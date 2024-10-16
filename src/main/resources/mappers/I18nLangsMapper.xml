@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.I18nLangsMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , lang, label, created_at, updated_at, created_by, updated_by
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="I18nLangsByCondition">
+        <if test="lang!=null and lang!=''">
+            AND lang = #{lang}
+        </if>
+        <if test="label!=null and label!=''">
+            AND label = #{label}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updated_by = #{updatedBy}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="I18nLangsSetColumns">
+        <if test="lang!=null and lang!=''">
+            lang = #{lang},
+        </if>
+        <if test="label!=null and label!=''">
+            label = #{label},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updated_by = #{updatedBy},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="I18nLangsMap" type="com.tinyengine.it.model.entity.I18nLangs">
+        <id column="id" property="id"/>
+        <result column="lang" property="lang"/>
+        <result column="label" property="label"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+    <!-- 查询表i18n_langs所有数据 -->
+    <select id="findAllI18nLangs" resultMap="I18nLangsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_langs
+    </select>
+
+    <!-- 根据主键id查询表i18n_langs信息 -->
+    <select id="findI18nLangsById" resultMap="I18nLangsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_langs
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表i18n_langs数据 -->
+    <select id="findI18nLangsByCondition" resultMap="I18nLangsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_langs
+        WHERE 1=1
+        <include refid="I18nLangsByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表i18n_langs数据 -->
+    <delete id="deleteI18nLangsById">
+        DELETE
+        FROM i18n_langs
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表i18n_langs数据 -->
+    <update id="updateI18nLangsById" parameterType="com.tinyengine.it.model.entity.I18nLangs">
+        UPDATE i18n_langs
+        <set>
+            <include refid="I18nLangsSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表i18n_langs数据 -->
+    <insert id="createI18nLangs">
+        INSERT INTO i18n_langs ( id
+                               , lang
+                               , label
+                               , created_at
+                               , updated_at
+                               , created_by
+                               , updated_by)
+        VALUES ( #{id}
+               , #{lang}
+               , #{label}
+               , #{createdAt}
+               , #{updatedAt}
+               , #{createdBy}
+               , #{updatedBy})
+    </insert>
+</mapper>

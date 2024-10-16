@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.UserComponentsMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , version, `name`, component, icon, description, doc_url, screenshot, tags, keywords, dev_mode, npm, `group`, category, priority, snippets, schema_fragment, configure, createdBy, updatedBy, created_at, updated_at, `public`, framework, isOfficial, isDefault, tiny_reserved, tenant, component_metadata, library
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="UserComponentsByCondition">
+        <if test="version!=null and version!=''">
+            AND version = #{version}
+        </if>
+        <if test="name!=null and name!=''">
+            AND `name` = #{name}
+        </if>
+        <if test="component!=null and component!=''">
+            AND component = #{component}
+        </if>
+        <if test="icon!=null and icon!=''">
+            AND icon = #{icon}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="docUrl!=null and docUrl!=''">
+            AND doc_url = #{docUrl}
+        </if>
+        <if test="screenshot!=null and screenshot!=''">
+            AND screenshot = #{screenshot}
+        </if>
+        <if test="tags!=null and tags!=''">
+            AND tags = #{tags}
+        </if>
+        <if test="keywords!=null and keywords!=''">
+            AND keywords = #{keywords}
+        </if>
+        <if test="devMode!=null and devMode!=''">
+            AND dev_mode = #{devMode}
+        </if>
+        <if test="npm!=null and npm!=''">
+            AND npm = #{npm}
+        </if>
+        <if test="group!=null and group!=''">
+            AND `group` = #{group}
+        </if>
+        <if test="category!=null and category!=''">
+            AND category = #{category}
+        </if>
+        <if test="priority!=null and priority!=''">
+            AND priority = #{priority}
+        </if>
+        <if test="snippets!=null and snippets!=''">
+            AND snippets = #{snippets}
+        </if>
+        <if test="schemaFragment!=null and schemaFragment!=''">
+            AND schema_fragment = #{schemaFragment}
+        </if>
+        <if test="configure!=null and configure!=''">
+            AND configure = #{configure}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND createdBy = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updatedBy = #{updatedBy}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+        <if test="isPublic!=null and isPublic!=''">
+            AND `public` = #{isPublic}
+        </if>
+        <if test="framework!=null and framework!=''">
+            AND framework = #{framework}
+        </if>
+        <if test="isOfficial!=null and isOfficial!=''">
+            AND isOfficial = #{isOfficial}
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            AND isDefault = #{isDefault}
+        </if>
+        <if test="tinyReserved!=null and tinyReserved!=''">
+            AND tiny_reserved = #{tinyReserved}
+        </if>
+        <if test="tenant!=null and tenant!=''">
+            AND tenant = #{tenant}
+        </if>
+        <if test="componentMetadata!=null and componentMetadata!=''">
+            AND component_metadata = #{componentMetadata}
+        </if>
+        <if test="library!=null and library!=''">
+            AND library = #{library}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="UserComponentsSetColumns">
+        <if test="version!=null and version!=''">
+            version = #{version},
+        </if>
+        <if test="name!=null and name!=''">
+            `name` = #{name},
+        </if>
+        <if test="component!=null and component!=''">
+            component = #{component},
+        </if>
+        <if test="icon!=null and icon!=''">
+            icon = #{icon},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="docUrl!=null and docUrl!=''">
+            doc_url = #{docUrl},
+        </if>
+        <if test="screenshot!=null and screenshot!=''">
+            screenshot = #{screenshot},
+        </if>
+        <if test="tags!=null and tags!=''">
+            tags = #{tags},
+        </if>
+        <if test="keywords!=null and keywords!=''">
+            keywords = #{keywords},
+        </if>
+        <if test="devMode!=null and devMode!=''">
+            dev_mode = #{devMode},
+        </if>
+        <if test="npm!=null and npm!=''">
+            npm = #{npm},
+        </if>
+        <if test="group!=null and group!=''">
+            `group` = #{group},
+        </if>
+        <if test="category!=null and category!=''">
+            category = #{category},
+        </if>
+        <if test="priority!=null and priority!=''">
+            priority = #{priority},
+        </if>
+        <if test="snippets!=null and snippets!=''">
+            snippets = #{snippets},
+        </if>
+        <if test="schemaFragment!=null and schemaFragment!=''">
+            schema_fragment = #{schemaFragment},
+        </if>
+        <if test="configure!=null and configure!=''">
+            configure = #{configure},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            createdBy = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updatedBy = #{updatedBy},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="isPublic!=null and isPublic!=''">
+            `public` = #{isPublic},
+        </if>
+        <if test="framework!=null and framework!=''">
+            framework = #{framework},
+        </if>
+        <if test="isOfficial!=null and isOfficial!=''">
+            isOfficial = #{isOfficial},
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            isDefault = #{isDefault},
+        </if>
+        <if test="tinyReserved!=null and tinyReserved!=''">
+            tiny_reserved = #{tinyReserved},
+        </if>
+        <if test="tenant!=null and tenant!=''">
+            tenant = #{tenant},
+        </if>
+        <if test="componentMetadata!=null and componentMetadata!=''">
+            component_metadata = #{componentMetadata},
+        </if>
+        <if test="library!=null and library!=''">
+            library = #{library},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="UserComponentsMap" type="com.tinyengine.it.model.entity.UserComponents">
+        <id column="id" property="id"/>
+        <result column="version" property="version"/>
+        <result column="name" property="name"/>
+        <result column="component" property="component"/>
+        <result column="icon" property="icon"/>
+        <result column="description" property="description"/>
+        <result column="doc_url" property="docUrl"/>
+        <result column="screenshot" property="screenshot"/>
+        <result column="tags" property="tags"/>
+        <result column="keywords" property="keywords"/>
+        <result column="dev_mode" property="devMode"/>
+        <result column="npm" property="npm"/>
+        <result column="group" property="group"/>
+        <result column="category" property="category"/>
+        <result column="priority" property="priority"/>
+        <result column="snippets" property="snippets"/>
+        <result column="schema_fragment" property="schemaFragment"/>
+        <result column="configure" property="configure"/>
+        <result column="createdBy" property="createdBy"/>
+        <result column="updatedBy" property="updatedBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="public" property="isPublic"/>
+        <result column="framework" property="framework"/>
+        <result column="isOfficial" property="isOfficial"/>
+        <result column="isDefault" property="isDefault"/>
+        <result column="tiny_reserved" property="tinyReserved"/>
+        <result column="tenant" property="tenant"/>
+        <result column="component_metadata" property="componentMetadata"/>
+        <result column="library" property="library"/>
+    </resultMap>
+
+    <!-- 查询表user_components所有数据 -->
+    <select id="findAllUserComponents" resultMap="UserComponentsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_components
+    </select>
+
+    <!-- 根据主键id查询表user_components信息 -->
+    <select id="findUserComponentsById" resultMap="UserComponentsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_components
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表user_components数据 -->
+    <select id="findUserComponentsByCondition" resultMap="UserComponentsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_components
+        WHERE 1=1
+        <include refid="UserComponentsByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表user_components数据 -->
+    <delete id="deleteUserComponentsById">
+        DELETE
+        FROM user_components
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表user_components数据 -->
+    <update id="updateUserComponentsById" parameterType="com.tinyengine.it.model.entity.UserComponents">
+        UPDATE user_components
+        <set>
+            <include refid="UserComponentsSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表user_components数据 -->
+    <insert id="createUserComponents">
+        INSERT INTO user_components ( id
+                                    , version
+                                    , `name`
+                                    , component
+                                    , icon
+                                    , description
+                                    , doc_url
+                                    , screenshot
+                                    , tags
+                                    , keywords
+                                    , dev_mode
+                                    , npm
+                                    , `group`
+                                    , category
+                                    , priority
+                                    , snippets
+                                    , schema_fragment
+                                    , configure
+                                    , createdBy
+                                    , updatedBy
+                                    , created_at
+                                    , updated_at
+                                    , `public`
+                                    , framework
+                                    , isOfficial
+                                    , isDefault
+                                    , tiny_reserved
+                                    , tenant
+                                    , component_metadata
+                                    , library)
+        VALUES ( #{id}
+               , #{version}
+               , #{name}
+               , #{component}
+               , #{icon}
+               , #{description}
+               , #{docUrl}
+               , #{screenshot}
+               , #{tags}
+               , #{keywords}
+               , #{devMode}
+               , #{npm}
+               , #{group}
+               , #{category}
+               , #{priority}
+               , #{snippets}
+               , #{schemaFragment}
+               , #{configure}
+               , #{createdBy}
+               , #{updatedBy}
+               , #{createdAt}
+               , #{updatedAt}
+               , #{isPublic}
+               , #{framework}
+               , #{isOfficial}
+               , #{isDefault}
+               , #{tinyReserved}
+               , #{tenant}
+               , #{componentMetadata}
+               , #{library})
+    </insert>
+</mapper>

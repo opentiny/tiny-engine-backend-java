@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.AppsMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, app_website, platform, obs_url, created_at, updated_at, `state`, published, createdBy, updatedBy, tenant, home_page, css, config, git_group, project_name, constants, data_handler, description, latest, platform_history, editor_url, branch, visit_url, is_demo, image_url, is_default, template_type, set_template_time, set_template_by, set_default_by, framework, global_state, default_lang, extend_config, assets_url, data_hash, can_associate, data_source_global, `tpl-groups`
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="AppsByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="appWebsite!=null and appWebsite!=''">
+            AND app_website = #{appWebsite}
+        </if>
+        <if test="platform!=null and platform!=''">
+            AND platform = #{platform}
+        </if>
+        <if test="obsUrl!=null and obsUrl!=''">
+            AND obs_url = #{obsUrl}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+        <if test="state!=null and state!=''">
+            AND `state` = #{state}
+        </if>
+        <if test="published!=null and published!=''">
+            AND published = #{published}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND createdBy = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updatedBy = #{updatedBy}
+        </if>
+        <if test="tenant!=null and tenant!=''">
+            AND tenant = #{tenant}
+        </if>
+        <if test="homePage!=null and homePage!=''">
+            AND home_page = #{homePage}
+        </if>
+        <if test="css!=null and css!=''">
+            AND css = #{css}
+        </if>
+        <if test="config!=null and config!=''">
+            AND config = #{config}
+        </if>
+        <if test="gitGroup!=null and gitGroup!=''">
+            AND git_group = #{gitGroup}
+        </if>
+        <if test="projectName!=null and projectName!=''">
+            AND project_name = #{projectName}
+        </if>
+        <if test="constants!=null and constants!=''">
+            AND constants = #{constants}
+        </if>
+        <if test="dataHandler!=null and dataHandler!=''">
+            AND data_handler = #{dataHandler}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="latest!=null and latest!=''">
+            AND latest = #{latest}
+        </if>
+        <if test="platformHistory!=null and platformHistory!=''">
+            AND platform_history = #{platformHistory}
+        </if>
+        <if test="editorUrl!=null and editorUrl!=''">
+            AND editor_url = #{editorUrl}
+        </if>
+        <if test="branch!=null and branch!=''">
+            AND branch = #{branch}
+        </if>
+        <if test="visitUrl!=null and visitUrl!=''">
+            AND visit_url = #{visitUrl}
+        </if>
+        <if test="isDemo!=null and isDemo!=''">
+            AND is_demo = #{isDemo}
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            AND image_url = #{imageUrl}
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            AND is_default = #{isDefault}
+        </if>
+        <if test="templateType!=null and templateType!=''">
+            AND template_type = #{templateType}
+        </if>
+        <if test="setTemplateTime!=null and setTemplateTime!=''">
+            AND set_template_time = #{setTemplateTime}
+        </if>
+        <if test="setTemplateBy!=null and setTemplateBy!=''">
+            AND set_template_by = #{setTemplateBy}
+        </if>
+        <if test="setDefaultBy!=null and setDefaultBy!=''">
+            AND set_default_by = #{setDefaultBy}
+        </if>
+        <if test="framework!=null and framework!=''">
+            AND framework = #{framework}
+        </if>
+        <if test="globalState!=null and globalState!=''">
+            AND global_state = #{globalState}
+        </if>
+        <if test="defaultLang!=null and defaultLang!=''">
+            AND default_lang = #{defaultLang}
+        </if>
+        <if test="extendConfig!=null and extendConfig!=''">
+            AND extend_config = #{extendConfig}
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            AND assets_url = #{assetsUrl}
+        </if>
+        <if test="dataHash!=null and dataHash!=''">
+            AND data_hash = #{dataHash}
+        </if>
+        <if test="canAssociate!=null and canAssociate!=''">
+            AND can_associate = #{canAssociate}
+        </if>
+        <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">
+            AND data_source_global = #{dataSourceGlobal}
+        </if>
+        <if test="tplGroups!=null and tplGroups!=''">
+            AND `tpl-groups` = #{tplGroups}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="AppsSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="appWebsite!=null and appWebsite!=''">
+            app_website = #{appWebsite},
+        </if>
+        <if test="platform!=null and platform!=''">
+            platform = #{platform},
+        </if>
+        <if test="obsUrl!=null and obsUrl!=''">
+            obs_url = #{obsUrl},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="state!=null and state!=''">
+            `state`= #{state},
+        </if>
+        <if test="published!=null and published!=''">
+            published = #{published},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            createdBy = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updatedBy = #{updatedBy},
+        </if>
+        <if test="tenant!=null and tenant!=''">
+            tenant = #{tenant},
+        </if>
+        <if test="homePage!=null and homePage!=''">
+            home_page = #{homePage},
+        </if>
+        <if test="css!=null and css!=''">
+            css = #{css},
+        </if>
+        <if test="config!=null and config!=''">
+            config = #{config},
+        </if>
+        <if test="gitGroup!=null and gitGroup!=''">
+            git_group = #{gitGroup},
+        </if>
+        <if test="projectName!=null and projectName!=''">
+            project_name = #{projectName},
+        </if>
+        <if test="constants!=null and constants!=''">
+            constants = #{constants},
+        </if>
+        <if test="dataHandler!=null and dataHandler!=''">
+            data_handler = #{dataHandler},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="latest!=null and latest!=''">
+            latest = #{latest},
+        </if>
+        <if test="platformHistory!=null and platformHistory!=''">
+            platform_history = #{platformHistory},
+        </if>
+        <if test="editorUrl!=null and editorUrl!=''">
+            editor_url = #{editorUrl},
+        </if>
+        <if test="branch!=null and branch!=''">
+            branch = #{branch},
+        </if>
+        <if test="visitUrl!=null and visitUrl!=''">
+            visit_url = #{visitUrl},
+        </if>
+        <if test="isDemo!=null and isDemo!=''">
+            is_demo = #{isDemo},
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            image_url = #{imageUrl},
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            is_default = #{isDefault},
+        </if>
+        <if test="templateType!=null and templateType!=''">
+            template_type = #{templateType},
+        </if>
+        <if test="setTemplateTime!=null and setTemplateTime!=''">
+            set_template_time = #{setTemplateTime},
+        </if>
+        <if test="setTemplateBy!=null and setTemplateBy!=''">
+            set_template_by = #{setTemplateBy},
+        </if>
+        <if test="setDefaultBy!=null and setDefaultBy!=''">
+            set_default_by = #{setDefaultBy},
+        </if>
+        <if test="framework!=null and framework!=''">
+            framework = #{framework},
+        </if>
+        <if test="globalState!=null and globalState!=''">
+            global_state = #{globalState},
+        </if>
+        <if test="defaultLang!=null and defaultLang!=''">
+            default_lang = #{defaultLang},
+        </if>
+        <if test="extendConfig!=null and extendConfig!=''">
+            extend_config = #{extendConfig},
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            assets_url = #{assetsUrl},
+        </if>
+        <if test="dataHash!=null and dataHash!=''">
+            data_hash = #{dataHash},
+        </if>
+        <if test="canAssociate!=null and canAssociate!=''">
+            can_associate = #{canAssociate},
+        </if>
+        <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">
+            data_source_global = #{dataSourceGlobal},
+        </if>
+        <if test="tplGroups!=null and tplGroups!=''">
+            `tpl-groups` = #{tplGroups},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="AppsMap" type="com.tinyengine.it.model.entity.Apps">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="app_website" property="appWebsite"/>
+        <result column="platform" property="platform"/>
+        <result column="obs_url" property="obsUrl"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="state" property="state"/>
+        <result column="published" property="published"/>
+        <result column="createdBy" property="createdBy"/>
+        <result column="updatedBy" property="updatedBy"/>
+        <result column="tenant" property="tenant"/>
+        <result column="home_page" property="homePage"/>
+        <result column="css" property="css"/>
+        <result column="config" property="config"/>
+        <result column="git_group" property="gitGroup"/>
+        <result column="project_name" property="projectName"/>
+        <result column="constants" property="constants"/>
+        <result column="data_handler" property="dataHandler"/>
+        <result column="description" property="description"/>
+        <result column="latest" property="latest"/>
+        <result column="platform_history" property="platformHistory"/>
+        <result column="editor_url" property="editorUrl"/>
+        <result column="branch" property="branch"/>
+        <result column="visit_url" property="visitUrl"/>
+        <result column="is_demo" property="isDemo"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="template_type" property="templateType"/>
+        <result column="set_template_time" property="setTemplateTime"/>
+        <result column="set_template_by" property="setTemplateBy"/>
+        <result column="set_default_by" property="setDefaultBy"/>
+        <result column="framework" property="framework"/>
+        <result column="global_state" property="globalState"/>
+        <result column="default_lang" property="defaultLang"/>
+        <result column="extend_config" property="extendConfig"/>
+        <result column="assets_url" property="assetsUrl"/>
+        <result column="data_hash" property="dataHash"/>
+        <result column="can_associate" property="canAssociate"/>
+        <result column="data_source_global" property="dataSourceGlobal"/>
+        <result column="tpl-groups" property="tplGroups"/>
+    </resultMap>
+
+    <!-- 查询表apps所有数据 -->
+    <select id="findAllApps" resultMap="AppsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM apps
+    </select>
+
+    <!-- 根据主键id查询表apps信息 -->
+    <select id="findAppsById" resultMap="AppsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM apps
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表apps数据 -->
+    <select id="findAppsByCondition" resultMap="AppsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM apps
+        WHERE 1=1
+        <include refid="AppsByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表apps数据 -->
+    <delete id="deleteAppsById">
+        DELETE
+        FROM apps
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表apps数据 -->
+    <update id="updateAppsById" parameterType="com.tinyengine.it.model.entity.Apps">
+        UPDATE apps
+        <set>
+            <include refid="AppsSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表apps数据 -->
+    <insert id="createApps">
+        INSERT INTO apps ( id
+                         , name
+                         , app_website
+                         , platform
+                         , obs_url
+                         , created_at
+                         , updated_at
+                         , state
+                         , published
+                         , createdBy
+                         , updatedBy
+                         , tenant
+                         , home_page
+                         , css
+                         , config
+                         , git_group
+                         , project_name
+                         , constants
+                         , data_handler
+                         , description
+                         , latest
+                         , platform_history
+                         , editor_url
+                         , branch
+                         , visit_url
+                         , is_demo
+                         , image_url
+                         , is_default
+                         , template_type
+                         , set_template_time
+                         , set_template_by
+                         , set_default_by
+                         , framework
+                         , global_state
+                         , default_lang
+                         , extend_config
+                         , assets_url
+                         , data_hash
+                         , can_associate
+                         , data_source_global
+                         , `tpl-groups`)
+        VALUES ( #{id}
+               , #{name}
+               , #{appWebsite}
+               , #{platform}
+               , #{obsUrl}
+               , #{createdAt}
+               , #{updatedAt}
+               , #{state}
+               , #{published}
+               , #{createdBy}
+               , #{updatedBy}
+               , #{tenant}
+               , #{homePage}
+               , #{css}
+               , #{config}
+               , #{gitGroup}
+               , #{projectName}
+               , #{constants}
+               , #{dataHandler}
+               , #{description}
+               , #{latest}
+               , #{platformHistory}
+               , #{editorUrl}
+               , #{branch}
+               , #{visitUrl}
+               , #{isDemo}
+               , #{imageUrl}
+               , #{isDefault}
+               , #{templateType}
+               , #{setTemplateTime}
+               , #{setTemplateBy}
+               , #{setDefaultBy}
+               , #{framework}
+               , #{globalState}
+               , #{defaultLang}
+               , #{extendConfig}
+               , #{assetsUrl}
+               , #{dataHash}
+               , #{canAssociate}
+               , #{dataSourceGlobal}
+               , #{tplGroups})
+    </insert>
+</mapper>

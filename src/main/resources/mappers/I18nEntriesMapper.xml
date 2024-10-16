@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.I18nEntriesMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , `key`, content, host, host_type,lang, created_at, updated_at, created_by, updated_by
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="I18nEntriesByCondition">
+
+        <if test="key!=null and key!=''">
+            AND `key` = #{key}
+        </if>
+        <if test="content!=null and content!=''">
+            AND content = #{content}
+        </if>
+        <if test="host!=null and host!=''">
+            AND host = #{host}
+        </if>
+        <if test="hostType!=null and hostType!=''">
+            AND host_type = #{hostType}
+        </if>
+        <if test="langId!=null and langId!=''">
+            AND lang = #{langId}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updated_by = #{updatedBy}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="I18nEntriesSetColumns">
+
+        <if test="key!=null and key!=''">
+            `key` = #{key},
+        </if>
+        <if test="content!=null and content!=''">
+            content = #{content},
+        </if>
+        <if test="host!=null and host!=''">
+            host = #{host},
+        </if>
+        <if test="hostType!=null and hostType!=''">
+            host_type = #{hostType},
+        </if>
+        <if test="langId!=null and langId!=''">
+            lang = #{langId},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updated_by = #{updatedBy},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="I18nEntriesMap" type="com.tinyengine.it.model.entity.I18nEntries">
+        <id column="id" property="id"/>
+        <result column="key" property="key"/>
+        <result column="content" property="content"/>
+        <result column="host" property="host"/>
+        <result column="host_type" property="hostType"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="lang" property="langId"/>
+    </resultMap>
+
+    <!-- 查询表i18n_entries所有数据 -->
+    <select id="findAllI18nEntries" resultMap="I18nEntriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_entries
+    </select>
+
+    <!-- 根据host、hosttype字段查询表i18n_entries数据 -->
+    <select id="findI18nEntriesByHostAndHostType" resultMap="I18nEntriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_entries
+        WHERE host=#{host} and hostType=#{hostType}
+    </select>
+
+
+    <!-- 根据主键id查询表i18n_entries信息 -->
+    <select id="findI18nEntriesById" resultMap="I18nEntriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_entries
+        WHERE id=#{id}
+    </select>
+
+
+    <!-- 根据key、lang查询表i18n_entries信息 -->
+    <select id="findI18nEntriesByKeyAndLang" resultMap="I18nEntriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_entries
+        WHERE `key`=#{key} and lang=#{langId}
+    </select>
+
+
+    <!-- 根据条件查询表i18n_entries数据 -->
+    <select id="findI18nEntriesByCondition" resultMap="I18nEntriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM i18n_entries
+        WHERE 1=1
+        <include refid="I18nEntriesByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表i18n_entries数据 -->
+    <delete id="deleteI18nEntriesById">
+        DELETE
+        FROM i18n_entries
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表i18n_entries数据 -->
+    <update id="updateI18nEntriesById" parameterType="com.tinyengine.it.model.entity.I18nEntries">
+        UPDATE i18n_entries
+        <set>
+            <include refid="I18nEntriesSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表i18n_entries数据 -->
+    <insert id="createI18nEntries" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.I18nEntries">
+        INSERT INTO i18n_entries ( id
+                                 , `key`
+                                 , content
+                                 , host
+                                 , host_type
+                                 , lang
+                                 , created_at
+                                 , updated_at
+                                 , created_by
+                                 , updated_by)
+        VALUES ( #{id}
+               , #{key}
+               , #{content}
+               , #{host}
+               , #{hostType}
+               , #{langId}
+               , #{createdAt}
+               , #{updatedAt}
+               , #{createdBy}
+               , #{updatedBy})
+    </insert>
+</mapper>

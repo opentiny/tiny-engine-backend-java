@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.PagesHistoriesMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , message, page, `time`, page_content, created_at, updated_at, is_body, parent_id, route, is_home, `name`, `group`, content_blocks, created_by, updated_by
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="PagesHistoriesByCondition">
+        <if test="message!=null and message!=''">
+            AND message = #{message}
+        </if>
+        <if test="page!=null and page!=''">
+            AND page = #{page}
+        </if>
+        <if test="time!=null and time!=''">
+            AND `time` = #{time}
+        </if>
+        <if test="pageContent!=null and pageContent!=''">
+            AND page_content = #{pageContent}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+        <if test="isBody!=null and isBody!=''">
+            AND is_body = #{isBody}
+        </if>
+        <if test="parentId!=null and parentId!=''">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="route!=null and route!=''">
+            AND route = #{route}
+        </if>
+        <if test="isHome!=null and isHome!=''">
+            AND is_home = #{isHome}
+        </if>
+        <if test="name!=null and name!=''">
+            AND `name` = #{name}
+        </if>
+        <if test="group!=null and group!=''">
+            AND `group` = #{group}
+        </if>
+        <if test="contentBlocks!=null and contentBlocks!=''">
+            AND content_blocks = #{contentBlocks}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updated_by = #{updatedBy}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="PagesHistoriesSetColumns">
+        <if test="message!=null and message!=''">
+            message = #{message},
+        </if>
+        <if test="page!=null and page!=''">
+            page = #{page},
+        </if>
+        <if test="time!=null and time!=''">
+            `time` = #{time},
+        </if>
+        <if test="pageContent!=null and pageContent!=''">
+            page_content = #{pageContent},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="isBody!=null and isBody!=''">
+            is_body = #{isBody},
+        </if>
+        <if test="parentId!=null and parentId!=''">
+            parent_id = #{parentId},
+        </if>
+        <if test="route!=null and route!=''">
+            route = #{route},
+        </if>
+        <if test="isHome!=null and isHome!=''">
+            is_home = #{isHome},
+        </if>
+        <if test="name!=null and name!=''">
+            `name` = #{name},
+        </if>
+        <if test="group!=null and group!=''">
+            `group` = #{group},
+        </if>
+        <if test="contentBlocks!=null and contentBlocks!=''">
+            content_blocks = #{contentBlocks},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updated_by = #{updatedBy},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PagesHistoriesMap" type="com.tinyengine.it.model.entity.PagesHistories">
+        <id column="id" property="id"/>
+        <result column="message" property="message"/>
+        <result column="page" property="page"/>
+        <result column="time" property="time"/>
+        <result column="page_content" property="pageContent"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="is_body" property="isBody"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="route" property="route"/>
+        <result column="is_home" property="isHome"/>
+        <result column="name" property="name"/>
+        <result column="group" property="group"/>
+        <result column="content_blocks" property="contentBlocks"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+    <!-- 查询表pages_histories所有数据 -->
+    <select id="findAllPagesHistories" resultMap="PagesHistoriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pages_histories
+    </select>
+
+    <!-- 根据主键id查询表pages_histories信息 -->
+    <select id="findPagesHistoriesById" resultMap="PagesHistoriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pages_histories
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表pages_histories数据 -->
+    <select id="findPagesHistoriesByCondition" resultMap="PagesHistoriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pages_histories
+        WHERE 1=1
+        <include refid="PagesHistoriesByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表pages_histories数据 -->
+    <delete id="deletePagesHistoriesById">
+        DELETE
+        FROM pages_histories
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表pages_histories数据 -->
+    <update id="updatePagesHistoriesById" parameterType="com.tinyengine.it.model.entity.PagesHistories">
+        UPDATE pages_histories
+        <set>
+            <include refid="PagesHistoriesSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表pages_histories数据 -->
+    <insert id="createPagesHistories" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.PagesHistories">
+        INSERT INTO pages_histories ( id
+                                    , message
+                                    , page
+                                    , time
+                                    , page_content
+                                    , created_at
+                                    , updated_at
+                                    , is_body
+                                    , parent_id
+                                    , route
+                                    , is_home
+                                    , name
+                                    , `group`
+                                    , content_blocks
+                                    , created_by
+                                    , updated_by)
+        VALUES ( #{id}
+               , #{message}
+               , #{page}
+               , #{time}
+               , #{pageContent}
+               , #{createdAt}
+               , #{updatedAt}
+               , #{isBody}
+               , #{parentId}
+               , #{route}
+               , #{isHome}
+               , #{name}
+               , #{group}
+               , #{contentBlocks}
+               , #{createdBy}
+               , #{updatedBy})
+    </insert>
+</mapper>

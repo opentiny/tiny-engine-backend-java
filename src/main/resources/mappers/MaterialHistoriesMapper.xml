@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.MaterialHistoriesMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, npm_name, version, framework, description, material, content, createdBy, updatedBy, assets_url, components, created_at, updated_at
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="MaterialHistoriesByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="npmName!=null and npmName!=''">
+            AND npm_name = #{npmName}
+        </if>
+        <if test="version!=null and version!=''">
+            AND version = #{version}
+        </if>
+        <if test="framework!=null and framework!=''">
+            AND framework = #{framework}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="material!=null and material!=''">
+            AND material = #{material}
+        </if>
+        <if test="content!=null and content!=''">
+            AND content = #{content}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND createdBy = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updatedBy = #{updatedBy}
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            AND assets_url = #{assetsUrl}
+        </if>
+        <if test="components!=null and components!=''">
+            AND components = #{components}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="MaterialHistoriesSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="npmName!=null and npmName!=''">
+            npm_name = #{npmName},
+        </if>
+        <if test="version!=null and version!=''">
+            version = #{version},
+        </if>
+        <if test="framework!=null and framework!=''">
+            framework = #{framework},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="material!=null and material!=''">
+            material = #{material},
+        </if>
+        <if test="content!=null and content!=''">
+            content = #{content},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            createdBy = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updatedBy = #{updatedBy},
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            assets_url = #{assetsUrl},
+        </if>
+        <if test="components!=null and components!=''">
+            components = #{components},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="MaterialHistoriesMap" type="com.tinyengine.it.model.entity.MaterialHistories">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="npm_name" property="npmName"/>
+        <result column="version" property="version"/>
+        <result column="framework" property="framework"/>
+        <result column="description" property="description"/>
+        <result column="material" property="material"/>
+        <result column="content" property="content"/>
+        <result column="createdBy" property="createdBy"/>
+        <result column="updatedBy" property="updatedBy"/>
+        <result column="assets_url" property="assetsUrl"/>
+        <result column="components" property="components"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <!-- 查询表material_histories所有数据 -->
+    <select id="findAllMaterialHistories" resultMap="MaterialHistoriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_histories
+    </select>
+
+
+    <!-- 根据条件查询表material_histories数据 -->
+    <select id="findMaterialHistoriesByCondition" resultMap="MaterialHistoriesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_histories
+        WHERE 1=1
+        <include refid="MaterialHistoriesByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表material_histories数据 -->
+    <delete id="deleteMaterialHistoriesById">
+        DELETE
+        FROM material_histories
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表material_histories数据 -->
+    <update id="updateMaterialHistoriesById" parameterType="com.tinyengine.it.model.entity.MaterialHistories">
+        UPDATE material_histories
+        <set>
+            <include refid="MaterialHistoriesSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表material_histories数据 -->
+    <insert id="createMaterialHistories">
+        INSERT INTO material_histories ( id
+                                       , name
+                                       , npm_name
+                                       , version
+                                       , framework
+                                       , description
+                                       , material
+                                       , content
+                                       , createdBy
+                                       , updatedBy
+                                       , assets_url
+                                       , components
+                                       , created_at
+                                       , updated_at)
+        VALUES ( #{id}
+               , #{name}
+               , #{npmName}
+               , #{version}
+               , #{framework}
+               , #{description}
+               , #{material}
+               , #{content}
+               , #{createdBy}
+               , #{updatedBy}
+               , #{assetsUrl}
+               , #{components}
+               , #{createdAt}
+               , #{updatedAt})
+    </insert>
+</mapper>

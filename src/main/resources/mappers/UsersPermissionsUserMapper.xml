@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.UsersPermissionsUserMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , username, email, provider, password, resetPasswordToken, confirmationToken, confirmed, blocked, role, is_admin, is_public, created_at, updated_at, created_by, updated_by
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="UsersPermissionsUserByCondition">
+        <if test="username!=null and username!=''">
+            AND username = #{username}
+        </if>
+        <if test="email!=null and email!=''">
+            AND email = #{email}
+        </if>
+        <if test="provider!=null and provider!=''">
+            AND provider = #{provider}
+        </if>
+        <if test="password!=null and password!=''">
+            AND password = #{password}
+        </if>
+        <if test="resetPasswordToken!=null and resetPasswordToken!=''">
+            AND resetPasswordToken = #{resetPasswordToken}
+        </if>
+        <if test="confirmationToken!=null and confirmationToken!=''">
+            AND confirmationToken = #{confirmationToken}
+        </if>
+        <if test="confirmed!=null and confirmed!=''">
+            AND confirmed = #{confirmed}
+        </if>
+        <if test="blocked!=null and blocked!=''">
+            AND blocked = #{blocked}
+        </if>
+        <if test="role!=null and role!=''">
+            AND `role` = #{role}
+        </if>
+        <if test="isAdmin!=null and isAdmin!=''">
+            AND is_admin = #{isAdmin}
+        </if>
+        <if test="isPublic!=null and isPublic!=''">
+            AND is_public = #{isPublic}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updated_by = #{updatedBy}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="UsersPermissionsUserSetColumns">
+        <if test="username!=null and username!=''">
+            username = #{username},
+        </if>
+        <if test="email!=null and email!=''">
+            email = #{email},
+        </if>
+        <if test="provider!=null and provider!=''">
+            provider = #{provider},
+        </if>
+        <if test="password!=null and password!=''">
+            password = #{password},
+        </if>
+        <if test="resetPasswordToken!=null and resetPasswordToken!=''">
+            resetPasswordToken = #{resetPasswordToken},
+        </if>
+        <if test="confirmationToken!=null and confirmationToken!=''">
+            confirmationToken = #{confirmationToken},
+        </if>
+        <if test="confirmed!=null and confirmed!=''">
+            confirmed = #{confirmed},
+        </if>
+        <if test="blocked!=null and blocked!=''">
+            blocked = #{blocked},
+        </if>
+        <if test="role!=null and role!=''">
+            `role` = #{role},
+        </if>
+        <if test="isAdmin!=null and isAdmin!=''">
+            is_admin = #{isAdmin},
+        </if>
+        <if test="isPublic!=null and isPublic!=''">
+            is_public = #{isPublic},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updated_by = #{updatedBy},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="UsersPermissionsUserMap" type="com.tinyengine.it.model.entity.UsersPermissionsUser">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="provider" property="provider"/>
+        <result column="password" property="password"/>
+        <result column="resetPasswordToken" property="resetPasswordToken"/>
+        <result column="confirmationToken" property="confirmationToken"/>
+        <result column="confirmed" property="confirmed"/>
+        <result column="blocked" property="blocked"/>
+        <result column="role" property="role"/>
+        <result column="is_admin" property="isAdmin"/>
+        <result column="is_public" property="isPublic"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+    <!-- 查询表users-permissions_user所有数据 -->
+    <select id="findAllUsersPermissionsUser" resultMap="UsersPermissionsUserMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `users-permissions_user`
+    </select>
+
+    <!-- 根据主键id查询表users-permissions_user信息 -->
+    <select id="findUsersPermissionsUserById" resultMap="UsersPermissionsUserMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `users-permissions_user`
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表users-permissions_user数据 -->
+    <select id="findUsersPermissionsUserByCondition" resultMap="UsersPermissionsUserMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `users-permissions_user`
+        WHERE 1=1
+        <include refid="UsersPermissionsUserByCondition"/>
+    </select>
+
+    <!-- 根据ids范围内的查询表users-permissions_user数据 -->
+    <select id="selectUsersByIds" parameterType="java.util.List" resultMap="UsersPermissionsUserMap">
+        SELECT id, username, resetPasswordToken
+        FROM `users-permissions_user`
+        WHERE id IN
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </select>
+
+
+    <!-- 根据主键id删除表users-permissions_user数据 -->
+    <delete id="deleteUsersPermissionsUserById">
+        DELETE
+        FROM `users-permissions_user`
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表users-permissions_user数据 -->
+    <update id="updateUsersPermissionsUserById" parameterType="com.tinyengine.it.model.entity.UsersPermissionsUser">
+        UPDATE `users-permissions_user`
+        <set>
+            <include refid="UsersPermissionsUserSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表users-permissions_user数据 -->
+    <insert id="createUsersPermissionsUser">
+        INSERT INTO `users-permissions_user` ( id
+                                             , username
+                                             , email
+                                             , provider
+                                             , password
+                                             , resetPasswordToken
+                                             , confirmationToken
+                                             , confirmed
+                                             , blocked
+                                             , role
+                                             , is_admin
+                                             , is_public
+                                             , created_at
+                                             , updated_at
+                                             , created_by
+                                             , updated_by)
+        VALUES ( #{id}
+               , #{username}
+               , #{email}
+               , #{provider}
+               , #{password}
+               , #{resetPasswordToken}
+               , #{confirmationToken}
+               , #{confirmed}
+               , #{blocked}
+               , #{role}
+               , #{isAdmin}
+               , #{isPublic}
+               , #{createdAt}
+               , #{updatedAt}
+               , #{createdBy}
+               , #{updatedBy})
+    </insert>
+</mapper>

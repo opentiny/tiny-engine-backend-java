@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.BlocksCarriersRelationsMapper">
+
+    <!-- 通用设置 -->
+
+        <!-- 通用查询列 -->
+        <sql id="Base_Column_List">
+            id, block, host, host_type, version, created_at, updated_at, created_by, updated_by
+        </sql>
+
+        <!-- 通用条件列 -->
+        <sql id="BlocksCarriersRelationsByCondition">
+                    <if test="block!=null and block!=''">
+                        AND block = #{block}
+                    </if>
+                    <if test="host!=null and host!=''">
+                        AND host = #{host}
+                    </if>
+                    <if test="hostType!=null and hostType!=''">
+                        AND host_type = #{hostType}
+                    </if>
+                    <if test="version!=null and version!=''">
+                        AND version = #{version}
+                    </if>
+                    <if test="createdAt!=null and createdAt!=''">
+                        AND created_at = #{createdAt}
+                    </if>
+                    <if test="updatedAt!=null and updatedAt!=''">
+                        AND updated_at = #{updatedAt}
+                    </if>
+                    <if test="createdBy!=null and createdBy!=''">
+                        AND created_by = #{createdBy}
+                    </if>
+                    <if test="updatedBy!=null and updatedBy!=''">
+                        AND updated_by = #{updatedBy}
+                    </if>
+        </sql>
+
+        <!-- 通用设置列 -->
+        <sql id="BlocksCarriersRelationsSetColumns">
+                    <if test="block!=null and block!=''">
+                        block = #{block},
+                    </if>
+                    <if test="host!=null and host!=''">
+                        host = #{host},
+                    </if>
+                    <if test="hostType!=null and hostType!=''">
+                        host_type = #{hostType},
+                    </if>
+                    <if test="version!=null and version!=''">
+                        version = #{version},
+                    </if>
+                    <if test="createdAt!=null and createdAt!=''">
+                        created_at = #{createdAt},
+                    </if>
+                    <if test="updatedAt!=null and updatedAt!=''">
+                        updated_at = #{updatedAt},
+                    </if>
+                    <if test="createdBy!=null and createdBy!=''">
+                        created_by = #{createdBy},
+                    </if>
+                    <if test="updatedBy!=null and updatedBy!=''">
+                        updated_by = #{updatedBy},
+                    </if>
+        </sql>
+
+
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BlocksCarriersRelationsMap" type="com.tinyengine.it.model.entity.BlocksCarriersRelations">
+                    <id column="id" property="id"/>
+                    <result column="block" property="block"/>
+                    <result column="host" property="host"/>
+                    <result column="host_type" property="hostType"/>
+                    <result column="version" property="version"/>
+                    <result column="created_at" property="createdAt"/>
+                    <result column="updated_at" property="updatedAt"/>
+                    <result column="created_by" property="createdBy"/>
+                    <result column="updated_by" property="updatedBy"/>
+        </resultMap>
+
+    <!-- 查询表blocks_carriers_relations所有数据 -->
+    <select id="findAllBlocksCarriersRelations" resultMap="BlocksCarriersRelationsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM blocks_carriers_relations
+    </select>
+
+            <!-- 根据主键id查询表blocks_carriers_relations信息 -->
+            <select id="findBlocksCarriersRelationsById" resultMap="BlocksCarriersRelationsMap">
+                SELECT
+                <include refid="Base_Column_List"/>
+                FROM blocks_carriers_relations
+                WHERE id=#{id}
+            </select>
+
+    <!-- 根据条件查询表blocks_carriers_relations数据 -->
+    <select id="findBlocksCarriersRelationsByCondition" resultMap="BlocksCarriersRelationsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM blocks_carriers_relations
+        WHERE 1=1
+        <include refid="BlocksCarriersRelationsByCondition" />
+    </select>
+
+        <!-- 根据主键id删除表blocks_carriers_relations数据 -->
+            <delete id="deleteBlocksCarriersRelationsById">
+                DELETE FROM
+                blocks_carriers_relations
+                WHERE id=#{id}
+            </delete>
+
+            <!-- 根据主键id更新表blocks_carriers_relations数据 -->
+            <update id="updateBlocksCarriersRelationsById" parameterType="com.tinyengine.it.model.entity.BlocksCarriersRelations">
+                UPDATE blocks_carriers_relations
+                <set>
+                    <include refid="BlocksCarriersRelationsSetColumns"/>
+                </set>
+                WHERE
+                id=#{id}
+            </update>
+
+            <!-- 新增表blocks_carriers_relations数据 -->
+            <insert id="createBlocksCarriersRelations">
+                INSERT INTO blocks_carriers_relations (
+                    id
+                    ,block
+                    ,host
+                    ,host_type
+                    ,version
+                    ,created_at
+                    ,updated_at
+                    ,created_by
+                    ,updated_by
+                ) VALUES (
+                    #{id}
+                    ,#{block}
+                    ,#{host}
+                    ,#{hostType}
+                    ,#{version}
+                    ,#{createdAt}
+                    ,#{updatedAt}
+                    ,#{createdBy}
+                    ,#{updatedBy}
+                )
+            </insert>
+</mapper>

@@ -1,0 +1,51 @@
+{
+  "name": "tiny-engine-webservice",
+  "version": "1.0.0",
+  "description": "tiny-engine-webservice is a restful API responsible for providing data services, code generation services, and code release services to the front end.  It does not directly operate on the database, and data operations request interfaces from tiny-engine-data-center",
+  "homepage": "https://opentiny.design/tiny-engine",
+  "keywords": [
+    "node.js",
+    "tiny-engine-webservice",
+    "lowcode"
+  ],
+  "private": true,
+  "egg": {
+    "typescript": true,
+    "declarations": true
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opentiny/tiny-engine-webservice",
+    "directory": ""
+  },
+  "bugs": {
+    "url": "https://github.com/opentiny/tiny-engine-webservice/issues"
+  },
+  "author": "OpenTiny Team",
+  "license": "MIT",
+  "nyc": {
+    "check-coverage": false,
+    "lines": 60,
+    "statements": 60,
+    "functions": 60,
+    "branches": 60
+  },
+  "dependencies": {
+    "@opentiny/tiny-engine-block-build": "^0.0.1-alpha.0",
+    "@opentiny/tiny-engine-dsl-vue": "~1.0.1",
+    "@opentiny/tiny-engine-transform": "^1.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "cross-spawn": "^7.0.3"
+  },
+  "resolutions": {
+    "@types/node": "^12.20.16"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "eslintIgnore": [
+    "coverage"
+  ]
+}

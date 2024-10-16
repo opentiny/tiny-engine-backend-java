@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.BlocksCategoriesBlockCategoriesBlocksMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , `block-category_id`, block_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="BlocksCategoriesBlockCategoriesBlocksByCondition">
+        <if test="blockCategoryId!=null and blockCategoryId!=''">
+            AND `block-category_id` = #{blockCategoryId}
+        </if>
+        <if test="blockId!=null and blockId!=''">
+            AND block_id = #{blockId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="BlocksCategoriesBlockCategoriesBlocksSetColumns">
+        <if test="blockCategoryId!=null and blockCategoryId!=''">
+            `block-category_id` = #{blockCategoryId},
+        </if>
+        <if test="blockId!=null and blockId!=''">
+            block_id = #{blockId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BlocksCategoriesBlockCategoriesBlocksMap"
+               type="com.tinyengine.it.model.entity.BlocksCategoriesBlockCategoriesBlocks">
+        <id column="id" property="id"/>
+        <result column="block-category_id" property="blockCategoryId"/>
+        <result column="block_id" property="blockId"/>
+    </resultMap>
+
+    <!-- 查询表blocks_categories__block_categories_blocks所有数据 -->
+    <select id="findAllBlocksCategoriesBlockCategoriesBlocks" resultMap="BlocksCategoriesBlockCategoriesBlocksMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM blocks_categories__block_categories_blocks
+    </select>
+
+    <!-- 根据主键id查询表blocks_categories__block_categories_blocks信息 -->
+    <select id="findBlocksCategoriesBlockCategoriesBlocksById" resultMap="BlocksCategoriesBlockCategoriesBlocksMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM blocks_categories__block_categories_blocks
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表blocks_categories__block_categories_blocks数据 -->
+    <select id="findBlocksCategoriesBlockCategoriesBlocksByCondition"
+            resultMap="BlocksCategoriesBlockCategoriesBlocksMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM blocks_categories__block_categories_blocks
+        WHERE 1=1
+        <include refid="BlocksCategoriesBlockCategoriesBlocksByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表blocks_categories__block_categories_blocks数据 -->
+    <delete id="deleteBlocksCategoriesBlockCategoriesBlocksById">
+        DELETE
+        FROM blocks_categories__block_categories_blocks
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表blocks_categories__block_categories_blocks数据 -->
+    <update id="updateBlocksCategoriesBlockCategoriesBlocksById"
+            parameterType="com.tinyengine.it.model.entity.BlocksCategoriesBlockCategoriesBlocks">
+        UPDATE blocks_categories__block_categories_blocks
+        <set>
+            <include refid="BlocksCategoriesBlockCategoriesBlocksSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表blocks_categories__block_categories_blocks数据 -->
+    <insert id="createBlocksCategoriesBlockCategoriesBlocks">
+        INSERT INTO blocks_categories__block_categories_blocks ( id
+                                                               , `block-category_id`
+                                                               , block_id)
+        VALUES ( #{id}
+               , #{blockCategoryId}
+               , #{blockId})
+    </insert>
+</mapper>

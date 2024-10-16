@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.TenantsMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , tenant_id, name_cn, name_en, description, created_at, updated_at, createdBy, updatedBy
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="TenantsByCondition">
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="nameCn!=null and nameCn!=''">
+            AND name_cn = #{nameCn}
+        </if>
+        <if test="nameEn!=null and nameEn!=''">
+            AND name_en = #{nameEn}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            AND created_at = #{createdAt}
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            AND updated_at = #{updatedAt}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND createdBy = #{createdBy}
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            AND updatedBy = #{updatedBy}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="TenantsSetColumns">
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="nameCn!=null and nameCn!=''">
+            name_cn = #{nameCn},
+        </if>
+        <if test="nameEn!=null and nameEn!=''">
+            name_en = #{nameEn},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="createdAt!=null and createdAt!=''">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt!=null and updatedAt!=''">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            createdBy = #{createdBy},
+        </if>
+        <if test="updatedBy!=null and updatedBy!=''">
+            updatedBy = #{updatedBy},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="TenantsMap" type="com.tinyengine.it.model.entity.Tenants">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="name_cn" property="nameCn"/>
+        <result column="name_en" property="nameEn"/>
+        <result column="description" property="description"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="createdBy" property="createdBy"/>
+        <result column="updatedBy" property="updatedBy"/>
+    </resultMap>
+
+    <!-- 查询表tenants所有数据 -->
+    <select id="findAllTenants" resultMap="TenantsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tenants
+    </select>
+
+    <!-- 根据主键id查询表tenants信息 -->
+    <select id="findTenantsById" resultMap="TenantsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tenants
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表tenants数据 -->
+    <select id="findTenantsByCondition" resultMap="TenantsMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tenants
+        WHERE 1=1
+        <include refid="TenantsByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表tenants数据 -->
+    <delete id="deleteTenantsById">
+        DELETE
+        FROM tenants
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表tenants数据 -->
+    <update id="updateTenantsById" parameterType="com.tinyengine.it.model.entity.Tenants">
+        UPDATE tenants
+        <set>
+            <include refid="TenantsSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表tenants数据 -->
+    <insert id="createTenants">
+        INSERT INTO tenants ( id
+                            , tenant_id
+                            , name_cn
+                            , name_en
+                            , description
+                            , created_at
+                            , updated_at
+                            , createdBy
+                            , updatedBy)
+        VALUES ( #{id}
+               , #{tenantId}
+               , #{nameCn}
+               , #{nameEn}
+               , #{description}
+               , #{createdAt}
+               , #{updatedAt}
+               , #{createdBy}
+               , #{updatedBy})
+    </insert>
+</mapper>
