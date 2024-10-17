@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.DatasourceMapper">
+
+    <!-- 通用设置 -->
+
+        <!-- 通用查询列 -->
+        <sql id="Base_Column_List">
+            id, name, data, tpl, app_id, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        </sql>
+
+        <!-- 通用条件列 -->
+        <sql id="DatasourceByCondition">
+                    <if test="name!=null and name!=''">
+                        AND name = #{name}
+                    </if>
+                    <if test="data!=null and data!=''">
+                        AND data = #{data}
+                    </if>
+                    <if test="tpl!=null and tpl!=''">
+                        AND tpl = #{tpl}
+                    </if>
+                    <if test="appId!=null and appId!=''">
+                        AND app_id = #{appId}
+                    </if>
+                    <if test="description!=null and description!=''">
+                        AND description = #{description}
+                    </if>
+                    <if test="createdBy!=null and createdBy!=''">
+                        AND created_by = #{createdBy}
+                    </if>
+                    <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+                        AND last_updated_by = #{lastUpdatedBy}
+                    </if>
+                    <if test="createdTime!=null and createdTime!=''">
+                        AND created_time = #{createdTime}
+                    </if>
+                    <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+                        AND last_updated_time = #{lastUpdatedTime}
+                    </if>
+                    <if test="tenantId!=null and tenantId!=''">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                    <if test="siteId!=null and siteId!=''">
+                        AND site_id = #{siteId}
+                    </if>
+        </sql>
+
+        <!-- 通用设置列 -->
+        <sql id="DatasourceSetColumns">
+                    <if test="name!=null and name!=''">
+                        name = #{name},
+                    </if>
+                    <if test="data!=null and data!=''">
+                        data = #{data},
+                    </if>
+                    <if test="tpl!=null and tpl!=''">
+                        tpl = #{tpl},
+                    </if>
+                    <if test="appId!=null and appId!=''">
+                        app_id = #{appId},
+                    </if>
+                    <if test="description!=null and description!=''">
+                        description = #{description},
+                    </if>
+                    <if test="createdBy!=null and createdBy!=''">
+                        created_by = #{createdBy},
+                    </if>
+                    <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+                        last_updated_by = #{lastUpdatedBy},
+                    </if>
+                    <if test="createdTime!=null and createdTime!=''">
+                        created_time = #{createdTime},
+                    </if>
+                    <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+                        last_updated_time = #{lastUpdatedTime},
+                    </if>
+                    <if test="tenantId!=null and tenantId!=''">
+                        tenant_id = #{tenantId},
+                    </if>
+                    <if test="siteId!=null and siteId!=''">
+                        site_id = #{siteId},
+                    </if>
+        </sql>
+
+
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="DatasourceMap" type="com.tinyengine.it.model.entity.Datasource">
+                    <id column="id" property="id"/>
+                    <result column="name" property="name"/>
+                    <result column="data" property="data"/>
+                    <result column="tpl" property="tpl"/>
+                    <result column="app_id" property="appId"/>
+                    <result column="description" property="description"/>
+                    <result column="created_by" property="createdBy"/>
+                    <result column="last_updated_by" property="lastUpdatedBy"/>
+                    <result column="created_time" property="createdTime"/>
+                    <result column="last_updated_time" property="lastUpdatedTime"/>
+                    <result column="tenant_id" property="tenantId"/>
+                    <result column="site_id" property="siteId"/>
+        </resultMap>
+
+    <!-- 查询表t_datasource所有数据 -->
+    <select id="findAllDatasource" resultMap="DatasourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_datasource
+    </select>
+
+            <!-- 根据主键id查询表t_datasource信息 -->
+            <select id="findDatasourceById" resultMap="DatasourceMap">
+                SELECT
+                <include refid="Base_Column_List"/>
+                FROM t_datasource
+                WHERE id=#{id}
+            </select>
+
+    <!-- 根据条件查询表t_datasource数据 -->
+    <select id="findDatasourceByCondition" resultMap="DatasourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_datasource
+        WHERE 1=1
+        <include refid="DatasourceByCondition" />
+    </select>
+
+            <!-- 根据主键id删除表t_datasource数据 -->
+            <delete id="deleteDatasourceById">
+                DELETE FROM
+                t_datasource
+                WHERE id=#{id}
+            </delete>
+
+            <!-- 根据主键id更新表t_datasource数据 -->
+            <update id="updateDatasourceById" parameterType="com.tinyengine.it.model.entity.Datasource">
+                UPDATE t_datasource
+                <set>
+                    <include refid="DatasourceSetColumns"/>
+                </set>
+                WHERE
+                id=#{id}
+            </update>
+
+            <!-- 新增表t_datasource数据 -->
+            <insert id="createDatasource">
+                INSERT INTO t_datasource (
+                    id
+                    ,name
+                    ,data
+                    ,tpl
+                    ,app_id
+                    ,description
+                    ,created_by
+                    ,last_updated_by
+                    ,created_time
+                    ,last_updated_time
+                    ,tenant_id
+                    ,site_id
+                ) VALUES (
+                    #{id}
+                    ,#{name}
+                    ,#{data}
+                    ,#{tpl}
+                    ,#{appId}
+                    ,#{description}
+                    ,#{createdBy}
+                    ,#{lastUpdatedBy}
+                    ,#{createdTime}
+                    ,#{lastUpdatedTime}
+                    ,#{tenantId}
+                    ,#{siteId}
+                )
+            </insert>
+</mapper>
