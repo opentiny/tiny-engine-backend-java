@@ -29,7 +29,7 @@ public class AutoGeneratorCode {
                 .packageConfig((scanner, builder) -> {
                     builder.parent("com.tinyengine.it")
                             .moduleName("")
-                            .controller(scanner.apply("请输入controller包名称"))
+                            // .controller(scanner.apply("请输入controller包名称"))
                             .service(scanner.apply("请输入service包名称"))
                             .serviceImpl(scanner.apply("请输入impl包名称"))
                             .mapper("mapper") // scanner.apply("请输入mapper包名称"))
@@ -42,8 +42,8 @@ public class AutoGeneratorCode {
                             .service("templates/service.java")
                             .serviceImpl("templates/serviceImpl.java")
                             .mapper("templates/mapper.java")
-                            .xml("templates/mapper.xml")
-                            .controller("templates/controller.java");
+                            .xml("templates/mapper.xml");
+                            // .controller("templates/controller.java");
                 })
                 // 策略配置
                 .strategyConfig((scanner, builder) -> {
@@ -54,9 +54,9 @@ public class AutoGeneratorCode {
                             .formatServiceImplFileName("%sServiceImpl") // scanner.apply("请输入service实现类impl名称"))
                             .entityBuilder()
                             .enableLombok() // 开启Lombok
-                            .controllerBuilder()
-                            .formatFileName("%sController")//scanner.apply("请输入controller名称"))
-                            .enableRestStyle()
+                            // .controllerBuilder()
+                            // .formatFileName("%sController")//scanner.apply("请输入controller名称"))
+                            // .enableRestStyle()
                             .mapperBuilder()
                             .formatMapperFileName("%sMapper")//scanner.apply("请输入mapper名称"))
                             .formatXmlFileName("%sMapper")//scanner.apply("请输入mapper xml名称"))

@@ -5,8 +5,6 @@ import com.tinyengine.it.config.SystemControllerLog;
 import com.tinyengine.it.exception.ExceptionEnum;
 import com.tinyengine.it.exception.ServiceException;
 import com.tinyengine.it.model.dto.*;
-import com.tinyengine.it.model.entity.I18nEntries;
-import com.tinyengine.it.service.app.I18nEntriesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
