@@ -1,8 +1,6 @@
 package com.tinyengine.it.controller.platform;
 
-import com.tinyengine.it.mapper.UsersPermissionsUserMapper;
 import com.tinyengine.it.model.dto.Result;
-import com.tinyengine.it.model.entity.UsersPermissionsUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

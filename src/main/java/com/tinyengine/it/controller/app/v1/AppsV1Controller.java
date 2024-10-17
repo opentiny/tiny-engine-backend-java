@@ -3,7 +3,6 @@ package com.tinyengine.it.controller.app.v1;
 import com.tinyengine.it.config.SystemControllerLog;
 import com.tinyengine.it.exception.ServiceException;
 import com.tinyengine.it.model.dto.Result;
-import com.tinyengine.it.model.entity.Apps;
 import com.tinyengine.it.service.app.v1.AppsV1Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

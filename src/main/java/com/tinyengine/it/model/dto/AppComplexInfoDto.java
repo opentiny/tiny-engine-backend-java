@@ -1,6 +1,5 @@
 package com.tinyengine.it.model.dto;
 
-import com.tinyengine.it.model.entity.Apps;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
