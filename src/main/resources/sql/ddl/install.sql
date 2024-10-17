@@ -344,8 +344,8 @@ CREATE TABLE `t_app`  (
                           `last_updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
                           `tenant_id` varchar(60) NOT NULL COMMENT '租户ID',
                           `site_id` varchar(60) COMMENT '站点ID',
-                          PRIMARY KEY (`id`) USING BTREE
-                              UNIQUE INDEX `u_idx_app`(`tenant_id`,`platform_id`,`name`) USING BTREE
+                          PRIMARY KEY (`id`) USING BTREE,
+                          UNIQUE INDEX `u_idx_app`(`tenant_id`,`platform_id`,`name`) USING BTREE
 ) ENGINE = InnoDB COMMENT = '应用表';
 
 
