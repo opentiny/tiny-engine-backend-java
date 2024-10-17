@@ -2,8 +2,6 @@ package com.tinyengine.it.model.dto;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tinyengine.it.model.entity.Apps;
-import com.tinyengine.it.model.entity.Blocks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tinyengine.it.model.entity.I18nLangs;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

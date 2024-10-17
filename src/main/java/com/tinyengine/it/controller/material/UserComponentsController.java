@@ -2,9 +2,6 @@ package com.tinyengine.it.controller.material;
 
 
 import com.tinyengine.it.model.dto.Result;
-import com.tinyengine.it.model.entity.Blocks;
-import com.tinyengine.it.model.entity.UserComponents;
-import com.tinyengine.it.service.material.UserComponentsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
