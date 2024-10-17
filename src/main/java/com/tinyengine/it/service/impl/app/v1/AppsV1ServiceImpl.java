@@ -5,7 +5,6 @@ import com.tinyengine.it.exception.ServiceException;
 import com.tinyengine.it.mapper.*;
 import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.*;
-import com.tinyengine.it.service.app.I18nEntriesService;
 import com.tinyengine.it.service.app.v1.AppsV1Service;
 import com.tinyengine.it.utils.Schema;
 import com.tinyengine.it.utils.Utils;

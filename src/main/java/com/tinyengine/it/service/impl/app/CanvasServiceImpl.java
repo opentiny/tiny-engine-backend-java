@@ -1,13 +1,7 @@
 package com.tinyengine.it.service.impl.app;
 
 import com.tinyengine.it.config.Enums;
-import com.tinyengine.it.mapper.BlocksMapper;
-import com.tinyengine.it.mapper.PagesMapper;
-import com.tinyengine.it.mapper.UsersPermissionsUserMapper;
 import com.tinyengine.it.model.dto.PageDto;
-import com.tinyengine.it.model.entity.Blocks;
-import com.tinyengine.it.model.entity.Pages;
-import com.tinyengine.it.model.entity.UsersPermissionsUser;
 import com.tinyengine.it.service.app.CanvasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

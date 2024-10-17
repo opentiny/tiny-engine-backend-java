@@ -3,8 +3,6 @@ package com.tinyengine.it.model.dto;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tinyengine.it.model.entity.BlockCategories;
-import com.tinyengine.it.model.entity.BlockGroups;
 import com.tinyengine.it.utils.ListTypeHandler;
 import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;

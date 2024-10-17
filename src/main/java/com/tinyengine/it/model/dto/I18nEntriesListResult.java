@@ -1,6 +1,5 @@
 package com.tinyengine.it.model.dto;
 
-import com.tinyengine.it.model.entity.I18nLangs;
 import lombok.Data;
 
 import java.util.List;
