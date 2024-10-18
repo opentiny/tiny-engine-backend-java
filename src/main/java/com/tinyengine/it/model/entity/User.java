@@ -19,9 +19,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("t_users")
-@Schema(name = "Users", description = "用户权限表")
-public class Users implements Serializable {
+@TableName("t_user")
+@Schema(name = "User", description = "用户权限表")
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Schema(name= "id", description = "主键id")
