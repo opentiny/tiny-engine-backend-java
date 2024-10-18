@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.PageTemplateMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, page_content, framework, published, `public`, type, status, is_preset, tpl_image, description, platform_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="PageTemplateByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="pageContent!=null and pageContent!=''">
+            AND page_content = #{pageContent}
+        </if>
+        <if test="framework!=null and framework!=''">
+            AND framework = #{framework}
+        </if>
+        <if test="published!=null and published!=''">
+            AND published = #{published}
+        </if>
+        <if test="public!=null and public!=''">
+            AND `public` = #{publicStatus}
+        </if>
+        <if test="type!=null and type!=''">
+            AND type = #{type}
+        </if>
+        <if test="status!=null and status!=''">
+            AND status = #{status}
+        </if>
+        <if test="isPreset!=null and isPreset!=''">
+            AND is_preset = #{isPreset}
+        </if>
+        <if test="tplImage!=null and tplImage!=''">
+            AND tpl_image = #{tplImage}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="platformId!=null and platformId!=''">
+            AND platform_id = #{platformId}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="PageTemplateSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="pageContent!=null and pageContent!=''">
+            page_content = #{pageContent},
+        </if>
+        <if test="framework!=null and framework!=''">
+            framework = #{framework},
+        </if>
+        <if test="published!=null and published!=''">
+            published = #{published},
+        </if>
+        <if test="public!=null and public!=''">
+            `public` = #{publicStatus},
+        </if>
+        <if test="type!=null and type!=''">
+            type = #{type},
+        </if>
+        <if test="status!=null and status!=''">
+            status = #{status},
+        </if>
+        <if test="isPreset!=null and isPreset!=''">
+            is_preset = #{isPreset},
+        </if>
+        <if test="tplImage!=null and tplImage!=''">
+            tpl_image = #{tplImage},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="platformId!=null and platformId!=''">
+            platform_id = #{platformId},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PageTemplateMap" type="com.tinyengine.it.model.entity.PageTemplate">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="page_content" property="pageContent"/>
+        <result column="framework" property="framework"/>
+        <result column="published" property="published"/>
+        <result column="public" property="publicStatus"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="is_preset" property="isPreset"/>
+        <result column="tpl_image" property="tplImage"/>
+        <result column="description" property="description"/>
+        <result column="platform_id" property="platformId"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 查询表page_template所有数据 -->
+    <select id="queryAllPageTemplate" resultMap="PageTemplateMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM page_template
+    </select>
+
+    <!-- 根据主键id查询表page_template信息 -->
+    <select id="queryPageTemplateById" resultMap="PageTemplateMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM page_template
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表page_template数据 -->
+    <select id="queryPageTemplateByCondition" resultMap="PageTemplateMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM page_template
+        WHERE 1=1
+        <include refid="PageTemplateByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表page_template数据 -->
+    <delete id="deletePageTemplateById">
+        DELETE
+        FROM page_template
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表page_template数据 -->
+    <update id="updatePageTemplateById" parameterType="com.tinyengine.it.model.entity.PageTemplate">
+        UPDATE page_template
+        <set>
+            <include refid="PageTemplateSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表page_template数据 -->
+    <insert id="createPageTemplate">
+        INSERT INTO page_template ( id
+                                  , name
+                                  , page_content
+                                  , framework
+                                  , published
+                                  , `public`
+                                  , type
+                                  , status
+                                  , is_preset
+                                  , tpl_image
+                                  , description
+                                  , platform_id
+                                  , created_by
+                                  , last_updated_by
+                                  , created_time
+                                  , last_updated_time
+                                  , tenant_id
+                                  , site_id)
+        VALUES ( #{id}
+               , #{name}
+               , #{pageContent}
+               , #{framework}
+               , #{published}
+               , #{publicStatus}
+               , #{type}
+               , #{status}
+               , #{isPreset}
+               , #{tplImage}
+               , #{description}
+               , #{platformId}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId})
+    </insert>
+</mapper>
