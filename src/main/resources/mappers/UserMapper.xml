@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tinyengine.it.mapper.UsersMapper">
+<mapper namespace="com.tinyengine.it.mapper.UserMapper">
 
     <!-- 通用设置 -->
 
@@ -11,7 +11,7 @@
     </sql>
 
     <!-- 通用条件列 -->
-    <sql id="UsersByCondition">
+    <sql id="UserByCondition">
         <if test="username!=null and username!=''">
             AND username = #{username}
         </if>
@@ -48,7 +48,7 @@
     </sql>
 
     <!-- 通用设置列 -->
-    <sql id="UsersSetColumns">
+    <sql id="UserSetColumns">
         <if test="username!=null and username!=''">
             username = #{username},
         </if>
@@ -86,7 +86,7 @@
 
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="UsersMap" type="com.tinyengine.it.model.entity.Users">
+    <resultMap id="UserMap" type="com.tinyengine.it.model.entity.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="email" property="email"/>
@@ -101,61 +101,60 @@
         <result column="is_public" property="isPublic"/>
     </resultMap>
 
-    <!-- 查询表t_users所有数据 -->
-    <select id="queryAllUsers" resultMap="UsersMap">
+    <!-- 查询表t_user所有数据 -->
+    <select id="queryAllUser" resultMap="UserMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_users
+        FROM t_user
     </select>
 
-    <!-- 根据主键id查询表t_users信息 -->
-    <select id="queryUsersById" resultMap="UsersMap">
+    <!-- 根据主键id查询表t_user信息 -->
+    <select id="queryUserById" resultMap="UserMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_users
+        FROM t_user
         WHERE id=#{id}
     </select>
 
-    <!-- 根据条件查询表t_users数据 -->
-    <select id="queryUsersByCondition" resultMap="UsersMap">
+    <!-- 根据条件查询表t_user数据 -->
+    <select id="queryUserByCondition" resultMap="UserMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_users
+        FROM t_user
         WHERE 1=1
-        <include refid="UsersByCondition"/>
+        <include refid="UserByCondition"/>
     </select>
 
-    <!-- 根据主键id删除表t_users数据 -->
-    <delete id="deleteUsersById">
+    <!-- 根据主键id删除表t_user数据 -->
+    <delete id="deleteUserById">
         DELETE
-        FROM t_users
+        FROM t_user
         WHERE id = #{id}
     </delete>
 
-    <!-- 根据主键id更新表t_users数据 -->
-    <update id="updateUsersById" parameterType="com.tinyengine.it.model.entity.Users">
-        UPDATE t_users
+    <!-- 根据主键id更新表t_user数据 -->
+    <update id="updateUserById" parameterType="com.tinyengine.it.model.entity.User">
+        UPDATE t_user
         <set>
-            <include refid="UsersSetColumns"/>
+            <include refid="UserSetColumns"/>
         </set>
         WHERE
         id=#{id}
     </update>
 
-    <!-- 新增表t_users数据 -->
-    <insert id="createUsers" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_users ( id
-                            , username
-                            , email
-                            , enable
-                            , created_by
-                            , last_updated_by
-                            , created_time
-                            , last_updated_time
-                            , tenant_id
-                            , site_id
-                            , is_admin
-                            , is_public)
+    <insert id="createUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user ( id
+                           , username
+                           , email
+                           , enable
+                           , created_by
+                           , last_updated_by
+                           , created_time
+                           , last_updated_time
+                           , tenant_id
+                           , site_id
+                           , is_admin
+                           , is_public)
         VALUES ( #{id}
                , #{username}
                , #{email}

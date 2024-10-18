@@ -593,8 +593,8 @@ CREATE TABLE `t_task_record`
 -- ----------------------------
 -- Table structure for t_users
 -- ----------------------------
-DROP TABLE IF EXISTS `t_users`;
-CREATE TABLE `t_users`
+DROP TABLE IF EXISTS `t_user`;
+CREATE TABLE `t_user`
 (
     `id`                int          NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `username`          varchar(255) NOT NULL COMMENT '用户名',
@@ -609,5 +609,5 @@ CREATE TABLE `t_users`
     `is_admin`          tinyint(1),
     `is_public`         tinyint(1),
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE INDEX `u_idx_users`(`username`,`email`) USING BTREE
+    UNIQUE INDEX `u_idx_user`(`username`,`email`) USING BTREE
 ) ENGINE = InnoDB COMMENT = '用户权限表';
