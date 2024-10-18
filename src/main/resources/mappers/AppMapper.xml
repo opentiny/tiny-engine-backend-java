@@ -358,7 +358,7 @@
     </update>
 
     <!-- 新增表t_app数据 -->
-    <insert id="createApp">
+    <insert id="createApp" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_app ( id
                           , name
                           , app_website

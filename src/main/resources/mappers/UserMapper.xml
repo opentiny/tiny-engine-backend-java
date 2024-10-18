@@ -142,8 +142,7 @@
         id=#{id}
     </update>
 
-    <!-- 新增表t_user数据 -->
-    <insert id="createUser">
+    <insert id="createUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_user ( id
                            , username
                            , email

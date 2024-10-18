@@ -9,7 +9,7 @@ public interface ${table.mapperName} extends BaseMapper<${entity}>{
     /**
     *  查询表${table.name}所有信息
     */
-    List<${entity}> findAll${entity}();
+    List<${entity}> queryAll${entity}();
 
 <#list table.fields as field>
         <#if field.keyFlag>
@@ -17,14 +17,14 @@ public interface ${table.mapperName} extends BaseMapper<${entity}>{
     * 根据主键${field.propertyName}查询表${table.name}数据
     * @param ${field.propertyName}
     */
-    ${entity} find${entity}ById(@Param("${field.propertyName}") ${field.propertyType} ${field.propertyName});
+    ${entity} query${entity}ById(@Param("${field.propertyName}") ${field.propertyType} ${field.propertyName});
     </#if>
 </#list>
     /**
     *  根据条件查询表${table.name}数据
     *  @param ${table.entityPath}
     */
-    List<${entity}> find${entity}ByCondition(${entity} ${table.entityPath});
+    List<${entity}> query${entity}ByCondition(${entity} ${table.entityPath});
 
 <#list table.fields as field>
     <#if field.keyFlag>
