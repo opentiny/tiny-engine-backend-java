@@ -88,14 +88,14 @@
         </resultMap>
 
     <!-- 查询表t_tenant所有数据 -->
-    <select id="findAllTenant" resultMap="TenantMap">
+    <select id="queryAllTenant" resultMap="TenantMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_tenant
     </select>
 
             <!-- 根据主键id查询表t_tenant信息 -->
-            <select id="findTenantById" resultMap="TenantMap">
+            <select id="queryTenantById" resultMap="TenantMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_tenant
@@ -103,7 +103,7 @@
             </select>
 
     <!-- 根据条件查询表t_tenant数据 -->
-    <select id="findTenantByCondition" resultMap="TenantMap">
+    <select id="queryTenantByCondition" resultMap="TenantMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_tenant

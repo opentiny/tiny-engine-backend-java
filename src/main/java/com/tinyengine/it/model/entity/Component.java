@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,6 +80,7 @@ public class Component implements Serializable {
     @Schema(name= "configure", description = "配置信息")
     private String configure;
 
+    @JsonProperty("public")
     @Schema(name= "public", description = "公开状态：0，1，2")
     private Integer isPublic;
 

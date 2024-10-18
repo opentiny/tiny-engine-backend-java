@@ -228,22 +228,34 @@
         </resultMap>
 
     <!-- 查询表t_component所有数据 -->
-    <select id="findAllComponent" resultMap="ComponentMap">
+    <select id="queryAllComponent" resultMap="ComponentMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_component
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
             <!-- 根据主键id查询表t_component信息 -->
-            <select id="findComponentById" resultMap="ComponentMap">
+            <select id="queryComponentById" resultMap="ComponentMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_component
-                WHERE id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </select>
 
     <!-- 根据条件查询表t_component数据 -->
-    <select id="findComponentByCondition" resultMap="ComponentMap">
+    <select id="queryComponentByCondition" resultMap="ComponentMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_component

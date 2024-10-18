@@ -21,7 +21,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     */
     @Override
     public List<Datasource> findAllDatasource() throws ServiceException {
-        return datasourceMapper.findAllDatasource();
+        return datasourceMapper.queryAllDatasource();
     }
 
     /**
@@ -30,7 +30,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     */
     @Override
     public Datasource findDatasourceById(@Param("id") Integer id) throws ServiceException {
-        return datasourceMapper.findDatasourceById(id);
+        return datasourceMapper.queryDatasourceById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     */
     @Override
     public List<Datasource> findDatasourceByCondition(Datasource datasource) throws ServiceException {
-        return datasourceMapper.findDatasourceByCondition(datasource);
+        return datasourceMapper.queryDatasourceByCondition(datasource);
     }
 
     /**

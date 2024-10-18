@@ -21,7 +21,7 @@ public class ComponentServiceImpl implements ComponentService {
     */
     @Override
     public List<Component> findAllComponent() throws ServiceException {
-        return componentMapper.findAllComponent();
+        return componentMapper.queryAllComponent();
     }
 
     /**
@@ -30,7 +30,7 @@ public class ComponentServiceImpl implements ComponentService {
     */
     @Override
     public Component findComponentById(@Param("id") Integer id) throws ServiceException {
-        return componentMapper.findComponentById(id);
+        return componentMapper.queryComponentById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class ComponentServiceImpl implements ComponentService {
     */
     @Override
     public List<Component> findComponentByCondition(Component component) throws ServiceException {
-        return componentMapper.findComponentByCondition(component);
+        return componentMapper.queryComponentByCondition(component);
     }
 
     /**

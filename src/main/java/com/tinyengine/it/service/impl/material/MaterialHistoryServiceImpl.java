@@ -21,7 +21,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     */
     @Override
     public List<MaterialHistory> findAllMaterialHistory() throws ServiceException {
-        return materialHistoryMapper.findAllMaterialHistory();
+        return materialHistoryMapper.queryAllMaterialHistory();
     }
 
     /**
@@ -30,7 +30,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     */
     @Override
     public MaterialHistory findMaterialHistoryById(@Param("id") Integer id) throws ServiceException {
-        return materialHistoryMapper.findMaterialHistoryById(id);
+        return materialHistoryMapper.queryMaterialHistoryById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     */
     @Override
     public List<MaterialHistory> findMaterialHistoryByCondition(MaterialHistory materialHistory) throws ServiceException {
-        return materialHistoryMapper.findMaterialHistoryByCondition(materialHistory);
+        return materialHistoryMapper.queryMaterialHistoryByCondition(materialHistory);
     }
 
     /**
