@@ -12,21 +12,21 @@ public interface MaterialMapper extends BaseMapper<Material> {
     /**
      * 查询表t_material所有信息
      */
-    List<Material> findAllMaterial();
+    List<Material> queryAllMaterial();
 
     /**
      * 根据主键id查询表t_material数据
      *
      * @param id
      */
-    Material findMaterialById(@Param("id") Integer id);
+    Material queryMaterialById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_material数据
      *
      * @param material
      */
-    List<Material> findMaterialByCondition(Material material);
+    List<Material> queryMaterialByCondition(Material material);
 
     /**
      * 根据主键id删除表t_material数据

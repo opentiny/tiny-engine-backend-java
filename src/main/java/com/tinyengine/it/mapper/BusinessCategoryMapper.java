@@ -12,21 +12,21 @@ public interface BusinessCategoryMapper extends BaseMapper<BusinessCategory> {
     /**
      * 查询表t_business_category所有信息
      */
-    List<BusinessCategory> findAllBusinessCategory();
+    List<BusinessCategory> queryAllBusinessCategory();
 
     /**
      * 根据主键id查询表t_business_category数据
      *
      * @param id
      */
-    BusinessCategory findBusinessCategoryById(@Param("id") Integer id);
+    BusinessCategory queryBusinessCategoryById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_business_category数据
      *
      * @param businessCategory
      */
-    List<BusinessCategory> findBusinessCategoryByCondition(BusinessCategory businessCategory);
+    List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory);
 
     /**
      * 根据主键id删除表t_business_category数据

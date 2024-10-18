@@ -12,21 +12,21 @@ public interface PlatformMapper extends BaseMapper<Platform> {
     /**
      * 查询表t_platform所有信息
      */
-    List<Platform> findAllPlatform();
+    List<Platform> queryAllPlatform();
 
     /**
      * 根据主键id查询表t_platform数据
      *
      * @param id
      */
-    Platform findPlatformById(@Param("id") Integer id);
+    Platform queryPlatformById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_platform数据
      *
      * @param platform
      */
-    List<Platform> findPlatformByCondition(Platform platform);
+    List<Platform> queryPlatformByCondition(Platform platform);
 
     /**
      * 根据主键id删除表t_platform数据

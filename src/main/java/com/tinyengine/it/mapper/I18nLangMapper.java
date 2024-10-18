@@ -12,21 +12,21 @@ public interface I18nLangMapper extends BaseMapper<I18nLang> {
     /**
      * 查询表t_i18n_lang所有信息
      */
-    List<I18nLang> findAllI18nLang();
+    List<I18nLang> queryAllI18nLang();
 
     /**
      * 根据主键id查询表t_i18n_lang数据
      *
      * @param id
      */
-    I18nLang findI18nLangById(@Param("id") Integer id);
+    I18nLang queryI18nLangById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_i18n_lang数据
      *
      * @param i18nLang
      */
-    List<I18nLang> findI18nLangByCondition(I18nLang i18nLang);
+    List<I18nLang> queryI18nLangByCondition(I18nLang i18nLang);
 
     /**
      * 根据主键id删除表t_i18n_lang数据

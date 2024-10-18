@@ -17,53 +17,58 @@ public class UsersServiceImpl implements UsersService {
     private UsersMapper usersMapper;
 
     /**
-    *  查询表t_users所有数据
-    */
+     * 查询表t_users所有数据
+     */
     @Override
-    public List<Users> findAllUsers() throws ServiceException {
-        return usersMapper.findAllUsers();
+    public List<Users> queryAllUsers() throws ServiceException {
+        return usersMapper.queryAllUsers();
     }
 
     /**
-    *  根据主键id查询表t_users信息
-    *  @param id
-    */
+     * 根据主键id查询表t_users信息
+     *
+     * @param id
+     */
     @Override
-    public Users findUsersById(@Param("id") Integer id) throws ServiceException {
-        return usersMapper.findUsersById(id);
+    public Users queryUsersById(@Param("id") Integer id) throws ServiceException {
+        return usersMapper.queryUsersById(id);
     }
 
     /**
-    *  根据条件查询表t_users数据
-    *  @param users
-    */
+     * 根据条件查询表t_users数据
+     *
+     * @param users
+     */
     @Override
-    public List<Users> findUsersByCondition(Users users) throws ServiceException {
-        return usersMapper.findUsersByCondition(users);
+    public List<Users> queryUsersByCondition(Users users) throws ServiceException {
+        return usersMapper.queryUsersByCondition(users);
     }
 
     /**
-    *  根据主键id删除表t_users数据
-    *  @param id
-    */
+     * 根据主键id删除表t_users数据
+     *
+     * @param id
+     */
     @Override
     public Integer deleteUsersById(@Param("id") Integer id) throws ServiceException {
         return usersMapper.deleteUsersById(id);
     }
 
     /**
-    *  根据主键id更新表t_users数据
-    *  @param users
-    */
+     * 根据主键id更新表t_users数据
+     *
+     * @param users
+     */
     @Override
     public Integer updateUsersById(Users users) throws ServiceException {
         return usersMapper.updateUsersById(users);
     }
 
     /**
-    *  新增表t_users数据
-    *  @param users
-    */
+     * 新增表t_users数据
+     *
+     * @param users
+     */
     @Override
     public Integer createUsers(Users users) throws ServiceException {
         return usersMapper.createUsers(users);

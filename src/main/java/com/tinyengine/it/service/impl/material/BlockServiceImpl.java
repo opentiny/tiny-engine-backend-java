@@ -17,53 +17,58 @@ public class BlockServiceImpl implements BlockService {
     private BlockMapper blockMapper;
 
     /**
-    *  查询表t_block所有数据
-    */
+     * 查询表t_block所有数据
+     */
     @Override
-    public List<Block> findAllBlock() throws ServiceException {
-        return blockMapper.findAllBlock();
+    public List<Block> queryAllBlock() throws ServiceException {
+        return blockMapper.queryAllBlock();
     }
 
     /**
-    *  根据主键id查询表t_block信息
-    *  @param id
-    */
+     * 根据主键id查询表t_block信息
+     *
+     * @param id
+     */
     @Override
-    public Block findBlockById(@Param("id") Integer id) throws ServiceException {
-        return blockMapper.findBlockById(id);
+    public Block queryBlockById(@Param("id") Integer id) throws ServiceException {
+        return blockMapper.queryBlockById(id);
     }
 
     /**
-    *  根据条件查询表t_block数据
-    *  @param block
-    */
+     * 根据条件查询表t_block数据
+     *
+     * @param block
+     */
     @Override
-    public List<Block> findBlockByCondition(Block block) throws ServiceException {
-        return blockMapper.findBlockByCondition(block);
+    public List<Block> queryBlockByCondition(Block block) throws ServiceException {
+        return blockMapper.queryBlockByCondition(block);
     }
 
     /**
-    *  根据主键id删除表t_block数据
-    *  @param id
-    */
+     * 根据主键id删除表t_block数据
+     *
+     * @param id
+     */
     @Override
     public Integer deleteBlockById(@Param("id") Integer id) throws ServiceException {
         return blockMapper.deleteBlockById(id);
     }
 
     /**
-    *  根据主键id更新表t_block数据
-    *  @param block
-    */
+     * 根据主键id更新表t_block数据
+     *
+     * @param block
+     */
     @Override
     public Integer updateBlockById(Block block) throws ServiceException {
         return blockMapper.updateBlockById(block);
     }
 
     /**
-    *  新增表t_block数据
-    *  @param block
-    */
+     * 新增表t_block数据
+     *
+     * @param block
+     */
     @Override
     public Integer createBlock(Block block) throws ServiceException {
         return blockMapper.createBlock(block);

@@ -17,53 +17,58 @@ public class TaskRecordServiceImpl implements TaskRecordService {
     private TaskRecordMapper taskRecordMapper;
 
     /**
-    *  查询表t_task_record所有数据
-    */
+     * 查询表t_task_record所有数据
+     */
     @Override
-    public List<TaskRecord> findAllTaskRecord() throws ServiceException {
-        return taskRecordMapper.findAllTaskRecord();
+    public List<TaskRecord> queryAllTaskRecord() throws ServiceException {
+        return taskRecordMapper.queryAllTaskRecord();
     }
 
     /**
-    *  根据主键id查询表t_task_record信息
-    *  @param id
-    */
+     * 根据主键id查询表t_task_record信息
+     *
+     * @param id
+     */
     @Override
-    public TaskRecord findTaskRecordById(@Param("id") Integer id) throws ServiceException {
-        return taskRecordMapper.findTaskRecordById(id);
+    public TaskRecord queryTaskRecordById(@Param("id") Integer id) throws ServiceException {
+        return taskRecordMapper.queryTaskRecordById(id);
     }
 
     /**
-    *  根据条件查询表t_task_record数据
-    *  @param taskRecord
-    */
+     * 根据条件查询表t_task_record数据
+     *
+     * @param taskRecord
+     */
     @Override
-    public List<TaskRecord> findTaskRecordByCondition(TaskRecord taskRecord) throws ServiceException {
-        return taskRecordMapper.findTaskRecordByCondition(taskRecord);
+    public List<TaskRecord> queryTaskRecordByCondition(TaskRecord taskRecord) throws ServiceException {
+        return taskRecordMapper.queryTaskRecordByCondition(taskRecord);
     }
 
     /**
-    *  根据主键id删除表t_task_record数据
-    *  @param id
-    */
+     * 根据主键id删除表t_task_record数据
+     *
+     * @param id
+     */
     @Override
     public Integer deleteTaskRecordById(@Param("id") Integer id) throws ServiceException {
         return taskRecordMapper.deleteTaskRecordById(id);
     }
 
     /**
-    *  根据主键id更新表t_task_record数据
-    *  @param taskRecord
-    */
+     * 根据主键id更新表t_task_record数据
+     *
+     * @param taskRecord
+     */
     @Override
     public Integer updateTaskRecordById(TaskRecord taskRecord) throws ServiceException {
         return taskRecordMapper.updateTaskRecordById(taskRecord);
     }
 
     /**
-    *  新增表t_task_record数据
-    *  @param taskRecord
-    */
+     * 新增表t_task_record数据
+     *
+     * @param taskRecord
+     */
     @Override
     public Integer createTaskRecord(TaskRecord taskRecord) throws ServiceException {
         return taskRecordMapper.createTaskRecord(taskRecord);
