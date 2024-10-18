@@ -148,6 +148,11 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM page_template
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
     <!-- 根据主键id查询表page_template信息 -->
@@ -155,7 +160,14 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM page_template
-        WHERE id=#{id}
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
     <!-- 根据条件查询表page_template数据 -->

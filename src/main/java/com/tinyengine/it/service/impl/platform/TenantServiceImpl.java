@@ -21,7 +21,7 @@ public class TenantServiceImpl implements TenantService {
     */
     @Override
     public List<Tenant> findAllTenant() throws ServiceException {
-        return tenantMapper.findAllTenant();
+        return tenantMapper.queryAllTenant();
     }
 
     /**
@@ -30,7 +30,7 @@ public class TenantServiceImpl implements TenantService {
     */
     @Override
     public Tenant findTenantById(@Param("id") Integer id) throws ServiceException {
-        return tenantMapper.findTenantById(id);
+        return tenantMapper.queryTenantById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class TenantServiceImpl implements TenantService {
     */
     @Override
     public List<Tenant> findTenantByCondition(Tenant tenant) throws ServiceException {
-        return tenantMapper.findTenantByCondition(tenant);
+        return tenantMapper.queryTenantByCondition(tenant);
     }
 
     /**

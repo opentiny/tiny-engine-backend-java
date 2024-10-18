@@ -10,18 +10,18 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
     /**
     *  查询表t_material_history所有信息
     */
-    List<MaterialHistory> findAllMaterialHistory();
+    List<MaterialHistory> queryAllMaterialHistory();
 
     /**
     * 根据主键id查询表t_material_history数据
     * @param id
     */
-    MaterialHistory findMaterialHistoryById(@Param("id") Integer id);
+    MaterialHistory queryMaterialHistoryById(@Param("id") Integer id);
     /**
     *  根据条件查询表t_material_history数据
     *  @param materialHistory
     */
-    List<MaterialHistory> findMaterialHistoryByCondition(MaterialHistory materialHistory);
+    List<MaterialHistory> queryMaterialHistoryByCondition(MaterialHistory materialHistory);
 
     /**
     *  根据主键id删除表t_material_history数据

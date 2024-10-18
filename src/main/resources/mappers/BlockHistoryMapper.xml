@@ -235,22 +235,34 @@
         </resultMap>
 
     <!-- 查询表t_block_history所有数据 -->
-    <select id="findAllBlockHistory" resultMap="BlockHistoryMap">
+    <select id="queryAllBlockHistory" resultMap="BlockHistoryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block_history
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
             <!-- 根据主键id查询表t_block_history信息 -->
-            <select id="findBlockHistoryById" resultMap="BlockHistoryMap">
+            <select id="queryBlockHistoryById" resultMap="BlockHistoryMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_block_history
-                WHERE id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </select>
 
     <!-- 根据条件查询表t_block_history数据 -->
-    <select id="findBlockHistoryByCondition" resultMap="BlockHistoryMap">
+    <select id="queryBlockHistoryByCondition" resultMap="BlockHistoryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block_history
