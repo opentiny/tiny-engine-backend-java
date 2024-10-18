@@ -12,21 +12,21 @@ public interface PageMapper extends BaseMapper<Page> {
     /**
      * 查询表t_page所有信息
      */
-    List<Page> findAllPage();
+    List<Page> queryAllPage();
 
     /**
      * 根据主键id查询表t_page数据
      *
      * @param id
      */
-    Page findPageById(@Param("id") Integer id);
+    Page queryPageById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_page数据
      *
      * @param page
      */
-    List<Page> findPageByCondition(Page page);
+    List<Page> queryPageByCondition(Page page);
 
     /**
      * 根据主键id删除表t_page数据

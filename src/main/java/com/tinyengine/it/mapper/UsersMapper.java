@@ -12,21 +12,21 @@ public interface UsersMapper extends BaseMapper<Users> {
     /**
      * 查询表t_users所有信息
      */
-    List<Users> findAllUsers();
+    List<Users> queryAllUsers();
 
     /**
      * 根据主键id查询表t_users数据
      *
      * @param id
      */
-    Users findUsersById(@Param("id") Integer id);
+    Users queryUsersById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_users数据
      *
      * @param users
      */
-    List<Users> findUsersByCondition(Users users);
+    List<Users> queryUsersByCondition(Users users);
 
     /**
      * 根据主键id删除表t_users数据

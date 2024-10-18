@@ -12,21 +12,21 @@ public interface BlockMapper extends BaseMapper<Block> {
     /**
      * 查询表t_block所有信息
      */
-    List<Block> findAllBlock();
+    List<Block> queryAllBlock();
 
     /**
      * 根据主键id查询表t_block数据
      *
      * @param id
      */
-    Block findBlockById(@Param("id") Integer id);
+    Block queryBlockById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_block数据
      *
      * @param block
      */
-    List<Block> findBlockByCondition(Block block);
+    List<Block> queryBlockByCondition(Block block);
 
     /**
      * 根据主键id删除表t_block数据

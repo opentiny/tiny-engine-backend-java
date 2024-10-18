@@ -228,14 +228,14 @@
     </resultMap>
 
     <!-- 查询表t_block所有数据 -->
-    <select id="findAllBlock" resultMap="BlockMap">
+    <select id="queryAllBlock" resultMap="BlockMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block
     </select>
 
     <!-- 根据主键id查询表t_block信息 -->
-    <select id="findBlockById" resultMap="BlockMap">
+    <select id="queryBlockById" resultMap="BlockMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block
@@ -243,7 +243,7 @@
     </select>
 
     <!-- 根据条件查询表t_block数据 -->
-    <select id="findBlockByCondition" resultMap="BlockMap">
+    <select id="queryBlockByCondition" resultMap="BlockMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block

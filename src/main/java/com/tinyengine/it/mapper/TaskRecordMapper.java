@@ -12,21 +12,21 @@ public interface TaskRecordMapper extends BaseMapper<TaskRecord> {
     /**
      * 查询表t_task_record所有信息
      */
-    List<TaskRecord> findAllTaskRecord();
+    List<TaskRecord> queryAllTaskRecord();
 
     /**
      * 根据主键id查询表t_task_record数据
      *
      * @param id
      */
-    TaskRecord findTaskRecordById(@Param("id") Integer id);
+    TaskRecord queryTaskRecordById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_task_record数据
      *
      * @param taskRecord
      */
-    List<TaskRecord> findTaskRecordByCondition(TaskRecord taskRecord);
+    List<TaskRecord> queryTaskRecordByCondition(TaskRecord taskRecord);
 
     /**
      * 根据主键id删除表t_task_record数据

@@ -4,298 +4,295 @@
 
     <!-- 通用设置 -->
 
-        <!-- 通用查询列 -->
-        <sql id="Base_Column_List">
-            id, name, published, last_build_info, description, latest_version, latest_history_id, material_history_id, image_url, sort_plugins, sort_toolbar, is_default, prettier_opts, set_default_by, app_extend_config, data_hash, business_category_id, theme_id, platform_url, vscode_url, tenant_id, site_id, created_by, last_updated_by, created_time, last_updated_time
-        </sql>
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, published, last_build_info, description, latest_version, latest_history_id, material_history_id, image_url, sort_plugins, sort_toolbar, is_default, prettier_opts, set_default_by, app_extend_config, data_hash, business_category_id, theme_id, platform_url, vscode_url, tenant_id, site_id, created_by, last_updated_by, created_time, last_updated_time
+    </sql>
 
-        <!-- 通用条件列 -->
-        <sql id="PlatformByCondition">
-                    <if test="name!=null and name!=''">
-                        AND name = #{name}
-                    </if>
-                    <if test="published!=null and published!=''">
-                        AND published = #{published}
-                    </if>
-                    <if test="lastBuildInfo!=null and lastBuildInfo!=''">
-                        AND last_build_info = #{lastBuildInfo}
-                    </if>
-                    <if test="description!=null and description!=''">
-                        AND description = #{description}
-                    </if>
-                    <if test="latestVersion!=null and latestVersion!=''">
-                        AND latest_version = #{latestVersion}
-                    </if>
-                    <if test="latestHistoryId!=null and latestHistoryId!=''">
-                        AND latest_history_id = #{latestHistoryId}
-                    </if>
-                    <if test="materialHistoryId!=null and materialHistoryId!=''">
-                        AND material_history_id = #{materialHistoryId}
-                    </if>
-                    <if test="imageUrl!=null and imageUrl!=''">
-                        AND image_url = #{imageUrl}
-                    </if>
-                    <if test="sortPlugins!=null and sortPlugins!=''">
-                        AND sort_plugins = #{sortPlugins}
-                    </if>
-                    <if test="sortToolbar!=null and sortToolbar!=''">
-                        AND sort_toolbar = #{sortToolbar}
-                    </if>
-                    <if test="isDefault!=null and isDefault!=''">
-                        AND is_default = #{isDefault}
-                    </if>
-                    <if test="prettierOpts!=null and prettierOpts!=''">
-                        AND prettier_opts = #{prettierOpts}
-                    </if>
-                    <if test="setDefaultBy!=null and setDefaultBy!=''">
-                        AND set_default_by = #{setDefaultBy}
-                    </if>
-                    <if test="appExtendConfig!=null and appExtendConfig!=''">
-                        AND app_extend_config = #{appExtendConfig}
-                    </if>
-                    <if test="dataHash!=null and dataHash!=''">
-                        AND data_hash = #{dataHash}
-                    </if>
-                    <if test="businessCategoryId!=null and businessCategoryId!=''">
-                        AND business_category_id = #{businessCategoryId}
-                    </if>
-                    <if test="themeId!=null and themeId!=''">
-                        AND theme_id = #{themeId}
-                    </if>
-                    <if test="platformUrl!=null and platformUrl!=''">
-                        AND platform_url = #{platformUrl}
-                    </if>
-                    <if test="vscodeUrl!=null and vscodeUrl!=''">
-                        AND vscode_url = #{vscodeUrl}
-                    </if>
-                    <if test="tenantId!=null and tenantId!=''">
-                        AND tenant_id = #{tenantId}
-                    </if>
-                    <if test="siteId!=null and siteId!=''">
-                        AND site_id = #{siteId}
-                    </if>
-                    <if test="createdBy!=null and createdBy!=''">
-                        AND created_by = #{createdBy}
-                    </if>
-                    <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-                        AND last_updated_by = #{lastUpdatedBy}
-                    </if>
-                    <if test="createdTime!=null and createdTime!=''">
-                        AND created_time = #{createdTime}
-                    </if>
-                    <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
-                        AND last_updated_time = #{lastUpdatedTime}
-                    </if>
-        </sql>
+    <!-- 通用条件列 -->
+    <sql id="PlatformByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="published!=null and published!=''">
+            AND published = #{published}
+        </if>
+        <if test="lastBuildInfo!=null and lastBuildInfo!=''">
+            AND last_build_info = #{lastBuildInfo}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="latestVersion!=null and latestVersion!=''">
+            AND latest_version = #{latestVersion}
+        </if>
+        <if test="latestHistoryId!=null and latestHistoryId!=''">
+            AND latest_history_id = #{latestHistoryId}
+        </if>
+        <if test="materialHistoryId!=null and materialHistoryId!=''">
+            AND material_history_id = #{materialHistoryId}
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            AND image_url = #{imageUrl}
+        </if>
+        <if test="sortPlugins!=null and sortPlugins!=''">
+            AND sort_plugins = #{sortPlugins}
+        </if>
+        <if test="sortToolbar!=null and sortToolbar!=''">
+            AND sort_toolbar = #{sortToolbar}
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            AND is_default = #{isDefault}
+        </if>
+        <if test="prettierOpts!=null and prettierOpts!=''">
+            AND prettier_opts = #{prettierOpts}
+        </if>
+        <if test="setDefaultBy!=null and setDefaultBy!=''">
+            AND set_default_by = #{setDefaultBy}
+        </if>
+        <if test="appExtendConfig!=null and appExtendConfig!=''">
+            AND app_extend_config = #{appExtendConfig}
+        </if>
+        <if test="dataHash!=null and dataHash!=''">
+            AND data_hash = #{dataHash}
+        </if>
+        <if test="businessCategoryId!=null and businessCategoryId!=''">
+            AND business_category_id = #{businessCategoryId}
+        </if>
+        <if test="themeId!=null and themeId!=''">
+            AND theme_id = #{themeId}
+        </if>
+        <if test="platformUrl!=null and platformUrl!=''">
+            AND platform_url = #{platformUrl}
+        </if>
+        <if test="vscodeUrl!=null and vscodeUrl!=''">
+            AND vscode_url = #{vscodeUrl}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+    </sql>
 
-        <!-- 通用设置列 -->
-        <sql id="PlatformSetColumns">
-                    <if test="name!=null and name!=''">
-                        name = #{name},
-                    </if>
-                    <if test="published!=null and published!=''">
-                        published = #{published},
-                    </if>
-                    <if test="lastBuildInfo!=null and lastBuildInfo!=''">
-                        last_build_info = #{lastBuildInfo},
-                    </if>
-                    <if test="description!=null and description!=''">
-                        description = #{description},
-                    </if>
-                    <if test="latestVersion!=null and latestVersion!=''">
-                        latest_version = #{latestVersion},
-                    </if>
-                    <if test="latestHistoryId!=null and latestHistoryId!=''">
-                        latest_history_id = #{latestHistoryId},
-                    </if>
-                    <if test="materialHistoryId!=null and materialHistoryId!=''">
-                        material_history_id = #{materialHistoryId},
-                    </if>
-                    <if test="imageUrl!=null and imageUrl!=''">
-                        image_url = #{imageUrl},
-                    </if>
-                    <if test="sortPlugins!=null and sortPlugins!=''">
-                        sort_plugins = #{sortPlugins},
-                    </if>
-                    <if test="sortToolbar!=null and sortToolbar!=''">
-                        sort_toolbar = #{sortToolbar},
-                    </if>
-                    <if test="isDefault!=null and isDefault!=''">
-                        is_default = #{isDefault},
-                    </if>
-                    <if test="prettierOpts!=null and prettierOpts!=''">
-                        prettier_opts = #{prettierOpts},
-                    </if>
-                    <if test="setDefaultBy!=null and setDefaultBy!=''">
-                        set_default_by = #{setDefaultBy},
-                    </if>
-                    <if test="appExtendConfig!=null and appExtendConfig!=''">
-                        app_extend_config = #{appExtendConfig},
-                    </if>
-                    <if test="dataHash!=null and dataHash!=''">
-                        data_hash = #{dataHash},
-                    </if>
-                    <if test="businessCategoryId!=null and businessCategoryId!=''">
-                        business_category_id = #{businessCategoryId},
-                    </if>
-                    <if test="themeId!=null and themeId!=''">
-                        theme_id = #{themeId},
-                    </if>
-                    <if test="platformUrl!=null and platformUrl!=''">
-                        platform_url = #{platformUrl},
-                    </if>
-                    <if test="vscodeUrl!=null and vscodeUrl!=''">
-                        vscode_url = #{vscodeUrl},
-                    </if>
-                    <if test="tenantId!=null and tenantId!=''">
-                        tenant_id = #{tenantId},
-                    </if>
-                    <if test="siteId!=null and siteId!=''">
-                        site_id = #{siteId},
-                    </if>
-                    <if test="createdBy!=null and createdBy!=''">
-                        created_by = #{createdBy},
-                    </if>
-                    <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-                        last_updated_by = #{lastUpdatedBy},
-                    </if>
-                    <if test="createdTime!=null and createdTime!=''">
-                        created_time = #{createdTime},
-                    </if>
-                    <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
-                        last_updated_time = #{lastUpdatedTime},
-                    </if>
-        </sql>
+    <!-- 通用设置列 -->
+    <sql id="PlatformSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="published!=null and published!=''">
+            published = #{published},
+        </if>
+        <if test="lastBuildInfo!=null and lastBuildInfo!=''">
+            last_build_info = #{lastBuildInfo},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="latestVersion!=null and latestVersion!=''">
+            latest_version = #{latestVersion},
+        </if>
+        <if test="latestHistoryId!=null and latestHistoryId!=''">
+            latest_history_id = #{latestHistoryId},
+        </if>
+        <if test="materialHistoryId!=null and materialHistoryId!=''">
+            material_history_id = #{materialHistoryId},
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            image_url = #{imageUrl},
+        </if>
+        <if test="sortPlugins!=null and sortPlugins!=''">
+            sort_plugins = #{sortPlugins},
+        </if>
+        <if test="sortToolbar!=null and sortToolbar!=''">
+            sort_toolbar = #{sortToolbar},
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            is_default = #{isDefault},
+        </if>
+        <if test="prettierOpts!=null and prettierOpts!=''">
+            prettier_opts = #{prettierOpts},
+        </if>
+        <if test="setDefaultBy!=null and setDefaultBy!=''">
+            set_default_by = #{setDefaultBy},
+        </if>
+        <if test="appExtendConfig!=null and appExtendConfig!=''">
+            app_extend_config = #{appExtendConfig},
+        </if>
+        <if test="dataHash!=null and dataHash!=''">
+            data_hash = #{dataHash},
+        </if>
+        <if test="businessCategoryId!=null and businessCategoryId!=''">
+            business_category_id = #{businessCategoryId},
+        </if>
+        <if test="themeId!=null and themeId!=''">
+            theme_id = #{themeId},
+        </if>
+        <if test="platformUrl!=null and platformUrl!=''">
+            platform_url = #{platformUrl},
+        </if>
+        <if test="vscodeUrl!=null and vscodeUrl!=''">
+            vscode_url = #{vscodeUrl},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+    </sql>
 
 
-
-        <!-- 通用查询映射结果 -->
-        <resultMap id="PlatformMap" type="com.tinyengine.it.model.entity.Platform">
-                    <id column="id" property="id"/>
-                    <result column="name" property="name"/>
-                    <result column="published" property="published"/>
-                    <result column="last_build_info" property="lastBuildInfo"/>
-                    <result column="description" property="description"/>
-                    <result column="latest_version" property="latestVersion"/>
-                    <result column="latest_history_id" property="latestHistoryId"/>
-                    <result column="material_history_id" property="materialHistoryId"/>
-                    <result column="image_url" property="imageUrl"/>
-                    <result column="sort_plugins" property="sortPlugins"/>
-                    <result column="sort_toolbar" property="sortToolbar"/>
-                    <result column="is_default" property="isDefault"/>
-                    <result column="prettier_opts" property="prettierOpts"/>
-                    <result column="set_default_by" property="setDefaultBy"/>
-                    <result column="app_extend_config" property="appExtendConfig"/>
-                    <result column="data_hash" property="dataHash"/>
-                    <result column="business_category_id" property="businessCategoryId"/>
-                    <result column="theme_id" property="themeId"/>
-                    <result column="platform_url" property="platformUrl"/>
-                    <result column="vscode_url" property="vscodeUrl"/>
-                    <result column="tenant_id" property="tenantId"/>
-                    <result column="site_id" property="siteId"/>
-                    <result column="created_by" property="createdBy"/>
-                    <result column="last_updated_by" property="lastUpdatedBy"/>
-                    <result column="created_time" property="createdTime"/>
-                    <result column="last_updated_time" property="lastUpdatedTime"/>
-        </resultMap>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PlatformMap" type="com.tinyengine.it.model.entity.Platform">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="published" property="published"/>
+        <result column="last_build_info" property="lastBuildInfo"/>
+        <result column="description" property="description"/>
+        <result column="latest_version" property="latestVersion"/>
+        <result column="latest_history_id" property="latestHistoryId"/>
+        <result column="material_history_id" property="materialHistoryId"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="sort_plugins" property="sortPlugins"/>
+        <result column="sort_toolbar" property="sortToolbar"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="prettier_opts" property="prettierOpts"/>
+        <result column="set_default_by" property="setDefaultBy"/>
+        <result column="app_extend_config" property="appExtendConfig"/>
+        <result column="data_hash" property="dataHash"/>
+        <result column="business_category_id" property="businessCategoryId"/>
+        <result column="theme_id" property="themeId"/>
+        <result column="platform_url" property="platformUrl"/>
+        <result column="vscode_url" property="vscodeUrl"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+    </resultMap>
 
     <!-- 查询表t_platform所有数据 -->
-    <select id="findAllPlatform" resultMap="PlatformMap">
+    <select id="queryAllPlatform" resultMap="PlatformMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_platform
     </select>
 
-            <!-- 根据主键id查询表t_platform信息 -->
-            <select id="findPlatformById" resultMap="PlatformMap">
-                SELECT
-                <include refid="Base_Column_List"/>
-                FROM t_platform
-                WHERE id=#{id}
-            </select>
+    <!-- 根据主键id查询表t_platform信息 -->
+    <select id="queryPlatformById" resultMap="PlatformMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_platform
+        WHERE id=#{id}
+    </select>
 
     <!-- 根据条件查询表t_platform数据 -->
-    <select id="findPlatformByCondition" resultMap="PlatformMap">
+    <select id="queryPlatformByCondition" resultMap="PlatformMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_platform
         WHERE 1=1
-        <include refid="PlatformByCondition" />
+        <include refid="PlatformByCondition"/>
     </select>
 
-            <!-- 根据主键id删除表t_platform数据 -->
-            <delete id="deletePlatformById">
-                DELETE FROM
-                t_platform
-                WHERE id=#{id}
-            </delete>
+    <!-- 根据主键id删除表t_platform数据 -->
+    <delete id="deletePlatformById">
+        DELETE
+        FROM t_platform
+        WHERE id = #{id}
+    </delete>
 
-            <!-- 根据主键id更新表t_platform数据 -->
-            <update id="updatePlatformById" parameterType="com.tinyengine.it.model.entity.Platform">
-                UPDATE t_platform
-                <set>
-                    <include refid="PlatformSetColumns"/>
-                </set>
-                WHERE
-                id=#{id}
-            </update>
+    <!-- 根据主键id更新表t_platform数据 -->
+    <update id="updatePlatformById" parameterType="com.tinyengine.it.model.entity.Platform">
+        UPDATE t_platform
+        <set>
+            <include refid="PlatformSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
 
-            <!-- 新增表t_platform数据 -->
-            <insert id="createPlatform">
-                INSERT INTO t_platform (
-                    id
-                    ,name
-                    ,published
-                    ,last_build_info
-                    ,description
-                    ,latest_version
-                    ,latest_history_id
-                    ,material_history_id
-                    ,image_url
-                    ,sort_plugins
-                    ,sort_toolbar
-                    ,is_default
-                    ,prettier_opts
-                    ,set_default_by
-                    ,app_extend_config
-                    ,data_hash
-                    ,business_category_id
-                    ,theme_id
-                    ,platform_url
-                    ,vscode_url
-                    ,tenant_id
-                    ,site_id
-                    ,created_by
-                    ,last_updated_by
-                    ,created_time
-                    ,last_updated_time
-                ) VALUES (
-                    #{id}
-                    ,#{name}
-                    ,#{published}
-                    ,#{lastBuildInfo}
-                    ,#{description}
-                    ,#{latestVersion}
-                    ,#{latestHistoryId}
-                    ,#{materialHistoryId}
-                    ,#{imageUrl}
-                    ,#{sortPlugins}
-                    ,#{sortToolbar}
-                    ,#{isDefault}
-                    ,#{prettierOpts}
-                    ,#{setDefaultBy}
-                    ,#{appExtendConfig}
-                    ,#{dataHash}
-                    ,#{businessCategoryId}
-                    ,#{themeId}
-                    ,#{platformUrl}
-                    ,#{vscodeUrl}
-                    ,#{tenantId}
-                    ,#{siteId}
-                    ,#{createdBy}
-                    ,#{lastUpdatedBy}
-                    ,#{createdTime}
-                    ,#{lastUpdatedTime}
-                )
-            </insert>
+    <!-- 新增表t_platform数据 -->
+    <insert id="createPlatform">
+        INSERT INTO t_platform ( id
+                               , name
+                               , published
+                               , last_build_info
+                               , description
+                               , latest_version
+                               , latest_history_id
+                               , material_history_id
+                               , image_url
+                               , sort_plugins
+                               , sort_toolbar
+                               , is_default
+                               , prettier_opts
+                               , set_default_by
+                               , app_extend_config
+                               , data_hash
+                               , business_category_id
+                               , theme_id
+                               , platform_url
+                               , vscode_url
+                               , tenant_id
+                               , site_id
+                               , created_by
+                               , last_updated_by
+                               , created_time
+                               , last_updated_time)
+        VALUES ( #{id}
+               , #{name}
+               , #{published}
+               , #{lastBuildInfo}
+               , #{description}
+               , #{latestVersion}
+               , #{latestHistoryId}
+               , #{materialHistoryId}
+               , #{imageUrl}
+               , #{sortPlugins}
+               , #{sortToolbar}
+               , #{isDefault}
+               , #{prettierOpts}
+               , #{setDefaultBy}
+               , #{appExtendConfig}
+               , #{dataHash}
+               , #{businessCategoryId}
+               , #{themeId}
+               , #{platformUrl}
+               , #{vscodeUrl}
+               , #{tenantId}
+               , #{siteId}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime})
+    </insert>
 </mapper>

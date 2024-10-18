@@ -144,14 +144,14 @@
     </resultMap>
 
     <!-- 查询表page_template所有数据 -->
-    <select id="findAllPageTemplate" resultMap="PageTemplateMap">
+    <select id="queryAllPageTemplate" resultMap="PageTemplateMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM page_template
     </select>
 
     <!-- 根据主键id查询表page_template信息 -->
-    <select id="findPageTemplateById" resultMap="PageTemplateMap">
+    <select id="queryPageTemplateById" resultMap="PageTemplateMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM page_template
@@ -159,7 +159,7 @@
     </select>
 
     <!-- 根据条件查询表page_template数据 -->
-    <select id="findPageTemplateByCondition" resultMap="PageTemplateMap">
+    <select id="queryPageTemplateByCondition" resultMap="PageTemplateMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM page_template
