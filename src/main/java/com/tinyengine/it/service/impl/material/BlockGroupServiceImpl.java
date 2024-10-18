@@ -21,7 +21,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     */
     @Override
     public List<BlockGroup> findAllBlockGroup() throws ServiceException {
-        return blockGroupMapper.findAllBlockGroup();
+        return blockGroupMapper.queryAllBlockGroup();
     }
 
     /**
@@ -30,7 +30,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     */
     @Override
     public BlockGroup findBlockGroupById(@Param("id") Integer id) throws ServiceException {
-        return blockGroupMapper.findBlockGroupById(id);
+        return blockGroupMapper.queryBlockGroupById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     */
     @Override
     public List<BlockGroup> findBlockGroupByCondition(BlockGroup blockGroup) throws ServiceException {
-        return blockGroupMapper.findBlockGroupByCondition(blockGroup);
+        return blockGroupMapper.queryBlockGroupByCondition(blockGroup);
     }
 
     /**

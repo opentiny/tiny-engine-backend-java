@@ -21,7 +21,7 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
     */
     @Override
     public List<BlockHistory> findAllBlockHistory() throws ServiceException {
-        return blockHistoryMapper.findAllBlockHistory();
+        return blockHistoryMapper.queryAllBlockHistory();
     }
 
     /**
@@ -30,7 +30,7 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
     */
     @Override
     public BlockHistory findBlockHistoryById(@Param("id") Integer id) throws ServiceException {
-        return blockHistoryMapper.findBlockHistoryById(id);
+        return blockHistoryMapper.queryBlockHistoryById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
     */
     @Override
     public List<BlockHistory> findBlockHistoryByCondition(BlockHistory blockHistory) throws ServiceException {
-        return blockHistoryMapper.findBlockHistoryByCondition(blockHistory);
+        return blockHistoryMapper.queryBlockHistoryByCondition(blockHistory);
     }
 
     /**

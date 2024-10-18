@@ -95,22 +95,34 @@
         </resultMap>
 
     <!-- 查询表t_block_group所有数据 -->
-    <select id="findAllBlockGroup" resultMap="BlockGroupMap">
+    <select id="queryAllBlockGroup" resultMap="BlockGroupMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block_group
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
             <!-- 根据主键id查询表t_block_group信息 -->
-            <select id="findBlockGroupById" resultMap="BlockGroupMap">
+            <select id="queryBlockGroupById" resultMap="BlockGroupMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_block_group
-                WHERE id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </select>
 
     <!-- 根据条件查询表t_block_group数据 -->
-    <select id="findBlockGroupByCondition" resultMap="BlockGroupMap">
+    <select id="queryBlockGroupByCondition" resultMap="BlockGroupMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block_group

@@ -158,22 +158,34 @@
         </resultMap>
 
     <!-- 查询表t_material_history所有数据 -->
-    <select id="findAllMaterialHistory" resultMap="MaterialHistoryMap">
+    <select id="queryAllMaterialHistory" resultMap="MaterialHistoryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_material_history
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
             <!-- 根据主键id查询表t_material_history信息 -->
-            <select id="findMaterialHistoryById" resultMap="MaterialHistoryMap">
+            <select id="queryMaterialHistoryById" resultMap="MaterialHistoryMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_material_history
-                WHERE id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </select>
 
     <!-- 根据条件查询表t_material_history数据 -->
-    <select id="findMaterialHistoryByCondition" resultMap="MaterialHistoryMap">
+    <select id="queryMaterialHistoryByCondition" resultMap="MaterialHistoryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_material_history

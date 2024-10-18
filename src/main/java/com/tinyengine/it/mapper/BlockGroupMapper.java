@@ -10,18 +10,18 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
     /**
     *  查询表t_block_group所有信息
     */
-    List<BlockGroup> findAllBlockGroup();
+    List<BlockGroup> queryAllBlockGroup();
 
     /**
     * 根据主键id查询表t_block_group数据
     * @param id
     */
-    BlockGroup findBlockGroupById(@Param("id") Integer id);
+    BlockGroup queryBlockGroupById(@Param("id") Integer id);
     /**
     *  根据条件查询表t_block_group数据
     *  @param blockGroup
     */
-    List<BlockGroup> findBlockGroupByCondition(BlockGroup blockGroup);
+    List<BlockGroup> queryBlockGroupByCondition(BlockGroup blockGroup);
 
     /**
     *  根据主键id删除表t_block_group数据

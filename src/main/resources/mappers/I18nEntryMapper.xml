@@ -102,22 +102,34 @@
         </resultMap>
 
     <!-- 查询表t_i18n_entry所有数据 -->
-    <select id="findAllI18nEntry" resultMap="I18nEntryMap">
+    <select id="queryAllI18nEntry" resultMap="I18nEntryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_i18n_entry
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
             <!-- 根据主键id查询表t_i18n_entry信息 -->
-            <select id="findI18nEntryById" resultMap="I18nEntryMap">
+            <select id="queryI18nEntryById" resultMap="I18nEntryMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_i18n_entry
-                WHERE id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </select>
 
     <!-- 根据条件查询表t_i18n_entry数据 -->
-    <select id="findI18nEntryByCondition" resultMap="I18nEntryMap">
+    <select id="queryI18nEntryByCondition" resultMap="I18nEntryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_i18n_entry

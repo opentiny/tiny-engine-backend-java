@@ -10,18 +10,18 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
     /**
     *  查询表t_page_history所有信息
     */
-    List<PageHistory> findAllPageHistory();
+    List<PageHistory> queryAllPageHistory();
 
     /**
     * 根据主键id查询表t_page_history数据
     * @param id
     */
-    PageHistory findPageHistoryById(@Param("id") Integer id);
+    PageHistory queryPageHistoryById(@Param("id") Integer id);
     /**
     *  根据条件查询表t_page_history数据
     *  @param pageHistory
     */
-    List<PageHistory> findPageHistoryByCondition(PageHistory pageHistory);
+    List<PageHistory> queryPageHistoryByCondition(PageHistory pageHistory);
 
     /**
     *  根据主键id删除表t_page_history数据
