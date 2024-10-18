@@ -253,7 +253,7 @@
     </update>
 
     <!-- 新增表t_platform数据 -->
-    <insert id="createPlatform">
+    <insert id="createPlatform" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_platform ( id
                                , name
                                , published

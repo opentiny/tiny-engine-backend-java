@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tinyengine.it.mapper.TenantMapper">
+<mapper namespace="com.tinyengine.it.mapper.AppExtensionMapper">
 
     <!-- 通用设置 -->
 
         <!-- 通用查询列 -->
         <sql id="Base_Column_List">
-            id, name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+            id, name, type, content, app_id, category, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
         </sql>
 
         <!-- 通用条件列 -->
-        <sql id="TenantByCondition">
-                    <if test="nameCn!=null and nameCn!=''">
-                        AND name_cn = #{nameCn}
+        <sql id="AppExtensionByCondition">
+                    <if test="name!=null and name!=''">
+                        AND name = #{name}
                     </if>
-                    <if test="nameEn!=null and nameEn!=''">
-                        AND name_en = #{nameEn}
+                    <if test="type!=null and type!=''">
+                        AND type = #{type}
                     </if>
-                    <if test="description!=null and description!=''">
-                        AND description = #{description}
+                    <if test="content!=null and content!=''">
+                        AND content = #{content}
+                    </if>
+                    <if test="app!=null and app!=''">
+                        AND app_id = #{app}
+                    </if>
+                    <if test="category!=null and category!=''">
+                        AND category = #{category}
                     </if>
                     <if test="createdBy!=null and createdBy!=''">
                         AND created_by = #{createdBy}
@@ -41,15 +47,21 @@
         </sql>
 
         <!-- 通用设置列 -->
-        <sql id="TenantSetColumns">
-                    <if test="nameCn!=null and nameCn!=''">
-                        name_cn = #{nameCn},
+        <sql id="AppExtensionSetColumns">
+                    <if test="name!=null and name!=''">
+                        name = #{name},
                     </if>
-                    <if test="nameEn!=null and nameEn!=''">
-                        name_en = #{nameEn},
+                    <if test="type!=null and type!=''">
+                        type = #{type},
                     </if>
-                    <if test="description!=null and description!=''">
-                        description = #{description},
+                    <if test="content!=null and content!=''">
+                        content = #{content},
+                    </if>
+                    <if test="app!=null and app!=''">
+                        app_id = #{app},
+                    </if>
+                    <if test="category!=null and category!=''">
+                        category = #{category},
                     </if>
                     <if test="createdBy!=null and createdBy!=''">
                         created_by = #{createdBy},
@@ -74,11 +86,13 @@
 
 
         <!-- 通用查询映射结果 -->
-        <resultMap id="TenantMap" type="com.tinyengine.it.model.entity.Tenant">
+        <resultMap id="AppExtensionMap" type="com.tinyengine.it.model.entity.AppExtension">
                     <id column="id" property="id"/>
-                    <result column="name_cn" property="nameCn"/>
-                    <result column="name_en" property="nameEn"/>
-                    <result column="description" property="description"/>
+                    <result column="name" property="name"/>
+                    <result column="type" property="type"/>
+                    <result column="content" property="content"/>
+                    <result column="app_id" property="app"/>
+                    <result column="category" property="category"/>
                     <result column="created_by" property="createdBy"/>
                     <result column="last_updated_by" property="lastUpdatedBy"/>
                     <result column="created_time" property="createdTime"/>
@@ -87,54 +101,56 @@
                     <result column="site_id" property="siteId"/>
         </resultMap>
 
-    <!-- 查询表t_tenant所有数据 -->
-    <select id="queryAllTenant" resultMap="TenantMap">
+    <!-- 查询表t_app_extension所有数据 -->
+    <select id="queryAllAppExtension" resultMap="AppExtensionMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_tenant
+        FROM t_app_extension
     </select>
 
-            <!-- 根据主键id查询表t_tenant信息 -->
-            <select id="queryTenantById" resultMap="TenantMap">
+            <!-- 根据主键id查询表t_app_extension信息 -->
+            <select id="queryAppExtensionById" resultMap="AppExtensionMap">
                 SELECT
                 <include refid="Base_Column_List"/>
-                FROM t_tenant
+                FROM t_app_extension
                 WHERE id=#{id}
             </select>
 
-    <!-- 根据条件查询表t_tenant数据 -->
-    <select id="queryTenantByCondition" resultMap="TenantMap">
+    <!-- 根据条件查询表t_app_extension数据 -->
+    <select id="queryAppExtensionByCondition" resultMap="AppExtensionMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_tenant
+        FROM t_app_extension
         WHERE 1=1
-        <include refid="TenantByCondition" />
+        <include refid="AppExtensionByCondition" />
     </select>
 
-            <!-- 根据主键id删除表t_tenant数据 -->
-            <delete id="deleteTenantById">
+            <!-- 根据主键id删除表t_app_extension数据 -->
+            <delete id="deleteAppExtensionById">
                 DELETE FROM
-                t_tenant
+                t_app_extension
                 WHERE id=#{id}
             </delete>
 
-            <!-- 根据主键id更新表t_tenant数据 -->
-            <update id="updateTenantById" parameterType="com.tinyengine.it.model.entity.Tenant">
-                UPDATE t_tenant
+            <!-- 根据主键id更新表t_app_extension数据 -->
+            <update id="updateAppExtensionById" parameterType="com.tinyengine.it.model.entity.AppExtension">
+                UPDATE t_app_extension
                 <set>
-                    <include refid="TenantSetColumns"/>
+                    <include refid="AppExtensionSetColumns"/>
                 </set>
                 WHERE
                 id=#{id}
             </update>
 
-            <!-- 新增表t_tenant数据 -->
-            <insert id="createTenant" useGeneratedKeys="true" keyProperty="id">
-                INSERT INTO t_tenant (
+            <!-- 新增表t_app_extension数据 -->
+            <insert id="createAppExtension" useGeneratedKeys="true" keyProperty="id">
+                INSERT INTO t_app_extension (
                     id
-                    ,name_cn
-                    ,name_en
-                    ,description
+                    ,name
+                    ,type
+                    ,content
+                    ,app_id
+                    ,category
                     ,created_by
                     ,last_updated_by
                     ,created_time
@@ -143,9 +159,11 @@
                     ,site_id
                 ) VALUES (
                     #{id}
-                    ,#{nameCn}
-                    ,#{nameEn}
-                    ,#{description}
+                    ,#{name}
+                    ,#{type}
+                    ,#{content}
+                    ,#{app}
+                    ,#{category}
                     ,#{createdBy}
                     ,#{lastUpdatedBy}
                     ,#{createdTime}

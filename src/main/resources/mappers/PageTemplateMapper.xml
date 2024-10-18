@@ -197,7 +197,7 @@
     </update>
 
     <!-- 新增表page_template数据 -->
-    <insert id="createPageTemplate">
+    <insert id="createPageTemplate" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO page_template ( id
                                   , name
                                   , page_content
