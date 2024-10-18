@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.MaterialBlockMapper">
+
+    <!-- 通用设置 -->
+
+        <!-- 通用查询列 -->
+        <sql id="Base_Column_List">
+            id, material_id, block_id
+        </sql>
+
+        <!-- 通用条件列 -->
+        <sql id="MaterialBlockByCondition">
+                    <if test="materialId!=null and materialId!=''">
+                        AND material_id = #{materialId}
+                    </if>
+                    <if test="blockId!=null and blockId!=''">
+                        AND block_id = #{blockId}
+                    </if>
+        </sql>
+
+        <!-- 通用设置列 -->
+        <sql id="MaterialBlockSetColumns">
+                    <if test="materialId!=null and materialId!=''">
+                        material_id = #{materialId},
+                    </if>
+                    <if test="blockId!=null and blockId!=''">
+                        block_id = #{blockId},
+                    </if>
+        </sql>
+
+
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="MaterialBlockMap" type="com.tinyengine.it.model.entity.MaterialBlock">
+                    <id column="id" property="id"/>
+                    <result column="material_id" property="materialId"/>
+                    <result column="block_id" property="blockId"/>
+        </resultMap>
+
+    <!-- 查询表r_material_block所有数据 -->
+    <select id="findAllMaterialBlock" resultMap="MaterialBlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_material_block
+    </select>
+
+            <!-- 根据主键id查询表r_material_block信息 -->
+            <select id="findMaterialBlockById" resultMap="MaterialBlockMap">
+                SELECT
+                <include refid="Base_Column_List"/>
+                FROM r_material_block
+                WHERE id=#{id}
+            </select>
+
+    <!-- 根据条件查询表r_material_block数据 -->
+    <select id="findMaterialBlockByCondition" resultMap="MaterialBlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_material_block
+        WHERE 1=1
+        <include refid="MaterialBlockByCondition" />
+    </select>
+
+            <!-- 根据主键id删除表r_material_block数据 -->
+            <delete id="deleteMaterialBlockById">
+                DELETE FROM
+                r_material_block
+                WHERE id=#{id}
+            </delete>
+
+            <!-- 根据主键id更新表r_material_block数据 -->
+            <update id="updateMaterialBlockById" parameterType="com.tinyengine.it.model.entity.MaterialBlock">
+                UPDATE r_material_block
+                <set>
+                    <include refid="MaterialBlockSetColumns"/>
+                </set>
+                WHERE
+                id=#{id}
+            </update>
+
+            <!-- 新增表r_material_block数据 -->
+            <insert id="createMaterialBlock">
+                INSERT INTO r_material_block (
+                    id
+                    ,material_id
+                    ,block_id
+                ) VALUES (
+                    #{id}
+                    ,#{materialId}
+                    ,#{blockId}
+                )
+            </insert>
+</mapper>
