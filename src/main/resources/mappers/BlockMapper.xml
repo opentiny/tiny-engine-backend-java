@@ -281,7 +281,7 @@
     </update>
 
     <!-- 新增表t_block数据 -->
-    <insert id="createBlock">
+    <insert id="createBlock" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_block ( id
                             , label
                             , name

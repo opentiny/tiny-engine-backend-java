@@ -3,10 +3,7 @@ package com.tinyengine.it.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -33,6 +30,8 @@ public class SystemLogAspect {
     // 本地异常日志记录对象
     private static final Logger logger = LoggerFactory.getLogger(SystemLogAspect.class);
 
+    // ThreadLocal 变量用于存储日志状态
+    private ThreadLocal<Boolean> alreadyLogged = ThreadLocal.withInitial(() -> false);
     // Service层切点
     @Pointcut("@annotation(com.tinyengine.it.config.SystemServiceLog)")
     public void serviceAspect() {
@@ -51,18 +50,13 @@ public class SystemLogAspect {
     public void doBefore(JoinPoint joinPoint) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
-        // 读取session中的用户,需要在请求同中携带用户的信息才能获取到数据
-        // User user = (User) session.getAttribute("user");
+
         try {
-            logger.info("==============前置通知开始==============");
-            logger.info("请求方法" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName()));
-            logger.info("方法描述：" + getControllerMethodDescription(joinPoint));
-            // System.out.println("请求人："+user.getUsername());
-            // *========数据库日志=========*//
-            // 保存数据库(这里可以直接调用service将收集到的日志信息存到数据库中)
+            logger.info("请求方法: {}", (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName()));
+            logger.info("方法描述: {}", getControllerMethodDescription(joinPoint));
         } catch (Exception e) {
             // 记录本地异常日志
-            logger.error("==前置通知异常==");
+            logger.error("==异常通知异常==");
             logger.error("异常信息：{}", e.getMessage());
         }
     }
@@ -74,21 +68,9 @@ public class SystemLogAspect {
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) throws JsonProcessingException {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
-        // 读取session中的用户
-        // User user = (User) session.getAttribute("user");
-        // 获取用户请求方法的参数并序列化为JSON格式字符串
-        String params = "";
-        ObjectMapper mapper = new ObjectMapper();
-        if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
-            for (int i = 0; i < joinPoint.getArgs().length; i++) {
-                params += mapper.writeValueAsString(joinPoint.getArgs()[i]) + ";";
-            }
-        }
         try {
             logger.error("异常方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
             logger.error("方法描述:" + getServiceMethodDescription(joinPoint));
-            // System.out.println("请求人:" + user.getUsername());
-            logger.error("请求参数:" + params);
             logger.error("异常代码:" + e.getClass().getName());
             logger.error("异常信息:" + e.getMessage());
             logger.error("异常堆栈信息:");
@@ -149,4 +131,5 @@ public class SystemLogAspect {
         }
         return description;
     }
+
 }

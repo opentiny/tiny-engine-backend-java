@@ -1,9 +1,14 @@
+server:
+  port: 8090
+
 spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: 111111
-    url: jdbc:mariadb://localhost:3306/tiny_engine-data?useUnicode=true&useSSL=false&characterEncoding=utf8
+    url: jdbc:mariadb://localhost:3306/tiny_engine_data_java?useUnicode=true&useSSL=false&characterEncoding=utf8
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5 # 连接池初始化时建立的连接数，默认值为 0。
@@ -23,8 +28,7 @@ spring:
   aop:
     proxy-target-class: true        #默认为false
     auto: true        #默认为false
-server:
-  port: 8090
+
 springdoc:
   api-docs:
     #是否开启文档功能
@@ -44,6 +48,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     auto-mapping-behavior: full
   type-handlers-package: com.tinyengine.it.utils
+
 logging:
   level:
     ROOT: INFO
@@ -52,9 +57,6 @@ logging:
     file: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
   file:
     name: /logs
-path:
-  dslScriptPath: /forkWork/tiny-engine-webservice-java/src/main/java/com/tinyengine/it/js/tiny-engine-dsl.js
-  tfScriptPath: /forkWork/tiny-engine-webservice-java/src/main/java/com/tinyengine/it/js/tiny-engine-transform.js
 
 
 

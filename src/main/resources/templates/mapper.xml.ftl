@@ -64,7 +64,7 @@
         </resultMap>
 
     <!-- 查询表${table.name}所有数据 -->
-    <select id="findAll${entity}" resultMap="${entity}Map">
+    <select id="queryAll${entity}" resultMap="${entity}Map">
         SELECT
         <include refid="Base_Column_List"/>
         FROM ${table.name}
@@ -73,7 +73,7 @@
     <#list table.fields as field>
         <#if field.keyFlag>
             <!-- 根据主键${field.propertyName}查询表${table.name}信息 -->
-            <select id="find${entity}ById" resultMap="${entity}Map">
+            <select id="query${entity}ById" resultMap="${entity}Map">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM ${table.name}
@@ -83,7 +83,7 @@
     </#list>
 
     <!-- 根据条件查询表${table.name}数据 -->
-    <select id="find${entity}ByCondition" resultMap="${entity}Map">
+    <select id="query${entity}ByCondition" resultMap="${entity}Map">
         SELECT
         <include refid="Base_Column_List"/>
         FROM ${table.name}
@@ -119,7 +119,7 @@
     <#list table.fields as field>
         <#if field.keyFlag>
             <!-- 新增表${table.name}数据 -->
-            <insert id="create${entity}">
+            <insert id="create${entity}" useGeneratedKeys="true" keyProperty="id">
                 INSERT INTO ${table.name} (
                 <#list table.fields as field>
                     <#if field_index gt 0>,</#if>${field.name}

@@ -211,7 +211,7 @@
             </update>
 
             <!-- 新增表t_material_history数据 -->
-            <insert id="createMaterialHistory">
+            <insert id="createMaterialHistory" useGeneratedKeys="true" keyProperty="id">
                 INSERT INTO t_material_history (
                     id
                     ,ref_id

@@ -178,7 +178,7 @@
     </update>
 
     <!-- 新增表t_task_record数据 -->
-    <insert id="createTaskRecord">
+    <insert id="createTaskRecord" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_task_record ( id
                                   , team_id
                                   , task_type_id

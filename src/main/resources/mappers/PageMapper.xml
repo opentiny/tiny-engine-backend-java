@@ -218,7 +218,7 @@
     </update>
 
     <!-- 新增表t_page数据 -->
-    <insert id="createPage">
+    <insert id="createPage" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_page ( id
                            , name
                            , app_id

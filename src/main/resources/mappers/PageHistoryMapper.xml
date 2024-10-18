@@ -218,7 +218,7 @@
             </update>
 
             <!-- 新增表t_page_history数据 -->
-            <insert id="createPageHistory">
+            <insert id="createPageHistory" useGeneratedKeys="true" keyProperty="id">
                 INSERT INTO t_page_history (
                     id
                     ,ref_id
