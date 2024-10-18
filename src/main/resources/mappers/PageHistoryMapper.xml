@@ -165,22 +165,34 @@
         </resultMap>
 
     <!-- 查询表t_page_history所有数据 -->
-    <select id="findAllPageHistory" resultMap="PageHistoryMap">
+    <select id="queryAllPageHistory" resultMap="PageHistoryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_page_history
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
             <!-- 根据主键id查询表t_page_history信息 -->
-            <select id="findPageHistoryById" resultMap="PageHistoryMap">
+            <select id="queryPageHistoryById" resultMap="PageHistoryMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_page_history
-                WHERE id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </select>
 
     <!-- 根据条件查询表t_page_history数据 -->
-    <select id="findPageHistoryByCondition" resultMap="PageHistoryMap">
+    <select id="queryPageHistoryByCondition" resultMap="PageHistoryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_page_history

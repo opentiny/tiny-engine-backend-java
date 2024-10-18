@@ -10,18 +10,18 @@ public interface TenantMapper extends BaseMapper<Tenant> {
     /**
     *  查询表t_tenant所有信息
     */
-    List<Tenant> findAllTenant();
+    List<Tenant> queryAllTenant();
 
     /**
     * 根据主键id查询表t_tenant数据
     * @param id
     */
-    Tenant findTenantById(@Param("id") Integer id);
+    Tenant queryTenantById(@Param("id") Integer id);
     /**
     *  根据条件查询表t_tenant数据
     *  @param tenant
     */
-    List<Tenant> findTenantByCondition(Tenant tenant);
+    List<Tenant> queryTenantByCondition(Tenant tenant);
 
     /**
     *  根据主键id删除表t_tenant数据

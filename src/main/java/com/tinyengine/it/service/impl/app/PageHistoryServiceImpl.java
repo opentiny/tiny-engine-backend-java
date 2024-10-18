@@ -21,7 +21,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
     */
     @Override
     public List<PageHistory> findAllPageHistory() throws ServiceException {
-        return pageHistoryMapper.findAllPageHistory();
+        return pageHistoryMapper.queryAllPageHistory();
     }
 
     /**
@@ -30,7 +30,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
     */
     @Override
     public PageHistory findPageHistoryById(@Param("id") Integer id) throws ServiceException {
-        return pageHistoryMapper.findPageHistoryById(id);
+        return pageHistoryMapper.queryPageHistoryById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
     */
     @Override
     public List<PageHistory> findPageHistoryByCondition(PageHistory pageHistory) throws ServiceException {
-        return pageHistoryMapper.findPageHistoryByCondition(pageHistory);
+        return pageHistoryMapper.queryPageHistoryByCondition(pageHistory);
     }
 
     /**

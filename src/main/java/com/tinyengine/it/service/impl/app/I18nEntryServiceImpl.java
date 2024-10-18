@@ -21,7 +21,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     */
     @Override
     public List<I18nEntry> findAllI18nEntry() throws ServiceException {
-        return i18nEntryMapper.findAllI18nEntry();
+        return i18nEntryMapper.queryAllI18nEntry();
     }
 
     /**
@@ -30,7 +30,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     */
     @Override
     public I18nEntry findI18nEntryById(@Param("id") Integer id) throws ServiceException {
-        return i18nEntryMapper.findI18nEntryById(id);
+        return i18nEntryMapper.queryI18nEntryById(id);
     }
 
     /**
@@ -39,7 +39,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     */
     @Override
     public List<I18nEntry> findI18nEntryByCondition(I18nEntry i18nEntry) throws ServiceException {
-        return i18nEntryMapper.findI18nEntryByCondition(i18nEntry);
+        return i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
     }
 
     /**

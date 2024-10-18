@@ -10,18 +10,18 @@ public interface DatasourceMapper extends BaseMapper<Datasource> {
     /**
     *  查询表t_datasource所有信息
     */
-    List<Datasource> findAllDatasource();
+    List<Datasource> queryAllDatasource();
 
     /**
     * 根据主键id查询表t_datasource数据
     * @param id
     */
-    Datasource findDatasourceById(@Param("id") Integer id);
+    Datasource queryDatasourceById(@Param("id") Integer id);
     /**
     *  根据条件查询表t_datasource数据
     *  @param datasource
     */
-    List<Datasource> findDatasourceByCondition(Datasource datasource);
+    List<Datasource> queryDatasourceByCondition(Datasource datasource);
 
     /**
     *  根据主键id删除表t_datasource数据

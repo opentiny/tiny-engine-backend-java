@@ -102,22 +102,34 @@
         </resultMap>
 
     <!-- 查询表t_datasource所有数据 -->
-    <select id="findAllDatasource" resultMap="DatasourceMap">
+    <select id="queryAllDatasource" resultMap="DatasourceMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_datasource
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
             <!-- 根据主键id查询表t_datasource信息 -->
-            <select id="findDatasourceById" resultMap="DatasourceMap">
+            <select id="queryDatasourceById" resultMap="DatasourceMap">
                 SELECT
                 <include refid="Base_Column_List"/>
                 FROM t_datasource
-                WHERE id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </select>
 
     <!-- 根据条件查询表t_datasource数据 -->
-    <select id="findDatasourceByCondition" resultMap="DatasourceMap">
+    <select id="queryDatasourceByCondition" resultMap="DatasourceMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_datasource

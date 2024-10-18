@@ -204,6 +204,11 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_platform
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
     <!-- 根据主键id查询表t_platform信息 -->
@@ -211,7 +216,14 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_platform
-        WHERE id=#{id}
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
     </select>
 
     <!-- 根据条件查询表t_platform数据 -->
