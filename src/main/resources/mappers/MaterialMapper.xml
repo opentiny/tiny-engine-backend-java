@@ -260,7 +260,7 @@
     </update>
 
     <!-- 新增表t_material数据 -->
-    <insert id="createMaterial">
+    <insert id="createMaterial" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_material ( id
                                , name
                                , npm_name

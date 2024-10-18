@@ -281,7 +281,7 @@
             </update>
 
             <!-- 新增表t_component数据 -->
-            <insert id="createComponent">
+            <insert id="createComponent" useGeneratedKeys="true" keyProperty="id">
                 INSERT INTO t_component (
                     id
                     ,version

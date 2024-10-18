@@ -148,7 +148,7 @@
             </update>
 
             <!-- 新增表t_block_group数据 -->
-            <insert id="createBlockGroup">
+            <insert id="createBlockGroup" useGeneratedKeys="true" keyProperty="id">
                 INSERT INTO t_block_group (
                     id
                     ,name
