@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.BusinessCategoryMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , code, name, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="BusinessCategoryByCondition">
+        <if test="code!=null and code!=''">
+            AND code = #{code}
+        </if>
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="BusinessCategorySetColumns">
+        <if test="code!=null and code!=''">
+            code = #{code},
+        </if>
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BusinessCategoryMap" type="com.tinyengine.it.model.entity.BusinessCategory">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 查询表t_business_category所有数据 -->
+    <select id="queryAllBusinessCategory" resultMap="BusinessCategoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_business_category
+    </select>
+
+    <!-- 根据主键id查询表t_business_category信息 -->
+    <select id="queryBusinessCategoryById" resultMap="BusinessCategoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_business_category
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表t_business_category数据 -->
+    <select id="queryBusinessCategoryByCondition" resultMap="BusinessCategoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_business_category
+        WHERE 1=1
+        <include refid="BusinessCategoryByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_business_category数据 -->
+    <delete id="deleteBusinessCategoryById">
+        DELETE
+        FROM t_business_category
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_business_category数据 -->
+    <update id="updateBusinessCategoryById" parameterType="com.tinyengine.it.model.entity.BusinessCategory">
+        UPDATE t_business_category
+        <set>
+            <include refid="BusinessCategorySetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表t_business_category数据 -->
+    <insert id="createBusinessCategory">
+        INSERT INTO t_business_category ( id
+                                        , code
+                                        , name
+                                        , created_by
+                                        , last_updated_by
+                                        , created_time
+                                        , last_updated_time
+                                        , tenant_id
+                                        , site_id)
+        VALUES ( #{id}
+               , #{code}
+               , #{name}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId})
+    </insert>
+</mapper>
