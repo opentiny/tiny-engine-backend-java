@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.PageMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, app_id, route, page_cotent, is_body, parent_id, group, depth, is_page, occupier_by, is_default, content_blocks, latest_version, latest_history_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="PageByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="appId!=null and appId!=''">
+            AND app_id = #{appId}
+        </if>
+        <if test="route!=null and route!=''">
+            AND route = #{route}
+        </if>
+        <if test="pageCotent!=null and pageCotent!=''">
+            AND page_cotent = #{pageCotent}
+        </if>
+        <if test="isBody!=null and isBody!=''">
+            AND is_body = #{isBody}
+        </if>
+        <if test="parentId!=null and parentId!=''">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="group!=null and group!=''">
+            AND group = #{group}
+        </if>
+        <if test="depth!=null and depth!=''">
+            AND depth = #{depth}
+        </if>
+        <if test="isPage!=null and isPage!=''">
+            AND is_page = #{isPage}
+        </if>
+        <if test="occupierBy!=null and occupierBy!=''">
+            AND occupier_by = #{occupierBy}
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            AND is_default = #{isDefault}
+        </if>
+        <if test="contentBlocks!=null and contentBlocks!=''">
+            AND content_blocks = #{contentBlocks}
+        </if>
+        <if test="latestVersion!=null and latestVersion!=''">
+            AND latest_version = #{latestVersion}
+        </if>
+        <if test="latestHistoryId!=null and latestHistoryId!=''">
+            AND latest_history_id = #{latestHistoryId}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="PageSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="appId!=null and appId!=''">
+            app_id = #{appId},
+        </if>
+        <if test="route!=null and route!=''">
+            route = #{route},
+        </if>
+        <if test="pageCotent!=null and pageCotent!=''">
+            page_cotent = #{pageCotent},
+        </if>
+        <if test="isBody!=null and isBody!=''">
+            is_body = #{isBody},
+        </if>
+        <if test="parentId!=null and parentId!=''">
+            parent_id = #{parentId},
+        </if>
+        <if test="group!=null and group!=''">
+            group = #{group},
+        </if>
+        <if test="depth!=null and depth!=''">
+            depth = #{depth},
+        </if>
+        <if test="isPage!=null and isPage!=''">
+            is_page = #{isPage},
+        </if>
+        <if test="occupierBy!=null and occupierBy!=''">
+            occupier_by = #{occupierBy},
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            is_default = #{isDefault},
+        </if>
+        <if test="contentBlocks!=null and contentBlocks!=''">
+            content_blocks = #{contentBlocks},
+        </if>
+        <if test="latestVersion!=null and latestVersion!=''">
+            latest_version = #{latestVersion},
+        </if>
+        <if test="latestHistoryId!=null and latestHistoryId!=''">
+            latest_history_id = #{latestHistoryId},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PageMap" type="com.tinyengine.it.model.entity.Page">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="app_id" property="appId"/>
+        <result column="route" property="route"/>
+        <result column="page_cotent" property="pageCotent"/>
+        <result column="is_body" property="isBody"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="group" property="group"/>
+        <result column="depth" property="depth"/>
+        <result column="is_page" property="isPage"/>
+        <result column="occupier_by" property="occupierBy"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="content_blocks" property="contentBlocks"/>
+        <result column="latest_version" property="latestVersion"/>
+        <result column="latest_history_id" property="latestHistoryId"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 查询表t_page所有数据 -->
+    <select id="queryAllPage" resultMap="PageMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_page
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键id查询表t_page信息 -->
+    <select id="queryPageById" resultMap="PageMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_page
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据条件查询表t_page数据 -->
+    <select id="queryPageByCondition" resultMap="PageMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_page
+        WHERE 1=1
+        <include refid="PageByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_page数据 -->
+    <delete id="deletePageById">
+        DELETE
+        FROM t_page
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_page数据 -->
+    <update id="updatePageById" parameterType="com.tinyengine.it.model.entity.Page">
+        UPDATE t_page
+        <set>
+            <include refid="PageSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表t_page数据 -->
+    <insert id="createPage" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_page ( id
+                           , name
+                           , app_id
+                           , route
+                           , page_cotent
+                           , is_body
+                           , parent_id
+                           , group
+                           , depth
+                           , is_page
+                           , occupier_by
+                           , is_default
+                           , content_blocks
+                           , latest_version
+                           , latest_history_id
+                           , created_by
+                           , last_updated_by
+                           , created_time
+                           , last_updated_time
+                           , tenant_id
+                           , site_id)
+        VALUES ( #{id}
+               , #{name}
+               , #{appId}
+               , #{route}
+               , #{pageCotent}
+               , #{isBody}
+               , #{parentId}
+               , #{group}
+               , #{depth}
+               , #{isPage}
+               , #{occupierBy}
+               , #{isDefault}
+               , #{contentBlocks}
+               , #{latestVersion}
+               , #{latestHistoryId}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId})
+    </insert>
+</mapper>
