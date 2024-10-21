@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.BlockGroupMapper">
+
+    <!-- 通用设置 -->
+
+        <!-- 通用查询列 -->
+        <sql id="Base_Column_List">
+            id, name, app_id, platform_id, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        </sql>
+
+        <!-- 通用条件列 -->
+        <sql id="BlockGroupByCondition">
+                    <if test="name!=null and name!=''">
+                        AND name = #{name}
+                    </if>
+                    <if test="appId!=null and appId!=''">
+                        AND app_id = #{appId}
+                    </if>
+                    <if test="platformId!=null and platformId!=''">
+                        AND platform_id = #{platformId}
+                    </if>
+                    <if test="description!=null and description!=''">
+                        AND description = #{description}
+                    </if>
+                    <if test="createdBy!=null and createdBy!=''">
+                        AND created_by = #{createdBy}
+                    </if>
+                    <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+                        AND last_updated_by = #{lastUpdatedBy}
+                    </if>
+                    <if test="createdTime!=null and createdTime!=''">
+                        AND created_time = #{createdTime}
+                    </if>
+                    <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+                        AND last_updated_time = #{lastUpdatedTime}
+                    </if>
+                    <if test="tenantId!=null and tenantId!=''">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                    <if test="siteId!=null and siteId!=''">
+                        AND site_id = #{siteId}
+                    </if>
+        </sql>
+
+        <!-- 通用设置列 -->
+        <sql id="BlockGroupSetColumns">
+                    <if test="name!=null and name!=''">
+                        name = #{name},
+                    </if>
+                    <if test="appId!=null and appId!=''">
+                        app_id = #{appId},
+                    </if>
+                    <if test="platformId!=null and platformId!=''">
+                        platform_id = #{platformId},
+                    </if>
+                    <if test="description!=null and description!=''">
+                        description = #{description},
+                    </if>
+                    <if test="createdBy!=null and createdBy!=''">
+                        created_by = #{createdBy},
+                    </if>
+                    <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+                        last_updated_by = #{lastUpdatedBy},
+                    </if>
+                    <if test="createdTime!=null and createdTime!=''">
+                        created_time = #{createdTime},
+                    </if>
+                    <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+                        last_updated_time = #{lastUpdatedTime},
+                    </if>
+                    <if test="tenantId!=null and tenantId!=''">
+                        tenant_id = #{tenantId},
+                    </if>
+                    <if test="siteId!=null and siteId!=''">
+                        site_id = #{siteId},
+                    </if>
+        </sql>
+
+
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BlockGroupMap" type="com.tinyengine.it.model.entity.BlockGroup">
+                    <id column="id" property="id"/>
+                    <result column="name" property="name"/>
+                    <result column="app_id" property="appId"/>
+                    <result column="platform_id" property="platformId"/>
+                    <result column="description" property="description"/>
+                    <result column="created_by" property="createdBy"/>
+                    <result column="last_updated_by" property="lastUpdatedBy"/>
+                    <result column="created_time" property="createdTime"/>
+                    <result column="last_updated_time" property="lastUpdatedTime"/>
+                    <result column="tenant_id" property="tenantId"/>
+                    <result column="site_id" property="siteId"/>
+        </resultMap>
+
+    <!-- 查询表t_block_group所有数据 -->
+    <select id="queryAllBlockGroup" resultMap="BlockGroupMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block_group
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
+            <!-- 根据主键id查询表t_block_group信息 -->
+            <select id="queryBlockGroupById" resultMap="BlockGroupMap">
+                SELECT
+                <include refid="Base_Column_List"/>
+                FROM t_block_group
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
+            </select>
+
+    <!-- 根据条件查询表t_block_group数据 -->
+    <select id="queryBlockGroupByCondition" resultMap="BlockGroupMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block_group
+        WHERE 1=1
+        <include refid="BlockGroupByCondition" />
+    </select>
+
+            <!-- 根据主键id删除表t_block_group数据 -->
+            <delete id="deleteBlockGroupById">
+                DELETE FROM
+                t_block_group
+                WHERE id=#{id}
+            </delete>
+
+            <!-- 根据主键id更新表t_block_group数据 -->
+            <update id="updateBlockGroupById" parameterType="com.tinyengine.it.model.entity.BlockGroup">
+                UPDATE t_block_group
+                <set>
+                    <include refid="BlockGroupSetColumns"/>
+                </set>
+                WHERE
+                id=#{id}
+            </update>
+
+            <!-- 新增表t_block_group数据 -->
+            <insert id="createBlockGroup" useGeneratedKeys="true" keyProperty="id">
+                INSERT INTO t_block_group (
+                    id
+                    ,name
+                    ,app_id
+                    ,platform_id
+                    ,description
+                    ,created_by
+                    ,last_updated_by
+                    ,created_time
+                    ,last_updated_time
+                    ,tenant_id
+                    ,site_id
+                ) VALUES (
+                    #{id}
+                    ,#{name}
+                    ,#{appId}
+                    ,#{platformId}
+                    ,#{description}
+                    ,#{createdBy}
+                    ,#{lastUpdatedBy}
+                    ,#{createdTime}
+                    ,#{lastUpdatedTime}
+                    ,#{tenantId}
+                    ,#{siteId}
+                )
+            </insert>
+</mapper>

@@ -25,12 +25,10 @@ public class PermissionInterceptor implements Interceptor {
         BoundSql boundSql = mappedStatement.getBoundSql(parameter);
 
         // 在这里可以获取 session 中的 tenant 参数
-        // String tenant = (String) session.getAttribute("tenant");
-        String tenant = null;
+        // String tenantId = (String) session.getAttribute("tenantId");
+        int tenantId = 1;
         // 如果 tenant 存在，则将其作为参数添加到 BoundSql 中
-        if (tenant != null) {
-            boundSql.setAdditionalParameter("tenant", tenant);
-        }
+        boundSql.setAdditionalParameter("tenantId", tenantId);
 
         // 执行原有的查询或更新操作
         return invocation.proceed();

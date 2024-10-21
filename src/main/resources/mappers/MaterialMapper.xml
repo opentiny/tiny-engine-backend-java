@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.MaterialMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, npm_name, framework, assets_url, image_url, published, latest_version, latest_history_id, pulblic, last_build_info, description, is_official, is_default, tiny_reserved, component_library_id, material_category_id, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="MaterialByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="npmName!=null and npmName!=''">
+            AND npm_name = #{npmName}
+        </if>
+        <if test="framework!=null and framework!=''">
+            AND framework = #{framework}
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            AND assets_url = #{assetsUrl}
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            AND image_url = #{imageUrl}
+        </if>
+        <if test="published!=null and published!=''">
+            AND published = #{published}
+        </if>
+        <if test="latestVersion!=null and latestVersion!=''">
+            AND latest_version = #{latestVersion}
+        </if>
+        <if test="latestHistoryId!=null and latestHistoryId!=''">
+            AND latest_history_id = #{latestHistoryId}
+        </if>
+        <if test="pulblic!=null and pulblic!=''">
+            AND pulblic = #{pulblic}
+        </if>
+        <if test="lastBuildInfo!=null and lastBuildInfo!=''">
+            AND last_build_info = #{lastBuildInfo}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="isOfficial!=null and isOfficial!=''">
+            AND is_official = #{isOfficial}
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            AND is_default = #{isDefault}
+        </if>
+        <if test="tinyReserved!=null and tinyReserved!=''">
+            AND tiny_reserved = #{tinyReserved}
+        </if>
+        <if test="componentLibraryId!=null and componentLibraryId!=''">
+            AND component_library_id = #{componentLibraryId}
+        </if>
+        <if test="materialCategoryId!=null and materialCategoryId!=''">
+            AND material_category_id = #{materialCategoryId}
+        </if>
+        <if test="materialSize!=null and materialSize!=''">
+            AND material_size = #{materialSize}
+        </if>
+        <if test="tgzUrl!=null and tgzUrl!=''">
+            AND tgz_url = #{tgzUrl}
+        </if>
+        <if test="unzipTgzRootPathUrl!=null and unzipTgzRootPathUrl!=''">
+            AND unzip_tgz_root_path_url = #{unzipTgzRootPathUrl}
+        </if>
+        <if test="unzipTgzFiles!=null and unzipTgzFiles!=''">
+            AND unzip_tgz_files = #{unzipTgzFiles}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="MaterialSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="npmName!=null and npmName!=''">
+            npm_name = #{npmName},
+        </if>
+        <if test="framework!=null and framework!=''">
+            framework = #{framework},
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            assets_url = #{assetsUrl},
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            image_url = #{imageUrl},
+        </if>
+        <if test="published!=null and published!=''">
+            published = #{published},
+        </if>
+        <if test="latestVersion!=null and latestVersion!=''">
+            latest_version = #{latestVersion},
+        </if>
+        <if test="latestHistoryId!=null and latestHistoryId!=''">
+            latest_history_id = #{latestHistoryId},
+        </if>
+        <if test="pulblic!=null and pulblic!=''">
+            pulblic = #{pulblic},
+        </if>
+        <if test="lastBuildInfo!=null and lastBuildInfo!=''">
+            last_build_info = #{lastBuildInfo},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="isOfficial!=null and isOfficial!=''">
+            is_official = #{isOfficial},
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            is_default = #{isDefault},
+        </if>
+        <if test="tinyReserved!=null and tinyReserved!=''">
+            tiny_reserved = #{tinyReserved},
+        </if>
+        <if test="componentLibraryId!=null and componentLibraryId!=''">
+            component_library_id = #{componentLibraryId},
+        </if>
+        <if test="materialCategoryId!=null and materialCategoryId!=''">
+            material_category_id = #{materialCategoryId},
+        </if>
+        <if test="materialSize!=null and materialSize!=''">
+            material_size = #{materialSize},
+        </if>
+        <if test="tgzUrl!=null and tgzUrl!=''">
+            tgz_url = #{tgzUrl},
+        </if>
+        <if test="unzipTgzRootPathUrl!=null and unzipTgzRootPathUrl!=''">
+            unzip_tgz_root_path_url = #{unzipTgzRootPathUrl},
+        </if>
+        <if test="unzipTgzFiles!=null and unzipTgzFiles!=''">
+            unzip_tgz_files = #{unzipTgzFiles},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="MaterialMap" type="com.tinyengine.it.model.entity.Material">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="npm_name" property="npmName"/>
+        <result column="framework" property="framework"/>
+        <result column="assets_url" property="assetsUrl"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="published" property="published"/>
+        <result column="latest_version" property="latestVersion"/>
+        <result column="latest_history_id" property="latestHistoryId"/>
+        <result column="pulblic" property="pulblic"/>
+        <result column="last_build_info" property="lastBuildInfo"/>
+        <result column="description" property="description"/>
+        <result column="is_official" property="isOfficial"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="tiny_reserved" property="tinyReserved"/>
+        <result column="component_library_id" property="componentLibraryId"/>
+        <result column="material_category_id" property="materialCategoryId"/>
+        <result column="material_size" property="materialSize"/>
+        <result column="tgz_url" property="tgzUrl"/>
+        <result column="unzip_tgz_root_path_url" property="unzipTgzRootPathUrl"/>
+        <result column="unzip_tgz_files" property="unzipTgzFiles"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 查询表t_material所有数据 -->
+    <select id="queryAllMaterial" resultMap="MaterialMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_material
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键id查询表t_material信息 -->
+    <select id="queryMaterialById" resultMap="MaterialMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_material
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据条件查询表t_material数据 -->
+    <select id="queryMaterialByCondition" resultMap="MaterialMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_material
+        WHERE 1=1
+        <include refid="MaterialByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_material数据 -->
+    <delete id="deleteMaterialById">
+        DELETE
+        FROM t_material
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_material数据 -->
+    <update id="updateMaterialById" parameterType="com.tinyengine.it.model.entity.Material">
+        UPDATE t_material
+        <set>
+            <include refid="MaterialSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表t_material数据 -->
+    <insert id="createMaterial" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_material ( id
+                               , name
+                               , npm_name
+                               , framework
+                               , assets_url
+                               , image_url
+                               , published
+                               , latest_version
+                               , latest_history_id
+                               , pulblic
+                               , last_build_info
+                               , description
+                               , is_official
+                               , is_default
+                               , tiny_reserved
+                               , component_library_id
+                               , material_category_id
+                               , material_size
+                               , tgz_url
+                               , unzip_tgz_root_path_url
+                               , unzip_tgz_files
+                               , created_by
+                               , last_updated_by
+                               , created_time
+                               , last_updated_time
+                               , tenant_id
+                               , site_id)
+        VALUES ( #{id}
+               , #{name}
+               , #{npmName}
+               , #{framework}
+               , #{assetsUrl}
+               , #{imageUrl}
+               , #{published}
+               , #{latestVersion}
+               , #{latestHistoryId}
+               , #{pulblic}
+               , #{lastBuildInfo}
+               , #{description}
+               , #{isOfficial}
+               , #{isDefault}
+               , #{tinyReserved}
+               , #{componentLibraryId}
+               , #{materialCategoryId}
+               , #{materialSize}
+               , #{tgzUrl}
+               , #{unzipTgzRootPathUrl}
+               , #{unzipTgzFiles}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId})
+    </insert>
+</mapper>
