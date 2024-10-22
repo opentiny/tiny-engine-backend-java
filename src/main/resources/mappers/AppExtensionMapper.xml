@@ -138,8 +138,14 @@
                 <set>
                     <include refid="AppExtensionSetColumns"/>
                 </set>
-                WHERE
-                id=#{id}
+                <where>
+                    <if test="id != null">
+                        AND id = #{id}
+                    </if>
+                    <if test="tenantId != null">
+                        AND tenant_id = #{tenantId}
+                    </if>
+                </where>
             </update>
 
             <!-- 新增表t_app_extension数据 -->
