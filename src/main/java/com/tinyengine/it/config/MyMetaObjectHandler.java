@@ -10,16 +10,15 @@ import java.time.LocalDateTime;
 public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName("createdAt", LocalDateTime.now(), metaObject);
-        this.setFieldValByName("updatedAt", LocalDateTime.now(), metaObject);
-        this.setFieldValByName("time", LocalDateTime.now(), metaObject);
-        this.setFieldValByName("createdBy", 86, metaObject);
-        this.setFieldValByName("updatedBy", 86, metaObject);
+        this.setFieldValByName("createdTime", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("lastUpdatedTime", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("createdBy", "1", metaObject);
+        this.setFieldValByName("lastUpdatedBy", "1", metaObject);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("updatedAt", LocalDateTime.now(), metaObject);
+        this.setFieldValByName("lastUpdatedTime", LocalDateTime.now(), metaObject);
 
     }
 }

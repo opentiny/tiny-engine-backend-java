@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.AppMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, app_website, platform_id, platform_history_id, publish_url, editor_url, visit_url, image_url, assets_url, state, published, home_page_id, css, config, constants, data_handler, description, latest, git_group, project_name, branch, is_demo, is_default, template_type, set_template_time, set_template_by, set_default_by, framework, global_state, default_lang, extend_config, data_hash, can_associate, data_source_global, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="AppByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="appWebsite!=null and appWebsite!=''">
+            AND app_website = #{appWebsite}
+        </if>
+        <if test="platformId!=null and platformId!=''">
+            AND platform_id = #{platformId}
+        </if>
+        <if test="platformHistoryId!=null and platformHistoryId!=''">
+            AND platform_history_id = #{platformHistoryId}
+        </if>
+        <if test="publishUrl!=null and publishUrl!=''">
+            AND publish_url = #{publishUrl}
+        </if>
+        <if test="editorUrl!=null and editorUrl!=''">
+            AND editor_url = #{editorUrl}
+        </if>
+        <if test="visitUrl!=null and visitUrl!=''">
+            AND visit_url = #{visitUrl}
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            AND image_url = #{imageUrl}
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            AND assets_url = #{assetsUrl}
+        </if>
+        <if test="state!=null and state!=''">
+            AND state = #{state}
+        </if>
+        <if test="published!=null and published!=''">
+            AND published = #{published}
+        </if>
+        <if test="homePageId!=null and homePageId!=''">
+            AND home_page_id = #{homePageId}
+        </if>
+        <if test="css!=null and css!=''">
+            AND css = #{css}
+        </if>
+        <if test="config!=null and config!=''">
+            AND config = #{config}
+        </if>
+        <if test="constants!=null and constants!=''">
+            AND constants = #{constants}
+        </if>
+        <if test="dataHandler!=null and dataHandler!=''">
+            AND data_handler = #{dataHandler}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="latest!=null and latest!=''">
+            AND latest = #{latest}
+        </if>
+        <if test="gitGroup!=null and gitGroup!=''">
+            AND git_group = #{gitGroup}
+        </if>
+        <if test="projectName!=null and projectName!=''">
+            AND project_name = #{projectName}
+        </if>
+        <if test="branch!=null and branch!=''">
+            AND branch = #{branch}
+        </if>
+        <if test="isDemo!=null and isDemo!=''">
+            AND is_demo = #{isDemo}
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            AND is_default = #{isDefault}
+        </if>
+        <if test="templateType!=null and templateType!=''">
+            AND template_type = #{templateType}
+        </if>
+        <if test="setTemplateTime!=null and setTemplateTime!=''">
+            AND set_template_time = #{setTemplateTime}
+        </if>
+        <if test="setTemplateBy!=null and setTemplateBy!=''">
+            AND set_template_by = #{setTemplateBy}
+        </if>
+        <if test="setDefaultBy!=null and setDefaultBy!=''">
+            AND set_default_by = #{setDefaultBy}
+        </if>
+        <if test="framework!=null and framework!=''">
+            AND framework = #{framework}
+        </if>
+        <if test="globalState!=null and globalState!=''">
+            AND global_state = #{globalState}
+        </if>
+        <if test="defaultLang!=null and defaultLang!=''">
+            AND default_lang = #{defaultLang}
+        </if>
+        <if test="extendConfig!=null and extendConfig!=''">
+            AND extend_config = #{extendConfig}
+        </if>
+        <if test="dataHash!=null and dataHash!=''">
+            AND data_hash = #{dataHash}
+        </if>
+        <if test="canAssociate!=null and canAssociate!=''">
+            AND can_associate = #{canAssociate}
+        </if>
+        <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">
+            AND data_source_global = #{dataSourceGlobal}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="AppSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="appWebsite!=null and appWebsite!=''">
+            app_website = #{appWebsite},
+        </if>
+        <if test="platformId!=null and platformId!=''">
+            platform_id = #{platformId},
+        </if>
+        <if test="platformHistoryId!=null and platformHistoryId!=''">
+            platform_history_id = #{platformHistoryId},
+        </if>
+        <if test="publishUrl!=null and publishUrl!=''">
+            publish_url = #{publishUrl},
+        </if>
+        <if test="editorUrl!=null and editorUrl!=''">
+            editor_url = #{editorUrl},
+        </if>
+        <if test="visitUrl!=null and visitUrl!=''">
+            visit_url = #{visitUrl},
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            image_url = #{imageUrl},
+        </if>
+        <if test="assetsUrl!=null and assetsUrl!=''">
+            assets_url = #{assetsUrl},
+        </if>
+        <if test="state!=null and state!=''">
+            state = #{state},
+        </if>
+        <if test="published!=null and published!=''">
+            published = #{published},
+        </if>
+        <if test="homePageId!=null and homePageId!=''">
+            home_page_id = #{homePageId},
+        </if>
+        <if test="css!=null and css!=''">
+            css = #{css},
+        </if>
+        <if test="config!=null and config!=''">
+            config = #{config},
+        </if>
+        <if test="constants!=null and constants!=''">
+            constants = #{constants},
+        </if>
+        <if test="dataHandler!=null and dataHandler!=''">
+            data_handler = #{dataHandler},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="latest!=null and latest!=''">
+            latest = #{latest},
+        </if>
+        <if test="gitGroup!=null and gitGroup!=''">
+            git_group = #{gitGroup},
+        </if>
+        <if test="projectName!=null and projectName!=''">
+            project_name = #{projectName},
+        </if>
+        <if test="branch!=null and branch!=''">
+            branch = #{branch},
+        </if>
+        <if test="isDemo!=null and isDemo!=''">
+            is_demo = #{isDemo},
+        </if>
+        <if test="isDefault!=null and isDefault!=''">
+            is_default = #{isDefault},
+        </if>
+        <if test="templateType!=null and templateType!=''">
+            template_type = #{templateType},
+        </if>
+        <if test="setTemplateTime!=null and setTemplateTime!=''">
+            set_template_time = #{setTemplateTime},
+        </if>
+        <if test="setTemplateBy!=null and setTemplateBy!=''">
+            set_template_by = #{setTemplateBy},
+        </if>
+        <if test="setDefaultBy!=null and setDefaultBy!=''">
+            set_default_by = #{setDefaultBy},
+        </if>
+        <if test="framework!=null and framework!=''">
+            framework = #{framework},
+        </if>
+        <if test="globalState!=null and globalState!=''">
+            global_state = #{globalState},
+        </if>
+        <if test="defaultLang!=null and defaultLang!=''">
+            default_lang = #{defaultLang},
+        </if>
+        <if test="extendConfig!=null and extendConfig!=''">
+            extend_config = #{extendConfig},
+        </if>
+        <if test="dataHash!=null and dataHash!=''">
+            data_hash = #{dataHash},
+        </if>
+        <if test="canAssociate!=null and canAssociate!=''">
+            can_associate = #{canAssociate},
+        </if>
+        <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">
+            data_source_global = #{dataSourceGlobal},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="AppMap" type="com.tinyengine.it.model.entity.App">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="app_website" property="appWebsite"/>
+        <result column="platform_id" property="platformId"/>
+        <result column="platform_history_id" property="platformHistoryId"/>
+        <result column="publish_url" property="publishUrl"/>
+        <result column="editor_url" property="editorUrl"/>
+        <result column="visit_url" property="visitUrl"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="assets_url" property="assetsUrl"/>
+        <result column="state" property="state"/>
+        <result column="published" property="published"/>
+        <result column="home_page_id" property="homePageId"/>
+        <result column="css" property="css"/>
+        <result column="config" property="config"/>
+        <result column="constants" property="constants"/>
+        <result column="data_handler" property="dataHandler"/>
+        <result column="description" property="description"/>
+        <result column="latest" property="latest"/>
+        <result column="git_group" property="gitGroup"/>
+        <result column="project_name" property="projectName"/>
+        <result column="branch" property="branch"/>
+        <result column="is_demo" property="isDemo"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="template_type" property="templateType"/>
+        <result column="set_template_time" property="setTemplateTime"/>
+        <result column="set_template_by" property="setTemplateBy"/>
+        <result column="set_default_by" property="setDefaultBy"/>
+        <result column="framework" property="framework"/>
+        <result column="global_state" property="globalState"/>
+        <result column="default_lang" property="defaultLang"/>
+        <result column="extend_config" property="extendConfig"/>
+        <result column="data_hash" property="dataHash"/>
+        <result column="can_associate" property="canAssociate"/>
+        <result column="data_source_global" property="dataSourceGlobal"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 查询表t_app所有数据 -->
+    <select id="queryAllApp" resultMap="AppMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_app
+        <where>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键id查询表t_app信息 -->
+    <select id="queryAppById" resultMap="AppMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_app
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="tenantId != null">
+                AND tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据条件查询表t_app数据 -->
+    <select id="queryAppByCondition" resultMap="AppMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_app
+        WHERE 1=1
+        <include refid="AppByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_app数据 -->
+    <delete id="deleteAppById">
+        DELETE
+        FROM t_app
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_app数据 -->
+    <update id="updateAppById" parameterType="com.tinyengine.it.model.entity.App">
+        UPDATE t_app
+        <set>
+            <include refid="AppSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表t_app数据 -->
+    <insert id="createApp" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_app ( id
+                          , name
+                          , app_website
+                          , platform_id
+                          , platform_history_id
+                          , publish_url
+                          , editor_url
+                          , visit_url
+                          , image_url
+                          , assets_url
+                          , state
+                          , published
+                          , home_page_id
+                          , css
+                          , config
+                          , constants
+                          , data_handler
+                          , description
+                          , latest
+                          , git_group
+                          , project_name
+                          , branch
+                          , is_demo
+                          , is_default
+                          , template_type
+                          , set_template_time
+                          , set_template_by
+                          , set_default_by
+                          , framework
+                          , global_state
+                          , default_lang
+                          , extend_config
+                          , data_hash
+                          , can_associate
+                          , data_source_global
+                          , created_by
+                          , last_updated_by
+                          , created_time
+                          , last_updated_time
+                          , tenant_id
+                          , site_id)
+        VALUES ( #{id}
+               , #{name}
+               , #{appWebsite}
+               , #{platformId}
+               , #{platformHistoryId}
+               , #{publishUrl}
+               , #{editorUrl}
+               , #{visitUrl}
+               , #{imageUrl}
+               , #{assetsUrl}
+               , #{state}
+               , #{published}
+               , #{homePageId}
+               , #{css}
+               , #{config}
+               , #{constants}
+               , #{dataHandler}
+               , #{description}
+               , #{latest}
+               , #{gitGroup}
+               , #{projectName}
+               , #{branch}
+               , #{isDemo}
+               , #{isDefault}
+               , #{templateType}
+               , #{setTemplateTime}
+               , #{setTemplateBy}
+               , #{setDefaultBy}
+               , #{framework}
+               , #{globalState}
+               , #{defaultLang}
+               , #{extendConfig}
+               , #{dataHash}
+               , #{canAssociate}
+               , #{dataSourceGlobal}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId})
+    </insert>
+</mapper>

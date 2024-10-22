@@ -21,7 +21,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     */
     @Override
     public List<${entity}> findAll${entity}() throws ServiceException {
-        return ${table.entityPath}Mapper.findAll${entity}();
+        return ${table.entityPath}Mapper.queryAll${entity}();
     }
 
 <#list table.fields as field>
@@ -32,7 +32,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     */
     @Override
     public ${entity} find${entity}ById(@Param("${field.propertyName}") ${field.propertyType} ${field.propertyName}) throws ServiceException {
-        return ${table.entityPath}Mapper.find${entity}ById(${field.propertyName});
+        return ${table.entityPath}Mapper.query${entity}ById(${field.propertyName});
     }
  </#if>
 </#list>
@@ -43,7 +43,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     */
     @Override
     public List<${entity}> find${entity}ByCondition(${entity} ${table.entityPath}) throws ServiceException {
-        return ${table.entityPath}Mapper.find${entity}ByCondition(${table.entityPath});
+        return ${table.entityPath}Mapper.query${entity}ByCondition(${table.entityPath});
     }
 
 <#list table.fields as field>

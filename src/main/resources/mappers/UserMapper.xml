@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.UserMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , username, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id, is_admin, is_public
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="UserByCondition">
+        <if test="username!=null and username!=''">
+            AND username = #{username}
+        </if>
+        <if test="email!=null and email!=''">
+            AND email = #{email}
+        </if>
+        <if test="enable!=null and enable!=''">
+            AND enable = #{enable}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+        <if test="isAdmin!=null and isAdmin!=''">
+            AND is_admin = #{isAdmin}
+        </if>
+        <if test="isPublic!=null and isPublic!=''">
+            AND is_public = #{isPublic}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="UserSetColumns">
+        <if test="username!=null and username!=''">
+            username = #{username},
+        </if>
+        <if test="email!=null and email!=''">
+            email = #{email},
+        </if>
+        <if test="enable!=null and enable!=''">
+            enable = #{enable},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+        <if test="isAdmin!=null and isAdmin!=''">
+            is_admin = #{isAdmin},
+        </if>
+        <if test="isPublic!=null and isPublic!=''">
+            is_public = #{isPublic},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="UserMap" type="com.tinyengine.it.model.entity.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="enable" property="enable"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+        <result column="is_admin" property="isAdmin"/>
+        <result column="is_public" property="isPublic"/>
+    </resultMap>
+
+    <!-- 查询表t_user所有数据 -->
+    <select id="queryAllUser" resultMap="UserMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_user
+    </select>
+
+    <!-- 根据主键id查询表t_user信息 -->
+    <select id="queryUserById" resultMap="UserMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_user
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表t_user数据 -->
+    <select id="queryUserByCondition" resultMap="UserMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_user
+        WHERE 1=1
+        <include refid="UserByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_user数据 -->
+    <delete id="deleteUserById">
+        DELETE
+        FROM t_user
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_user数据 -->
+    <update id="updateUserById" parameterType="com.tinyengine.it.model.entity.User">
+        UPDATE t_user
+        <set>
+            <include refid="UserSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <insert id="createUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user ( id
+                           , username
+                           , email
+                           , enable
+                           , created_by
+                           , last_updated_by
+                           , created_time
+                           , last_updated_time
+                           , tenant_id
+                           , site_id
+                           , is_admin
+                           , is_public)
+        VALUES ( #{id}
+               , #{username}
+               , #{email}
+               , #{enable}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId}
+               , #{isAdmin}
+               , #{isPublic})
+    </insert>
+</mapper>
