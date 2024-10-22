@@ -1,11 +1,12 @@
 package com.tinyengine.it.service.app;
 
-import com.tinyengine.it.model.dto.*;
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.PreviewDto;
+import com.tinyengine.it.model.dto.PreviewParam;
 import com.tinyengine.it.model.entity.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface PageService {
 
@@ -35,6 +36,7 @@ public interface PageService {
      * @param id
      */
     Result<Page> delPage(@Param("id") Integer id) throws Exception;
+
     /**
      * 创建页面
      *

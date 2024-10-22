@@ -1,8 +1,8 @@
 package com.tinyengine.it.service.app;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.PreviewDto;
-import com.tinyengine.it.model.dto.Result;
 import com.tinyengine.it.model.entity.App;
 import org.apache.ibatis.annotations.Param;
 
