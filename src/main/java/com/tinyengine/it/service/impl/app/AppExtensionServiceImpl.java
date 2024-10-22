@@ -4,6 +4,7 @@ import com.tinyengine.it.config.Enums;
 import com.tinyengine.it.config.SystemServiceLog;
 import com.tinyengine.it.exception.ExceptionEnum;
 import com.tinyengine.it.model.dto.Result;
+import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.service.app.AppExtensionService;
@@ -87,6 +88,10 @@ public class AppExtensionServiceImpl implements AppExtensionService {
     @Override
     @SystemServiceLog(description = "应用扩展创建实现方法")
     public Result<AppExtension> createAppExtension(AppExtension appExtension) throws ServiceException {
+        List<AppExtension> appExtensionResult = appExtensionMapper.queryAppExtensionByCondition(appExtension);
+        if(!appExtensionResult.isEmpty()){
+            return Result.failed(ExceptionEnum.CM003);
+        }
         int result = appExtensionMapper.createAppExtension(appExtension);
         if(result == 1){
             return Result.success(appExtension);

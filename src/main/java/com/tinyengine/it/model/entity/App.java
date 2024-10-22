@@ -1,10 +1,16 @@
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import com.tinyengine.it.utils.ListTypeHandler;
+import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -61,20 +67,23 @@ public class App implements Serializable {
     @Schema(name= "published", description = "是否发布：1是，0否")
     private Boolean published;
 
-    @Schema(name= "homePageId", description = "主页面id，关联page表的id")
-    private Integer homePageId;
+    @Schema(name= "homePage", description = "主页面id，关联page表的id")
+    private Integer homePage;
 
     @Schema(name= "css", description = "*设计预留字段*")
-    private String css;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> css;
 
     @Schema(name= "config", description = "*设计预留字段*")
-    private String config;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> config;
 
     @Schema(name= "constants", description = "*设计预留字段*")
     private String constants;
 
     @Schema(name= "dataHandler", description = "数据源的拦截器")
-    private String dataHandler;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> dataHandler;
 
     @Schema(name= "description", description = "描述")
     private String description;
@@ -113,13 +122,15 @@ public class App implements Serializable {
     private String framework;
 
     @Schema(name= "globalState", description = "应用全局状态")
-    private String globalState;
+    @TableField(typeHandler = ListTypeHandler.class)
+    private List<Map<String,Object>> globalState;
 
     @Schema(name= "defaultLang", description = "默认语言")
     private String defaultLang;
 
     @Schema(name= "extendConfig", description = "应用扩展config")
-    private String extendConfig;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> extendConfig;
 
     @Schema(name= "dataHash", description = "应用内容哈希值")
     private String dataHash;
@@ -128,7 +139,8 @@ public class App implements Serializable {
     private String canAssociate;
 
     @Schema(name= "dataSourceGlobal", description = "数据源全局配置")
-    private String dataSourceGlobal;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> dataSourceGlobal;
 
     @Schema(name= "createdBy", description = "创建人")
     private String createdBy;
