@@ -7,43 +7,31 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , teamId, taskTypeId, uniqueId, taskName, taskStatus, taskResult, progress, created_at, updated_at, createdBy, updatedBy, ratio, progress_percent, `indicator`
+        , team_id, task_type_id, unique_id, task_name, task_status, task_result, progress, ratio, progress_percent, indicator, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
     <sql id="TaskRecordByCondition">
         <if test="teamId!=null and teamId!=''">
-            AND teamId = #{teamId}
+            AND team_id = #{teamId}
         </if>
         <if test="taskTypeId!=null and taskTypeId!=''">
-            AND taskTypeId = #{taskTypeId}
+            AND task_type_id = #{taskTypeId}
         </if>
         <if test="uniqueId!=null and uniqueId!=''">
-            AND uniqueId = #{uniqueId}
+            AND unique_id = #{uniqueId}
         </if>
         <if test="taskName!=null and taskName!=''">
-            AND taskName = #{taskName}
+            AND task_name = #{taskName}
         </if>
         <if test="taskStatus!=null and taskStatus!=''">
-            AND taskStatus = #{taskStatus}
+            AND task_status = #{taskStatus}
         </if>
         <if test="taskResult!=null and taskResult!=''">
-            AND taskResult = #{taskResult}
+            AND task_result = #{taskResult}
         </if>
         <if test="progress!=null and progress!=''">
             AND progress = #{progress}
-        </if>
-        <if test="createdAt!=null and createdAt!=''">
-            AND created_at = #{createdAt}
-        </if>
-        <if test="updatedAt!=null and updatedAt!=''">
-            AND updated_at = #{updatedAt}
-        </if>
-        <if test="createdBy!=null and createdBy!=''">
-            AND createdBy = #{createdBy}
-        </if>
-        <if test="updatedBy!=null and updatedBy!=''">
-            AND updatedBy = #{updatedBy}
         </if>
         <if test="ratio!=null and ratio!=''">
             AND ratio = #{ratio}
@@ -52,44 +40,50 @@
             AND progress_percent = #{progressPercent}
         </if>
         <if test="indicator!=null and indicator!=''">
-            AND `indicator` = #{indicator}
+            AND indicator = #{indicator}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
         </if>
     </sql>
 
     <!-- 通用设置列 -->
     <sql id="TaskRecordSetColumns">
         <if test="teamId!=null and teamId!=''">
-            teamId = #{teamId},
+            team_id = #{teamId},
         </if>
         <if test="taskTypeId!=null and taskTypeId!=''">
-            taskTypeId = #{taskTypeId},
+            task_type_id = #{taskTypeId},
         </if>
         <if test="uniqueId!=null and uniqueId!=''">
-            uniqueId = #{uniqueId},
+            unique_id = #{uniqueId},
         </if>
         <if test="taskName!=null and taskName!=''">
-            taskName = #{taskName},
+            task_name = #{taskName},
         </if>
         <if test="taskStatus!=null and taskStatus!=''">
-            taskStatus = #{taskStatus},
+            task_status = #{taskStatus},
         </if>
         <if test="taskResult!=null and taskResult!=''">
-            taskResult = #{taskResult},
+            task_result = #{taskResult},
         </if>
         <if test="progress!=null and progress!=''">
             progress = #{progress},
-        </if>
-        <if test="createdAt!=null and createdAt!=''">
-            created_at = #{createdAt},
-        </if>
-        <if test="updatedAt!=null and updatedAt!=''">
-            updated_at = #{updatedAt},
-        </if>
-        <if test="createdBy!=null and createdBy!=''">
-            createdBy = #{createdBy},
-        </if>
-        <if test="updatedBy!=null and updatedBy!=''">
-            updatedBy = #{updatedBy},
         </if>
         <if test="ratio!=null and ratio!=''">
             ratio = #{ratio},
@@ -98,7 +92,25 @@
             progress_percent = #{progressPercent},
         </if>
         <if test="indicator!=null and indicator!=''">
-            `indicator` = #{indicator},
+            indicator = #{indicator},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
         </if>
     </sql>
 
@@ -106,74 +118,58 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="TaskRecordMap" type="com.tinyengine.it.model.entity.TaskRecord">
         <id column="id" property="id"/>
-        <result column="teamId" property="teamId"/>
-        <result column="taskTypeId" property="taskTypeId"/>
-        <result column="uniqueId" property="uniqueId"/>
-        <result column="taskName" property="taskName"/>
-        <result column="taskStatus" property="taskStatus"/>
-        <result column="taskResult" property="taskResult"/>
+        <result column="team_id" property="teamId"/>
+        <result column="task_type_id" property="taskTypeId"/>
+        <result column="unique_id" property="uniqueId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="task_status" property="taskStatus"/>
+        <result column="task_result" property="taskResult"/>
         <result column="progress" property="progress"/>
-        <result column="created_at" property="createdAt"/>
-        <result column="updated_at" property="updatedAt"/>
-        <result column="createdBy" property="createdBy"/>
-        <result column="updatedBy" property="updatedBy"/>
         <result column="ratio" property="ratio"/>
         <result column="progress_percent" property="progressPercent"/>
         <result column="indicator" property="indicator"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
     </resultMap>
 
-    <!-- 查询表task_record所有数据 -->
-    <select id="findAllTaskRecord" resultMap="TaskRecordMap">
+    <!-- 查询表t_task_record所有数据 -->
+    <select id="queryAllTaskRecord" resultMap="TaskRecordMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM task_record
+        FROM t_task_record
     </select>
 
-    <!-- 根据主键id查询表task_record信息 -->
-    <select id="findTaskRecordById" resultMap="TaskRecordMap">
+    <!-- 根据主键id查询表t_task_record信息 -->
+    <select id="queryTaskRecordById" resultMap="TaskRecordMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM task_record
+        FROM t_task_record
         WHERE id=#{id}
     </select>
 
-    <!-- 根据条件查询表task_record数据 -->
-    <select id="findTaskRecordByCondition" resultMap="TaskRecordMap">
+    <!-- 根据条件查询表t_task_record数据 -->
+    <select id="queryTaskRecordByCondition" resultMap="TaskRecordMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM task_record
+        FROM t_task_record
         WHERE 1=1
         <include refid="TaskRecordByCondition"/>
     </select>
 
-    <!-- 根据taskTypeId、uniqueId按照created_at降序查询表task_record信息 -->
-    <select id="fingTaskRecordByTaskIdAndUniqueid" resultMap="TaskRecordMap">
-        select
-        <include refid="Base_Column_List"/>
-        FROM task_record
-        WHERE taskTypeId=#{taskTypeId} and uniqueId=#{uniqueId}
-        order by created_at desc
-    </select>
-
-    <!-- 根据taskTypeId、uniqueId按照id降序查询表task_record信息 -->
-    <select id="getUnfinishedTask" resultMap="TaskRecordMap">
-        select
-        <include refid="Base_Column_List"/>
-        FROM task_record
-        WHERE taskTypeId=#{taskTypeId} and uniqueId=#{uniqueId}
-        order by id desc
-        LIMIT 1
-    </select>
-    <!-- 根据主键id删除表task_record数据 -->
+    <!-- 根据主键id删除表t_task_record数据 -->
     <delete id="deleteTaskRecordById">
         DELETE
-        FROM task_record
+        FROM t_task_record
         WHERE id = #{id}
     </delete>
 
-    <!-- 根据主键id更新表task_record数据 -->
+    <!-- 根据主键id更新表t_task_record数据 -->
     <update id="updateTaskRecordById" parameterType="com.tinyengine.it.model.entity.TaskRecord">
-        UPDATE task_record
+        UPDATE t_task_record
         <set>
             <include refid="TaskRecordSetColumns"/>
         </set>
@@ -181,23 +177,25 @@
         id=#{id}
     </update>
 
-    <!-- 新增表task_record数据 -->
-    <insert id="createTaskRecord">
-        INSERT INTO task_record ( id
-                                , teamId
-                                , taskTypeId
-                                , uniqueId
-                                , taskName
-                                , taskStatus
-                                , taskResult
-                                , progress
-                                , created_at
-                                , updated_at
-                                , createdBy
-                                , updatedBy
-                                , ratio
-                                , progress_percent
-                                , indicator)
+    <!-- 新增表t_task_record数据 -->
+    <insert id="createTaskRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_task_record ( id
+                                  , team_id
+                                  , task_type_id
+                                  , unique_id
+                                  , task_name
+                                  , task_status
+                                  , task_result
+                                  , progress
+                                  , ratio
+                                  , progress_percent
+                                  , indicator
+                                  , created_by
+                                  , last_updated_by
+                                  , created_time
+                                  , last_updated_time
+                                  , tenant_id
+                                  , site_id)
         VALUES ( #{id}
                , #{teamId}
                , #{taskTypeId}
@@ -206,12 +204,14 @@
                , #{taskStatus}
                , #{taskResult}
                , #{progress}
-               , #{createdAt}
-               , #{updatedAt}
-               , #{createdBy}
-               , #{updatedBy}
                , #{ratio}
                , #{progressPercent}
-               , #{indicator})
+               , #{indicator}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId})
     </insert>
 </mapper>
