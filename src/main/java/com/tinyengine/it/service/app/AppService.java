@@ -1,10 +1,13 @@
 package com.tinyengine.it.service.app;
 
+import com.tinyengine.it.model.dto.I18nEntryDto;
+import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.Result;
 import com.tinyengine.it.model.entity.App;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AppService {
 
@@ -47,4 +50,22 @@ public interface AppService {
      * @param app
      */
     Result<App> createApp(App app);
+
+    /**
+     * 序列化国际化词条
+     *
+     * @param i18nEntries 国际化词条标准请求返回数据
+     * @param userdIn     国际化词条从属单元 （应用或区块）
+     * @param id          应用id或区块id
+     */
+    Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn, Integer id);
+
+    /**
+     * 获取预览元数据
+     *
+     * @param id 应用id
+     */
+    PreviewDto getAppPreviewMetaData(Integer id);
+
+
 }

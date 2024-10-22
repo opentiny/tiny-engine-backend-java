@@ -1,10 +1,12 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
+
+import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +40,8 @@ public class Material implements Serializable {
     private String framework;
 
     @Schema(name= "assetsUrl", description = "资源地址")
-    private String assetsUrl;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> assetsUrl;
 
     @Schema(name= "imageUrl", description = "封面图地址")
     private String imageUrl;
@@ -56,7 +59,8 @@ public class Material implements Serializable {
     private Integer pulblic;
 
     @Schema(name= "lastBuildInfo", description = "最新一次构建信息")
-    private String lastBuildInfo;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> lastBuildInfo;
 
     @Schema(name= "description", description = "描述")
     private String description;
@@ -89,15 +93,19 @@ public class Material implements Serializable {
     private String unzipTgzFiles;
 
     @Schema(name= "createdBy", description = "创建人")
+    @TableField(value = "createdBy", fill = FieldFill.INSERT)
     private String createdBy;
 
     @Schema(name= "lastUpdatedBy", description = "最后修改人")
+    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
 
     @Schema(name= "createdTime", description = "创建时间")
+    @TableField(value = "createdTime", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     @Schema(name= "lastUpdatedTime", description = "更新时间")
+    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdatedTime;
 
     @Schema(name= "tenantId", description = "租户ID")

@@ -66,13 +66,6 @@ public interface PageService {
      */
     Result<Page> update(Page pages) throws Exception;
 
-    /**
-     * 查询页面schemaCode
-     *
-     * @param schemaCodeParam
-     * @return schemaCode
-     */
-    List<Map<String, Object>> schema2Code(SchemaCodeParam schemaCodeParam);
 
     /**
      * 查询页面预览元数据

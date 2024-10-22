@@ -109,7 +109,7 @@ public class PageController {
 
         if (page.getIsPage()) {
             // 创建页面
-             return pageService.createPage(page);
+            return pageService.createPage(page);
 
         } else {
             // 创建文件夹
@@ -189,31 +189,6 @@ public class PageController {
     public Result<Page> deletepage(@PathVariable Integer id) throws Exception {
 
         return pageService.delPage(id);
-    }
-
-    /**
-     * 查询页面schemaCode
-     * 新版本页面预览不用该接口
-     *
-     * @param schemaCodeParam
-     * @return schemaCode
-     */
-    @Operation(summary = "查询页面schemaCode",
-            description = "根据app和pageInfo查询表schemaCode信息并返回",
-            parameters = {
-                    @Parameter(name = "schemaCodeParam", description = "入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
-    @SystemControllerLog(description = "查询页面schemaCode")
-    @GetMapping("/schema2code")
-    public Result<List<Map<String, Object>>> schema2code(@ModelAttribute SchemaCodeParam schemaCodeParam) {
-        List<Map<String, Object>> code = pageService.schema2Code(schemaCodeParam);
-        return Result.success(code);
     }
 
     /**

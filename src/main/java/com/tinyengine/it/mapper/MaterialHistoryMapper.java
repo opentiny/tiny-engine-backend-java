@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.MaterialHistory;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
 
@@ -40,4 +41,7 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
     *  @param materialHistory
     */
     Integer createMaterialHistory(MaterialHistory materialHistory);
+
+    @Select(" SELECT block_history_id FROM r_material_history_block WHERE material_history_id=#{materialHistoryId}")
+List<Integer> queryBlockHistoryBymaterialHistoryId(@Param("materialHistoryId") Integer materialHistoryId);
 }
