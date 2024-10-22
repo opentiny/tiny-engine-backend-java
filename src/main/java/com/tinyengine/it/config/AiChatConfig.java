@@ -8,7 +8,7 @@ public class AiChatConfig {
     private static final String OPENAI_API_KEY = System.getenv("OPENAI_API_KEY");
 
     private static final String LOCAL_GPT_API_URL = System.getenv("Local_GPT_API_URL") != null ? System.getenv("Local_GPT_API_URL") : "https://dashscope.aliyuncs.com/compatible-mode";
-    private static final String LOCAL_GPT_API_KEY = "sk-9454bb152f114048828d073db20d2b30";//System.getenv("Local_GPT_API_KEY");
+    private static final String LOCAL_GPT_API_KEY = System.getenv("Local_GPT_API_KEY");
 
     private static final String WENXIN_ACCESS_TOKEN = System.getenv("WENXIN_ACCESS_TOKEN");
 
