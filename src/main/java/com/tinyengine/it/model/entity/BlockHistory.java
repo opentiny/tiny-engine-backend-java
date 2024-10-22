@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tinyengine.it.common.base.BaseEntity;
+import com.tinyengine.it.common.base.HistoryEntity;
 import com.tinyengine.it.common.utils.MapTypeHandler;
 import com.tinyengine.it.model.dto.BlockVersionDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +27,7 @@ import java.util.Map;
 @Setter
 @TableName("t_block_history")
 @Schema(name = "BlockHistory", description = "区块历史表")
-public class BlockHistory extends BaseEntity {
+public class BlockHistory extends HistoryEntity {
     @Schema(name = "id", description = "主键id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
