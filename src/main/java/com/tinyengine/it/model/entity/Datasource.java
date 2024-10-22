@@ -1,14 +1,13 @@
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tinyengine.it.common.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -22,7 +21,7 @@ import lombok.Setter;
 @Setter
 @TableName("t_datasource")
 @Schema(name = "Datasource", description = "数据源表")
-public class Datasource implements Serializable {
+public class Datasource extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
     @Schema(name = "id", description = "主键id")

@@ -1,15 +1,14 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Map;
-
-import com.tinyengine.it.utils.MapTypeHandler;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.tinyengine.it.common.base.BaseEntity;
+import com.tinyengine.it.common.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -23,95 +22,66 @@ import lombok.Setter;
 @Setter
 @TableName("t_material")
 @Schema(name = "Material", description = "物料包表")
-public class Material implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    @Schema(name= "id", description = "主键id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
-    @Schema(name= "name", description = "物料包名称")
+public class Material extends BaseEntity {
+    @Schema(name = "name", description = "物料包名称")
     private String name;
 
-    @Schema(name= "npmName", description = "npm包名")
+    @Schema(name = "npmName", description = "npm包名")
     private String npmName;
 
-    @Schema(name= "framework", description = "技术栈")
+    @Schema(name = "framework", description = "技术栈")
     private String framework;
 
-    @Schema(name= "assetsUrl", description = "资源地址")
+    @Schema(name = "assetsUrl", description = "资源地址")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> assetsUrl;
+    private Map<String, Object> assetsUrl;
 
-    @Schema(name= "imageUrl", description = "封面图地址")
+    @Schema(name = "imageUrl", description = "封面图地址")
     private String imageUrl;
 
-    @Schema(name= "published", description = "是否发布：1是，0否")
+    @Schema(name = "published", description = "是否发布：1是，0否")
     private Boolean published;
 
-    @Schema(name= "latestVersion", description = "当前历史记录表最新版本")
+    @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
     private String latestVersion;
 
-    @Schema(name= "latestHistoryId", description = "当前历史记录表ID")
+    @Schema(name = "latestHistoryId", description = "当前历史记录表ID")
     private Integer latestHistoryId;
 
-    @Schema(name= "pulblic", description = "公开状态：0,1,2")
+    @Schema(name = "pulblic", description = "公开状态：0,1,2")
     private Integer pulblic;
 
-    @Schema(name= "lastBuildInfo", description = "最新一次构建信息")
+    @Schema(name = "lastBuildInfo", description = "最新一次构建信息")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> lastBuildInfo;
+    private Map<String, Object> lastBuildInfo;
 
-    @Schema(name= "description", description = "描述")
+    @Schema(name = "description", description = "描述")
     private String description;
 
-    @Schema(name= "isOfficial", description = "是否是官方")
+    @Schema(name = "isOfficial", description = "是否是官方")
     private Boolean isOfficial;
 
-    @Schema(name= "isDefault", description = "是否默认")
+    @Schema(name = "isDefault", description = "是否默认")
     private Boolean isDefault;
 
-    @Schema(name= "tinyReserved", description = "是否是tiny专有")
+    @Schema(name = "tinyReserved", description = "是否是tiny专有")
     private Boolean tinyReserved;
 
-    @Schema(name= "componentLibraryId", description = "*设计预留字段*")
+    @Schema(name = "componentLibraryId", description = "*设计预留字段*")
     private String componentLibraryId;
 
-    @Schema(name= "materialCategoryId", description = "物料包业务类型")
+    @Schema(name = "materialCategoryId", description = "物料包业务类型")
     private String materialCategoryId;
 
-    @Schema(name= "materialSize", description = "物料包大小")
+    @Schema(name = "materialSize", description = "物料包大小")
     private Integer materialSize;
 
-    @Schema(name= "tgzUrl", description = "物料包存储地址")
+    @Schema(name = "tgzUrl", description = "物料包存储地址")
     private String tgzUrl;
 
-    @Schema(name= "unzipTgzRootPathUrl", description = "物料包存储根路径")
+    @Schema(name = "unzipTgzRootPathUrl", description = "物料包存储根路径")
     private String unzipTgzRootPathUrl;
 
-    @Schema(name= "unzipTgzFiles", description = "物料包存储文件")
+    @Schema(name = "unzipTgzFiles", description = "物料包存储文件")
     private String unzipTgzFiles;
-
-    @Schema(name= "createdBy", description = "创建人")
-    @TableField(value = "createdBy", fill = FieldFill.INSERT)
-    private String createdBy;
-
-    @Schema(name= "lastUpdatedBy", description = "最后修改人")
-    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
-    private String lastUpdatedBy;
-
-    @Schema(name= "createdTime", description = "创建时间")
-    @TableField(value = "createdTime", fill = FieldFill.INSERT)
-    private LocalDateTime createdTime;
-
-    @Schema(name= "lastUpdatedTime", description = "更新时间")
-    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime lastUpdatedTime;
-
-    @Schema(name= "tenantId", description = "租户ID")
-    private String tenantId;
-
-    @Schema(name= "siteId", description = "站点ID")
-    private String siteId;
-
 }

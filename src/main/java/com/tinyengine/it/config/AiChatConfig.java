@@ -1,5 +1,7 @@
 package com.tinyengine.it.config;
 
+import com.tinyengine.it.common.enums.Enums;
+
 import java.util.HashMap;
 import java.util.Map;
 
