@@ -6,7 +6,7 @@ import ${package.Service}.${table.serviceName};
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.ibatis.annotations.Param;
-import com.tinyengine.it.exception.ServiceException;
+import com.tinyengine.it.common.exception.ServiceException;
 
 import java.util.List;
 
