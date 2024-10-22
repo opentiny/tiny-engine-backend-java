@@ -1,10 +1,15 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import com.tinyengine.it.model.dto.BlockVersionDto;
+import com.tinyengine.it.utils.ListTypeHandler;
+import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,8 +44,9 @@ public class PageHistory implements Serializable {
     @Schema(name= "route", description = "页面路由")
     private String route;
 
-    @Schema(name= "pageContent", description = "页面内容")
-    private String pageContent;
+    @Schema(name= "pageCotent", description = "页面内容")
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Object> pageContent;
 
     @Schema(name= "isBody", description = "根元素是否是body")
     private Boolean isBody;
@@ -65,18 +71,24 @@ public class PageHistory implements Serializable {
     @Schema(name= "isHome", description = "是否为主页")
     private Boolean isHome;
 
-    private String contentBlocks;
+    @Schema(name= "contentBlocks", description = "*设计预留字段*")
+    @TableField(typeHandler = ListTypeHandler.class)
+    private List<BlockVersionDto> contentBlocks;
 
     @Schema(name= "createdBy", description = "创建人")
+    @TableField(value = "createdBy", fill = FieldFill.INSERT)
     private String createdBy;
 
     @Schema(name= "lastUpdatedBy", description = "最后修改人")
+    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
 
     @Schema(name= "createdTime", description = "创建时间")
+    @TableField(value = "createdTime", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     @Schema(name= "lastUpdatedTime", description = "更新时间")
+    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdatedTime;
 
     @Schema(name= "tenantId", description = "租户id")

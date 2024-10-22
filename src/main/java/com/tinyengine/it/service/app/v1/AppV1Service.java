@@ -4,7 +4,7 @@ import com.tinyengine.it.exception.ServiceException;
 
 import java.util.Map;
 
-public interface AppsV1Service {
+public interface AppV1Service {
     /**
      * 查询app schema
      *

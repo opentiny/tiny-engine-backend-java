@@ -1,10 +1,14 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import com.tinyengine.it.utils.ListTypeHandler;
+import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +39,8 @@ public class Platform implements Serializable {
     private Boolean published;
 
     @Schema(name= "lastBuildInfo", description = "最后构建信息")
-    private String lastBuildInfo;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> lastBuildInfo;
 
     @Schema(name= "description", description = "描述")
     private String description;
@@ -53,22 +58,26 @@ public class Platform implements Serializable {
     private String imageUrl;
 
     @Schema(name= "sortPlugins", description = "插件集合")
-    private String sortPlugins;
+    @TableField(typeHandler = ListTypeHandler.class)
+    private List<Integer> sortPlugins;
 
     @Schema(name= "sortToolbar", description = "工具集合")
-    private String sortToolbar;
+    @TableField(typeHandler = ListTypeHandler.class)
+    private List<Integer> sortToolbar;
 
     @Schema(name= "isDefault", description = "是否默认编辑器：1是，0否")
     private Boolean isDefault;
 
     @Schema(name= "prettierOpts", description = "*设计预留字段*")
+    @TableField(typeHandler = MapTypeHandler.class)
     private String prettierOpts;
 
     @Schema(name= "setDefaultBy", description = "设置默认编辑器的人")
     private String setDefaultBy;
 
     @Schema(name= "appExtendConfig", description = "应用扩展配置")
-    private String appExtendConfig;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String,Object> appExtendConfig;
 
     @Schema(name= "dataHash", description = "设计器数据Hash，验证数据一致性")
     private String dataHash;
@@ -92,15 +101,19 @@ public class Platform implements Serializable {
     private String siteId;
 
     @Schema(name= "createdBy", description = "创建人")
+    @TableField(value = "createdBy", fill = FieldFill.INSERT)
     private String createdBy;
 
     @Schema(name= "lastUpdatedBy", description = "最后修改人")
+    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
 
     @Schema(name= "createdTime", description = "创建时间")
+    @TableField(value = "createdTime", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     @Schema(name= "lastUpdatedTime", description = "更新时间")
+    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdatedTime;
 
 }
