@@ -11,7 +11,7 @@ public class MetaDto {
     private List<I18nEntryDto> i18n;
     private List<Datasource> source;
     private List<AppExtension> extension;
-    private List<PageDto> pages;
+    private List<Page> pages;
     private List<BlockHistory> blockHistories;
     private MaterialHistory materialHistory;
 }

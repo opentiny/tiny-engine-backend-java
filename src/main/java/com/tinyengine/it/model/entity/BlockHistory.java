@@ -1,12 +1,16 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tinyengine.it.model.dto.BlockVersionDto;
+import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,14 +52,17 @@ public class BlockHistory implements Serializable {
     @Schema(name= "framework", description = "技术栈")
     private String framework;
 
-    @Schema(name= "content", description = "区块内容")
-    private String content;
+    @TableField(typeHandler = MapTypeHandler.class)
+    @Schema(name = "content", description = "区块内容")
+    private Map<String, Object> content;
 
     @Schema(name= "assets", description = "区块构建资源")
-    private String assets;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Object> assets;
 
     @Schema(name= "buildInfo", description = "构建信息")
-    private String buildInfo;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Object> buildInfo;
 
     @Schema(name= "screenshot", description = "截图")
     private String screenshot;
@@ -95,24 +102,30 @@ public class BlockHistory implements Serializable {
     private String npmName;
 
     @Schema(name= "i18n", description = "国际化")
-    private String i18n;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Map<String, String>> i18n;
 
     @Schema(name= "blockGroupId", description = "区块分组关联Id")
     private Integer blockGroupId;
 
     @Schema(name= "contentBlocks", description = "*暂不清楚*")
-    private String contentBlocks;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private List<BlockVersionDto> contentBlocks;
 
     @Schema(name= "createdBy", description = "创建人")
+    @TableField(value = "createdBy", fill = FieldFill.INSERT)
     private String createdBy;
 
     @Schema(name= "lastUpdatedBy", description = "最后修改人")
+    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
 
     @Schema(name= "createdTime", description = "创建时间")
+    @TableField(value = "createdTime", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     @Schema(name= "lastUpdatedTime", description = "更新时间")
+    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdatedTime;
 
     @Schema(name= "tenantId", description = "租户id")

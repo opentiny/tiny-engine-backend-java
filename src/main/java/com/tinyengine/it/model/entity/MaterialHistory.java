@@ -1,10 +1,15 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +39,8 @@ public class MaterialHistory implements Serializable {
     private String version;
 
     @Schema(name= "content", description = "物料内容")
-    private String content;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Object> content;
 
     @Schema(name= "name", description = "物料名称")
     private String name;
@@ -45,8 +51,10 @@ public class MaterialHistory implements Serializable {
     @Schema(name= "framework", description = "技术栈")
     private String framework;
 
-    @Schema(name= "assetsUrl", description = "物料构建资源")
-    private String assetsUrl;
+    @JsonProperty("assets_url")
+    @TableField(typeHandler = MapTypeHandler.class)
+    @Schema(name = "assets_url", description = "资源地址")
+    private Map<String, Object> assetsUrl;
 
     @Schema(name= "imageUrl", description = "封面图片地址")
     private String imageUrl;
@@ -67,15 +75,19 @@ public class MaterialHistory implements Serializable {
     private String unzipTgzFiles;
 
     @Schema(name= "createdBy", description = "创建人")
+    @TableField(value = "createdBy", fill = FieldFill.INSERT)
     private String createdBy;
 
     @Schema(name= "lastUpdatedBy", description = "最后修改人")
+    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
 
     @Schema(name= "createdTime", description = "创建时间")
+    @TableField(value = "createdTime", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     @Schema(name= "lastUpdatedTime", description = "更新时间")
+    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdatedTime;
 
     @Schema(name= "tenantId", description = "租户id")
@@ -83,5 +95,8 @@ public class MaterialHistory implements Serializable {
 
     @Schema(name= "siteId", description = "站点id")
     private String siteId;
+
+    @Schema(name = "components", description = "组件")
+    private List<Component> components;
 
 }

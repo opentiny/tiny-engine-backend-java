@@ -12,6 +12,7 @@ import com.tinyengine.it.service.app.AppService;
 import com.tinyengine.it.service.app.PageHistoryService;
 import com.tinyengine.it.service.app.PageService;
 import com.tinyengine.it.service.app.UserService;
+import com.tinyengine.it.service.impl.app.v1.AppV1ServiceImpl;
 import com.tinyengine.it.service.impl.material.BlockServiceImpl;
 import com.tinyengine.it.utils.ExecuteJavaScript;
 import com.tinyengine.it.utils.Utils;
@@ -97,7 +98,7 @@ public class PageServiceImpl implements PageService {
         // 删除
         Page pageResult = pageMapper.queryPageById(id);
         int result = pageMapper.deletePageById(id);
-        if(result < 1) {
+        if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
         return Result.success(pageResult);
@@ -129,11 +130,11 @@ public class PageServiceImpl implements PageService {
         pageParam.setName(page.getName());
         pageParam.setApp(page.getApp());
         List<Page> pageResult = pageMapper.queryPageByCondition(pageParam);
-        if(!pageResult.isEmpty()) {
+        if (!pageResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
         int result = pageMapper.createPage(page);
-        if(result < 1) {
+        if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
         Page pageInfo = queryPageById(page.getId());
@@ -172,11 +173,11 @@ public class PageServiceImpl implements PageService {
         pageParam.setName(page.getName());
         pageParam.setApp(page.getApp());
         List<Page> pageResult = pageMapper.queryPageByCondition(pageParam);
-        if(!pageResult.isEmpty()) {
+        if (!pageResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
         int result = pageMapper.createPage(page);
-        if(result < 1) {
+        if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
         Page pageInfo = queryPageById(page.getId());
@@ -203,8 +204,8 @@ public class PageServiceImpl implements PageService {
         } else if (!page.getIsHome()) {
             // 判断页面原始信息中是否为首页
             if (pageTemp.getIsHome()) {
-                 setAppHomePage(appId, 0);
-                 isHomeVal = false;
+                setAppHomePage(appId, 0);
+                isHomeVal = false;
             }
         } else {
             long res = getAppHomePageId(pageTemp.getApp());
@@ -220,7 +221,7 @@ public class PageServiceImpl implements PageService {
         pageHistory.setRefId(pageTemp.getId());
         pageHistory.setId(null);
         int result = pageHistoryService.createPageHistory(pageHistory);
-        if(result < 1){
+        if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
 
@@ -250,7 +251,7 @@ public class PageServiceImpl implements PageService {
         // 当更新参数中没有depth 或 depth没有发生改变时
         if (page.getDepth().equals(parentInfo.getDepth())) {
             int result = pageMapper.updatePageById(page);
-            if(result < 1){
+            if (result < 1) {
                 return Result.failed(ExceptionEnum.CM001);
             }
             Page pagesResult = queryPageById(page.getId());
@@ -265,15 +266,28 @@ public class PageServiceImpl implements PageService {
         return null;
     }
 
-    @Override
-    public List<Map<String, Object>> schema2Code(SchemaCodeParam schemaCodeParam) {
-        return null;
-    }
 
+    /**
+     * 获取 页面（虽然这个接口数据跟页面没啥关系）/区块的预览元数据
+     *
+     * @param { E_Schema2CodeType } type 页面还是区块
+     * @param { number|string } id 页面或区块id
+     * @param { number|string } app 应用id
+     * @return { PreviewDto }
+     */
+    @SystemServiceLog(description = "getPreviewMetaData 获取预览元数据")
     @Override
     public PreviewDto getPreviewMetaData(PreviewParam previewParam) {
-        return null;
+        String type = previewParam.getType();
+        PreviewDto previewDto;
+        if (Enums.E_Schema2CodeType.BLOCK.getValue().equals(type)) {
+            previewDto = getBlockPreviewMetaData(previewParam);
+            return previewDto;
+        }
+        previewDto = appService.getAppPreviewMetaData(previewParam.getApp());
+        return previewDto;
     }
+
 
     public boolean setAppHomePage(int appId, int pageId) {
         // updateApp
@@ -282,7 +296,7 @@ public class PageServiceImpl implements PageService {
         app.setHomePage(pageId);
 
         int result = appMapper.updateAppById(app);
-        if(result < 1){
+        if (result < 1) {
             return false;
         }
         return true;
@@ -312,6 +326,7 @@ public class PageServiceImpl implements PageService {
 
         return result;
     }
+
     public Page addIsHome(Page pageInfo) {
         if (pageInfo == null) {
             return pageInfo;
@@ -438,6 +453,7 @@ public class PageServiceImpl implements PageService {
         Page pagesResult = queryPageById(page.getId());
         return Result.success(pagesResult);
     }
+
     /**
      * 校验parentId
      *
@@ -490,9 +506,7 @@ public class PageServiceImpl implements PageService {
 
         if (obj instanceof List<?>) {
             List<?> pidsList = (List<?>) obj;
-            pids = pidsList.stream()
-                    .map(element -> (Integer) element)
-                    .collect(Collectors.toList());
+            pids = pidsList.stream().map(element -> (Integer) element).collect(Collectors.toList());
 
         }
         // 没有子节点，返回收集的节点信息
@@ -506,8 +520,7 @@ public class PageServiceImpl implements PageService {
         // 获取子节点的id
         List<Integer> childrenId = getChildrenId(pids);
         // 收集 id depth 信息
-        List<AbstractMap.SimpleEntry<Integer, Integer>> dps = childrenId.stream()
-                .map(id -> new AbstractMap.SimpleEntry<>(id, level)) // 或者使用 SimpleEntry
+        List<AbstractMap.SimpleEntry<Integer, Integer>> dps = childrenId.stream().map(id -> new AbstractMap.SimpleEntry<>(id, level)) // 或者使用 SimpleEntry
                 .collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
         collection.getRange().addAll(childrenId);
@@ -537,9 +550,7 @@ public class PageServiceImpl implements PageService {
             return new ArrayList<>();
         }
 
-        return children.stream()
-                .map(Page::getId)
-                .collect(Collectors.toList());
+        return children.stream().map(Page::getId).collect(Collectors.toList());
     }
 
 
@@ -560,7 +571,7 @@ public class PageServiceImpl implements PageService {
         // 拼装数据源
         Map<String, Object> dataSource = (Map<String, Object>) block.getContent().get("dataSource");
         // 拼装国际化词条
-        List<I18nEntriesDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
+        List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
         Map<String, Map<String, String>> i18n = appService.formatI18nEntrites(i18ns, Enums.E_i18Belongs.BLOCK.getValue(), previewParam.getId());
 
         PreviewDto previewDto = new PreviewDto();
@@ -570,53 +581,9 @@ public class PageServiceImpl implements PageService {
         return previewDto;
     }
 
-    /**
-     * 通过dsl 将页面/区块schema数据生成对应代码
-     *
-     * @param { I_TranslateSchemaParam } params
-     * @return {Promise<I_Response>} dsl函数返回数据
-     */
-    public List<Map<String, Object>> translateSchema(SchemaCodeParam schemaCodeParam, String type) {
-
-        // 页面/区块 预览只需将页面、区块路径和区块构建产物路径统一设置为 ./components 即可
-        String defaultMain = "./components";
-
-        Map<String, Object> dslParam = getDslParamByAppId(schemaCodeParam.getApp());
-        MetaDto metaDto = new MetaDto();
-        metaDto.setBlockHistories((List<BlockHistories>) dslParam.get("blockHistories"));
-        metaDto.setMaterialHistory((MaterialHistories) dslParam.get("materialHistory"));
-
-        List<Map<String, Object>> componentsMap = appsV1ServiceImpl.getSchemaComponentsMap(metaDto);
-        for (Map<String, Object> component : componentsMap) {
-            if (component.get("main") != null) {
-                component.put("main", defaultMain);
-            }
-        }
-        // 如果类型是 PAGE，则添加新的组件
-        if (Enums.E_Schema2CodeType.PAGE.getValue().equals(type)) {
-            Map<String, Object> pageComponent = new HashMap<>();
-            pageComponent.put("name", schemaCodeParam.getPageInfo().get("name"));
-            pageComponent.put("main", defaultMain);
-            componentsMap.add(pageComponent);
-        }
-        List<BlockHistories> blocksData = (List<BlockHistories>) dslParam.get("blockHistories");
-        ExecuteJavaScript executeJavaScript = new ExecuteJavaScript();
-        // 指定 npm 的完整路径
-        String npmCommand = "node";
-        List<String> command = new ArrayList<>();
-        command.add(npmCommand);
-        command.add(scriptPath);
-        command.add(schemaCodeParam.getPageInfo().toString());
-        command.add(blocksData.toString());
-        if (!componentsMap.isEmpty()) {
-            command.add(componentsMap.toString());
-        }
-        List<Map<String, Object>> code = executeJavaScript.executeDslJavaScript(command);
-        return code;
-    }
 
     public List<BlockVersionDto> getAllBlockHistories(Integer id) {
-        Page pageInfo = findPagesById(id);
+        Page pageInfo = queryPageById(id);
         // 先查出该区块的全部子区块content_blocks 数据
         List<BlockVersionDto> blockHistories = new ArrayList<>();
         if (pageInfo.getContentBlocks().isEmpty()) {
@@ -625,22 +592,20 @@ public class PageServiceImpl implements PageService {
         List<BlockVersionDto> contentBlocks = pageInfo.getContentBlocks();
         List<BlockVersionDto> allContentBlocks = findContentBlockHistories(contentBlocks);
         // 根据content_blocks 获取区块的全部子区块的构建产物数据
-        List<Integer> historiesId = appsV1ServiceImpl.getBlockHistoryIdBySemver(allContentBlocks);
+        List<Integer> historiesId = appV1ServiceImpl.getBlockHistoryIdBySemver(allContentBlocks);
 
         return blockHistories;
     }
 
     private List<BlockVersionDto> findContentBlockHistories(List<BlockVersionDto> contentBlocks) {
 
-        List<Integer> historiesId = appsV1ServiceImpl.getBlockHistoryIdBySemver(contentBlocks);
-        List<BlockHistories> blockHistories = blockHistoriesMapper.findBlockHistoriesByIds(historiesId);
-        List<BlockVersionDto> subContentBlocks = blockHistories.stream()
-                .map(BlockHistories::getContentBlocks) // 提取 content_blocks
-                .filter(BlockHistories -> BlockHistories != null && !BlockHistories.isEmpty()) // 过滤非空集合
+        List<Integer> historiesId = appV1ServiceImpl.getBlockHistoryIdBySemver(contentBlocks);
+        List<BlockHistory> blockHistory = blockHistoryMapper.queryBlockHistoriesByIds(historiesId);
+        List<BlockVersionDto> subContentBlocks = blockHistory.stream().map(BlockHistory::getContentBlocks) // 提取 content_blocks
+                .filter(BlockHistory -> BlockHistory != null && !BlockHistory.isEmpty()) // 过滤非空集合
                 .flatMap(List::stream) // 扁平化
                 .collect(Collectors.toList()); // 收集到 List 中
-        List<BlockVersionDto> mergedBlocks = Stream.concat(subContentBlocks.stream(), contentBlocks.stream())
-                .collect(Collectors.toList());
+        List<BlockVersionDto> mergedBlocks = Stream.concat(subContentBlocks.stream(), contentBlocks.stream()).collect(Collectors.toList());
         // 对全部的content_blocks 进行去重合并
         if (!subContentBlocks.isEmpty()) {
             return deduplicateContentBlocks(mergedBlocks);
@@ -667,21 +632,5 @@ public class PageServiceImpl implements PageService {
         return new ArrayList<>(resMap.values());
     }
 
-
-    /**
-     * 通过appId 获取 dsl 必须的 components 和 blocksData数据
-     *
-     * @param { string|number } appId 应用id
-     * @return {any} 返回对应参数
-     */
-    public Map<String, Object> getDslParamByAppId(Integer appId) {
-        MetaDto metaDto = appsV1ServiceImpl.setMeta(appId);
-        Map<String, Object> dslParam = new HashMap<>();
-        dslParam.put("blockHistories", metaDto.getBlockHistories());
-        dslParam.put("framework", metaDto.getMaterialHistory().getFramework());
-        dslParam.put("components", metaDto.getMaterialHistory().getComponents());
-        dslParam.put("materialHistory", metaDto.getMaterialHistory());
-        return dslParam;
-    }
 
 }
