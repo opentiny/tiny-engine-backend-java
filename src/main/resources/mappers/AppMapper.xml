@@ -45,8 +45,8 @@
         <if test="published!=null and published!=''">
             AND published = #{published}
         </if>
-        <if test="homePageId!=null and homePageId!=''">
-            AND home_page_id = #{homePageId}
+        <if test="homePage!=null and homePage!=''">
+            AND home_page_id = #{homePage}
         </if>
         <if test="css!=null and css!=''">
             AND css = #{css}
@@ -169,8 +169,8 @@
         <if test="published!=null and published!=''">
             published = #{published},
         </if>
-        <if test="homePageId!=null and homePageId!=''">
-            home_page_id = #{homePageId},
+        <if test="homePage!=null and homePage!=''">
+            home_page_id = #{homePage},
         </if>
         <if test="css!=null and css!=''">
             css = #{css},
@@ -273,7 +273,7 @@
         <result column="assets_url" property="assetsUrl"/>
         <result column="state" property="state"/>
         <result column="published" property="published"/>
-        <result column="home_page_id" property="homePageId"/>
+        <result column="home_page_id" property="homePage"/>
         <result column="css" property="css"/>
         <result column="config" property="config"/>
         <result column="constants" property="constants"/>
@@ -412,7 +412,7 @@
                , #{assetsUrl}
                , #{state}
                , #{published}
-               , #{homePageId}
+               , #{homePage}
                , #{css}
                , #{config}
                , #{constants}

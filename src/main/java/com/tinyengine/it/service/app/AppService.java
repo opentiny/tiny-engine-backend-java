@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.app;
 
+import com.tinyengine.it.model.dto.Result;
 import com.tinyengine.it.model.entity.App;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,7 +18,7 @@ public interface AppService {
      *
      * @param id
      */
-    App queryAppById(@Param("id") Integer id);
+    Result<App> queryAppById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_app信息
@@ -31,19 +32,19 @@ public interface AppService {
      *
      * @param id
      */
-    Integer deleteAppById(@Param("id") Integer id);
+    Result<App> deleteAppById(@Param("id") Integer id);
 
     /**
      * 根据主键id更新表t_app信息
      *
      * @param app
      */
-    Integer updateAppById(App app);
+    Result<App> updateAppById(App app);
 
     /**
      * 新增表t_app数据
      *
      * @param app
      */
-    Integer createApp(App app);
+    Result<App> createApp(App app);
 }

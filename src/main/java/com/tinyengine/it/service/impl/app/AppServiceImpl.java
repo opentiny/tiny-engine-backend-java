@@ -1,20 +1,29 @@
 package com.tinyengine.it.service.impl.app;
 
+import com.tinyengine.it.config.SystemServiceLog;
+import com.tinyengine.it.exception.ExceptionEnum;
+import com.tinyengine.it.mapper.PlatformMapper;
+import com.tinyengine.it.model.dto.Result;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.model.entity.Platform;
 import com.tinyengine.it.service.app.AppService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.ibatis.annotations.Param;
 import com.tinyengine.it.exception.ServiceException;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AppServiceImpl implements AppService {
 
     @Autowired
-    private AppMapper appMapper;
+    AppMapper appMapper;
+    @Autowired
+    PlatformMapper platformMapper;
 
     /**
      * 查询表t_app所有数据
@@ -30,8 +39,13 @@ public class AppServiceImpl implements AppService {
      * @param id
      */
     @Override
-    public App queryAppById(@Param("id") Integer id) throws ServiceException {
-        return appMapper.queryAppById(id);
+    @SystemServiceLog(description = "通过id查询应用实现方法")
+    public Result<App> queryAppById(@Param("id") Integer id) throws ServiceException {
+        App app = appMapper.queryAppById(id);
+        if(app == null ){
+            return Result.failed(ExceptionEnum.CM009);
+        }
+        return Result.success(app);
     }
 
     /**
@@ -50,8 +64,14 @@ public class AppServiceImpl implements AppService {
      * @param id
      */
     @Override
-    public Integer deleteAppById(@Param("id") Integer id) throws ServiceException {
-        return appMapper.deleteAppById(id);
+    @SystemServiceLog(description = "应用删除实现方法")
+    public Result<App> deleteAppById(@Param("id") Integer id) throws ServiceException {
+        App app = appMapper.queryAppById(id);
+        int result = appMapper.deleteAppById(id);
+        if(result < 1){
+            return Result.failed(ExceptionEnum.CM009);
+        }
+        return Result.success(app);
     }
 
     /**
@@ -60,8 +80,21 @@ public class AppServiceImpl implements AppService {
      * @param app
      */
     @Override
-    public Integer updateAppById(App app) throws ServiceException {
-        return appMapper.updateAppById(app);
+    public Result<App> updateAppById(App app) throws ServiceException {
+        // 如果更新extend_config字段，从platform获取数据，继承非route部分
+        if(!app.getExtendConfig().isEmpty()){
+            App appResult = appMapper.queryAppById(app.getId());
+            Platform platform =platformMapper.queryPlatformById(appResult.getPlatformId());
+            Map<String,Object> appExtendConfig = platform.getAppExtendConfig();
+            appExtendConfig.remove("route");
+            app.getExtendConfig().putAll(appExtendConfig);
+        }
+        int result = appMapper.updateAppById(app);
+        if(result < 1){
+            return Result.failed(ExceptionEnum.CM001);
+        }
+        app = appMapper.queryAppById(app.getId());
+        return Result.success(app);
     }
 
     /**
@@ -70,7 +103,16 @@ public class AppServiceImpl implements AppService {
      * @param app
      */
     @Override
-    public Integer createApp(App app) throws ServiceException {
-        return appMapper.createApp(app);
+    public Result<App> createApp(App app) throws ServiceException {
+
+        List<App> appResult = appMapper.queryAppByCondition(app);
+        if(!appResult.isEmpty()){
+            return Result.failed(ExceptionEnum.CM003);
+        }
+        int result = appMapper.createApp(app);
+        if(result < 1) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
+        return Result.success(app);
     }
 }
