@@ -1,16 +1,18 @@
 package com.tinyengine.it.service.app;
 
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PageService {
 
     /**
      * 查询表t_page所有信息
      */
-    List<Page> queryAllPage();
+    List<Page> queryAllPage(Integer aid);
 
     /**
      * 根据主键id查询表t_page信息
@@ -26,24 +28,52 @@ public interface PageService {
      */
     List<Page> queryPageByCondition(Page page);
 
+
     /**
-     * 根据主键id删除t_page数据
+     * 根据主键id删除pages数据
      *
      * @param id
      */
-    Integer deletePageById(@Param("id") Integer id);
-
+    Result<Page> delPage(@Param("id") Integer id) throws Exception;
     /**
-     * 根据主键id更新表t_page信息
+     * 创建页面
      *
      * @param page
      */
-    Integer updatePageById(Page page);
+    Result<Page> createPage(Page page);
 
     /**
-     * 新增表t_page数据
+     * 创建文件夹
      *
      * @param page
      */
-    Integer createPage(Page page);
+    Result<Page> createFolder(Page page);
+
+    /**
+     * 更新页面
+     *
+     * @param pages
+     * @return
+     * @throws Exception
+     */
+    Result<Page> updatePage(Page pages) throws Exception;
+
+    /**
+     * 更新页面文件夹
+     *
+     * @param pages
+     * @return
+     */
+    Result<Page> update(Page pages) throws Exception;
+
+
+    /**
+     * 查询页面预览元数据
+     *
+     * @param previewParam
+     * @return PreviewDto
+     */
+    PreviewDto getPreviewMetaData(PreviewParam previewParam);
+
+
 }

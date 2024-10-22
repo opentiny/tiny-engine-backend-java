@@ -1,12 +1,14 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
+import java.util.List;
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tinyengine.it.utils.ListTypeHandler;
+import com.tinyengine.it.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,11 +34,12 @@ public class Component implements Serializable {
     @Schema(name= "version", description = "版本")
     private String version;
 
-    @Schema(name= "name", description = "名称")
-    private String name;
+    @TableField(typeHandler = MapTypeHandler.class)
+    @Schema(name = "name", description = "名称")
+    private Map<String, String> name;
 
-    @Schema(name= "nameEn", description = "英文名称")
-    private String nameEn;
+    @Schema(name = "component", description = "组件")
+    private String component;
 
     @Schema(name= "icon", description = "组件图标")
     private String icon;
@@ -59,8 +62,10 @@ public class Component implements Serializable {
     @Schema(name= "devMode", description = "研发模式")
     private String devMode;
 
-    @Schema(name= "npm", description = "npm属性对象")
-    private String npm;
+    @TableField(typeHandler = MapTypeHandler.class)
+    @Schema(name = "npm", description = "npm信息")
+    private Map<String, Object> npm;
+   
 
     @Schema(name= "group", description = "分组")
     private String group;
@@ -71,14 +76,17 @@ public class Component implements Serializable {
     @Schema(name= "priority", description = "排序")
     private Integer priority;
 
-    @Schema(name= "snippets", description = "schema片段")
-    private String snippets;
+    @TableField(typeHandler = ListTypeHandler.class)
+    @Schema(name = "snippets", description = "schema片段")
+    private List<Map<String, Object>> snippets;
 
     @Schema(name= "schemaFragment", description = "schema片段")
     private String schemaFragment;
 
-    @Schema(name= "configure", description = "配置信息")
-    private String configure;
+    @Schema(name = "configure", description = "配置信息")
+    @JsonProperty("configure")
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Object> configure;
 
     @JsonProperty("public")
     @Schema(name= "public", description = "公开状态：0，1，2")
@@ -96,19 +104,25 @@ public class Component implements Serializable {
     @Schema(name= "tinyReserved", description = "是否tiny自有")
     private Boolean tinyReserved;
 
-    @Schema(name= "componentMetadata", description = "属性信息")
-    private String componentMetadata;
+    @JsonProperty("component_metadata")
+    @TableField(typeHandler = MapTypeHandler.class)
+    @Schema(name = "component_metadata", description = "属性信息")
+    private Map<String, Object> componentMetadata;
 
     @Schema(name= "createdBy", description = "创建人")
+    @TableField(value = "createdBy", fill = FieldFill.INSERT)
     private String createdBy;
 
     @Schema(name= "lastUpdatedBy", description = "最后修改人")
+    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
     private String lastUpdatedBy;
 
     @Schema(name= "createdTime", description = "创建时间")
+    @TableField(value = "createdTime", fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
 
     @Schema(name= "lastUpdatedTime", description = "更新时间")
+    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime lastUpdatedTime;
 
     @Schema(name= "tenantId", description = "租户id")

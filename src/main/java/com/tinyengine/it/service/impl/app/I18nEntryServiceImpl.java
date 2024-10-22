@@ -682,15 +682,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         return i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
     }
 
-    /**
-     * 根据主键id删除表t_i18n_entry数据
-     *
-     * @param id
-     */
-    @Override
-    public Integer deleteI18nEntryById(@Param("id") Integer id) throws ServiceException {
-        return i18nEntryMapper.deleteI18nEntryById(id);
-    }
 
     /**
      * 根据主键id更新表t_i18n_entry数据
@@ -702,13 +693,4 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         return i18nEntryMapper.updateI18nEntryById(i18nEntry);
     }
 
-    /**
-     * 新增表t_i18n_entry数据
-     *
-     * @param i18nEntry
-     */
-    @Override
-    public Integer createI18nEntry(I18nEntry i18nEntry) throws ServiceException {
-        return i18nEntryMapper.createI18nEntry(i18nEntry);
-    }
 }
