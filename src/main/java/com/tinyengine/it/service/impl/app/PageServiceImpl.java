@@ -58,6 +58,7 @@ public class PageServiceImpl implements PageService {
      * 查询表t_page所有数据
      */
     @Override
+    @SystemServiceLog(description = "通过appId查询page所有数据实现方法")
     public List<Page> queryAllPage(Integer aid) {
         return pageMapper.queryPageByApp(aid);
     }
@@ -68,8 +69,22 @@ public class PageServiceImpl implements PageService {
      * @param id
      */
     @Override
+    @SystemServiceLog(description = "通过Id查询page数据实现方法")
     public Page queryPageById(@Param("id") Integer id) throws ServiceException {
-        return pageMapper.queryPageById(id);
+        Page pageInfo = pageMapper.queryPageById(id);
+        //  获取schemaMeta进行获取materialHistory中的framework进行判断
+        String framework = appV1ServiceImpl.setMeta(pageInfo.getApp().intValue()).getMaterialHistory().getFramework();
+
+        if (framework.isEmpty()) {
+            throw new ServiceException(ExceptionEnum.CM312.getResultCode(), ExceptionEnum.CM312.getResultMsg());
+        }
+        if (pageInfo.getIsPage()) {
+            // 这里不保证能成功获取区块的列表，没有区块或获取区块列表不成功返回 {}
+            Map<String, List<String>> blockAssets = blockServiceImpl.getBlockAssets(pageInfo.getPageContent(), framework);
+            pageInfo.setAssets(blockAssets);
+            return addIsHome(pageInfo);
+        }
+        return pageInfo;
     }
 
     /**
@@ -78,12 +93,14 @@ public class PageServiceImpl implements PageService {
      * @param page
      */
     @Override
+    @SystemServiceLog(description = "通过条件查询page数据实现方法")
     public List<Page> queryPageByCondition(Page page) throws ServiceException {
         return pageMapper.queryPageByCondition(page);
     }
 
 
     @Override
+    @SystemServiceLog(description = "通过appId删除page数据实现方法")
     public Result<Page> delPage(Integer id) throws Exception {
         // 获取页面信息
         Page pages = queryPageById(id);
@@ -110,7 +127,7 @@ public class PageServiceImpl implements PageService {
      * @param page
      */
     @Override
-    @SystemServiceLog(description = "createPage 创建页面 实现类")
+    @SystemServiceLog(description = "createPage 创建页面实现方法")
     public Result<Page> createPage(Page page) throws ServiceException {
         // 判断isHome 为true时，parentId 不为0，禁止创建
         if (page.getIsHome() && !page.getParentId().equals("0")) {
@@ -153,7 +170,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    @SystemServiceLog(description = "createFolder 创建文件夹 实现类")
+    @SystemServiceLog(description = "createFolder 创建文件夹实现方法")
     public Result<Page> createFolder(Page page) {
         String parentId = page.getParentId();
         // 通过parentId 计算depth
@@ -184,7 +201,7 @@ public class PageServiceImpl implements PageService {
         return Result.success(pageInfo);
     }
 
-    @SystemServiceLog(description = "updatePage 更新页面 实现类")
+    @SystemServiceLog(description = "updatePage 更新页面实现方法")
     @Override
     public Result<Page> updatePage(Page page) throws Exception {
         int id = page.getId();
@@ -234,7 +251,7 @@ public class PageServiceImpl implements PageService {
      * @param page
      * @return
      */
-    @SystemServiceLog(description = "update 更新文件夹 实现类")
+    @SystemServiceLog(description = "update 更新文件夹实现方法")
     @Override
     public Result<Page> update(Page page) throws Exception {
         String parentId = page.getParentId();
@@ -275,7 +292,7 @@ public class PageServiceImpl implements PageService {
      * @param { number|string } app 应用id
      * @return { PreviewDto }
      */
-    @SystemServiceLog(description = "getPreviewMetaData 获取预览元数据")
+    @SystemServiceLog(description = "getPreviewMetaData 获取预览元数据实现方法")
     @Override
     public PreviewDto getPreviewMetaData(PreviewParam previewParam) {
         String type = previewParam.getType();
@@ -579,57 +596,6 @@ public class PageServiceImpl implements PageService {
         previewDto.setI18n(i18n);
         previewDto.setUtils(utils);
         return previewDto;
-    }
-
-
-    public List<BlockVersionDto> getAllBlockHistories(Integer id) {
-        Page pageInfo = queryPageById(id);
-        // 先查出该区块的全部子区块content_blocks 数据
-        List<BlockVersionDto> blockHistories = new ArrayList<>();
-        if (pageInfo.getContentBlocks().isEmpty()) {
-            return blockHistories;
-        }
-        List<BlockVersionDto> contentBlocks = pageInfo.getContentBlocks();
-        List<BlockVersionDto> allContentBlocks = findContentBlockHistories(contentBlocks);
-        // 根据content_blocks 获取区块的全部子区块的构建产物数据
-        List<Integer> historiesId = appV1ServiceImpl.getBlockHistoryIdBySemver(allContentBlocks);
-
-        return blockHistories;
-    }
-
-    private List<BlockVersionDto> findContentBlockHistories(List<BlockVersionDto> contentBlocks) {
-
-        List<Integer> historiesId = appV1ServiceImpl.getBlockHistoryIdBySemver(contentBlocks);
-        List<BlockHistory> blockHistory = blockHistoryMapper.queryBlockHistoriesByIds(historiesId);
-        List<BlockVersionDto> subContentBlocks = blockHistory.stream().map(BlockHistory::getContentBlocks) // 提取 content_blocks
-                .filter(BlockHistory -> BlockHistory != null && !BlockHistory.isEmpty()) // 过滤非空集合
-                .flatMap(List::stream) // 扁平化
-                .collect(Collectors.toList()); // 收集到 List 中
-        List<BlockVersionDto> mergedBlocks = Stream.concat(subContentBlocks.stream(), contentBlocks.stream()).collect(Collectors.toList());
-        // 对全部的content_blocks 进行去重合并
-        if (!subContentBlocks.isEmpty()) {
-            return deduplicateContentBlocks(mergedBlocks);
-        }
-        return contentBlocks;
-    }
-
-    public List<BlockVersionDto> deduplicateContentBlocks(List<BlockVersionDto> contentBlocks) {
-        Map<Integer, BlockVersionDto> resMap = new HashMap<>();
-
-        for (BlockVersionDto blockVersionDto : contentBlocks) {
-            BlockVersionDto existing = resMap.get(blockVersionDto.getBlock());
-            if (existing != null) {
-                if (!"x".equals(existing.getVersion())) {
-                    if (Utils.versionAGteVersionB(blockVersionDto.getVersion(), existing.getVersion())) {
-                        resMap.put(blockVersionDto.getBlock(), blockVersionDto);
-                    }
-                }
-            } else {
-                resMap.put(blockVersionDto.getBlock(), blockVersionDto);
-            }
-        }
-
-        return new ArrayList<>(resMap.values());
     }
 
 

@@ -101,6 +101,7 @@ public class AppServiceImpl implements AppService {
      * @param app
      */
     @Override
+    @SystemServiceLog(description = "应用修改实现方法")
     public Result<App> updateAppById(App app) throws ServiceException {
         // 如果更新extend_config字段，从platform获取数据，继承非route部分
         if(!app.getExtendConfig().isEmpty()){
@@ -124,6 +125,7 @@ public class AppServiceImpl implements AppService {
      * @param app
      */
     @Override
+    @SystemServiceLog(description = "应用创建实现方法")
     public Result<App> createApp(App app) throws ServiceException {
 
         List<App> appResult = appMapper.queryAppByCondition(app);
