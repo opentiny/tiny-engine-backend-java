@@ -3,10 +3,9 @@ package com.tinyengine.it.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.entity.I18nEntry;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.*;
 
 public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
 

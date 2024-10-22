@@ -1,17 +1,17 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-
-import com.tinyengine.it.utils.ListTypeHandler;
-import com.tinyengine.it.utils.MapTypeHandler;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.tinyengine.it.common.base.BaseEntity;
+import com.tinyengine.it.common.utils.ListTypeHandler;
+import com.tinyengine.it.common.utils.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,141 +25,112 @@ import lombok.Setter;
 @Setter
 @TableName("t_app")
 @Schema(name = "App", description = "应用表")
-public class App implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    @Schema(name= "id", description = "主键id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
-    @Schema(name= "name", description = "应用名称")
+public class App extends BaseEntity {
+    @Schema(name = "name", description = "应用名称")
     private String name;
 
-    @Schema(name= "appWebsite", description = "*设计预留字段*")
+    @Schema(name = "appWebsite", description = "*设计预留字段*")
     private String appWebsite;
 
-    @Schema(name= "platformId", description = "设计器id")
+    @Schema(name = "platformId", description = "设计器id")
     private Integer platformId;
 
-    @Schema(name= "platformHistoryId", description = "关联设计器的历史版本ID")
+    @Schema(name = "platformHistoryId", description = "关联设计器的历史版本ID")
     private String platformHistoryId;
 
-    @Schema(name= "publishUrl", description = "应用静态资源托管地址URL")
+    @Schema(name = "publishUrl", description = "应用静态资源托管地址URL")
     private String publishUrl;
 
-    @Schema(name= "editorUrl", description = "设计器地址")
+    @Schema(name = "editorUrl", description = "设计器地址")
     private String editorUrl;
 
-    @Schema(name= "visitUrl", description = "访问地址")
+    @Schema(name = "visitUrl", description = "访问地址")
     private String visitUrl;
 
-    @Schema(name= "imageUrl", description = "封面图地址")
+    @Schema(name = "imageUrl", description = "封面图地址")
     private String imageUrl;
 
-    @Schema(name= "assetsUrl", description = "应用资源url")
+    @Schema(name = "assetsUrl", description = "应用资源url")
     private String assetsUrl;
 
-    @Schema(name= "state", description = "应用状态：1可用，0不可用")
+    @Schema(name = "state", description = "应用状态：1可用，0不可用")
     private Integer state;
 
-    @Schema(name= "published", description = "是否发布：1是，0否")
+    @Schema(name = "published", description = "是否发布：1是，0否")
     private Boolean published;
 
-    @Schema(name= "homePage", description = "主页面id，关联page表的id")
+    @Schema(name = "homePage", description = "主页面id，关联page表的id")
     private Integer homePage;
 
-    @Schema(name= "css", description = "*设计预留字段*")
+    @Schema(name = "css", description = "*设计预留字段*")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> css;
+    private Map<String, Object> css;
 
-    @Schema(name= "config", description = "*设计预留字段*")
+    @Schema(name = "config", description = "*设计预留字段*")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> config;
+    private Map<String, Object> config;
 
-    @Schema(name= "constants", description = "*设计预留字段*")
+    @Schema(name = "constants", description = "*设计预留字段*")
     private String constants;
 
-    @Schema(name= "dataHandler", description = "数据源的拦截器")
+    @Schema(name = "dataHandler", description = "数据源的拦截器")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> dataHandler;
+    private Map<String, Object> dataHandler;
 
-    @Schema(name= "description", description = "描述")
+    @Schema(name = "description", description = "描述")
     private String description;
 
-    @Schema(name= "latest", description = "应用最新历史记录id")
+    @Schema(name = "latest", description = "应用最新历史记录id")
     private String latest;
 
-    @Schema(name= "gitGroup", description = "git仓库分组")
+    @Schema(name = "gitGroup", description = "git仓库分组")
     private String gitGroup;
 
-    @Schema(name= "projectName", description = "git仓库名称")
+    @Schema(name = "projectName", description = "git仓库名称")
     private String projectName;
 
-    @Schema(name= "branch", description = "默认提交分支")
+    @Schema(name = "branch", description = "默认提交分支")
     private String branch;
 
-    @Schema(name= "isDemo", description = "是否是demo应用")
+    @Schema(name = "isDemo", description = "是否是demo应用")
     private String isDemo;
 
-    @Schema(name= "isDefault", description = "是否是默认应用")
+    @Schema(name = "isDefault", description = "是否是默认应用")
     private String isDefault;
 
-    @Schema(name= "templateType", description = "应用模板类型")
+    @Schema(name = "templateType", description = "应用模板类型")
     private String templateType;
 
-    @Schema(name= "setTemplateTime", description = "设置模板时间")
+    @Schema(name = "setTemplateTime", description = "设置模板时间")
     private LocalDateTime setTemplateTime;
 
-    @Schema(name= "setTemplateBy", description = "设置模板人id")
+    @Schema(name = "setTemplateBy", description = "设置模板人id")
     private String setTemplateBy;
 
-    @Schema(name= "setDefaultBy", description = "设置为默认应用人id")
+    @Schema(name = "setDefaultBy", description = "设置为默认应用人id")
     private String setDefaultBy;
 
-    @Schema(name= "framework", description = "应用框架")
+    @Schema(name = "framework", description = "应用框架")
     private String framework;
 
-    @Schema(name= "globalState", description = "应用全局状态")
+    @Schema(name = "globalState", description = "应用全局状态")
     @TableField(typeHandler = ListTypeHandler.class)
-    private List<Map<String,Object>> globalState;
+    private List<Map<String, Object>> globalState;
 
-    @Schema(name= "defaultLang", description = "默认语言")
+    @Schema(name = "defaultLang", description = "默认语言")
     private String defaultLang;
 
-    @Schema(name= "extendConfig", description = "应用扩展config")
+    @Schema(name = "extendConfig", description = "应用扩展config")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> extendConfig;
+    private Map<String, Object> extendConfig;
 
-    @Schema(name= "dataHash", description = "应用内容哈希值")
+    @Schema(name = "dataHash", description = "应用内容哈希值")
     private String dataHash;
 
-    @Schema(name= "canAssociate", description = "*设计预留字段*")
+    @Schema(name = "canAssociate", description = "*设计预留字段*")
     private String canAssociate;
 
-    @Schema(name= "dataSourceGlobal", description = "数据源全局配置")
+    @Schema(name = "dataSourceGlobal", description = "数据源全局配置")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> dataSourceGlobal;
-
-    @Schema(name= "createdBy", description = "创建人")
-    @TableField(value = "createdBy", fill = FieldFill.INSERT)
-    private String createdBy;
-
-    @Schema(name= "lastUpdatedBy", description = "最后修改人")
-    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
-    private String lastUpdatedBy;
-
-    @Schema(name= "createdTime", description = "创建时间")
-    @TableField(value = "createdTime", fill = FieldFill.INSERT)
-    private LocalDateTime createdTime;
-
-    @Schema(name= "lastUpdatedTime", description = "更新时间")
-    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime lastUpdatedTime;
-
-    @Schema(name= "tenantId", description = "租户ID")
-    private String tenantId;
-
-    @Schema(name= "siteId", description = "站点ID")
-    private String siteId;
-
+    private Map<String, Object> dataSourceGlobal;
 }

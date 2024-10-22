@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 <#if superControllerClassPackage??>
     import ${superControllerClassPackage};
 </#if>
-import com.tinyengine.it.model.dto.Result;
+import com.tinyengine.it.common.base.Result;
 import java.util.ArrayList;
 import java.util.List;
 
