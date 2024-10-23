@@ -1,0 +1,42 @@
+spring:
+  jpa:
+    database-platform=org.hibernate.dialect.H2Dialect
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    username: sa
+    password:
+  sql:
+    init:
+      schema-locations: classpath:sql/h2/create_all_tables_ddl_v1.h2.sql
+      data-locations: classpath:sql/h2/init_data_for_test.sql
+
+springdoc:
+  api-docs:
+    #是否开启文档功能
+    enabled: true
+    #swagger后端请求地址
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html #自定义swagger-ui HTML文档路径
+  #包扫描路径
+  packages-to-scan: com.tinyengine.it.controller
+
+mybatis-plus:
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    com.tinyengine.it.mapper: debug
+  type-handlers-package: com.tinyengine.it.config.handler
+
+logging:
+  level:
+    ROOT: INFO
+    druid.sql.Statement: INFO
+  pattern:
+    file: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: /logs

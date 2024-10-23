@@ -1,7 +1,5 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
@@ -22,12 +20,6 @@ import lombok.Setter;
 @TableName("t_i18n_entry")
 @Schema(name = "I18nEntry", description = "国际化语言配置表")
 public class I18nEntry extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
-    @Schema(name = "id", description = "主键id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
     @Schema(name = "key", description = "国际化词条key")
     private String key;
 
@@ -45,7 +37,4 @@ public class I18nEntry extends BaseEntity {
     @Schema(name = "langId", description = "关联语言id")
     @JsonProperty("lang_id")
     private Integer langId;
-
-
-
 }
