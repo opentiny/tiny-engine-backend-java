@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.HistoryEntity;
-import com.tinyengine.it.common.utils.MapTypeHandler;
+import com.tinyengine.it.config.handler.MapTypeHandler;
 import com.tinyengine.it.model.dto.BlockVersionDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

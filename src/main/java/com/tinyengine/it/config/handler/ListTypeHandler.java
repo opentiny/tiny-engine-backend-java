@@ -1,4 +1,4 @@
-package com.tinyengine.it.common.utils;
+package com.tinyengine.it.config.handler;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
