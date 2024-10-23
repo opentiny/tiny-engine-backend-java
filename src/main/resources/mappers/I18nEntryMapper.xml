@@ -129,7 +129,7 @@
     </select>
 
     <!-- 根据key、lang查询表i18n_entries信息 -->
-    <select id="findI18nEntriesByKeyAndLang" resultMap="I18nEntriesMap">
+    <select id="findI18nEntriesByKeyAndLang" resultMap="I18nEntryMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_i18n_entry

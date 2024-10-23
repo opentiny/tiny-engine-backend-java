@@ -133,4 +133,5 @@ public class App extends BaseEntity {
     @Schema(name = "dataSourceGlobal", description = "数据源全局配置")
     @TableField(typeHandler = MapTypeHandler.class)
     private Map<String, Object> dataSourceGlobal;
+
 }
