@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
@@ -55,8 +56,8 @@ public interface AppService {
      * 序列化国际化词条
      *
      * @param i18nEntries 国际化词条标准请求返回数据
-     * @param userdIn     国际化词条从属单元 （应用或区块）
-     * @param id          应用id或区块id
+     * @param userdIn 国际化词条从属单元 （应用或区块）
+     * @param id 应用id或区块id
      */
     Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn, Integer id);
 
@@ -66,6 +67,5 @@ public interface AppService {
      * @param id 应用id
      */
     PreviewDto getAppPreviewMetaData(Integer id);
-
 
 }
