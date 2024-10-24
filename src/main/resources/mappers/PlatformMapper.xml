@@ -253,7 +253,7 @@
     </update>
 
     <!-- 新增表t_platform数据 -->
-    <insert id="createPlatform" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createPlatform" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Platform">
         INSERT INTO t_platform ( id
                                , name
                                , published

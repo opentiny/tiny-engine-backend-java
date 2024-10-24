@@ -1,6 +1,8 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tinyengine.it.common.base.BaseEntity;
+import com.tinyengine.it.common.base.BaseQuery;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
@@ -71,10 +73,12 @@ public class PageServiceImpl implements PageService {
     @Override
     @SystemServiceLog(description = "通过Id查询page数据实现方法")
     public Page queryPageById(@Param("id") Integer id) throws ServiceException {
-        Page pageInfo = pageMapper.queryPageById(id);
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(id);
+        Page pageInfo = pageMapper.queryPageById(baseQuery);
         //  获取schemaMeta进行获取materialHistory中的framework进行判断
-        String framework = appV1ServiceImpl.setMeta(pageInfo.getApp().intValue()).getMaterialHistory().getFramework();
-
+        baseQuery.setId(pageInfo.getApp());
+        String framework = appMapper.queryAppById(baseQuery).getFramework();
         if (framework.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM312.getResultCode(), ExceptionEnum.CM312.getResultMsg());
         }
@@ -114,7 +118,9 @@ public class PageServiceImpl implements PageService {
         protectDefaultPage(pages, id);
 
         // 删除
-        Page pageResult = pageMapper.queryPageById(id);
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(id);
+        Page pageResult = pageMapper.queryPageById(baseQuery);
         int result = pageMapper.deletePageById(id);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
@@ -211,7 +217,7 @@ public class PageServiceImpl implements PageService {
         if (!validateIsHome(page, pageTemp)) {
             return Result.failed("isHome parameter error");
         }
-        int appId = pageTemp.getApp().intValue();
+        int appId = pageTemp.getApp();
         // 保护默认页面
         protectDefaultPage(pageTemp, appId);
 
@@ -219,15 +225,11 @@ public class PageServiceImpl implements PageService {
         if (page.getIsHome()) {
             setAppHomePage(appId, id);
             isHomeVal = true;
-        } else if (!page.getIsHome()) {
+        } else {
             // 判断页面原始信息中是否为首页
             if (pageTemp.getIsHome()) {
                 setAppHomePage(appId, 0);
-                isHomeVal = false;
             }
-        } else {
-            long res = getAppHomePageId(pageTemp.getApp());
-            isHomeVal = id == res;
         }
 
         page.setIsHome(isHomeVal);
@@ -265,7 +267,9 @@ public class PageServiceImpl implements PageService {
             page.setDepth((int) depthInfo.get("depth") + 1);
         }
         // getFolder 获取父类信息
-        Page parentInfo = pageMapper.queryPageById(page.getId());
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(page.getId());
+        Page parentInfo = pageMapper.queryPageById(baseQuery);
         // 当更新参数中没有depth 或 depth没有发生改变时
         if (page.getDepth().equals(parentInfo.getDepth())) {
             int result = pageMapper.updatePageById(page);
@@ -334,7 +338,9 @@ public class PageServiceImpl implements PageService {
             return result;
         }
         // getFolder 获取父类信息
-        Page parentInfo = pageMapper.queryPageById(parent);
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(parent);
+        Page parentInfo = pageMapper.queryPageById(baseQuery);
         int depth = parentInfo.getDepth();
         if (depth < 5) {
             result.put("depth", depth);
@@ -349,22 +355,24 @@ public class PageServiceImpl implements PageService {
         if (pageInfo == null) {
             return pageInfo;
         }
-        long appId = pageInfo.getApp();
-        long appHomePageId = getAppHomePageId(appId);
+        int appId = pageInfo.getApp();
+        int appHomePageId = getAppHomePageId(appId);
         pageInfo.setIsHome((pageInfo.getId()) == appHomePageId);
 
         return pageInfo;
     }
 
-    public Long getAppHomePageId(Long appId) {
-        App appInfo = appMapper.queryAppById(appId.intValue());
+    public int getAppHomePageId(int appId) {
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(appId);
+        App appInfo = appMapper.queryAppById(baseQuery);
         // appHomePageId 存在为null的情况，即app没有设置首页
-        Long homePage = Long.valueOf(appInfo.getHomePage());
+        Integer homePage = appInfo.getHomePage();
 
         // 将 homePage 转换为整数，如果为空则默认为 0
-        long id;
-        if (homePage == null) {
-            id = 0L;
+        int id;
+        if ( homePage == null) {
+            id = 0;
             return id;
         }
         id = homePage;
@@ -388,13 +396,16 @@ public class PageServiceImpl implements PageService {
     public Result<Page> checkDelete(Integer id) {
         // todo 从缓存中获取的user信息
         User user = userService.queryUserById(1);
-        User occupier = pageMapper.queryPageById(id).getOccupier();
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(id);
+        Page page = pageMapper.queryPageById(baseQuery);
+        User occupier = page.getOccupier();
+
         // 如果当前页面没人占用 或者是自己占用 可以删除该页面
         if (iCanDoIt(occupier, user)) {
-            Page pages = pageMapper.queryPageById(id);
             pageMapper.deletePageById(id);
 
-            return Result.success(pages);
+            return Result.success(page);
         }
 
         return Result.failed("The current page is being edited by" + occupier.getUsername());
@@ -424,7 +435,9 @@ public class PageServiceImpl implements PageService {
     public void protectDefaultPage(Page pages, Integer id) {
         if (pages.getIsDefault()) {
             // 查询是否是模板应用，不是的话不能删除或修改
-            App app = appMapper.queryAppById(id);
+            BaseQuery baseQuery = new BaseQuery();
+            baseQuery.setId(id);
+            App app = appMapper.queryAppById(baseQuery);
             if (app.getTemplateType() == null) {
                 Result.failed(ExceptionEnum.CM310.getResultCode());
             }

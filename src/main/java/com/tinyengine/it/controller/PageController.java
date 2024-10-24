@@ -56,7 +56,7 @@ public class PageController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "获取页面列表")
-    @GetMapping("/page/list/{aid}")
+    @GetMapping("/pages/list/{aid}")
     public Result<List<Page>> getAllpage(@PathVariable Integer aid) {
         List<Page> pageList = pageService.queryAllPage(aid);
         return Result.success(pageList);
@@ -80,7 +80,7 @@ public class PageController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "获取页面明细")
-    @GetMapping("/page/detail/{id}")
+    @GetMapping("/pages/detail/{id}")
     public Result<Page> getpageById(@PathVariable Integer id) throws Exception {
         Page page = pageService.queryPageById(id);
         return Result.success(page);
@@ -104,7 +104,7 @@ public class PageController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "创建页面")
-    @PostMapping("/page/create")
+    @PostMapping("/pages/create")
     public Result<Page> createpage(@Valid @RequestBody Page page) {
 
         if (page.getIsPage()) {
@@ -140,15 +140,15 @@ public class PageController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "修改页面")
-    @PostMapping("/page/update/{id}")
+    @PostMapping("/pages/update/{id}")
     public Result<Page> updatepage(@PathVariable Integer id, @RequestBody Map<String, Object> param) throws Exception {
         // 由于前端传过来的参数中createBy和occupier是个对象，想把param中的所有属性值对应的给赋值到page中做以下处理
         Map<String, Object> targetMap = new HashMap<>(param);
         targetMap.remove("createdBy");
         targetMap.remove("occupier");
-        targetMap.remove("created_at");
-        targetMap.remove("updated_at");
-        targetMap.remove("occupierId");
+        targetMap.remove("createdTime");
+        targetMap.remove("lastUpdatedTime");
+        targetMap.remove("occupierBy");
         targetMap.remove("trueFolder");
         String occupierId = (String) param.get("occupierId");
         ObjectMapper objectMapper = new ObjectMapper();
@@ -185,7 +185,7 @@ public class PageController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "删除页面")
-    @GetMapping("/page/delete/{id}")
+    @GetMapping("/pages/delete/{id}")
     public Result<Page> deletepage(@PathVariable Integer id) throws Exception {
 
         return pageService.delPage(id);

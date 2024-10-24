@@ -8,11 +8,14 @@ import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Properties;
 
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
-        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class})
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
 })
 public class PermissionInterceptor implements Interceptor {
 
@@ -22,13 +25,20 @@ public class PermissionInterceptor implements Interceptor {
         Object[] args = invocation.getArgs();
         MappedStatement mappedStatement = (MappedStatement) args[0];
         Object parameter = args[1];
-        BoundSql boundSql = mappedStatement.getBoundSql(parameter);
 
-        // 在这里可以获取 session 中的 tenant 参数
-        // String tenantId = (String) session.getAttribute("tenantId");
-        int tenantId = 1;
-        // 如果 tenant 存在，则将其作为参数添加到 BoundSql 中
-        boundSql.setAdditionalParameter("tenantId", tenantId);
+        // 在这里获取 session 中的 tenant 参数
+        String tenantId = "1"; // 示例值
+
+        // 检查参数类型并添加 tenantId
+        if (parameter instanceof Map) {
+            ((Map<String, Object>) parameter).put("tenantId", tenantId);
+        } else {
+            // 使用反射获取 setter 方法
+            String setterMethodName = "setTenantId";
+            Class<?> parameterClass = parameter.getClass();
+            Method setterMethod = parameterClass.getMethod(setterMethodName, String.class);
+            setterMethod.invoke(parameter, tenantId);
+        }
 
         // 执行原有的查询或更新操作
         return invocation.proceed();

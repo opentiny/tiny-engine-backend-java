@@ -39,7 +39,7 @@ public class AppController {
      * @param
      * @return App信息
      */
-    @GetMapping("/App/list")
+    @GetMapping("/app/list")
     public Result<List<App>> getAllApp() {
         List<App> AppList = appService.queryAllApp();
         return Result.success(AppList);
@@ -51,7 +51,7 @@ public class AppController {
      * @param id
      * @return App信息
      */
-    @GetMapping("/App/{id}")
+    @GetMapping("/app/{id}")
     public Result<App> getAppById(@PathVariable Integer id) {
         return appService.queryAppById(id);
     }
@@ -62,7 +62,7 @@ public class AppController {
      * @param app
      * @return App信息
      */
-    @PostMapping("/App/create")
+    @PostMapping("/app/create")
     public Result<App> createApp(@Valid @RequestBody App app) {
 
         return appService.createApp(app);
@@ -88,7 +88,7 @@ public class AppController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "修改单个App信息")
-    @PostMapping("/App/update/{id}")
+    @PostMapping("/app/update/{id}")
     public Result<App> updateApp(@PathVariable Integer id, @RequestBody App app) {
         app.setId(id);
         return appService.updateAppById(app);
@@ -100,7 +100,7 @@ public class AppController {
      * @param id
      * @return app信息
      */
-    @GetMapping("/App/delete/{id}")
+    @GetMapping("/app/delete/{id}")
     public Result<App> deleteApp(@PathVariable Integer id) {
 
         return appService.deleteAppById(id);
@@ -124,7 +124,7 @@ public class AppController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "获取应用信息详情")
-    @GetMapping("/App/detail/{id}")
+    @GetMapping("/app/detail/{id}")
     public Result<App> detail(@PathVariable Integer id) {
         return appService.queryAppById(id);
     }
@@ -149,7 +149,7 @@ public class AppController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "修改应用对应的国际化语种关联")
-    @PostMapping("/App/i18n/{id}")
+    @PostMapping("/app/i18n/{id}")
     public Result<App> updateI18n(@PathVariable Integer id, @RequestBody Map<String, Object> param) {
         if (param.get("i18n_langs") == null) {
             return Result.failed("i18n_langs 是必须的");

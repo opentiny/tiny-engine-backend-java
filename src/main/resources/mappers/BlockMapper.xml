@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , label, name, framework, content, assets_url, last_build_info, description, tags, latest_version, latest_history_id, screenshot, path, occupier_by, is_official, `public`, is_default, tiny_reserved, npm_name, i18n, platform_id, app_id, content_blocks, block_group_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , label, name, framework, content, assets, last_build_info, description, tags, latest_version, latest_history_id, screenshot, path, occupier_by, is_official, `public`, is_default, tiny_reserved, npm_name, i18n, platform_id, app_id, content_blocks, block_group_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -24,8 +24,8 @@
         <if test="content!=null and content!=''">
             AND content = #{content}
         </if>
-        <if test="assetsUrl!=null and assetsUrl!=''">
-            AND assets_url = #{assetsUrl}
+        <if test="assets!=null and assets!=''">
+            AND assets = #{assets}
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
             AND last_build_info = #{lastBuildInfo}
@@ -115,8 +115,8 @@
         <if test="content!=null and content!=''">
             content = #{content},
         </if>
-        <if test="assetsUrl!=null and assetsUrl!=''">
-            assets_url = #{assetsUrl},
+        <if test="assets!=null and assets!=''">
+            assets = #{assets},
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
             last_build_info = #{lastBuildInfo},
@@ -200,7 +200,7 @@
         <result column="name" property="name"/>
         <result column="framework" property="framework"/>
         <result column="content" property="content"/>
-        <result column="assets_url" property="assetsUrl"/>
+        <result column="assets" property="assets"/>
         <result column="last_build_info" property="lastBuildInfo"/>
         <result column="description" property="description"/>
         <result column="tags" property="tags"/>
@@ -281,13 +281,13 @@
     </update>
 
     <!-- 新增表t_block数据 -->
-    <insert id="createBlock" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createBlock" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Block">
         INSERT INTO t_block ( id
                             , label
                             , name
                             , framework
                             , content
-                            , assets_url
+                            , assets
                             , last_build_info
                             , description
                             , tags
@@ -317,7 +317,7 @@
                , #{name}
                , #{framework}
                , #{content}
-               , #{assetsUrl}
+               , #{assets}
                , #{lastBuildInfo}
                , #{description}
                , #{tags}

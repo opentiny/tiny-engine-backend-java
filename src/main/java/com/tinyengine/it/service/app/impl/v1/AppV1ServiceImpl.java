@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.app.impl.v1;
 
+import com.tinyengine.it.common.base.BaseQuery;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.utils.Schema;
 import com.tinyengine.it.common.utils.Utils;
@@ -139,7 +140,9 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @param id
      */
     public MetaDto setMeta(Integer id) {
-        App app = appMapper.queryAppById(id);
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(id);
+        App app = appMapper.queryAppById(baseQuery);
         Map<String, Object> materialhistoryMsg = new HashMap<>();
         // 当前无法构建物料，采用mock数据
         materialhistoryMsg.put("isUnpkg", true);

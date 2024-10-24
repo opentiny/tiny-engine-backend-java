@@ -43,7 +43,7 @@ public class PageHistory extends HistoryEntity {
     private Boolean isBody;
 
     @Schema(name = "parentId", description = "父文件夹id")
-    private Long parentId;
+    private Integer parentId;
 
     private String group;
 

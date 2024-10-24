@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , version, name, name_en, icon, description, doc_url, screenshot, tags, keywords, dev_mode, npm, `group`, category, priority, snippets, schema_fragment, configure, `public`, framework, is_official, is_default, tiny_reserved, component_metadata, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , version, name, name_en, icon, description, doc_url, screenshot, tags, keywords, dev_mode, npm, `group`, category, priority, snippets, schema_fragment, configure, `public`, framework, is_official, is_default, tiny_reserved, component_metadata, library_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -63,8 +63,8 @@
         <if test="configure!=null and configure!=''">
             AND configure = #{configure}
         </if>
-        <if test="isPublic!=null and isPublic!=''">
-            AND `public` = #{isPublic}
+        <if test="publicStatus!=null and publicStatus!=''">
+            AND `public` = #{publicStatus}
         </if>
         <if test="framework!=null and framework!=''">
             AND framework = #{framework}
@@ -80,6 +80,9 @@
         </if>
         <if test="componentMetadata!=null and componentMetadata!=''">
             AND component_metadata = #{componentMetadata}
+        </if>
+        <if test="libraryId!=null and libraryId!=''">
+            AND library_id = #{libraryId}
         </if>
         <if test="createdBy!=null and createdBy!=''">
             AND created_by = #{createdBy}
@@ -154,8 +157,8 @@
         <if test="configure!=null and configure!=''">
             configure = #{configure},
         </if>
-        <if test="isPublic!=null and isPublic!=''">
-            `public` = #{isPublic},
+        <if test="publicStatus!=null and publicStatus!=''">
+            `public` = #{publicStatus},
         </if>
         <if test="framework!=null and framework!=''">
             framework = #{framework},
@@ -171,6 +174,9 @@
         </if>
         <if test="componentMetadata!=null and componentMetadata!=''">
             component_metadata = #{componentMetadata},
+        </if>
+        <if test="libraryId!=null and libraryId!=''">
+            library_id = #{libraryId}
         </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
@@ -213,12 +219,13 @@
         <result column="snippets" property="snippets"/>
         <result column="schema_fragment" property="schemaFragment"/>
         <result column="configure" property="configure"/>
-        <result column="public" property="isPublic"/>
+        <result column="public" property="publicStatus"/>
         <result column="framework" property="framework"/>
         <result column="is_official" property="isOfficial"/>
         <result column="is_default" property="isDefault"/>
         <result column="tiny_reserved" property="tinyReserved"/>
         <result column="component_metadata" property="componentMetadata"/>
+        <result column="library_id" property="libraryId"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
@@ -281,7 +288,7 @@
     </update>
 
     <!-- 新增表t_component数据 -->
-    <insert id="createComponent" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createComponent" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Component">
         INSERT INTO t_component ( id
                                 , version
                                 , name
@@ -306,6 +313,7 @@
                                 , is_default
                                 , tiny_reserved
                                 , component_metadata
+                                , library_id
                                 , created_by
                                 , last_updated_by
                                 , created_time
@@ -330,12 +338,13 @@
                , #{snippets}
                , #{schemaFragment}
                , #{configure}
-               , #{isPublic}
+               , #{publicStatus}
                , #{framework}
                , #{isOfficial}
                , #{isDefault}
                , #{tinyReserved}
                , #{componentMetadata}
+               , #{libraryId}
                , #{createdBy}
                , #{lastUpdatedBy}
                , #{createdTime}

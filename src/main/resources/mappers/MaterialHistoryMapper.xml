@@ -6,7 +6,7 @@
 
         <!-- 通用查询列 -->
         <sql id="Base_Column_List">
-            id, ref_id, version, content, name, npm_name, framework, assets_url, image_url, description, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+            id, ref_id, version, content, name, npm_name, framework, assets_url, image_url, build_info, description, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
         </sql>
 
         <!-- 通用条件列 -->
@@ -34,6 +34,9 @@
                     </if>
                     <if test="imageUrl!=null and imageUrl!=''">
                         AND image_url = #{imageUrl}
+                    </if>
+                    <if test="buildInfo!=null and buildInfo!=''">
+                        AND build_info = #{buildInfo}
                     </if>
                     <if test="description!=null and description!=''">
                         AND description = #{description}
@@ -96,6 +99,9 @@
                     <if test="imageUrl!=null and imageUrl!=''">
                         image_url = #{imageUrl},
                     </if>
+                    <if test="buildInfo!=null and buildInfo!=''">
+                        build_info = #{buildInfo}
+                    </if>
                     <if test="description!=null and description!=''">
                         description = #{description},
                     </if>
@@ -144,6 +150,7 @@
                     <result column="framework" property="framework"/>
                     <result column="assets_url" property="assetsUrl"/>
                     <result column="image_url" property="imageUrl"/>
+                    <result column="build_info" property="buildInfo"/>
                     <result column="description" property="description"/>
                     <result column="material_size" property="materialSize"/>
                     <result column="tgz_url" property="tgzUrl"/>
@@ -211,7 +218,7 @@
             </update>
 
             <!-- 新增表t_material_history数据 -->
-            <insert id="createMaterialHistory" useGeneratedKeys="true" keyProperty="id">
+            <insert id="createMaterialHistory" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.MaterialHistory">
                 INSERT INTO t_material_history (
                     id
                     ,ref_id
@@ -222,6 +229,7 @@
                     ,framework
                     ,assets_url
                     ,image_url
+                    ,build_info
                     ,description
                     ,material_size
                     ,tgz_url
@@ -243,6 +251,7 @@
                     ,#{framework}
                     ,#{assetsUrl}
                     ,#{imageUrl}
+                    ,#{buildInfo}
                     ,#{description}
                     ,#{materialSize}
                     ,#{tgzUrl}

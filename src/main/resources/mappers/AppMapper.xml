@@ -358,7 +358,7 @@
     </update>
 
     <!-- 新增表t_app数据 -->
-    <insert id="createApp" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createApp" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.App">
         INSERT INTO t_app ( id
                           , name
                           , app_website

@@ -288,7 +288,7 @@
             </update>
 
             <!-- 新增表t_block_history数据 -->
-            <insert id="createBlockHistory" useGeneratedKeys="true" keyProperty="id">
+            <insert id="createBlockHistory" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.BlockHistory">
                 INSERT INTO t_block_history (
                     id
                     ,ref_id
