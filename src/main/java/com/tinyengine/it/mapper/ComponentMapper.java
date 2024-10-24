@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Component mapper.
+ * @since 2024-10-20
  */
 public interface ComponentMapper extends BaseMapper<Component> {
 

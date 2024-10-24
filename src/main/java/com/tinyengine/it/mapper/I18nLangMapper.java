@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface 18 n lang mapper.
+ * @since 2024-10-20
  */
 public interface I18nLangMapper extends BaseMapper<I18nLang> {
 

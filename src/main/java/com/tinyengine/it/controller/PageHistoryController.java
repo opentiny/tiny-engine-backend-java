@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * </p>
  *
  * @author lu -yg
- * @since 2024 -10-24
+ * @since 2024-10-24
  */
 @Validated
 @RestController

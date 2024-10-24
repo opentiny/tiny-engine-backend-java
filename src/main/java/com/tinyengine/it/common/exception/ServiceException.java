@@ -4,6 +4,7 @@ import lombok.Getter;
 
 /**
  * The type Service exception.
+ * @since 2024-10-20
  */
 public class ServiceException extends RuntimeException {
     private final String message;

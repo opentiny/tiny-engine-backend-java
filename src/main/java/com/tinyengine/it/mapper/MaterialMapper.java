@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Material mapper.
+ * @since 2024-10-20
  */
 public interface MaterialMapper extends BaseMapper<Material> {
 

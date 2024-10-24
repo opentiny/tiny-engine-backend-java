@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 /**
  * The type Schema config.
+ * @since 2024-10-20
  */
 @Data
 public class SchemaConfig {

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author zhangjuncao
- * @since 2024 -10-21
+ * @since 2024-10-21
  */
 @Data
 @Schema(name = "I18nEntries对象", description = "返回对象")

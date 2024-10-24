@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Business category mapper.
+ * @since 2024-10-20
  */
 public interface BusinessCategoryMapper extends BaseMapper<BusinessCategory> {
 

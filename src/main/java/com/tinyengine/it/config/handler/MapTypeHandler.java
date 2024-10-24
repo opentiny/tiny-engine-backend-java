@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * The type Map type handler.
+ * @since 2024-10-20
  */
 @Slf4j
 public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {

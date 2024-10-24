@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * The type Ai chat client.
+ * @since 2024-10-20
  */
 @Slf4j
 public class AiChatClient {

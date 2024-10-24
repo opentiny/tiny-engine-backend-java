@@ -2,6 +2,7 @@ package com.tinyengine.it.common.exception;
 
 /**
  * The interface Base error.
+ * @since 2024-10-20
  */
 public interface IBaseError {
     /**

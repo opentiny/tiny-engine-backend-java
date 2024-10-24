@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Page mapper.
+ * @since 2024-10-20
  */
 public interface PageMapper extends BaseMapper<Page> {
 

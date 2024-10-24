@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * The interface System service log.
  *
  * @version V1.0  Description:  自定义注解，拦截service
+ * @since 2024-10-20
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

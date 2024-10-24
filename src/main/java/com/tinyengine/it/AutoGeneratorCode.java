@@ -11,6 +11,7 @@ import java.util.Collections;
 
 /**
  * The type Auto generator code.
+ * @since 2024-10-20
  */
 public class AutoGeneratorCode {
     /**

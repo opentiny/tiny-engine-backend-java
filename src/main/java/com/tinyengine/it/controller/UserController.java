@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 查询用户信息
+ * @since 2024-10-20
  */
 @Validated
 @RestController

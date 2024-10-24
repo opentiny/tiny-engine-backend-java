@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface App mapper.
+ * @since 2024-10-20
  */
 public interface AppMapper extends BaseMapper<App> {
 

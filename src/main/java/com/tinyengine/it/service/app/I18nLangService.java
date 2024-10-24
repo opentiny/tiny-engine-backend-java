@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * The interface 18 n lang service.
+ * @since 2024-10-20
  */
 public interface I18nLangService {
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * The type Collection.
+ * @since 2024-10-20
  */
 public class Collection {
     private List<Object> range;
