@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Task record mapper.
+ *
  * @since 2024-10-20
  */
 public interface TaskRecordMapper extends BaseMapper<TaskRecord> {

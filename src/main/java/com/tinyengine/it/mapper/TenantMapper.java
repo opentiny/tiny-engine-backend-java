@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Tenant mapper.
+ *
  * @since 2024-10-20
  */
 public interface TenantMapper extends BaseMapper<Tenant> {

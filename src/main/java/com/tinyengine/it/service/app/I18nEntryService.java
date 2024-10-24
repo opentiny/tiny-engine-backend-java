@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * The interface 18 n entry service.
+ *
  * @since 2024-10-20
  */
 public interface I18nEntryService {

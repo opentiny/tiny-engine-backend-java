@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * The interface 18 n entry mapper.
+ *
  * @since 2024-10-20
  */
 public interface I18nEntryMapper extends BaseMapper<I18nEntry> {

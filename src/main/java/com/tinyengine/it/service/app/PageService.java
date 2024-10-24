@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * The interface Page service.
+ *
  * @since 2024-10-20
  */
 public interface PageService {

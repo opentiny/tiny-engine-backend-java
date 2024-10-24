@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Block mapper.
+ *
  * @since 2024-10-20
  */
 public interface BlockMapper extends BaseMapper<Block> {

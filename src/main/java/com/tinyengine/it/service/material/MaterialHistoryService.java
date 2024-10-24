@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * The interface Material history service.
+ *
  * @since 2024-10-20
  */
 public interface MaterialHistoryService {

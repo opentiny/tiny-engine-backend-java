@@ -50,6 +50,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * The type 18 n entry service.
+ *
  * @since 2024-10-20
  */
 @Service
@@ -525,8 +526,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         String fieldname = lang;
         String filename = file.getOriginalFilename();
         logger.info(
-            "parseJsonFileStream field: " + fieldname + ", filename:" + filename + ", encoding:"
-                + encoding + ", mime:" + file.getContentType());
+            "parseJsonFileStream field: " + fieldname + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.E_MimeType.JSON.getValue()));

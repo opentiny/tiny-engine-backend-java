@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 
 /**
  * The type Page service.
+ *
  * @since 2024-10-20
  */
 @Service

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * The type Tiny engine application.
+ *
  * @since 2024-10-20
  */
 @SpringBootApplication

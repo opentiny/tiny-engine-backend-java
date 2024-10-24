@@ -5,7 +5,6 @@ import org.slf4j.MDC;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -14,6 +13,7 @@ import java.util.UUID;
 
 /**
  * The type Request id filter.
+ *
  * @since 2024-10-20
  */
 public class RequestIdFilter implements Filter {

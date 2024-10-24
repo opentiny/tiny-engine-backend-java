@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * The type Open ai body dto.
+ *
  * @since 2024-10-20
  */
 @Data

@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * The interface Page template service.
+ *
  * @since 2024-10-20
  */
 public interface PageTemplateService {

@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * The type Material history service.
+ *
  * @since 2024-10-20
  */
 @Service

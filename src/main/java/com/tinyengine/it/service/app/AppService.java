@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * The interface App service.
+ *
  * @since 2024-10-20
  */
 public interface AppService {

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 /**
  * The type Open api config.
+ *
  * @since 2024-10-20
  */
 @OpenAPIDefinition(

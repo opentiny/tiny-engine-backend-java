@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * The type 18 n lang service.
+ *
  * @since 2024-10-20
  */
 @Service

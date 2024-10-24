@@ -6,6 +6,7 @@ import lombok.Setter;
 
 /**
  * The type Material history msg.
+ *
  * @since 2024-10-20
  */
 @Setter

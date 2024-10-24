@@ -14,6 +14,7 @@ import java.util.Objects;
 
 /**
  * The type Global exception.
+ *
  * @since 2024-10-20
  */
 @RestControllerAdvice

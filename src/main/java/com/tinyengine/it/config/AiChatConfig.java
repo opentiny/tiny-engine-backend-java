@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * The type Ai chat config.
+ *
  * @since 2024-10-20
  */
 public class AiChatConfig {

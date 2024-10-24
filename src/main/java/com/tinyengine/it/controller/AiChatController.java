@@ -21,6 +21,7 @@ import java.util.Map;
 
 /**
  * The type Ai chat controller.
+ *
  * @since 2024-10-20
  */
 @Validated
