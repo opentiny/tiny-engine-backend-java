@@ -41,7 +41,7 @@ public class AiChatConfig {
             new AiChatConfigData(OPENAI_API_URL + "/v1/chat/completions", createCommonRequestOption(), openaiHeaders,
                 "openai"));
 
-        config.put(Enums.E_FOUNDATION_MODEL.Local_GPT.getValue(),
+        config.put(Enums.E_FOUNDATION_MODEL.LOCAL_GPT.getValue(),
             new AiChatConfigData(LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(),
                 localGptHeaders, "!openai"));
 
