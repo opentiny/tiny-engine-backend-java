@@ -58,7 +58,8 @@ public class AiChatClient {
         }
 
         if ("POST".equalsIgnoreCase(httpRequestOption.method) && !openAiBodyDto.getMessages().isEmpty()) {
-            requestSpec = ((WebClient.RequestBodySpec)requestSpec).bodyValue(openAiBodyDto); // Add request body
+            requestSpec = ((WebClient.RequestBodySpec)requestSpec).bodyValue(openAiBodyDto);
+            // Add request body
         }
 
         return requestSpec.retrieve().bodyToMono(String.class).map(response -> {
