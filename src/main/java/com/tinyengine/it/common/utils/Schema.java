@@ -1,6 +1,7 @@
 package com.tinyengine.it.common.utils;
 
 import com.tinyengine.it.model.dto.SchemaConfig;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Set;
 /**
  * The type Schema.
  */
+@Slf4j
 public class Schema {
     // 使用一个 Set 来检查是否包含特定的字符串
     private static final Set<String> GROUPS = new HashSet<>();
@@ -135,7 +137,7 @@ public class Schema {
                 Object value = data.get(key);
                 formattedData.put(key, method.invoke(this, value));
             } catch (Exception e) {
-
+                log.error(e.getMessage());
             }
         }
         return formattedData;

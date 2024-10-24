@@ -378,12 +378,12 @@ public class AppV1ServiceImpl implements AppV1Service {
         resKeys.add("is_default");
         for (Page pageInfo : pageList) {
             Map<String, Object> data = Utils.convert(pageInfo);
-            Boolean isToLine = false;
+            boolean isToLine = false;
             Map<String, Object> page = formatDataFields(data, resKeys, isToLine);
             page.put("isHome", String.valueOf(page.get("id")).equals(app.getHomePage()));
             Map<String, Object> schema;
             Schema schemaUtil = new Schema();
-            if (pageInfo.getIsPage() != true) {
+            if (!pageInfo.getIsPage()) {
 
                 schema = schemaUtil.getFolderSchema(page);
             } else {

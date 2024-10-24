@@ -492,7 +492,7 @@ public class PageServiceImpl implements PageService {
             return true;
         }
 
-        return occupier != null ? occupier.getId().equals(user.getId()) : true;
+        return occupier == null || occupier.getId().equals(user.getId());
     }
 
     /**
