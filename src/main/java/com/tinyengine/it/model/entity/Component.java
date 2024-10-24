@@ -18,8 +18,8 @@ import java.util.Map;
  * 组件表
  * </p>
  *
- * @author lu-yg
- * @since 2024-10-17
+ * @author lu -yg
+ * @since 2024 -10-17
  */
 @Getter
 @Setter
@@ -60,7 +60,6 @@ public class Component extends BaseEntity {
     @TableField(typeHandler = MapTypeHandler.class)
     @Schema(name = "npm", description = "npm信息")
     private Map<String, Object> npm;
-
 
     @Schema(name = "group", description = "分组")
     private String group;

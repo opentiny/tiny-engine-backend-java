@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Block group service.
+ */
 @Service
 public class BlockGroupServiceImpl implements BlockGroupService {
 

@@ -14,11 +14,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type List type handler.
+ */
 public class ListTypeHandler extends BaseTypeHandler<List<?>> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, List<?> parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, List<?> parameter, JdbcType jdbcType)
+        throws SQLException {
         // 将 List<?> 转换为字符串，并设置到 PreparedStatement 中的相应参数
         try {
             String json = objectMapper.writeValueAsString(parameter);

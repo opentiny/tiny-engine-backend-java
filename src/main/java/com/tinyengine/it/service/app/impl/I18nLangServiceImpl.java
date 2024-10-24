@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type 18 n lang service.
+ */
 @Service
 public class I18nLangServiceImpl implements I18nLangService {
 

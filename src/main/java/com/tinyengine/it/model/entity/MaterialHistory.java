@@ -17,8 +17,8 @@ import java.util.Map;
  * 物料历史表
  * </p>
  *
- * @author lu-yg
- * @since 2024-10-17
+ * @author lu -yg
+ * @since 2024 -10-17
  */
 @Getter
 @Setter

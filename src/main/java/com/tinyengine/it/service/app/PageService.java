@@ -8,74 +8,87 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * The interface Page service.
+ */
 public interface PageService {
 
     /**
      * 查询表t_page所有信息
+     *
+     * @param aid the aid
+     * @return the list
      */
     List<Page> queryAllPage(Integer aid);
 
     /**
      * 根据主键id查询表t_page信息
      *
-     * @param id
+     * @param id the id
+     * @return the page
+     * @throws Exception the exception
      */
     Page queryPageById(@Param("id") Integer id) throws Exception;
 
     /**
      * 根据条件查询表t_page信息
      *
-     * @param page
+     * @param page the page
+     * @return the list
      */
     List<Page> queryPageByCondition(Page page);
-
 
     /**
      * 根据主键id删除pages数据
      *
-     * @param id
+     * @param id the id
+     * @return the result
+     * @throws Exception the exception
      */
     Result<Page> delPage(@Param("id") Integer id) throws Exception;
 
     /**
      * 创建页面
      *
-     * @param page
+     * @param page the page
+     * @return the result
+     * @throws Exception the exception
      */
     Result<Page> createPage(Page page) throws Exception;
 
     /**
      * 创建文件夹
      *
-     * @param page
+     * @param page the page
+     * @return the result
+     * @throws Exception the exception
      */
     Result<Page> createFolder(Page page) throws Exception;
 
     /**
      * 更新页面
      *
-     * @param pages
-     * @return
-     * @throws Exception
+     * @param pages the pages
+     * @return result
+     * @throws Exception the exception
      */
     Result<Page> updatePage(Page pages) throws Exception;
 
     /**
      * 更新页面文件夹
      *
-     * @param pages
-     * @return
+     * @param pages the pages
+     * @return result
+     * @throws Exception the exception
      */
     Result<Page> update(Page pages) throws Exception;
-
 
     /**
      * 查询页面预览元数据
      *
-     * @param previewParam
-     * @return PreviewDto
+     * @param previewParam the preview param
+     * @return PreviewDto preview meta data
      */
     PreviewDto getPreviewMetaData(PreviewParam previewParam);
-
 
 }

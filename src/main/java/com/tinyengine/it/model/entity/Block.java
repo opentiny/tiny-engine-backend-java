@@ -17,7 +17,7 @@ import java.util.Map;
  * </p>
  *
  * @author zhangjuncao
- * @since 2024-10-17
+ * @since 2024 -10-17
  */
 @Getter
 @Setter
@@ -107,7 +107,5 @@ public class Block extends BaseEntity {
     @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
     @JsonProperty("block_group_id")
     private Integer blockGroupId;
-
-
 
 }

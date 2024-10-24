@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Tenant service.
+ */
 @Service
 public class TenantServiceImpl implements TenantService {
 

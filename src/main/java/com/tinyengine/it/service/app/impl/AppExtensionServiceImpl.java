@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type App extension service.
+ */
 @Service
 public class AppExtensionServiceImpl implements AppExtensionService {
 

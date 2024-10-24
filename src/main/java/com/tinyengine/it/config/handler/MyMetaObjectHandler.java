@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+/**
+ * The type My meta object handler.
+ */
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override

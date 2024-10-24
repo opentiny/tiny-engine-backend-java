@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
+/**
+ * The type Operate i 18 n entries.
+ */
 @Data
 @NoArgsConstructor
 public class OperateI18nEntries {

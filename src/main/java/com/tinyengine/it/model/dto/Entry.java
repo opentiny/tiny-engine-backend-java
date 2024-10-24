@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * The type Entry.
+ */
 @Data
 public class Entry {
     private String key;

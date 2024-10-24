@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Task record service.
+ */
 @Service
 public class TaskRecordServiceImpl implements TaskRecordService {
 

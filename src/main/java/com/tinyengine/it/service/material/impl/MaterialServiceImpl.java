@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Material service.
+ */
 @Service
 public class MaterialServiceImpl implements MaterialService {
 

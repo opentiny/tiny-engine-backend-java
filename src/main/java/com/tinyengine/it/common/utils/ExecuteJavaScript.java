@@ -11,10 +11,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Execute java script.
+ */
 @Component
 @Slf4j
 public class ExecuteJavaScript {
 
+    /**
+     * Execute dsl java script list.
+     *
+     * @param command the command
+     * @return the list
+     */
     public List<Map<String, Object>> executeDslJavaScript(List<String> command) {
 
         StringBuilder result = ExecuteCommand.executeCommand(command);
@@ -30,6 +39,12 @@ public class ExecuteJavaScript {
         return resulList;
     }
 
+    /**
+     * Execute trans form map.
+     *
+     * @param command the command
+     * @return the map
+     */
     public Map<String, Object> executeTransForm(List<String> command) {
         StringBuilder result = ExecuteCommand.executeCommand(command);
         log.info("result" + result.toString());

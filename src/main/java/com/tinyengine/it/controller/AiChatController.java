@@ -15,31 +15,31 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * The type Ai chat controller.
+ */
 @Validated
 @RestController
 @CrossOrigin
 @RequestMapping("/app-center/api")
 public class AiChatController {
+    /**
+     * The Ai chat service.
+     */
     @Autowired
     AiChatService aiChatService;
 
     /**
      * ai api
      *
-     * @param
-     * @return ai回答信息
+     * @param aiParam the ai param
+     * @return ai回答信息 result
      */
-    @Operation(summary = "获取ai回答信息",
-            description = "获取ai回答信息",
-            parameters = {
-                    @Parameter(name = "AiParam", description = "入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "获取ai回答信息", description = "获取ai回答信息",
+        parameters = {@Parameter(name = "AiParam", description = "入参对象")}, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+        @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "ai api")
     @PostMapping("/ai/chat")
     public Result<Map<String, Object>> aiChat(@RequestBody AiParam aiParam) {

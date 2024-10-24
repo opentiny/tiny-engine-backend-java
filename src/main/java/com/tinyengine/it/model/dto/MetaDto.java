@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * The type Meta dto.
+ */
 @Data
 public class MetaDto {
     private App app;

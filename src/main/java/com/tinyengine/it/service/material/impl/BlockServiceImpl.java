@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The type Block service.
+ */
 @Service
 public class BlockServiceImpl implements BlockService {
 
@@ -79,7 +82,16 @@ public class BlockServiceImpl implements BlockService {
         return blockMapper.createBlock(block);
     }
 
-    public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) throws Exception {
+    /**
+     * Gets block assets.
+     *
+     * @param pageContent the page content
+     * @param framework   the framework
+     * @return the block assets
+     * @throws Exception the exception
+     */
+    public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework)
+        throws Exception {
         List<String> block = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -96,41 +108,40 @@ public class BlockServiceImpl implements BlockService {
         mergedAssets.put("styles", new ArrayList<>());
 
         // Merge the assets using streams
-        return blocksList.stream()
-                .map(Block::getAssets)
-                .map(assetsMap -> {
-                    Map<String, List<String>> tempMap = new HashMap<>();
-                    tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
-                    tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
-                    tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
-                    return tempMap;
-                })
-                .reduce(
-                        mergedAssets,
-                        (acc, curr) -> {
-                            acc.get("material").addAll(curr.get("material"));
-                            acc.get("scripts").addAll(curr.get("scripts"));
-                            acc.get("styles").addAll(curr.get("styles"));
-                            return acc;
-                        },
-                        (map1, map2) -> {
-                            map1.get("material").addAll(map2.get("material"));
-                            map1.get("scripts").addAll(map2.get("scripts"));
-                            map1.get("styles").addAll(map2.get("styles"));
-                            return map1;
-                        }
-                );
+        return blocksList.stream().map(Block::getAssets).map(assetsMap -> {
+            Map<String, List<String>> tempMap = new HashMap<>();
+            tempMap.put("material", (List<String>)assetsMap.getOrDefault("material", new ArrayList<>()));
+            tempMap.put("scripts", (List<String>)assetsMap.getOrDefault("scripts", new ArrayList<>()));
+            tempMap.put("styles", (List<String>)assetsMap.getOrDefault("styles", new ArrayList<>()));
+            return tempMap;
+        }).reduce(mergedAssets, (acc, curr) -> {
+            acc.get("material").addAll(curr.get("material"));
+            acc.get("scripts").addAll(curr.get("scripts"));
+            acc.get("styles").addAll(curr.get("styles"));
+            return acc;
+        }, (map1, map2) -> {
+            map1.get("material").addAll(map2.get("material"));
+            map1.get("scripts").addAll(map2.get("scripts"));
+            map1.get("styles").addAll(map2.get("styles"));
+            return map1;
+        });
     }
 
+    /**
+     * Gets block info.
+     *
+     * @param block     the block
+     * @param framework the framework
+     * @return the block info
+     */
     public List<Block> getBlockInfo(List<String> block, String framework) {
         // 创建 QueryWrapper 实例
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (block != null && !block.isEmpty()) {
 
             // 处理 blockLabelName 为数组的情况
-            String labelsCondition = block.stream()
-                    .map(name -> "label = '" + name + "'")
-                    .collect(Collectors.joining(" OR "));
+            String labelsCondition =
+                block.stream().map(name -> "label = '" + name + "'").collect(Collectors.joining(" OR "));
 
             // 添加标签条件
             queryWrapper.and(wrapper -> wrapper.apply(labelsCondition));
@@ -143,20 +154,28 @@ public class BlockServiceImpl implements BlockService {
         // 执行查询并返回结果
         return blockMapper.selectList(queryWrapper);
     }
+
+    /**
+     * Traverse blocks.
+     *
+     * @param content the content
+     * @param block   the block
+     * @throws JsonProcessingException the json processing exception
+     */
     public void traverseBlocks(String content, List<String> block) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(content);
         // 判断传过来的参数是JSON数组还是JSON对象
         if (content != null && jsonNode.isArray()) {
             List<String> schema = objectMapper.readValue(content, List.class);
-            for (Object prop : (List<?>) schema) {
+            for (Object prop : (List<?>)schema) {
                 traverseBlocks(objectMapper.writeValueAsString(prop), block);
             }
         } else {
             Map<String, Object> schema = objectMapper.readValue(content, Map.class);
-            Map<?, ?> schemaMap = (Map<?, ?>) schema;
+            Map<?, ?> schemaMap = (Map<?, ?>)schema;
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
-                block.add((String) schemaMap.get("componentName"));
+                block.add((String)schemaMap.get("componentName"));
             }
             if (schemaMap.containsKey("children") && schemaMap.get("children") instanceof List) {
                 traverseBlocks(objectMapper.writeValueAsString(schemaMap.get("children")), block);
@@ -165,6 +184,12 @@ public class BlockServiceImpl implements BlockService {
 
     }
 
+    /**
+     * Is block boolean.
+     *
+     * @param schema the schema
+     * @return the boolean
+     */
     public boolean isBlock(Map<?, ?> schema) {
         return schema != null && "Block".equals(schema.get("componentType"));
     }

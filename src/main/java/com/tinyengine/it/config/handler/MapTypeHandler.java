@@ -15,11 +15,15 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Map type handler.
+ */
 public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, Map<String, Object> parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, Map<String, Object> parameter, JdbcType jdbcType)
+        throws SQLException {
         try {
             String json = objectMapper.writeValueAsString(parameter);
             ps.setString(i, json);
