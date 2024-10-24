@@ -516,11 +516,14 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @throws Exception the exception
      */
     public Result<Map<String, Object>> parseJsonFileStream(String lang, MultipartFile file) throws Exception {
-        String encoding = StandardCharsets.UTF_8.name(); // 默认使用UTF-8
-        String fieldname = lang; // fieldname 为i18n_langs的id
+        // 默认使用UTF-8
+        String encoding = StandardCharsets.UTF_8.name();
+        // fieldname 为i18n_langs的id
+        String fieldname = lang;
         String filename = file.getOriginalFilename();
         logger.info(
-            "parseJsonFileStream field: " + fieldname + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
+            "parseJsonFileStream field: " + fieldname + ", filename:" + filename + ", encoding:"
+                + encoding + ", mime:" + file.getContentType());
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.E_MimeType.Json.getValue()));

@@ -72,7 +72,7 @@ public class AiChatServiceImpl implements AiChatService {
         // 通过二方包将页面转成schema
         String codes = extractCode(answerContent);
 
-        Map<String, Object> schema = new HashMap<>(); // todo 需替换转译二方包
+        Map<String, Object> schema = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
         result.put("originalResponse", data);
         result.put("replyWithoutCode", replyWithoutCode);
@@ -108,7 +108,8 @@ public class AiChatServiceImpl implements AiChatService {
             Map<String, Object> openAiResponse = new HashMap<>();
             openAiResponse.put("id", responseData.get("id"));
             openAiResponse.put("object", "text_completion");
-            openAiResponse.put("created", System.currentTimeMillis() / 1000); // 设置创建时间戳
+            openAiResponse.put("created", System.currentTimeMillis() / 1000);
+            // 设置创建时间戳
             openAiResponse.put("model", responseData.get("model"));
 
             List<Map<String, Object>> chatgptChoices = new ArrayList<>();

@@ -52,7 +52,8 @@ public class AiChatConfig {
     }
 
     private static HttpRequestOption createCommonRequestOption() {
-        return new HttpRequestOption("POST", "json", "json", 10 * 60 * 1000); // 10 minutes
+        return new HttpRequestOption("POST", "json", "json", 10 * 60 * 1000);
+        // 10 minutes
     }
 
     /**

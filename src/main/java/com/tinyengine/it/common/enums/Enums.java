@@ -800,15 +800,18 @@ public class Enums {
         /**
          * Gpt 35 turbo e foundation model.
          */
-        GPT_35_TURBO("gpt-3.5-turbo"),  // openai
+        // openai
+        GPT_35_TURBO("gpt-3.5-turbo"),
         /**
          * Local gpt e foundation model.
          */
-        Local_GPT("qwen-turbo"),  //本地兼容opanai-api接口的 大语言模型，如chatGLM6b,通义千问 等。
+        //本地兼容opanai-api接口的 大语言模型，如chatGLM6b,通义千问 等。
+        Local_GPT("qwen-turbo"),
         /**
          * Ernie bot turbo e foundation model.
          */
-        ERNIE_BOT_TURBO("ERNIE-Bot-turbo");  // 文心一言
+        // 文心一言
+        ERNIE_BOT_TURBO("ERNIE-Bot-turbo");
         private final String value;
 
         E_FOUNDATION_MODEL(String value) {

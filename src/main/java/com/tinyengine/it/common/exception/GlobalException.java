@@ -28,7 +28,8 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(Exception.class)
     public Result<Map<String, String>> handleException(Exception e) {
-        log.error("Exception occurred: ", e);  // 修改为 log.error，传递异常对象以打印堆栈信息
+        // 修改为 log.error，传递异常对象以打印堆栈信息
+        log.error("Exception occurred: ", e);
         return Result.failed(ExceptionEnum.CM001);
     }
 
@@ -42,7 +43,8 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NullPointerException.class)
     public Result<Map<String, String>> handleNullPointerException(HttpServletRequest req, NullPointerException e) {
-        log.error("NullPointerException occurred: ", e);  // 修改为 log.error，传递异常对象以打印堆栈信息
+        // 修改为 log.error，传递异常对象以打印堆栈信息
+        log.error("NullPointerException occurred: ", e);
         return Result.failed(ExceptionEnum.CM001);
     }
 
@@ -55,7 +57,8 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ServiceException.class)
     public Result<Map<String, String>> handleServiceException(ServiceException e) {
-        log.error("Business exception occurred: ", e);  // 修改为 log.error，传递异常对象以打印堆栈信息
+        // 修改为 log.error，传递异常对象以打印堆栈信息
+        log.error("Business exception occurred: ", e);
         return Result.failed(e.getCode(), e.getMessage());
     }
 
@@ -70,7 +73,8 @@ public class GlobalException {
     public Result<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException e) {
         // 从异常对象中获取验证错误信息
         String errorMessage = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
-        log.error("Validation exception occurred: ", e);  // 修改为 log.error，传递异常对象以打印堆栈信息
+        // 修改为 log.error，传递异常对象以打印堆栈信息
+        log.error("Validation exception occurred: ", e);
         // 返回响应实体，其中包含错误消息
         return Result.failed(ExceptionEnum.CM002, errorMessage);
     }

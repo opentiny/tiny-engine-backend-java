@@ -213,8 +213,10 @@ public class I18nEntryController {
         Result<Map<String, Object>> result = new Result<>();
         // 处理上传的文件
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
-            String key = entry.getKey(); // 获取动态的参数名
-            MultipartFile file = entry.getValue(); // 获取对应的文件
+            // 获取动态的参数名
+            String key = entry.getKey();
+            // 获取对应的文件
+            MultipartFile file = entry.getValue();
 
             if (file.isEmpty()) {
                 return Result.failed(ExceptionEnum.CM307);
@@ -249,8 +251,10 @@ public class I18nEntryController {
         Result<Map<String, Object>> result = new Result<>();
         // 处理上传的文件
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
-            String key = entry.getKey(); // 获取动态的参数名
-            MultipartFile file = entry.getValue(); // 获取对应的文件
+            // 获取动态的参数名
+            String key = entry.getKey();
+            // 获取对应的文件
+            MultipartFile file = entry.getValue();
 
             if (file.isEmpty()) {
                 return Result.failed(ExceptionEnum.CM307);

@@ -36,8 +36,9 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<RequestIdFilter> requestIdFilter() {
         FilterRegistrationBean<RequestIdFilter> registrationBean = new FilterRegistrationBean<>();
+        // 对所有请求生效
+        registrationBean.addUrlPatterns("/*");
         registrationBean.setFilter(new RequestIdFilter());
-        registrationBean.addUrlPatterns("/*"); // 对所有请求生效
         return registrationBean;
     }
 
