@@ -3,8 +3,8 @@ package com.tinyengine.it.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tinyengine.it.common.base.BaseEntity;
-import com.tinyengine.it.common.utils.ListTypeHandler;
-import com.tinyengine.it.common.utils.MapTypeHandler;
+import com.tinyengine.it.config.handler.ListTypeHandler;
+import com.tinyengine.it.config.handler.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -133,4 +133,5 @@ public class App extends BaseEntity {
     @Schema(name = "dataSourceGlobal", description = "数据源全局配置")
     @TableField(typeHandler = MapTypeHandler.class)
     private Map<String, Object> dataSourceGlobal;
+
 }

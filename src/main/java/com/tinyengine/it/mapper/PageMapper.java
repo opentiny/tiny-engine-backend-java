@@ -1,8 +1,6 @@
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tinyengine.it.common.base.BaseEntity;
-import com.tinyengine.it.common.base.BaseQuery;
 import com.tinyengine.it.model.entity.Page;
 import org.apache.ibatis.annotations.*;
 
@@ -17,9 +15,9 @@ public interface PageMapper extends BaseMapper<Page> {
     /**
      * 根据主键id查询表pages数据
      *
-     * @param baseQuery
+     * @param id
      */
-    Page queryPageById(BaseQuery baseQuery);
+    Page queryPageById(Integer id);
 
     /**
      * 根据条件查询表pages数据
@@ -53,21 +51,8 @@ public interface PageMapper extends BaseMapper<Page> {
     /**
      * 通过app查pages
      *
-     * @param app
+     * @param appId
      */
-    @Results({
-            @Result(column = "occupier", property = "occupierBy"),
-            @Result(column = "occupier", property = "occupier",
-                    one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
 
-    })
-    @Select("select * from t_page  <where>\n" +
-            "                    <if test=\"app != null\">\n" +
-            "                        AND app_id = #{app}\n" +
-            "                    </if>\n" +
-            "                    <if test=\"tenantId != null\">\n" +
-            "                        AND tenant_id = #{tenantId}\n" +
-            "                    </if>\n" +
-            "                </where>")
-    List<Page> queryPageByApp(Integer app);
+    List<Page> queryPageByApp(Integer appId);
 }

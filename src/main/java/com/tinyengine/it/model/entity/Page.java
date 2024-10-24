@@ -2,10 +2,11 @@ package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
-import com.tinyengine.it.common.utils.ListTypeHandler;
-import com.tinyengine.it.common.utils.MapTypeHandler;
+import com.tinyengine.it.config.handler.ListTypeHandler;
+import com.tinyengine.it.config.handler.MapTypeHandler;
 import com.tinyengine.it.model.dto.BlockVersionDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -25,6 +26,7 @@ import java.util.Map;
 @Getter
 @Setter
 @TableName("t_page")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Schema(name = "Page", description = "页面表")
 public class Page extends BaseEntity {
     @Schema(name = "name", description = "名称")

@@ -105,7 +105,7 @@ public class PageController {
     )
     @SystemControllerLog(description = "创建页面")
     @PostMapping("/pages/create")
-    public Result<Page> createpage(@Valid @RequestBody Page page) {
+    public Result<Page> createpage(@Valid @RequestBody Page page) throws Exception {
 
         if (page.getIsPage()) {
             // 创建页面
@@ -141,19 +141,10 @@ public class PageController {
     )
     @SystemControllerLog(description = "修改页面")
     @PostMapping("/pages/update/{id}")
-    public Result<Page> updatepage(@PathVariable Integer id, @RequestBody Map<String, Object> param) throws Exception {
-        // 由于前端传过来的参数中createBy和occupier是个对象，想把param中的所有属性值对应的给赋值到page中做以下处理
-        Map<String, Object> targetMap = new HashMap<>(param);
-        targetMap.remove("createdBy");
-        targetMap.remove("occupier");
-        targetMap.remove("createdTime");
-        targetMap.remove("lastUpdatedTime");
-        targetMap.remove("occupierBy");
-        targetMap.remove("trueFolder");
-        String occupierId = (String) param.get("occupierId");
-        ObjectMapper objectMapper = new ObjectMapper();
-        Page page = objectMapper.convertValue(targetMap, Page.class);
-        page.setOccupierBy(occupierId);
+    public Result<Page> updatepage(@PathVariable Integer id, @RequestBody Page page) throws Exception {
+        page.setLastUpdatedTime(null);
+        page.setCreatedTime(null);
+        page.setLastUpdatedBy(null);
         if (page.getIsPage()) {
             // 更新页面
             return pageService.updatePage(page);

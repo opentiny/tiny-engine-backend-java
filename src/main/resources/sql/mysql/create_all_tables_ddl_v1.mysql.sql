@@ -460,9 +460,9 @@ create table `r_material_block` (
     primary key (`id`) using btree
   ) engine = innodb comment = '物料包区块编辑态关系表';
 
-drop table if exists `t_i18n_entity`;
+drop table if exists `t_i18n_entry`;
 
-create table `t_i18n_entity` (
+create table `t_i18n_entry` (
     `id` int not null auto_increment comment '主键id',
     `key` varchar(255) not null comment '国际化词条key',
     `content` varchar(3000) not null comment '词条内容',
@@ -500,6 +500,7 @@ create table `t_datasource` (
     `name` varchar(255) not null comment '数据源名称',
     `data` longtext comment '数据源内容',
     `tpl` int comment '设计预留字段',
+    `app_id` int comment '关联appId',
     `platform_id` int comment '关联设计器id',
     `description` varchar(2000) comment '描述',
     `tenant_id` varchar(60) not null comment '租户id',
@@ -558,7 +559,7 @@ create table `t_user` (
     `username` varchar(255) not null comment '用户名',
     `email` varchar(255) not null comment '邮箱',
     `role` varchar(255) comment '用户角色',
-    `enable` tinyint(1) not null comment '账号是否可用',
+    `enable` tinyint(1) comment '账号是否可用',
     `is_admin` tinyint(1) comment '是否管理员',
     `is_public` tinyint(1) comment '是否公共账号',
     `tenant_id` varchar(60) not null comment '租户id',

@@ -99,24 +99,16 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_block_group
-        <where>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
-            </if>
-        </where>
     </select>
 
     <!-- 根据app查询表block_group -->
     <select id="queryBlockGroupByApp" resultMap="BlockGroupMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM block_groups
+        FROM t_block_group
         <where>
-            <if test="app != null">
-                AND app = #{app}
-            </if>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
+            <if test="appId != null">
+                AND app_id = #{appId}
             </if>
         </where>
     </select>

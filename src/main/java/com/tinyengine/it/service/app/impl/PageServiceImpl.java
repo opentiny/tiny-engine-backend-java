@@ -1,8 +1,6 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tinyengine.it.common.base.BaseEntity;
-import com.tinyengine.it.common.base.BaseQuery;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
@@ -72,20 +70,17 @@ public class PageServiceImpl implements PageService {
      */
     @Override
     @SystemServiceLog(description = "通过Id查询page数据实现方法")
-    public Page queryPageById(@Param("id") Integer id) throws ServiceException {
-        BaseQuery baseQuery = new BaseQuery();
-        baseQuery.setId(id);
-        Page pageInfo = pageMapper.queryPageById(baseQuery);
+    public Page queryPageById(@Param("id") Integer id) throws Exception {
+
+        Page pageInfo = pageMapper.queryPageById(id);
         //  获取schemaMeta进行获取materialHistory中的framework进行判断
-        baseQuery.setId(pageInfo.getApp());
-        String framework = appMapper.queryAppById(baseQuery).getFramework();
+        String framework = appMapper.queryAppById(pageInfo.getApp()).getFramework();
         if (framework.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM312.getResultCode(), ExceptionEnum.CM312.getResultMsg());
         }
         if (pageInfo.getIsPage()) {
             // 这里不保证能成功获取区块的列表，没有区块或获取区块列表不成功返回 {}
-            Map<String, List<String>> blockAssets = new HashMap<>();
-            // blockServiceImpl.getBlockAssets(pageInfo.getPageContent(), framework);
+            Map<String, List<String>> blockAssets = blockServiceImpl.getBlockAssets(pageInfo.getPageContent(), framework);
             pageInfo.setAssets(blockAssets);
             return addIsHome(pageInfo);
         }
@@ -118,9 +113,7 @@ public class PageServiceImpl implements PageService {
         protectDefaultPage(pages, id);
 
         // 删除
-        BaseQuery baseQuery = new BaseQuery();
-        baseQuery.setId(id);
-        Page pageResult = pageMapper.queryPageById(baseQuery);
+        Page pageResult = pageMapper.queryPageById(id);
         int result = pageMapper.deletePageById(id);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
@@ -135,7 +128,7 @@ public class PageServiceImpl implements PageService {
      */
     @Override
     @SystemServiceLog(description = "createPage 创建页面实现方法")
-    public Result<Page> createPage(Page page) throws ServiceException {
+    public Result<Page> createPage(Page page) throws Exception {
         // 判断isHome 为true时，parentId 不为0，禁止创建
         if (page.getIsHome() && !page.getParentId().equals("0")) {
             return Result.failed("Homepage can only be set in the root directory");
@@ -178,7 +171,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     @SystemServiceLog(description = "createFolder 创建文件夹实现方法")
-    public Result<Page> createFolder(Page page) {
+    public Result<Page> createFolder(Page page) throws Exception {
         String parentId = page.getParentId();
         // 通过parentId 计算depth
         Map<String, Object> depthResult = getDepth(parentId);
@@ -238,7 +231,7 @@ public class PageServiceImpl implements PageService {
         PageHistory pageHistory = new PageHistory();
 
         BeanUtils.copyProperties(pageTemp, pageHistory); // 把Pages中的属性值赋值到PagesHistories中
-        pageHistory.setRefId(pageTemp.getId());
+        pageHistory.setPage(pageTemp.getId());
         pageHistory.setId(null);
         int result = pageHistoryService.createPageHistory(pageHistory);
         if (result < 1) {
@@ -267,9 +260,7 @@ public class PageServiceImpl implements PageService {
             page.setDepth((int) depthInfo.get("depth") + 1);
         }
         // getFolder 获取父类信息
-        BaseQuery baseQuery = new BaseQuery();
-        baseQuery.setId(page.getId());
-        Page parentInfo = pageMapper.queryPageById(baseQuery);
+        Page parentInfo = pageMapper.queryPageById(page.getId());
         // 当更新参数中没有depth 或 depth没有发生改变时
         if (page.getDepth().equals(parentInfo.getDepth())) {
             int result = pageMapper.updatePageById(page);
@@ -338,9 +329,7 @@ public class PageServiceImpl implements PageService {
             return result;
         }
         // getFolder 获取父类信息
-        BaseQuery baseQuery = new BaseQuery();
-        baseQuery.setId(parent);
-        Page parentInfo = pageMapper.queryPageById(baseQuery);
+        Page parentInfo = pageMapper.queryPageById(parent);
         int depth = parentInfo.getDepth();
         if (depth < 5) {
             result.put("depth", depth);
@@ -363,9 +352,7 @@ public class PageServiceImpl implements PageService {
     }
 
     public int getAppHomePageId(int appId) {
-        BaseQuery baseQuery = new BaseQuery();
-        baseQuery.setId(appId);
-        App appInfo = appMapper.queryAppById(baseQuery);
+        App appInfo = appMapper.queryAppById(appId);
         // appHomePageId 存在为null的情况，即app没有设置首页
         Integer homePage = appInfo.getHomePage();
 
@@ -396,9 +383,7 @@ public class PageServiceImpl implements PageService {
     public Result<Page> checkDelete(Integer id) {
         // todo 从缓存中获取的user信息
         User user = userService.queryUserById(1);
-        BaseQuery baseQuery = new BaseQuery();
-        baseQuery.setId(id);
-        Page page = pageMapper.queryPageById(baseQuery);
+        Page page = pageMapper.queryPageById(id);
         User occupier = page.getOccupier();
 
         // 如果当前页面没人占用 或者是自己占用 可以删除该页面
@@ -435,9 +420,7 @@ public class PageServiceImpl implements PageService {
     public void protectDefaultPage(Page pages, Integer id) {
         if (pages.getIsDefault()) {
             // 查询是否是模板应用，不是的话不能删除或修改
-            BaseQuery baseQuery = new BaseQuery();
-            baseQuery.setId(id);
-            App app = appMapper.queryAppById(baseQuery);
+            App app = appMapper.queryAppById(id);
             if (app.getTemplateType() == null) {
                 Result.failed(ExceptionEnum.CM310.getResultCode());
             }
@@ -468,7 +451,7 @@ public class PageServiceImpl implements PageService {
 
     public Result<Page> checkUpdate(Page page) throws Exception {
         // 获取占用着occupier todo 获取的时候从page实体类中获取是个对象
-        User occupier = userService.queryUserById(Integer.valueOf(page.getOccupierBy()));
+        User occupier = userService.queryUserById(Integer.parseInt(page.getOccupierBy()));
         // 当前页面没有被锁定就请求更新页面接口，提示无权限
         if (occupier == null) {
             Result.failed("Please unlock the page before editing the page");
