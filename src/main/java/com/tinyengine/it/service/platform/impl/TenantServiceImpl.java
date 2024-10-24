@@ -4,6 +4,7 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.service.platform.TenantService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,9 @@ import java.util.List;
 /**
  * The type Tenant service.
  */
+
 @Service
+@Slf4j
 public class TenantServiceImpl implements TenantService {
 
     @Autowired

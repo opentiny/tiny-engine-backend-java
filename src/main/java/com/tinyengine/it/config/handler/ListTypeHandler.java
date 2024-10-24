@@ -2,6 +2,7 @@ package com.tinyengine.it.config.handler;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 /**
  * The type List type handler.
  */
+@Slf4j
 public class ListTypeHandler extends BaseTypeHandler<List<?>> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 

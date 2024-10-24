@@ -4,6 +4,7 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.model.entity.PageHistory;
 import com.tinyengine.it.service.app.PageHistoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
  * The type Page history service.
  */
 @Service
+@Slf4j
 public class PageHistoryServiceImpl implements PageHistoryService {
 
     @Autowired

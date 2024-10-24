@@ -30,6 +30,7 @@ import com.tinyengine.it.model.entity.Platform;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.v1.AppV1Service;
 import com.tinyengine.it.service.platform.PlatformService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,7 @@ import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
  * The type App v 1 service.
  */
 @Service
+@Slf4j
 public class AppV1ServiceImpl implements AppV1Service {
     /**
      * The App mapper.
@@ -248,8 +250,8 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @returns {Promise<any>} 区块历史信息
      */
     private List<BlockHistory> getBlockHistory(App app, MaterialHistoryMsg materialhistoryMsg) {
-        Boolean isUnpkg = (Boolean)materialhistoryMsg.getIsUnpkg();
-        Integer materialHistoryId = (Integer)materialhistoryMsg.getMaterialHistoryId();
+        Boolean isUnpkg = materialhistoryMsg.getIsUnpkg();
+        Integer materialHistoryId = materialhistoryMsg.getMaterialHistoryId();
         List<Integer> materialBlockHistoryId = new ArrayList<>();
         List<BlockHistory> blockHistory = new ArrayList<>();
         List<BlockVersionDto> blocksVersionCtl;
@@ -290,10 +292,8 @@ public class AppV1ServiceImpl implements AppV1Service {
             return new ArrayList<>();
         }
         List<Integer> blockGroupsIds = blockGroupsList.stream().map(BlockGroup::getId).collect(Collectors.toList());
-        List<BlockVersionDto> blockAndVersion =
-            blockHistoryMapper.queryBlockAndVersion(blockGroupsIds, materialHistoryId);
 
-        return blockAndVersion;
+        return blockHistoryMapper.queryBlockAndVersion(blockGroupsIds, materialHistoryId);
     }
 
     /**
@@ -354,9 +354,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         }
         // 序列化国际化词条
         Map<String, Map<String, String>> appEntries = i18nEntryService.formatEntriesList(i18n);
-        Map<String, Map<String, String>> entries = mergeEntries(appEntries, blockEntries);
 
-        return entries;
+        return mergeEntries(appEntries, blockEntries);
     }
 
     /**
@@ -384,7 +383,6 @@ public class AppV1ServiceImpl implements AppV1Service {
             Map<String, Object> schema;
             Schema schemaUtil = new Schema();
             if (!pageInfo.getIsPage()) {
-
                 schema = schemaUtil.getFolderSchema(page);
             } else {
                 schema = schemaUtil.getSchemaBase(page);

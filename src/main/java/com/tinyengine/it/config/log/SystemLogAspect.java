@@ -1,6 +1,7 @@
 package com.tinyengine.it.config.log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,6 +26,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 @SuppressWarnings("all")
+@Slf4j
 public class SystemLogAspect {
 
     // 本地异常日志记录对象

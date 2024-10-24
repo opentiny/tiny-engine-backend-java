@@ -1,5 +1,6 @@
 package com.tinyengine.it.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * The type Execute command.
  */
+@Slf4j
 public class ExecuteCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExecuteCommand.class);
 
@@ -56,7 +58,7 @@ public class ExecuteCommand {
                         result.append(line).append("\n");
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
             });
 
@@ -68,7 +70,7 @@ public class ExecuteCommand {
                         logger.error(line);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
             });
 
@@ -84,7 +86,7 @@ public class ExecuteCommand {
                 logger.error("命令运行失败，exitCode: " + exitCode);
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return result;

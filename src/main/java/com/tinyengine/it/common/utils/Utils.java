@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tinyengine.it.common.exception.ServiceException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.regex.Pattern;
 /**
  * The type Utils.
  */
+@Slf4j
 public class Utils {
     /**
      * The Res keys.
