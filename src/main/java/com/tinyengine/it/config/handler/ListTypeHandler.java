@@ -69,9 +69,8 @@ public class ListTypeHandler extends BaseTypeHandler<List<?>> {
                     });
                 } else {
                     // 尝试将 JSON 字符串转换为 List<String>
-                    List<String> list = objectMapper.readValue(jsonString, new TypeReference<List<String>>() {
+                    return objectMapper.readValue(jsonString, new TypeReference<List<String>>() {
                     });
-                    return list;
                 }
             }
             return null;

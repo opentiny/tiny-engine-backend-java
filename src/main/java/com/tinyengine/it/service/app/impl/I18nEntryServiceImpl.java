@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -124,7 +123,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             return null;
         }
         // 获取词条列表
-        List<I18nEntryDto> i18nEntriesList = new ArrayList<I18nEntryDto>();
+        List<I18nEntryDto> i18nEntriesList;
         i18nEntriesList = i18nEntryMapper.findAllI18();
         if (i18nEntriesList == null) {
             return null;
@@ -151,8 +150,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 先默认全部应用都支持中英文, 后续其他语言需要结合管理后台逻辑二次开发
         QueryWrapper<I18nLang> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("lang", "zh_CN").or().eq("lang", "en_US");
-        List<I18nLang> i18nLangsList = i18nLangMapper.selectList(queryWrapper);
-        return i18nLangsList;
+        return i18nLangMapper.selectList(queryWrapper);
     }
 
     /**
@@ -216,7 +214,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 I18nEntry i18nEntries = new I18nEntry();
                 i18nEntries.setHostId(Integer.valueOf(operateI18nEntries.getHost()));
                 i18nEntries.setKey(operateI18nEntries.getKey());
-                i18nEntries.setLangId(Integer.valueOf(lang));
+                i18nEntries.setLangId(lang);
                 i18nEntries.setHostType(operateI18nEntries.getHost_type());
                 i18nEntries.setContent(contents.get(item));
                 i18nEntriesList.add(i18nEntries);
@@ -433,8 +431,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         });
 
         // 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
-        Map<String, Object> bulkInsertOrUpdateNumReturn = bulkInsertOrUpdate(entries);
-        return bulkInsertOrUpdateNumReturn;
+        return bulkInsertOrUpdate(entries);
 
     }
 
@@ -522,17 +519,16 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 默认使用UTF-8
         String encoding = StandardCharsets.UTF_8.name();
         // fieldname 为i18n_langs的id
-        String fieldname = lang;
         String filename = file.getOriginalFilename();
         logger.info(
-            "parseJsonFileStream field: " + fieldname + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
+            "parseJsonFileStream field: " + lang + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.E_MimeType.JSON.getValue()));
 
         // 解析国际化词条文件
         Map<String, Object> entriesItem = new HashMap<>();
-        entriesItem.put("lang", Integer.parseInt(fieldname));
+        entriesItem.put("lang", Integer.parseInt(lang));
         entriesItem.put("entries", new HashMap<String, Object>());
 
         // 读取上传的 JSON 文件内容
@@ -570,10 +566,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     public Map<String, Object> parseZipFileStream(String lang, MultipartFile file) throws Exception {
         // 默认使用UTF-8
         String encoding = StandardCharsets.UTF_8.name();
-        String fieldname = lang;
         String filename = file.getOriginalFilename();
         logger.info(
-            "parseZipFileStream field: " + fieldname + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
+            "parseZipFileStream field: " + lang + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
@@ -581,7 +576,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> entriesItem = new HashMap<>();
-        entriesItem.put("lang", Integer.parseInt(fieldname));
+        entriesItem.put("lang", Integer.parseInt(lang));
         entriesItem.put("entries", new HashMap<String, Object>());
 
         // 解压zip文件
@@ -660,7 +655,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     private String extractAndProcessZipFile(File zipFile) throws IOException {
 
         StringBuilder jsonResult = new StringBuilder();
-        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
+        try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 String entryName = entry.getName();

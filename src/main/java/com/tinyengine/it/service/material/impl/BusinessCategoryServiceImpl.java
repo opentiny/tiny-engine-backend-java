@@ -33,7 +33,8 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
     /**
      * 根据主键id查询表t_business_category信息
      *
-     * @param id
+     * @param id id
+     * @return BusinessCategory
      */
     @Override
     public BusinessCategory queryBusinessCategoryById(@Param("id") Integer id) {
@@ -43,7 +44,8 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
     /**
      * 根据条件查询表t_business_category数据
      *
-     * @param businessCategory
+     * @param businessCategory businessCategory
+     * @return BusinessCategory
      */
     @Override
     public List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory)

@@ -149,7 +149,6 @@ public class AppV1ServiceImpl implements AppV1Service {
     public Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries,
         Map<String, Map<String, String>> blockEntries) {
         // 直接将 blockEntries 赋值给 res
-        Map<String, Map<String, String>> res = blockEntries;
 
         if (appEntries == null || blockEntries == null) {
             return (appEntries != null) ? appEntries : blockEntries;
@@ -160,21 +159,21 @@ public class AppV1ServiceImpl implements AppV1Service {
             String lang = appEntry.getKey();
             Map<String, String> langEntries = appEntry.getValue();
 
-            res.putIfAbsent(lang, new HashMap<>());
+            blockEntries.putIfAbsent(lang, new HashMap<>());
 
             for (Map.Entry<String, String> langEntry : langEntries.entrySet()) {
                 String key = langEntry.getKey();
                 String value = langEntry.getValue();
-                res.get(lang).put(key, value);
+                blockEntries.get(lang).put(key, value);
             }
 
             // 如果区块没有这个国际化分组，把应用的合并进来
-            if (!res.containsKey(lang)) {
-                res.put(lang, langEntries);
+            if (!blockEntries.containsKey(lang)) {
+                blockEntries.put(lang, langEntries);
             }
         }
 
-        return res;
+        return blockEntries;
     }
 
     /**
@@ -381,7 +380,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             Map<String, Object> data = Utils.convert(pageInfo);
             boolean isToLine = false;
             Map<String, Object> page = formatDataFields(data, resKeys, isToLine);
-            page.put("isHome", String.valueOf(page.get("id")).equals(app.getHomePage()));
+            page.put("isHome", String.valueOf(page.get("id")).equals(app.getHomePage().toString()));
             Map<String, Object> schema;
             Schema schemaUtil = new Schema();
             if (!pageInfo.getIsPage()) {

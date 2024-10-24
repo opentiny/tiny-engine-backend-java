@@ -76,7 +76,7 @@ public class PageTemplateServiceImpl implements PageTemplateService {
     /**
      * 新增表page_template数据
      *
-     * @param pageTemplate
+     * @param pageTemplate pageTemplate
      * @return execute success data number
      */
     @Override
