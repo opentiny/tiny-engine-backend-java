@@ -10,7 +10,11 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
-import com.tinyengine.it.model.dto.*;
+import com.tinyengine.it.model.dto.Entry;
+import com.tinyengine.it.model.dto.I18nEntryDto;
+import com.tinyengine.it.model.dto.I18nEntryListResult;
+import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
+import com.tinyengine.it.model.dto.OperateI18nEntries;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
@@ -21,12 +25,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -279,7 +295,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Override
     public List<I18nEntry> bulkUpdate(OperateI18nEntries operateI18nEntries) {
         List<I18nEntry> i18nEntriesList = new ArrayList<>();
-        if (operateI18nEntries.getHost_type().equals("app")) {
+        if ("app".equals(operateI18nEntries.getHost_type())) {
             I18nEntry i18nEntries = new I18nEntry();
             i18nEntries.setHostType(operateI18nEntries.getHost_type());
             i18nEntries.setHostId(Integer.valueOf(operateI18nEntries.getHost()));

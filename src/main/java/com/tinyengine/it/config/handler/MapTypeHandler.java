@@ -49,7 +49,7 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
     }
 
     private Map<String, Object> parseJson(String json) throws SQLException {
-        if (json == null || json.trim().isEmpty() || json.equals("{}")) {
+        if (json == null || json.trim().isEmpty() || "{}".equals(json)) {
             return new HashMap<>(); // 返回一个空的 Map
         }
         try {
