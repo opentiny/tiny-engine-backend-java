@@ -19,6 +19,9 @@ import lombok.Setter;
 @TableName("t_tenant")
 @Schema(name = "Tenant", description = "组织表")
 public class Tenant extends BaseEntity {
+    @Schema(name = "nameCn", description = "组织唯一代码")
+    private String orgCode;
+
     @Schema(name = "nameCn", description = "组织中文名")
     private String nameCn;
 

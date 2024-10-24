@@ -142,7 +142,7 @@
         id=#{id}
     </update>
 
-    <insert id="createUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createUser" useGeneratedKeys="true" keyProperty="id"  parameterType="com.tinyengine.it.model.entity.User">
         INSERT INTO t_user ( id
                            , username
                            , email

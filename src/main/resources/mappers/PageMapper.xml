@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, app_id, route, page_cotent, is_body, parent_id, `group`, `depth`, is_page, occupier_by, is_default, content_blocks, latest_version, latest_history_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, occupier_by, is_default, content_blocks, latest_version, latest_history_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -21,8 +21,8 @@
         <if test="route!=null and route!=''">
             AND route = #{route}
         </if>
-        <if test="pageCotent!=null and pageCotent!=''">
-            AND page_cotent = #{pageCotent}
+        <if test="pageContent!=null and pageContent!=''">
+            AND page_content = #{pageContent}
         </if>
         <if test="isBody!=null and isBody!=''">
             AND is_body = #{isBody}
@@ -85,8 +85,8 @@
         <if test="route!=null and route!=''">
             route = #{route},
         </if>
-        <if test="pageCotent!=null and pageCotent!=''">
-            page_cotent = #{pageCotent},
+        <if test="pageContent!=null and pageContent!=''">
+            page_content = #{pageContent},
         </if>
         <if test="isBody!=null and isBody!=''">
             is_body = #{isBody},
@@ -145,7 +145,7 @@
         <result column="name" property="name"/>
         <result column="app_id" property="app"/>
         <result column="route" property="route"/>
-        <result column="page_cotent" property="pageCotent"/>
+        <result column="page_content" property="pageContent"/>
         <result column="is_body" property="isBody"/>
         <result column="parent_id" property="parentId"/>
         <result column="group" property="group"/>
@@ -162,6 +162,20 @@
         <result column="last_updated_time" property="lastUpdatedTime"/>
         <result column="tenant_id" property="tenantId"/>
         <result column="site_id" property="siteId"/>
+        <association property="occupier" javaType="com.tinyengine.it.model.entity.User">
+            <id column="occupierId" property="id"/>
+            <result column="username" property="username"/>
+            <result column="email" property="email"/>
+            <result column="enable" property="enable"/>
+            <result column="created_by" property="createdBy"/>
+            <result column="last_updated_by" property="lastUpdatedBy"/>
+            <result column="created_time" property="createdTime"/>
+            <result column="last_updated_time" property="lastUpdatedTime"/>
+            <result column="tenant_id" property="tenantId"/>
+            <result column="site_id" property="siteId"/>
+            <result column="is_admin" property="isAdmin"/>
+            <result column="is_public" property="isPublic"/>
+        </association>
     </resultMap>
 
     <!-- 查询表t_page所有数据 -->
@@ -186,6 +200,53 @@
         <include refid="PageByCondition"/>
     </select>
 
+
+    <select id="queryPageById" parameterType="com.tinyengine.it.common.base.BaseQuery" resultMap="PageMap">
+        SELECT
+        p.id,
+        p.name,
+        p.app_id,
+        p.route,
+        p.page_content,
+        p.is_body,
+        p.parent_id,
+        p.`group`,
+        p.`depth`,
+        p.is_page,
+        p.occupier_by,
+        p.is_default,
+        p.content_blocks,
+        p.latest_version,
+        p.latest_history_id,
+        p.created_by,
+        p.last_updated_by,
+        p.created_time,
+        p.last_updated_time,
+        p.tenant_id,
+        p.site_id,
+        u.id AS occupierId,  -- 指定 t_user 的 id 列
+        u.username,
+        u.email,
+        u.enable,
+        u.created_by AS userCreatedBy,
+        u.last_updated_by AS userLastUpdatedBy,
+        u.created_time AS userCreatedTime,
+        u.last_updated_time AS userLastUpdatedTime,
+        u.tenant_id AS userTenantId,
+        u.site_id AS userSiteId,
+        u.is_admin
+        FROM t_page p
+        LEFT JOIN t_user u ON p.occupier_by = u.id
+        <where>
+            <if test="id != null">
+                AND p.id = #{id}
+            </if>
+            <if test="tenantId != null">
+                AND p.tenant_id = #{tenantId}
+            </if>
+        </where>
+    </select>
+
     <!-- 根据主键id删除表t_page数据 -->
     <delete id="deletePageById">
         DELETE
@@ -204,12 +265,13 @@
     </update>
 
     <!-- 新增表t_page数据 -->
-    <insert id="createPage" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createPage" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.Page">
         INSERT INTO t_page ( id
                            , name
                            , app_id
                            , route
-                           , page_cotent
+                           , page_content
                            , is_body
                            , parent_id
                            , `group`
@@ -230,7 +292,7 @@
                , #{name}
                , #{app}
                , #{route}
-               , #{pageCotent}
+               , #{pageContent}
                , #{isBody}
                , #{parentId}
                , #{group}

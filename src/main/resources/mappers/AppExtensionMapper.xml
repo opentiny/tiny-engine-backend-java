@@ -149,7 +149,7 @@
             </update>
 
             <!-- 新增表t_app_extension数据 -->
-            <insert id="createAppExtension" useGeneratedKeys="true" keyProperty="id">
+            <insert id="createAppExtension" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.AppExtension" >
                 INSERT INTO t_app_extension (
                     id
                     ,name

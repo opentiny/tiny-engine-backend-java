@@ -43,11 +43,11 @@ springdoc:
 
 mybatis-plus:
   mapper-locations: classpath:mappers/*.xml
+  type-handlers-package: com.tinyengine.it.common.utils
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
     auto-mapping-behavior: full
-  type-handlers-package: com.tinyengine.it.utils
 
 logging:
   level:

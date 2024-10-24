@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, npm_name, framework, assets_url, image_url, published, latest_version, latest_history_id, pulblic, last_build_info, description, is_official, is_default, tiny_reserved, component_library_id, material_category_id, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name, npm_name, framework, assets_url, image_url, published, latest_version, latest_history_id, `public`, last_build_info, description, is_official, is_default, tiny_reserved, component_library_id, material_category_id, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -36,8 +36,8 @@
         <if test="latestHistoryId!=null and latestHistoryId!=''">
             AND latest_history_id = #{latestHistoryId}
         </if>
-        <if test="pulblic!=null and pulblic!=''">
-            AND pulblic = #{pulblic}
+        <if test="publicStatus!=null and publicStatus!=''">
+            AND `public` = #{publicStatus}
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
             AND last_build_info = #{lastBuildInfo}
@@ -118,8 +118,8 @@
         <if test="latestHistoryId!=null and latestHistoryId!=''">
             latest_history_id = #{latestHistoryId},
         </if>
-        <if test="pulblic!=null and pulblic!=''">
-            pulblic = #{pulblic},
+        <if test="publicStatus!=null and publicStatus!=''">
+            `public` = #{publicStatus},
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
             last_build_info = #{lastBuildInfo},
@@ -186,7 +186,7 @@
         <result column="published" property="published"/>
         <result column="latest_version" property="latestVersion"/>
         <result column="latest_history_id" property="latestHistoryId"/>
-        <result column="pulblic" property="pulblic"/>
+        <result column="public" property="publicStatus"/>
         <result column="last_build_info" property="lastBuildInfo"/>
         <result column="description" property="description"/>
         <result column="is_official" property="isOfficial"/>
@@ -260,7 +260,7 @@
     </update>
 
     <!-- 新增表t_material数据 -->
-    <insert id="createMaterial" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createMaterial" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Material">
         INSERT INTO t_material ( id
                                , name
                                , npm_name
@@ -270,7 +270,7 @@
                                , published
                                , latest_version
                                , latest_history_id
-                               , pulblic
+                               , public
                                , last_build_info
                                , description
                                , is_official
@@ -297,7 +297,7 @@
                , #{published}
                , #{latestVersion}
                , #{latestHistoryId}
-               , #{pulblic}
+               , #{publicStatus}
                , #{lastBuildInfo}
                , #{description}
                , #{isOfficial}

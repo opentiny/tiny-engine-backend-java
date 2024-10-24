@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.app.impl;
 
+import com.tinyengine.it.common.base.BaseQuery;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
@@ -61,7 +62,9 @@ public class AppServiceImpl implements AppService {
     @Override
     @SystemServiceLog(description = "通过id查询应用实现方法")
     public Result<App> queryAppById(@Param("id") Integer id) throws ServiceException {
-        App app = appMapper.queryAppById(id);
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(id);
+        App app = appMapper.queryAppById(baseQuery);
         if (app == null) {
             return Result.failed(ExceptionEnum.CM009);
         }
@@ -86,7 +89,9 @@ public class AppServiceImpl implements AppService {
     @Override
     @SystemServiceLog(description = "应用删除实现方法")
     public Result<App> deleteAppById(@Param("id") Integer id) throws ServiceException {
-        App app = appMapper.queryAppById(id);
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(id);
+        App app = appMapper.queryAppById(baseQuery);
         int result = appMapper.deleteAppById(id);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM009);
@@ -104,7 +109,9 @@ public class AppServiceImpl implements AppService {
     public Result<App> updateAppById(App app) throws ServiceException {
         // 如果更新extend_config字段，从platform获取数据，继承非route部分
         if (!app.getExtendConfig().isEmpty()) {
-            App appResult = appMapper.queryAppById(app.getId());
+            BaseQuery baseQuery = new BaseQuery();
+            baseQuery.setId(app.getId());
+            App appResult = appMapper.queryAppById(baseQuery);
             Platform platform = platformMapper.queryPlatformById(appResult.getPlatformId());
             Map<String, Object> appExtendConfig = platform.getAppExtendConfig();
             appExtendConfig.remove("route");
@@ -114,7 +121,9 @@ public class AppServiceImpl implements AppService {
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        app = appMapper.queryAppById(app.getId());
+        BaseQuery baseQuery = new BaseQuery();
+        baseQuery.setId(app.getId());
+        app = appMapper.queryAppById(baseQuery);
         return Result.success(app);
     }
 
