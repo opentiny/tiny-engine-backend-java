@@ -1,5 +1,8 @@
 package com.tinyengine.it.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,8 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
+@Getter
+@Setter
 public class Collection {
     private List<Object> range;
     private List<Object> data;
@@ -18,41 +23,5 @@ public class Collection {
     public Collection() {
         this.range = new ArrayList<>();
         this.data = new ArrayList<>();
-    }
-
-    /**
-     * Gets range.
-     *
-     * @return the range
-     */
-    public List<Object> getRange() {
-        return range;
-    }
-
-    /**
-     * Sets range.
-     *
-     * @param range the range
-     */
-    public void setRange(List<Object> range) {
-        this.range = range;
-    }
-
-    /**
-     * Gets data.
-     *
-     * @return the data
-     */
-    public List<Object> getData() {
-        return data;
-    }
-
-    /**
-     * Sets data.
-     *
-     * @param data the data
-     */
-    public void setData(List<Object> data) {
-        this.data = data;
     }
 }

@@ -36,9 +36,9 @@ public class AiChatController {
     private AiChatService aiChatService;
 
     /**
-     * ai api
+     * AI api
      *
-     * @param aiParam the ai param
+     * @param aiParam the AI param
      * @return ai回答信息 result
      */
     @Operation(summary = "获取ai回答信息", description = "获取ai回答信息",
@@ -46,7 +46,7 @@ public class AiChatController {
         @ApiResponse(responseCode = "200", description = "返回信息",
             content = @Content(mediaType = "application/json", schema = @Schema())),
         @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "ai api")
+    @SystemControllerLog(description = "AI api")
     @PostMapping("/ai/chat")
     public Result<Map<String, Object>> aiChat(@RequestBody AiParam aiParam) {
 

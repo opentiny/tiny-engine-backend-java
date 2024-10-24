@@ -41,13 +41,6 @@ public interface I18nEntryService {
      */
     List<I18nEntry> findI18nEntryByCondition(I18nEntry i18nEntry);
 
-    //    /**
-    //     * 根据主键id删除t_i18n_entry数据
-    //     *
-    //     * @param id
-    //     */
-    //    Integer deleteI18nEntryById(@Param("id") Integer id);
-
     /**
      * 根据主键id更新表t_i18n_entry信息
      *
@@ -55,13 +48,6 @@ public interface I18nEntryService {
      * @return the integer
      */
     Integer updateI18nEntryById(I18nEntry i18nEntry);
-
-    //    /**
-    //     * 新增表t_i18n_entry数据
-    //     *
-    //     * @param i18nEntry
-    //     */
-    //    Integer createI18nEntry(I18nEntry i18nEntry);
 
     /**
      * 格式化词条列表

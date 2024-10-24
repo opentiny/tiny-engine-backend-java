@@ -126,11 +126,12 @@ public class PageServiceImpl implements PageService {
     /**
      * 根据主键id查询表t_page信息
      *
-     * @param id
+     * @param id id
+     * @return query result
      */
     @Override
     @SystemServiceLog(description = "通过Id查询page数据实现方法")
-    public Page queryPageById(@Param("id") Integer id) throws Exception {
+    public Page queryPageById(@Param("id") Integer id) {
 
         Page pageInfo = pageMapper.queryPageById(id);
         //  获取schemaMeta进行获取materialHistory中的framework进行判断
@@ -151,17 +152,24 @@ public class PageServiceImpl implements PageService {
     /**
      * 根据条件查询表t_page数据
      *
-     * @param page
+     * @param page page
+     * @return query result
      */
     @Override
     @SystemServiceLog(description = "通过条件查询page数据实现方法")
-    public List<Page> queryPageByCondition(Page page) throws ServiceException {
+    public List<Page> queryPageByCondition(Page page) {
         return pageMapper.queryPageByCondition(page);
     }
 
+    /**
+     * 通过appId删除page数据实现方法
+     *
+     * @param id the id
+     * @return deleted page
+     */
     @Override
     @SystemServiceLog(description = "通过appId删除page数据实现方法")
-    public Result<Page> delPage(Integer id) throws Exception {
+    public Result<Page> delPage(Integer id) {
         // 获取页面信息
         Page pages = queryPageById(id);
         // 判断是页面还是文件夹
@@ -184,11 +192,12 @@ public class PageServiceImpl implements PageService {
     /**
      * 新增表t_page数据
      *
-     * @param page
+     * @param page page
+     * @return created page
      */
     @Override
     @SystemServiceLog(description = "createPage 创建页面实现方法")
-    public Result<Page> createPage(Page page) throws Exception {
+    public Result<Page> createPage(Page page) {
         // 判断isHome 为true时，parentId 不为0，禁止创建
         if (page.getIsHome() && !"0".equals(page.getParentId())) {
             return Result.failed("Homepage can only be set in the root directory");
@@ -198,7 +207,7 @@ public class PageServiceImpl implements PageService {
             page.setGroup(page.getGroup() + "Pages");
 
         }
-        String userId = "1"; // todo 获取的是user.id
+        String userId = "1";
         page.setOccupierBy(userId);
         page.setIsDefault(false);
         page.setDepth(0);
@@ -229,9 +238,13 @@ public class PageServiceImpl implements PageService {
 
     }
 
+    /**
+     * @param page the page
+     * @return Page
+     */
     @Override
     @SystemServiceLog(description = "createFolder 创建文件夹实现方法")
-    public Result<Page> createFolder(Page page) throws Exception {
+    public Result<Page> createFolder(Page page) {
         String parentId = page.getParentId();
         // 通过parentId 计算depth
         Map<String, Object> depthResult = getDepth(parentId);
@@ -261,9 +274,13 @@ public class PageServiceImpl implements PageService {
         return Result.success(pageInfo);
     }
 
+    /**
+     * @param page the page
+     * @return Page
+     */
     @SystemServiceLog(description = "updatePage 更新页面实现方法")
     @Override
-    public Result<Page> updatePage(Page page) throws Exception {
+    public Result<Page> updatePage(Page page) {
         int id = page.getId();
         boolean isHomeVal = false;
         Page pageTemp = queryPageById(page.getId());
@@ -290,7 +307,8 @@ public class PageServiceImpl implements PageService {
         // 保存成功，异步生成页面历史记录快照,不保证生成成功
         PageHistory pageHistory = new PageHistory();
 
-        BeanUtils.copyProperties(pageTemp, pageHistory); // 把Pages中的属性值赋值到PagesHistories中
+        // 把Pages中的属性值赋值到PagesHistories中
+        BeanUtils.copyProperties(pageTemp, pageHistory);
         pageHistory.setPage(pageTemp.getId());
         pageHistory.setId(null);
         int result = pageHistoryService.createPageHistory(pageHistory);
@@ -304,12 +322,12 @@ public class PageServiceImpl implements PageService {
     /**
      * 更新页面文件夹
      *
-     * @param page
-     * @return
+     * @param page Page
+     * @return Page
      */
     @SystemServiceLog(description = "update 更新文件夹实现方法")
     @Override
-    public Result<Page> update(Page page) throws Exception {
+    public Result<Page> update(Page page) {
         String parentId = page.getParentId();
         // 校验parentId 带来的深度改变
         if (parentId != null) {
@@ -342,9 +360,7 @@ public class PageServiceImpl implements PageService {
     /**
      * 获取 页面（虽然这个接口数据跟页面没啥关系）/区块的预览元数据
      *
-     * @param { E_Schema2CodeType } type 页面还是区块
-     * @param { number|string } id 页面或区块id
-     * @param { number|string } app 应用id
+     * @param previewParam previewParam
      * @return { PreviewDto }
      */
     @SystemServiceLog(description = "getPreviewMetaData 获取预览元数据实现方法")
@@ -549,9 +565,9 @@ public class PageServiceImpl implements PageService {
      *
      * @param page the page
      * @return the result
-     * @throws Exception the exception
+     * @the exception
      */
-    public Result<Page> checkUpdate(Page page) throws Exception {
+    public Result<Page> checkUpdate(Page page) {
         // 获取占用着occupier todo 获取的时候从page实体类中获取是个对象
         User occupier = userService.queryUserById(Integer.parseInt(page.getOccupierBy()));
         // 当前页面没有被锁定就请求更新页面接口，提示无权限
@@ -577,7 +593,7 @@ public class PageServiceImpl implements PageService {
      * @return map
      */
     public Map<String, Object> verifyParentId(String parentId) {
-        if (Pattern.matches("^[0-9]+$", parentId.toString())) {
+        if (Pattern.matches("^[0-9]+$", parentId)) {
             return getDepth(parentId);
         }
         Map<String, Object> result = new HashMap<>();
@@ -591,9 +607,9 @@ public class PageServiceImpl implements PageService {
      * @param pid    the pid
      * @param target the target
      * @return update tree
-     * @throws Exception the exception
+     * @the exception
      */
-    public Collection getUpdateTree(int pid, int target) throws Exception {
+    public Collection getUpdateTree(int pid, int target) {
         Collection collection = new Collection();
         Map<String, Object> param = new HashMap<>();
         param.put("collection", collection);
@@ -612,9 +628,9 @@ public class PageServiceImpl implements PageService {
      *
      * @param map the map
      * @return the tree nodes
-     * @throws Exception the exception
+     * @the exception
      */
-    public Collection getTreeNodes(Map<String, Object> map) throws Exception {
+    public Collection getTreeNodes(Map<String, Object> map) {
         int level = (int)map.get("level");
         Collection collection = new Collection();
         Object obj = map.get("pids");
@@ -631,14 +647,13 @@ public class PageServiceImpl implements PageService {
         }
         // 当前的节点深度超过 配置的最大深度，返回失败信息
         if (level > 5) {
-            throw new Exception("Exceeded depth");
+            throw new ServiceException("Exceeded depth");
         }
         // 获取子节点的id
         List<Integer> childrenId = getChildrenId(pids);
         // 收集 id depth 信息
         List<AbstractMap.SimpleEntry<Integer, Integer>> dps =
-            childrenId.stream().map(id -> new AbstractMap.SimpleEntry<>(id, level)) // 或者使用 SimpleEntry
-                .collect(Collectors.toList());
+            childrenId.stream().map(id -> new AbstractMap.SimpleEntry<>(id, level)).collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
         collection.getRange().addAll(childrenId);
         collection.getData().addAll(dps);

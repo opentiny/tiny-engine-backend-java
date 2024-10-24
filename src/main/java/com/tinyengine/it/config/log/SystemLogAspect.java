@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
  * Title: SystemLogAspect
  *
  * @version V1.0  Description: 切点类
- * @date 2024年7月30日
  * @since 2024-10-20
  */
 @Aspect
@@ -93,6 +92,7 @@ public class SystemLogAspect {
      */
     @Pointcut("@annotation(com.tinyengine.it.config.log.SystemServiceLog)")
     public void serviceAspect() {
+        log.debug("service aspect");
     }
 
     /**
@@ -100,6 +100,7 @@ public class SystemLogAspect {
      */
     @Pointcut("@annotation(com.tinyengine.it.config.log.SystemControllerLog)")
     public void controllerAspect() {
+        log.debug("controller aspect");
     }
 
     /**

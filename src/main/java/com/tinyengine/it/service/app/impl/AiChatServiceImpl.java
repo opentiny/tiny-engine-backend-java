@@ -180,8 +180,8 @@ public class AiChatServiceImpl implements AiChatService {
         Pattern pattern = Pattern.compile(".*编码时遵从以下几条要求.*");
 
         Map<String, String> firstMessage = messages.get(0);
-        String role = (String)firstMessage.get("role");
-        String content = (String)firstMessage.get("content");
+        String role = firstMessage.get("role");
+        String content = firstMessage.get("content");
 
         if (!"user".equals(role)) {
             messages.add(0, defaultWords);

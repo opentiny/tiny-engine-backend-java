@@ -12,10 +12,10 @@ import java.util.Map;
  */
 public interface AiChatService {
     /**
-     * Gets answer from ai.
+     * Gets answer from AI .
      *
-     * @param aiParam the ai param
-     * @return the answer from ai
+     * @param aiParam the AI param
+     * @return the answer from AI
      */
     Result<Map<String, Object>> getAnswerFromAi(AiParam aiParam);
 }

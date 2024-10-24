@@ -19,7 +19,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     *  查询表${table.name}所有数据
     */
     @Override
-    public List<${entity}> findAll${entity}() throws ServiceException {
+    public List<${entity}> findAll${entity}(){
         return ${table.entityPath}Mapper.queryAll${entity}();
     }
 
@@ -30,7 +30,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     *  @param ${field.propertyName}
     */
     @Override
-    public ${entity} find${entity}ById(@Param("${field.propertyName}") ${field.propertyType} ${field.propertyName}) throws ServiceException {
+    public ${entity} find${entity}ById(@Param("${field.propertyName}") ${field.propertyType} ${field.propertyName}){
         return ${table.entityPath}Mapper.query${entity}ById(${field.propertyName});
     }
  </#if>
@@ -41,7 +41,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     *  @param ${table.entityPath}
     */
     @Override
-    public List<${entity}> find${entity}ByCondition(${entity} ${table.entityPath}) throws ServiceException {
+    public List<${entity}> find${entity}ByCondition(${entity} ${table.entityPath}){
         return ${table.entityPath}Mapper.query${entity}ByCondition(${table.entityPath});
     }
 
@@ -52,7 +52,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     *  @param ${field.propertyName}
     */
     @Override
-    public Integer delete${entity}ById(@Param("${field.propertyName}") ${field.propertyType} ${field.propertyName}) throws ServiceException {
+    public Integer delete${entity}ById(@Param("${field.propertyName}") ${field.propertyType} ${field.propertyName}){
         return ${table.entityPath}Mapper.delete${entity}ById(${field.propertyName});
     }
  </#if>
@@ -65,7 +65,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     *  @param ${table.entityPath}
     */
     @Override
-    public Integer update${entity}ById(${entity} ${table.entityPath}) throws ServiceException {
+    public Integer update${entity}ById(${entity} ${table.entityPath}){
         return ${table.entityPath}Mapper.update${entity}ById(${table.entityPath});
     }
  </#if>
@@ -78,7 +78,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
     *  @param ${table.entityPath}
     */
     @Override
-    public Integer create${entity}(${entity} ${table.entityPath}) throws ServiceException {
+    public Integer create${entity}(${entity} ${table.entityPath}){
         return ${table.entityPath}Mapper.create${entity}(${table.entityPath});
     }
  </#if>

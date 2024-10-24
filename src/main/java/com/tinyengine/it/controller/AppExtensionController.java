@@ -137,7 +137,7 @@ public class AppExtensionController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除单个桥接或工具")
     @GetMapping("/apps/extension/delete")
-    public Result<AppExtension> deleteAppExtension(@RequestParam Integer id) throws ServiceException {
+    public Result<AppExtension> deleteAppExtension(@RequestParam Integer id) {
         return AppExtensionService.deleteAppExtensionById(id);
     }
 }
