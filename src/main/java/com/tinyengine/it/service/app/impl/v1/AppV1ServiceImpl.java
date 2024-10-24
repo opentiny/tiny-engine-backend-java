@@ -56,52 +56,52 @@ public class AppV1ServiceImpl implements AppV1Service {
      * The App mapper.
      */
     @Autowired
-    AppMapper appMapper;
+    private AppMapper appMapper;
     /**
      * The 18 n entry mapper.
      */
     @Autowired
-    I18nEntryMapper i18nEntryMapper;
+    private I18nEntryMapper i18nEntryMapper;
     /**
      * The 18 n entry service.
      */
     @Autowired
-    I18nEntryService i18nEntryService;
+    private I18nEntryService i18nEntryService;
     /**
      * The App extension mapper.
      */
     @Autowired
-    AppExtensionMapper appExtensionMapper;
+    private AppExtensionMapper appExtensionMapper;
     /**
      * The Datasource mapper.
      */
     @Autowired
-    DatasourceMapper datasourceMapper;
+    private DatasourceMapper datasourceMapper;
     /**
      * The Page mapper.
      */
     @Autowired
-    PageMapper pageMapper;
+    private PageMapper pageMapper;
     /**
      * The Block history mapper.
      */
     @Autowired
-    BlockHistoryMapper blockHistoryMapper;
+    private BlockHistoryMapper blockHistoryMapper;
     /**
      * The Block group mapper.
      */
     @Autowired
-    BlockGroupMapper blockGroupMapper;
+    private BlockGroupMapper blockGroupMapper;
     /**
      * The Material history mapper.
      */
     @Autowired
-    MaterialHistoryMapper materialHistoryMapper;
+    private MaterialHistoryMapper materialHistoryMapper;
     /**
      * The Platform service.
      */
     @Autowired
-    PlatformService platformService;
+    private PlatformService platformService;
     private MetaDto metaDto;
     private List<String> exposedFields = Arrays.asList("config", "constants", "css");
 

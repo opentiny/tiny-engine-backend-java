@@ -39,12 +39,12 @@ public class AppController {
      * The App service.
      */
     @Autowired
-    AppService appService;
+    private AppService appService;
     /**
      * The App mapper.
      */
     @Autowired
-    AppMapper appMapper;
+    private AppMapper appMapper;
 
     /**
      * 查询表App信息
@@ -157,5 +157,4 @@ public class AppController {
         // todo 对于传参进行修改逻辑存疑
         return Result.failed("修改应用对应的国际化语种关联接口逻辑存疑");
     }
-
 }

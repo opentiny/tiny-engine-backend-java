@@ -23,7 +23,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("lastUpdatedBy", "1", metaObject);
         this.setFieldValByName("tenantId", "1", metaObject);
         this.setFieldValByName("siteId", "1", metaObject);
-
     }
 
     @Override

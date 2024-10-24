@@ -21,7 +21,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class DatasourceServiceImpl implements DatasourceService {
-
     @Autowired
     private DatasourceMapper datasourceMapper;
 

@@ -44,13 +44,12 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 @RequestMapping("/app-center/api")
-
 public class I18nEntryController {
     /**
      * The 18 n entry service.
      */
     @Autowired
-    I18nEntryService i18nEntryService;
+    private I18nEntryService i18nEntryService;
 
     /**
      * Gets all i 18 n entries.
@@ -266,5 +265,4 @@ public class I18nEntryController {
         return result;
 
     }
-
 }

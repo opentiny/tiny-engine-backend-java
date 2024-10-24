@@ -57,62 +57,62 @@ public class PageServiceImpl implements PageService {
      * The Page mapper.
      */
     @Autowired
-    PageMapper pageMapper;
+    private PageMapper pageMapper;
     /**
      * The App service.
      */
     @Autowired
-    AppService appService;
+    private AppService appService;
     /**
      * The App mapper.
      */
     @Autowired
-    AppMapper appMapper;
+    private AppMapper appMapper;
     /**
      * The User service.
      */
     @Autowired
-    UserService userService;
+    private UserService userService;
     /**
      * The Block mapper.
      */
     @Autowired
-    BlockMapper blockMapper;
+    private BlockMapper blockMapper;
     /**
      * The Block service.
      */
     @Autowired
-    BlockServiceImpl blockServiceImpl;
+    private BlockServiceImpl blockServiceImpl;
     /**
      * The Page history service.
      */
     @Autowired
-    PageHistoryService pageHistoryService;
+    private PageHistoryService pageHistoryService;
     /**
      * The Page history mapper.
      */
     @Autowired
-    PageHistoryMapper pageHistoryMapper;
+    private PageHistoryMapper pageHistoryMapper;
     /**
      * The App v 1 service.
      */
     @Autowired
-    AppV1ServiceImpl appV1ServiceImpl;
+    private AppV1ServiceImpl appV1ServiceImpl;
     /**
      * The Block history mapper.
      */
     @Autowired
-    BlockHistoryMapper blockHistoryMapper;
+    private BlockHistoryMapper blockHistoryMapper;
     /**
      * The App extension mapper.
      */
     @Autowired
-    AppExtensionMapper appExtensionMapper;
+    private AppExtensionMapper appExtensionMapper;
     /**
      * The 18 n entry mapper.
      */
     @Autowired
-    I18nEntryMapper i18nEntryMapper;
+    private I18nEntryMapper i18nEntryMapper;
 
     /**
      * 查询表t_page所有数据
@@ -697,5 +697,4 @@ public class PageServiceImpl implements PageService {
         previewDto.setUtils(utils);
         return previewDto;
     }
-
 }

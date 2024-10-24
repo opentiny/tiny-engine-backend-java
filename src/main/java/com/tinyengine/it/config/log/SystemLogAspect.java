@@ -26,7 +26,6 @@ import java.lang.reflect.Method;
  */
 @Aspect
 @Component
-@SuppressWarnings("all")
 @Slf4j
 public class SystemLogAspect {
 
@@ -37,12 +36,11 @@ public class SystemLogAspect {
     private ThreadLocal<Boolean> alreadyLogged = ThreadLocal.withInitial(() -> false);
 
     /**
-     * Gets service method description.
+     * Gets service method description. 获取注解中对方法的描述信息 用于service层注解
      *
      * @param joinPoint the join point
      * @return the service method description
      * @throws Exception the exception
-     * @Description 获取注解中对方法的描述信息 用于service层注解
      */
     public static String getServiceMethodDescription(JoinPoint joinPoint) throws Exception {
         String targetName = joinPoint.getTarget().getClass().getName();
@@ -64,16 +62,16 @@ public class SystemLogAspect {
     }
 
     /**
-     * Gets controller method description.
+     * Gets controller method description. 获取注解中对方法的描述信息 用于Controller层注解
      *
      * @param joinPoint the join point
      * @return the controller method description
      * @throws Exception the exception
-     * @Description 获取注解中对方法的描述信息 用于Controller层注解
      */
     public static String getControllerMethodDescription(JoinPoint joinPoint) throws Exception {
         String targetName = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();//目标方法名
+        //目标方法名
+        String methodName = joinPoint.getSignature().getName();
         Object[] arguments = joinPoint.getArgs();
         Class targetClass = Class.forName(targetName);
         Method[] methods = targetClass.getMethods();
@@ -93,7 +91,6 @@ public class SystemLogAspect {
     /**
      * Service aspect.
      */
-    // Service层切点
     @Pointcut("@annotation(com.tinyengine.it.config.log.SystemServiceLog)")
     public void serviceAspect() {
     }
@@ -101,16 +98,14 @@ public class SystemLogAspect {
     /**
      * Controller aspect.
      */
-    // Controller层切点
     @Pointcut("@annotation(com.tinyengine.it.config.log.SystemControllerLog)")
     public void controllerAspect() {
     }
 
     /**
-     * Do before.
+     * 前置通知 用于拦截Controller层记录用户的操作
      *
      * @param joinPoint the join point
-     * @Description 前置通知 用于拦截Controller层记录用户的操作
      */
     @Before("controllerAspect()")
     public void doBefore(JoinPoint joinPoint) {
@@ -130,12 +125,11 @@ public class SystemLogAspect {
     }
 
     /**
-     * Do after throwing.
+     * 异常通知 用于拦截service层记录异常日志
      *
      * @param joinPoint the join point
      * @param e         the e
      * @throws JsonProcessingException the json processing exception
-     * @Description 异常通知 用于拦截service层记录异常日志
      */
     @AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) throws JsonProcessingException {
@@ -159,5 +153,4 @@ public class SystemLogAspect {
             logger.error("异常信息:{}", ex.getMessage());
         }
     }
-
 }

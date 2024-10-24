@@ -12,7 +12,6 @@ import java.util.List;
 
 @Service
 public class ${table.serviceImplName} implements ${table.serviceName} {
-
     @Autowired
     private ${table.mapperName} ${table.entityPath}Mapper;
 

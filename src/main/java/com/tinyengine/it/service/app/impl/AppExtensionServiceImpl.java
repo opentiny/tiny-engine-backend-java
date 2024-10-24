@@ -22,7 +22,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class AppExtensionServiceImpl implements AppExtensionService {
-
     @Autowired
     private AppExtensionMapper appExtensionMapper;
 

@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface PlatformMapper extends BaseMapper<Platform> {
-
     /**
      * 查询表t_platform所有信息
      *

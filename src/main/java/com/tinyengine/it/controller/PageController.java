@@ -42,7 +42,7 @@ public class PageController {
      * The Page service.
      */
     @Autowired
-    PageService pageService;
+    private PageService pageService;
 
     /**
      * 获取页面列表
@@ -136,7 +136,6 @@ public class PageController {
         } else {
             // 更新文件夹
             return pageService.update(page);
-
         }
     }
 
@@ -155,7 +154,6 @@ public class PageController {
     @SystemControllerLog(description = "删除页面")
     @GetMapping("/pages/delete/{id}")
     public Result<Page> deletepage(@PathVariable Integer id) throws Exception {
-
         return pageService.delPage(id);
     }
 
@@ -176,5 +174,4 @@ public class PageController {
         PreviewDto previewDto = pageService.getPreviewMetaData(previewParam);
         return Result.success(previewDto);
     }
-
 }

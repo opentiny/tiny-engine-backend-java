@@ -11,7 +11,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface MaterialHistoryService {
-
     /**
      * 查询表t_material_history所有信息
      *

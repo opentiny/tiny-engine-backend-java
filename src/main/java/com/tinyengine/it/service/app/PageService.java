@@ -14,7 +14,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface PageService {
-
     /**
      * 查询表t_page所有信息
      *

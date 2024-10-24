@@ -55,5 +55,4 @@ public class FilterConfig {
         mapper.registerModule(new JavaTimeModule());
         return mapper;
     }
-
 }

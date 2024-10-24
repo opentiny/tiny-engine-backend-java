@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface PageMapper extends BaseMapper<Page> {
-
     /**
      * 查询表pages所有信息
      *

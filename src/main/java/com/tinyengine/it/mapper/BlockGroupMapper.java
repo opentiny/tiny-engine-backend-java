@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
-
     /**
      * 查询表t_block_group所有信息
      *

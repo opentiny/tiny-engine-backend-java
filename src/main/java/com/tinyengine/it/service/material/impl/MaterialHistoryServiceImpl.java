@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class MaterialHistoryServiceImpl implements MaterialHistoryService {
-
     @Autowired
     private MaterialHistoryMapper materialHistoryMapper;
 

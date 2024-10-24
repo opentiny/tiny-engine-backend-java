@@ -33,7 +33,7 @@ public class AiChatController {
      * The Ai chat service.
      */
     @Autowired
-    AiChatService aiChatService;
+    private AiChatService aiChatService;
 
     /**
      * ai api

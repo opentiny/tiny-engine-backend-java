@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface TaskRecordMapper extends BaseMapper<TaskRecord> {
-
     /**
      * 查询表t_task_record所有信息
      *

@@ -54,7 +54,8 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
 
     private Map<String, Object> parseJson(String json) throws SQLException {
         if (json == null || json.trim().isEmpty() || "{}".equals(json)) {
-            return new HashMap<>(); // 返回一个空的 Map
+            // 返回一个空的 Map
+            return new HashMap<>();
         }
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
@@ -62,7 +63,8 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
                 return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
                 });
             } else {
-                return new HashMap<>(); // 非对象类型也返回空的 Map
+                // 非对象类型也返回空的 Map
+                return new HashMap<>();
             }
         } catch (IOException e) {
             throw new SQLException("Error converting JSON to Map", e);

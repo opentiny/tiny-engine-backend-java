@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface TenantMapper extends BaseMapper<Tenant> {
-
     /**
      * 查询表t_tenant所有信息
      *

@@ -17,9 +17,8 @@ import java.lang.annotation.Target;
 @Documented // 表明这个注解应该被 javadoc工具记录
 public @interface SystemControllerLog {
     /**
-     * Description string.
-     *
-     * @return the string
+     * description
+     * @return {@link String }
      */
     String description() default "";
 }

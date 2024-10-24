@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface PageHistoryMapper extends BaseMapper<PageHistory> {
-
     /**
      * 查询表t_page_history所有信息
      *

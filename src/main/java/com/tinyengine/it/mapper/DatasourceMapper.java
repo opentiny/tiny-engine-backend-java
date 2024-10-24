@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface DatasourceMapper extends BaseMapper<Datasource> {
-
     /**
      * 查询表t_datasource所有信息
      *

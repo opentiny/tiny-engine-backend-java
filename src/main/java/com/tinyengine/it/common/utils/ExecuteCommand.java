@@ -37,7 +37,6 @@ public class ExecuteCommand {
         command.add(npmCommand);
         command.add("install");
         executeCommand(command);
-
     }
 
     /**

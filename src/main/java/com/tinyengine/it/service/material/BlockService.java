@@ -11,7 +11,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface BlockService {
-
     /**
      * 查询表t_block所有信息
      *

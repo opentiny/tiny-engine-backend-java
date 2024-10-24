@@ -6,7 +6,6 @@ package com.tinyengine.it.common.exception;
  * @since 2024-10-20
  */
 public enum ExceptionEnum implements IBaseError {
-
     /**
      * Success exception enum.
      */
