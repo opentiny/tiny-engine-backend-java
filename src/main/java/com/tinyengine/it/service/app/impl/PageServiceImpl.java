@@ -70,18 +70,17 @@ public class PageServiceImpl implements PageService {
      */
     @Override
     @SystemServiceLog(description = "通过Id查询page数据实现方法")
-    public Page queryPageById(@Param("id") Integer id) throws ServiceException {
+    public Page queryPageById(@Param("id") Integer id) throws Exception {
+
         Page pageInfo = pageMapper.queryPageById(id);
         //  获取schemaMeta进行获取materialHistory中的framework进行判断
-        String framework = appV1ServiceImpl.setMeta(pageInfo.getApp().intValue()).getMaterialHistory().getFramework();
-
+        String framework = appMapper.queryAppById(pageInfo.getApp()).getFramework();
         if (framework.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM312.getResultCode(), ExceptionEnum.CM312.getResultMsg());
         }
         if (pageInfo.getIsPage()) {
             // 这里不保证能成功获取区块的列表，没有区块或获取区块列表不成功返回 {}
-            Map<String, List<String>> blockAssets = new HashMap<>();
-            // blockServiceImpl.getBlockAssets(pageInfo.getPageContent(), framework);
+            Map<String, List<String>> blockAssets = blockServiceImpl.getBlockAssets(pageInfo.getPageContent(), framework);
             pageInfo.setAssets(blockAssets);
             return addIsHome(pageInfo);
         }
@@ -129,7 +128,7 @@ public class PageServiceImpl implements PageService {
      */
     @Override
     @SystemServiceLog(description = "createPage 创建页面实现方法")
-    public Result<Page> createPage(Page page) throws ServiceException {
+    public Result<Page> createPage(Page page) throws Exception {
         // 判断isHome 为true时，parentId 不为0，禁止创建
         if (page.getIsHome() && !page.getParentId().equals("0")) {
             return Result.failed("Homepage can only be set in the root directory");
@@ -172,7 +171,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     @SystemServiceLog(description = "createFolder 创建文件夹实现方法")
-    public Result<Page> createFolder(Page page) {
+    public Result<Page> createFolder(Page page) throws Exception {
         String parentId = page.getParentId();
         // 通过parentId 计算depth
         Map<String, Object> depthResult = getDepth(parentId);
@@ -211,7 +210,7 @@ public class PageServiceImpl implements PageService {
         if (!validateIsHome(page, pageTemp)) {
             return Result.failed("isHome parameter error");
         }
-        int appId = pageTemp.getApp().intValue();
+        int appId = pageTemp.getApp();
         // 保护默认页面
         protectDefaultPage(pageTemp, appId);
 
@@ -219,15 +218,11 @@ public class PageServiceImpl implements PageService {
         if (page.getIsHome()) {
             setAppHomePage(appId, id);
             isHomeVal = true;
-        } else if (!page.getIsHome()) {
+        } else {
             // 判断页面原始信息中是否为首页
             if (pageTemp.getIsHome()) {
                 setAppHomePage(appId, 0);
-                isHomeVal = false;
             }
-        } else {
-            long res = getAppHomePageId(pageTemp.getApp());
-            isHomeVal = id == res;
         }
 
         page.setIsHome(isHomeVal);
@@ -236,7 +231,7 @@ public class PageServiceImpl implements PageService {
         PageHistory pageHistory = new PageHistory();
 
         BeanUtils.copyProperties(pageTemp, pageHistory); // 把Pages中的属性值赋值到PagesHistories中
-        pageHistory.setRefId(pageTemp.getId());
+        pageHistory.setPage(pageTemp.getId());
         pageHistory.setId(null);
         int result = pageHistoryService.createPageHistory(pageHistory);
         if (result < 1) {
@@ -349,22 +344,22 @@ public class PageServiceImpl implements PageService {
         if (pageInfo == null) {
             return pageInfo;
         }
-        long appId = pageInfo.getApp();
-        long appHomePageId = getAppHomePageId(appId);
+        int appId = pageInfo.getApp();
+        int appHomePageId = getAppHomePageId(appId);
         pageInfo.setIsHome((pageInfo.getId()) == appHomePageId);
 
         return pageInfo;
     }
 
-    public Long getAppHomePageId(Long appId) {
-        App appInfo = appMapper.queryAppById(appId.intValue());
+    public int getAppHomePageId(int appId) {
+        App appInfo = appMapper.queryAppById(appId);
         // appHomePageId 存在为null的情况，即app没有设置首页
-        Long homePage = Long.valueOf(appInfo.getHomePage());
+        Integer homePage = appInfo.getHomePage();
 
         // 将 homePage 转换为整数，如果为空则默认为 0
-        long id;
-        if (homePage == null) {
-            id = 0L;
+        int id;
+        if ( homePage == null) {
+            id = 0;
             return id;
         }
         id = homePage;
@@ -388,13 +383,14 @@ public class PageServiceImpl implements PageService {
     public Result<Page> checkDelete(Integer id) {
         // todo 从缓存中获取的user信息
         User user = userService.queryUserById(1);
-        User occupier = pageMapper.queryPageById(id).getOccupier();
+        Page page = pageMapper.queryPageById(id);
+        User occupier = page.getOccupier();
+
         // 如果当前页面没人占用 或者是自己占用 可以删除该页面
         if (iCanDoIt(occupier, user)) {
-            Page pages = pageMapper.queryPageById(id);
             pageMapper.deletePageById(id);
 
-            return Result.success(pages);
+            return Result.success(page);
         }
 
         return Result.failed("The current page is being edited by" + occupier.getUsername());
@@ -455,7 +451,7 @@ public class PageServiceImpl implements PageService {
 
     public Result<Page> checkUpdate(Page page) throws Exception {
         // 获取占用着occupier todo 获取的时候从page实体类中获取是个对象
-        User occupier = userService.queryUserById(Integer.valueOf(page.getOccupierBy()));
+        User occupier = userService.queryUserById(Integer.parseInt(page.getOccupierBy()));
         // 当前页面没有被锁定就请求更新页面接口，提示无权限
         if (occupier == null) {
             Result.failed("Please unlock the page before editing the page");

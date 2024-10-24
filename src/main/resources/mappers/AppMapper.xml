@@ -313,11 +313,6 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_app
-        <where>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
-            </if>
-        </where>
     </select>
 
     <!-- 根据主键id查询表t_app信息 -->
@@ -328,9 +323,6 @@
         <where>
             <if test="id != null">
                 AND id = #{id}
-            </if>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
             </if>
         </where>
     </select>
@@ -362,7 +354,7 @@
     </update>
 
     <!-- 新增表t_app数据 -->
-    <insert id="createApp" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createApp" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.App">
         INSERT INTO t_app ( id
         , name
         , app_website

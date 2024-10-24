@@ -2,6 +2,7 @@ package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.config.handler.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,8 +49,9 @@ public class Material extends BaseEntity {
     @Schema(name = "latestHistoryId", description = "当前历史记录表ID")
     private Integer latestHistoryId;
 
-    @Schema(name = "pulblic", description = "公开状态：0,1,2")
-    private Integer pulblic;
+    @Schema(name = "public", description = "公开状态：0,1,2")
+    @JsonProperty("public")
+    private Integer publicStatus;
 
     @Schema(name = "lastBuildInfo", description = "最新一次构建信息")
     @TableField(typeHandler = MapTypeHandler.class)
@@ -68,10 +70,10 @@ public class Material extends BaseEntity {
     private Boolean tinyReserved;
 
     @Schema(name = "componentLibraryId", description = "*设计预留字段*")
-    private String componentLibraryId;
+    private Integer componentLibraryId;
 
     @Schema(name = "materialCategoryId", description = "物料包业务类型")
-    private String materialCategoryId;
+    private Integer materialCategoryId;
 
     @Schema(name = "materialSize", description = "物料包大小")
     private Integer materialSize;

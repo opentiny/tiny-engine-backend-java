@@ -3,11 +3,13 @@ package com.tinyengine.it.model.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
+import com.tinyengine.it.config.handler.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,22 +25,23 @@ import java.time.LocalDateTime;
 @Schema(name = "Datasource", description = "数据源表")
 public class Datasource extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-    @Schema(name = "id", description = "主键id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
 
     @Schema(name = "name", description = "数据源名称")
     private String name;
 
     @Schema(name = "data", description = "数据源内容")
-    private String data;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Object> data;
 
     @Schema(name = "tpl", description = "*暂不清楚*")
     private Long tpl;
 
-    @Schema(name = "appId", description = "关联应用id")
-    private Long appId;
+    @Schema(name = "app", description = "关联应用id")
+    private Integer app;
+
+
+    @Schema(name = "platformId", description = "关联设计器id")
+    private Integer platformId;
 
     @Schema(name = "description", description = "描述")
     private String description;

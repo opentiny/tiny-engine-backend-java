@@ -178,7 +178,7 @@
     </update>
 
     <!-- 新增表t_task_record数据 -->
-    <insert id="createTaskRecord" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createTaskRecord" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.TaskRecord">
         INSERT INTO t_task_record ( id
                                   , team_id
                                   , task_type_id

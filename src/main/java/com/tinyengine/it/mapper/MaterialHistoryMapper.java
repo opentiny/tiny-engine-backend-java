@@ -1,9 +1,9 @@
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.MaterialHistory;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -19,8 +19,19 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
      *
      * @param id
      */
+
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "components", column = "id",
+                    many = @Many(select = "findUserComponentsByMaterialHistoryId"))
+    })
+    @Select("SELECT * FROM t_material_history WHERE id = #{id}")
     MaterialHistory queryMaterialHistoryById(@Param("id") Integer id);
 
+    @Select("SELECT C.* FROM t_component C " +
+            "JOIN r_material_history_component MHC ON C.id = MHC.`component_id` " +
+            "WHERE MHC.`material_history_id` = #{id}")
+    List<Component> findUserComponentsByMaterialHistoryId(@Param("id") Integer id);
     /**
      * 根据条件查询表t_material_history数据
      *

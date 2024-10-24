@@ -9,11 +9,6 @@ import java.util.List;
 public interface DatasourceService {
 
     /**
-     * 查询表t_datasource所有信息
-     */
-    List<Datasource> queryAllDatasource();
-
-    /**
      * 根据主键id查询表t_datasource信息
      *
      * @param id

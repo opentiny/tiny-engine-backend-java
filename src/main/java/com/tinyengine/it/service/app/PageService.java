@@ -20,7 +20,7 @@ public interface PageService {
      *
      * @param id
      */
-    Page queryPageById(@Param("id") Integer id);
+    Page queryPageById(@Param("id") Integer id) throws Exception;
 
     /**
      * 根据条件查询表t_page信息
@@ -42,14 +42,14 @@ public interface PageService {
      *
      * @param page
      */
-    Result<Page> createPage(Page page);
+    Result<Page> createPage(Page page) throws Exception;
 
     /**
      * 创建文件夹
      *
      * @param page
      */
-    Result<Page> createFolder(Page page);
+    Result<Page> createFolder(Page page) throws Exception;
 
     /**
      * 更新页面

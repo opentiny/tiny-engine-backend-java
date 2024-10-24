@@ -18,7 +18,7 @@ public interface AppMapper extends BaseMapper<App> {
      *
      * @param id
      */
-    App queryAppById(@Param("id") Integer id);
+    App queryAppById(Integer id);
 
     /**
      * 根据条件查询表t_app数据

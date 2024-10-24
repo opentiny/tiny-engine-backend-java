@@ -5,13 +5,11 @@ import com.tinyengine.it.common.utils.Schema;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.*;
-import com.tinyengine.it.model.dto.BlockHistoryDto;
-import com.tinyengine.it.model.dto.BlockVersionDto;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.MetaDto;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.*;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.v1.AppV1Service;
+import com.tinyengine.it.service.platform.PlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +37,10 @@ public class AppV1ServiceImpl implements AppV1Service {
     BlockHistoryMapper blockHistoryMapper;
     @Autowired
     BlockGroupMapper blockGroupMapper;
-
     @Autowired
     MaterialHistoryMapper materialHistoryMapper;
+    @Autowired
+    PlatformService platformService;
     private MetaDto metaDto;
     private List<String> exposedFields = Arrays.asList("config", "constants", "css");
 
@@ -139,11 +138,19 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @param id
      */
     public MetaDto setMeta(Integer id) {
+
         App app = appMapper.queryAppById(id);
-        Map<String, Object> materialhistoryMsg = new HashMap<>();
-        // 当前无法构建物料，采用mock数据
-        materialhistoryMsg.put("isUnpkg", true);
-        materialhistoryMsg.put("materialHistoryId", 639);
+        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
+
+        Platform platform = platformService.queryPlatformById(app.getPlatformId());
+        // 当前版本暂无设计器数据
+        if(platform == null) {
+            materialhistoryMsg.setMaterialHistoryId(1);
+        }else {
+            materialhistoryMsg.setMaterialHistoryId(platform.getMaterialHistoryId());
+        }
+        materialhistoryMsg.setIsUnpkg(true);
+
         MetaDto metaDto = new MetaDto();
         metaDto.setApp(app);
 
@@ -157,7 +164,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         metaDto.setI18n(i18n);
 
         Datasource datasource = new Datasource();
-        datasource.setAppId(Long.valueOf(app.getId()));
+        datasource.setApp(app.getId());
         List<Datasource> datasourceList = datasourceMapper.queryDatasourceByCondition(datasource);
         metaDto.setSource(datasourceList);
 
@@ -166,7 +173,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<AppExtension> appExtensionList = appExtensionMapper.queryAppExtensionByCondition(appExtension);
         metaDto.setExtension(appExtensionList);
 
-        MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById((Integer) materialhistoryMsg.get("materialHistoryId"));
+        MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
         metaDto.setMaterialHistory(materialHistory);
 
         List<BlockHistory> blockHistory = getBlockHistory(app, materialhistoryMsg);
@@ -182,9 +189,9 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @param app 应用信息 materialhistoryMsg 物料历史信息
      * @returns {Promise<any>} 区块历史信息
      */
-    private List<BlockHistory> getBlockHistory(App app, Map<String, Object> materialhistoryMsg) {
-        Boolean isUnpkg = (Boolean) materialhistoryMsg.get("isUnpkg");
-        Integer materialHistoryId = (Integer) materialhistoryMsg.get("materialHistoryId");
+    private List<BlockHistory> getBlockHistory(App app, MaterialHistoryMsg materialhistoryMsg) {
+        Boolean isUnpkg = (Boolean) materialhistoryMsg.getIsUnpkg();
+        Integer materialHistoryId = (Integer) materialhistoryMsg.getMaterialHistoryId();
         List<Integer> materialBlockHistoryId = new ArrayList<>();
         List<BlockHistory> blockHistory = new ArrayList<>();
         List<BlockVersionDto> blocksVersionCtl;
@@ -209,7 +216,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Integer> blockHistoryIds = getBlockHistoryIdBySemver(blocksVersionCtl);
         blockHistoryIds.addAll(materialBlockHistoryId);
         List<Integer> listWithoutDuplicates = Utils.removeDuplicates(blockHistoryIds);
-        blockHistory = blockHistoryMapper.queryBlockHistoriesByIds(listWithoutDuplicates);
+        blockHistory = blockHistoryMapper.queryBlockHistoryByIds(listWithoutDuplicates);
         return blockHistory;
     }
 
@@ -245,12 +252,12 @@ public class AppV1ServiceImpl implements AppV1Service {
         if (blockHistory.isEmpty()) {
             return historiesId;
         }
-        Map<String, Object> blocksVersionMap = new HashMap<>();
+        Map<String, Map<String, Object>> blocksVersionMap = new HashMap<>();
         for (BlockHistoryDto item : blockHistory) {
             Map<String, Object> itemMap = new HashMap<>();
             Map<String, Object> historyMap = new HashMap<>();
             List<String> versionList = new ArrayList<>();
-            String version = (String) item.getVersion();
+            String version = item.getVersion();
             versionList.add(version);
             historyMap.put(version, item.getHistoryId());
             itemMap.put("historyMap", historyMap);
@@ -260,7 +267,7 @@ public class AppV1ServiceImpl implements AppV1Service {
 
         // 遍历区块历史记录 综合信息映射关系
         for (String key : blocksVersionMap.keySet()) {
-            Map<String, Object> keyMap = (Map<String, Object>) blocksVersionMap.get(key);
+            Map<String, Object> keyMap = blocksVersionMap.get(key);
             List<String> versions = (List<String>) keyMap.get("versions");
 
             String targetVersion;
@@ -369,6 +376,9 @@ public class AppV1ServiceImpl implements AppV1Service {
     // 转换组件schema数据
     private List<Map<String, Object>> getComponentSchema(List<Component> components) {
         List<Map<String, Object>> schemas = new ArrayList<>();
+        if(components.isEmpty()){
+            return schemas;
+        }
         for (Component component : components) {
             String componentName = component.getComponent();
             Map<String, Object> npm = component.getNpm();

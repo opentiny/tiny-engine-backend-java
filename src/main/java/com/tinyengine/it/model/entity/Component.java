@@ -85,7 +85,7 @@ public class Component extends BaseEntity {
 
     @JsonProperty("public")
     @Schema(name = "public", description = "公开状态：0，1，2")
-    private Integer isPublic;
+    private Integer publicStatus;
 
     @Schema(name = "framework", description = "技术栈")
     private String framework;
@@ -103,4 +103,7 @@ public class Component extends BaseEntity {
     @TableField(typeHandler = MapTypeHandler.class)
     @Schema(name = "component_metadata", description = "属性信息")
     private Map<String, Object> componentMetadata;
+
+    @Schema(name = "libraryId", description = "关联组件库id")
+    private Integer libraryId;
 }
