@@ -98,6 +98,5 @@ public class DatasourceServiceImpl implements DatasourceService {
             }
         }
         throw new Exception("The request body is missing some parameters");
-
     }
 }

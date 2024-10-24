@@ -123,8 +123,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             return null;
         }
         // 获取词条列表
-        List<I18nEntryDto> i18nEntriesList;
-        i18nEntriesList = i18nEntryMapper.findAllI18();
+        List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.findAllI18();
         if (i18nEntriesList == null) {
             return null;
         }
