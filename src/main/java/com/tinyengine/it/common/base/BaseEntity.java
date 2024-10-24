@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * 基础对象
@@ -46,4 +47,22 @@ public class BaseEntity {
 
     @Schema(name = "siteId", description = "站点ID")
     private String siteId;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof BaseEntity))
+            return false;
+        BaseEntity that = (BaseEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(createdBy, that.createdBy)
+                && Objects.equals(lastUpdatedBy, that.lastUpdatedBy) && Objects.equals(createdTime, that.createdTime)
+                && Objects.equals(lastUpdatedTime, that.lastUpdatedTime) && Objects.equals(tenantId, that.tenantId)
+                && Objects.equals(siteId, that.siteId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createdBy, lastUpdatedBy, createdTime, lastUpdatedTime, tenantId, siteId);
+    }
 }

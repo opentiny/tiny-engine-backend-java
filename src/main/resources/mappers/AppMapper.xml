@@ -7,7 +7,11 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, app_website, platform_id, platform_history_id, publish_url, editor_url, visit_url, image_url, assets_url, state, published, home_page_id, css, config, constants, data_handler, description, latest, git_group, project_name, branch, is_demo, is_default, template_type, set_template_time, set_template_by, set_default_by, framework, global_state, default_lang, extend_config, data_hash, can_associate, data_source_global, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name, app_website, platform_id, platform_history_id, publish_url, editor_url, visit_url, image_url,
+        assets_url, state, published, home_page_id, css, config, constants, data_handler, description, latest,
+        git_group, project_name, branch, is_demo, is_default, template_type, set_template_time, set_template_by,
+        set_default_by, framework, global_state, default_lang, extend_config, data_hash, can_associate,
+        data_source_global, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -309,11 +313,6 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_app
-        <where>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
-            </if>
-        </where>
     </select>
 
     <!-- 根据主键id查询表t_app信息 -->
@@ -324,9 +323,6 @@
         <where>
             <if test="id != null">
                 AND id = #{id}
-            </if>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
             </if>
         </where>
     </select>
@@ -360,86 +356,86 @@
     <!-- 新增表t_app数据 -->
     <insert id="createApp" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.App">
         INSERT INTO t_app ( id
-                          , name
-                          , app_website
-                          , platform_id
-                          , platform_history_id
-                          , publish_url
-                          , editor_url
-                          , visit_url
-                          , image_url
-                          , assets_url
-                          , state
-                          , published
-                          , home_page_id
-                          , css
-                          , config
-                          , constants
-                          , data_handler
-                          , description
-                          , latest
-                          , git_group
-                          , project_name
-                          , branch
-                          , is_demo
-                          , is_default
-                          , template_type
-                          , set_template_time
-                          , set_template_by
-                          , set_default_by
-                          , framework
-                          , global_state
-                          , default_lang
-                          , extend_config
-                          , data_hash
-                          , can_associate
-                          , data_source_global
-                          , created_by
-                          , last_updated_by
-                          , created_time
-                          , last_updated_time
-                          , tenant_id
-                          , site_id)
+        , name
+        , app_website
+        , platform_id
+        , platform_history_id
+        , publish_url
+        , editor_url
+        , visit_url
+        , image_url
+        , assets_url
+        , state
+        , published
+        , home_page_id
+        , css
+        , config
+        , constants
+        , data_handler
+        , description
+        , latest
+        , git_group
+        , project_name
+        , branch
+        , is_demo
+        , is_default
+        , template_type
+        , set_template_time
+        , set_template_by
+        , set_default_by
+        , framework
+        , global_state
+        , default_lang
+        , extend_config
+        , data_hash
+        , can_associate
+        , data_source_global
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{name}
-               , #{appWebsite}
-               , #{platformId}
-               , #{platformHistoryId}
-               , #{publishUrl}
-               , #{editorUrl}
-               , #{visitUrl}
-               , #{imageUrl}
-               , #{assetsUrl}
-               , #{state}
-               , #{published}
-               , #{homePage}
-               , #{css}
-               , #{config}
-               , #{constants}
-               , #{dataHandler}
-               , #{description}
-               , #{latest}
-               , #{gitGroup}
-               , #{projectName}
-               , #{branch}
-               , #{isDemo}
-               , #{isDefault}
-               , #{templateType}
-               , #{setTemplateTime}
-               , #{setTemplateBy}
-               , #{setDefaultBy}
-               , #{framework}
-               , #{globalState}
-               , #{defaultLang}
-               , #{extendConfig}
-               , #{dataHash}
-               , #{canAssociate}
-               , #{dataSourceGlobal}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{name}
+        , #{appWebsite}
+        , #{platformId}
+        , #{platformHistoryId}
+        , #{publishUrl}
+        , #{editorUrl}
+        , #{visitUrl}
+        , #{imageUrl}
+        , #{assetsUrl}
+        , #{state}
+        , #{published}
+        , #{homePage}
+        , #{css}
+        , #{config}
+        , #{constants}
+        , #{dataHandler}
+        , #{description}
+        , #{latest}
+        , #{gitGroup}
+        , #{projectName}
+        , #{branch}
+        , #{isDemo}
+        , #{isDefault}
+        , #{templateType}
+        , #{setTemplateTime}
+        , #{setTemplateBy}
+        , #{setDefaultBy}
+        , #{framework}
+        , #{globalState}
+        , #{defaultLang}
+        , #{extendConfig}
+        , #{dataHash}
+        , #{canAssociate}
+        , #{dataSourceGlobal}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

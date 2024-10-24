@@ -2,9 +2,10 @@ package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.HistoryEntity;
-import com.tinyengine.it.common.utils.ListTypeHandler;
-import com.tinyengine.it.common.utils.MapTypeHandler;
+import com.tinyengine.it.config.handler.ListTypeHandler;
+import com.tinyengine.it.config.handler.MapTypeHandler;
 import com.tinyengine.it.model.dto.BlockVersionDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -29,13 +30,16 @@ public class PageHistory extends HistoryEntity {
     @Schema(name = "name", description = "名称")
     private String name;
 
-    @Schema(name = "appId", description = "关联app表Id")
-    private Integer appId;
+    @Schema(name = "page", description = "关联page表Id")
+    private Integer page;
+    @Schema(name = "app", description = "关联app表Id")
+    private Integer app;
 
     @Schema(name = "route", description = "页面路由")
     private String route;
 
-    @Schema(name = "pageCotent", description = "页面内容")
+    @Schema(name = "page_content", description = "页面内容")
+    @JsonProperty("page_content")
     @TableField(typeHandler = MapTypeHandler.class)
     private Map<String, Object> pageContent;
 
@@ -43,7 +47,7 @@ public class PageHistory extends HistoryEntity {
     private Boolean isBody;
 
     @Schema(name = "parentId", description = "父文件夹id")
-    private Integer parentId;
+    private String parentId;
 
     private String group;
 

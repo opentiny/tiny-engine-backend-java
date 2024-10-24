@@ -239,11 +239,6 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_component
-        <where>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
-            </if>
-        </where>
     </select>
 
     <!-- 根据主键id查询表t_component信息 -->
@@ -254,9 +249,6 @@
         <where>
             <if test="id != null">
                 AND id = #{id}
-            </if>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
             </if>
         </where>
     </select>

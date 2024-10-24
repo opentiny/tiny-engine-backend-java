@@ -1,7 +1,6 @@
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tinyengine.it.common.base.BaseQuery;
 import com.tinyengine.it.model.entity.App;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,9 +16,9 @@ public interface AppMapper extends BaseMapper<App> {
     /**
      * 根据主键id查询表t_app数据
      *
-     * @param baseQuery
+     * @param id
      */
-    App queryAppById(BaseQuery baseQuery);
+    App queryAppById(Integer id);
 
     /**
      * 根据条件查询表t_app数据

@@ -3,10 +3,12 @@ package com.tinyengine.it.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tinyengine.it.common.base.BaseEntity;
-import com.tinyengine.it.common.utils.MapTypeHandler;
+import com.tinyengine.it.config.handler.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -29,7 +31,7 @@ public class AppExtension extends BaseEntity {
 
     @Schema(name = "content", description = "内容")
     @TableField(typeHandler = MapTypeHandler.class)
-    private String content;
+    private Map<String,Object> content;
 
     @Schema(name = "app", description = "关联app表Id")
     private Integer app;

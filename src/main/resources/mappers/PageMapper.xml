@@ -183,11 +183,6 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_page
-        <where>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
-            </if>
-        </where>
     </select>
 
 
@@ -200,8 +195,8 @@
         <include refid="PageByCondition"/>
     </select>
 
-
-    <select id="queryPageById" parameterType="com.tinyengine.it.common.base.BaseQuery" resultMap="PageMap">
+    <!-- 根据id查询表t_page数据 -->
+    <select id="queryPageById" resultMap="PageMap">
         SELECT
         p.id,
         p.name,
@@ -241,9 +236,50 @@
             <if test="id != null">
                 AND p.id = #{id}
             </if>
-            <if test="tenantId != null">
-                AND p.tenant_id = #{tenantId}
+        </where>
+    </select>
+    <!-- 根据appId查询表t_page数据 -->
+    <select id="queryPageByApp" resultMap="PageMap">
+        SELECT
+        P.id,
+        P.name,
+        P.app_id,
+        P.route,
+        P.page_content,
+        P.is_body,
+        P.parent_id,
+        P.`group`,
+        P.`depth`,
+        P.is_page,
+        P.occupier_by,
+        P.is_default,
+        P.content_blocks,
+        P.latest_version,
+        P.latest_history_id,
+        P.created_by,
+        P.last_updated_by,
+        P.created_time,
+        P.last_updated_time,
+        P.tenant_id,
+        P.site_id,
+        U.id AS occupierId,  -- 指定 t_user 的 id 列
+        U.username,
+        U.email,
+        U.enable,
+        U.created_by AS userCreatedBy,
+        U.last_updated_by AS userLastUpdatedBy,
+        U.created_time AS userCreatedTime,
+        U.last_updated_time AS userLastUpdatedTime,
+        U.tenant_id AS userTenantId,
+        U.site_id AS userSiteId,
+        U.is_admin
+        FROM t_page P
+        LEFT JOIN t_user U ON P.occupier_by = U.id
+        <where>
+            <if test="appId != null">
+                AND P.app_id = #{appId}
             </if>
+
         </where>
     </select>
 
