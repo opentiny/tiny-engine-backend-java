@@ -22,8 +22,6 @@ import java.time.LocalDateTime;
 @Data
 @Schema(name = "I18nEntries对象", description = "返回对象")
 public class I18nEntryDto {
-
-    private static final long serialVersionUID = 1L;
     @Schema(name = "id", description = "主键id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
