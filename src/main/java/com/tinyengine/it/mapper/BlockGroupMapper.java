@@ -51,7 +51,7 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
     /**
      * 通过appId查区块分组
      *
-     * @param app
+     * @param appId
      */
-    List<BlockGroup> queryBlockGroupByApp(@Param("app") Integer app);
+    List<BlockGroup> queryBlockGroupByApp(Integer appId);
 }

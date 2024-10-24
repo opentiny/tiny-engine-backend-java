@@ -50,6 +50,7 @@ mybatis-plus:
     com.tinyengine.it.mapper: debug
   type-handlers-package: com.tinyengine.it.config.handler
 
+
 logging:
   level:
     ROOT: INFO

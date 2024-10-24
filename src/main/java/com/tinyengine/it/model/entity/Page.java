@@ -2,6 +2,8 @@ package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.config.handler.ListTypeHandler;
 import com.tinyengine.it.config.handler.MapTypeHandler;
@@ -24,18 +26,20 @@ import java.util.Map;
 @Getter
 @Setter
 @TableName("t_page")
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Schema(name = "Page", description = "页面表")
 public class Page extends BaseEntity {
     @Schema(name = "name", description = "名称")
     private String name;
 
     @Schema(name = "app", description = "关联appId")
-    private Long app;
+    private Integer app;
 
     @Schema(name = "route", description = "访问路由")
     private String route;
 
-    @Schema(name = "pageCotent", description = "页面内容")
+    @Schema(name = "pageContent", description = "页面内容")
+    @JsonProperty("page_content")
     @TableField(typeHandler = MapTypeHandler.class)
     private Map<String, Object> pageContent;
 

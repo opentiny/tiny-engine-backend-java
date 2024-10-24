@@ -41,6 +41,7 @@ public class BaseEntity {
     @Schema(name = "lastUpdatedTime", description = "更新时间")
     private LocalDateTime lastUpdatedTime;
 
+    @TableField(fill = FieldFill.INSERT)
     @Schema(name = "tenantId", description = "租户ID")
     private String tenantId;
 

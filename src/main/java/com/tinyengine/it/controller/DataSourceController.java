@@ -53,7 +53,7 @@ public class DataSourceController {
     @GetMapping("/sources/list/{aid}")
     public Result<List<Datasource>> getAllSources(@PathVariable Integer aid) {
         Datasource sources = new Datasource();
-        sources.setAppId(Long.valueOf(aid.longValue()));
+        sources.setApp(aid);
         List<Datasource> SourcesList = datasourceService.queryDatasourceByCondition(sources);
         return Result.success(SourcesList);
     }

@@ -129,7 +129,7 @@
     </update>
 
     <!-- 新增表t_tenant数据 -->
-    <insert id="createTenant" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createTenant" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Tenant">
         INSERT INTO t_tenant ( id
                              , name_cn
                              , name_en
