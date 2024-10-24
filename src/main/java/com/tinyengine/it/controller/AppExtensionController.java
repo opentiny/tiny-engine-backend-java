@@ -1,7 +1,6 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemControllerLog;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.service.app.AppExtensionService;
@@ -128,7 +127,6 @@ public class AppExtensionController {
      *
      * @param id the id
      * @return result
-     * @throws ServiceException the service exception
      */
     @Operation(summary = "删除单个桥接或工具", description = "删除单个桥接或工具",
         parameters = {@Parameter(name = "id", description = "AppExtensionId")}, responses = {
