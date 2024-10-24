@@ -46,6 +46,11 @@ public class MaterialHistory extends HistoryEntity {
     @Schema(name = "imageUrl", description = "封面图片地址")
     private String imageUrl;
 
+    @JsonProperty("build_info")
+    @TableField(typeHandler = MapTypeHandler.class)
+    @Schema(name = "build_info", description = "资源地址")
+    private Map<String, Object> buildInfo;
+
     @Schema(name = "description", description = "描述")
     private String description;
 

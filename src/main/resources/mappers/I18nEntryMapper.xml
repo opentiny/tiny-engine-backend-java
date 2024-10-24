@@ -106,11 +106,6 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_i18n_entry
-        <where>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
-            </if>
-        </where>
     </select>
 
     <!-- 根据主键id查询表t_i18n_entry信息 -->
@@ -121,9 +116,6 @@
         <where>
             <if test="id != null">
                 AND id = #{id}
-            </if>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
             </if>
         </where>
     </select>
@@ -163,7 +155,7 @@
     </update>
 
     <!-- 新增表t_i18n_entry数据 -->
-    <insert id="createI18nEntry" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createI18nEntry" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.I18nEntry">
         INSERT INTO t_i18n_entry ( id
                                  , key
                                  , content

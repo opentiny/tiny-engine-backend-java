@@ -54,16 +54,16 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
     /**
      * 通过id集合查block_histories数据
      *
-     * @param blockHistoriesIds
+     * @param blockHistoryIds
      */
-    List<BlockHistory> queryBlockHistoriesByIds(List<Integer> blockHistoriesIds);
+    List<BlockHistory> queryBlockHistoryByIds(List<Integer> blockHistoryIds);
 
     @Select("<script>" +
-            "SELECT A.block_id AS blockId, A.id AS historyId, A.version " +
-            "FROM block_histories A " +
+            "SELECT A.ref_id AS blockId, A.id AS historyId, A.version " +
+            "FROM t_block_history A " +
             "WHERE A.version IS NOT NULL " +
             "AND A.version != 'N/A' " +
-            "AND A.block_id IN " +
+            "AND A.ref_id IN " +
             "<foreach item='id' collection='ids' open='(' separator=',' close=')'>" +
             "#{id}" +
             "</foreach>" +
@@ -71,6 +71,17 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
     List<BlockHistoryDto> queryMapByIds(@Param("ids") List<Integer> ids);
 
 
-    @Select("SELECT B.id,B.version FROM `t_block_history` B LEFT JOIN r_material_history_block M ON `material_history_id` = #{materialHistoryId} WHERE B.id = M.block_history_id and B.block_group_id in (#{ids})")
+    @Select({
+            "<script>",
+            "SELECT B.ref_id AS block, B.version",
+            "FROM `t_block_history` B",
+            "LEFT JOIN r_material_history_block M ON M.material_history_id = #{materialHistoryId}",
+            "WHERE B.id = M.block_history_id",
+            "AND B.block_group_id IN",
+            "<foreach item='id' collection='ids' open='(' separator=',' close=')'>",
+            "#{id}",
+            "</foreach>",
+            "</script>"
+    })
     List<BlockVersionDto> queryBlockAndVersion(@Param("ids") List<Integer> ids, @Param("materialHistoryId") Integer materialHistoryId);
 }

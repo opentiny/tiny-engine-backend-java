@@ -18,7 +18,7 @@ public interface PlatformMapper extends BaseMapper<Platform> {
      *
      * @param id
      */
-    Platform queryPlatformById(@Param("id") Integer id);
+    Platform queryPlatformById(Integer id);
 
     /**
      * 根据条件查询表t_platform数据
