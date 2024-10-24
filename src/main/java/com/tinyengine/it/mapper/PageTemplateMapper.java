@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface PageTemplateMapper extends BaseMapper<PageTemplate> {
-
     /**
      * 查询表page_template所有信息
      *

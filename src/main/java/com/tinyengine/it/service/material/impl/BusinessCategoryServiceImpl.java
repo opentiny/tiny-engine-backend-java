@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class BusinessCategoryServiceImpl implements BusinessCategoryService {
-
     @Autowired
     private BusinessCategoryMapper businessCategoryMapper;
 

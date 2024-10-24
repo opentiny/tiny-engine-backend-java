@@ -35,6 +35,5 @@ public class ServiceException extends RuntimeException {
         this.code = "400";
         this.message = message;
     }
-
 }
 

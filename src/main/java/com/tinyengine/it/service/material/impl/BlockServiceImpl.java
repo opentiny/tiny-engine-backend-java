@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class BlockServiceImpl implements BlockService {
-
     @Autowired
     private BlockMapper blockMapper;
 
@@ -201,5 +200,4 @@ public class BlockServiceImpl implements BlockService {
     public boolean isBlock(Map<?, ?> schema) {
         return schema != null && "Block".equals(schema.get("componentType"));
     }
-
 }

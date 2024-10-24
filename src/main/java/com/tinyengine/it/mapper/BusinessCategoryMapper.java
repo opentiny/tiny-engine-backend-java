@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface BusinessCategoryMapper extends BaseMapper<BusinessCategory> {
-
     /**
      * 查询表t_business_category所有信息
      *

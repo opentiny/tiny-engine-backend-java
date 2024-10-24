@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class TaskRecordServiceImpl implements TaskRecordService {
-
     @Autowired
     private TaskRecordMapper taskRecordMapper;
 

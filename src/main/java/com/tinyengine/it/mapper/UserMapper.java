@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface UserMapper extends BaseMapper<User> {
-
     /**
      * 查询表t_user所有信息
      *

@@ -41,7 +41,7 @@ public class AppExtensionController {
      * The App extension service.
      */
     @Autowired
-    AppExtensionService AppExtensionService;
+    private AppExtensionService AppExtensionService;
 
     /**
      * 获取应用的桥接源或工具类列表

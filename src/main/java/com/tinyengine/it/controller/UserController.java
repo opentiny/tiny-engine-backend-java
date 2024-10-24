@@ -22,7 +22,7 @@ public class UserController {
      * The User service.
      */
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * Me result.

@@ -11,7 +11,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface PlatformService {
-
     /**
      * 查询表t_platform所有信息
      *

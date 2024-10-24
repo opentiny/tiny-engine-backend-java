@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface AppMapper extends BaseMapper<App> {
-
     /**
      * 查询表t_app所有信息
      *

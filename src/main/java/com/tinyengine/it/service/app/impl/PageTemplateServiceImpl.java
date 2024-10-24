@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PageTemplateServiceImpl implements PageTemplateService {
-
     @Autowired
     private PageTemplateMapper pageTemplateMapper;
 

@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class TenantServiceImpl implements TenantService {
-
     @Autowired
     private TenantMapper tenantMapper;
 

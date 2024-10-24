@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface MaterialMapper extends BaseMapper<Material> {
-
     /**
      * 查询表t_material所有信息
      *

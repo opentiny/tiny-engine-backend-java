@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface ${table.serviceName}{
-
     /**
     *  查询表${table.name}所有信息
     */

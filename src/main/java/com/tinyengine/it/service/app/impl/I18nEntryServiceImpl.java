@@ -724,5 +724,4 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     public Integer updateI18nEntryById(I18nEntry i18nEntry) throws ServiceException {
         return i18nEntryMapper.updateI18nEntryById(i18nEntry);
     }
-
 }

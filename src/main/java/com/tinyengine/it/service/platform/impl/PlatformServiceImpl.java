@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PlatformServiceImpl implements PlatformService {
-
     @Autowired
     private PlatformMapper platformMapper;
 

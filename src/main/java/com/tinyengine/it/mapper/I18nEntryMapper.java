@@ -18,7 +18,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
-
     /**
      * 查询表t_i18n_entry所有信息
      *

@@ -11,7 +11,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface TaskRecordService {
-
     /**
      * 查询表t_task_record所有信息
      *

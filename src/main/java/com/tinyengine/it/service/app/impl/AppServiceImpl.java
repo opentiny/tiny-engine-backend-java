@@ -36,42 +36,41 @@ import java.util.Map;
 @Service
 @Slf4j
 public class AppServiceImpl implements AppService {
-
     /**
      * The App mapper.
      */
     @Autowired
-    AppMapper appMapper;
+    private AppMapper appMapper;
     /**
      * The Platform service.
      */
     @Autowired
-    PlatformService platformService;
+    private PlatformService platformService;
     /**
      * The 18 n entry service.
      */
     @Autowired
-    I18nEntryService i18nEntryService;
+    private I18nEntryService i18nEntryService;
     /**
      * The 18 n entry mapper.
      */
     @Autowired
-    I18nEntryMapper i18nEntryMapper;
+    private I18nEntryMapper i18nEntryMapper;
     /**
      * The App v 1 service.
      */
     @Autowired
-    AppV1ServiceImpl appV1ServiceImpl;
+    private AppV1ServiceImpl appV1ServiceImpl;
     /**
      * The Block service.
      */
     @Autowired
-    BlockServiceImpl blockServiceImpl;
+    private BlockServiceImpl blockServiceImpl;
     /**
      * The Block group service.
      */
     @Autowired
-    BlockGroupServiceImpl blockGroupServiceImpl;
+    private BlockGroupServiceImpl blockGroupServiceImpl;
 
     /**
      * 查询表t_app所有数据
@@ -218,5 +217,4 @@ public class AppServiceImpl implements AppService {
         previewDto.setGlobalState(metaDto.getApp().getGlobalState());
         return previewDto;
     }
-
 }

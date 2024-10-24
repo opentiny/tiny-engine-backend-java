@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PageHistoryServiceImpl implements PageHistoryService {
-
     @Autowired
     private PageHistoryMapper pageHistoryMapper;
 

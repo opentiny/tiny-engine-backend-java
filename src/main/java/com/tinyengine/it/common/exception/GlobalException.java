@@ -20,7 +20,6 @@ import java.util.Objects;
 @RestControllerAdvice
 @Slf4j
 public class GlobalException {
-
     /**
      * 服务异常
      *

@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class ComponentServiceImpl implements ComponentService {
-
     @Autowired
     private ComponentMapper componentMapper;
 

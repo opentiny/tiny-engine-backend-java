@@ -12,7 +12,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface DatasourceService {
-
     /**
      * 根据主键id查询表t_datasource信息
      *

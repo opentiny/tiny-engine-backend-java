@@ -15,7 +15,6 @@ import java.util.Map;
  * @since 2024-10-20
  */
 public interface AppService {
-
     /**
      * 查询表t_app所有信息
      *

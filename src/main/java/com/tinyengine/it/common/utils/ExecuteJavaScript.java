@@ -19,7 +19,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class ExecuteJavaScript {
-
     /**
      * Execute dsl java script list.
      *

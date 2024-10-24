@@ -11,7 +11,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface ComponentService {
-
     /**
      * 查询表t_component所有信息
      *

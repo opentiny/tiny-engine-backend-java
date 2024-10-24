@@ -41,7 +41,7 @@ public class PageHistoryController {
      * The Page history service.
      */
     @Autowired
-    PageHistoryService pageHistoryService;
+    private PageHistoryService pageHistoryService;
 
     /**
      * 获取页面历史记录列表

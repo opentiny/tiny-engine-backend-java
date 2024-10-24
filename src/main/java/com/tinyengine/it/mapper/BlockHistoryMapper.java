@@ -15,7 +15,6 @@ import java.util.List;
  * @since 2024-10-20
  */
 public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
-
     /**
      * 查询表t_block_history所有信息
      *

@@ -17,7 +17,6 @@ import java.util.UUID;
  * @since 2024-10-20
  */
 public class RequestIdFilter implements Filter {
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         // 初始化方法

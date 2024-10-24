@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class I18nLangServiceImpl implements I18nLangService {
-
     @Autowired
     private I18nLangMapper i18nLangMapper;
 

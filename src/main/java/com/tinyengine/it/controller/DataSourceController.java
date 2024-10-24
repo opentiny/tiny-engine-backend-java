@@ -39,7 +39,7 @@ public class DataSourceController {
      * The Datasource service.
      */
     @Autowired
-    DatasourceService datasourceService;
+    private DatasourceService datasourceService;
 
     /**
      * 获取数据源列表
