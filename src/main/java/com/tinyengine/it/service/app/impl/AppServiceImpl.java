@@ -3,7 +3,6 @@ package com.tinyengine.it.service.app.impl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
@@ -76,18 +75,19 @@ public class AppServiceImpl implements AppService {
      * 查询表t_app所有数据
      */
     @Override
-    public List<App> queryAllApp() throws ServiceException {
+    public List<App> queryAllApp() {
         return appMapper.queryAllApp();
     }
 
     /**
      * 根据主键id查询表t_app信息
      *
-     * @param id
+     * @param id id
+     * @return App
      */
     @Override
     @SystemServiceLog(description = "通过id查询应用实现方法")
-    public Result<App> queryAppById(@Param("id") Integer id) throws ServiceException {
+    public Result<App> queryAppById(@Param("id") Integer id) {
         App app = appMapper.queryAppById(id);
         if (app == null) {
             return Result.failed(ExceptionEnum.CM009);
@@ -98,21 +98,23 @@ public class AppServiceImpl implements AppService {
     /**
      * 根据条件查询表t_app数据
      *
-     * @param app
+     * @param app app
+     * @return App
      */
     @Override
-    public List<App> queryAppByCondition(App app) throws ServiceException {
+    public List<App> queryAppByCondition(App app) {
         return appMapper.queryAppByCondition(app);
     }
 
     /**
      * 根据主键id删除表t_app数据
      *
-     * @param id
+     * @param id id
+     * @return App
      */
     @Override
     @SystemServiceLog(description = "应用删除实现方法")
-    public Result<App> deleteAppById(@Param("id") Integer id) throws ServiceException {
+    public Result<App> deleteAppById(@Param("id") Integer id) {
         App app = appMapper.queryAppById(id);
         int result = appMapper.deleteAppById(id);
         if (result < 1) {
@@ -124,11 +126,12 @@ public class AppServiceImpl implements AppService {
     /**
      * 根据主键id更新表t_app数据
      *
-     * @param app
+     * @param app app
+     * @return App
      */
     @Override
     @SystemServiceLog(description = "应用修改实现方法")
-    public Result<App> updateAppById(App app) throws ServiceException {
+    public Result<App> updateAppById(App app) {
         // 如果更新extend_config字段，从platform获取数据，继承非route部分
         if (!app.getExtendConfig().isEmpty()) {
             App appResult = appMapper.queryAppById(app.getId());
@@ -148,11 +151,12 @@ public class AppServiceImpl implements AppService {
     /**
      * 新增表t_app数据
      *
-     * @param app
+     * @param app app
+     * @return App
      */
     @Override
     @SystemServiceLog(description = "应用创建实现方法")
-    public Result<App> createApp(App app) throws ServiceException {
+    public Result<App> createApp(App app) {
 
         List<App> appResult = appMapper.queryAppByCondition(app);
         if (!appResult.isEmpty()) {

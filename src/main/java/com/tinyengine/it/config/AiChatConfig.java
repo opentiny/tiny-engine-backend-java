@@ -23,9 +23,9 @@ public class AiChatConfig {
     private static final String WENXIN_ACCESS_TOKEN = System.getenv("WENXIN_ACCESS_TOKEN");
 
     /**
-     * Gets ai chat config.
+     * Gets AI chat config.
      *
-     * @return the ai chat config
+     * @return the AI chat config
      */
     public static Map<String, AiChatConfigData> getAiChatConfig() {
         Map<String, AiChatConfigData> config = new HashMap<>();

@@ -79,7 +79,8 @@ public class Utils {
             result.append(name, lastEnd, matcher.start());
 
             // 获取匹配到的字母并转换为大写
-            String match = matcher.group(1);  // 确保此处是有效的调用
+            // 确保此处是有效的调用
+            String match = matcher.group(1);
             result.append(match.toUpperCase());
 
             lastEnd = matcher.end();
@@ -111,7 +112,8 @@ public class Utils {
             result.append(name, lastEnd, matcher.start());
 
             // 在大写字母前添加下划线
-            result.append("_").append(matcher.group(1));  // 确保此处是有效的调用
+            // 确保此处是有效的调用
+            result.append("_").append(matcher.group(1));
 
             lastEnd = matcher.end();
         }
@@ -129,7 +131,7 @@ public class Utils {
      * @throws ServiceException the service exception
      */
     // 对象转map
-    public static Map<String, Object> convert(Object obj) throws ServiceException {
+    public static Map<String, Object> convert(Object obj) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         objectMapper.registerModule(new JavaTimeModule());
@@ -149,15 +151,19 @@ public class Utils {
      */
     // 将 Map 转换为对象
     public static <T> T mapToObject(Map<String, Object> map, Class<T> clazz) throws Exception {
-        T obj = clazz.getDeclaredConstructor().newInstance(); // 创建对象实例
+        // 创建对象实例
+        T obj = clazz.getDeclaredConstructor().newInstance();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
 
             try {
-                Field field = clazz.getDeclaredField(key); // 获取字段
-                field.setAccessible(true); // 设置可访问性
-                field.set(obj, value); // 设置字段值
+                // 获取字段
+                Field field = clazz.getDeclaredField(key);
+                // 设置可访问性
+                field.setAccessible(true);
+                // 设置字段值
+                field.set(obj, value);
             } catch (NoSuchFieldException e) {
                 // 字段不存在，可以选择忽略或处理异常
                 throw new ServiceException("Field not found: " + key);

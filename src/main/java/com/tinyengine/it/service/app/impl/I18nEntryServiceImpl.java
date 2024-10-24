@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
@@ -117,7 +116,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 查询表t_i18n_entry所有数据
      */
     @Override
-    public I18nEntryListResult findAllI18nEntry() throws ServiceException {
+    public I18nEntryListResult findAllI18nEntry() {
         // 获取所属应用/区块的 语言列表  getHostLangs
 
         List<I18nLang> i18nLangsList = getHostLangs();
@@ -159,8 +158,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 获取格式化词条列表
      *
-     * @param i18nEntriesList
-     * @return
+     * @param i18nEntriesList i18nEntriesList
+     * @return map result
      */
     @SystemServiceLog(description = "formatEntriesList 国际化词条实现类里获取格式化词条列表")
     @Override
@@ -182,8 +181,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 创建多词条国际化
      *
-     * @param operateI18nEntries
-     * @return
+     * @param operateI18nEntries operateI18nEntries
+     * @return I18nEntry
      */
     @Override
     public List<I18nEntry> Create(OperateI18nEntries operateI18nEntries) {
@@ -229,8 +228,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 批量创建
      *
-     * @param operateI18nBatchEntries
-     * @return
+     * @param operateI18nBatchEntries operateI18nBatchEntries
+     * @return I18nEntry
      */
     @SystemServiceLog(description = "bulkCreate 国际化词条批量创建")
     @Override
@@ -292,8 +291,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 批量更新
      *
-     * @param operateI18nEntries
-     * @return
+     * @param operateI18nEntries operateI18nEntries
+     * @return I18nEntry
      */
     @SystemServiceLog(description = "bulkUpdate 批量更新")
     @Override
@@ -339,10 +338,10 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     }
 
     /**
-     * @param host
-     * @param hostType
-     * @param keys
-     * @return
+     * @param host     host
+     * @param hostType hostType
+     * @param keys     keys
+     * @return I18nEntry
      */
     @SystemServiceLog(description = "deleteI18nEntriesByHostAndHostTypeAndKey 根据host、host_type、key查询删除国际化词条")
     @Override
@@ -364,9 +363,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 上传单个文件
      *
-     * @param file
-     * @param host
-     * @throws Exception
+     * @param file file
+     * @param host host
+     * @throws Exception Exception
      */
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
     @Override
@@ -442,8 +441,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 批量上传词条数据
      *
-     * @param file
-     * @param host
+     * @param file file
+     * @param host host
      */
     @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
     @Override
@@ -569,8 +568,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @throws Exception the exception
      */
     public Map<String, Object> parseZipFileStream(String lang, MultipartFile file) throws Exception {
-
-        String encoding = StandardCharsets.UTF_8.name(); // 默认使用UTF-8
+        // 默认使用UTF-8
+        String encoding = StandardCharsets.UTF_8.name();
         String fieldname = lang;
         String filename = file.getOriginalFilename();
         logger.info(
@@ -654,9 +653,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 解压并处理zip文件，把读取到的JSON文件内容以字符串返回
      *
-     * @param zipFile
-     * @return
-     * @throws IOException
+     * @param zipFile zipFile
+     * @return String
+     * @throws IOException IOException
      */
     private String extractAndProcessZipFile(File zipFile) throws IOException {
 
@@ -686,42 +685,43 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 删除临时目录以及内容
      *
-     * @param targetDir
-     * @throws IOException
+     * @param targetDir targetDir
+     * @throws IOException IOException
      */
     private void cleanUp(String targetDir) throws IOException {
         Path directory = Paths.get(targetDir);
-        Files.walk(directory).sorted((o1, o2) -> -o1.compareTo(o2)) // reverse order to delete deepest files first
-            .map(Path::toFile).forEach(File::delete);
+        // reverse order to delete deepest files first
+        Files.walk(directory).sorted((o1, o2) -> -o1.compareTo(o2)).map(Path::toFile).forEach(File::delete);
     }
 
     /**
      * 根据主键id查询表t_i18n_entry信息
      *
-     * @param id
+     * @param id id
      */
     @Override
-    public I18nEntry findI18nEntryById(@Param("id") Integer id) throws ServiceException {
+    public I18nEntry findI18nEntryById(@Param("id") Integer id) {
         return i18nEntryMapper.queryI18nEntryById(id);
     }
 
     /**
      * 根据条件查询表t_i18n_entry数据
      *
-     * @param i18nEntry
+     * @param i18nEntry i18nEntry
      */
     @Override
-    public List<I18nEntry> findI18nEntryByCondition(I18nEntry i18nEntry) throws ServiceException {
+    public List<I18nEntry> findI18nEntryByCondition(I18nEntry i18nEntry) {
         return i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
     }
 
     /**
      * 根据主键id更新表t_i18n_entry数据
      *
-     * @param i18nEntry
+     * @param i18nEntry i18nEntry
+     * @return execute success data number
      */
     @Override
-    public Integer updateI18nEntryById(I18nEntry i18nEntry) throws ServiceException {
+    public Integer updateI18nEntryById(I18nEntry i18nEntry) {
         return i18nEntryMapper.updateI18nEntryById(i18nEntry);
     }
 }

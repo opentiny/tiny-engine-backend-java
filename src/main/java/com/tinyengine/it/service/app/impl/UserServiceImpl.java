@@ -1,6 +1,5 @@
 package com.tinyengine.it.service.app.impl;
 
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
      * 查询表t_user所有数据
      */
     @Override
-    public List<User> queryAllUser() throws ServiceException {
+    public List<User> queryAllUser() {
         return userMapper.queryAllUser();
     }
 
@@ -36,7 +35,7 @@ public class UserServiceImpl implements UserService {
      * @param id
      */
     @Override
-    public User queryUserById(@Param("id") Integer id) throws ServiceException {
+    public User queryUserById(@Param("id") Integer id) {
         return userMapper.queryUserById(id);
     }
 
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService {
      * @param user
      */
     @Override
-    public List<User> queryUserByCondition(User user) throws ServiceException {
+    public List<User> queryUserByCondition(User user) {
         return userMapper.queryUserByCondition(user);
     }
 
@@ -56,7 +55,7 @@ public class UserServiceImpl implements UserService {
      * @param id
      */
     @Override
-    public Integer deleteUserById(@Param("id") Integer id) throws ServiceException {
+    public Integer deleteUserById(@Param("id") Integer id) {
         return userMapper.deleteUserById(id);
     }
 
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService {
      * @param user
      */
     @Override
-    public Integer updateUserById(User user) throws ServiceException {
+    public Integer updateUserById(User user) {
         return userMapper.updateUserById(user);
     }
 
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService {
      * @param user
      */
     @Override
-    public Integer createUser(User user) throws ServiceException {
+    public Integer createUser(User user) {
         return userMapper.createUser(user);
     }
 }

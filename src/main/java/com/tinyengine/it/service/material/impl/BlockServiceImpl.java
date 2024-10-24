@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.service.material.BlockService;
@@ -35,27 +34,29 @@ public class BlockServiceImpl implements BlockService {
      * 查询表t_block所有数据
      */
     @Override
-    public List<Block> queryAllBlock() throws ServiceException {
+    public List<Block> queryAllBlock() {
         return blockMapper.queryAllBlock();
     }
 
     /**
      * 根据主键id查询表t_block信息
      *
-     * @param id
+     * @param id id
+     * @return block
      */
     @Override
-    public Block queryBlockById(@Param("id") Integer id) throws ServiceException {
+    public Block queryBlockById(@Param("id") Integer id) {
         return blockMapper.queryBlockById(id);
     }
 
     /**
      * 根据条件查询表t_block数据
      *
-     * @param block
+     * @param block block
+     * @return block
      */
     @Override
-    public List<Block> queryBlockByCondition(Block block) throws ServiceException {
+    public List<Block> queryBlockByCondition(Block block) {
         return blockMapper.queryBlockByCondition(block);
     }
 
@@ -63,29 +64,32 @@ public class BlockServiceImpl implements BlockService {
      * 根据主键id删除表t_block数据
      *
      * @param id
+     * @return execute success data number
      */
     @Override
-    public Integer deleteBlockById(@Param("id") Integer id) throws ServiceException {
+    public Integer deleteBlockById(@Param("id") Integer id) {
         return blockMapper.deleteBlockById(id);
     }
 
     /**
      * 根据主键id更新表t_block数据
      *
-     * @param block
+     * @param block block
+     * @return execute success data number
      */
     @Override
-    public Integer updateBlockById(Block block) throws ServiceException {
+    public Integer updateBlockById(Block block) {
         return blockMapper.updateBlockById(block);
     }
 
     /**
      * 新增表t_block数据
      *
-     * @param block
+     * @param block block
+     * @return execute success data number
      */
     @Override
-    public Integer createBlock(Block block) throws ServiceException {
+    public Integer createBlock(Block block) {
         return blockMapper.createBlock(block);
     }
 
@@ -97,12 +101,15 @@ public class BlockServiceImpl implements BlockService {
      * @return the block assets
      * @throws Exception the exception
      */
-    public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework)
-        throws Exception {
+    public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
         List<String> block = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        traverseBlocks(objectMapper.writeValueAsString(pageContent), block);
+        try {
+            traverseBlocks(objectMapper.writeValueAsString(pageContent), block);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage());
+        }
         if (block.isEmpty()) {
             return Collections.emptyMap();
         }
@@ -175,12 +182,12 @@ public class BlockServiceImpl implements BlockService {
         // 判断传过来的参数是JSON数组还是JSON对象
         if (content != null && jsonNode.isArray()) {
             List<String> schema = objectMapper.readValue(content, List.class);
-            for (Object prop : (List<?>)schema) {
+            for (Object prop : schema) {
                 traverseBlocks(objectMapper.writeValueAsString(prop), block);
             }
         } else {
             Map<String, Object> schema = objectMapper.readValue(content, Map.class);
-            Map<?, ?> schemaMap = (Map<?, ?>)schema;
+            Map<?, ?> schemaMap = schema;
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
                 block.add((String)schemaMap.get("componentName"));
             }

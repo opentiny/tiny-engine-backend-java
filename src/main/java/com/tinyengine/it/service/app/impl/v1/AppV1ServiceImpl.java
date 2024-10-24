@@ -52,6 +52,7 @@ import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 @Service
 @Slf4j
 public class AppV1ServiceImpl implements AppV1Service {
+    private final List<String> exposedFields = Arrays.asList("config", "constants", "css");
     /**
      * The App mapper.
      */
@@ -103,16 +104,16 @@ public class AppV1ServiceImpl implements AppV1Service {
     @Autowired
     private PlatformService platformService;
     private MetaDto metaDto;
-    private List<String> exposedFields = Arrays.asList("config", "constants", "css");
 
     /**
      * 获取应用schema
      *
-     * @param id
+     * @param id id
+     * @return app schema
      */
     @SystemServiceLog(description = "获取app schema 实现类")
     @Override
-    public Map<String, Object> appSchema(Integer id) throws ServiceException {
+    public Map<String, Object> appSchema(Integer id) {
         this.metaDto = setMeta(id);
         Map<String, Object> schema = new HashMap<>();
         Map<String, Object> meta = getSchemaMeta();
@@ -178,8 +179,6 @@ public class AppV1ServiceImpl implements AppV1Service {
 
     /**
      * 获取元数据
-     *
-     * @param
      */
     private Map<String, Object> getSchemaMeta() {
         Map<String, Object> appData = Utils.convert(this.metaDto.getApp());
@@ -249,7 +248,7 @@ public class AppV1ServiceImpl implements AppV1Service {
      * 获取区块历史信息
      *
      * @param app 应用信息 materialhistoryMsg 物料历史信息
-     * @returns {Promise<any>} 区块历史信息
+     * @return {Promise<any>} 区块历史信息
      */
     private List<BlockHistory> getBlockHistory(App app, MaterialHistoryMsg materialhistoryMsg) {
         Boolean isUnpkg = materialhistoryMsg.getIsUnpkg();
@@ -260,7 +259,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         if (!isUnpkg) {
             // 不是unpkg的旧版本，部分区块构建产物id直接从关联关系取
             materialBlockHistoryId = materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(materialHistoryId);
-            /**
+            /*
              * 其余区块构建产物信息根据 区块分组的关联信息
              * 这里需要注意，区块分组中关联的区块， 有的是版本控制的区块，有的是旧的存量数据
              * 对于存量数据默认返回最新一次的区块发布记录
@@ -285,8 +284,9 @@ public class AppV1ServiceImpl implements AppV1Service {
     /**
      * 获取应用关联的区块及版本信息
      *
-     * @param {any} appInfo 应用信息
-     * @returns {Promise<any>} 应用关联的区块版本控制信息
+     * @param app               appInfo 应用信息
+     * @param materialHistoryId materialHistoryId
+     * @return {Promise<any>} 应用关联的区块版本控制信息
      */
     private List<BlockVersionDto> getAppBlocksVersionCtl(App app, Integer materialHistoryId) {
         List<BlockGroup> blockGroupsList = blockGroupMapper.queryBlockGroupByApp(app.getId());
@@ -367,7 +367,7 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @return the schema components tree
      * @throws ServiceException the service exception
      */
-    public List<Map<String, Object>> getSchemaComponentsTree(MetaDto metaDto) throws ServiceException {
+    public List<Map<String, Object>> getSchemaComponentsTree(MetaDto metaDto) {
         List<Map<String, Object>> pageSchemas = new ArrayList<>();
         List<Page> pageList = metaDto.getPages();
         App app = metaDto.getApp();

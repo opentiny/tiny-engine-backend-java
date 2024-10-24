@@ -45,7 +45,7 @@ public class AppV1Controller {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取app schema api")
     @GetMapping("/apps/schema/{id}")
-    public Result<Map<String, Object>> getSchema(@PathVariable Integer id) throws ServiceException {
+    public Result<Map<String, Object>> getSchema(@PathVariable Integer id) {
         Map<String, Object> schema = appV1Service.appSchema(id);
         return Result.success(schema);
     }

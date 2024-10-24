@@ -34,7 +34,7 @@ public class AiChatClient {
     /**
      * Execute chat request map.
      *
-     * @param openAiBodyDto the open ai body dto
+     * @param openAiBodyDto the open AI body dto
      * @return the map
      */
     public Map<String, Object> executeChatRequest(OpenAiBodyDto openAiBodyDto) {

@@ -49,7 +49,6 @@ public class AppController {
     /**
      * 查询表App信息
      *
-     * @param
      * @return App信息 all app
      */
     @GetMapping("/apps/list")

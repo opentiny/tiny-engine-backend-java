@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The type Open ai body dto.
+ * The type Open AI body dto.
  *
  * @since 2024-10-20
  */
@@ -16,7 +16,7 @@ public class OpenAiBodyDto {
     private List<Map<String, String>> messages;
 
     /**
-     * Instantiates a new Open ai body dto.
+     * Instantiates a new Open AI body dto.
      *
      * @param model    the model
      * @param messages the messages

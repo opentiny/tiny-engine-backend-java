@@ -26,7 +26,7 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      * 查询表t_business_category所有数据
      */
     @Override
-    public List<BusinessCategory> queryAllBusinessCategory() throws ServiceException {
+    public List<BusinessCategory> queryAllBusinessCategory() {
         return businessCategoryMapper.queryAllBusinessCategory();
     }
 
@@ -36,7 +36,7 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      * @param id
      */
     @Override
-    public BusinessCategory queryBusinessCategoryById(@Param("id") Integer id) throws ServiceException {
+    public BusinessCategory queryBusinessCategoryById(@Param("id") Integer id) {
         return businessCategoryMapper.queryBusinessCategoryById(id);
     }
 
@@ -54,30 +54,33 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
     /**
      * 根据主键id删除表t_business_category数据
      *
-     * @param id
+     * @param id id
+     * @return execute success data number
      */
     @Override
-    public Integer deleteBusinessCategoryById(@Param("id") Integer id) throws ServiceException {
+    public Integer deleteBusinessCategoryById(@Param("id") Integer id) {
         return businessCategoryMapper.deleteBusinessCategoryById(id);
     }
 
     /**
      * 根据主键id更新表t_business_category数据
      *
-     * @param businessCategory
+     * @param businessCategory category
+     * @return execute success data number
      */
     @Override
-    public Integer updateBusinessCategoryById(BusinessCategory businessCategory) throws ServiceException {
+    public Integer updateBusinessCategoryById(BusinessCategory businessCategory) {
         return businessCategoryMapper.updateBusinessCategoryById(businessCategory);
     }
 
     /**
      * 新增表t_business_category数据
      *
-     * @param businessCategory
+     * @param businessCategory category
+     * @return execute success data number
      */
     @Override
-    public Integer createBusinessCategory(BusinessCategory businessCategory) throws ServiceException {
+    public Integer createBusinessCategory(BusinessCategory businessCategory) {
         return businessCategoryMapper.createBusinessCategory(businessCategory);
     }
 }
