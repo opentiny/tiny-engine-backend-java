@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Page template service.
+ */
 @Service
 public class PageTemplateServiceImpl implements PageTemplateService {
 

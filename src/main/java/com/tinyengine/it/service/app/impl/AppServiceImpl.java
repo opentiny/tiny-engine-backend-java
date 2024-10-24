@@ -27,21 +27,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type App service.
+ */
 @Service
 public class AppServiceImpl implements AppService {
 
+    /**
+     * The App mapper.
+     */
     @Autowired
     AppMapper appMapper;
+    /**
+     * The Platform service.
+     */
     @Autowired
     PlatformService platformService;
+    /**
+     * The 18 n entry service.
+     */
     @Autowired
     I18nEntryService i18nEntryService;
+    /**
+     * The 18 n entry mapper.
+     */
     @Autowired
     I18nEntryMapper i18nEntryMapper;
+    /**
+     * The App v 1 service.
+     */
     @Autowired
     AppV1ServiceImpl appV1ServiceImpl;
+    /**
+     * The Block service.
+     */
     @Autowired
     BlockServiceImpl blockServiceImpl;
+    /**
+     * The Block group service.
+     */
     @Autowired
     BlockGroupServiceImpl blockGroupServiceImpl;
 
@@ -147,7 +171,8 @@ public class AppServiceImpl implements AppService {
      */
     @SystemServiceLog(description = "对应用id或区块id获取序列化国际化词条")
     @Override
-    public Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn, Integer id) {
+    public Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn,
+        Integer id) {
 
         if (i18nEntries.isEmpty()) {
             Map<String, Map<String, String>> relationLangs = new HashMap<>();
@@ -178,9 +203,10 @@ public class AppServiceImpl implements AppService {
         dataSource.putAll(dataHandler);
         // 拼装工具类
         Map<String, Object> extensions = appV1ServiceImpl.getSchemaExtensions(metaDto.getExtension());
-        List<Map<String, Object>> utils = (List<Map<String, Object>>) extensions.get("utils");
+        List<Map<String, Object>> utils = (List<Map<String, Object>>)extensions.get("utils");
         // 拼装国际化词条
-        Map<String, Map<String, String>> i18n = formatI18nEntrites(metaDto.getI18n(), Enums.E_i18Belongs.APP.getValue(), id);
+        Map<String, Map<String, String>> i18n =
+            formatI18nEntrites(metaDto.getI18n(), Enums.E_i18Belongs.APP.getValue(), id);
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);
         previewDto.setI18n(i18n);
@@ -188,6 +214,5 @@ public class AppServiceImpl implements AppService {
         previewDto.setGlobalState(metaDto.getApp().getGlobalState());
         return previewDto;
     }
-
 
 }

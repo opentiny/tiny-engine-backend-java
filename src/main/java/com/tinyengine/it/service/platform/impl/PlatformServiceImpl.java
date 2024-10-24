@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Platform service.
+ */
 @Service
 public class PlatformServiceImpl implements PlatformService {
 

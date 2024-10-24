@@ -12,12 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The type Global exception.
+ */
 @RestControllerAdvice
 @Slf4j
 public class GlobalException {
 
     /**
      * 服务异常
+     *
+     * @param e the e
+     * @return the result
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(Exception.class)
@@ -28,6 +34,10 @@ public class GlobalException {
 
     /**
      * 处理空指针的异常
+     *
+     * @param req the req
+     * @param e   the e
+     * @return the result
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NullPointerException.class)
@@ -38,6 +48,9 @@ public class GlobalException {
 
     /**
      * 自定义业务异常
+     *
+     * @param e the e
+     * @return the result
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ServiceException.class)
@@ -48,6 +61,9 @@ public class GlobalException {
 
     /**
      * 处理方法参数验证异常
+     *
+     * @param e the e
+     * @return the result
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * The type Schema code param.
+ */
 @Data
 public class SchemaCodeParam {
     private Integer app;

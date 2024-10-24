@@ -16,8 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/platform-center/api")
 public class UserController {
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
+
+    /**
+     * Me result.
+     *
+     * @return the result
+     */
     @GetMapping("/user/me")
     public Result<User> me() {
         User user = userService.queryUserById(1);

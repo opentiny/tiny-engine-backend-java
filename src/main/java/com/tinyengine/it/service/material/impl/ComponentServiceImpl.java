@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Component service.
+ */
 @Service
 public class ComponentServiceImpl implements ComponentService {
 

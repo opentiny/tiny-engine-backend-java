@@ -10,9 +10,22 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Utils.
+ */
 public class Utils {
+    /**
+     * The Res keys.
+     */
     public String[] resKeys = {"is_body", "parent_id", "is_page", "is_default"};
 
+    /**
+     * Remove duplicates list.
+     *
+     * @param <T>  the type parameter
+     * @param list the list
+     * @return the list
+     */
     // 泛型去重方法
     public static <T> List<T> removeDuplicates(List<T> list) {
         // 使用 Set 去重
@@ -21,17 +34,26 @@ public class Utils {
         return new ArrayList<>(set);
     }
 
+    /**
+     * Find max version string.
+     *
+     * @param versions the versions
+     * @return the string
+     */
     // 查找最大版本
     public static String findMaxVersion(List<String> versions) {
-        return versions.stream()
-                .max(Comparator.comparing(version -> Arrays.stream(version.split("\\."))
-                        .mapToInt(Integer::parseInt)
-                        .toArray(), Comparator.comparingInt((int[] arr) -> arr[0])
-                        .thenComparingInt(arr -> arr[1])
-                        .thenComparingInt(arr -> arr[2])))
-                .orElse(null);
+        return versions.stream().max(
+            Comparator.comparing(version -> Arrays.stream(version.split("\\.")).mapToInt(Integer::parseInt).toArray(),
+                Comparator.comparingInt((int[] arr) -> arr[0]).thenComparingInt(arr -> arr[1])
+                    .thenComparingInt(arr -> arr[2]))).orElse(null);
     }
 
+    /**
+     * To hump string.
+     *
+     * @param name the name
+     * @return the string
+     */
     public static String toHump(String name) {
         // 定义正则表达式模式
         Pattern pattern = Pattern.compile("_(\\w)");
@@ -58,6 +80,12 @@ public class Utils {
         return result.toString();
     }
 
+    /**
+     * To line string.
+     *
+     * @param name the name
+     * @return the string
+     */
     public static String toLine(String name) {
         // 定义正则表达式模式
         Pattern pattern = Pattern.compile("([A-Z])");
@@ -83,6 +111,13 @@ public class Utils {
         return result.toString();
     }
 
+    /**
+     * Convert map.
+     *
+     * @param obj the obj
+     * @return the map
+     * @throws ServiceException the service exception
+     */
     // 对象转map
     public static Map<String, Object> convert(Object obj) throws ServiceException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -93,6 +128,15 @@ public class Utils {
         return objectMapper.convertValue(obj, Map.class);
     }
 
+    /**
+     * Map to object t.
+     *
+     * @param <T>   the type parameter
+     * @param map   the map
+     * @param clazz the clazz
+     * @return the t
+     * @throws Exception the exception
+     */
     // 将 Map 转换为对象
     public static <T> T mapToObject(Map<String, Object> map, Class<T> clazz) throws Exception {
         T obj = clazz.getDeclaredConstructor().newInstance(); // 创建对象实例
@@ -112,6 +156,13 @@ public class Utils {
         return obj;
     }
 
+    /**
+     * Version a gte version b boolean.
+     *
+     * @param a the a
+     * @param b the b
+     * @return the boolean
+     */
     // 判断两个版本号或范围，谁更高、更广
     public static boolean versionAGteVersionB(String a, String b) {
         if (isSubset(b, a)) {

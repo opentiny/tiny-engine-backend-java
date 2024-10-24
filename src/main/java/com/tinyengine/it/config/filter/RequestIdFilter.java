@@ -7,6 +7,9 @@ import javax.servlet.*;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * The type Request id filter.
+ */
 public class RequestIdFilter implements Filter {
 
     @Override
@@ -16,7 +19,7 @@ public class RequestIdFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
         try {
             // 生成唯一请求 ID
             String requestId = UUID.randomUUID().toString();

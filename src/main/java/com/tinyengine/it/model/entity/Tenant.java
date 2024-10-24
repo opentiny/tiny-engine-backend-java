@@ -11,8 +11,8 @@ import lombok.Setter;
  * 组织表
  * </p>
  *
- * @author lu-yg
- * @since 2024-10-17
+ * @author lu -yg
+ * @since 2024 -10-17
  */
 @Getter
 @Setter

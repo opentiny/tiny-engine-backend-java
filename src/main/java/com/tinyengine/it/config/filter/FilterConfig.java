@@ -10,10 +10,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
+/**
+ * The type Filter config.
+ */
 @Configuration
 @EnableTransactionManagement
 public class FilterConfig {
+    /**
+     * Mybatis plus interceptor mybatis plus interceptor.
+     *
+     * @return the mybatis plus interceptor
+     */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
@@ -21,7 +28,11 @@ public class FilterConfig {
         return interceptor;
     }
 
-
+    /**
+     * Request id filter filter registration bean.
+     *
+     * @return the filter registration bean
+     */
     @Bean
     public FilterRegistrationBean<RequestIdFilter> requestIdFilter() {
         FilterRegistrationBean<RequestIdFilter> registrationBean = new FilterRegistrationBean<>();
@@ -30,6 +41,11 @@ public class FilterConfig {
         return registrationBean;
     }
 
+    /**
+     * Object mapper object mapper.
+     *
+     * @return the object mapper
+     */
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();

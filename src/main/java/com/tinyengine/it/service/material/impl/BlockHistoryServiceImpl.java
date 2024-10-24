@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Block history service.
+ */
 @Service
 public class BlockHistoryServiceImpl implements BlockHistoryService {
 

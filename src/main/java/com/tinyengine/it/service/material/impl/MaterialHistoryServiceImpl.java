@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Material history service.
+ */
 @Service
 public class MaterialHistoryServiceImpl implements MaterialHistoryService {
 
@@ -40,7 +43,8 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      * @param materialHistory
      */
     @Override
-    public List<MaterialHistory> findMaterialHistoryByCondition(MaterialHistory materialHistory) throws ServiceException {
+    public List<MaterialHistory> findMaterialHistoryByCondition(MaterialHistory materialHistory)
+        throws ServiceException {
         return materialHistoryMapper.queryMaterialHistoryByCondition(materialHistory);
     }
 

@@ -32,20 +32,15 @@ public class AppV1Controller {
     /**
      * 查询app的schema信息
      *
-     * @param
-     * @return app的schema信息
+     * @param id the id
+     * @return app的schema信息 schema
+     * @throws ServiceException the service exception
      */
-    @Operation(summary = "查询app schema详情",
-            description = "根据id查询app schema信息并返回",
-            parameters = {
-                    @Parameter(name = "id", description = "appId")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = App.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "查询app schema详情", description = "根据id查询app schema信息并返回",
+        parameters = {@Parameter(name = "id", description = "appId")}, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取app schema api")
     @GetMapping("/apps/schema/{id}")
     public Result<Map<String, Object>> getSchema(@PathVariable Integer id) throws ServiceException {

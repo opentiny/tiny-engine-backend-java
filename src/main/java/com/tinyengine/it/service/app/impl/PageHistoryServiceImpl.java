@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Page history service.
+ */
 @Service
 public class PageHistoryServiceImpl implements PageHistoryService {
 

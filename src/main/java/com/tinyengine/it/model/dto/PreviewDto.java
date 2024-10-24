@@ -5,6 +5,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Preview dto.
+ */
 @Data
 public class PreviewDto {
     private Map<String, Object> dataSource;

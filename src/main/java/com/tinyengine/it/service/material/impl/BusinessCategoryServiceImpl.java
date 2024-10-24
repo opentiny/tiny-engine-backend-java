@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The type Business category service.
+ */
 @Service
 public class BusinessCategoryServiceImpl implements BusinessCategoryService {
 
@@ -40,7 +43,8 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      * @param businessCategory
      */
     @Override
-    public List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory) throws ServiceException {
+    public List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory)
+        throws ServiceException {
         return businessCategoryMapper.queryBusinessCategoryByCondition(businessCategory);
     }
 

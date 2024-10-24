@@ -12,9 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * The type Execute command.
+ */
 public class ExecuteCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExecuteCommand.class);
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException the io exception
+     */
     public static void main(String[] args) throws IOException {
         // 指定运行 npm install 的目录
         Path path = Paths.get("C:\\forkWork\\tiny-engine-webservice-java\\src\\main\\java\\com\\tinyengine\\it\\js");
@@ -27,6 +36,12 @@ public class ExecuteCommand {
 
     }
 
+    /**
+     * Execute command string builder.
+     *
+     * @param command the command
+     * @return the string builder
+     */
     public static StringBuilder executeCommand(List<String> command) {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         StringBuilder result = new StringBuilder();
