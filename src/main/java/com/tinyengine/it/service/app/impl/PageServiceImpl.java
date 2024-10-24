@@ -6,12 +6,23 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemServiceLog;
-import com.tinyengine.it.mapper.*;
+import com.tinyengine.it.mapper.AppExtensionMapper;
+import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.mapper.BlockHistoryMapper;
+import com.tinyengine.it.mapper.BlockMapper;
+import com.tinyengine.it.mapper.I18nEntryMapper;
+import com.tinyengine.it.mapper.PageHistoryMapper;
+import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.model.dto.Collection;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
-import com.tinyengine.it.model.entity.*;
+import com.tinyengine.it.model.entity.App;
+import com.tinyengine.it.model.entity.AppExtension;
+import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.Page;
+import com.tinyengine.it.model.entity.PageHistory;
+import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.AppService;
 import com.tinyengine.it.service.app.PageHistoryService;
 import com.tinyengine.it.service.app.PageService;
@@ -23,7 +34,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -169,7 +186,7 @@ public class PageServiceImpl implements PageService {
     @SystemServiceLog(description = "createPage 创建页面实现方法")
     public Result<Page> createPage(Page page) throws Exception {
         // 判断isHome 为true时，parentId 不为0，禁止创建
-        if (page.getIsHome() && !page.getParentId().equals("0")) {
+        if (page.getIsHome() && !"0".equals(page.getParentId())) {
             return Result.failed("Homepage can only be set in the root directory");
         }
         // 将前端创建页面传递过来的staic/public 设置为 staticPages/publicPages
@@ -471,7 +488,7 @@ public class PageServiceImpl implements PageService {
      * @return boolean
      */
     public boolean iCanDoIt(User occupier, User user) {
-        if (user.getUsername().equals("public")) {
+        if ("public".equals(user.getUsername())) {
             return true;
         }
 

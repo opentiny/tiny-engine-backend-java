@@ -25,8 +25,8 @@ public class AiChatClient {
      */
     public AiChatClient() {
         this.config = AiChatConfig.getAiChatConfig();
-        this.webClient = WebClient.builder().baseUrl("https://default.api.url") // Optional: Default base URL
-            .build();
+        // Optional: Default base URL
+        this.webClient = WebClient.builder().baseUrl("https://default.api.url").build();
     }
 
     /**
