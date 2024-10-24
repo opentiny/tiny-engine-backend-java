@@ -32,7 +32,8 @@ public class UserServiceImpl implements UserService {
     /**
      * 根据主键id查询表t_user信息
      *
-     * @param id
+     * @param id id
+     * @return query result
      */
     @Override
     public User queryUserById(@Param("id") Integer id) {
@@ -42,7 +43,8 @@ public class UserServiceImpl implements UserService {
     /**
      * 根据条件查询表t_user数据
      *
-     * @param user
+     * @param user user
+     * @return query result
      */
     @Override
     public List<User> queryUserByCondition(User user) {
@@ -52,7 +54,8 @@ public class UserServiceImpl implements UserService {
     /**
      * 根据主键id删除表t_user数据
      *
-     * @param id
+     * @param id id
+     * @return execute success data number
      */
     @Override
     public Integer deleteUserById(@Param("id") Integer id) {
@@ -62,7 +65,8 @@ public class UserServiceImpl implements UserService {
     /**
      * 根据主键id更新表t_user数据
      *
-     * @param user
+     * @param user user
+     * @return execute success data number
      */
     @Override
     public Integer updateUserById(User user) {
@@ -72,7 +76,8 @@ public class UserServiceImpl implements UserService {
     /**
      * 新增表t_user数据
      *
-     * @param user
+     * @param user user
+     * @return execute success data number
      */
     @Override
     public Integer createUser(User user) {

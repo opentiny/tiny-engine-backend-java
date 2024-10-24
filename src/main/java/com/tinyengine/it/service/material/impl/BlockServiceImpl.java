@@ -63,7 +63,7 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 根据主键id删除表t_block数据
      *
-     * @param id
+     * @param id id
      * @return execute success data number
      */
     @Override
@@ -99,7 +99,6 @@ public class BlockServiceImpl implements BlockService {
      * @param pageContent the page content
      * @param framework   the framework
      * @return the block assets
-     * @throws Exception the exception
      */
     public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
         List<String> block = new ArrayList<>();
@@ -186,8 +185,7 @@ public class BlockServiceImpl implements BlockService {
                 traverseBlocks(objectMapper.writeValueAsString(prop), block);
             }
         } else {
-            Map<String, Object> schema = objectMapper.readValue(content, Map.class);
-            Map<?, ?> schemaMap = schema;
+            Map<?, ?> schemaMap = objectMapper.readValue(content, Map.class);
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
                 block.add((String)schemaMap.get("componentName"));
             }

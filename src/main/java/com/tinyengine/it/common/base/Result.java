@@ -99,9 +99,7 @@ public class Result<T> {
      * @return result
      */
     public static <T> Result<List<T>> success(List<T> list) {
-        Result<List<T>> listResult =
-            new Result<>(ExceptionEnum.SUCCESS.getResultCode(), ExceptionEnum.SUCCESS.getResultMsg(), list);
-        return listResult;
+        return new Result<>(ExceptionEnum.SUCCESS.getResultCode(), ExceptionEnum.SUCCESS.getResultMsg(), list);
     }
 
     /**

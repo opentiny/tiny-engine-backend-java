@@ -99,8 +99,7 @@ public class Schema {
         Map<String, Object> pageContent = (Map<String, Object>)data.get("page_content");
         pageContent.put("fileName", data.get("name"));
         String type = "pageContent";
-        Map<String, Object> schema = assembleFields(pageContent, type);
-        return schema;
+        return assembleFields(pageContent, type);
     }
 
     /**

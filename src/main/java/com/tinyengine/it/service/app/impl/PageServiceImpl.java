@@ -473,8 +473,7 @@ public class PageServiceImpl implements PageService {
         if (!subFolders.isEmpty()) {
             return Result.failed("此文件夹不是空文件夹，不能删除！");
         }
-        Result<Page> result = checkDelete(id);
-        return result;
+        return checkDelete(id);
 
     }
 
@@ -565,7 +564,6 @@ public class PageServiceImpl implements PageService {
      *
      * @param page the page
      * @return the result
-     * @the exception
      */
     public Result<Page> checkUpdate(Page page) {
         // 获取占用着occupier todo 获取的时候从page实体类中获取是个对象
@@ -607,7 +605,6 @@ public class PageServiceImpl implements PageService {
      * @param pid    the pid
      * @param target the target
      * @return update tree
-     * @the exception
      */
     public Collection getUpdateTree(int pid, int target) {
         Collection collection = new Collection();
@@ -628,7 +625,6 @@ public class PageServiceImpl implements PageService {
      *
      * @param map the map
      * @return the tree nodes
-     * @the exception
      */
     public Collection getTreeNodes(Map<String, Object> map) {
         int level = (int)map.get("level");
