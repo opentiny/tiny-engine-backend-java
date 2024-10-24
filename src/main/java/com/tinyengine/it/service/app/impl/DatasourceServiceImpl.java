@@ -18,13 +18,6 @@ public class DatasourceServiceImpl implements DatasourceService {
     @Autowired
     private DatasourceMapper datasourceMapper;
 
-    /**
-     * 查询表t_datasource所有数据
-     */
-    @Override
-    public List<Datasource> queryAllDatasource() throws ServiceException {
-        return datasourceMapper.queryAllDatasource();
-    }
 
     /**
      * 根据主键id查询表t_datasource信息
@@ -53,7 +46,7 @@ public class DatasourceServiceImpl implements DatasourceService {
      */
     @Override
     public Result<Datasource> deleteDatasourceById(@Param("id") Integer id) throws ServiceException {
-        Datasource sources = datasourceMapper.queryDatasourceById(id);
+        Datasource sources = queryDatasourceById(id);
         if (sources != null) {
             datasourceMapper.deleteDatasourceById(id);
             return Result.success(sources);
@@ -70,7 +63,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Result<Datasource> updateDatasourceById(Datasource datasource) throws ServiceException {
         int res = datasourceMapper.updateDatasourceById(datasource);
         if (res == 1) {
-            datasource = datasourceMapper.queryDatasourceById(datasource.getId());
+            datasource = queryDatasourceById(datasource.getId());
             return Result.success(datasource);
         }
         return Result.failed(ExceptionEnum.CM001);
@@ -83,13 +76,13 @@ public class DatasourceServiceImpl implements DatasourceService {
      */
     @Override
     public Result<Datasource> createDatasource(Datasource datasource) throws Exception {
-        long appId = datasource.getAppId();
+        Integer appId = datasource.getApp();
         String name = datasource.getName();
         if (appId != 0 && String.valueOf(appId).matches("^[0-9]+$") && !name.isEmpty()) {
             int res = datasourceMapper.createDatasource(datasource);
             if (res == 1) {
                 int id = datasource.getId();
-                datasource = datasourceMapper.queryDatasourceById(id);
+                datasource = queryDatasourceById(id);
                 return Result.success(datasource);
             } else {
                 Result.failed(ExceptionEnum.CM001);

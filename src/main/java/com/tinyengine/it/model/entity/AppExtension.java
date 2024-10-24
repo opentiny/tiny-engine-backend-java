@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
 /**
  * <p>
  * 应用扩展
@@ -29,7 +31,7 @@ public class AppExtension extends BaseEntity {
 
     @Schema(name = "content", description = "内容")
     @TableField(typeHandler = MapTypeHandler.class)
-    private String content;
+    private Map<String,Object> content;
 
     @Schema(name = "app", description = "关联app表Id")
     private Integer app;

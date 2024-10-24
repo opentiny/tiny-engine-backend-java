@@ -7,7 +7,6 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
-import com.tinyengine.it.mapper.PlatformMapper;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.MetaDto;
 import com.tinyengine.it.model.dto.PreviewDto;
@@ -19,6 +18,7 @@ import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockGroupServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockServiceImpl;
+import com.tinyengine.it.service.platform.PlatformService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class AppServiceImpl implements AppService {
     @Autowired
     AppMapper appMapper;
     @Autowired
-    PlatformMapper platformMapper;
+    PlatformService platformService;
     @Autowired
     I18nEntryService i18nEntryService;
     @Autowired
@@ -105,7 +105,7 @@ public class AppServiceImpl implements AppService {
         // 如果更新extend_config字段，从platform获取数据，继承非route部分
         if (!app.getExtendConfig().isEmpty()) {
             App appResult = appMapper.queryAppById(app.getId());
-            Platform platform = platformMapper.queryPlatformById(appResult.getPlatformId());
+            Platform platform = platformService.queryPlatformById(appResult.getPlatformId());
             Map<String, Object> appExtendConfig = platform.getAppExtendConfig();
             appExtendConfig.remove("route");
             app.getExtendConfig().putAll(appExtendConfig);

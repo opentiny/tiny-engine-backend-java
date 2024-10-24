@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+
 @Configuration
 @EnableTransactionManagement
 public class FilterConfig {
@@ -18,12 +19,6 @@ public class FilterConfig {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;
-    }
-
-    // 注册自定义的拦截器
-    @Bean
-    public PermissionInterceptor roleParameterInterceptor() {
-        return new PermissionInterceptor();
     }
 
 

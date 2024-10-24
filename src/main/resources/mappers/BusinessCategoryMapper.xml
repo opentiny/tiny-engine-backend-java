@@ -122,7 +122,7 @@
     </update>
 
     <!-- 新增表t_business_category数据 -->
-    <insert id="createBusinessCategory" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createBusinessCategory" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.BusinessCategory">
         INSERT INTO t_business_category ( id
                                         , code
                                         , name

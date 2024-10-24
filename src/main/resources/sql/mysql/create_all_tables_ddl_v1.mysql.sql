@@ -500,6 +500,7 @@ create table `t_datasource` (
     `name` varchar(255) not null comment '数据源名称',
     `data` longtext comment '数据源内容',
     `tpl` int comment '设计预留字段',
+    `app_id` int comment '关联appId',
     `platform_id` int comment '关联设计器id',
     `description` varchar(2000) comment '描述',
     `tenant_id` varchar(60) not null comment '租户id',
