@@ -46,6 +46,7 @@ import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
 /**
  * The type App v 1 service.
+ *
  * @since 2024-10-20
  */
 @Service

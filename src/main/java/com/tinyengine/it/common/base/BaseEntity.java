@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * 基础对象
+ *
  * @since 2024-10-20
  */
 @Getter

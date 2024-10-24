@@ -6,6 +6,7 @@ import java.util.Map;
 
 /**
  * The interface App v 1 service.
+ *
  * @since 2024-10-20
  */
 public interface AppV1Service {

@@ -14,6 +14,7 @@ import java.util.Set;
 
 /**
  * The type Schema.
+ *
  * @since 2024-10-20
  */
 @Slf4j

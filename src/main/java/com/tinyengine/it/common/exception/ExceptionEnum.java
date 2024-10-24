@@ -2,6 +2,7 @@ package com.tinyengine.it.common.exception;
 
 /**
  * The enum Exception enum.
+ *
  * @since 2024-10-20
  */
 public enum ExceptionEnum implements IBaseError {
@@ -216,7 +217,7 @@ public enum ExceptionEnum implements IBaseError {
      */
     private final String resultMsg;
 
-    private ExceptionEnum(String resultCode, String resultMsg) {
+    ExceptionEnum(String resultCode, String resultMsg) {
         this.resultCode = resultCode;
         this.resultMsg = resultMsg;
     }

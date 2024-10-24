@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * The type Execute command.
+ *
  * @since 2024-10-20
  */
 @Slf4j

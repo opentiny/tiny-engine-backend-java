@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * The type Meta dto.
+ *
  * @since 2024-10-20
  */
 @Data

@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * The type 18 n entry list result.
+ *
  * @since 2024-10-20
  */
 @Data

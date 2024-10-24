@@ -27,6 +27,7 @@ import java.util.Map;
 
 /**
  * 应用api
+ *
  * @since 2024-10-20
  */
 @Validated

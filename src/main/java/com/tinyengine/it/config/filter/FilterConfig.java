@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * The type Filter config.
+ *
  * @since 2024-10-20
  */
 @Configuration

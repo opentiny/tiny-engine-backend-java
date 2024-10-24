@@ -1,11 +1,15 @@
 package com.tinyengine.it.common.exception;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * The type Service exception.
+ *
  * @since 2024-10-20
  */
+@Getter
+@Setter
 public class ServiceException extends RuntimeException {
     private final String message;
     @Getter
@@ -32,18 +36,5 @@ public class ServiceException extends RuntimeException {
         this.message = message;
     }
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Sets code.
-     *
-     * @param code the code
-     */
-    public void setCode(String code) {
-        this.code = code;
-    }
 }
 
