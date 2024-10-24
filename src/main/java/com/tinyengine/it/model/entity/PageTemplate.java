@@ -1,10 +1,7 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.tinyengine.it.common.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,13 +18,7 @@ import lombok.Setter;
 @Setter
 @TableName("page_template")
 @Schema(name = "PageTemplate", description = "页面模板表")
-public class PageTemplate implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    @Schema(name = "id", description = "主键id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
+public class PageTemplate extends BaseEntity {
     @Schema(name = "name", description = "名称")
     private String name;
 
@@ -60,27 +51,4 @@ public class PageTemplate implements Serializable {
 
     @Schema(name = "platformId", description = "设计器ID")
     private Integer platformId;
-
-    @Schema(name= "createdBy", description = "创建人")
-    @TableField(value = "createdBy", fill = FieldFill.INSERT)
-    private String createdBy;
-
-    @Schema(name= "lastUpdatedBy", description = "最后修改人")
-    @TableField(value = "lastUpdatedBy", fill = FieldFill.INSERT_UPDATE)
-    private String lastUpdatedBy;
-
-    @Schema(name= "createdTime", description = "创建时间")
-    @TableField(value = "createdTime", fill = FieldFill.INSERT)
-    private LocalDateTime createdTime;
-
-    @Schema(name= "lastUpdatedTime", description = "更新时间")
-    @TableField(value = "lastUpdatedTime", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime lastUpdatedTime;
-
-    @Schema(name = "tenantId", description = "租户ID")
-    private String tenantId;
-
-    @Schema(name = "siteId", description = "站点ID")
-    private String siteId;
-
 }
