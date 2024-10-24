@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 /**
  * The type Ai chat service.
+ * @since 2024-10-20
  */
 @Service
 @Slf4j

@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * The interface Block history mapper.
+ * @since 2024-10-20
  */
 public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
 

@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * The type List type handler.
+ * @since 2024-10-20
  */
 @Slf4j
 public class ListTypeHandler extends BaseTypeHandler<List<?>> {

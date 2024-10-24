@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * The type Hash calculator.
+ * @since 2024-10-20
  */
 @Slf4j
 public class HashCalculator {

@@ -2,6 +2,7 @@ package com.tinyengine.it.common.exception;
 
 /**
  * The enum Exception enum.
+ * @since 2024-10-20
  */
 public enum ExceptionEnum implements IBaseError {
 

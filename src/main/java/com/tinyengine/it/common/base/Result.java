@@ -19,6 +19,7 @@ import static com.alibaba.druid.support.json.JSONUtils.toJSONString;
  * The type Result.
  *
  * @param <T> the type parameter
+ * @since 2024-10-20
  */
 @Data
 @NoArgsConstructor

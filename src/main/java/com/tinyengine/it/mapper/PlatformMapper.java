@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * The interface Platform mapper.
+ * @since 2024-10-20
  */
 public interface PlatformMapper extends BaseMapper<Platform> {
 

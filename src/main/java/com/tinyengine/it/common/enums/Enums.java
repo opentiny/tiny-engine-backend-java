@@ -2,6 +2,8 @@ package com.tinyengine.it.common.enums;
 
 /**
  * The type Enums.
+ *
+ * @since 2024-10-20
  */
 public class Enums {
     /**
@@ -147,15 +149,15 @@ public class Enums {
         /**
          * Vue e framework.
          */
-        Vue("Vue"),
+        VUE("Vue"),
         /**
          * Angular e framework.
          */
-        Angular("Angular"),
+        ANGULAR("Angular"),
         /**
          * React e framework.
          */
-        React("React"),
+        REACT("React"),
         /**
          * Html e framework.
          */
@@ -188,19 +190,19 @@ public class Enums {
         /**
          * Today e time range.
          */
-        Today("today"),
+        TODAY("today"),
         /**
          * Week e time range.
          */
-        Week("week"),
+        WEEK("week"),
         /**
          * Month e time range.
          */
-        Month("month"),
+        MONTH("month"),
         /**
          * Longer e time range.
          */
-        Longer("longer");
+        LONGER("longer");
 
         private final String value;
 
@@ -225,31 +227,31 @@ public class Enums {
         /**
          * Admin e user roles.
          */
-        Admin("Tinybuilder_Admin"),
+        ADMIN("Tinybuilder_Admin"),
         /**
          * Tenant admin e user roles.
          */
-        TenantAdmin("Tinybuilder_Tenant_Admin"),
+        TENANTADMIN("Tinybuilder_Tenant_Admin"),
         /**
          * Platform admin e user roles.
          */
-        PlatformAdmin("Tinybuilder_Platform_Admin"),
+        PLATFORMADMIN("Tinybuilder_Platform_Admin"),
         /**
          * App admin e user roles.
          */
-        AppAdmin("Tinybuilder_App_Admin"),
+        APPADMIN("Tinybuilder_App_Admin"),
         /**
          * App developer e user roles.
          */
-        AppDeveloper("Tinybuilder_App_Developer"),
+        APPDEVELOPER("Tinybuilder_App_Developer"),
         /**
          * Master e user roles.
          */
-        Master("Master"),
+        MASTER("Master"),
         /**
          * Guest e user roles.
          */
-        Guest("Guest");
+        GUEST("Guest");
 
         private final String value;
 
@@ -274,11 +276,11 @@ public class Enums {
         /**
          * Created e app state.
          */
-        Created(0),
+        CREATED(0),
         /**
          * Published e app state.
          */
-        Published(1);
+        PUBLISHED(1);
 
         private final int value;
 
@@ -303,27 +305,27 @@ public class Enums {
         /**
          * To local timestamp e schema format func.
          */
-        ToLocalTimestamp("toLocalTimestamp"),
+        TO_LOCALTIMESTAMP("toLocalTimestamp"),
         /**
          * To root element e schema format func.
          */
-        ToRootElement("toRootElement"),
+        TO_ROOTELEMENT("toRootElement"),
         /**
          * To group name e schema format func.
          */
-        ToGroupName("toGroupName"),
+        TO_GROUPNAME("toGroupName"),
         /**
          * To creator name e schema format func.
          */
-        ToCreatorName("toCreatorName"),
+        TO_CREATORNAME("toCreatorName"),
         /**
          * To format string e schema format func.
          */
-        ToFormatString("toFormatString"),
+        TO_FORMATSTRING("toFormatString"),
         /**
          * To array value e schema format func.
          */
-        ToArrayValue("toArrayValue");
+        TO_ARRAYVALUE("toArrayValue");
 
         private final String value;
 
@@ -348,11 +350,11 @@ public class Enums {
         /**
          * Release e canvas editor state.
          */
-        Release("release"),
+        RELEASE("release"),
         /**
          * Occupy e canvas editor state.
          */
-        Occupy("occupy");
+        OCCUPY("occupy");
 
         private final String value;
 
@@ -377,31 +379,31 @@ public class Enums {
         /**
          * Admin e system user token.
          */
-        Admin("developer-admin"),
+        ADMIN("developer-admin"),
         /**
          * Tenant admin e system user token.
          */
-        TenantAdmin("developer-tenant"),
+        TENANTADMIN("developer-tenant"),
         /**
          * Platform admin e system user token.
          */
-        PlatformAdmin("developer-platform"),
+        PLATFORMADMIN("developer-platform"),
         /**
          * App admin e system user token.
          */
-        AppAdmin("developer-app"),
+        APPADMIN("developer-app"),
         /**
          * App developer e system user token.
          */
-        AppDeveloper("developer-worker"),
+        APPDEVELOPER("developer-worker"),
         /**
          * Master e system user token.
          */
-        Master("developer"),
+        MASTER("developer"),
         /**
          * Guest e system user token.
          */
-        Guest("developer-worker");
+        GUEST("developer-worker");
 
         private final String value;
 
@@ -426,11 +428,11 @@ public class Enums {
         /**
          * Light e app theme.
          */
-        Light("light"),
+        LIGHT("light"),
         /**
          * Dark e app theme.
          */
-        Dark("Dark");
+        DARK("Dark");
 
         private final String value;
 
@@ -455,11 +457,11 @@ public class Enums {
         /**
          * Created e project state.
          */
-        Created(1),
+        CREATED(1),
         /**
          * Published e project state.
          */
-        Published(2);
+        PUBLISHED(2);
 
         private final int value;
 
@@ -478,78 +480,41 @@ public class Enums {
     }
 
     /**
-     * The enum E types.
-     */
-    public enum E_TYPES {
-        /**
-         * Angular e types.
-         */
-        Angular("ng-tiny"),
-        /**
-         * React e types.
-         */
-        React("react-fusion"),
-        /**
-         * Vue e types.
-         */
-        Vue("vue-tiny"),
-        /**
-         * Html e types.
-         */
-        Html("html-vanilla");
-
-        private final String value;
-
-        E_TYPES(String value) {
-            this.value = value;
-        }
-
-        /**
-         * Gets value.
-         *
-         * @return the value
-         */
-        public String getValue() {
-            return value;
-        }
-    }
-
-    /**
      * The enum E task progress.
      */
     public enum E_Task_Progress {
         /**
          * The Init.
          */
-        Init("Build environment initialization"),
+        INIT("Build environment initialization"),
         /**
          * The Install.
          */
-        Install("Install build dependencies"),
+        INSTALL("Install build dependencies"),
         /**
          * The After install.
          */
-        AfterInstall("Install dependencies complete"),
+        AFTERINSTALL("Install dependencies complete"),
         /**
          * The Build.
          */
-        Build("Execute build logic"),
+        BUILD("Execute build logic"),
         /**
          * The After build.
          */
-        AfterBuild("The build logic is executed"),
+        AFTERBUILD("The build logic is executed"),
         /**
          * The Upload.
          */
-        Upload("Upload build result"),
+        UPLOAD("Upload build result"),
         /**
          * The Complete.
          */
-        Complete("Build task completed"),
+        COMPLETE("Build task completed"),
         /**
          * The Update.
          */
-        Update("Update datasheet");
+        UPDATE("Update datasheet");
 
         private final String value;
 
@@ -574,23 +539,23 @@ public class Enums {
         /**
          * Dsl e ecology category.
          */
-        Dsl("dsl"),
+        DSL("dsl"),
         /**
          * Plugin e ecology category.
          */
-        Plugin("plugin"),
+        PLUGIN("plugin"),
         /**
          * Theme e ecology category.
          */
-        Theme("theme"),
+        THEME("theme"),
         /**
          * Toolbar e ecology category.
          */
-        Toolbar("toolbar"),
+        TOOLBAR("toolbar"),
         /**
          * App extend e ecology category.
          */
-        AppExtend("appExtension");
+        APPEXTEND("appExtension");
 
         private final String value;
 
@@ -615,39 +580,39 @@ public class Enums {
         /**
          * Utf 8 e encodings.
          */
-        Utf8("utf8"),
+        UTF8("utf8"),
         /**
          * Base 64 e encodings.
          */
-        Base64("base64"),
+        BASE64("base64"),
         /**
          * Hex e encodings.
          */
-        Hex("hex"),
+        HEX("hex"),
         /**
          * Ascii e encodings.
          */
-        Ascii("ascii"),
+        ASCII("ascii"),
         /**
          * Utf 16 le e encodings.
          */
-        Utf16le("utf16le"),
+        UTF16LE("utf16le"),
         /**
          * Latin 1 e encodings.
          */
-        Latin1("latin1"),
+        LATIN1("latin1"),
         /**
          * Base 64 url e encodings.
          */
-        Base64url("base64url"),
+        BASE64URL("base64url"),
         /**
          * Binary e encodings.
          */
-        Binary("binary"),
+        BINARY("binary"),
         /**
          * Ucs 2 e encodings.
          */
-        Ucs2("ucs2");
+        UCS2("ucs2");
 
         private final String value;
 
@@ -672,11 +637,11 @@ public class Enums {
         /**
          * En us e i 18 n langs.
          */
-        en_US("en_US"),
+        EN_US("en_US"),
         /**
          * Zh cn e i 18 n langs.
          */
-        zh_CN("zh_CN");
+        ZH_CN("zh_CN");
 
         private final String value;
 
@@ -701,15 +666,15 @@ public class Enums {
         /**
          * Json e mime type.
          */
-        Json("application/json"),
+        JSON("application/json"),
         /**
          * X zip e mime type.
          */
-        xZip("application/x-zip-compressed"),
+        XZIP("application/x-zip-compressed"),
         /**
          * Zip e mime type.
          */
-        Zip("application/zip");
+        ZIP("application/zip");
 
         private final String value;
 
@@ -734,15 +699,15 @@ public class Enums {
         /**
          * Duration e indicator type.
          */
-        Duration("duration"),
+        DURATION("duration"),
         /**
          * Cpu e indicator type.
          */
-        Cpu("cpu"),
+        CPU("cpu"),
         /**
          * Mem e indicator type.
          */
-        Mem("mem");
+        MEM("mem");
 
         private final String value;
 
@@ -767,11 +732,11 @@ public class Enums {
         /**
          * Private e public.
          */
-        Private(0),
+        PRIVATE(0),
         /**
          * Public e public.
          */
-        Public(1),
+        PUBLIC(1),
         /**
          * Semi public e public.
          */
@@ -806,7 +771,7 @@ public class Enums {
          * Local gpt e foundation model.
          */
         //本地兼容opanai-api接口的 大语言模型，如chatGLM6b,通义千问 等。
-        Local_GPT("qwen-turbo"),
+        LOCAL_GPT("qwen-turbo"),
         /**
          * Ernie bot turbo e foundation model.
          */

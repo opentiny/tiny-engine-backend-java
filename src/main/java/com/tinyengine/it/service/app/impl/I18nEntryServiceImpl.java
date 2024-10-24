@@ -50,6 +50,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * The type 18 n entry service.
+ * @since 2024-10-20
  */
 @Service
 @Slf4j
@@ -375,7 +376,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         Map<String, Object> entriesItem = new HashMap<>();
         String contentType = file.getContentType();
 
-        if (contentType.equals(Enums.E_MimeType.Json.getValue())) {
+        if (contentType.equals(Enums.E_MimeType.JSON.getValue())) {
             Result<Map<String, Object>> parseJsonFileStreamResult = parseJsonFileStream(lang, file);
             if (!parseJsonFileStreamResult.isSuccess()) {
                 return parseJsonFileStreamResult;
@@ -528,7 +529,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 + encoding + ", mime:" + file.getContentType());
 
         // 校验文件流合法性
-        validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.E_MimeType.Json.getValue()));
+        validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.E_MimeType.JSON.getValue()));
 
         // 解析国际化词条文件
         Map<String, Object> entriesItem = new HashMap<>();
@@ -577,7 +578,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
-            Arrays.asList(Enums.E_MimeType.Zip.getValue(), Enums.E_MimeType.xZip.getValue()));
+            Arrays.asList(Enums.E_MimeType.ZIP.getValue(), Enums.E_MimeType.XZIP.getValue()));
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> entriesItem = new HashMap<>();

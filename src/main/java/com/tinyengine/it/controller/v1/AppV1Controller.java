@@ -21,6 +21,7 @@ import java.util.Map;
 
 /**
  * 应用api v1版本
+ * @since 2024-10-20
  */
 @Validated
 @RestController

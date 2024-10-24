@@ -30,6 +30,7 @@ import java.util.Map;
 
 /**
  * The type App service.
+ * @since 2024-10-20
  */
 @Service
 @Slf4j

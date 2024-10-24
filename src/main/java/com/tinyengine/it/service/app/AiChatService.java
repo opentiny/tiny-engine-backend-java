@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * The interface Ai chat service.
+ * @since 2024-10-20
  */
 public interface AiChatService {
     /**
