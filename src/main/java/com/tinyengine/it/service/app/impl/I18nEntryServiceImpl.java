@@ -18,6 +18,7 @@ import com.tinyengine.it.model.dto.OperateI18nEntries;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ import java.util.zip.ZipInputStream;
  * The type 18 n entry service.
  */
 @Service
+@Slf4j
 public class I18nEntryServiceImpl implements I18nEntryService {
 
     private static final Logger logger = LoggerFactory.getLogger(I18nEntryServiceImpl.class);
@@ -617,7 +619,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             entriesItem.put("entries", jsonData);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             throw e;
         } finally {
             // 清理临时文件

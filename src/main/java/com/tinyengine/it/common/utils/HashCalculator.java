@@ -1,5 +1,7 @@
 package com.tinyengine.it.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.Map;
 /**
  * The type Hash calculator.
  */
+@Slf4j
 public class HashCalculator {
     /**
      * Calculate md 5 hash string.
@@ -37,7 +40,7 @@ public class HashCalculator {
 
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return null;
         }
     }

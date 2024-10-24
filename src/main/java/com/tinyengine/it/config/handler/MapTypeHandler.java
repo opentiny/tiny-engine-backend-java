@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 /**
  * The type Map type handler.
  */
+@Slf4j
 public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 

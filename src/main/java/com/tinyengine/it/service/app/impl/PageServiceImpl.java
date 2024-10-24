@@ -29,6 +29,7 @@ import com.tinyengine.it.service.app.PageService;
 import com.tinyengine.it.service.app.UserService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ import java.util.stream.Collectors;
  * The type Page service.
  */
 @Service
+@Slf4j
 public class PageServiceImpl implements PageService {
     /**
      * The Page mapper.

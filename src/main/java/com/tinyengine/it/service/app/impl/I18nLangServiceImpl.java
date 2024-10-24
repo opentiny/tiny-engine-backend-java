@@ -4,6 +4,7 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.I18nLangMapper;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nLangService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
  * The type 18 n lang service.
  */
 @Service
+@Slf4j
 public class I18nLangServiceImpl implements I18nLangService {
 
     @Autowired

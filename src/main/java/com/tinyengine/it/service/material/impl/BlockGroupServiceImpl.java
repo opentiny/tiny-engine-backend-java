@@ -4,6 +4,7 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.service.material.BlockGroupService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
  * The type Block group service.
  */
 @Service
+@Slf4j
 public class BlockGroupServiceImpl implements BlockGroupService {
 
     @Autowired

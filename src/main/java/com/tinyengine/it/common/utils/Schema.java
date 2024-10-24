@@ -192,7 +192,7 @@ public class Schema {
             SimpleDateFormat localFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             return localFormat.format(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return value.toString();
         }
     }

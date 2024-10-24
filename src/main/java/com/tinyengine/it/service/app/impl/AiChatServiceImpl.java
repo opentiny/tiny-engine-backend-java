@@ -8,6 +8,7 @@ import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiParam;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
 import com.tinyengine.it.service.app.AiChatService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.regex.Pattern;
  * The type Ai chat service.
  */
 @Service
+@Slf4j
 public class AiChatServiceImpl implements AiChatService {
     /**
      * Get start and end int [ ].

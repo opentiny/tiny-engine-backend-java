@@ -7,6 +7,7 @@ import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.service.app.AppExtensionService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
  * The type App extension service.
  */
 @Service
+@Slf4j
 public class AppExtensionServiceImpl implements AppExtensionService {
 
     @Autowired
@@ -80,8 +82,8 @@ public class AppExtensionServiceImpl implements AppExtensionService {
     public Result<AppExtension> updateAppExtensionById(AppExtension appExtension) throws ServiceException {
         int result = appExtensionMapper.updateAppExtensionById(appExtension);
         if (result == 1) {
-            appExtension = appExtensionMapper.queryAppExtensionById(appExtension.getId());
-            return Result.success(appExtension);
+            AppExtension data = appExtensionMapper.queryAppExtensionById(appExtension.getId());
+            return Result.success(data);
         }
         return Result.failed(ExceptionEnum.CM001);
     }

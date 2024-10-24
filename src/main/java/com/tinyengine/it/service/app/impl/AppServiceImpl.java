@@ -19,6 +19,7 @@ import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockGroupServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 import com.tinyengine.it.service.platform.PlatformService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import java.util.Map;
  * The type App service.
  */
 @Service
+@Slf4j
 public class AppServiceImpl implements AppService {
 
     /**
@@ -138,8 +140,8 @@ public class AppServiceImpl implements AppService {
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        app = appMapper.queryAppById(app.getId());
-        return Result.success(app);
+        App selectedApp = appMapper.queryAppById(app.getId());
+        return Result.success(selectedApp);
     }
 
     /**
