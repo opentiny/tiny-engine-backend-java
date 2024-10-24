@@ -9,7 +9,6 @@ import com.tinyengine.it.model.entity.I18nLang;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -22,7 +21,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Schema(name = "I18nEntries对象", description = "返回对象")
-public class I18nEntryDto implements Serializable {
+public class I18nEntryDto {
 
     private static final long serialVersionUID = 1L;
     @Schema(name = "id", description = "主键id")
