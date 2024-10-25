@@ -34,7 +34,7 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = page.getOccupier().getId();
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.E_CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
+                int arg = state == Enums.CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
                 Page updatePage = new Page();
                 updatePage.setId(id);
                 updatePage.setOccupierBy(String.valueOf(arg));
@@ -48,7 +48,7 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = Integer.parseInt(block.getOccupierBy());
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.E_CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
+                int arg = state == Enums.CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
                 Block updateBlock = new Block();
                 updateBlock.setId(id);
                 updateBlock.setOccupierBy(String.valueOf(arg));

@@ -185,7 +185,6 @@ public class I18nEntryController {
     @SystemControllerLog(description = "删除多语言词条")
     @PostMapping("/i18n/entries/bulk/delete")
     public Result<List<I18nEntryDto>> deleteI18nEntries(@RequestBody DeleteI18nEntry deleteI18nEntry) throws ServiceException {
-
         List<I18nEntryDto> i18nEntriesList = i18nEntryService.deleteI18nEntriesByHostAndHostTypeAndKey(deleteI18nEntry);
         return Result.success(i18nEntriesList);
     }
@@ -262,6 +261,5 @@ public class I18nEntryController {
             result = i18nEntryService.readFilesAndbulkCreate(key, file, id);
         }
         return result;
-
     }
 }

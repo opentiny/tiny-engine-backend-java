@@ -80,7 +80,6 @@ public class PageTemplateServiceImpl implements PageTemplateService {
             return Result.failed(ExceptionEnum.CM001);
         }
         return Result.success(result);
-
     }
 
     /**
