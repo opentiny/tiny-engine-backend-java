@@ -1,10 +1,8 @@
-
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.entity.I18nEntry;
-
 import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -25,7 +23,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      *
      * @return the list
      */
-    List<I18nEntry> queryAllI18nEntry();
+    List<I18nEntryDto> queryAllI18nEntry();
 
     /**
      * 根据主键id查询表t_i18n_entry数据
@@ -33,7 +31,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param id the id
      * @return the 18 n entry
      */
-    I18nEntry queryI18nEntryById(@Param("id") Integer id);
+    I18nEntryDto queryI18nEntryById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_i18n_entry数据
@@ -41,7 +39,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param i18nEntry the 18 n entry
      * @return the list
      */
-    List<I18nEntry> queryI18nEntryByCondition(I18nEntry i18nEntry);
+    List<I18nEntryDto> queryI18nEntryByCondition(I18nEntry i18nEntry);
 
     /**
      * 根据主键id删除表t_i18n_entry数据
@@ -67,48 +65,39 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      */
     Integer createI18nEntry(I18nEntry i18nEntry);
 
-    /**
-     * 查询所有词条及关联语言信息
-     *
-     * @return list
-     */
-    @Results({@Result(column = "lang", property = "langId"),
-            @Result(column = "lang", property = "lang", one = @One(select = "com.tinyengine.it.mapper.I18nLangMapper.queryI18nLangById"))})
-    @Select("select * from t_i18n_entry")
-    List<I18nEntryDto> findAllI18();
+
 
     /**
      * Update by entry integer.
      *
-     * @param content the content
-     * @param hostId the host id
+     * @param content  the content
+     * @param hostId   the host id
      * @param hostType the host type
-     * @param key the key
-     * @param langId the lang id
+     * @param key      the key
+     * @param langId   the lang id
      * @return the integer
      */
-    @Update("UPDATE t_i18n_entry  SET content = #{content}   WHERE  (host_id = #{hostId} AND host_type = #{hostType} AND `key` = #{key} AND lang_id = #{langId})")
+    @Update(
+        "UPDATE t_i18n_entry  SET content = #{content}   WHERE  (host_id = #{hostId} AND host_type = #{hostType} AND `key` = #{key} AND lang_id = #{langId})")
     Integer updateByEntry(String content, Integer hostId, String hostType, String key, Integer langId);
 
     /**
      * 根据key、lang查询i18n_entries数据
      *
      * @param entriesKey the entries key
-     * @param lang the lang
+     * @param lang       the lang
      * @return 18 n entry
      */
-    I18nEntry findI18nEntriesByKeyAndLang(@Param("key") String entriesKey, @Param("langId") int lang);
+    I18nEntryDto findI18nEntriesByKeyAndLang(@Param("key") String entriesKey, @Param("langId") int lang);
+
 
     /**
      * Find i 18 n entries by hostand host type list.
      *
-     * @param hostId the host id
+     * @param hostId   the host id
      * @param hostType the host type
      * @return the list
      */
-    @Results({@Result(column = "lang", property = "langId"),
-            @Result(column = "lang", property = "lang", one = @One(select = "com.tinyengine.it.mapper.I18nLangMapper.queryI18nLangById"))})
-    @Select("select * from t_i18n_entry where host_id = #{hostId} and host_type = #{hostType}")
     List<I18nEntryDto> findI18nEntriesByHostandHostType(Integer hostId, String hostType);
 
     /**
@@ -119,8 +108,9 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @return list
      */
     @Select({"<script>", "SELECT * FROM t_i18n_entry", "WHERE host_id IN",
-            "<foreach item='item' index='index' collection='blockIds' open='(' separator=',' close=')'>", "#{item}",
-            "</foreach>", "AND host_type = #{hostType}", "</script>"})
+        "<foreach item='item' index='index' collection='blockIds' open='(' separator=',' close=')'>", "#{item}",
+        "</foreach>", "AND host_type = #{hostType}", "</script>"})
     List<I18nEntryDto> findI18nEntriesByHostsandHostType(@Param("blockIds") List<Integer> blockIds,
-            @Param("hostType") String hostType);
+        @Param("hostType") String hostType);
+
 }

@@ -40,10 +40,11 @@ public interface PageTemplateMapper extends BaseMapper<PageTemplate> {
     /**
      * 根据主键id删除表page_template数据
      *
-     * @param id the id
+     * @param ids
      * @return the integer
+
      */
-    Integer deletePageTemplateById(@Param("id") Integer id);
+    Integer deletePageTemplateByIds(@Param("ids") List<Integer> ids);
 
     /**
      * 根据主键id更新表page_template数据

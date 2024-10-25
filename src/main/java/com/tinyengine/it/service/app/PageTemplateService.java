@@ -1,6 +1,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.PageTemplate;
 
 import org.apache.ibatis.annotations.Param;
@@ -18,7 +19,7 @@ public interface PageTemplateService {
      *
      * @return the list
      */
-    List<PageTemplate> queryAllPageTemplate();
+    Result<List<PageTemplate>> queryAllPageTemplate();
 
     /**
      * 根据主键id查询表page_template信息
@@ -26,7 +27,7 @@ public interface PageTemplateService {
      * @param id the id
      * @return the page template
      */
-    PageTemplate queryPageTemplateById(@Param("id") Integer id);
+    Result<PageTemplate> queryPageTemplateById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表page_template信息
@@ -39,10 +40,14 @@ public interface PageTemplateService {
     /**
      * 根据主键id删除page_template数据
      *
+<<<<<<< HEAD
+     * @param ids
+=======
      * @param id the id
      * @return the integer
+>>>>>>> a5e5a1c35bea21c111b17556f6e830f5f4591434
      */
-    Integer deletePageTemplateById(@Param("id") Integer id);
+    Result<Integer> deletePageTemplateByIds(@Param("ids") List<Integer> ids);
 
     /**
      * 根据主键id更新表page_template信息
@@ -58,5 +63,5 @@ public interface PageTemplateService {
      * @param pageTemplate the page template
      * @return the integer
      */
-    Integer createPageTemplate(PageTemplate pageTemplate);
+    Result<PageTemplate> createPageTemplate(PageTemplate pageTemplate);
 }

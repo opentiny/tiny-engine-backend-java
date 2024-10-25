@@ -1,6 +1,10 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
+import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageTemplateMapper;
 import com.tinyengine.it.model.entity.PageTemplate;
 import com.tinyengine.it.service.app.PageTemplateService;
@@ -28,8 +32,10 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      * 查询表page_template所有数据
      */
     @Override
-    public List<PageTemplate> queryAllPageTemplate() {
-        return pageTemplateMapper.queryAllPageTemplate();
+    @SystemServiceLog(description = "获取页面模版列表实现方法")
+    public Result<List<PageTemplate>> queryAllPageTemplate() throws ServiceException {
+        List<PageTemplate> pageTemplates = pageTemplateMapper.queryAllPageTemplate();
+        return Result.success(pageTemplates);
     }
 
     /**
@@ -39,8 +45,11 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      * @return query result
      */
     @Override
-    public PageTemplate queryPageTemplateById(@Param("id") Integer id) {
-        return pageTemplateMapper.queryPageTemplateById(id);
+
+    @SystemServiceLog(description = "根据id获取页面模版详情实现方法")
+    public Result<PageTemplate> queryPageTemplateById(@Param("id") Integer id) throws ServiceException {
+        PageTemplate pageTemplate = pageTemplateMapper.queryPageTemplateById(id);
+        return Result.success(pageTemplate);
     }
 
     /**
@@ -50,19 +59,28 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      * @return query result
      */
     @Override
-    public List<PageTemplate> queryPageTemplateByCondition(PageTemplate pageTemplate) {
+    @SystemServiceLog(description = "获取页面模版条件查询实现方法")
+    public List<PageTemplate> queryPageTemplateByCondition(PageTemplate pageTemplate) throws ServiceException {
         return pageTemplateMapper.queryPageTemplateByCondition(pageTemplate);
     }
 
     /**
-     * 根据主键id删除表page_template数据
-     *
-     * @param id id
-     * @return execute success data number
+     * 根据主键id列表删除表page_template数据
+     * @param ids
+     *  @return execute success data number
      */
     @Override
-    public Integer deletePageTemplateById(@Param("id") Integer id) {
-        return pageTemplateMapper.deletePageTemplateById(id);
+    @SystemServiceLog(description = "批量删除页面模版实现方法")
+    public Result<Integer> deletePageTemplateByIds(@Param("ids") List<Integer> ids) throws ServiceException {
+        if(ids.isEmpty()){
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        Integer result = pageTemplateMapper.deletePageTemplateByIds(ids);
+        if(result != ids.size()){
+            return Result.failed(ExceptionEnum.CM001);
+        }
+        return Result.success(result);
+
     }
 
     /**
@@ -83,7 +101,19 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      * @return execute success data number
      */
     @Override
-    public Integer createPageTemplate(PageTemplate pageTemplate) {
-        return pageTemplateMapper.createPageTemplate(pageTemplate);
+    @SystemServiceLog(description = "创建页面模版实现方法")
+    public Result<PageTemplate> createPageTemplate(PageTemplate pageTemplate) throws ServiceException {
+        PageTemplate queryPageTemplate = new PageTemplate();
+        queryPageTemplate.setName(pageTemplate.getName());
+        List<PageTemplate> pageTemplateResult = pageTemplateMapper.queryPageTemplateByCondition(queryPageTemplate);
+        if(!pageTemplateResult.isEmpty()){
+            return Result.failed(ExceptionEnum.CM003);
+        }
+        int result = pageTemplateMapper.createPageTemplate(pageTemplate);
+        if(result < 1){
+            return Result.failed(ExceptionEnum.CM001);
+        }
+        PageTemplate templateResult = pageTemplateMapper.queryPageTemplateById(pageTemplate.getId());
+        return Result.success(templateResult);
     }
 }
