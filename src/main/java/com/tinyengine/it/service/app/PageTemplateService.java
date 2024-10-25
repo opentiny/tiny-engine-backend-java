@@ -40,12 +40,8 @@ public interface PageTemplateService {
     /**
      * 根据主键id删除page_template数据
      *
-<<<<<<< HEAD
-     * @param ids
-=======
-     * @param id the id
+     * @param ids id
      * @return the integer
->>>>>>> a5e5a1c35bea21c111b17556f6e830f5f4591434
      */
     Result<Integer> deletePageTemplateByIds(@Param("ids") List<Integer> ids);
 

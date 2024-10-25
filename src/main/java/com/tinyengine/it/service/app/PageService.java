@@ -29,7 +29,6 @@ public interface PageService {
      *
      * @param id the id
      * @return the page
-     * @throws Exception the exception
      */
     Page queryPageById(@Param("id") Integer id);
 
@@ -46,7 +45,6 @@ public interface PageService {
      *
      * @param id the id
      * @return the result
-     * @throws Exception the exception
      */
     Result<Page> delPage(@Param("id") Integer id);
 
@@ -55,7 +53,6 @@ public interface PageService {
      *
      * @param page the page
      * @return the result
-     * @throws Exception the exception
      */
     Result<Page> createPage(Page page);
 
@@ -64,7 +61,6 @@ public interface PageService {
      *
      * @param page the page
      * @return the result
-     * @throws Exception the exception
      */
     Result<Page> createFolder(Page page);
 
@@ -73,7 +69,6 @@ public interface PageService {
      *
      * @param pages the pages
      * @return result
-     * @throws Exception the exception
      */
     Result<Page> updatePage(Page pages);
 
@@ -82,7 +77,6 @@ public interface PageService {
      *
      * @param pages the pages
      * @return result
-     * @throws Exception the exception
      */
     Result<Page> update(Page pages);
 

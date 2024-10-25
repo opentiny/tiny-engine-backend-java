@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
@@ -44,20 +45,15 @@ public class PageTemplateController {
     /**
      * 创建pageTemplate
      *
-     * @param pageTemplate
+     * @param pageTemplate pageTemplate
      * @return pageTemplate信息
      */
-    @Operation(summary = "创建页面模版",
-            description = "创建页面模版",
-            parameters = {
-                    @Parameter(name = "pageTemplate", description = "PageTemplate")
-            },
-            responses = {
+    @Operation(summary = "创建页面模版", description = "创建页面模版", parameters = {
+            @Parameter(name = "pageTemplate", description = "PageTemplate")}, responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PageTemplate.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "创建页面模版")
     @PostMapping("/page_template/create")
     public Result<PageTemplate> createPageTemplate(@Valid @RequestBody PageTemplate pageTemplate) {
@@ -67,54 +63,39 @@ public class PageTemplateController {
     /**
      * 批量删除pageTemplate
      *
-     * @param id
+     * @param id id
      * @return pageTemplate信息
      */
-    @Operation(summary = "批量删除页面模版",
-            description = "批量删除页面模版",
-            parameters = {
-                    @Parameter(name = "id", description = "ids")
-            },
-            responses = {
+    @Operation(summary = "批量删除页面模版", description = "批量删除页面模版", parameters = {
+            @Parameter(name = "id", description = "ids")}, responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PageTemplate.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "批量删除页面模版")
     @PostMapping("/template_basic/bulk/delete")
     public Result<Integer> deletePageTemplate(@RequestBody List<Integer> id) {
         return pageTemplateService.deletePageTemplateByIds(id);
     }
 
-    @Operation(summary = "获取页面模版信息详情",
-            description = "获取页面模版信息详情",
-            parameters = {
-                    @Parameter(name = "id", description = "id")
-            },
-            responses = {
+    @Operation(summary = "获取页面模版信息详情", description = "获取页面模版信息详情", parameters = {
+            @Parameter(name = "id", description = "id")}, responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PageTemplate.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面模版信息详情")
     @GetMapping("/template_basic/detail/{id}")
     public Result<PageTemplate> detail(@PathVariable Integer id) {
         return pageTemplateService.queryPageTemplateById(id);
     }
 
-    @Operation(summary = "获取页面模版信息列表",
-            description = "获取页面模版信息列表",
-            parameters = {
-                    @Parameter(name = "", description = "")
-            },
-            responses = {
+    @Operation(summary = "获取页面模版信息列表", description = "获取页面模版信息列表", parameters = {
+            @Parameter(name = "", description = "")}, responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PageTemplate.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面模版信息列表")
     @GetMapping("/template_basic/list")
     public Result<List<PageTemplate>> findAllPageTemplate() {

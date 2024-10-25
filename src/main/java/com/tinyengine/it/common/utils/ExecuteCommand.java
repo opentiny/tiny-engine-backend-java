@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,6 @@ public class ExecuteCommand {
      * The entry point of application.
      *
      * @param args the input arguments
-     * @throws IOException the io exception
      */
     public static void main(String[] args) {
         // 指定运行 npm install 的目录
@@ -78,9 +78,9 @@ public class ExecuteCommand {
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
-                log.info("命令成功完成！");
+                log.info("execute finished！");
             } else {
-                log.error("命令运行失败，exitCode: " + exitCode);
+                log.error("execute fail，exitCode: " + exitCode);
             }
         } catch (IOException | InterruptedException e) {
             log.error(e.getMessage());

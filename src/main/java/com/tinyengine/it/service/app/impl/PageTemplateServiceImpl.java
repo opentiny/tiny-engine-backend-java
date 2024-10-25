@@ -66,17 +66,18 @@ public class PageTemplateServiceImpl implements PageTemplateService {
 
     /**
      * 根据主键id列表删除表page_template数据
-     * @param ids
-     *  @return execute success data number
+     * 
+     * @param ids id
+     * @return execute success data number
      */
     @Override
     @SystemServiceLog(description = "批量删除页面模版实现方法")
     public Result<Integer> deletePageTemplateByIds(@Param("ids") List<Integer> ids) throws ServiceException {
-        if(ids.isEmpty()){
+        if (ids.isEmpty()) {
             return Result.failed(ExceptionEnum.CM002);
         }
         Integer result = pageTemplateMapper.deletePageTemplateByIds(ids);
-        if(result != ids.size()){
+        if (result != ids.size()){
             return Result.failed(ExceptionEnum.CM001);
         }
         return Result.success(result);
@@ -105,11 +106,11 @@ public class PageTemplateServiceImpl implements PageTemplateService {
         PageTemplate queryPageTemplate = new PageTemplate();
         queryPageTemplate.setName(pageTemplate.getName());
         List<PageTemplate> pageTemplateResult = pageTemplateMapper.queryPageTemplateByCondition(queryPageTemplate);
-        if(!pageTemplateResult.isEmpty()){
+        if (!pageTemplateResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
         int result = pageTemplateMapper.createPageTemplate(pageTemplate);
-        if(result < 1){
+        if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
         PageTemplate templateResult = pageTemplateMapper.queryPageTemplateById(pageTemplate.getId());

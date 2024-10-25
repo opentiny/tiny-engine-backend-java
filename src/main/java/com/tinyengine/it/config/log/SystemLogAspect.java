@@ -131,8 +131,7 @@ public class SystemLogAspect {
      * 异常通知 用于拦截service层记录异常日志
      *
      * @param joinPoint the join point
-     * @param e         the e
-     * @throws JsonProcessingException the json processing exception
+     * @param e the e
      */
     @AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {

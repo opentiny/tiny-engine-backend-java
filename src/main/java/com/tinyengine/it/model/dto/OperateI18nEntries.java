@@ -16,6 +16,6 @@ import java.util.Map;
 public class OperateI18nEntries {
     private String key;
     private String host;
-    private String host_type;
+    private String hostType;
     private Map<String, String> contents;
 }
