@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
@@ -65,7 +66,7 @@ public interface I18nEntryService {
      * @param operateI18nEntries the operate i 18 n entries
      * @return list
      */
-    List<I18nEntry> Create(OperateI18nEntries operateI18nEntries);
+    List<I18nEntry> create(OperateI18nEntries operateI18nEntries);
 
     /**
      * 批量创建
@@ -83,9 +84,6 @@ public interface I18nEntryService {
      */
     List<I18nEntry> bulkUpdate(OperateI18nEntries operateI18nEntries);
 
-
-
-
     /**
      * Delete i 18 n entries by host and host type and key list.
      *
@@ -93,7 +91,6 @@ public interface I18nEntryService {
      * @return the list
      */
     List<I18nEntryDto> deleteI18nEntriesByHostAndHostTypeAndKey(DeleteI18nEntry deleteI18nEntry);
-
 
     /**
      * 上传单个文件

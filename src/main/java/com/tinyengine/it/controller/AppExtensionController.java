@@ -56,16 +56,18 @@ public class AppExtensionController {
     @Operation(summary = "获取应用的桥接源或工具类列表", description = "获取应用的桥接源或工具类列表", parameters = {
             @Parameter(name = "appId", description = "appId"),
             @Parameter(name = "category", description = "category")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AppExtension.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AppExtension.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取应用的桥接源或工具类列表")
     @GetMapping("/apps/extension/list")
     public Result<List<AppExtension>> getAllAppExtension(@RequestParam(value = "app") String appId,
             @RequestParam String category) {
-        AppExtension AppExtension = new AppExtension();
-        AppExtension.setApp(Integer.valueOf(appId));
-        AppExtension.setCategory(category);
-        List<AppExtension> AppExtensionList = AppExtensionService.findAppExtensionByCondition(AppExtension);
+        AppExtension appExtension = new AppExtension();
+        appExtension.setApp(Integer.valueOf(appId));
+        appExtension.setCategory(category);
+        List<AppExtension> AppExtensionList = AppExtensionService.findAppExtensionByCondition(appExtension);
         return Result.success(AppExtensionList);
     }
 
@@ -77,7 +79,9 @@ public class AppExtensionController {
      */
     @Operation(summary = "获取单个应用的桥接源或工具类列表", description = "获取单个应用的桥接源或工具类列表", parameters = {
             @Parameter(name = "map", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AppExtension.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AppExtension.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取单个应用的桥接源或工具类列表")
     @GetMapping("/apps/extension")
@@ -98,12 +102,14 @@ public class AppExtensionController {
      */
     @Operation(summary = "新建桥接或工具", description = "新建桥接或工具", parameters = {
             @Parameter(name = "AppExtension", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AppExtension.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AppExtension.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "新建桥接或工具")
     @PostMapping("/apps/extension/create")
-    public Result<AppExtension> createAppExtension(@Valid @RequestBody AppExtension AppExtension) {
-        return AppExtensionService.createAppExtension(AppExtension);
+    public Result<AppExtension> createAppExtension(@Valid @RequestBody AppExtension appExtension) {
+        return AppExtensionService.createAppExtension(appExtension);
     }
 
     /**
@@ -114,12 +120,14 @@ public class AppExtensionController {
      */
     @Operation(summary = "修改桥接或工具", description = "修改桥接或工具", parameters = {
             @Parameter(name = "AppExtension", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AppExtension.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AppExtension.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改桥接或工具")
     @PostMapping("/apps/extension/update")
-    public Result<AppExtension> updateAppExtension(@RequestBody AppExtension AppExtension) {
-        return AppExtensionService.updateAppExtensionById(AppExtension);
+    public Result<AppExtension> updateAppExtension(@RequestBody AppExtension appExtension) {
+        return AppExtensionService.updateAppExtensionById(appExtension);
     }
 
     /**
@@ -130,7 +138,9 @@ public class AppExtensionController {
      */
     @Operation(summary = "删除单个桥接或工具", description = "删除单个桥接或工具", parameters = {
             @Parameter(name = "id", description = "AppExtensionId")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AppExtension.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AppExtension.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除单个桥接或工具")
     @GetMapping("/apps/extension/delete")

@@ -189,7 +189,6 @@ public class AppServiceImpl implements AppService {
     public Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn,
             Integer id) {
         if (i18nEntries.isEmpty()) {
-            Map<String, Map<String, String>> relationLangs = new HashMap<>();
             I18nEntry i18n = new I18nEntry();
             // 没有词条的时候，查询应用和区块对应的国家化关联，把默认空的关联分组返回
             if (userdIn == Enums.I18Belongs.APP.getValue()) {
@@ -199,8 +198,7 @@ public class AppServiceImpl implements AppService {
                 i18n.setHostType("block");
             }
             List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(id, i18n.getHostType());
-            relationLangs = i18nEntryService.formatEntriesList(i18ns);
-            return relationLangs;
+            return i18nEntryService.formatEntriesList(i18ns);
         }
         return i18nEntryService.formatEntriesList(i18nEntries);
     }

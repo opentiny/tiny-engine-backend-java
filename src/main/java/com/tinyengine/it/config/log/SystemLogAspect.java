@@ -1,8 +1,6 @@
 
 package com.tinyengine.it.config.log;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.aspectj.lang.JoinPoint;
