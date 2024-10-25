@@ -43,31 +43,37 @@ public class AppServiceImpl implements AppService {
      */
     @Autowired
     private AppMapper appMapper;
+
     /**
      * The Platform service.
      */
     @Autowired
     private PlatformService platformService;
+
     /**
      * The 18 n entry service.
      */
     @Autowired
     private I18nEntryService i18nEntryService;
+
     /**
      * The 18 n entry mapper.
      */
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+
     /**
      * The App v 1 service.
      */
     @Autowired
     private AppV1ServiceImpl appV1ServiceImpl;
+
     /**
      * The Block service.
      */
     @Autowired
     private BlockServiceImpl blockServiceImpl;
+
     /**
      * The Block group service.
      */

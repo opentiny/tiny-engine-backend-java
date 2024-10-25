@@ -61,56 +61,67 @@ public class PageServiceImpl implements PageService {
      */
     @Autowired
     private PageMapper pageMapper;
+
     /**
      * The App service.
      */
     @Autowired
     private AppService appService;
+
     /**
      * The App mapper.
      */
     @Autowired
     private AppMapper appMapper;
+
     /**
      * The User service.
      */
     @Autowired
     private UserService userService;
+
     /**
      * The Block mapper.
      */
     @Autowired
     private BlockMapper blockMapper;
+
     /**
      * The Block service.
      */
     @Autowired
     private BlockServiceImpl blockServiceImpl;
+
     /**
      * The Page history service.
      */
     @Autowired
     private PageHistoryService pageHistoryService;
+
     /**
      * The Page history mapper.
      */
     @Autowired
     private PageHistoryMapper pageHistoryMapper;
+
     /**
      * The App v 1 service.
      */
     @Autowired
     private AppV1ServiceImpl appV1ServiceImpl;
+
     /**
      * The Block history mapper.
      */
     @Autowired
     private BlockHistoryMapper blockHistoryMapper;
+
     /**
      * The App extension mapper.
      */
     @Autowired
     private AppExtensionMapper appExtensionMapper;
+
     /**
      * The 18 n entry mapper.
      */
@@ -236,7 +247,6 @@ public class PageServiceImpl implements PageService {
 
         pageInfo.setIsHome(page.getIsHome());
         return Result.success(pageInfo);
-
     }
 
     /**
@@ -472,7 +482,6 @@ public class PageServiceImpl implements PageService {
             return Result.failed("此文件夹不是空文件夹，不能删除！");
         }
         return checkDelete(id);
-
     }
 
     /**
@@ -550,7 +559,6 @@ public class PageServiceImpl implements PageService {
         }
         // 当isHome 不存在 且 isHomeOld 为true时 将parentId 设为其他id 时非法
         return isHome || !isHomeOld || parentId <= 0;
-
     }
 
     /**
@@ -611,7 +619,6 @@ public class PageServiceImpl implements PageService {
             return null;
         }
         return getTreeNodesResult;
-
     }
 
     /**

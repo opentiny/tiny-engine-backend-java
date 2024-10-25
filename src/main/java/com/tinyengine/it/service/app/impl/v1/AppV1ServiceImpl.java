@@ -56,51 +56,61 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AppV1ServiceImpl implements AppV1Service {
     private final List<String> exposedFields = Arrays.asList("config", "constants", "css");
+
     /**
      * The App mapper.
      */
     @Autowired
     private AppMapper appMapper;
+
     /**
      * The 18 n entry mapper.
      */
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+
     /**
      * The 18 n entry service.
      */
     @Autowired
     private I18nEntryService i18nEntryService;
+
     /**
      * The App extension mapper.
      */
     @Autowired
     private AppExtensionMapper appExtensionMapper;
+
     /**
      * The Datasource mapper.
      */
     @Autowired
     private DatasourceMapper datasourceMapper;
+
     /**
      * The Page mapper.
      */
     @Autowired
     private PageMapper pageMapper;
+
     /**
      * The Block history mapper.
      */
     @Autowired
     private BlockHistoryMapper blockHistoryMapper;
+
     /**
      * The Block group mapper.
      */
     @Autowired
     private BlockGroupMapper blockGroupMapper;
+
     /**
      * The Material history mapper.
      */
     @Autowired
     private MaterialHistoryMapper materialHistoryMapper;
+
     /**
      * The Platform service.
      */

@@ -58,7 +58,6 @@ import java.util.zip.ZipInputStream;
 @Service
 @Slf4j
 public class I18nEntryServiceImpl implements I18nEntryService {
-
     private static final Logger logger = LoggerFactory.getLogger(I18nEntryServiceImpl.class);
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
@@ -241,7 +240,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // bulkCreateEntries
         i18nEntriesList.stream().map(entry -> i18nEntryMapper.createI18nEntry(entry)).collect(Collectors.toList());
         return i18nEntriesList;
-
     }
 
     /**
@@ -331,7 +329,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<I18nEntry> i18nEntriesList = fillParam(operateI18nEntries, langsDic);
         // bulkCreateEntries
         for (I18nEntry i18Entries : i18nEntriesList) {
-
             i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(), i18Entries.getHostType(), i18Entries.getKey(), i18Entries.getLang());
         }
         return i18nEntriesList;
@@ -369,12 +366,11 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Override
     public Result<Map<String, Object>> readSingleFileAndBulkCreate(String lang, MultipartFile file, int host)
         throws Exception {
-
         List<Object> entriesArr = new ArrayList<>();
         Map<String, Object> entriesItem = new HashMap<>();
         String contentType = file.getContentType();
 
-        if (contentType.equals(Enums.E_MimeType.JSON.getValue())) {
+        if (contentType.equals(Enums.MimeType.JSON.getValue())) {
             Result<Map<String, Object>> parseJsonFileStreamResult = parseJsonFileStream(lang, file);
             if (!parseJsonFileStreamResult.isSuccess()) {
                 return parseJsonFileStreamResult;
@@ -392,7 +388,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         Map<String, Object> bulkCreateOrUpdateNumReturn = bulkCreateOrUpdate(entriesArr, host);
         return Result.success(bulkCreateOrUpdateNumReturn);
-
     }
 
     /**
@@ -432,7 +427,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         // 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
         return bulkInsertOrUpdate(entries);
-
     }
 
     /**
@@ -445,7 +439,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Override
     public Result<Map<String, Object>> readFilesAndbulkCreate(String lang, MultipartFile file, int host)
         throws Exception {
-
         List<Object> entriesArr = new ArrayList<>();
         InputStream inputStream = file.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -468,7 +461,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         Map<String, Object> bulkCreateOrUpdateNumReturn = bulkCreateOrUpdate(entriesArr, host);
         return Result.success(bulkCreateOrUpdateNumReturn);
-
     }
 
     /**
@@ -524,7 +516,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             "parseJsonFileStream field: " + lang + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
 
         // 校验文件流合法性
-        validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.E_MimeType.JSON.getValue()));
+        validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.MimeType.JSON.getValue()));
 
         // 解析国际化词条文件
         Map<String, Object> entriesItem = new HashMap<>();
@@ -572,7 +564,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
-            Arrays.asList(Enums.E_MimeType.ZIP.getValue(), Enums.E_MimeType.XZIP.getValue()));
+            Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> entriesItem = new HashMap<>();
@@ -582,7 +574,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 解压zip文件
         String target = null;
         try {
-
             // 将上传的文件保存到临时文件中
             File tempFile = File.createTempFile("/path/to/tmp", ".zip");
             target = tempFile.getAbsolutePath();
@@ -642,7 +633,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 只要文件不合法就throw error， 无论是批量还是单个
         file.getInputStream().close();
         throw new Exception(code);
-
     }
 
     /**
@@ -653,23 +643,19 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @throws IOException IOException
      */
     private String extractAndProcessZipFile(File zipFile) throws IOException {
-
         StringBuilder jsonResult = new StringBuilder();
         try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 String entryName = entry.getName();
                 if (entryName.endsWith(".json")) {
-
                     // 处理JSON文件
                     byte[] buffer = new byte[1024];
                     int len;
                     while ((len = zipInputStream.read(buffer)) > 0) {
-
                         jsonResult.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
                     }
                     jsonResult.append("\n");
-
                 }
             }
         }
@@ -696,7 +682,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @Override
     public I18nEntryDto findI18nEntryById(@Param("id") Integer id) throws ServiceException {
-
         return i18nEntryMapper.queryI18nEntryById(id);
     }
 

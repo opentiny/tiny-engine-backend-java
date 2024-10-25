@@ -61,7 +61,6 @@ public class PageTemplateController {
     @SystemControllerLog(description = "创建页面模版")
     @PostMapping("/page_template/create")
     public Result<PageTemplate> createPageTemplate(@Valid @RequestBody PageTemplate pageTemplate) {
-
         return pageTemplateService.createPageTemplate(pageTemplate);
     }
 

@@ -99,7 +99,6 @@ public class PageController {
     @SystemControllerLog(description = "创建页面")
     @PostMapping("/pages/create")
     public Result<Page> createPage(@Valid @RequestBody Page page) throws Exception {
-
         if (page.getIsPage()) {
             // 创建页面
             return pageService.createPage(page);
@@ -109,7 +108,6 @@ public class PageController {
             return pageService.createFolder(page);
 
         }
-
     }
 
     /**
