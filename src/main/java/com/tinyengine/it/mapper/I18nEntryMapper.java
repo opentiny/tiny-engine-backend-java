@@ -3,10 +3,8 @@ package com.tinyengine.it.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.entity.I18nEntry;
-import org.apache.ibatis.annotations.One;
+
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
