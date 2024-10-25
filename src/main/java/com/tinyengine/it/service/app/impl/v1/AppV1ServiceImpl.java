@@ -220,7 +220,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         metaDto.setPages(page);
 
         I18nEntry i18nEntry = new I18nEntry();
-        i18nEntry.setHostId(app.getId());
+        i18nEntry.setHost(app.getId());
         i18nEntry.setHostType("app");
         List<I18nEntryDto> i18n = i18nEntryMapper.findI18nEntriesByHostandHostType(app.getId(), "app");
         metaDto.setI18n(i18n);
