@@ -23,7 +23,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      *
      * @return the list
      */
-    List<I18nEntry> queryAllI18nEntry();
+    List<I18nEntryDto> queryAllI18nEntry();
 
     /**
      * 根据主键id查询表t_i18n_entry数据
@@ -31,7 +31,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param id the id
      * @return the 18 n entry
      */
-    I18nEntry queryI18nEntryById(@Param("id") Integer id);
+    I18nEntryDto queryI18nEntryById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_i18n_entry数据
@@ -39,7 +39,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param i18nEntry the 18 n entry
      * @return the list
      */
-    List<I18nEntry> queryI18nEntryByCondition(I18nEntry i18nEntry);
+    List<I18nEntryDto> queryI18nEntryByCondition(I18nEntry i18nEntry);
 
     /**
      * 根据主键id删除表t_i18n_entry数据
@@ -65,15 +65,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      */
     Integer createI18nEntry(I18nEntry i18nEntry);
 
-    /**
-     * 查询所有词条及关联语言信息
-     *
-     * @return list
-     */
-    @Results({@Result(column = "lang", property = "langId"), @Result(column = "lang", property = "lang",
-        one = @One(select = "com.tinyengine.it.mapper.I18nLangMapper.queryI18nLangById"))})
-    @Select("select * from t_i18n_entry")
-    List<I18nEntryDto> findAllI18();
+
 
     /**
      * Update by entry integer.
@@ -96,7 +88,8 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param lang       the lang
      * @return 18 n entry
      */
-    I18nEntry findI18nEntriesByKeyAndLang(@Param("key") String entriesKey, @Param("langId") int lang);
+    I18nEntryDto findI18nEntriesByKeyAndLang(@Param("key") String entriesKey, @Param("langId") int lang);
+
 
     /**
      * Find i 18 n entries by hostand host type list.
@@ -105,9 +98,6 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param hostType the host type
      * @return the list
      */
-    @Results({@Result(column = "lang", property = "langId"), @Result(column = "lang", property = "lang",
-        one = @One(select = "com.tinyengine.it.mapper.I18nLangMapper.queryI18nLangById"))})
-    @Select("select * from t_i18n_entry where host_id = #{hostId} and host_type = #{hostType}")
     List<I18nEntryDto> findI18nEntriesByHostandHostType(Integer hostId, String hostType);
 
     /**

@@ -1,10 +1,7 @@
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +28,7 @@ public interface I18nEntryService {
      * @param id the id
      * @return the 18 n entry
      */
-    I18nEntry findI18nEntryById(@Param("id") Integer id);
+    I18nEntryDto findI18nEntryById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_i18n_entry信息
@@ -39,7 +36,7 @@ public interface I18nEntryService {
      * @param i18nEntry the 18 n entry
      * @return the list
      */
-    List<I18nEntry> findI18nEntryByCondition(I18nEntry i18nEntry);
+    List<I18nEntryDto> findI18nEntryByCondition(I18nEntry i18nEntry);
 
     /**
      * 根据主键id更新表t_i18n_entry信息
@@ -81,15 +78,17 @@ public interface I18nEntryService {
      */
     List<I18nEntry> bulkUpdate(OperateI18nEntries operateI18nEntries);
 
+
+
+
     /**
      * Delete i 18 n entries by host and host type and key list.
      *
-     * @param host     the host
-     * @param hostType the host type
-     * @param keys     the keys
+     * @param deleteI18nEntry the deleteI18nEntry
      * @return the list
      */
-    List<I18nEntry> deleteI18nEntriesByHostAndHostTypeAndKey(String host, String hostType, List<String> keys);
+    List<I18nEntryDto> deleteI18nEntriesByHostAndHostTypeAndKey(DeleteI18nEntry deleteI18nEntry);
+
 
     /**
      * 上传单个文件

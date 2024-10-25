@@ -4,10 +4,7 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemControllerLog;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.service.app.I18nEntryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,8 +77,8 @@ public class I18nEntryController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取国际化语言的详情")
     @GetMapping("/i18n/entries/{id}")
-    public Result<I18nEntry> getI18nEntriesById(@Valid @PathVariable Integer id) {
-        I18nEntry i18nEntry = i18nEntryService.findI18nEntryById(id);
+    public Result<I18nEntryDto> getI18nEntriesById(@Valid @PathVariable Integer id) {
+        I18nEntryDto i18nEntry = i18nEntryService.findI18nEntryById(id);
         return Result.success(i18nEntry);
     }
 
@@ -139,11 +136,11 @@ public class I18nEntryController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改国际化单语言词条")
     @PostMapping("/i18n/entries/update/{id}")
-    public Result<I18nEntry> updateI18nEntries(@PathVariable Integer id, @RequestBody I18nEntry i18nEntries) {
+    public Result<I18nEntryDto> updateI18nEntries(@PathVariable Integer id, @RequestBody I18nEntry i18nEntries) {
         i18nEntries.setId(id);
         i18nEntryService.updateI18nEntryById(i18nEntries);
-        i18nEntries = i18nEntryService.findI18nEntryById(id);
-        return Result.success(i18nEntries);
+        I18nEntryDto i18nEntryDto = i18nEntryService.findI18nEntryById(id);
+        return Result.success(i18nEntryDto);
     }
 
     /**
@@ -169,7 +166,7 @@ public class I18nEntryController {
     /**
      * 删除多语言词条
      *
-     * @param iDeleteI18nEntry the delete i 18 n entry
+     * @param deleteI18nEntry the delete i 18 n entry
      * @return result
      * @throws ServiceException the service exception
      */
@@ -180,14 +177,9 @@ public class I18nEntryController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除多语言词条")
     @PostMapping("/i18n/entries/bulk/delete")
-    public Result<List<I18nEntry>> deleteI18nEntries(@RequestBody DeleteI18nEntry iDeleteI18nEntry)
-        throws ServiceException {
-        String host = iDeleteI18nEntry.getHost();
-        String hostType = iDeleteI18nEntry.getHost_type();
-        List<String> keys = iDeleteI18nEntry.getKey_in();
+    public Result<List<I18nEntryDto>> deleteI18nEntries(@RequestBody DeleteI18nEntry deleteI18nEntry) throws ServiceException {
 
-        List<I18nEntry> i18nEntriesList =
-            i18nEntryService.deleteI18nEntriesByHostAndHostTypeAndKey(host, hostType, keys);
+        List<I18nEntryDto> i18nEntriesList = i18nEntryService.deleteI18nEntriesByHostAndHostTypeAndKey(deleteI18nEntry);
         return Result.success(i18nEntriesList);
     }
 

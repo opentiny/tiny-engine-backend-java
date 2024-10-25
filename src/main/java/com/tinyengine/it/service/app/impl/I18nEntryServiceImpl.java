@@ -6,14 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
-import com.tinyengine.it.model.dto.Entry;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
@@ -123,7 +120,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             return null;
         }
         // 获取词条列表
-        List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.findAllI18();
+        List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.queryAllI18nEntry();
         if (i18nEntriesList == null) {
             return null;
         }
@@ -211,9 +208,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             int lang = langsDic.get(item);
             if (lang != 0) {
                 I18nEntry i18nEntries = new I18nEntry();
-                i18nEntries.setHostId(Integer.valueOf(operateI18nEntries.getHost()));
+                i18nEntries.setHost(Integer.valueOf(operateI18nEntries.getHost()));
                 i18nEntries.setKey(operateI18nEntries.getKey());
-                i18nEntries.setLangId(lang);
+                i18nEntries.setLang(lang);
                 i18nEntries.setHostType(operateI18nEntries.getHost_type());
                 i18nEntries.setContent(contents.get(item));
                 i18nEntriesList.add(i18nEntries);
@@ -294,20 +291,20 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "bulkUpdate 批量更新")
     @Override
     public List<I18nEntry> bulkUpdate(OperateI18nEntries operateI18nEntries) {
-        List<I18nEntry> i18nEntriesList = new ArrayList<>();
+        List<I18nEntry> i18nEntryResult = new ArrayList<>();
         if ("app".equals(operateI18nEntries.getHost_type())) {
             I18nEntry i18nEntries = new I18nEntry();
             i18nEntries.setHostType(operateI18nEntries.getHost_type());
-            i18nEntries.setHostId(Integer.valueOf(operateI18nEntries.getHost()));
+            i18nEntries.setHost(Integer.valueOf(operateI18nEntries.getHost()));
             i18nEntries.setKey(operateI18nEntries.getKey());
-            i18nEntriesList = i18nEntryMapper.queryI18nEntryByCondition(i18nEntries);
+            List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.queryI18nEntryByCondition(i18nEntries);
             if (i18nEntriesList.isEmpty()) {
-                i18nEntriesList = Create(operateI18nEntries);
-                return i18nEntriesList;
+                i18nEntryResult = Create(operateI18nEntries);
+                return i18nEntryResult;
             }
         }
-        i18nEntriesList = bulkUpdateEntries(operateI18nEntries);
-        return i18nEntriesList;
+        i18nEntryResult = bulkUpdateEntries(operateI18nEntries);
+        return i18nEntryResult;
     }
 
     /**
@@ -328,31 +325,28 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // bulkCreateEntries
         for (I18nEntry i18Entries : i18nEntriesList) {
 
-            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHostId(), i18Entries.getHostType(),
-                i18Entries.getKey(), i18Entries.getLangId());
+            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(), i18Entries.getHostType(), i18Entries.getKey(), i18Entries.getLang());
         }
         return i18nEntriesList;
     }
 
     /**
-     * @param host     host
-     * @param hostType hostType
-     * @param keys     keys
+     * @param deleteI18nEntry
      * @return I18nEntry
      */
     @SystemServiceLog(description = "deleteI18nEntriesByHostAndHostTypeAndKey 根据host、host_type、key查询删除国际化词条")
     @Override
-    public List<I18nEntry> deleteI18nEntriesByHostAndHostTypeAndKey(String host, String hostType, List<String> keys) {
-        List<I18nEntry> i18nEntriesList = new ArrayList<>();
+    public List<I18nEntryDto> deleteI18nEntriesByHostAndHostTypeAndKey(DeleteI18nEntry deleteI18nEntry) {
+        List<I18nEntryDto> i18nEntriesList = new ArrayList<>();
 
-        for (String key : keys) {
-            I18nEntry i18nEntries = new I18nEntry();
-            i18nEntries.setHostType(hostType);
-            i18nEntries.setHostId(Integer.valueOf(host));
-            i18nEntries.setKey(key);
-            i18nEntriesList = i18nEntryMapper.queryI18nEntryByCondition(i18nEntries);
-            i18nEntriesList.stream()
-                .forEach(i18nEntriesDto -> i18nEntryMapper.deleteI18nEntryById(i18nEntriesDto.getId()));
+        for (String key : deleteI18nEntry.getKey_in()) {
+            I18nEntry i18nEntry = new I18nEntry();
+            i18nEntry.setHostType(deleteI18nEntry.getHost_type());
+            i18nEntry.setHost(Integer.valueOf(deleteI18nEntry.getHost()));
+            i18nEntry.setKey(key);
+            List<I18nEntryDto> i18nEntries = i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
+            i18nEntries.stream().forEach(i18nEntriesDto -> i18nEntryMapper.deleteI18nEntryById(i18nEntriesDto.getId()));
+            i18nEntriesList.addAll(i18nEntries);
         }
         return i18nEntriesList;
     }
@@ -360,9 +354,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 上传单个文件
      *
-     * @param file file
-     * @param host host
-     * @throws Exception Exception
+     * @param file the file
+     * @param host the host
+     * @throws Exception the Exception
      */
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
     @Override
@@ -416,8 +410,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 langEntries.forEach((key, value) -> {
                     I18nEntry i18nEntries = new I18nEntry();
                     i18nEntries.setKey(key);
-                    i18nEntries.setLangId(lang);
-                    i18nEntries.setHostId(host);
+                    i18nEntries.setLang(lang);
+                    i18nEntries.setHost(host);
                     i18nEntries.setHostType("app");
                     i18nEntries.setContent((String)value);
                     entries.add(i18nEntries);
@@ -483,7 +477,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         for (I18nEntry entry : entries) {
             // 构建查询条件，假设 key 作为唯一键
             // 查询数据库中是否存在该记录
-            I18nEntry existingEntry = i18nEntryMapper.findI18nEntriesByKeyAndLang(entry.getKey(), entry.getLangId());
+            I18nEntryDto existingEntry = i18nEntryMapper.findI18nEntriesByKeyAndLang(entry.getKey(), entry.getLang());
 
             if (existingEntry == null) {
                 // 插入新记录
@@ -694,7 +688,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param id id
      */
     @Override
-    public I18nEntry findI18nEntryById(@Param("id") Integer id) {
+    public I18nEntryDto findI18nEntryById(@Param("id") Integer id) throws ServiceException {
+
         return i18nEntryMapper.queryI18nEntryById(id);
     }
 
@@ -704,7 +699,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param i18nEntry i18nEntry
      */
     @Override
-    public List<I18nEntry> findI18nEntryByCondition(I18nEntry i18nEntry) {
+
+    public List<I18nEntryDto> findI18nEntryByCondition(I18nEntry i18nEntry) throws ServiceException {
         return i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
     }
 
