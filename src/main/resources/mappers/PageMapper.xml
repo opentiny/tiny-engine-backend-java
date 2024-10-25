@@ -167,12 +167,12 @@
             <result column="username" property="username"/>
             <result column="email" property="email"/>
             <result column="enable" property="enable"/>
-            <result column="created_by" property="createdBy"/>
-            <result column="last_updated_by" property="lastUpdatedBy"/>
-            <result column="created_time" property="createdTime"/>
-            <result column="last_updated_time" property="lastUpdatedTime"/>
-            <result column="tenant_id" property="tenantId"/>
-            <result column="site_id" property="siteId"/>
+            <result column="userCreatedBy" property="createdBy"/>
+            <result column="userLastUpdatedBy" property="lastUpdatedBy"/>
+            <result column="userCreatedTime" property="createdTime"/>
+            <result column="userLastUpdatedTime" property="lastUpdatedTime"/>
+            <result column="userTenantId" property="tenantId"/>
+            <result column="userSiteId" property="siteId"/>
             <result column="is_admin" property="isAdmin"/>
             <result column="is_public" property="isPublic"/>
         </association>
@@ -198,43 +198,43 @@
     <!-- 根据id查询表t_page数据 -->
     <select id="queryPageById" resultMap="PageMap">
         SELECT
-        p.id,
-        p.name,
-        p.app_id,
-        p.route,
-        p.page_content,
-        p.is_body,
-        p.parent_id,
-        p.`group`,
-        p.`depth`,
-        p.is_page,
-        p.occupier_by,
-        p.is_default,
-        p.content_blocks,
-        p.latest_version,
-        p.latest_history_id,
-        p.created_by,
-        p.last_updated_by,
-        p.created_time,
-        p.last_updated_time,
-        p.tenant_id,
-        p.site_id,
-        u.id AS occupierId,  -- 指定 t_user 的 id 列
-        u.username,
-        u.email,
-        u.enable,
-        u.created_by AS userCreatedBy,
-        u.last_updated_by AS userLastUpdatedBy,
-        u.created_time AS userCreatedTime,
-        u.last_updated_time AS userLastUpdatedTime,
-        u.tenant_id AS userTenantId,
-        u.site_id AS userSiteId,
-        u.is_admin
-        FROM t_page p
-        LEFT JOIN t_user u ON p.occupier_by = u.id
+        P.id,
+        P.name,
+        P.app_id,
+        P.route,
+        P.page_content,
+        P.is_body,
+        P.parent_id,
+        P.`group`,
+        P.`depth`,
+        P.is_page,
+        P.occupier_by,
+        P.is_default,
+        P.content_blocks,
+        P.latest_version,
+        P.latest_history_id,
+        P.created_by,
+        P.last_updated_by,
+        P.created_time,
+        P.last_updated_time,
+        P.tenant_id,
+        P.site_id,
+        U.id AS occupierId,  -- 指定 t_user 的 id 列
+        U.username,
+        U.email,
+        U.enable,
+        U.created_by AS userCreatedBy,
+        U.last_updated_by AS userLastUpdatedBy,
+        U.created_time AS userCreatedTime,
+        U.last_updated_time AS userLastUpdatedTime,
+        U.tenant_id AS userTenantId,
+        U.site_id AS userSiteId,
+        U.is_admin
+        FROM t_page P
+        LEFT JOIN t_user U ON P.occupier_by = U.id
         <where>
             <if test="id != null">
-                AND p.id = #{id}
+                AND P.id = #{id}
             </if>
         </where>
     </select>
