@@ -1,10 +1,12 @@
 package com.tinyengine.it.service.app.impl;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.BlockMapper;
 
 import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.mapper.UserMapper;
+import com.tinyengine.it.model.dto.CanvasDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Page;
 import com.tinyengine.it.model.entity.User;
@@ -25,43 +27,43 @@ public class CanvasServiceImpl implements CanvasService {
     UserMapper userMapper;
 
     @Override
-    public Map<String, Object> lockCanvas(Integer id, String state, String type) {
+    public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
         int occupier;
         // TODO 先试用mock数据，后续添加登录及权限后从session获取,
         User user = userMapper.queryUserById(1);
-        Map<String, Object> result = new HashMap<>();
+        CanvasDto canvasDto = new CanvasDto();
         if ("page".equals(type)) {
             Page page = pageMapper.queryPageById(id);
             occupier = page.getOccupier().getId();
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.E_CanvasEditorState.Occupy.getValue() ? user.getId() : null;
+                int arg = state == Enums.E_CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
                 Page updatePage = new Page();
                 updatePage.setId(id);
                 updatePage.setOccupierBy(String.valueOf(arg));
                 pageMapper.updatePageById(updatePage);
-                result.put("operate", "success");
-                result.put("occupier", user);
-                return result;
+                canvasDto.setOperate("success");
+                canvasDto.setOccupier(user);
+                return Result.success(canvasDto);
             }
         } else {
             Block block = blockMapper.queryBlockById(id);
             occupier = Integer.parseInt(block.getOccupierBy());
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.E_CanvasEditorState.Occupy.getValue() ? user.getId() : null;
+                int arg = state == Enums.E_CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
                 Block updateBlock = new Block();
                 updateBlock.setId(id);
                 updateBlock.setOccupierBy(String.valueOf(arg));
                 blockMapper.updateBlockById(updateBlock);
-                result.put("operate", "success");
-                result.put("occupier", user);
-                return result;
+                canvasDto.setOperate("success");
+                canvasDto.setOccupier(user);
+                return Result.success(canvasDto);
             }
         }
-        result.put("operate", "failed");
-        result.put("occupier", user);
-        return result;
+        canvasDto.setOperate("failed");
+        canvasDto.setOccupier(user);
+        return Result.success(canvasDto);
     }
 
     public Boolean iCanDoIt(Integer occupier, User user) {

@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class HomeController {
+
+    /**
+     *  健康检测
+     */
     @GetMapping("/healthCheck")
     public Result healthCheck() {
         return Result.success();

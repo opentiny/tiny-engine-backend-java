@@ -4,20 +4,29 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.service.material.BlockService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * The type Block service.
+ *
+ * @since 2024-10-20
+ */
 @Service
+@Slf4j
 public class BlockServiceImpl implements BlockService {
-
     @Autowired
     private BlockMapper blockMapper;
 
@@ -25,65 +34,81 @@ public class BlockServiceImpl implements BlockService {
      * 查询表t_block所有数据
      */
     @Override
-    public List<Block> queryAllBlock() throws ServiceException {
+    public List<Block> queryAllBlock() {
         return blockMapper.queryAllBlock();
     }
 
     /**
      * 根据主键id查询表t_block信息
      *
-     * @param id
+     * @param id id
+     * @return block
      */
     @Override
-    public Block queryBlockById(@Param("id") Integer id) throws ServiceException {
+    public Block queryBlockById(@Param("id") Integer id) {
         return blockMapper.queryBlockById(id);
     }
 
     /**
      * 根据条件查询表t_block数据
      *
-     * @param block
+     * @param block block
+     * @return block
      */
     @Override
-    public List<Block> queryBlockByCondition(Block block) throws ServiceException {
+    public List<Block> queryBlockByCondition(Block block) {
         return blockMapper.queryBlockByCondition(block);
     }
 
     /**
      * 根据主键id删除表t_block数据
      *
-     * @param id
+     * @param id id
+     * @return execute success data number
      */
     @Override
-    public Integer deleteBlockById(@Param("id") Integer id) throws ServiceException {
+    public Integer deleteBlockById(@Param("id") Integer id) {
         return blockMapper.deleteBlockById(id);
     }
 
     /**
      * 根据主键id更新表t_block数据
      *
-     * @param block
+     * @param block block
+     * @return execute success data number
      */
     @Override
-    public Integer updateBlockById(Block block) throws ServiceException {
+    public Integer updateBlockById(Block block) {
         return blockMapper.updateBlockById(block);
     }
 
     /**
      * 新增表t_block数据
      *
-     * @param block
+     * @param block block
+     * @return execute success data number
      */
     @Override
-    public Integer createBlock(Block block) throws ServiceException {
+    public Integer createBlock(Block block) {
         return blockMapper.createBlock(block);
     }
 
-    public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) throws Exception {
+    /**
+     * Gets block assets.
+     *
+     * @param pageContent the page content
+     * @param framework   the framework
+     * @return the block assets
+     */
+    public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
         List<String> block = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        traverseBlocks(objectMapper.writeValueAsString(pageContent), block);
+        try {
+            traverseBlocks(objectMapper.writeValueAsString(pageContent), block);
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage());
+        }
         if (block.isEmpty()) {
             return Collections.emptyMap();
         }
@@ -96,41 +121,40 @@ public class BlockServiceImpl implements BlockService {
         mergedAssets.put("styles", new ArrayList<>());
 
         // Merge the assets using streams
-        return blocksList.stream()
-                .map(Block::getAssets)
-                .map(assetsMap -> {
-                    Map<String, List<String>> tempMap = new HashMap<>();
-                    tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
-                    tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
-                    tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
-                    return tempMap;
-                })
-                .reduce(
-                        mergedAssets,
-                        (acc, curr) -> {
-                            acc.get("material").addAll(curr.get("material"));
-                            acc.get("scripts").addAll(curr.get("scripts"));
-                            acc.get("styles").addAll(curr.get("styles"));
-                            return acc;
-                        },
-                        (map1, map2) -> {
-                            map1.get("material").addAll(map2.get("material"));
-                            map1.get("scripts").addAll(map2.get("scripts"));
-                            map1.get("styles").addAll(map2.get("styles"));
-                            return map1;
-                        }
-                );
+        return blocksList.stream().map(Block::getAssets).map(assetsMap -> {
+            Map<String, List<String>> tempMap = new HashMap<>();
+            tempMap.put("material", (List<String>)assetsMap.getOrDefault("material", new ArrayList<>()));
+            tempMap.put("scripts", (List<String>)assetsMap.getOrDefault("scripts", new ArrayList<>()));
+            tempMap.put("styles", (List<String>)assetsMap.getOrDefault("styles", new ArrayList<>()));
+            return tempMap;
+        }).reduce(mergedAssets, (acc, curr) -> {
+            acc.get("material").addAll(curr.get("material"));
+            acc.get("scripts").addAll(curr.get("scripts"));
+            acc.get("styles").addAll(curr.get("styles"));
+            return acc;
+        }, (map1, map2) -> {
+            map1.get("material").addAll(map2.get("material"));
+            map1.get("scripts").addAll(map2.get("scripts"));
+            map1.get("styles").addAll(map2.get("styles"));
+            return map1;
+        });
     }
 
+    /**
+     * Gets block info.
+     *
+     * @param block     the block
+     * @param framework the framework
+     * @return the block info
+     */
     public List<Block> getBlockInfo(List<String> block, String framework) {
         // 创建 QueryWrapper 实例
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (block != null && !block.isEmpty()) {
 
             // 处理 blockLabelName 为数组的情况
-            String labelsCondition = block.stream()
-                    .map(name -> "label = '" + name + "'")
-                    .collect(Collectors.joining(" OR "));
+            String labelsCondition =
+                block.stream().map(name -> "label = '" + name + "'").collect(Collectors.joining(" OR "));
 
             // 添加标签条件
             queryWrapper.and(wrapper -> wrapper.apply(labelsCondition));
@@ -143,20 +167,27 @@ public class BlockServiceImpl implements BlockService {
         // 执行查询并返回结果
         return blockMapper.selectList(queryWrapper);
     }
+
+    /**
+     * Traverse blocks.
+     *
+     * @param content the content
+     * @param block   the block
+     * @throws JsonProcessingException the json processing exception
+     */
     public void traverseBlocks(String content, List<String> block) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(content);
         // 判断传过来的参数是JSON数组还是JSON对象
         if (content != null && jsonNode.isArray()) {
             List<String> schema = objectMapper.readValue(content, List.class);
-            for (Object prop : (List<?>) schema) {
+            for (Object prop : schema) {
                 traverseBlocks(objectMapper.writeValueAsString(prop), block);
             }
         } else {
-            Map<String, Object> schema = objectMapper.readValue(content, Map.class);
-            Map<?, ?> schemaMap = (Map<?, ?>) schema;
+            Map<?, ?> schemaMap = objectMapper.readValue(content, Map.class);
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
-                block.add((String) schemaMap.get("componentName"));
+                block.add((String)schemaMap.get("componentName"));
             }
             if (schemaMap.containsKey("children") && schemaMap.get("children") instanceof List) {
                 traverseBlocks(objectMapper.writeValueAsString(schemaMap.get("children")), block);
@@ -165,8 +196,13 @@ public class BlockServiceImpl implements BlockService {
 
     }
 
+    /**
+     * Is block boolean.
+     *
+     * @param schema the schema
+     * @return the boolean
+     */
     public boolean isBlock(Map<?, ?> schema) {
         return schema != null && "Block".equals(schema.get("componentType"));
     }
-
 }
