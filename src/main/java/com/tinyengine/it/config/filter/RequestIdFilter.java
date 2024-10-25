@@ -2,13 +2,21 @@ package com.tinyengine.it.config.filter;
 
 import org.slf4j.MDC;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.*;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * The type Request id filter.
+ *
+ * @since 2024-10-20
+ */
 public class RequestIdFilter implements Filter {
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         // 初始化方法
@@ -16,7 +24,7 @@ public class RequestIdFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
         try {
             // 生成唯一请求 ID
             String requestId = UUID.randomUUID().toString();

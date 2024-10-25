@@ -20,7 +20,7 @@ import java.util.Map;
  * 区块历史表
  * </p>
  *
- * @author lu-yg
+ * @author lu -yg
  * @since 2024-10-17
  */
 @Getter
@@ -32,10 +32,8 @@ public class BlockHistory extends HistoryEntity {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-
     @Schema(name = "message", description = "历史记录描述消息")
     private String message;
-
 
     @Schema(name = "label", description = "区块编码")
     private String label;
@@ -105,6 +103,5 @@ public class BlockHistory extends HistoryEntity {
     @Schema(name = "contentBlocks", description = "*暂不清楚*")
     @TableField(typeHandler = MapTypeHandler.class)
     private List<BlockVersionDto> contentBlocks;
-
 
 }

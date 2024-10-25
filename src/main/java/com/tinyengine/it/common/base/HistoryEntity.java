@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.common.base;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,6 +6,8 @@ import lombok.Setter;
 
 /**
  * 历史数据对象
+ *
+ * @since 2024-10-20
  */
 @Getter
 @Setter

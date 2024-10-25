@@ -1,5 +1,6 @@
 package com.tinyengine.it.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * The type Execute command.
+ *
+ * @since 2024-10-20
+ */
+@Slf4j
 public class ExecuteCommand {
     private static final Logger logger = LoggerFactory.getLogger(ExecuteCommand.class);
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException the io exception
+     */
     public static void main(String[] args) throws IOException {
         // 指定运行 npm install 的目录
         Path path = Paths.get("C:\\forkWork\\tiny-engine-webservice-java\\src\\main\\java\\com\\tinyengine\\it\\js");
@@ -24,9 +37,14 @@ public class ExecuteCommand {
         command.add(npmCommand);
         command.add("install");
         executeCommand(command);
-
     }
 
+    /**
+     * Execute command string builder.
+     *
+     * @param command the command
+     * @return the string builder
+     */
     public static StringBuilder executeCommand(List<String> command) {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         StringBuilder result = new StringBuilder();
@@ -41,7 +59,7 @@ public class ExecuteCommand {
                         result.append(line).append("\n");
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
             });
 
@@ -53,7 +71,7 @@ public class ExecuteCommand {
                         logger.error(line);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
             });
 
@@ -69,7 +87,7 @@ public class ExecuteCommand {
                 logger.error("命令运行失败，exitCode: " + exitCode);
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return result;

@@ -12,18 +12,31 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * The type Ai chat client.
+ *
+ * @since 2024-10-20
+ */
 @Slf4j
 public class AiChatClient {
     private final Map<String, AiChatConfig.AiChatConfigData> config;
     private final WebClient webClient;
 
+    /**
+     * Instantiates a new Ai chat client.
+     */
     public AiChatClient() {
         this.config = AiChatConfig.getAiChatConfig();
-        this.webClient = WebClient.builder()
-                .baseUrl("https://default.api.url") // Optional: Default base URL
-                .build();
+        // Optional: Default base URL
+        this.webClient = WebClient.builder().baseUrl("https://default.api.url").build();
     }
 
+    /**
+     * Execute chat request map.
+     *
+     * @param openAiBodyDto the open AI body dto
+     * @return the map
+     */
     public Map<String, Object> executeChatRequest(OpenAiBodyDto openAiBodyDto) {
         AiChatConfig.AiChatConfigData configData = config.get(openAiBodyDto.getModel());
         if (configData == null) {
@@ -38,29 +51,26 @@ public class AiChatClient {
         log.info("Request Option: " + httpRequestOption.method);
         log.info("Headers: " + configData.headers);
 
-        WebClient.RequestHeadersSpec<?> requestSpec = webClient
-                .method(httpRequestOption.method.equalsIgnoreCase("POST") ? HttpMethod.POST : HttpMethod.GET)
+        WebClient.RequestHeadersSpec<?> requestSpec =
+            webClient.method("POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET)
                 .uri(httpRequestUrl);
 
         for (Map.Entry<String, String> header : configData.headers.entrySet()) {
             requestSpec.header(header.getKey(), header.getValue());
         }
 
-
-        if (httpRequestOption.method.equalsIgnoreCase("POST") && !openAiBodyDto.getMessages().isEmpty()) {
-            requestSpec = ((WebClient.RequestBodySpec) requestSpec).bodyValue(openAiBodyDto); // Add request body
+        if ("POST".equalsIgnoreCase(httpRequestOption.method) && !openAiBodyDto.getMessages().isEmpty()) {
+            requestSpec = ((WebClient.RequestBodySpec)requestSpec).bodyValue(openAiBodyDto);
+            // Add request body
         }
 
-        return requestSpec.retrieve()
-                .bodyToMono(String.class)
-                .map(response -> {
-                    try {
-                        return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {
-                        });
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .block(); // 等待结果
+        return requestSpec.retrieve().bodyToMono(String.class).map(response -> {
+            try {
+                return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {
+                });
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }).block(); // 等待结果
     }
 }
