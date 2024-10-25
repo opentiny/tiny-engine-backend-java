@@ -2,6 +2,7 @@ package com.tinyengine.it.controller;
 
 
 import com.tinyengine.it.common.base.Result;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

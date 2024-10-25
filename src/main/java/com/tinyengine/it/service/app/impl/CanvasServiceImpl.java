@@ -3,7 +3,6 @@ package com.tinyengine.it.service.app.impl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.BlockMapper;
-
 import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.CanvasDto;
@@ -11,11 +10,9 @@ import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Page;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.CanvasService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class CanvasServiceImpl implements CanvasService {
