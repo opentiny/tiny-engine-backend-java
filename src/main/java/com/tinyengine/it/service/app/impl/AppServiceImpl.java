@@ -185,7 +185,7 @@ public class AppServiceImpl implements AppService {
             Map<String, Map<String, String>> relationLangs = new HashMap<>();
             I18nEntry i18n = new I18nEntry();
             // 没有词条的时候，查询应用和区块对应的国家化关联，把默认空的关联分组返回
-            if (userdIn == Enums.E_i18Belongs.APP.getValue()) {
+            if (userdIn == Enums.I18Belongs.APP.getValue()) {
 
                 i18n.setHostType("app");
 
@@ -213,7 +213,7 @@ public class AppServiceImpl implements AppService {
         List<Map<String, Object>> utils = (List<Map<String, Object>>)extensions.get("utils");
         // 拼装国际化词条
         Map<String, Map<String, String>> i18n =
-            formatI18nEntrites(metaDto.getI18n(), Enums.E_i18Belongs.APP.getValue(), id);
+            formatI18nEntrites(metaDto.getI18n(), Enums.I18Belongs.APP.getValue(), id);
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);
         previewDto.setI18n(i18n);

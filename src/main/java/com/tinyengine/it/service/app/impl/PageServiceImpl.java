@@ -368,7 +368,7 @@ public class PageServiceImpl implements PageService {
     public PreviewDto getPreviewMetaData(PreviewParam previewParam) {
         String type = previewParam.getType();
         PreviewDto previewDto;
-        if (Enums.E_Schema2CodeType.BLOCK.getValue().equals(type)) {
+        if (Enums.Schema2CodeType.BLOCK.getValue().equals(type)) {
             previewDto = getBlockPreviewMetaData(previewParam);
             return previewDto;
         }
@@ -700,7 +700,7 @@ public class PageServiceImpl implements PageService {
         // 拼装国际化词条
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
         Map<String, Map<String, String>> i18n =
-            appService.formatI18nEntrites(i18ns, Enums.E_i18Belongs.BLOCK.getValue(), previewParam.getId());
+            appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
 
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);

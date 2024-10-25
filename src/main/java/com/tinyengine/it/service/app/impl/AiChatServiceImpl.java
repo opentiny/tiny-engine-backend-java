@@ -63,7 +63,7 @@ public class AiChatServiceImpl implements AiChatService {
         }
         String model = aiParam.getFoundationModel().get("model");
         if (aiParam.getFoundationModel().get("model").isEmpty()) {
-            model = Enums.E_FOUNDATION_MODEL.GPT_35_TURBO.getValue();
+            model = Enums.FoundationModel.GPT_35_TURBO.getValue();
         }
         Map<String, Object> data = requestAnswerFromAi(aiParam.getMessages(), model).getData();
         if (data.isEmpty()) {
@@ -105,7 +105,7 @@ public class AiChatServiceImpl implements AiChatService {
             String message = (String)response.get("message");
             return Result.failed(code, message);
         }
-        if (Enums.E_FOUNDATION_MODEL.ERNIE_BOT_TURBO.getValue().equals(model)) {
+        if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model)) {
             // 进行转换
             Map<String, Object> responseData = (Map<String, Object>)response.get("data");
 

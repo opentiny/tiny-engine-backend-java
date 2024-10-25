@@ -38,15 +38,15 @@ public class AiChatConfig {
 
         Map<String, String> ernieBotHeaders = new HashMap<>();
 
-        config.put(Enums.E_FOUNDATION_MODEL.GPT_35_TURBO.getValue(),
+        config.put(Enums.FoundationModel.GPT_35_TURBO.getValue(),
             new AiChatConfigData(OPENAI_API_URL + "/v1/chat/completions", createCommonRequestOption(), openaiHeaders,
                 "openai"));
 
-        config.put(Enums.E_FOUNDATION_MODEL.LOCAL_GPT.getValue(),
+        config.put(Enums.FoundationModel.LOCAL_GPT.getValue(),
             new AiChatConfigData(LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(),
                 localGptHeaders, "!openai"));
 
-        config.put(Enums.E_FOUNDATION_MODEL.ERNIE_BOT_TURBO.getValue(), new AiChatConfigData(
+        config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(), new AiChatConfigData(
             "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=" + WENXIN_ACCESS_TOKEN,
             createCommonRequestOption(), ernieBotHeaders, "baidu"));
 
