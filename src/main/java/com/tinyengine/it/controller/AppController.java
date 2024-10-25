@@ -122,7 +122,9 @@ public class AppController {
      */
     @Operation(summary = "获取应用信息详情", description = "获取应用信息详情", parameters = {
             @Parameter(name = "id", description = "appId")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = App.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取应用信息详情")
     @GetMapping("/apps/detail/{id}")
@@ -140,7 +142,9 @@ public class AppController {
     @Operation(summary = "修改应用对应的国际化语种关联", description = "修改应用对应的国际化语种关联", parameters = {
             @Parameter(name = "id", description = "appId"),
             @Parameter(name = "param", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = App.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改应用对应的国际化语种关联")
     @PostMapping("/apps/i18n/{id}")

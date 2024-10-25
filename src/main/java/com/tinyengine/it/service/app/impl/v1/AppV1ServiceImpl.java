@@ -336,9 +336,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             } else {
                 targetVersion = versions.get(versions.size() - 1);
             }
-            Map<String, Object> historyMap = new HashMap<>();
-            historyMap = (Map<String, Object>) keyMap.get("historyMap");
-            Integer historyId = (Integer) historyMap.get(targetVersion);
+            Integer historyId = (Integer) ((Map<String, Object>) keyMap.get("historyMap")).get(targetVersion);
             historiesId.add(historyId);
         }
         return historiesId;

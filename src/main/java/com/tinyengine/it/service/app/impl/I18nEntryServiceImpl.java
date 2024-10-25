@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -186,7 +187,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @return I18nEntry
      */
     @Override
-    public List<I18nEntry> Create(OperateI18nEntries operateI18nEntries) {
+    public List<I18nEntry> create(OperateI18nEntries operateI18nEntries) {
         List<I18nLang> langs = getHostLangs();
         Map<String, Integer> langsDic = new HashMap<>();
         for (I18nLang i18nLangs : langs) {
@@ -269,7 +270,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     public List<I18nEntry> formatEntriesParam(OperateI18nBatchEntries operateI18nBatchEntries,
             List<I18nLang> i18nLangsList) {
         Map<String, Integer> langsDic = new HashMap<>();
-        List<I18nEntry> i18nEntriesList = new ArrayList<>();
         List<I18nEntry> i18nEntriesListResult = new ArrayList<>();
         for (I18nLang i18nLangs : i18nLangsList) {
             langsDic.put(i18nLangs.getLang(), i18nLangs.getId());
@@ -281,8 +281,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             operateI18nEntries.setHostType(operateI18nBatchEntries.getHostType());
             operateI18nEntries.setKey(entry.getKey());
             operateI18nEntries.setContents(entry.getContents());
-            i18nEntriesList = fillParam(operateI18nEntries, langsDic);
-            i18nEntriesListResult.addAll(i18nEntriesList);
+            i18nEntriesListResult.addAll(fillParam(operateI18nEntries, langsDic));
         }
 
         return i18nEntriesListResult;
@@ -297,7 +296,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "bulkUpdate 批量更新")
     @Override
     public List<I18nEntry> bulkUpdate(OperateI18nEntries operateI18nEntries) {
-        List<I18nEntry> i18nEntryResult = new ArrayList<>();
         if ("app".equals(operateI18nEntries.getHostType())) {
             I18nEntry i18nEntries = new I18nEntry();
             i18nEntries.setHostType(operateI18nEntries.getHostType());
@@ -305,12 +303,10 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             i18nEntries.setKey(operateI18nEntries.getKey());
             List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.queryI18nEntryByCondition(i18nEntries);
             if (i18nEntriesList.isEmpty()) {
-                i18nEntryResult = Create(operateI18nEntries);
-                return i18nEntryResult;
+                return create(operateI18nEntries);
             }
         }
-        i18nEntryResult = bulkUpdateEntries(operateI18nEntries);
-        return i18nEntryResult;
+        return bulkUpdateEntries(operateI18nEntries);
     }
 
     /**
@@ -369,19 +365,16 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     public Result<Map<String, Object>> readSingleFileAndBulkCreate(String lang, MultipartFile file, int host)
             throws Exception {
         List<Object> entriesArr = new ArrayList<>();
-        Map<String, Object> entriesItem = new HashMap<>();
         String contentType = file.getContentType();
 
-        if (contentType.equals(Enums.MimeType.JSON.getValue())) {
+        if (Objects.equals(contentType, Enums.MimeType.JSON.getValue())) {
             Result<Map<String, Object>> parseJsonFileStreamResult = parseJsonFileStream(lang, file);
             if (!parseJsonFileStreamResult.isSuccess()) {
                 return parseJsonFileStreamResult;
             }
-            entriesItem = parseJsonFileStreamResult.getData();
-            entriesArr.add(entriesItem);
+            entriesArr.add(parseJsonFileStreamResult.getData());
         } else {
-            entriesItem = parseZipFileStream(lang, file);
-            entriesArr.add(entriesItem);
+            entriesArr.add(parseZipFileStream(lang, file));
         }
         // 批量上传接口未提交任何文件流时报错
         if (entriesArr.isEmpty()) {
