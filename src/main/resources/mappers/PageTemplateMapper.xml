@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, page_content, framework, published, `public`, type, status, is_preset, tpl_image, description, platform_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name, page_content, framework, published, `public`, `type`, status, is_preset, image_url, description, platform_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -28,7 +28,7 @@
             AND `public` = #{publicStatus}
         </if>
         <if test="type!=null and type!=''">
-            AND type = #{type}
+            AND `type` = #{type}
         </if>
         <if test="status!=null and status!=''">
             AND status = #{status}
@@ -36,8 +36,8 @@
         <if test="isPreset!=null and isPreset!=''">
             AND is_preset = #{isPreset}
         </if>
-        <if test="tplImage!=null and tplImage!=''">
-            AND tpl_image = #{tplImage}
+        <if test="imageUrl!=null and imageUrl!=''">
+            AND image_url = #{imageUrl}
         </if>
         <if test="description!=null and description!=''">
             AND description = #{description}
@@ -83,7 +83,7 @@
             `public` = #{publicStatus},
         </if>
         <if test="type!=null and type!=''">
-            type = #{type},
+            `type` = #{type},
         </if>
         <if test="status!=null and status!=''">
             status = #{status},
@@ -91,8 +91,8 @@
         <if test="isPreset!=null and isPreset!=''">
             is_preset = #{isPreset},
         </if>
-        <if test="tplImage!=null and tplImage!=''">
-            tpl_image = #{tplImage},
+        <if test="imageUrl!=null and imageUrl!=''">
+            image_url = #{imageUrl},
         </if>
         <if test="description!=null and description!=''">
             description = #{description},
@@ -132,7 +132,7 @@
         <result column="type" property="type"/>
         <result column="status" property="status"/>
         <result column="is_preset" property="isPreset"/>
-        <result column="tpl_image" property="tplImage"/>
+        <result column="image_url" property="imageUrl"/>
         <result column="description" property="description"/>
         <result column="platform_id" property="platformId"/>
         <result column="created_by" property="createdBy"/>
@@ -143,19 +143,19 @@
         <result column="site_id" property="siteId"/>
     </resultMap>
 
-    <!-- 查询表page_template所有数据 -->
+    <!-- 查询表t_page_template所有数据 -->
     <select id="queryAllPageTemplate" resultMap="PageTemplateMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM page_template
+        FROM t_page_template
 
     </select>
 
-    <!-- 根据主键id查询表page_template信息 -->
+    <!-- 根据主键id查询表t_page_template信息 -->
     <select id="queryPageTemplateById" resultMap="PageTemplateMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM page_template
+        FROM t_page_template
         <where>
             <if test="id != null">
                 AND id = #{id}
@@ -164,25 +164,28 @@
         </where>
     </select>
 
-    <!-- 根据条件查询表page_template数据 -->
+    <!-- 根据条件查询表t_page_template数据 -->
     <select id="queryPageTemplateByCondition" resultMap="PageTemplateMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM page_template
+        FROM t_page_template
         WHERE 1=1
         <include refid="PageTemplateByCondition"/>
     </select>
 
-    <!-- 根据主键id删除表page_template数据 -->
-    <delete id="deletePageTemplateById">
+    <!-- 根据主键id删除表t_page_template数据 -->
+    <delete id="deletePageTemplateByIds">
         DELETE
-        FROM page_template
-        WHERE id = #{id}
+        FROM t_page_template
+        WHERE id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
 
-    <!-- 根据主键id更新表page_template数据 -->
+    <!-- 根据主键id更新表t_page_template数据 -->
     <update id="updatePageTemplateById" parameterType="com.tinyengine.it.model.entity.PageTemplate">
-        UPDATE page_template
+        UPDATE t_page_template
         <set>
             <include refid="PageTemplateSetColumns"/>
         </set>
@@ -190,9 +193,9 @@
         id=#{id}
     </update>
 
-    <!-- 新增表page_template数据 -->
+    <!-- 新增表t_page_template数据 -->
     <insert id="createPageTemplate" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.PageTemplate">
-        INSERT INTO page_template ( id
+        INSERT INTO t_page_template ( id
                                   , name
                                   , page_content
                                   , framework
@@ -201,7 +204,7 @@
                                   , type
                                   , status
                                   , is_preset
-                                  , tpl_image
+                                  , image_url
                                   , description
                                   , platform_id
                                   , created_by
@@ -219,7 +222,7 @@
                , #{type}
                , #{status}
                , #{isPreset}
-               , #{tplImage}
+               , #{imageUrl}
                , #{description}
                , #{platformId}
                , #{createdBy}

@@ -22,7 +22,8 @@ public class TaskRecord extends BaseEntity {
     @Schema(name = "teamId", description = "团队id, 默认0")
     private Integer teamId;
 
-    @Schema(name = "taskTypeId", description = "任务类型: 1 ASSETS_BUILD / 2 APP_BUILD / 3 PLATFORM_BUILD / 4 VSCODE_PLUGIN_BUILD/5 BLOCK_BUILD")
+    @Schema(name = "taskTypeId",
+        description = "任务类型: 1 ASSETS_BUILD / 2 APP_BUILD / 3 PLATFORM_BUILD / 4 VSCODE_PLUGIN_BUILD/5 BLOCK_BUILD")
     private Integer taskTypeId;
 
     @Schema(name = "uniqueId", description = "构建资源id")
