@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , lang, label, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , lang, label, created_by, last_updated_by, created_time, last_updated_time
     </sql>
 
     <!-- 通用条件列 -->
@@ -29,12 +29,6 @@
         </if>
         <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
             AND last_updated_time = #{lastUpdatedTime}
-        </if>
-        <if test="tenantId!=null and tenantId!=''">
-            AND tenant_id = #{tenantId}
-        </if>
-        <if test="siteId!=null and siteId!=''">
-            AND site_id = #{siteId}
         </if>
     </sql>
 
@@ -58,12 +52,6 @@
         <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
             last_updated_time = #{lastUpdatedTime},
         </if>
-        <if test="tenantId!=null and tenantId!=''">
-            tenant_id = #{tenantId},
-        </if>
-        <if test="siteId!=null and siteId!=''">
-            site_id = #{siteId},
-        </if>
     </sql>
 
 
@@ -76,8 +64,6 @@
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
         <result column="last_updated_time" property="lastUpdatedTime"/>
-        <result column="tenant_id" property="tenantId"/>
-        <result column="site_id" property="siteId"/>
     </resultMap>
 
     <!-- 查询表t_i18n_lang所有数据 -->
@@ -129,17 +115,13 @@
                                 , created_by
                                 , last_updated_by
                                 , created_time
-                                , last_updated_time
-                                , tenant_id
-                                , site_id)
+                                , last_updated_time)
         VALUES ( #{id}
                , #{lang}
                , #{label}
                , #{createdBy}
                , #{lastUpdatedBy}
                , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+               , #{lastUpdatedTime})
     </insert>
 </mapper>

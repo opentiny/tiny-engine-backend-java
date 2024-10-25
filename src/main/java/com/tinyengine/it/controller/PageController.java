@@ -123,7 +123,7 @@ public class PageController {
      * 修改页面
      *
      * @param id
-     * @param param
+     * @param page
      * @return
      * @throws Exception
      */

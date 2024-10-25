@@ -1,10 +1,15 @@
 package com.tinyengine.it.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
+import com.tinyengine.it.config.handler.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -23,7 +28,8 @@ public class PageTemplate extends BaseEntity {
     private String name;
 
     @Schema(name = "pageContent", description = "模板页面内容，存储页面内容，数据源等")
-    private String pageContent;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Object> pageContent;
 
     @Schema(name = "framework", description = "技术栈")
     private String framework;
@@ -43,8 +49,8 @@ public class PageTemplate extends BaseEntity {
     @Schema(name = "isPreset", description = "*设计预留字段*")
     private Integer isPreset;
 
-    @Schema(name = "tplImage", description = "模板截图")
-    private String tplImage;
+    @Schema(name = "imageUrl", description = "模板截图")
+    private String imageUrl;
 
     @Schema(name = "description", description = "描述")
     private String description;

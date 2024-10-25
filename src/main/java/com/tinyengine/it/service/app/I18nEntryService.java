@@ -1,10 +1,7 @@
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,21 +21,15 @@ public interface I18nEntryService {
      *
      * @param id
      */
-    I18nEntry findI18nEntryById(@Param("id") Integer id);
+    I18nEntryDto findI18nEntryById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_i18n_entry信息
      *
      * @param i18nEntry
      */
-    List<I18nEntry> findI18nEntryByCondition(I18nEntry i18nEntry);
+    List<I18nEntryDto> findI18nEntryByCondition(I18nEntry i18nEntry);
 
-//    /**
-//     * 根据主键id删除t_i18n_entry数据
-//     *
-//     * @param id
-//     */
-//    Integer deleteI18nEntryById(@Param("id") Integer id);
 
     /**
      * 根据主键id更新表t_i18n_entry信息
@@ -47,12 +38,6 @@ public interface I18nEntryService {
      */
     Integer updateI18nEntryById(I18nEntry i18nEntry);
 
-//    /**
-//     * 新增表t_i18n_entry数据
-//     *
-//     * @param i18nEntry
-//     */
-//    Integer createI18nEntry(I18nEntry i18nEntry);
 
     /**
      * 格式化词条列表
@@ -88,7 +73,7 @@ public interface I18nEntryService {
      */
     List<I18nEntry> bulkUpdate(OperateI18nEntries operateI18nEntries);
 
-    List<I18nEntry> deleteI18nEntriesByHostAndHostTypeAndKey(String host, String hostType, List<String> keys);
+    List<I18nEntryDto> deleteI18nEntriesByHostAndHostTypeAndKey(DeleteI18nEntry deleteI18nEntry);
 
     /**
      * 上传单个文件
