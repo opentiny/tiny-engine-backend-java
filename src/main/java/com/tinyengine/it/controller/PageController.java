@@ -57,7 +57,7 @@ public class PageController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面列表")
     @GetMapping("/pages/list/{aid}")
-    public Result<List<Page>> getAllpage(@PathVariable Integer aid) {
+    public Result<List<Page>> getAllPage(@PathVariable Integer aid) {
         List<Page> pageList = pageService.queryAllPage(aid);
         return Result.success(pageList);
     }
@@ -76,7 +76,7 @@ public class PageController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面明细")
     @GetMapping("/pages/detail/{id}")
-    public Result<Page> getpageById(@PathVariable Integer id) throws Exception {
+    public Result<Page> getPageById(@PathVariable Integer id) throws Exception {
         Page page = pageService.queryPageById(id);
         return Result.success(page);
     }
@@ -95,7 +95,7 @@ public class PageController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "创建页面")
     @PostMapping("/pages/create")
-    public Result<Page> createpage(@Valid @RequestBody Page page) throws Exception {
+    public Result<Page> createPage(@Valid @RequestBody Page page) throws Exception {
 
         if (page.getIsPage()) {
             // 创建页面
@@ -112,7 +112,6 @@ public class PageController {
     /**
      * 修改页面
      *
-     * @param id   the id
      * @param page the page
      * @return result
      * @throws Exception the exception
@@ -125,7 +124,7 @@ public class PageController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改页面")
     @PostMapping("/pages/update/{id}")
-    public Result<Page> updatepage(@PathVariable Integer id, @RequestBody Page page) throws Exception {
+    public Result<Page> updatePage(@RequestBody Page page) throws Exception {
         page.setLastUpdatedTime(null);
         page.setCreatedTime(null);
         page.setLastUpdatedBy(null);
@@ -153,7 +152,7 @@ public class PageController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除页面")
     @GetMapping("/pages/delete/{id}")
-    public Result<Page> deletepage(@PathVariable Integer id) throws Exception {
+    public Result<Page> deletePage(@PathVariable Integer id) throws Exception {
         return pageService.delPage(id);
     }
 
