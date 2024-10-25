@@ -6,45 +6,56 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * The interface App extension mapper.
+ *
+ * @since 2024-10-20
+ */
 public interface AppExtensionMapper extends BaseMapper<AppExtension> {
-
     /**
      * 查询表t_app_extension所有信息
+     *
+     * @return the list
      */
     List<AppExtension> queryAllAppExtension();
 
     /**
      * 根据主键id查询表t_app_extension数据
      *
-     * @param id
+     * @param id the id
+     * @return the app extension
      */
     AppExtension queryAppExtensionById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_app_extension数据
      *
-     * @param appExtension
+     * @param appExtension the app extension
+     * @return the list
      */
     List<AppExtension> queryAppExtensionByCondition(AppExtension appExtension);
 
     /**
      * 根据主键id删除表t_app_extension数据
      *
-     * @param id
+     * @param id the id
+     * @return the integer
      */
     Integer deleteAppExtensionById(@Param("id") Integer id);
 
     /**
      * 根据主键id更新表t_app_extension数据
      *
-     * @param appExtension
+     * @param appExtension the app extension
+     * @return the integer
      */
     Integer updateAppExtensionById(AppExtension appExtension);
 
     /**
      * 新增表t_app_extension数据
      *
-     * @param appExtension
+     * @param appExtension the app extension
+     * @return the integer
      */
     Integer createAppExtension(AppExtension appExtension);
 }

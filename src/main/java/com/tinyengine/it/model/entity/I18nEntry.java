@@ -12,7 +12,7 @@ import lombok.Setter;
  * 国际化语言配置表
  * </p>
  *
- * @author lu-yg
+ * @author lu -yg
  * @since 2024-10-17
  */
 @Getter
@@ -26,15 +26,13 @@ public class I18nEntry extends BaseEntity {
     @Schema(name = "content", description = "词条内容")
     private String content;
 
-    @Schema(name = "hostId", description = "关联的hostid： appId或blockId")
-    @JsonProperty("host_id")
-    private Integer hostId;
+    @Schema(name = "host", description = "关联的hostid： appId或blockId")
+    private Integer host;
 
     @Schema(name = "hostType", description = "app或者block")
     @JsonProperty("host_type")
     private String hostType;
 
-    @Schema(name = "langId", description = "关联语言id")
-    @JsonProperty("lang_id")
-    private Integer langId;
+    @Schema(name = "lang", description = "关联语言id")
+    private Integer lang;
 }

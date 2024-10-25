@@ -22,8 +22,6 @@ import java.time.LocalDateTime;
 @Data
 @Schema(name = "I18nEntries对象", description = "返回对象")
 public class I18nEntryDto {
-
-    private static final long serialVersionUID = 1L;
     @Schema(name = "id", description = "主键id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -34,9 +32,8 @@ public class I18nEntryDto {
     @Schema(name = "content", description = "词条内容")
     private String content;
 
-    @Schema(name = "hostId", description = "关联的hostid： appId或blockId")
-    @JsonProperty("host_id")
-    private Integer hostId;
+    @Schema(name = "host", description = "关联的hostid： appId或blockId")
+    private Integer host;
 
     @Schema(name = "hostType", description = "app或者block")
     @JsonProperty("host_type")

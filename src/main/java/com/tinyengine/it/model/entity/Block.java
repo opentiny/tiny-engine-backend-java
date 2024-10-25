@@ -108,6 +108,4 @@ public class Block extends BaseEntity {
     @JsonProperty("block_group_id")
     private Integer blockGroupId;
 
-
-
 }

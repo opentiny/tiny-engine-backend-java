@@ -7,25 +7,46 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , key, content, host_id, host_type, lang_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , `key`, content, host_id, host_type, lang_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+    </sql>
+    <sql id="Il8EntryLeftJoinI18Lang">
+        E.id,
+               E.`key`,
+               E.content,
+               E.host_id,
+               E.host_type,
+               E.lang_id,
+               E.created_by,
+               E.last_updated_by,
+               E.created_time,
+               E.last_updated_time,
+               E.tenant_id,
+               E.site_id,
+               L.id                AS langId,
+               L.lang,
+               L.label,
+               L.created_by        AS langCreatedBy,
+               L.last_updated_by   AS langLastUpdatedBy,
+               L.created_time      AS langCreatedTime,
+               L.last_updated_time AS langLastUpdatedTime
     </sql>
 
     <!-- 通用条件列 -->
     <sql id="I18nEntryByCondition">
         <if test="key!=null and key!=''">
-            AND key = #{key}
+            AND `key` = #{key}
         </if>
         <if test="content!=null and content!=''">
             AND content = #{content}
         </if>
-        <if test="hostId!=null and hostId!=''">
-            AND host_id = #{hostId}
+        <if test="host!=null and host!=''">
+            AND host_id = #{host}
         </if>
         <if test="hostType!=null and hostType!=''">
             AND host_type = #{hostType}
         </if>
-        <if test="langId!=null and langId!=''">
-            AND lang_id = #{langId}
+        <if test="lang!=null and lang!=''">
+            AND lang_id = #{lang}
         </if>
         <if test="createdBy!=null and createdBy!=''">
             AND created_by = #{createdBy}
@@ -50,19 +71,19 @@
     <!-- 通用设置列 -->
     <sql id="I18nEntrySetColumns">
         <if test="key!=null and key!=''">
-            key = #{key},
+            `key` = #{key},
         </if>
         <if test="content!=null and content!=''">
             content = #{content},
         </if>
-        <if test="hostId!=null and hostId!=''">
-            host_id = #{hostId},
+        <if test="host!=null and host!=''">
+            host_id = #{host},
         </if>
         <if test="hostType!=null and hostType!=''">
             host_type = #{hostType},
         </if>
-        <if test="langId!=null and langId!=''">
-            lang_id = #{langId},
+        <if test="lang!=null and lang!=''">
+            lang_id = #{lang},
         </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
@@ -86,11 +107,11 @@
 
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="I18nEntryMap" type="com.tinyengine.it.model.entity.I18nEntry">
+    <resultMap id="I18nEntryMap" type="com.tinyengine.it.model.dto.I18nEntryDto">
         <id column="id" property="id"/>
         <result column="key" property="key"/>
         <result column="content" property="content"/>
-        <result column="host_id" property="hostId"/>
+        <result column="host_id" property="host"/>
         <result column="host_type" property="hostType"/>
         <result column="lang_id" property="langId"/>
         <result column="created_by" property="createdBy"/>
@@ -99,23 +120,34 @@
         <result column="last_updated_time" property="lastUpdatedTime"/>
         <result column="tenant_id" property="tenantId"/>
         <result column="site_id" property="siteId"/>
+        <association property="lang" javaType="com.tinyengine.it.model.entity.I18nLang">
+            <id column="langId" property="id"/>
+            <result column="lang" property="lang"/>
+            <result column="label" property="label"/>
+            <result column="langCreatedBy" property="createdBy"/>
+            <result column="langLastUpdatedBy" property="lastUpdatedBy"/>
+            <result column="langCreatedTime" property="createdTime"/>
+            <result column="langLastUpdatedTime" property="lastUpdatedTime"/>
+        </association>
     </resultMap>
 
     <!-- 查询表t_i18n_entry所有数据 -->
     <select id="queryAllI18nEntry" resultMap="I18nEntryMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_i18n_entry
+            <include refid="Il8EntryLeftJoinI18Lang"/>
+        FROM t_i18n_entry E
+                 LEFT JOIN t_i18n_lang L ON E.lang_id = L.id;
     </select>
 
     <!-- 根据主键id查询表t_i18n_entry信息 -->
     <select id="queryI18nEntryById" resultMap="I18nEntryMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_i18n_entry
+        <include refid="Il8EntryLeftJoinI18Lang"/>
+        FROM t_i18n_entry E
+        LEFT JOIN t_i18n_lang L ON E.lang_id = L.id
         <where>
             <if test="id != null">
-                AND id = #{id}
+                AND E.id = #{id}
             </if>
         </where>
     </select>
@@ -123,16 +155,26 @@
     <!-- 根据key、lang查询表i18n_entries信息 -->
     <select id="findI18nEntriesByKeyAndLang" resultMap="I18nEntryMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_i18n_entry
-        WHERE `key`=#{key} and lang_id=#{langId}
+        <include refid="Il8EntryLeftJoinI18Lang"/>
+        FROM t_i18n_entry E
+        LEFT JOIN t_i18n_lang L ON E.lang_id = L.id
+        WHERE `key`=#{key} and lang_id=#{lang}
+    </select>
+    <!-- 根据host、hosttype查询表i18n_entries信息 -->
+    <select id="findI18nEntriesByHostandHostType" resultMap="I18nEntryMap">
+        SELECT
+        <include refid="Il8EntryLeftJoinI18Lang"/>
+        FROM t_i18n_entry E
+        LEFT JOIN t_i18n_lang L ON E.lang_id = L.id
+        where host_id = #{hostId} and host_type = #{hostType}
     </select>
 
     <!-- 根据条件查询表t_i18n_entry数据 -->
     <select id="queryI18nEntryByCondition" resultMap="I18nEntryMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_i18n_entry
+        <include refid="Il8EntryLeftJoinI18Lang"/>
+        FROM t_i18n_entry E
+        LEFT JOIN t_i18n_lang L ON E.lang_id = L.id
         WHERE 1=1
         <include refid="I18nEntryByCondition"/>
     </select>
@@ -155,9 +197,10 @@
     </update>
 
     <!-- 新增表t_i18n_entry数据 -->
-    <insert id="createI18nEntry" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.I18nEntry">
+    <insert id="createI18nEntry" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.I18nEntry">
         INSERT INTO t_i18n_entry ( id
-                                 , key
+                                 , `key`
                                  , content
                                  , host_id
                                  , host_type
@@ -171,9 +214,9 @@
         VALUES ( #{id}
                , #{key}
                , #{content}
-               , #{hostId}
+               , #{host}
                , #{hostType}
-               , #{langId}
+               , #{lang}
                , #{createdBy}
                , #{lastUpdatedBy}
                , #{createdTime}
