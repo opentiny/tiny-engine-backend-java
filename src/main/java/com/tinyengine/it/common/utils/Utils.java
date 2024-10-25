@@ -4,15 +4,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tinyengine.it.common.exception.ServiceException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Utils.
+ *
+ * @since 2024-10-20
+ */
+@Slf4j
 public class Utils {
+    /**
+     * The Res keys.
+     */
     public String[] resKeys = {"is_body", "parent_id", "is_page", "is_default"};
 
+    /**
+     * Remove duplicates list.
+     *
+     * @param <T>  the type parameter
+     * @param list the list
+     * @return the list
+     */
     // 泛型去重方法
     public static <T> List<T> removeDuplicates(List<T> list) {
         // 使用 Set 去重
@@ -21,17 +44,26 @@ public class Utils {
         return new ArrayList<>(set);
     }
 
+    /**
+     * Find max version string.
+     *
+     * @param versions the versions
+     * @return the string
+     */
     // 查找最大版本
     public static String findMaxVersion(List<String> versions) {
-        return versions.stream()
-                .max(Comparator.comparing(version -> Arrays.stream(version.split("\\."))
-                        .mapToInt(Integer::parseInt)
-                        .toArray(), Comparator.comparingInt((int[] arr) -> arr[0])
-                        .thenComparingInt(arr -> arr[1])
-                        .thenComparingInt(arr -> arr[2])))
-                .orElse(null);
+        return versions.stream().max(
+            Comparator.comparing(version -> Arrays.stream(version.split("\\.")).mapToInt(Integer::parseInt).toArray(),
+                Comparator.comparingInt((int[] arr) -> arr[0]).thenComparingInt(arr -> arr[1])
+                    .thenComparingInt(arr -> arr[2]))).orElse(null);
     }
 
+    /**
+     * To hump string.
+     *
+     * @param name the name
+     * @return the string
+     */
     public static String toHump(String name) {
         // 定义正则表达式模式
         Pattern pattern = Pattern.compile("_(\\w)");
@@ -47,7 +79,8 @@ public class Utils {
             result.append(name, lastEnd, matcher.start());
 
             // 获取匹配到的字母并转换为大写
-            String match = matcher.group(1);  // 确保此处是有效的调用
+            // 确保此处是有效的调用
+            String match = matcher.group(1);
             result.append(match.toUpperCase());
 
             lastEnd = matcher.end();
@@ -58,6 +91,12 @@ public class Utils {
         return result.toString();
     }
 
+    /**
+     * To line string.
+     *
+     * @param name the name
+     * @return the string
+     */
     public static String toLine(String name) {
         // 定义正则表达式模式
         Pattern pattern = Pattern.compile("([A-Z])");
@@ -73,7 +112,8 @@ public class Utils {
             result.append(name, lastEnd, matcher.start());
 
             // 在大写字母前添加下划线
-            result.append("_").append(matcher.group(1));  // 确保此处是有效的调用
+            // 确保此处是有效的调用
+            result.append("_").append(matcher.group(1));
 
             lastEnd = matcher.end();
         }
@@ -83,8 +123,15 @@ public class Utils {
         return result.toString();
     }
 
+    /**
+     * Convert map.
+     *
+     * @param obj the obj
+     * @return the map
+     * @throws ServiceException the service exception
+     */
     // 对象转map
-    public static Map<String, Object> convert(Object obj) throws ServiceException {
+    public static Map<String, Object> convert(Object obj) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         objectMapper.registerModule(new JavaTimeModule());
@@ -93,17 +140,30 @@ public class Utils {
         return objectMapper.convertValue(obj, Map.class);
     }
 
+    /**
+     * Map to object t.
+     *
+     * @param <T>   the type parameter
+     * @param map   the map
+     * @param clazz the clazz
+     * @return the t
+     * @throws Exception the exception
+     */
     // 将 Map 转换为对象
     public static <T> T mapToObject(Map<String, Object> map, Class<T> clazz) throws Exception {
-        T obj = clazz.getDeclaredConstructor().newInstance(); // 创建对象实例
+        // 创建对象实例
+        T obj = clazz.getDeclaredConstructor().newInstance();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
 
             try {
-                Field field = clazz.getDeclaredField(key); // 获取字段
-                field.setAccessible(true); // 设置可访问性
-                field.set(obj, value); // 设置字段值
+                // 获取字段
+                Field field = clazz.getDeclaredField(key);
+                // 设置可访问性
+                field.setAccessible(true);
+                // 设置字段值
+                field.set(obj, value);
             } catch (NoSuchFieldException e) {
                 // 字段不存在，可以选择忽略或处理异常
                 throw new ServiceException("Field not found: " + key);
@@ -112,6 +172,13 @@ public class Utils {
         return obj;
     }
 
+    /**
+     * Version a gte version b boolean.
+     *
+     * @param a the a
+     * @param b the b
+     * @return the boolean
+     */
     // 判断两个版本号或范围，谁更高、更广
     public static boolean versionAGteVersionB(String a, String b) {
         if (isSubset(b, a)) {

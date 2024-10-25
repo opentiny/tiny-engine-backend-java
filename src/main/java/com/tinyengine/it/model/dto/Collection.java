@@ -1,28 +1,25 @@
 package com.tinyengine.it.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Collection.
+ *
+ * @since 2024-10-20
+ */
+@Getter
+@Setter
 public class Collection {
     private List<Object> range;
     private List<Object> data;
 
-    public List<Object> getRange() {
-        return range;
-    }
-
-    public void setRange(List<Object> range) {
-        this.range = range;
-    }
-
-    public List<Object> getData() {
-        return data;
-    }
-
-    public void setData(List<Object> data) {
-        this.data = data;
-    }
-
+    /**
+     * Instantiates a new Collection.
+     */
     public Collection() {
         this.range = new ArrayList<>();
         this.data = new ArrayList<>();

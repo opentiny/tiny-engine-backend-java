@@ -1,6 +1,8 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.config.handler.MapTypeHandler;
@@ -16,7 +18,7 @@ import java.util.Map;
  * 数据源表
  * </p>
  *
- * @author lu-yg
+ * @author lu -yg
  * @since 2024-10-17
  */
 @Getter
@@ -24,8 +26,6 @@ import java.util.Map;
 @TableName("t_datasource")
 @Schema(name = "Datasource", description = "数据源表")
 public class Datasource extends BaseEntity {
-
-
     @Schema(name = "name", description = "数据源名称")
     private String name;
 
@@ -38,7 +38,6 @@ public class Datasource extends BaseEntity {
 
     @Schema(name = "app", description = "关联应用id")
     private Integer app;
-
 
     @Schema(name = "platformId", description = "关联设计器id")
     private Integer platformId;

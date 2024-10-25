@@ -25,6 +25,12 @@ public class I18nLang extends BaseEntity {
     @Schema(name = "label", description = "语言")
     private String label;
 
+    /**
+     * Instantiates a new 18 n lang.
+     *
+     * @param lang  the lang
+     * @param label the label
+     */
     public I18nLang(String lang, String label) {
         this.lang = lang;
         this.label = label;

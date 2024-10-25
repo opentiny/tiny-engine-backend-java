@@ -5,10 +5,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
+/**
+ * The type Tiny engine application.
+ *
+ * @since 2024-10-20
+ */
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @MapperScan("com.tinyengine.it.mapper")
 public class TinyEngineApplication {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(TinyEngineApplication.class, args);
     }
