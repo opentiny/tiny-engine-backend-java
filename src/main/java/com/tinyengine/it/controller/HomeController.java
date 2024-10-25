@@ -1,5 +1,5 @@
-package com.tinyengine.it.controller;
 
+package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class HomeController {
     /**
-     *  健康检测
+     * 健康检测
      */
     @GetMapping("/healthCheck")
     public Result healthCheck() {

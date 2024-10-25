@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
@@ -12,6 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * canvas api
+ *
+ * @since 2024-10-20
+ */
 @Validated
 @RestController
 @CrossOrigin
@@ -26,7 +32,7 @@ public class CanvasController {
      * @param id the id
      * @param state the state
      * @param type the type
-     * @return
+     * @return CanvasDto
      */
     @GetMapping("/canvas/lock")
     public Result<CanvasDto> lock(@PathVariable Integer id, String state, String type) {

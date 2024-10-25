@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
@@ -14,14 +15,18 @@ import com.tinyengine.it.service.app.CanvasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * canvas service
+ * @since @since 2024-10-20
+ */
 @Service
 public class CanvasServiceImpl implements CanvasService {
     @Autowired
-    PageMapper pageMapper;
+    private PageMapper pageMapper;
     @Autowired
-    BlockMapper blockMapper;
+    private BlockMapper blockMapper;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Override
     public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
