@@ -12,7 +12,7 @@ import lombok.Setter;
  * 国际化语言配置表
  * </p>
  *
- * @author lu-yg
+ * @author lu -yg
  * @since 2024-10-17
  */
 @Getter

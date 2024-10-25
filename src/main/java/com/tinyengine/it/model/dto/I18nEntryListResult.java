@@ -6,6 +6,11 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type 18 n entry list result.
+ *
+ * @since 2024-10-20
+ */
 @Data
 public class I18nEntryListResult {
     private Map<String, Map<String, String>> messages;

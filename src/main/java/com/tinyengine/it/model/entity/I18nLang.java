@@ -49,6 +49,14 @@ public class I18nLang {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "lastUpdatedTime", description = "更新时间")
     private LocalDateTime lastUpdatedTime;
+
+    /**
+     * Instantiates a new 18 n lang.
+     *
+     * @param lang  the lang
+     * @param label the label
+     */
+
     public I18nLang(String lang, String label) {
         this.lang = lang;
         this.label = label;

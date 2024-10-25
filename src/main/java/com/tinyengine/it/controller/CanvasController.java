@@ -1,6 +1,7 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.CanvasDto;
 import com.tinyengine.it.service.app.CanvasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -19,12 +20,13 @@ public class CanvasController {
     /**
      * 区块及页面锁
      *
-     * @param id, state, type
+     * @param id the id
+     * @param state the state
+     * @param type the type
      * @return
      */
     @GetMapping("/canvas/lock")
-    public Result<Map<String, Object>> lock(@PathVariable Integer id, String state, String type) {
-        Map<String, Object> result = canvasService.lockCanvas(id, state, type);
-        return Result.success(result);
+    public Result<CanvasDto> lock(@PathVariable Integer id, String state, String type) {
+        return canvasService.lockCanvas(id, state, type);
     }
 }

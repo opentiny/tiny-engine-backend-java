@@ -15,7 +15,7 @@ import java.util.Map;
  * 应用扩展
  * </p>
  *
- * @author lu-yg
+ * @author lu -yg
  * @since 2024-10-17
  */
 @Getter
@@ -31,7 +31,7 @@ public class AppExtension extends BaseEntity {
 
     @Schema(name = "content", description = "内容")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String,Object> content;
+    private Map<String, Object> content;
 
     @Schema(name = "app", description = "关联app表Id")
     private Integer app;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -15,11 +16,18 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Map type handler.
+ *
+ * @since 2024-10-20
+ */
+@Slf4j
 public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, Map<String, Object> parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, Map<String, Object> parameter, JdbcType jdbcType)
+        throws SQLException {
         try {
             String json = objectMapper.writeValueAsString(parameter);
             ps.setString(i, json);
@@ -45,8 +53,9 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
     }
 
     private Map<String, Object> parseJson(String json) throws SQLException {
-        if (json == null || json.trim().isEmpty() || json.equals("{}")) {
-            return new HashMap<>(); // 返回一个空的 Map
+        if (json == null || json.trim().isEmpty() || "{}".equals(json)) {
+            // 返回一个空的 Map
+            return new HashMap<>();
         }
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
@@ -54,7 +63,8 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
                 return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
                 });
             } else {
-                return new HashMap<>(); // 非对象类型也返回空的 Map
+                // 非对象类型也返回空的 Map
+                return new HashMap<>();
             }
         } catch (IOException e) {
             throw new SQLException("Error converting JSON to Map", e);

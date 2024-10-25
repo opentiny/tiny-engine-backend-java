@@ -15,6 +15,12 @@ import java.util.stream.Stream;
 
 import static com.alibaba.druid.support.json.JSONUtils.toJSONString;
 
+/**
+ * The type Result.
+ *
+ * @param <T> the type parameter
+ * @since 2024-10-20
+ */
 @Data
 @NoArgsConstructor
 @Schema(name = "Result<T>", description = "通用返回对象")
@@ -32,6 +38,13 @@ public class Result<T> {
     @Schema(name = "err_msg", description = "失败信息")
     private String err_msg;
 
+    /**
+     * Instantiates a new Result.
+     *
+     * @param code    the code
+     * @param message the message
+     * @param data    the data
+     */
     protected Result(String code, String message, T data) {
         this.code = code;
         this.message = message;
@@ -39,50 +52,63 @@ public class Result<T> {
         this.success = true;
     }
 
+    /**
+     * Instantiates a new Result.
+     *
+     * @param code    the code
+     * @param message the message
+     * @param data    the data
+     * @param success the success
+     */
     protected Result(String code, String message, T data, boolean success) {
         this(code, message, data);
         this.success = success;
         if (!success) {
             this.err_msg = message;
-            this.error = Stream.of(new Object[][]{
-                    {"code", code},
-                    {"message", message}
-            }).collect(Collectors.toMap(item -> (String) item[0], item -> item[1]));
+            this.error = Stream.of(new Object[][] {{"code", code}, {"message", message}})
+                .collect(Collectors.toMap(item -> (String)item[0], item -> item[1]));
         }
     }
 
+    /**
+     * Success result.
+     *
+     * @param <T> the type parameter
+     * @return the result
+     */
     public static <T> Result<T> success() {
-        return success((T) null);
+        return success((T)null);
     }
 
     /**
      * 成功返回结果
      *
+     * @param <T>  the type parameter
      * @param data 获取的数据
-     * @return
+     * @return result
      */
     public static <T> Result<T> success(T data) {
-        return new Result<>(ExceptionEnum.SUCCESS.getResultCode(),
-                ExceptionEnum.SUCCESS.getResultMsg(), data);
+        return new Result<>(ExceptionEnum.SUCCESS.getResultCode(), ExceptionEnum.SUCCESS.getResultMsg(), data);
     }
 
     /**
      * 成功返回list结果
      *
+     * @param <T>  the type parameter
      * @param list 获取的数据
-     * @return
+     * @return result
      */
     public static <T> Result<List<T>> success(List<T> list) {
-        Result<List<T>> listResult = new Result<>(ExceptionEnum.SUCCESS.getResultCode(),
-                ExceptionEnum.SUCCESS.getResultMsg(), list);
-        return listResult;
+        return new Result<>(ExceptionEnum.SUCCESS.getResultCode(), ExceptionEnum.SUCCESS.getResultMsg(), list);
     }
 
     /**
      * 成功返回结果
      *
+     * @param <T>     the type parameter
      * @param data    获取的数据
      * @param message 提示信息
+     * @return the result
      */
     public static <T> Result<T> success(T data, String message) {
         return new Result<>(ExceptionEnum.SUCCESS.getResultCode(), message, data);
@@ -91,7 +117,9 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
+     * @param <T>   the type parameter
      * @param error 错误码
+     * @return the result
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static <T> Result<T> failed(IBaseError error) {
@@ -101,8 +129,10 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
+     * @param <T>     the type parameter
      * @param error   错误码
      * @param message 错误信息
+     * @return the result
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static <T> Result<T> failed(IBaseError error, String message) {
@@ -112,8 +142,10 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
+     * @param <T>       the type parameter
      * @param errorCode 错误码
      * @param message   错误信息
+     * @return the result
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static <T> Result<T> failed(String errorCode, String message) {
@@ -123,7 +155,9 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
+     * @param <T>     the type parameter
      * @param message 提示信息
+     * @return the result
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public static <T> Result<T> failed(String message) {
@@ -132,6 +166,9 @@ public class Result<T> {
 
     /**
      * 失败返回结果
+     *
+     * @param <T> the type parameter
+     * @return the result
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public static <T> Result<T> failed() {
@@ -140,6 +177,9 @@ public class Result<T> {
 
     /**
      * 参数验证失败返回结果
+     *
+     * @param <T> the type parameter
+     * @return the result
      */
     public static <T> Result<T> validateFailed() {
         return failed(ExceptionEnum.CM002);
@@ -148,12 +188,13 @@ public class Result<T> {
     /**
      * 参数验证失败返回结果
      *
+     * @param <T>     the type parameter
      * @param message 提示信息
+     * @return the result
      */
     public static <T> Result<T> validateFailed(String message) {
         return new Result<>(ExceptionEnum.CM002.getResultCode(), message, null, false);
     }
-
 
     @Override
     public String toString() {

@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface ${table.mapperName} extends BaseMapper<${entity}>{
-
     /**
     *  查询表${table.name}所有信息
     */
