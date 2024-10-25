@@ -1,10 +1,15 @@
+
 package com.tinyengine.it.common.base;
+
+import static com.alibaba.druid.support.json.JSONUtils.toJSONString;
 
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.IBaseError;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -12,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.alibaba.druid.support.json.JSONUtils.toJSONString;
 
 /**
  * The type Result.
@@ -41,9 +44,9 @@ public class Result<T> {
     /**
      * Instantiates a new Result.
      *
-     * @param code    the code
+     * @param code the code
      * @param message the message
-     * @param data    the data
+     * @param data the data
      */
     protected Result(String code, String message, T data) {
         this.code = code;
@@ -55,9 +58,9 @@ public class Result<T> {
     /**
      * Instantiates a new Result.
      *
-     * @param code    the code
+     * @param code the code
      * @param message the message
-     * @param data    the data
+     * @param data the data
      * @param success the success
      */
     protected Result(String code, String message, T data, boolean success) {
@@ -65,8 +68,8 @@ public class Result<T> {
         this.success = success;
         if (!success) {
             this.err_msg = message;
-            this.error = Stream.of(new Object[][] {{"code", code}, {"message", message}})
-                .collect(Collectors.toMap(item -> (String)item[0], item -> item[1]));
+            this.error = Stream.of(new Object[][]{{"code", code}, {"message", message}})
+                    .collect(Collectors.toMap(item -> (String) item[0], item -> item[1]));
         }
     }
 
@@ -77,13 +80,13 @@ public class Result<T> {
      * @return the result
      */
     public static <T> Result<T> success() {
-        return success((T)null);
+        return success((T) null);
     }
 
     /**
      * 成功返回结果
      *
-     * @param <T>  the type parameter
+     * @param <T> the type parameter
      * @param data 获取的数据
      * @return result
      */
@@ -94,7 +97,7 @@ public class Result<T> {
     /**
      * 成功返回list结果
      *
-     * @param <T>  the type parameter
+     * @param <T> the type parameter
      * @param list 获取的数据
      * @return result
      */
@@ -105,8 +108,8 @@ public class Result<T> {
     /**
      * 成功返回结果
      *
-     * @param <T>     the type parameter
-     * @param data    获取的数据
+     * @param <T> the type parameter
+     * @param data 获取的数据
      * @param message 提示信息
      * @return the result
      */
@@ -117,7 +120,7 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T>   the type parameter
+     * @param <T> the type parameter
      * @param error 错误码
      * @return the result
      */
@@ -129,8 +132,8 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T>     the type parameter
-     * @param error   错误码
+     * @param <T> the type parameter
+     * @param error 错误码
      * @param message 错误信息
      * @return the result
      */
@@ -142,9 +145,9 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T>       the type parameter
+     * @param <T> the type parameter
      * @param errorCode 错误码
-     * @param message   错误信息
+     * @param message 错误信息
      * @return the result
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -155,7 +158,7 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T>     the type parameter
+     * @param <T> the type parameter
      * @param message 提示信息
      * @return the result
      */
@@ -188,7 +191,7 @@ public class Result<T> {
     /**
      * 参数验证失败返回结果
      *
-     * @param <T>     the type parameter
+     * @param <T> the type parameter
      * @param message 提示信息
      * @return the result
      */
@@ -201,4 +204,3 @@ public class Result<T> {
         return toJSONString(this);
     }
 }
-

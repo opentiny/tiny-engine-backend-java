@@ -1,7 +1,9 @@
+
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tinyengine.it.common.base.BaseEntity;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +30,7 @@ public class I18nLang extends BaseEntity {
     /**
      * Instantiates a new 18 n lang.
      *
-     * @param lang  the lang
+     * @param lang the lang
      * @param label the label
      */
     public I18nLang(String lang, String label) {

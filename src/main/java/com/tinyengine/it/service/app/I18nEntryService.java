@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
@@ -6,6 +7,7 @@ import com.tinyengine.it.model.dto.I18nEntryListResult;
 import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
 import com.tinyengine.it.model.dto.OperateI18nEntries;
 import com.tinyengine.it.model.entity.I18nEntry;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -84,9 +86,9 @@ public interface I18nEntryService {
     /**
      * Delete i 18 n entries by host and host type and key list.
      *
-     * @param host     the host
+     * @param host the host
      * @param hostType the host type
-     * @param keys     the keys
+     * @param keys the keys
      * @return the list
      */
     List<I18nEntry> deleteI18nEntriesByHostAndHostTypeAndKey(String host, String hostType, List<String> keys);

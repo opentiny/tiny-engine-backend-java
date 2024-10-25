@@ -1,9 +1,11 @@
+
 package com.tinyengine.it.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tinyengine.it.common.exception.ServiceException;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -32,7 +34,7 @@ public class Utils {
     /**
      * Remove duplicates list.
      *
-     * @param <T>  the type parameter
+     * @param <T> the type parameter
      * @param list the list
      * @return the list
      */
@@ -52,10 +54,13 @@ public class Utils {
      */
     // 查找最大版本
     public static String findMaxVersion(List<String> versions) {
-        return versions.stream().max(
-            Comparator.comparing(version -> Arrays.stream(version.split("\\.")).mapToInt(Integer::parseInt).toArray(),
-                Comparator.comparingInt((int[] arr) -> arr[0]).thenComparingInt(arr -> arr[1])
-                    .thenComparingInt(arr -> arr[2]))).orElse(null);
+        return versions.stream()
+                .max(Comparator.comparing(
+                        version -> Arrays.stream(version.split("\\.")).mapToInt(Integer::parseInt).toArray(),
+                        Comparator.comparingInt((int[] arr) -> arr[0])
+                                .thenComparingInt(arr -> arr[1])
+                                .thenComparingInt(arr -> arr[2])))
+                .orElse(null);
     }
 
     /**
@@ -143,8 +148,8 @@ public class Utils {
     /**
      * Map to object t.
      *
-     * @param <T>   the type parameter
-     * @param map   the map
+     * @param <T> the type parameter
+     * @param map the map
      * @param clazz the clazz
      * @return the t
      * @throws Exception the exception

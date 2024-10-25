@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
@@ -5,11 +6,13 @@ import com.tinyengine.it.config.log.SystemControllerLog;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.service.app.AppService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,10 +23,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 /**
  * 应用api
@@ -76,23 +80,21 @@ public class AppController {
      */
     @PostMapping("/apps/create")
     public Result<App> createApp(@Valid @RequestBody App app) {
-
         return appService.createApp(app);
     }
 
     /**
      * 修改App信息
      *
-     * @param id  the id
+     * @param id the id
      * @param app the app
      * @return App信息 result
      */
-    @Operation(summary = "修改单个App信息", description = "修改单个App信息",
-        parameters = {@Parameter(name = "id", description = "appId"),
+    @Operation(summary = "修改单个App信息", description = "修改单个App信息", parameters = {
+            @Parameter(name = "id", description = "appId"),
             @Parameter(name = "App", description = "入参对象")}, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")})
+                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改单个App信息")
     @PostMapping("/apps/update/{id}")
     public Result<App> updateApp(@PathVariable Integer id, @RequestBody App app) {
@@ -108,7 +110,6 @@ public class AppController {
      */
     @GetMapping("/apps/delete/{id}")
     public Result<App> deleteApp(@PathVariable Integer id) {
-
         return appService.deleteAppById(id);
     }
 
@@ -118,11 +119,10 @@ public class AppController {
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取应用信息详情", description = "获取应用信息详情",
-        parameters = {@Parameter(name = "id", description = "appId")}, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")})
+    @Operation(summary = "获取应用信息详情", description = "获取应用信息详情", parameters = {
+            @Parameter(name = "id", description = "appId")}, responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取应用信息详情")
     @GetMapping("/apps/detail/{id}")
     public Result<App> detail(@PathVariable Integer id) {
@@ -132,16 +132,15 @@ public class AppController {
     /**
      * 修改应用对应的国际化语种关联
      *
-     * @param id    the id
+     * @param id the id
      * @param param the param
      * @return the result
      */
-    @Operation(summary = "修改应用对应的国际化语种关联", description = "修改应用对应的国际化语种关联",
-        parameters = {@Parameter(name = "id", description = "appId"),
+    @Operation(summary = "修改应用对应的国际化语种关联", description = "修改应用对应的国际化语种关联", parameters = {
+            @Parameter(name = "id", description = "appId"),
             @Parameter(name = "param", description = "入参对象")}, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")})
+                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改应用对应的国际化语种关联")
     @PostMapping("/apps/i18n/{id}")
     public Result<App> updateI18n(@PathVariable Integer id, @RequestBody Map<String, Object> param) {
@@ -149,7 +148,7 @@ public class AppController {
             return Result.failed("i18n_langs 是必须的");
         }
         // 判断参数i18n_langs是不是数组且是数字
-        boolean allAreNumbers = Arrays.stream((int[])param.get("i18n_langs")).allMatch(Integer.class::isInstance);
+        boolean allAreNumbers = Arrays.stream((int[]) param.get("i18n_langs")).allMatch(Integer.class::isInstance);
         if (!allAreNumbers) {
             return Result.failed("i18n_langs[0] should be a number");
         }

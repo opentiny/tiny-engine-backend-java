@@ -1,10 +1,13 @@
+
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
 import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.service.material.MaterialHistoryService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +52,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      */
     @Override
     public List<MaterialHistory> findMaterialHistoryByCondition(MaterialHistory materialHistory)
-        throws ServiceException {
+            throws ServiceException {
         return materialHistoryMapper.queryMaterialHistoryByCondition(materialHistory);
     }
 

@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.common.enums;
 
 /**
@@ -770,7 +771,7 @@ public class Enums {
         /**
          * Local gpt e foundation model.
          */
-        //本地兼容opanai-api接口的 大语言模型，如chatGLM6b,通义千问 等。
+        // 本地兼容opanai-api接口的 大语言模型，如chatGLM6b,通义千问 等。
         LOCAL_GPT("qwen-turbo"),
         /**
          * Ernie bot turbo e foundation model.

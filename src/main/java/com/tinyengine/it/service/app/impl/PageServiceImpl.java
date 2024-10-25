@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,7 +30,9 @@ import com.tinyengine.it.service.app.PageService;
 import com.tinyengine.it.service.app.UserService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockServiceImpl;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,17 +135,16 @@ public class PageServiceImpl implements PageService {
     @Override
     @SystemServiceLog(description = "通过Id查询page数据实现方法")
     public Page queryPageById(@Param("id") Integer id) {
-
         Page pageInfo = pageMapper.queryPageById(id);
-        //  获取schemaMeta进行获取materialHistory中的framework进行判断
+        // 获取schemaMeta进行获取materialHistory中的framework进行判断
         String framework = appMapper.queryAppById(pageInfo.getApp()).getFramework();
         if (framework.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM312.getResultCode(), ExceptionEnum.CM312.getResultMsg());
         }
         if (pageInfo.getIsPage()) {
             // 这里不保证能成功获取区块的列表，没有区块或获取区块列表不成功返回 {}
-            Map<String, List<String>> blockAssets =
-                blockServiceImpl.getBlockAssets(pageInfo.getPageContent(), framework);
+            Map<String, List<String>> blockAssets = blockServiceImpl.getBlockAssets(pageInfo.getPageContent(),
+                    framework);
             pageInfo.setAssets(blockAssets);
             return addIsHome(pageInfo);
         }
@@ -205,7 +207,6 @@ public class PageServiceImpl implements PageService {
         // 将前端创建页面传递过来的staic/public 设置为 staticPages/publicPages
         if (!page.getGroup().isEmpty() && Arrays.asList("static", "public").contains(page.getGroup())) {
             page.setGroup(page.getGroup() + "Pages");
-
         }
         String userId = "1";
         page.setOccupierBy(userId);
@@ -251,7 +252,7 @@ public class PageServiceImpl implements PageService {
         if (depthResult.get("error") != null) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        int depth = (int)depthResult.get("depth");
+        int depth = (int) depthResult.get("depth");
         page.setDepth(depth + 1);
         page.setGroup("staticPages");
         page.setIsDefault(false);
@@ -335,7 +336,7 @@ public class PageServiceImpl implements PageService {
             if (depthInfo.get("error") != null) {
                 return Result.failed("parentId is invalid");
             }
-            page.setDepth((int)depthInfo.get("depth") + 1);
+            page.setDepth((int) depthInfo.get("depth") + 1);
         }
         // getFolder 获取父类信息
         Page parentInfo = pageMapper.queryPageById(page.getId());
@@ -379,7 +380,7 @@ public class PageServiceImpl implements PageService {
     /**
      * Sets app home page.
      *
-     * @param appId  the app id
+     * @param appId the app id
      * @param pageId the page id
      * @return the app home page
      */
@@ -390,10 +391,7 @@ public class PageServiceImpl implements PageService {
         app.setHomePage(pageId);
 
         int result = appMapper.updateAppById(app);
-        if (result < 1) {
-            return false;
-        }
-        return true;
+        return result >= 1;
     }
 
     /**
@@ -503,7 +501,7 @@ public class PageServiceImpl implements PageService {
      * 判断是否能删除
      *
      * @param occupier the occupier
-     * @param user     the user
+     * @param user the user
      * @return boolean
      */
     public boolean iCanDoIt(User occupier, User user) {
@@ -518,7 +516,7 @@ public class PageServiceImpl implements PageService {
      * 保护默认页面
      *
      * @param pages the pages
-     * @param id    the id
+     * @param id the id
      */
     public void protectDefaultPage(Page pages, Integer id) {
         if (pages.getIsDefault()) {
@@ -527,14 +525,13 @@ public class PageServiceImpl implements PageService {
             if (app.getTemplateType() == null) {
                 Result.failed(ExceptionEnum.CM310.getResultCode());
             }
-
         }
     }
 
     /**
      * Validate is home boolean.
      *
-     * @param param    the param
+     * @param param the param
      * @param pageInfo the page info
      * @return the boolean
      */
@@ -547,15 +544,12 @@ public class PageServiceImpl implements PageService {
         if (isHome && parentId > 0) {
             return false;
         }
-        // 当isHome 为 true parentId 不存在  parentIdOld 大于0时 非法
+        // 当isHome 为 true parentId 不存在 parentIdOld 大于0时 非法
         if (isHome && parentId == -1 && parentIdOld > 0) {
             return false;
         }
         // 当isHome 不存在 且 isHomeOld 为true时 将parentId 设为其他id 时非法
-        if (!isHome && isHomeOld && parentId > 0) {
-            return false;
-        }
-        return true;
+        return isHome || !isHomeOld || parentId <= 0;
 
     }
 
@@ -602,7 +596,7 @@ public class PageServiceImpl implements PageService {
     /**
      * 主函数
      *
-     * @param pid    the pid
+     * @param pid the pid
      * @param target the target
      * @return update tree
      */
@@ -627,15 +621,14 @@ public class PageServiceImpl implements PageService {
      * @return the tree nodes
      */
     public Collection getTreeNodes(Map<String, Object> map) {
-        int level = (int)map.get("level");
+        int level = (int) map.get("level");
         Collection collection = new Collection();
         Object obj = map.get("pids");
         List<Integer> pids = new ArrayList<>();
 
         if (obj instanceof List<?>) {
-            List<?> pidsList = (List<?>)obj;
-            pids = pidsList.stream().map(element -> (Integer)element).collect(Collectors.toList());
-
+            List<?> pidsList = (List<?>) obj;
+            pids = pidsList.stream().map(element -> (Integer) element).collect(Collectors.toList());
         }
         // 没有子节点，返回收集的节点信息
         if (pids.isEmpty()) {
@@ -648,8 +641,9 @@ public class PageServiceImpl implements PageService {
         // 获取子节点的id
         List<Integer> childrenId = getChildrenId(pids);
         // 收集 id depth 信息
-        List<AbstractMap.SimpleEntry<Integer, Integer>> dps =
-            childrenId.stream().map(id -> new AbstractMap.SimpleEntry<>(id, level)).collect(Collectors.toList());
+        List<AbstractMap.SimpleEntry<Integer, Integer>> dps = childrenId.stream()
+                .map(id -> new AbstractMap.SimpleEntry<>(id, level))
+                .collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
         collection.getRange().addAll(childrenId);
         collection.getData().addAll(dps);
@@ -694,13 +688,13 @@ public class PageServiceImpl implements PageService {
         appExtension.setApp(previewParam.getApp());
         List<AppExtension> extensionsList = appExtensionMapper.queryAppExtensionByCondition(appExtension);
         Map<String, Object> extensions = appV1ServiceImpl.getSchemaExtensions(extensionsList);
-        List<Map<String, Object>> utils = (List<Map<String, Object>>)extensions.get("utils");
+        List<Map<String, Object>> utils = (List<Map<String, Object>>) extensions.get("utils");
         // 拼装数据源
-        Map<String, Object> dataSource = (Map<String, Object>)block.getContent().get("dataSource");
+        Map<String, Object> dataSource = (Map<String, Object>) block.getContent().get("dataSource");
         // 拼装国际化词条
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
-        Map<String, Map<String, String>> i18n =
-            appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
+        Map<String, Map<String, String>> i18n = appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(),
+                previewParam.getId());
 
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);
