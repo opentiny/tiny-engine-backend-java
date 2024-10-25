@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.common.exception;
 
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class ServiceException extends RuntimeException {
     /**
      * Instantiates a new Service exception.
      *
-     * @param code    the code
+     * @param code the code
      * @param message the message
      */
     public ServiceException(String code, String message) {
@@ -36,4 +37,3 @@ public class ServiceException extends RuntimeException {
         this.message = message;
     }
 }
-

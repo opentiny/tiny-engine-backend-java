@@ -1,6 +1,8 @@
+
 package com.tinyengine.it.common.utils;
 
 import com.tinyengine.it.model.dto.SchemaConfig;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
@@ -31,7 +33,7 @@ public class Schema {
      * Assemble fields map.
      *
      * @param appData the app data
-     * @param type    the type
+     * @param type the type
      * @return the map
      */
     public Map<String, Object> assembleFields(Map<String, Object> appData, String type) {
@@ -44,7 +46,7 @@ public class Schema {
                 break;
             case "pageMeta":
                 appData = processFields(appData, conf.getPageMetaInclude(), conf.getPageMetaFormat(),
-                    conf.getPageMetaConvert());
+                        conf.getPageMetaConvert());
                 break;
             case "pageContent":
                 if (!conf.getPageContentInclude().isEmpty()) {
@@ -52,8 +54,8 @@ public class Schema {
                 }
                 break;
             default:
-                appData =
-                    processFields(appData, conf.getFolderInclude(), conf.getFolderFormat(), conf.getFolderConvert());
+                appData = processFields(appData, conf.getFolderInclude(), conf.getFolderFormat(),
+                        conf.getFolderConvert());
                 break;
         }
 
@@ -62,7 +64,7 @@ public class Schema {
 
     // 提取公共处理逻辑
     private Map<String, Object> processFields(Map<String, Object> appData, List<String> includeConfig,
-        Map<String, String> formatConfig, Map<String, String> convertConfig) {
+            Map<String, String> formatConfig, Map<String, String> convertConfig) {
         if (!includeConfig.isEmpty()) {
             appData = this.filterFields(appData, includeConfig);
         }
@@ -96,7 +98,7 @@ public class Schema {
      * @return the schema base
      */
     public Map<String, Object> getSchemaBase(Map<String, Object> data) {
-        Map<String, Object> pageContent = (Map<String, Object>)data.get("page_content");
+        Map<String, Object> pageContent = (Map<String, Object>) data.get("page_content");
         pageContent.put("fileName", data.get("name"));
         String type = "pageContent";
         return assembleFields(pageContent, type);
@@ -105,7 +107,7 @@ public class Schema {
     /**
      * Filter fields map.
      *
-     * @param data        the data
+     * @param data the data
      * @param includeConf the include conf
      * @return the map
      */
@@ -122,7 +124,7 @@ public class Schema {
     /**
      * Format fields map.
      *
-     * @param data         the data
+     * @param data the data
      * @param formatConfig the format config
      * @return the map
      */
@@ -147,12 +149,11 @@ public class Schema {
     /**
      * Convert fields map.
      *
-     * @param data        the data
+     * @param data the data
      * @param convertConf the convert conf
      * @return the map
      */
     protected Map<String, Object> convertFields(Map<String, Object> data, Map<String, String> convertConf) {
-
         Set<Map.Entry<String, String>> entries = convertConf.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             String oldKey = entry.getKey();
@@ -209,7 +210,7 @@ public class Schema {
         if (value == null) {
             return "Creator: ";
         }
-        return "Creator: " + value.toString();
+        return "Creator: " + value;
     }
 
     /**
@@ -221,9 +222,9 @@ public class Schema {
     // 给global_state设置默认值
     public Object[] toArrayValue(Object value) {
         if (value instanceof Object[]) {
-            return (Object[])value;
+            return (Object[]) value;
         }
-        return new Object[] {value};
+        return new Object[]{value};
     }
 
     /**
@@ -236,7 +237,7 @@ public class Schema {
     public String toRootElement(Object isBody) {
         if (isBody instanceof Boolean) {
             // 处理布尔值的格式化
-            return ((Boolean)isBody) ? "body" : "div";
+            return ((Boolean) isBody) ? "body" : "div";
         }
         return "";
     }

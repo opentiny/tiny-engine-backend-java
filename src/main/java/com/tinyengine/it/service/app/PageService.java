@@ -1,9 +1,11 @@
+
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
 import com.tinyengine.it.model.entity.Page;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public interface PageService {
      * @return the page
      * @throws Exception the exception
      */
-    Page queryPageById(@Param("id") Integer id) throws Exception;
+    Page queryPageById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_page信息
@@ -46,7 +48,7 @@ public interface PageService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<Page> delPage(@Param("id") Integer id) throws Exception;
+    Result<Page> delPage(@Param("id") Integer id);
 
     /**
      * 创建页面
@@ -55,7 +57,7 @@ public interface PageService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<Page> createPage(Page page) throws Exception;
+    Result<Page> createPage(Page page);
 
     /**
      * 创建文件夹
@@ -64,7 +66,7 @@ public interface PageService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<Page> createFolder(Page page) throws Exception;
+    Result<Page> createFolder(Page page);
 
     /**
      * 更新页面
@@ -73,7 +75,7 @@ public interface PageService {
      * @return result
      * @throws Exception the exception
      */
-    Result<Page> updatePage(Page pages) throws Exception;
+    Result<Page> updatePage(Page pages);
 
     /**
      * 更新页面文件夹
@@ -82,7 +84,7 @@ public interface PageService {
      * @return result
      * @throws Exception the exception
      */
-    Result<Page> update(Page pages) throws Exception;
+    Result<Page> update(Page pages);
 
     /**
      * 查询页面预览元数据
@@ -91,5 +93,4 @@ public interface PageService {
      * @return PreviewDto preview meta data
      */
     PreviewDto getPreviewMetaData(PreviewParam previewParam);
-
 }

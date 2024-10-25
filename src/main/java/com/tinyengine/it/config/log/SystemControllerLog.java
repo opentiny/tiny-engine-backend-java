@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.config.log;
 
 import java.lang.annotation.Documented;
@@ -9,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * The interface System controller log.
  *
- * @version V1.0  Description:  自定义注解，拦截controller
+ * @version V1.0 Description: 自定义注解，拦截controller
  * @since 2024-10-20
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD}) // 作用在参数和方法上
@@ -23,4 +24,3 @@ public @interface SystemControllerLog {
      */
     String description() default "";
 }
-

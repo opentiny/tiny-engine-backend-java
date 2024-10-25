@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -17,10 +18,10 @@ import com.tinyengine.it.model.dto.OperateI18nEntries;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,8 +55,6 @@ import java.util.zip.ZipInputStream;
 @Service
 @Slf4j
 public class I18nEntryServiceImpl implements I18nEntryService {
-
-    private static final Logger logger = LoggerFactory.getLogger(I18nEntryServiceImpl.class);
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
     @Autowired
@@ -77,7 +76,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         for (Map.Entry<String, Object> entry : data.entrySet()) {
             String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
             if (entry.getValue() instanceof Map) {
-                flatten(key, (Map<String, Object>)entry.getValue(), flattenedMap);
+                flatten(key, (Map<String, Object>) entry.getValue(), flattenedMap);
             } else {
                 flattenedMap.put(key, entry.getValue());
             }
@@ -116,7 +115,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @Override
     public I18nEntryListResult findAllI18nEntry() {
-        // 获取所属应用/区块的 语言列表  getHostLangs
+        // 获取所属应用/区块的 语言列表 getHostLangs
 
         List<I18nLang> i18nLangsList = getHostLangs();
         if (i18nLangsList == null || i18nLangsList.isEmpty()) {
@@ -129,8 +128,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
         // 格式化词条列表
         Map<String, Map<String, String>> messages = formatEntriesList(i18nEntriesList);
-        List<I18nLang> i18nLangsListTemp =
-            i18nLangsList.stream().map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
+        List<I18nLang> i18nLangsListTemp = i18nLangsList.stream()
+                .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
                 .collect(Collectors.toList());
         I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
         i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);
@@ -198,7 +197,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 填充参数
      *
      * @param operateI18nEntries the operate i 18 n entries
-     * @param langsDic           the langs dic
+     * @param langsDic the langs dic
      * @return list
      */
     @SystemServiceLog(description = "fillParam 填充参数")
@@ -259,19 +258,19 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 格式化词条参数
      *
      * @param operateI18nBatchEntries the operate i 18 n batch entries
-     * @param i18nLangsList           the 18 n langs list
+     * @param i18nLangsList the 18 n langs list
      * @return list
      */
     @SystemServiceLog(description = "formatEntriesParam 格式化词条参数")
     public List<I18nEntry> formatEntriesParam(OperateI18nBatchEntries operateI18nBatchEntries,
-        List<I18nLang> i18nLangsList) {
+            List<I18nLang> i18nLangsList) {
         Map<String, Integer> langsDic = new HashMap<>();
         List<I18nEntry> i18nEntriesList = new ArrayList<>();
         List<I18nEntry> i18nEntriesListResult = new ArrayList<>();
         for (I18nLang i18nLangs : i18nLangsList) {
             langsDic.put(i18nLangs.getLang(), i18nLangs.getId());
         }
-        // 需要两种类型判断  待定 操作批量国际化
+        // 需要两种类型判断 待定 操作批量国际化
         for (Entry entry : operateI18nBatchEntries.getEntries()) {
             OperateI18nEntries operateI18nEntries = new OperateI18nEntries();
             operateI18nEntries.setHost(operateI18nBatchEntries.getHost());
@@ -327,17 +326,16 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<I18nEntry> i18nEntriesList = fillParam(operateI18nEntries, langsDic);
         // bulkCreateEntries
         for (I18nEntry i18Entries : i18nEntriesList) {
-
             i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHostId(), i18Entries.getHostType(),
-                i18Entries.getKey(), i18Entries.getLangId());
+                    i18Entries.getKey(), i18Entries.getLangId());
         }
         return i18nEntriesList;
     }
 
     /**
-     * @param host     host
+     * @param host host
      * @param hostType hostType
-     * @param keys     keys
+     * @param keys keys
      * @return I18nEntry
      */
     @SystemServiceLog(description = "deleteI18nEntriesByHostAndHostTypeAndKey 根据host、host_type、key查询删除国际化词条")
@@ -352,7 +350,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             i18nEntries.setKey(key);
             i18nEntriesList = i18nEntryMapper.queryI18nEntryByCondition(i18nEntries);
             i18nEntriesList.stream()
-                .forEach(i18nEntriesDto -> i18nEntryMapper.deleteI18nEntryById(i18nEntriesDto.getId()));
+                    .forEach(i18nEntriesDto -> i18nEntryMapper.deleteI18nEntryById(i18nEntriesDto.getId()));
         }
         return i18nEntriesList;
     }
@@ -367,8 +365,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
     @Override
     public Result<Map<String, Object>> readSingleFileAndBulkCreate(String lang, MultipartFile file, int host)
-        throws Exception {
-
+            throws Exception {
         List<Object> entriesArr = new ArrayList<>();
         Map<String, Object> entriesItem = new HashMap<>();
         String contentType = file.getContentType();
@@ -398,7 +395,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 批量创建或修改
      *
      * @param entriesArr the entries arr
-     * @param host       the host
+     * @param host the host
      * @return map
      */
     @SystemServiceLog(description = "bulkCreateOrUpdate 批量创建或修改")
@@ -408,30 +405,28 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         entriesArr.forEach(langEntry -> {
             try {
                 if (langEntry instanceof Map) {
-                    resultMap.putAll((Map<? extends String, ?>)langEntry);
+                    resultMap.putAll((Map<? extends String, ?>) langEntry);
                 }
 
-                int lang = (int)resultMap.get("lang");
-                Map<String, Object> langEntries = (Map<String, Object>)resultMap.get("entries");
+                int lang = (int) resultMap.get("lang");
+                Map<String, Object> langEntries = (Map<String, Object>) resultMap.get("entries");
                 langEntries.forEach((key, value) -> {
                     I18nEntry i18nEntries = new I18nEntry();
                     i18nEntries.setKey(key);
                     i18nEntries.setLangId(lang);
                     i18nEntries.setHostId(host);
                     i18nEntries.setHostType("app");
-                    i18nEntries.setContent((String)value);
+                    i18nEntries.setContent((String) value);
                     entries.add(i18nEntries);
                 });
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
         });
 
         // 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
         return bulkInsertOrUpdate(entries);
-
     }
 
     /**
@@ -443,8 +438,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
     @Override
     public Result<Map<String, Object>> readFilesAndbulkCreate(String lang, MultipartFile file, int host)
-        throws Exception {
-
+            throws Exception {
         List<Object> entriesArr = new ArrayList<>();
         InputStream inputStream = file.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -519,8 +513,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         String encoding = StandardCharsets.UTF_8.name();
         // fieldname 为i18n_langs的id
         String filename = file.getOriginalFilename();
-        logger.info(
-            "parseJsonFileStream field: " + lang + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
+        log.info("parseJsonFileStream field: " + lang + ", filename:" + filename + ", encoding:" + encoding + ", mime:"
+                + file.getContentType());
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.MimeType.JSON.getValue()));
@@ -532,7 +526,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         // 读取上传的 JSON 文件内容
         String jsonContent = new String(file.getBytes(), StandardCharsets.UTF_8);
-        String jsonFileName = UUID.randomUUID().toString() + "_" + filename.toLowerCase();
+        String jsonFileName = UUID.randomUUID() + "_" + filename.toLowerCase();
 
         Path target = Paths.get("/path/to/tmp", jsonFileName);
         try (FileOutputStream fos = new FileOutputStream(String.valueOf(target))) {
@@ -540,9 +534,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Map<String, Object> jsonData =
-                objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
-                });
+            Map<String, Object> jsonData = objectMapper.readValue(jsonContent,
+                    new TypeReference<Map<String, Object>>() {
+                    });
             entriesItem.put("entries", flat(jsonData));
         } catch (IOException e) {
             return Result.validateFailed("parse Json error");
@@ -566,12 +560,12 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 默认使用UTF-8
         String encoding = StandardCharsets.UTF_8.name();
         String filename = file.getOriginalFilename();
-        logger.info(
-            "parseZipFileStream field: " + lang + ", filename:" + filename + ", encoding:" + encoding + ", mime:" + file.getContentType());
+        log.info("parseZipFileStream field: " + lang + ", filename:" + filename + ", encoding:" + encoding + ", mime:"
+                + file.getContentType());
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
-            Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
+                Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> entriesItem = new HashMap<>();
@@ -581,7 +575,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 解压zip文件
         String target = null;
         try {
-
             // 将上传的文件保存到临时文件中
             File tempFile = File.createTempFile("/path/to/tmp", ".zip");
             target = tempFile.getAbsolutePath();
@@ -611,7 +604,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             }
 
             entriesItem.put("entries", jsonData);
-
         } catch (IOException e) {
             log.error(e.getMessage());
             throw e;
@@ -626,14 +618,14 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 校验文件流合法性
      *
-     * @param file      文件
-     * @param code      报错码
+     * @param file 文件
+     * @param code 报错码
      * @param mimeTypes 文件类型集合
      * @throws Exception the exception
      */
     public void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) throws Exception {
-        boolean condition = file.getOriginalFilename() != null && file.getName().matches("\\d+") && mimeTypes.contains(
-            file.getContentType());
+        boolean condition = file.getOriginalFilename() != null && file.getName().matches("\\d+")
+                && mimeTypes.contains(file.getContentType());
         if (condition) {
             return;
         }
@@ -652,19 +644,16 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @throws IOException IOException
      */
     private String extractAndProcessZipFile(File zipFile) throws IOException {
-
         StringBuilder jsonResult = new StringBuilder();
         try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 String entryName = entry.getName();
                 if (entryName.endsWith(".json")) {
-
                     // 处理JSON文件
                     byte[] buffer = new byte[1024];
                     int len;
                     while ((len = zipInputStream.read(buffer)) > 0) {
-
                         jsonResult.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
                     }
                     jsonResult.append("\n");

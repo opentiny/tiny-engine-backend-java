@@ -1,8 +1,11 @@
+
 package com.tinyengine.it.config.handler;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -26,7 +29,7 @@ public class ListTypeHandler extends BaseTypeHandler<List<?>> {
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, List<?> parameter, JdbcType jdbcType)
-        throws SQLException {
+            throws SQLException {
         // 将 List<?> 转换为字符串，并设置到 PreparedStatement 中的相应参数
         try {
             String json = objectMapper.writeValueAsString(parameter);
@@ -79,4 +82,3 @@ public class ListTypeHandler extends BaseTypeHandler<List<?>> {
         }
     }
 }
-
