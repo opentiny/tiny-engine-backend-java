@@ -9,7 +9,7 @@ public class Enums {
     /**
      * The enum E i 18 belongs.
      */
-    public enum E_i18Belongs {
+    public enum I18Belongs {
         /**
          * App e i 18 belongs.
          */
@@ -21,7 +21,7 @@ public class Enums {
 
         private final int value;
 
-        E_i18Belongs(int value) {
+        I18Belongs(int value) {
             this.value = value;
         }
 
@@ -38,7 +38,7 @@ public class Enums {
     /**
      * The enum E schema 2 code type.
      */
-    public enum E_Schema2CodeType {
+    public enum Schema2CodeType {
         /**
          * Block e schema 2 code type.
          */
@@ -50,7 +50,7 @@ public class Enums {
 
         private final String value;
 
-        E_Schema2CodeType(String value) {
+        Schema2CodeType(String value) {
             this.value = value;
         }
 
@@ -67,7 +67,7 @@ public class Enums {
     /**
      * The enum E task type.
      */
-    public enum E_TaskType {
+    public enum TaskType {
         /**
          * Assets build e task type.
          */
@@ -83,7 +83,7 @@ public class Enums {
         /**
          * Vscode plugin build e task type.
          */
-        VSCODE_PLUGIN_BUILD(4),
+        VSCODPLUGIN_BUILD(4),
         /**
          * Block build e task type.
          */
@@ -91,7 +91,7 @@ public class Enums {
 
         private final int value;
 
-        E_TaskType(int value) {
+        TaskType(int value) {
             this.value = value;
         }
 
@@ -108,7 +108,7 @@ public class Enums {
     /**
      * The enum E task status.
      */
-    public enum E_TaskStatus {
+    public enum TaskStatus {
         /**
          * Init e task status.
          */
@@ -128,7 +128,7 @@ public class Enums {
 
         private final int value;
 
-        E_TaskStatus(int value) {
+        TaskStatus(int value) {
             this.value = value;
         }
 
@@ -145,7 +145,7 @@ public class Enums {
     /**
      * The enum E framework.
      */
-    public enum E_Framework {
+    public enum Framework {
         /**
          * Vue e framework.
          */
@@ -165,7 +165,7 @@ public class Enums {
 
         private final String value;
 
-        E_Framework(String value) {
+        Framework(String value) {
             this.value = value;
         }
 
@@ -182,7 +182,7 @@ public class Enums {
     /**
      * The enum E time range.
      */
-    public enum E_TimeRange {
+    public enum TimeRange {
         /**
          * All e time range.
          */
@@ -206,7 +206,7 @@ public class Enums {
 
         private final String value;
 
-        E_TimeRange(String value) {
+        TimeRange(String value) {
             this.value = value;
         }
 
@@ -223,7 +223,7 @@ public class Enums {
     /**
      * The enum E user roles.
      */
-    public enum E_UserRoles {
+    public enum UserRoles {
         /**
          * Admin e user roles.
          */
@@ -255,7 +255,7 @@ public class Enums {
 
         private final String value;
 
-        E_UserRoles(String value) {
+        UserRoles(String value) {
             this.value = value;
         }
 
@@ -272,7 +272,7 @@ public class Enums {
     /**
      * The enum E app state.
      */
-    public enum E_AppState {
+    public enum AppState {
         /**
          * Created e app state.
          */
@@ -284,7 +284,7 @@ public class Enums {
 
         private final int value;
 
-        E_AppState(int value) {
+        AppState(int value) {
             this.value = value;
         }
 
@@ -301,7 +301,7 @@ public class Enums {
     /**
      * The enum E schema format func.
      */
-    public enum E_SchemaFormatFunc {
+    public enum SchemaFormatFunc {
         /**
          * To local timestamp e schema format func.
          */
@@ -329,7 +329,7 @@ public class Enums {
 
         private final String value;
 
-        E_SchemaFormatFunc(String value) {
+        SchemaFormatFunc(String value) {
             this.value = value;
         }
 
@@ -346,7 +346,7 @@ public class Enums {
     /**
      * The enum E canvas editor state.
      */
-    public enum E_CanvasEditorState {
+    public enum CanvasEditorState {
         /**
          * Release e canvas editor state.
          */
@@ -358,7 +358,7 @@ public class Enums {
 
         private final String value;
 
-        E_CanvasEditorState(String value) {
+        CanvasEditorState(String value) {
             this.value = value;
         }
 
@@ -375,7 +375,7 @@ public class Enums {
     /**
      * The enum E system user token.
      */
-    public enum E_SystemUserToken {
+    public enum SystemUserToken {
         /**
          * Admin e system user token.
          */
@@ -407,7 +407,7 @@ public class Enums {
 
         private final String value;
 
-        E_SystemUserToken(String value) {
+        SystemUserToken(String value) {
             this.value = value;
         }
 
@@ -424,7 +424,7 @@ public class Enums {
     /**
      * The enum E app theme.
      */
-    public enum E_AppTheme {
+    public enum AppTheme {
         /**
          * Light e app theme.
          */
@@ -436,7 +436,7 @@ public class Enums {
 
         private final String value;
 
-        E_AppTheme(String value) {
+        AppTheme(String value) {
             this.value = value;
         }
 
@@ -453,7 +453,7 @@ public class Enums {
     /**
      * The enum E project state.
      */
-    public enum E_ProjectState {
+    public enum ProjectState {
         /**
          * Created e project state.
          */
@@ -465,7 +465,7 @@ public class Enums {
 
         private final int value;
 
-        E_ProjectState(int value) {
+        ProjectState(int value) {
             this.value = value;
         }
 
@@ -482,7 +482,7 @@ public class Enums {
     /**
      * The enum E task progress.
      */
-    public enum E_Task_Progress {
+    public enum TaskProgress {
         /**
          * The Init.
          */
@@ -518,7 +518,7 @@ public class Enums {
 
         private final String value;
 
-        E_Task_Progress(String value) {
+        TaskProgress(String value) {
             this.value = value;
         }
 
@@ -535,7 +535,7 @@ public class Enums {
     /**
      * The enum E ecology category.
      */
-    public enum E_Ecology_Category {
+    public enum EcologyCategory {
         /**
          * Dsl e ecology category.
          */
@@ -559,7 +559,7 @@ public class Enums {
 
         private final String value;
 
-        E_Ecology_Category(String value) {
+        EcologyCategory(String value) {
             this.value = value;
         }
 
@@ -576,7 +576,7 @@ public class Enums {
     /**
      * The enum E encodings.
      */
-    public enum E_Encodings {
+    public enum Encodings {
         /**
          * Utf 8 e encodings.
          */
@@ -616,7 +616,7 @@ public class Enums {
 
         private final String value;
 
-        E_Encodings(String value) {
+        Encodings(String value) {
             this.value = value;
         }
 
@@ -633,7 +633,7 @@ public class Enums {
     /**
      * The enum E i 18 n langs.
      */
-    public enum E_I18nLangs {
+    public enum I18nLangs {
         /**
          * En us e i 18 n langs.
          */
@@ -645,7 +645,7 @@ public class Enums {
 
         private final String value;
 
-        E_I18nLangs(String value) {
+        I18nLangs(String value) {
             this.value = value;
         }
 
@@ -662,7 +662,7 @@ public class Enums {
     /**
      * The enum E mime type.
      */
-    public enum E_MimeType {
+    public enum MimeType {
         /**
          * Json e mime type.
          */
@@ -678,7 +678,7 @@ public class Enums {
 
         private final String value;
 
-        E_MimeType(String value) {
+        MimeType(String value) {
             this.value = value;
         }
 
@@ -695,7 +695,7 @@ public class Enums {
     /**
      * The enum E indicator type.
      */
-    public enum E_IndicatorType {
+    public enum IndicatorType {
         /**
          * Duration e indicator type.
          */
@@ -711,7 +711,7 @@ public class Enums {
 
         private final String value;
 
-        E_IndicatorType(String value) {
+        IndicatorType(String value) {
             this.value = value;
         }
 
@@ -728,7 +728,7 @@ public class Enums {
     /**
      * The enum E public.
      */
-    public enum E_Public {
+    public enum Public {
         /**
          * Private e public.
          */
@@ -744,7 +744,7 @@ public class Enums {
 
         private final int value;
 
-        E_Public(int value) {
+        Public(int value) {
             this.value = value;
         }
 
@@ -761,7 +761,7 @@ public class Enums {
     /**
      * The enum E foundation model.
      */
-    public enum E_FOUNDATION_MODEL {
+    public enum FoundationModel {
         /**
          * Gpt 35 turbo e foundation model.
          */
@@ -776,10 +776,10 @@ public class Enums {
          * Ernie bot turbo e foundation model.
          */
         // 文心一言
-        ERNIE_BOT_TURBO("ERNIE-Bot-turbo");
+        ERNIBOT_TURBO("ERNIE-Bot-turbo");
         private final String value;
 
-        E_FOUNDATION_MODEL(String value) {
+        FoundationModel(String value) {
             this.value = value;
         }
 
@@ -796,7 +796,7 @@ public class Enums {
     /**
      * The enum Public scope.
      */
-    public enum PUBLIC_SCOPE {
+    public enum Scope {
         /**
          * Private public scope.
          */
@@ -812,7 +812,7 @@ public class Enums {
 
         private final int value;
 
-        PUBLIC_SCOPE(int value) {
+        Scope(int value) {
             this.value = value;
         }
 
