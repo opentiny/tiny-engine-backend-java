@@ -35,6 +35,8 @@ public class BlockServiceImpl implements BlockService {
 
     /**
      * 查询表t_block所有数据
+     *
+     * @return Block
      */
     @Override
     public List<Block> queryAllBlock() {

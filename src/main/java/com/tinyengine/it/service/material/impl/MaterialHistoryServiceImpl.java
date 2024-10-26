@@ -27,6 +27,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
 
     /**
      * 查询表t_material_history所有数据
+     *
      * @return MaterialHistory
      */
     @Override

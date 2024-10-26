@@ -122,11 +122,12 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
     /**
      * 查询表t_i18n_entry所有数据
+     *
+     * @return I18nEntryListResult
      */
     @Override
     public I18nEntryListResult findAllI18nEntry() {
         // 获取所属应用/区块的 语言列表 getHostLangs
-
         List<I18nLang> i18nLangsList = getHostLangs();
         if (i18nLangsList == null || i18nLangsList.isEmpty()) {
             return null;
@@ -153,7 +154,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @return host langs
      */
     @SystemServiceLog(description = "getHostLangs 获取词条宿主支持的语言")
-
     public List<I18nLang> getHostLangs() {
         // 先默认全部应用都支持中英文, 后续其他语言需要结合管理后台逻辑二次开发
         QueryWrapper<I18nLang> queryWrapper = new QueryWrapper<>();
@@ -337,6 +337,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     }
 
     /**
+     * 删除国际化词条
+     *
      * @param deleteI18nEntry deleteI18nEntry
      * @return I18nEntry
      */
@@ -344,7 +346,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Override
     public List<I18nEntryDto> deleteI18nEntriesByHostAndHostTypeAndKey(DeleteI18nEntry deleteI18nEntry) {
         List<I18nEntryDto> i18nEntriesList = new ArrayList<>();
-
         for (String key : deleteI18nEntry.getKeyIn()) {
             I18nEntry i18nEntry = new I18nEntry();
             i18nEntry.setHostType(deleteI18nEntry.getHostType());
@@ -360,6 +361,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 上传单个文件
      *
+     * @param lang the lang
      * @param file the file
      * @param host the host
      * @throws Exception the Exception
@@ -613,7 +615,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param file      文件
      * @param code      报错码
      * @param mimeTypes 文件类型集合
-     * @throws Exception the exception
      */
     public void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) {
         boolean condition = file.getOriginalFilename() != null && file.getName().matches("\\d+")
@@ -694,10 +695,10 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 根据条件查询表t_i18n_entry数据
      *
      * @param i18nEntry i18nEntry
+     * @return I18nEntryDto
      * @throws ServiceException ServiceException
      */
     @Override
-
     public List<I18nEntryDto> findI18nEntryByCondition(I18nEntry i18nEntry) throws ServiceException {
         return i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
     }
