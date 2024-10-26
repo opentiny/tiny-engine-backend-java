@@ -26,6 +26,8 @@ public class ComponentServiceImpl implements ComponentService {
 
     /**
      * 查询表t_component所有数据
+     *
+     * @return Component
      */
     @Override
     public List<Component> findAllComponent() {

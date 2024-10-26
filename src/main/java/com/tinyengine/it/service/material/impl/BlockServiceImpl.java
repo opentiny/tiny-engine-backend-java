@@ -195,7 +195,6 @@ public class BlockServiceImpl implements BlockService {
                 traverseBlocks(objectMapper.writeValueAsString(schemaMap.get("children")), block);
             }
         }
-
     }
 
     /**

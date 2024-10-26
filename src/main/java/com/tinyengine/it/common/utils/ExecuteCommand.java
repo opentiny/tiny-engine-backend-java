@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -49,7 +51,8 @@ public class ExecuteCommand {
             Process process = processBuilder.start();
 
             CompletableFuture<Void> outputFuture = CompletableFuture.runAsync(() -> {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                InputStreamReader in = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
+                try (BufferedReader reader = new BufferedReader(in)) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         result.append(line).append("\n");
@@ -60,7 +63,8 @@ public class ExecuteCommand {
             });
 
             CompletableFuture<Void> errorFuture = CompletableFuture.runAsync(() -> {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                InputStreamReader in = new InputStreamReader(process.getErrorStream(), StandardCharsets.UTF_8);
+                try (BufferedReader reader = new BufferedReader(in)) {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         // Handle errors if necessary
@@ -78,9 +82,9 @@ public class ExecuteCommand {
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
-                log.info("execute finished！");
+                log.info("execute finished!");
             } else {
-                log.error("execute fail，exitCode: " + exitCode);
+                log.error("execute fail,exitCode: " + exitCode);
             }
         } catch (IOException | InterruptedException e) {
             log.error(e.getMessage());

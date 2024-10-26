@@ -26,14 +26,4 @@ public class ServiceException extends RuntimeException {
         this.code = code;
         this.message = message;
     }
-
-    /**
-     * Instantiates a new Service exception.
-     *
-     * @param message the message
-     */
-    public ServiceException(String message) {
-        this.code = "400";
-        this.message = message;
-    }
 }

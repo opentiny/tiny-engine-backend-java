@@ -74,8 +74,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Result<Datasource> updateDatasourceById(Datasource datasource) {
         int res = datasourceMapper.updateDatasourceById(datasource);
         if (res == 1) {
-            datasource = queryDatasourceById(datasource.getId());
-            return Result.success(datasource);
+            return Result.success(queryDatasourceById(datasource.getId()));
         }
         return Result.failed(ExceptionEnum.CM001);
     }
@@ -87,19 +86,18 @@ public class DatasourceServiceImpl implements DatasourceService {
      * @return Datasource
      */
     @Override
-    public Result<Datasource> createDatasource(Datasource datasource) throws Exception {
+    public Result<Datasource> createDatasource(Datasource datasource) {
         Integer appId = datasource.getApp();
         String name = datasource.getName();
         if (appId != 0 && String.valueOf(appId).matches("^[0-9]+$") && !name.isEmpty()) {
             int res = datasourceMapper.createDatasource(datasource);
             if (res == 1) {
                 int id = datasource.getId();
-                datasource = queryDatasourceById(id);
-                return Result.success(datasource);
+                return Result.success(queryDatasourceById(id));
             } else {
                 Result.failed(ExceptionEnum.CM001);
             }
         }
-        throw new Exception("The request body is missing some parameters");
+        return Result.failed(ExceptionEnum.CM002);
     }
 }

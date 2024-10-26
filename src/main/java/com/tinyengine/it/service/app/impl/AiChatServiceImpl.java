@@ -29,6 +29,10 @@ import java.util.regex.Pattern;
 @Service
 @Slf4j
 public class AiChatServiceImpl implements AiChatService {
+    private static final Pattern PATTERN_TAG_START = Pattern.compile("```javascript|<template>");
+    private static final Pattern PATTERN_TAG_END = Pattern.compile("```|</template>|</script>|</style>");
+    private static final Pattern PATTERN_MESSAGE = Pattern.compile(".*编码时遵从以下几条要求.*");
+
     /**
      * Get start and end int [ ].
      *
@@ -37,16 +41,14 @@ public class AiChatServiceImpl implements AiChatService {
      */
     public static int[] getStartAndEnd(String str) {
         // 查找开始标记的位置
-        Pattern startPattern = Pattern.compile("```javascript|<template>");
-        Matcher startMatcher = startPattern.matcher(str);
+        Matcher startMatcher = PATTERN_TAG_START.matcher(str);
         int start = -1;
         if (startMatcher.find()) {
             start = startMatcher.end();
         }
 
         // 查找结束标记的位置
-        Pattern endPattern = Pattern.compile("```|</template>|</script>|</style>");
-        Matcher endMatcher = endPattern.matcher(str);
+        Matcher endMatcher = PATTERN_TAG_END.matcher(str);
         int end = -1;
 
         while (endMatcher.find()) {
@@ -89,9 +91,8 @@ public class AiChatServiceImpl implements AiChatService {
     }
 
     private Result<Map<String, Object>> requestAnswerFromAi(List<Map<String, String>> messages, String model) {
-        messages = formatMessage(messages);
         AiChatClient aiChatClient = new AiChatClient();
-        OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, messages);
+        OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, formatMessage(messages));
         Map<String, Object> response;
         try {
             response = aiChatClient.executeChatRequest(openAiBodyDto);
@@ -176,14 +177,14 @@ public class AiChatServiceImpl implements AiChatService {
 
     private List<Map<String, String>> formatMessage(List<Map<String, String>> messages) {
         Map<String, String> defaultWords = getStringStringMap();
-        Pattern pattern = Pattern.compile(".*编码时遵从以下几条要求.*");
         Map<String, String> firstMessage = messages.get(0);
         String role = firstMessage.get("role");
         String content = firstMessage.get("content");
 
         if (!"user".equals(role)) {
             messages.add(0, defaultWords);
-        } else if (!pattern.matcher(content).matches()) {
+        }
+        if (!PATTERN_MESSAGE.matcher(content).matches()) {
             firstMessage.put("content", defaultWords.get("content") + "\n" + content);
         }
 

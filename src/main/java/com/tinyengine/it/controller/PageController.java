@@ -106,11 +106,9 @@ public class PageController {
         if (page.getIsPage()) {
             // 创建页面
             return pageService.createPage(page);
-
         } else {
             // 创建文件夹
             return pageService.createFolder(page);
-
         }
     }
 
@@ -136,7 +134,6 @@ public class PageController {
         if (page.getIsPage()) {
             // 更新页面
             return pageService.updatePage(page);
-
         } else {
             // 更新文件夹
             return pageService.update(page);

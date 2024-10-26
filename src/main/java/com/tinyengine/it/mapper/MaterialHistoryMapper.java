@@ -33,7 +33,8 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
      * @return the material history
      */
     @Results({@Result(property = "id", column = "id"),
-            @Result(property = "components", column = "id", many = @Many(select = "findUserComponentsByMaterialHistoryId"))})
+            @Result(property = "components", column = "id",
+                    many = @Many(select = "findUserComponentsByMaterialHistoryId"))})
     @Select("SELECT * FROM t_material_history WHERE id = #{id}")
     MaterialHistory queryMaterialHistoryById(@Param("id") Integer id);
 

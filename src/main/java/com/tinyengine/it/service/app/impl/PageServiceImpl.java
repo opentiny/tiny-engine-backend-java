@@ -129,7 +129,10 @@ public class PageServiceImpl implements PageService {
     private I18nEntryMapper i18nEntryMapper;
 
     /**
-     * 查询表t_page所有数据
+     * 通过appId查询page所有数据实现方法
+     *
+     * @param aid the aid
+     * @return Page
      */
     @Override
     @SystemServiceLog(description = "通过appId查询page所有数据实现方法")
@@ -241,7 +244,6 @@ public class PageServiceImpl implements PageService {
             boolean res = setAppHomePage(Math.toIntExact(page.getApp()), pageInfo.getId());
             if (!res) {
                 return Result.failed(ExceptionEnum.CM001);
-
             }
         }
 
@@ -250,6 +252,8 @@ public class PageServiceImpl implements PageService {
     }
 
     /**
+     * 创建文件夹实现方法
+     *
      * @param page the page
      * @return Page
      */
@@ -267,7 +271,7 @@ public class PageServiceImpl implements PageService {
         page.setGroup("staticPages");
         page.setIsDefault(false);
         page.setIsBody(true);
-        // todo 获取user的ID
+        // needTODO 获取user的ID
         String userId = "1";
         page.setOccupierBy(userId);
         Page pageParam = new Page();
@@ -286,6 +290,8 @@ public class PageServiceImpl implements PageService {
     }
 
     /**
+     * 更新页面实现方法
+     *
      * @param page the page
      * @return Page
      */
@@ -390,7 +396,7 @@ public class PageServiceImpl implements PageService {
     /**
      * Sets app home page.
      *
-     * @param appId the app id
+     * @param appId  the app id
      * @param pageId the page id
      * @return the app home page
      */
@@ -491,7 +497,7 @@ public class PageServiceImpl implements PageService {
      * @return the result
      */
     public Result<Page> checkDelete(Integer id) {
-        // todo 从缓存中获取的user信息
+        // needTODO 从缓存中获取的user信息
         User user = userService.queryUserById(1);
         Page page = pageMapper.queryPageById(id);
         User occupier = page.getOccupier();
@@ -510,7 +516,7 @@ public class PageServiceImpl implements PageService {
      * 判断是否能删除
      *
      * @param occupier the occupier
-     * @param user the user
+     * @param user     the user
      * @return boolean
      */
     public boolean iCanDoIt(User occupier, User user) {
@@ -525,7 +531,7 @@ public class PageServiceImpl implements PageService {
      * 保护默认页面
      *
      * @param pages the pages
-     * @param id the id
+     * @param id    the id
      */
     public void protectDefaultPage(Page pages, Integer id) {
         if (pages.getIsDefault()) {
@@ -540,7 +546,7 @@ public class PageServiceImpl implements PageService {
     /**
      * Validate is home boolean.
      *
-     * @param param the param
+     * @param param    the param
      * @param pageInfo the page info
      * @return the boolean
      */
@@ -575,7 +581,7 @@ public class PageServiceImpl implements PageService {
             Result.failed("Please unlock the page before editing the page");
         }
         // 当页面被人锁定时，如果提交update请求的人不是当前用户，提示无权限
-        // todo 从缓存中获取登录用户信息
+        // needTODO 从缓存中获取登录用户信息
         User user = userService.queryUserById(1);
         if (!user.getId().equals(occupier.getId())) {
             Result.failed("The current page is being edited by" + occupier.getUsername());
@@ -604,7 +610,7 @@ public class PageServiceImpl implements PageService {
     /**
      * 主函数
      *
-     * @param pid the pid
+     * @param pid    the pid
      * @param target the target
      * @return update tree
      */
@@ -643,7 +649,7 @@ public class PageServiceImpl implements PageService {
         }
         // 当前的节点深度超过 配置的最大深度，返回失败信息
         if (level > 5) {
-            throw new ServiceException("Exceeded depth");
+            throw new ServiceException("400", "Exceeded depth");
         }
         // 获取子节点的id
         List<Integer> childrenId = getChildrenId(pids);

@@ -53,5 +53,5 @@ public interface DatasourceService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<Datasource> createDatasource(Datasource datasource) throws Exception;
+    Result<Datasource> createDatasource(Datasource datasource);
 }

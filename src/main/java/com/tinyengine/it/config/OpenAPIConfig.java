@@ -15,7 +15,11 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
  *
  * @since 2024-10-20
  */
-@OpenAPIDefinition(info = @Info(title = "Tiny Engine API", version = "1.0.0", description = "API介绍", contact = @Contact()), security = @SecurityRequirement(name = "JWT"), externalDocs = @ExternalDocumentation(description = "参考文档", url = "https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations")
+@OpenAPIDefinition(info = @Info(title = "Tiny Engine API", version = "1.0.0",
+        description = "API介绍", contact = @Contact()),
+        security = @SecurityRequirement(name = "JWT"),
+        externalDocs = @ExternalDocumentation(description = "参考文档",
+                url = "https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations")
 
 )
 @SecurityScheme(type = SecuritySchemeType.HTTP, name = "JWT", scheme = "bearer", in = SecuritySchemeIn.HEADER)

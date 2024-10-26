@@ -94,7 +94,9 @@ public class AppController {
     @Operation(summary = "修改单个App信息", description = "修改单个App信息", parameters = {
             @Parameter(name = "id", description = "appId"),
             @Parameter(name = "App", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = App.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改单个App信息")
     @PostMapping("/apps/update/{id}")
@@ -157,7 +159,7 @@ public class AppController {
         if (!allAreNumbers) {
             return Result.failed("i18n_langs[0] should be a number");
         }
-        // todo 对于传参进行修改逻辑存疑
+        // needTODO 对于传参进行修改逻辑存疑
         return Result.failed("修改应用对应的国际化语种关联接口逻辑存疑");
     }
 }

@@ -26,6 +26,8 @@ public class PlatformServiceImpl implements PlatformService {
 
     /**
      * 查询表t_platform所有数据
+     *
+     * @return Platform
      */
     @Override
     public List<Platform> queryAllPlatform() {

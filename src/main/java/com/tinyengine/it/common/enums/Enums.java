@@ -187,7 +187,7 @@ public class Enums {
         /**
          * All e time range.
          */
-        All("all"),
+        ALL("all"),
         /**
          * Today e time range.
          */

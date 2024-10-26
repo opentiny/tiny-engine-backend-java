@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 查询表t_user所有数据
+     *
+     * @return User
      */
     @Override
     public List<User> queryAllUser() {

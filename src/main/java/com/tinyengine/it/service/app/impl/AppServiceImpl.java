@@ -82,6 +82,8 @@ public class AppServiceImpl implements AppService {
 
     /**
      * 查询表t_app所有数据
+     *
+     * @return App
      */
     @Override
     public List<App> queryAllApp() {
@@ -183,6 +185,7 @@ public class AppServiceImpl implements AppService {
      * @param i18nEntries 国际化词条标准请求返回数据
      * @param userdIn 国际化词条从属单元 （应用或区块）
      * @param id 应用id或区块id
+     * @return Entries List
      */
     @SystemServiceLog(description = "对应用id或区块id获取序列化国际化词条")
     @Override
@@ -193,7 +196,6 @@ public class AppServiceImpl implements AppService {
             // 没有词条的时候，查询应用和区块对应的国家化关联，把默认空的关联分组返回
             if (userdIn == Enums.I18Belongs.APP.getValue()) {
                 i18n.setHostType("app");
-
             } else {
                 i18n.setHostType("block");
             }
@@ -203,6 +205,12 @@ public class AppServiceImpl implements AppService {
         return i18nEntryService.formatEntriesList(i18nEntries);
     }
 
+    /**
+     * 获取预览元数据
+     *
+     * @param id 应用id
+     * @return PreviewDto
+     */
     @SystemServiceLog(description = "getAppPreviewMetaData 获取预览元数据")
     @Override
     public PreviewDto getAppPreviewMetaData(Integer id) {

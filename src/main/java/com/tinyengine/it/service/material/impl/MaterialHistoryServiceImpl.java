@@ -27,6 +27,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
 
     /**
      * 查询表t_material_history所有数据
+     * @return MaterialHistory
      */
     @Override
     public List<MaterialHistory> findAllMaterialHistory() {
@@ -49,6 +50,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      *
      * @param materialHistory materialHistory
      * @return query result
+     * @throws ServiceException ServiceException
      */
     @Override
     public List<MaterialHistory> findMaterialHistoryByCondition(MaterialHistory materialHistory)

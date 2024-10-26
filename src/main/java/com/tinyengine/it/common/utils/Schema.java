@@ -33,48 +33,49 @@ public class Schema {
      * Assemble fields map.
      *
      * @param appData the app data
-     * @param type the type
+     * @param type    the type
      * @return the map
      */
     public Map<String, Object> assembleFields(Map<String, Object> appData, String type) {
         SchemaConfig conf = new SchemaConfig();
-
+        Map<String, Object> result = new HashMap<>();
         // 根据类型选择对应的配置方法
         switch (type) {
             case "app":
-                appData = processFields(appData, conf.getAppInclude(), conf.getAppFormat(), conf.getAppConvert());
+                result = processFields(appData, conf.getAppInclude(), conf.getAppFormat(), conf.getAppConvert());
                 break;
             case "pageMeta":
-                appData = processFields(appData, conf.getPageMetaInclude(), conf.getPageMetaFormat(),
+                result = processFields(appData, conf.getPageMetaInclude(), conf.getPageMetaFormat(),
                         conf.getPageMetaConvert());
                 break;
             case "pageContent":
                 if (!conf.getPageContentInclude().isEmpty()) {
-                    appData = this.filterFields(appData, conf.getPageContentInclude());
+                    result = this.filterFields(appData, conf.getPageContentInclude());
                 }
                 break;
             default:
-                appData = processFields(appData, conf.getFolderInclude(), conf.getFolderFormat(),
+                result = processFields(appData, conf.getFolderInclude(), conf.getFolderFormat(),
                         conf.getFolderConvert());
                 break;
         }
 
-        return appData;
+        return result;
     }
 
     // 提取公共处理逻辑
     private Map<String, Object> processFields(Map<String, Object> appData, List<String> includeConfig,
-            Map<String, String> formatConfig, Map<String, String> convertConfig) {
+                                              Map<String, String> formatConfig, Map<String, String> convertConfig) {
+        Map<String, Object> result = new HashMap<>();
         if (!includeConfig.isEmpty()) {
-            appData = this.filterFields(appData, includeConfig);
+            result = this.filterFields(appData, includeConfig);
         }
         if (!formatConfig.isEmpty()) {
-            appData = this.formatFields(appData, formatConfig);
+            result = this.formatFields(appData, formatConfig);
         }
         if (!convertConfig.isEmpty()) {
-            appData = this.convertFields(appData, convertConfig);
+            result = this.convertFields(appData, convertConfig);
         }
-        return appData;
+        return result;
     }
 
     /**
@@ -107,7 +108,7 @@ public class Schema {
     /**
      * Filter fields map.
      *
-     * @param data the data
+     * @param data        the data
      * @param includeConf the include conf
      * @return the map
      */
@@ -124,7 +125,7 @@ public class Schema {
     /**
      * Format fields map.
      *
-     * @param data the data
+     * @param data         the data
      * @param formatConfig the format config
      * @return the map
      */
@@ -149,7 +150,7 @@ public class Schema {
     /**
      * Convert fields map.
      *
-     * @param data the data
+     * @param data        the data
      * @param convertConf the convert conf
      * @return the map
      */

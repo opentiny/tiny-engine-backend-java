@@ -189,9 +189,6 @@ public class AppV1ServiceImpl implements AppV1Service {
         return blockEntries;
     }
 
-    /**
-     * 获取元数据
-     */
     private Map<String, Object> getSchemaMeta() {
         Map<String, Object> appData = Utils.convert(this.metaDto.getApp());
         Map<String, Object> config = new HashMap<>();
@@ -256,10 +253,11 @@ public class AppV1ServiceImpl implements AppV1Service {
     }
 
     /**
-     * 获取区块历史信息
+     * 查询区块历史信息
      *
      * @param app 应用信息 materialhistoryMsg 物料历史信息
-     * @return {Promise<any>} 区块历史信息
+     * @param materialhistoryMsg materialhistoryMsg
+     * @return 区块历史信息
      */
     private List<BlockHistory> getBlockHistory(App app, MaterialHistoryMsg materialhistoryMsg) {
         Boolean isUnpkg = materialhistoryMsg.getIsUnpkg();
@@ -534,7 +532,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         for (Object field : fields) {
             if (field instanceof String) {
                 fieldsMap.put((String) field, true);
-            } else if (field instanceof IFieldItem) {
+            }
+            if (field instanceof IFieldItem) {
                 IFieldItem fieldItem = (IFieldItem) field;
                 fieldsMap.put(fieldItem.getKey(), fieldItem.getValue());
             }

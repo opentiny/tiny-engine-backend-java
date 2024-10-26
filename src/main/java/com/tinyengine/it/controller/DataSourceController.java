@@ -62,8 +62,7 @@ public class DataSourceController {
     public Result<List<Datasource>> getAllSources(@PathVariable Integer aid) {
         Datasource sources = new Datasource();
         sources.setApp(aid);
-        List<Datasource> SourcesList = datasourceService.queryDatasourceByCondition(sources);
-        return Result.success(SourcesList);
+        return Result.success(datasourceService.queryDatasourceByCondition(sources));
     }
 
     /**
@@ -90,7 +89,6 @@ public class DataSourceController {
      *
      * @param sources the sources
      * @return result
-     * @throws Exception the exception
      */
     @Operation(summary = "创建数据源", description = "创建数据源", parameters = {
             @Parameter(name = "sources", description = "入参对象")}, responses = {
@@ -100,7 +98,7 @@ public class DataSourceController {
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "创建数据源")
     @PostMapping("/sources/create")
-    public Result<Datasource> createSources(@Valid @RequestBody Datasource sources) throws Exception {
+    public Result<Datasource> createSources(@Valid @RequestBody Datasource sources) {
         return datasourceService.createDatasource(sources);
     }
 

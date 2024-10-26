@@ -121,7 +121,7 @@ public class SystemLogAspect {
             logger.info("Method Description: {}", getControllerMethodDescription(joinPoint));
         } catch (Exception e) {
             // 记录本地异常日志
-            logger.error("Exception Message：{}", e.getMessage());
+            logger.error("Exception Message:{}", e.getMessage());
         }
     }
 

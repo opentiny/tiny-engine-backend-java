@@ -39,7 +39,7 @@ public class Result<T> {
     @Schema(name = "error", description = "失败对象")
     private Map<String, Object> error;
     @Schema(name = "err_msg", description = "失败信息")
-    private String err_msg;
+    private String errMsg;
 
     /**
      * Instantiates a new Result.
@@ -67,7 +67,7 @@ public class Result<T> {
         this(code, message, data);
         this.success = success;
         if (!success) {
-            this.err_msg = message;
+            this.errMsg = message;
             this.error = Stream.of(new Object[][]{{"code", code}, {"message", message}})
                     .collect(Collectors.toMap(item -> (String) item[0], item -> item[1]));
         }

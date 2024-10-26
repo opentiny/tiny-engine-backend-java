@@ -26,6 +26,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
 
     /**
      * 查询表t_block_group所有数据
+     *
+     * @return BlockGroup
      */
     @Override
     public List<BlockGroup> findAllBlockGroup() {
