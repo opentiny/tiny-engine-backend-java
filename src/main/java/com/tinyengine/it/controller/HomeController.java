@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * home api
+ *
  * @since 2024-10-26
  */
 @CrossOrigin
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
     /**
      * 健康检测
+     *
      * @return Result
      */
     @GetMapping("/healthCheck")
