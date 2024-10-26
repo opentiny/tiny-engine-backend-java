@@ -1,9 +1,12 @@
 
 package com.tinyengine.it.gateway.ai;
 
+import static com.tinyengine.it.common.exception.ExceptionEnum.CM322;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
@@ -72,7 +75,7 @@ public class AiChatClient {
                 return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {
                 });
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                throw new ServiceException(CM322.getResultCode(), e.getMessage());
             }
         }).block(); // 等待结果
     }

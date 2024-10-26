@@ -26,6 +26,8 @@ public class MaterialServiceImpl implements MaterialService {
 
     /**
      * 查询表t_material所有数据
+     *
+     * @return Material
      */
     @Override
     public List<Material> queryAllMaterial() {

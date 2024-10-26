@@ -68,18 +68,22 @@ public class AiChatConfig {
          * The Http request url.
          */
         public final String httpRequestUrl;
+
         /**
          * The Http request option.
          */
         public final HttpRequestOption httpRequestOption;
+
         /**
          * The Headers.
          */
         public final Map<String, String> headers;
+
         /**
          * The Manufacturer.
          */
         public final String manufacturer;
+
         /**
          * The Request body.
          */
@@ -111,14 +115,17 @@ public class AiChatConfig {
          * The Method.
          */
         public final String method;
+
         /**
          * The Data type.
          */
         public final String dataType;
+
         /**
          * The Content type.
          */
         public final String contentType;
+
         /**
          * The Timeout.
          */

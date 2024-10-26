@@ -26,6 +26,8 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
 
     /**
      * 查询表t_block_history所有数据
+     *
+     * @return BlockHistory
      */
     @Override
     public List<BlockHistory> findAllBlockHistory() {

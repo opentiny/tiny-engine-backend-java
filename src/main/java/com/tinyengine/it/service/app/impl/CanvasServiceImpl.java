@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * canvas service
- * @since @since 2024-10-20
+ * @since 2024-10-20
  */
 @Service
 public class CanvasServiceImpl implements CanvasService {
@@ -31,7 +31,7 @@ public class CanvasServiceImpl implements CanvasService {
     @Override
     public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
         int occupier;
-        // TODO 先试用mock数据，后续添加登录及权限后从session获取,
+        // needTODO 先试用mock数据，后续添加登录及权限后从session获取,
         User user = userMapper.queryUserById(1);
         CanvasDto canvasDto = new CanvasDto();
         if ("page".equals(type)) {
@@ -68,7 +68,7 @@ public class CanvasServiceImpl implements CanvasService {
         return Result.success(canvasDto);
     }
 
-    public Boolean iCanDoIt(Integer occupier, User user) {
+    private Boolean iCanDoIt(Integer occupier, User user) {
         if (occupier == user.getId()) {
             return true;
         }

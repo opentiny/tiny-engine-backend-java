@@ -26,6 +26,8 @@ public class PageHistoryServiceImpl implements PageHistoryService {
 
     /**
      * 查询表t_page_history所有数据
+     *
+     * @return PageHistory
      */
     @Override
     public List<PageHistory> findAllPageHistory() {

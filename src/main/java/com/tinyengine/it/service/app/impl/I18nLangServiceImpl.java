@@ -26,6 +26,8 @@ public class I18nLangServiceImpl implements I18nLangService {
 
     /**
      * 查询表t_i18n_lang所有数据
+     *
+     * @return I18nLang
      */
     @Override
     public List<I18nLang> queryAllI18nLang() {

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -29,12 +30,14 @@ public class Utils {
     /**
      * The Res keys.
      */
-    public String[] resKeys = {"is_body", "parent_id", "is_page", "is_default"};
+    private static final String[] RES_KEYS = {"is_body", "parent_id", "is_page", "is_default"};
+    private static final Pattern CHAR_WORD = Pattern.compile("_(\\w)");
+    private static final Pattern CHAR_AZ = Pattern.compile("([A-Z])");
 
     /**
      * Remove duplicates list.
      *
-     * @param <T> the type parameter
+     * @param <T>  the type parameter
      * @param list the list
      * @return the list
      */
@@ -56,7 +59,8 @@ public class Utils {
     public static String findMaxVersion(List<String> versions) {
         return versions.stream()
                 .max(Comparator.comparing(
-                        version -> Arrays.stream(version.split("\\.")).mapToInt(Integer::parseInt).toArray(),
+                        version -> Arrays.stream(version.split("\\."))
+                                .mapToInt(Integer::parseInt).toArray(),
                         Comparator.comparingInt((int[] arr) -> arr[0])
                                 .thenComparingInt(arr -> arr[1])
                                 .thenComparingInt(arr -> arr[2])))
@@ -71,9 +75,7 @@ public class Utils {
      */
     public static String toHump(String name) {
         // 定义正则表达式模式
-        Pattern pattern = Pattern.compile("_(\\w)");
-        Matcher matcher = pattern.matcher(name);
-
+        Matcher matcher = CHAR_WORD.matcher(name);
         // 使用 StringBuilder 来构建结果字符串
         StringBuilder result = new StringBuilder();
         int lastEnd = 0;
@@ -86,7 +88,7 @@ public class Utils {
             // 获取匹配到的字母并转换为大写
             // 确保此处是有效的调用
             String match = matcher.group(1);
-            result.append(match.toUpperCase());
+            result.append(match.toUpperCase(Locale.ROOT));
 
             lastEnd = matcher.end();
         }
@@ -104,8 +106,7 @@ public class Utils {
      */
     public static String toLine(String name) {
         // 定义正则表达式模式
-        Pattern pattern = Pattern.compile("([A-Z])");
-        Matcher matcher = pattern.matcher(name);
+        Matcher matcher = CHAR_AZ.matcher(name);
 
         // 使用 StringBuilder 来构建结果字符串
         StringBuilder result = new StringBuilder();
@@ -123,7 +124,7 @@ public class Utils {
             lastEnd = matcher.end();
         }
         // 添加最后的部分并转换为小写
-        result.append(name.substring(lastEnd).toLowerCase());
+        result.append(name.substring(lastEnd).toLowerCase(Locale.ROOT));
 
         return result.toString();
     }
@@ -148,8 +149,8 @@ public class Utils {
     /**
      * Map to object t.
      *
-     * @param <T> the type parameter
-     * @param map the map
+     * @param <T>   the type parameter
+     * @param map   the map
      * @param clazz the clazz
      * @return the t
      * @throws Exception the exception
@@ -171,7 +172,7 @@ public class Utils {
                 field.set(obj, value);
             } catch (NoSuchFieldException e) {
                 // 字段不存在，可以选择忽略或处理异常
-                throw new ServiceException("Field not found: " + key);
+                throw new ServiceException("400", "Field not found: " + key);
             }
         }
         return obj;
@@ -225,7 +226,8 @@ public class Utils {
 
             if (v1Part < v2Part) {
                 return -1;
-            } else if (v1Part > v2Part) {
+            }
+            if (v1Part > v2Part) {
                 return 1;
             }
         }

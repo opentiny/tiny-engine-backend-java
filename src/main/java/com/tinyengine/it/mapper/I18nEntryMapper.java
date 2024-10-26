@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -63,8 +64,6 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      */
     Integer createI18nEntry(I18nEntry i18nEntry);
 
-
-
     /**
      * Update by entry integer.
      *
@@ -75,8 +74,8 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param langId   the lang id
      * @return the integer
      */
-    @Update(
-        "UPDATE t_i18n_entry  SET content = #{content}   WHERE  (host_id = #{hostId} AND host_type = #{hostType} AND `key` = #{key} AND lang_id = #{langId})")
+    @Update("UPDATE t_i18n_entry  SET content = #{content}  " +
+            "WHERE  (host_id = #{hostId} AND host_type = #{hostType} AND `key` = #{key} AND lang_id = #{langId})")
     Integer updateByEntry(String content, Integer hostId, String hostType, String key, Integer langId);
 
     /**
@@ -87,7 +86,6 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @return 18 n entry
      */
     I18nEntryDto findI18nEntriesByKeyAndLang(@Param("key") String entriesKey, @Param("langId") int lang);
-
 
     /**
      * Find i 18 n entries by hostand host type list.
@@ -106,9 +104,8 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @return list
      */
     @Select({"<script>", "SELECT * FROM t_i18n_entry", "WHERE host_id IN",
-        "<foreach item='item' index='index' collection='blockIds' open='(' separator=',' close=')'>", "#{item}",
-        "</foreach>", "AND host_type = #{hostType}", "</script>"})
+            "<foreach item='item' index='index' collection='blockIds' open='(' separator=',' close=')'>", "#{item}",
+            "</foreach>", "AND host_type = #{hostType}", "</script>"})
     List<I18nEntryDto> findI18nEntriesByHostsandHostType(@Param("blockIds") List<Integer> blockIds,
-        @Param("hostType") String hostType);
-
+                                                         @Param("hostType") String hostType);
 }

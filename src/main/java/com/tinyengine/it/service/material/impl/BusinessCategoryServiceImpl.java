@@ -27,6 +27,8 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
 
     /**
      * 查询表t_business_category所有数据
+     *
+     * @return BusinessCategory
      */
     @Override
     public List<BusinessCategory> queryAllBusinessCategory() {
@@ -49,6 +51,7 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      *
      * @param businessCategory businessCategory
      * @return BusinessCategory
+     * @throws ServiceException ServiceException
      */
     @Override
     public List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory)

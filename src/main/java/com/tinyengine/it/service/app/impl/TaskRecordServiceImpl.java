@@ -26,6 +26,8 @@ public class TaskRecordServiceImpl implements TaskRecordService {
 
     /**
      * 查询表t_task_record所有数据
+     *
+     * @return TaskRecord
      */
     @Override
     public List<TaskRecord> queryAllTaskRecord() {

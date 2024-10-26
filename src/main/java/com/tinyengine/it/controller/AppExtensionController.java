@@ -44,7 +44,7 @@ public class AppExtensionController {
      * The App extension service.
      */
     @Autowired
-    private AppExtensionService AppExtensionService;
+    private AppExtensionService appExtensionService;
 
     /**
      * 获取应用的桥接源或工具类列表
@@ -67,8 +67,7 @@ public class AppExtensionController {
         AppExtension appExtension = new AppExtension();
         appExtension.setApp(Integer.valueOf(appId));
         appExtension.setCategory(category);
-        List<AppExtension> AppExtensionList = AppExtensionService.findAppExtensionByCondition(appExtension);
-        return Result.success(AppExtensionList);
+        return Result.success(appExtensionService.findAppExtensionByCondition(appExtension));
     }
 
     /**
@@ -90,15 +89,15 @@ public class AppExtensionController {
         appExtension.setApp(Integer.parseInt(map.get("app")));
         appExtension.setName(map.get("name"));
         appExtension.setCategory(map.get("category"));
-        appExtension = AppExtensionService.findAppExtensionByCondition(appExtension).get(0);
+        appExtension = appExtensionService.findAppExtensionByCondition(appExtension).get(0);
         return Result.success(appExtension);
     }
 
     /**
      * 新建桥接或工具
      *
-     * @param AppExtension the app extension
-     * @return result
+     * @param appExtension the app extension
+     * @return AppExtension
      */
     @Operation(summary = "新建桥接或工具", description = "新建桥接或工具", parameters = {
             @Parameter(name = "AppExtension", description = "入参对象")}, responses = {
@@ -109,14 +108,14 @@ public class AppExtensionController {
     @SystemControllerLog(description = "新建桥接或工具")
     @PostMapping("/apps/extension/create")
     public Result<AppExtension> createAppExtension(@Valid @RequestBody AppExtension appExtension) {
-        return AppExtensionService.createAppExtension(appExtension);
+        return appExtensionService.createAppExtension(appExtension);
     }
 
     /**
      * 修改桥接或工具
      *
-     * @param AppExtension the app extension
-     * @return result
+     * @param appExtension the app extension
+     * @return AppExtension
      */
     @Operation(summary = "修改桥接或工具", description = "修改桥接或工具", parameters = {
             @Parameter(name = "AppExtension", description = "入参对象")}, responses = {
@@ -127,7 +126,7 @@ public class AppExtensionController {
     @SystemControllerLog(description = "修改桥接或工具")
     @PostMapping("/apps/extension/update")
     public Result<AppExtension> updateAppExtension(@RequestBody AppExtension appExtension) {
-        return AppExtensionService.updateAppExtensionById(appExtension);
+        return appExtensionService.updateAppExtensionById(appExtension);
     }
 
     /**
@@ -145,6 +144,6 @@ public class AppExtensionController {
     @SystemControllerLog(description = "删除单个桥接或工具")
     @GetMapping("/apps/extension/delete")
     public Result<AppExtension> deleteAppExtension(@RequestParam Integer id) {
-        return AppExtensionService.deleteAppExtensionById(id);
+        return appExtensionService.deleteAppExtensionById(id);
     }
 }
