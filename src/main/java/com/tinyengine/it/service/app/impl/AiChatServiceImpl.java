@@ -192,7 +192,6 @@ public class AiChatServiceImpl implements AiChatService {
                 + "6. el-table标签内不得出现el-table-column\n"
                 + "###");
 
-        Pattern pattern = Pattern.compile(".*编码时遵从以下几条要求.*");
 
         String role = messages.get(0).getRole();
         String content = messages.get(0).getContent();
@@ -201,7 +200,8 @@ public class AiChatServiceImpl implements AiChatService {
 
         if (!"user".equals(role)) {
             aiMessages.add(0, defaultWords);
-        } else if (!pattern.matcher(content).matches()) {
+        }
+        if (!PATTERN_MESSAGE.matcher(content).matches()) {
             AiMessages aiMessagesResult = new AiMessages();
             aiMessagesResult.setContent(defaultWords.getContent() + "\n" + content);
             aiMessages.add(aiMessagesResult);

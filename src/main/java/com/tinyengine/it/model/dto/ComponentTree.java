@@ -23,5 +23,4 @@ public class ComponentTree {
     private Map<String, Object> methods;
     private Map<String, Object> props;
     private Map<String, Object> state;
-
 }
