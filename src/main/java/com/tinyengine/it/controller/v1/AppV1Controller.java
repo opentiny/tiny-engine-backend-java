@@ -3,6 +3,7 @@ package com.tinyengine.it.controller.v1;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemControllerLog;
+import com.tinyengine.it.model.dto.SchemaDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.service.app.v1.AppV1Service;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,8 +46,8 @@ public class AppV1Controller {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取app schema api")
     @GetMapping("/apps/schema/{id}")
-    public Result<Map<String, Object>> getSchema(@PathVariable Integer id) {
-        Map<String, Object> schema = appV1Service.appSchema(id);
+    public Result<SchemaDto> getSchema(@PathVariable Integer id) {
+        SchemaDto schema = appV1Service.appSchema(id);
         return Result.success(schema);
     }
 }
