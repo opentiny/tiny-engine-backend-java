@@ -45,10 +45,8 @@ public class ExecuteCommand {
     public static StringBuilder executeCommand(List<String> command) {
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         StringBuilder result = new StringBuilder();
-
         try {
             Process process = processBuilder.start();
-
             CompletableFuture<Void> outputFuture = CompletableFuture.runAsync(() -> {
                 InputStreamReader in = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
                 try (BufferedReader reader = new BufferedReader(in)) {

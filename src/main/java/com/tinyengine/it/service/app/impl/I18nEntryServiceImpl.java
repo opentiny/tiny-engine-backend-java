@@ -360,6 +360,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param lang the lang
      * @param file the file
      * @param host the host
+     * @return bulk Create Or Update number
      * @throws Exception the Exception
      */
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
@@ -566,7 +567,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         try {
             // 将上传的文件保存到临时文件中
             File tempFile = File.createTempFile("/path/to/tmp", ".zip");
-            target = tempFile.getAbsolutePath();
+            target = tempFile.getCanonicalPath();
             file.transferTo(tempFile);
 
             // 解压ZIP文件并处理
@@ -665,13 +666,18 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     private void cleanUp(String targetDir) throws IOException {
         Path directory = Paths.get(targetDir);
         // reverse order to delete deepest files first
+        Stream<Path> fileWalk = null;
         try {
-            Stream<Path> fileWalk = Files.walk(directory);
+            fileWalk = Files.walk(directory);
             fileWalk.sorted((o1, o2) -> {
                 return -o1.compareTo(o2);
             }).map(Path::toFile).forEach(File::delete);
         } catch (IOException e) {
             log.error("delete file fail:{}", e.getMessage());
+        } finally {
+            if (fileWalk != null) {
+                fileWalk.close();
+            }
         }
     }
 

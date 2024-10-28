@@ -74,8 +74,8 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param langId   the lang id
      * @return the integer
      */
-    @Update("UPDATE t_i18n_entry  SET content = #{content}  " +
-            "WHERE  (host_id = #{hostId} AND host_type = #{hostType} AND `key` = #{key} AND lang_id = #{langId})")
+    @Update("UPDATE t_i18n_entry  SET content = #{content}  "
+            + "WHERE  (host_id = #{hostId} AND host_type = #{hostType} AND `key` = #{key} AND lang_id = #{langId})")
     Integer updateByEntry(String content, Integer hostId, String hostType, String key, Integer langId);
 
     /**
