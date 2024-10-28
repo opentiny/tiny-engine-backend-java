@@ -6,9 +6,7 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.MetaDto;
-import com.tinyengine.it.model.dto.PreviewDto;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.Platform;
@@ -178,11 +176,10 @@ public class AppServiceImpl implements AppService {
      */
     @SystemServiceLog(description = "对应用id或区块id获取序列化国际化词条")
     @Override
-    public Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn,
-        Integer id) {
+    public SchemaI18n formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn,
+                                         Integer id) {
 
         if (i18nEntries.isEmpty()) {
-            Map<String, Map<String, String>> relationLangs = new HashMap<>();
             I18nEntry i18n = new I18nEntry();
             // 没有词条的时候，查询应用和区块对应的国家化关联，把默认空的关联分组返回
             if (userdIn == Enums.E_i18Belongs.APP.getValue()) {
@@ -193,8 +190,7 @@ public class AppServiceImpl implements AppService {
                 i18n.setHostType("block");
             }
             List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(id, i18n.getHostType());
-            relationLangs = i18nEntryService.formatEntriesList(i18ns);
-            return relationLangs;
+            return i18nEntryService.formatEntriesList(i18ns);
         }
         return i18nEntryService.formatEntriesList(i18nEntries);
     }
@@ -209,15 +205,14 @@ public class AppServiceImpl implements AppService {
         Map<String, Object> dataHandler = metaDto.getApp().getDataSourceGlobal();
         dataSource.putAll(dataHandler);
         // 拼装工具类
-        Map<String, Object> extensions = appV1ServiceImpl.getSchemaExtensions(metaDto.getExtension());
-        List<Map<String, Object>> utils = (List<Map<String, Object>>)extensions.get("utils");
+        Map<String, List<SchemaUtils>> extensions = appV1ServiceImpl.getSchemaExtensions(metaDto.getExtension());
         // 拼装国际化词条
-        Map<String, Map<String, String>> i18n =
+        SchemaI18n i18n =
             formatI18nEntrites(metaDto.getI18n(), Enums.E_i18Belongs.APP.getValue(), id);
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);
         previewDto.setI18n(i18n);
-        previewDto.setUtils(utils);
+        previewDto.setUtils(extensions.get("utils"));
         previewDto.setGlobalState(metaDto.getApp().getGlobalState());
         return previewDto;
     }

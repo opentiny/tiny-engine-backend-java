@@ -3,6 +3,7 @@ package com.tinyengine.it.service.app;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.PreviewDto;
+import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.App;
 import org.apache.ibatis.annotations.Param;
 
@@ -70,7 +71,7 @@ public interface AppService {
      * @param id          应用id或区块id
      * @return the map
      */
-    Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn, Integer id);
+    SchemaI18n formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn, Integer id);
 
     /**
      * 获取预览元数据
