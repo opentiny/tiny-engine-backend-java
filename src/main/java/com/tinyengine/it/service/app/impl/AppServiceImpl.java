@@ -216,7 +216,7 @@ public class AppServiceImpl implements AppService {
     @SystemServiceLog(description = "getAppPreviewMetaData 获取预览元数据")
     @Override
     public PreviewDto getAppPreviewMetaData(Integer id) {
-        MetaDto metaDto = appV1ServiceImpl.setMeta(id);
+        MetaDto metaDto = appV1ServiceImpl.getMetaDto(id);
         Map<String, Object> dataSource = new HashMap<>();
         // 拼装数据源
         dataSource.put("list", metaDto.getSource());

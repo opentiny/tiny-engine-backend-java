@@ -12,14 +12,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * Title: SystemLogAspect
@@ -96,18 +91,8 @@ public class SystemLogAspect {
      */
     @Before("controllerAspect()")
     public void doBefore(JoinPoint joinPoint) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
-        HttpSession session = request.getSession();
-
-        try {
-            logger.info("Method: {}",
-                    (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName()));
-            logger.info("Method Description: {}", getControllerMethodDescription(joinPoint));
-        } catch (Exception e) {
-            // 记录本地异常日志
-            logger.error("Exception Message:{}", e.getMessage());
-        }
+        logger.debug("Method: {}",
+                (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName()));
     }
 
     /**
@@ -118,23 +103,13 @@ public class SystemLogAspect {
      */
     @AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
-        HttpSession session = request.getSession();
-        try {
-            logger.error("Method:"
-                    + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
-            logger.error("Method Description:" + getServiceMethodDescription(joinPoint));
-            logger.error("Exception ClassName:" + e.getClass().getName());
-            logger.error("Exception Message:" + e.getMessage());
-            logger.error("Exception Message:" + e.getMessage());
-            logger.error("Exception Stack:");
-            for (StackTraceElement element : e.getStackTrace()) {
-                logger.error("\t" + element.toString());
-            }
-        } catch (Exception ex) {
-            // 记录本地异常日志
-            logger.error("Exception Message:{}", ex.getMessage());
+        logger.error("Method:"
+                + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
+        logger.error("Exception ClassName:" + e.getClass().getName());
+        logger.error("Exception Message:" + e.getMessage());
+        logger.error("Exception Stack:");
+        for (StackTraceElement element : e.getStackTrace()) {
+            logger.error("\t" + element.toString());
         }
     }
 }
