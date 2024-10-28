@@ -222,7 +222,7 @@ public class AppServiceImpl implements AppService {
         Map<String, List<SchemaUtils>> extensions = appV1ServiceImpl.getSchemaExtensions(metaDto.getExtension());
         // 拼装国际化词条
         SchemaI18n i18n =
-            formatI18nEntrites(metaDto.getI18n(), Enums.E_i18Belongs.APP.getValue(), id);
+            formatI18nEntrites(metaDto.getI18n(), Enums.I18Belongs.APP.getValue(), id);
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);
         previewDto.setI18n(i18n);

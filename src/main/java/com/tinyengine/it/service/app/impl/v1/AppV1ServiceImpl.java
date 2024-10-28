@@ -22,6 +22,7 @@ import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.Datasource;
+import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.model.entity.Page;
 import com.tinyengine.it.model.entity.Platform;
@@ -37,6 +38,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
 /**
  * The type App v 1 service.
@@ -222,10 +225,11 @@ public class AppV1ServiceImpl implements AppV1Service {
      */
     public MetaDto setMeta(Integer id) {
         App app = appMapper.queryAppById(id);
+        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
+
         Platform platform = platformService.queryPlatformById(app.getPlatformId());
 
         // 当前版本暂无设计器数据
-        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
         if (platform == null) {
             materialhistoryMsg.setMaterialHistoryId(1);
         } else {
@@ -333,7 +337,18 @@ public class AppV1ServiceImpl implements AppV1Service {
         if (blockHistory.isEmpty()) {
             return historiesId;
         }
-        Map<String, Map<String, Object>> blocksVersionMap = getStringMapMap(blockHistory);
+        Map<String, Map<String, Object>> blocksVersionMap = new HashMap<>();
+        for (BlockHistoryDto item : blockHistory) {
+            Map<String, Object> itemMap = new HashMap<>();
+            Map<String, Object> historyMap = new HashMap<>();
+            List<String> versionList = new ArrayList<>();
+            String version = item.getVersion();
+            versionList.add(version);
+            historyMap.put(version, item.getHistoryId());
+            itemMap.put("historyMap", historyMap);
+            itemMap.put("versions", versionList);
+            blocksVersionMap.put("blockId", itemMap);
+        }
 
         // 遍历区块历史记录 综合信息映射关系
         for (String key : blocksVersionMap.keySet()) {
@@ -518,9 +533,6 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @throws ServiceException the service exception
      */
     public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine)
-            throws ServiceException {
-        // 获取 toLine 和 toHump 方法
-        Function<String, String> format = isToLine ? Utils::toLine : Utils::toHump;
             throws ServiceException {
         // 将 fields 转换为 HashMap
         Map<String, Object> fieldsMap = new HashMap<>();
