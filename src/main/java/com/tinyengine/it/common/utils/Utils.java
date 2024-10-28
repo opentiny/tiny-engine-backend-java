@@ -4,11 +4,9 @@ package com.tinyengine.it.common.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.tinyengine.it.common.exception.ServiceException;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -134,7 +132,6 @@ public class Utils {
      *
      * @param obj the obj
      * @return the map
-     * @throws ServiceException the service exception
      */
     // 对象转map
     public static Map<String, Object> convert(Object obj) {
