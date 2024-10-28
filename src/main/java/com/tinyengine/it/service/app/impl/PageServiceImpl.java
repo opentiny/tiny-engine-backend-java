@@ -609,7 +609,7 @@ public class PageServiceImpl implements PageService {
 
         TreeNodeCollection getTreeNodesResult = getTreeNodes(treeNodeDto);
         if (getTreeNodesResult.getRange().isEmpty()) {
-            return rangeData;
+            return collection;
         }
         return getTreeNodesResult;
     }
@@ -627,7 +627,7 @@ public class PageServiceImpl implements PageService {
 
         // 没有子节点，返回收集的节点信息
         if (pids.isEmpty()) {
-            return rangeData;
+            return collection;
         }
         // 当前的节点深度超过 配置的最大深度，返回失败信息
         if (level > 5) {
@@ -639,8 +639,8 @@ public class PageServiceImpl implements PageService {
         List<NodeData> dps =
             childrenId.stream().map(id -> new NodeData(id, level)).collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
-        rangeData.getRange().addAll(childrenId);
-        rangeData.getData().addAll(dps);
+        collection.getRange().addAll(childrenId);
+        collection.getData().addAll(dps);
 
         // 递归
         TreeNodeDto treeNodeParam = new TreeNodeDto();
@@ -687,7 +687,7 @@ public class PageServiceImpl implements PageService {
         // 拼装国际化词条
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
         SchemaI18n i18n =
-            appService.formatI18nEntrites(i18ns, Enums.E_i18Belongs.BLOCK.getValue(), previewParam.getId());
+            appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
 
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);

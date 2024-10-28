@@ -178,7 +178,7 @@
         DELETE
         FROM t_page_template
         WHERE id IN
-        <foreach item="id" rangeData="ids" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>

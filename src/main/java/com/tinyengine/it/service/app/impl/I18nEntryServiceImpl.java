@@ -1,7 +1,6 @@
 
 package com.tinyengine.it.service.app.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,16 +17,17 @@ import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.I18nEntryListResult;
 import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
 import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -138,8 +138,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 格式化词条列表
         SchemaI18n messages = formatEntriesList(i18nEntriesList);
         List<I18nLang> i18nLangsListTemp =
-            i18nLangsList.stream().map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
-                .collect(Collectors.toList());
+                i18nLangsList.stream().map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
+                        .collect(Collectors.toList());
         I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
         i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);
         i18nEntriesListResult.setMessages(messages);
@@ -179,7 +179,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             // 现在可以将键值对存入 messages[lang] 对应的 map 中
             messages.get(lang).put(key, content);
         }
-        return BeanUtil.mapToBean(messages,SchemaI18n.class,true);
+        return BeanUtil.mapToBean(messages, SchemaI18n.class, true);
     }
 
     /**
