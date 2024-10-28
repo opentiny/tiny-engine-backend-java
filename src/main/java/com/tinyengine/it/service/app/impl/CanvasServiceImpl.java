@@ -68,10 +68,7 @@ public class CanvasServiceImpl implements CanvasService {
         return Result.success(canvasDto);
     }
 
-    private Boolean iCanDoIt(Integer occupier, User user) {
-        if (occupier == user.getId()) {
-            return true;
-        }
-        return false;
+    private Boolean iCanDoIt(int occupier, User user) {
+        return occupier == user.getId();
     }
 }
