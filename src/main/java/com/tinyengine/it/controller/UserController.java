@@ -1,8 +1,10 @@
+
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.HistoryEntity;
 import com.tinyengine.it.config.handler.MapTypeHandler;
 import com.tinyengine.it.model.dto.BlockVersionDto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -103,5 +105,4 @@ public class BlockHistory extends HistoryEntity {
     @Schema(name = "contentBlocks", description = "*暂不清楚*")
     @TableField(typeHandler = MapTypeHandler.class)
     private List<BlockVersionDto> contentBlocks;
-
 }

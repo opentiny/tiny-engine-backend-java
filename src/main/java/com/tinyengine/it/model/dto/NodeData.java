@@ -3,6 +3,11 @@ package com.tinyengine.it.model.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * NodeData
+ *
+ * @since 2024-10-20
+ */
 @Getter
 @Setter
 public class NodeData {

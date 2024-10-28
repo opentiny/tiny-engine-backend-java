@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
@@ -5,7 +6,9 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.model.entity.Datasource;
 import com.tinyengine.it.service.app.DatasourceService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,8 +74,7 @@ public class DatasourceServiceImpl implements DatasourceService {
     public Result<Datasource> updateDatasourceById(Datasource datasource) {
         int res = datasourceMapper.updateDatasourceById(datasource);
         if (res == 1) {
-            datasource = queryDatasourceById(datasource.getId());
-            return Result.success(datasource);
+            return Result.success(queryDatasourceById(datasource.getId()));
         }
         return Result.failed(ExceptionEnum.CM001);
     }
@@ -84,19 +86,18 @@ public class DatasourceServiceImpl implements DatasourceService {
      * @return Datasource
      */
     @Override
-    public Result<Datasource> createDatasource(Datasource datasource) throws Exception {
+    public Result<Datasource> createDatasource(Datasource datasource) {
         Integer appId = datasource.getApp();
         String name = datasource.getName();
         if (appId != 0 && String.valueOf(appId).matches("^[0-9]+$") && !name.isEmpty()) {
             int res = datasourceMapper.createDatasource(datasource);
             if (res == 1) {
                 int id = datasource.getId();
-                datasource = queryDatasourceById(id);
-                return Result.success(datasource);
+                return Result.success(queryDatasourceById(id));
             } else {
                 Result.failed(ExceptionEnum.CM001);
             }
         }
-        throw new Exception("The request body is missing some parameters");
+        return Result.failed(ExceptionEnum.CM002);
     }
 }

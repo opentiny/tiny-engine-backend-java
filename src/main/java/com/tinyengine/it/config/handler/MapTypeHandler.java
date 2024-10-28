@@ -1,10 +1,13 @@
+
 package com.tinyengine.it.config.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -27,7 +30,7 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Map<String, Object> parameter, JdbcType jdbcType)
-        throws SQLException {
+            throws SQLException {
         try {
             String json = objectMapper.writeValueAsString(parameter);
             ps.setString(i, json);
@@ -38,7 +41,6 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
 
     @Override
     public Map<String, Object> getNullableResult(ResultSet rs, String columnName) throws SQLException {
-
         return parseJson(rs.getString(columnName));
     }
 

@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -5,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -107,5 +109,4 @@ public class Block extends BaseEntity {
     @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
     @JsonProperty("block_group_id")
     private Integer blockGroupId;
-
 }

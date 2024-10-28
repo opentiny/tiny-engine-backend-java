@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.model.dto;
 
 import lombok.Data;
@@ -16,5 +17,4 @@ public class PreviewDto {
     private List<Map<String, Object>> globalState;
     private SchemaI18n i18n;
     private List<SchemaUtils> utils;
-
 }

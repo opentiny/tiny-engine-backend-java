@@ -1,6 +1,8 @@
+
 package com.tinyengine.it.common.utils;
 
 import com.tinyengine.it.model.dto.SchemaConfig;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
@@ -36,43 +38,44 @@ public class Schema {
      */
     public Map<String, Object> assembleFields(Map<String, Object> appData, String type) {
         SchemaConfig conf = new SchemaConfig();
-
+        Map<String, Object> result = new HashMap<>();
         // 根据类型选择对应的配置方法
         switch (type) {
             case "app":
-                appData = processFields(appData, conf.getAppInclude(), conf.getAppFormat(), conf.getAppConvert());
+                result = processFields(appData, conf.getAppInclude(), conf.getAppFormat(), conf.getAppConvert());
                 break;
             case "pageMeta":
-                appData = processFields(appData, conf.getPageMetaInclude(), conf.getPageMetaFormat(),
-                    conf.getPageMetaConvert());
+                result = processFields(appData, conf.getPageMetaInclude(), conf.getPageMetaFormat(),
+                        conf.getPageMetaConvert());
                 break;
             case "pageContent":
                 if (!conf.getPageContentInclude().isEmpty()) {
-                    appData = this.filterFields(appData, conf.getPageContentInclude());
+                    result = this.filterFields(appData, conf.getPageContentInclude());
                 }
                 break;
             default:
-                appData =
-                    processFields(appData, conf.getFolderInclude(), conf.getFolderFormat(), conf.getFolderConvert());
+                result = processFields(appData, conf.getFolderInclude(), conf.getFolderFormat(),
+                        conf.getFolderConvert());
                 break;
         }
 
-        return appData;
+        return result;
     }
 
     // 提取公共处理逻辑
     private Map<String, Object> processFields(Map<String, Object> appData, List<String> includeConfig,
-        Map<String, String> formatConfig, Map<String, String> convertConfig) {
+                                              Map<String, String> formatConfig, Map<String, String> convertConfig) {
+        Map<String, Object> result = new HashMap<>();
         if (!includeConfig.isEmpty()) {
-            appData = this.filterFields(appData, includeConfig);
+            result = this.filterFields(appData, includeConfig);
         }
         if (!formatConfig.isEmpty()) {
-            appData = this.formatFields(appData, formatConfig);
+            result = this.formatFields(appData, formatConfig);
         }
         if (!convertConfig.isEmpty()) {
-            appData = this.convertFields(appData, convertConfig);
+            result = this.convertFields(appData, convertConfig);
         }
-        return appData;
+        return result;
     }
 
     /**
@@ -96,7 +99,7 @@ public class Schema {
      * @return the schema base
      */
     public Map<String, Object> getSchemaBase(Map<String, Object> data) {
-        Map<String, Object> pageContent = (Map<String, Object>)data.get("page_content");
+        Map<String, Object> pageContent = (Map<String, Object>) data.get("page_content");
         pageContent.put("fileName", data.get("name"));
         String type = "pageContent";
         return assembleFields(pageContent, type);
@@ -152,7 +155,6 @@ public class Schema {
      * @return the map
      */
     protected Map<String, Object> convertFields(Map<String, Object> data, Map<String, String> convertConf) {
-
         Set<Map.Entry<String, String>> entries = convertConf.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             String oldKey = entry.getKey();
@@ -209,7 +211,7 @@ public class Schema {
         if (value == null) {
             return "Creator: ";
         }
-        return "Creator: " + value.toString();
+        return "Creator: " + value;
     }
 
     /**
@@ -221,9 +223,9 @@ public class Schema {
     // 给global_state设置默认值
     public Object[] toArrayValue(Object value) {
         if (value instanceof Object[]) {
-            return (Object[])value;
+            return (Object[]) value;
         }
-        return new Object[] {value};
+        return new Object[]{value};
     }
 
     /**
@@ -236,7 +238,7 @@ public class Schema {
     public String toRootElement(Object isBody) {
         if (isBody instanceof Boolean) {
             // 处理布尔值的格式化
-            return ((Boolean)isBody) ? "body" : "div";
+            return ((Boolean) isBody) ? "body" : "div";
         }
         return "";
     }

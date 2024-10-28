@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.material.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -7,7 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.service.material.BlockService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,8 @@ public class BlockServiceImpl implements BlockService {
 
     /**
      * 查询表t_block所有数据
+     *
+     * @return Block
      */
     @Override
     public List<Block> queryAllBlock() {
@@ -97,7 +102,7 @@ public class BlockServiceImpl implements BlockService {
      * Gets block assets.
      *
      * @param pageContent the page content
-     * @param framework   the framework
+     * @param framework the framework
      * @return the block assets
      */
     public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
@@ -123,9 +128,9 @@ public class BlockServiceImpl implements BlockService {
         // Merge the assets using streams
         return blocksList.stream().map(Block::getAssets).map(assetsMap -> {
             Map<String, List<String>> tempMap = new HashMap<>();
-            tempMap.put("material", (List<String>)assetsMap.getOrDefault("material", new ArrayList<>()));
-            tempMap.put("scripts", (List<String>)assetsMap.getOrDefault("scripts", new ArrayList<>()));
-            tempMap.put("styles", (List<String>)assetsMap.getOrDefault("styles", new ArrayList<>()));
+            tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
+            tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
+            tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
             return tempMap;
         }).reduce(mergedAssets, (acc, curr) -> {
             acc.get("material").addAll(curr.get("material"));
@@ -143,7 +148,7 @@ public class BlockServiceImpl implements BlockService {
     /**
      * Gets block info.
      *
-     * @param block     the block
+     * @param block the block
      * @param framework the framework
      * @return the block info
      */
@@ -151,17 +156,16 @@ public class BlockServiceImpl implements BlockService {
         // 创建 QueryWrapper 实例
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (block != null && !block.isEmpty()) {
-
             // 处理 blockLabelName 为数组的情况
-            String labelsCondition =
-                block.stream().map(name -> "label = '" + name + "'").collect(Collectors.joining(" OR "));
+            String labelsCondition = block.stream()
+                    .map(name -> "label = '" + name + "'")
+                    .collect(Collectors.joining(" OR "));
 
             // 添加标签条件
             queryWrapper.and(wrapper -> wrapper.apply(labelsCondition));
 
             // 添加框架条件
             queryWrapper.eq("framework", framework);
-
         }
 
         // 执行查询并返回结果
@@ -172,7 +176,7 @@ public class BlockServiceImpl implements BlockService {
      * Traverse blocks.
      *
      * @param content the content
-     * @param block   the block
+     * @param block the block
      * @throws JsonProcessingException the json processing exception
      */
     public void traverseBlocks(String content, List<String> block) throws JsonProcessingException {
@@ -187,13 +191,12 @@ public class BlockServiceImpl implements BlockService {
         } else {
             Map<?, ?> schemaMap = objectMapper.readValue(content, Map.class);
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
-                block.add((String)schemaMap.get("componentName"));
+                block.add((String) schemaMap.get("componentName"));
             }
             if (schemaMap.containsKey("children") && schemaMap.get("children") instanceof List) {
                 traverseBlocks(objectMapper.writeValueAsString(schemaMap.get("children")), block);
             }
         }
-
     }
 
     /**

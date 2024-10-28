@@ -1,9 +1,12 @@
+
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.service.material.BlockHistoryService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
 
     /**
      * 查询表t_block_history所有数据
+     *
+     * @return BlockHistory
      */
     @Override
     public List<BlockHistory> findAllBlockHistory() {

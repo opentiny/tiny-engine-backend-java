@@ -5,13 +5,19 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
+
+/**
+ * SchemaDto
+ *
+ * @since 2024-10-20
+ */
 @Getter
 @Setter
 public class SchemaDto {
     private List<SchemaUtils> bridge;
-    private  List<Map<String, Object>> componentsMap;
+    private List<Map<String, Object>> componentsMap;
     private List<ComponentTree> componentTree;
-    private Map<String,Object> config;
+    private Map<String, Object> config;
     private String constants;
     private String css;
     private SchemaDataSource dataSource;

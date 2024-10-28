@@ -3,7 +3,6 @@ package com.tinyengine.it.service.app.impl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.BlockMapper;
-
 import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.CanvasDto;
@@ -11,25 +10,28 @@ import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Page;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.CanvasService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * canvas service
+ *
+ * @since 2024-10-20
+ */
 @Service
 public class CanvasServiceImpl implements CanvasService {
     @Autowired
-    PageMapper pageMapper;
+    private PageMapper pageMapper;
     @Autowired
-    BlockMapper blockMapper;
+    private BlockMapper blockMapper;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Override
     public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
         int occupier;
-        // TODO 先试用mock数据，后续添加登录及权限后从session获取,
+        // needTODO 先试用mock数据，后续添加登录及权限后从session获取,
         User user = userMapper.queryUserById(1);
         CanvasDto canvasDto = new CanvasDto();
         if ("page".equals(type)) {
@@ -37,7 +39,7 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = page.getOccupier().getId();
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.E_CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
+                int arg = Enums.CanvasEditorState.OCCUPY.getValue().equals(state) ? user.getId() : null;
                 Page updatePage = new Page();
                 updatePage.setId(id);
                 updatePage.setOccupierBy(String.valueOf(arg));
@@ -51,7 +53,7 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = Integer.parseInt(block.getOccupierBy());
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.E_CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
+                int arg = Enums.CanvasEditorState.OCCUPY.getValue().equals(state) ? user.getId() : null;
                 Block updateBlock = new Block();
                 updateBlock.setId(id);
                 updateBlock.setOccupierBy(String.valueOf(arg));
@@ -66,7 +68,7 @@ public class CanvasServiceImpl implements CanvasService {
         return Result.success(canvasDto);
     }
 
-    public Boolean iCanDoIt(Integer occupier, User user) {
+    private Boolean iCanDoIt(Integer occupier, User user) {
         if (occupier == user.getId()) {
             return true;
         }
