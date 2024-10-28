@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -137,9 +136,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
         // 格式化词条列表
         SchemaI18n messages = formatEntriesList(i18nEntriesList);
-        List<I18nLang> i18nLangsListTemp =  i18nLangsList.stream()
+        List<I18nLang> i18nLangsListTemp = i18nLangsList.stream()
                 .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
-                        .collect(Collectors.toList());
+                .collect(Collectors.toList());
         I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
         i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);
         i18nEntriesListResult.setMessages(messages);
@@ -328,8 +327,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<I18nEntry> i18nEntriesList = fillParam(operateI18nEntries, langsDic);
         // bulkCreateEntries
         for (I18nEntry i18Entries : i18nEntriesList) {
-            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(), i18Entries.getHostType(),
-                    i18Entries.getKey(), i18Entries.getLang());
+            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(),
+                    i18Entries.getHostType(), i18Entries.getKey(), i18Entries.getLang());
         }
         return i18nEntriesList;
     }
@@ -523,8 +522,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             ObjectMapper objectMapper = new ObjectMapper();
 
             Map<String, Object> jsonData = objectMapper.readValue(jsonContent,
-                    new TypeReference<Map<String, Object>>() {
-                    });
+                    new TypeReference<Map<String, Object>>() {});
             entriesItem.put("entries", flat(jsonData));
         } catch (IOException e) {
             return Result.validateFailed("parse Json error");
@@ -616,7 +614,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param mimeTypes 文件类型集合
      */
     public void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) {
-        boolean condition = file.getOriginalFilename() != null && file.getName().matches("\\d+")
+        boolean condition = file.getOriginalFilename() != null
+                && file.getName().matches("\\d+")
                 && mimeTypes.contains(file.getContentType());
         if (condition) {
             return;

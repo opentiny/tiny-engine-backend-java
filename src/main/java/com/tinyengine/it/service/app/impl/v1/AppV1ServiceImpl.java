@@ -184,19 +184,19 @@ public class AppV1ServiceImpl implements AppV1Service {
         SchemaI18n mergedEntries = new SchemaI18n();
 
         // 初始化合并后的语言映射
-        mergedEntries.setEn_US(new HashMap<>());
-        mergedEntries.setZh_CN(new HashMap<>());
+        mergedEntries.setEnUS(new HashMap<>());
+        mergedEntries.setZhCN(new HashMap<>());
 
         // 合并 appEntries
         if (appEntries != null) {
-            mergeMaps(appEntries.getEn_US(), mergedEntries.getEn_US());
-            mergeMaps(appEntries.getZh_CN(), mergedEntries.getZh_CN());
+            mergeMaps(appEntries.getEnUS(), mergedEntries.getEnUS());
+            mergeMaps(appEntries.getZhCN(), mergedEntries.getZhCN());
         }
 
         // 合并 blockEntries
         if (blockEntries != null) {
-            mergeMaps(blockEntries.getEn_US(), mergedEntries.getEn_US());
-            mergeMaps(blockEntries.getZh_CN(), mergedEntries.getZh_CN());
+            mergeMaps(blockEntries.getEnUS(), mergedEntries.getEnUS());
+            mergeMaps(blockEntries.getZhCN(), mergedEntries.getZhCN());
         }
 
         return mergedEntries;
@@ -211,10 +211,6 @@ public class AppV1ServiceImpl implements AppV1Service {
         }
     }
 
-
-    /**
-     * 获取元数据
-     */
     private SchemaMeta getSchemaMeta() {
         Map<String, Object> appData = Utils.convert(this.metaDto.getApp());
         Map<String, Object> config = new HashMap<>();
@@ -385,7 +381,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         SchemaI18n blockEntries = new SchemaI18n();
         // 提取区块构建产物中的国际化词条
         for (BlockHistory blockHistory : blockHistoryList) {
-            blockEntries = mergeEntries(BeanUtil.mapToBean(blockHistory.getI18n(), SchemaI18n.class, true), blockEntries);
+            SchemaI18n mappedToBean = BeanUtil.mapToBean(blockHistory.getI18n(), SchemaI18n.class, true);
+            blockEntries = mergeEntries(mappedToBean, blockEntries);
         }
         // 序列化国际化词条
         SchemaI18n appEntries = i18nEntryService.formatEntriesList(i18n);
@@ -575,7 +572,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         if (value == null) {
             return false;
         }
-        return value.toString().equals("true");
+        return "true".equals(value.toString());
     }
 
     /**
