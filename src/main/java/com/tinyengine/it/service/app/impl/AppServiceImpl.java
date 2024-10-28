@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
@@ -18,7 +19,9 @@ import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockGroupServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 import com.tinyengine.it.service.platform.PlatformService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,31 +43,37 @@ public class AppServiceImpl implements AppService {
      */
     @Autowired
     private AppMapper appMapper;
+
     /**
      * The Platform service.
      */
     @Autowired
     private PlatformService platformService;
+
     /**
      * The 18 n entry service.
      */
     @Autowired
     private I18nEntryService i18nEntryService;
+
     /**
      * The 18 n entry mapper.
      */
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+
     /**
      * The App v 1 service.
      */
     @Autowired
     private AppV1ServiceImpl appV1ServiceImpl;
+
     /**
      * The Block service.
      */
     @Autowired
     private BlockServiceImpl blockServiceImpl;
+
     /**
      * The Block group service.
      */
@@ -73,6 +82,8 @@ public class AppServiceImpl implements AppService {
 
     /**
      * 查询表t_app所有数据
+     *
+     * @return App
      */
     @Override
     public List<App> queryAllApp() {
@@ -157,7 +168,6 @@ public class AppServiceImpl implements AppService {
     @Override
     @SystemServiceLog(description = "应用创建实现方法")
     public Result<App> createApp(App app) {
-
         List<App> appResult = appMapper.queryAppByCondition(app);
         if (!appResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
@@ -173,32 +183,34 @@ public class AppServiceImpl implements AppService {
      * 序列化国际化词条
      *
      * @param i18nEntries 国际化词条标准请求返回数据
-     * @param userdIn     国际化词条从属单元 （应用或区块）
-     * @param id          应用id或区块id
+     * @param userdIn 国际化词条从属单元 （应用或区块）
+     * @param id 应用id或区块id
+     * @return Entries List
      */
     @SystemServiceLog(description = "对应用id或区块id获取序列化国际化词条")
     @Override
     public Map<String, Map<String, String>> formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn,
-        Integer id) {
-
+            Integer id) {
         if (i18nEntries.isEmpty()) {
-            Map<String, Map<String, String>> relationLangs = new HashMap<>();
             I18nEntry i18n = new I18nEntry();
             // 没有词条的时候，查询应用和区块对应的国家化关联，把默认空的关联分组返回
-            if (userdIn == Enums.E_i18Belongs.APP.getValue()) {
-
+            if (userdIn == Enums.I18Belongs.APP.getValue()) {
                 i18n.setHostType("app");
-
             } else {
                 i18n.setHostType("block");
             }
             List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(id, i18n.getHostType());
-            relationLangs = i18nEntryService.formatEntriesList(i18ns);
-            return relationLangs;
+            return i18nEntryService.formatEntriesList(i18ns);
         }
         return i18nEntryService.formatEntriesList(i18nEntries);
     }
 
+    /**
+     * 获取预览元数据
+     *
+     * @param id 应用id
+     * @return PreviewDto
+     */
     @SystemServiceLog(description = "getAppPreviewMetaData 获取预览元数据")
     @Override
     public PreviewDto getAppPreviewMetaData(Integer id) {
@@ -210,10 +222,10 @@ public class AppServiceImpl implements AppService {
         dataSource.putAll(dataHandler);
         // 拼装工具类
         Map<String, Object> extensions = appV1ServiceImpl.getSchemaExtensions(metaDto.getExtension());
-        List<Map<String, Object>> utils = (List<Map<String, Object>>)extensions.get("utils");
+        List<Map<String, Object>> utils = (List<Map<String, Object>>) extensions.get("utils");
         // 拼装国际化词条
-        Map<String, Map<String, String>> i18n =
-            formatI18nEntrites(metaDto.getI18n(), Enums.E_i18Belongs.APP.getValue(), id);
+        Map<String, Map<String, String>> i18n = formatI18nEntrites(metaDto.getI18n(), Enums.I18Belongs.APP.getValue(),
+                id);
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);
         previewDto.setI18n(i18n);

@@ -1,7 +1,9 @@
+
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.PageTemplate;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -38,9 +40,8 @@ public interface PageTemplateMapper extends BaseMapper<PageTemplate> {
     /**
      * 根据主键id删除表page_template数据
      *
-     * @param ids
+     * @param ids id
      * @return the integer
-
      */
     Integer deletePageTemplateByIds(@Param("ids") List<Integer> ids);
 

@@ -1,9 +1,12 @@
+
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.mapper.ComponentMapper;
 import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.service.material.ComponentService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ public class ComponentServiceImpl implements ComponentService {
 
     /**
      * 查询表t_component所有数据
+     *
+     * @return Component
      */
     @Override
     public List<Component> findAllComponent() {

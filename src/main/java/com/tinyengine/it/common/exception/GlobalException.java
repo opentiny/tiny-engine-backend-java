@@ -1,16 +1,20 @@
+
 package com.tinyengine.it.common.exception;
 
 import com.tinyengine.it.common.base.Result;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * The type Global exception.
@@ -38,7 +42,7 @@ public class GlobalException {
      * 处理空指针的异常
      *
      * @param req the req
-     * @param e   the e
+     * @param e the e
      * @return the result
      */
     @ResponseStatus(HttpStatus.OK)

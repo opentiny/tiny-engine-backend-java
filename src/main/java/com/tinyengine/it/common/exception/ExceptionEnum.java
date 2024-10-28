@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.common.exception;
 
 /**
@@ -10,42 +11,52 @@ public enum ExceptionEnum implements IBaseError {
      * Success exception enum.
      */
     SUCCESS("200", "操作成功"),
+
     /**
      * Cm 001 exception enum.
      */
     CM001("CM001", "系统异常，请稍后重试"),
+
     /**
      * Cm 002 exception enum.
      */
     CM002("CM002", "参数错误"),
+
     /**
      * Cm 003 exception enum.
      */
     CM003("CM003", "重复创建，请修改传入参数。"),
+
     /**
      * Cm 004 exception enum.
      */
     CM004("CM004", "认证失败，请重新登录"),
+
     /**
      * Cm 005 exception enum.
      */
     CM005("CM005", "登录信息已过期，请重新登录"),
+
     /**
      * Cm 006 exception enum.
      */
     CM006("CM006", "用户未登录。"),
+
     /**
      * Cm 007 exception enum.
      */
     CM007("CM007", "用户权限不足"),
+
     /**
      * Cm 008 exception enum.
      */
     CM008("CM008", "数据库错误"),
+
     /**
      * Cm 009 exception enum.
      */
     CM009("CM009", "找不到资源"),
+
     /**
      * Cm 010 exception enum.
      */
@@ -55,10 +66,12 @@ public enum ExceptionEnum implements IBaseError {
      * Cm 101 exception enum.
      */
     CM101("CM101", "设计器存在应用实例，无法删除"),
+
     /**
      * Cm 1110 exception enum.
      */
     CM1110("CM110", "申请加入的组织不存在"),
+
     /**
      * Cm 120 exception enum.
      */
@@ -202,10 +215,17 @@ public enum ExceptionEnum implements IBaseError {
      * Cm 320 exception enum.
      */
     CM320("CM320", "不能为空"),
+
     /**
      * Cm 321 exception enum.
      */
-    CM321("CM321", "是必须的");
+    CM321("CM321", "是必须的"),
+
+    /**
+     * Cm 322 exception enum.
+     */
+    CM322("CM322", "调用接口失败");
+
     /**
      * 错误码
      */
