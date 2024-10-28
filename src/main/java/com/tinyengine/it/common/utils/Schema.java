@@ -5,6 +5,7 @@ import com.tinyengine.it.model.dto.SchemaConfig;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -140,7 +141,7 @@ public class Schema {
                 java.lang.reflect.Method method = this.getClass().getMethod(funcName, Object.class);
                 Object value = data.get(key);
                 formattedData.put(key, method.invoke(this, value));
-            } catch (Exception e) {
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 log.error(e.getMessage());
             }
         }

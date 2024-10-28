@@ -98,8 +98,8 @@ public class AiChatServiceImpl implements AiChatService {
         Map<String, Object> response;
         try {
             response = aiChatClient.executeChatRequest(openAiBodyDto);
-        } catch (Exception e) {
-            return Result.failed("调用AI大模型接口失败");
+        } catch (Throwable e) {
+            return Result.failed("调用AI大模型接口失败:"+e.getMessage());
         }
 
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
@@ -191,7 +191,6 @@ public class AiChatServiceImpl implements AiChatService {
                 + "5. 不要加任何注释\n"
                 + "6. el-table标签内不得出现el-table-column\n"
                 + "###");
-
 
         String role = messages.get(0).getRole();
         String content = messages.get(0).getContent();
