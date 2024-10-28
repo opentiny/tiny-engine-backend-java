@@ -642,19 +642,24 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 String entryName = entry.getName();
-                if (entryName.endsWith(".json")) {
-                    // 处理JSON文件
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = zipInputStream.read(buffer)) > 0) {
-                        jsonResult.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
-                    }
-                    jsonResult.append("\n");
-                }
+                jsonResult.append(processJsonFileContent(entryName, zipInputStream));
             }
         }
-
         return jsonResult.toString();
+    }
+
+    private StringBuilder processJsonFileContent(String entryName, ZipInputStream zipFile) throws IOException {
+        StringBuilder result = new StringBuilder();
+        if (entryName.endsWith(".json")) {
+            // 处理JSON文件
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = zipFile.read(buffer)) > 0) {
+                result.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
+            }
+            result.append("\n");
+        }
+        return result;
     }
 
     /**
