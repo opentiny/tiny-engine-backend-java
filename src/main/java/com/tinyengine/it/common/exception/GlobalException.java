@@ -42,7 +42,7 @@ public class GlobalException {
      * 处理空指针的异常
      *
      * @param req the req
-     * @param e the e
+     * @param e   the e
      * @return the result
      */
     @ResponseStatus(HttpStatus.OK)
