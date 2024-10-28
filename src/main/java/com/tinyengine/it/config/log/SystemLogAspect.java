@@ -8,12 +8,14 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,22 +45,17 @@ public class SystemLogAspect {
      * @throws Exception the exception
      */
     public static String getServiceMethodDescription(JoinPoint joinPoint) throws Exception {
-        String targetName = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();
-        Object[] arguments = joinPoint.getArgs();
-        Class targetClass = Class.forName(targetName);
-        Method[] methods = targetClass.getMethods();
-        String description = "";
-        for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                Class[] clazzs = method.getParameterTypes();
-                if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(SystemServiceLog.class).description();
-                    break;
-                }
-            }
+        SystemServiceLog methodAnnotation = getMethodAnnotation(joinPoint, SystemServiceLog.class);
+        if (methodAnnotation == null) {
+            return "";
         }
-        return description;
+        return methodAnnotation.description();
+    }
+
+    private static <T extends Annotation> T getMethodAnnotation(JoinPoint joinPoint, Class<T> annotationClass) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method1 = signature.getMethod();
+        return method1.getAnnotation(annotationClass);
     }
 
     /**
@@ -69,23 +66,11 @@ public class SystemLogAspect {
      * @throws Exception the exception
      */
     public static String getControllerMethodDescription(JoinPoint joinPoint) throws Exception {
-        String targetName = joinPoint.getTarget().getClass().getName();
-        // 目标方法名
-        String methodName = joinPoint.getSignature().getName();
-        Object[] arguments = joinPoint.getArgs();
-        Class targetClass = Class.forName(targetName);
-        Method[] methods = targetClass.getMethods();
-        String description = "";
-        for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                Class[] clazzs = method.getParameterTypes();
-                if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(SystemControllerLog.class).description();
-                    break;
-                }
-            }
+        SystemControllerLog methodAnnotation = getMethodAnnotation(joinPoint, SystemControllerLog.class);
+        if (methodAnnotation == null) {
+            return "";
         }
-        return description;
+        return methodAnnotation.description();
     }
 
     /**
@@ -129,7 +114,7 @@ public class SystemLogAspect {
      * 异常通知 用于拦截service层记录异常日志
      *
      * @param joinPoint the join point
-     * @param e the e
+     * @param e         the e
      */
     @AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {

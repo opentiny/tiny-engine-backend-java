@@ -1,5 +1,7 @@
-
 package com.tinyengine.it.mapper;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.tinyengine.it.model.entity.App;
 
@@ -9,11 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 /**
  * Mapper集成测试，使用h2内存数据库
+ *
+ * @since 2024-10-26
  */
 @SpringBootTest
 class AppMapperTest {

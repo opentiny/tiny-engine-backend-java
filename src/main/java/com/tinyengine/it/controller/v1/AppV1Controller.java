@@ -3,6 +3,7 @@ package com.tinyengine.it.controller.v1;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.config.log.SystemControllerLog;
+import com.tinyengine.it.model.dto.SchemaDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.service.app.v1.AppV1Service;
 
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 /**
  * 应用api v1版本
@@ -46,8 +45,8 @@ public class AppV1Controller {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取app schema api")
     @GetMapping("/apps/schema/{id}")
-    public Result<Map<String, Object>> getSchema(@PathVariable Integer id) {
-        Map<String, Object> schema = appV1Service.appSchema(id);
+    public Result<SchemaDto> getSchema(@PathVariable Integer id) {
+        SchemaDto schema = appV1Service.appSchema(id);
         return Result.success(schema);
     }
 }

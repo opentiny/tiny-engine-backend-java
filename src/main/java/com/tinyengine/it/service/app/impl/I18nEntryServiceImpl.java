@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -17,10 +16,12 @@ import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.I18nEntryListResult;
 import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
 import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
@@ -134,7 +135,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             return null;
         }
         // 格式化词条列表
-        Map<String, Map<String, String>> messages = formatEntriesList(i18nEntriesList);
+        SchemaI18n messages = formatEntriesList(i18nEntriesList);
         List<I18nLang> i18nLangsListTemp = i18nLangsList.stream()
                 .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
                 .collect(Collectors.toList());
@@ -165,7 +166,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @SystemServiceLog(description = "formatEntriesList 国际化词条实现类里获取格式化词条列表")
     @Override
-    public Map<String, Map<String, String>> formatEntriesList(List<I18nEntryDto> i18nEntriesList) {
+    public SchemaI18n formatEntriesList(List<I18nEntryDto> i18nEntriesList) {
         // 格式化词条列表
         Map<String, Map<String, String>> messages = new HashMap<>();
         for (I18nEntryDto i18nEntries : i18nEntriesList) {
@@ -177,7 +178,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             // 现在可以将键值对存入 messages[lang] 对应的 map 中
             messages.get(lang).put(key, content);
         }
-        return messages;
+        return BeanUtil.mapToBean(messages, SchemaI18n.class, true);
     }
 
     /**
@@ -326,8 +327,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<I18nEntry> i18nEntriesList = fillParam(operateI18nEntries, langsDic);
         // bulkCreateEntries
         for (I18nEntry i18Entries : i18nEntriesList) {
-            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(), i18Entries.getHostType(),
-                    i18Entries.getKey(), i18Entries.getLang());
+            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(),
+                    i18Entries.getHostType(), i18Entries.getKey(), i18Entries.getLang());
         }
         return i18nEntriesList;
     }
@@ -360,6 +361,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param lang the lang
      * @param file the file
      * @param host the host
+     * @return bulk Create Or Update number
      * @throws Exception the Exception
      */
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
@@ -520,8 +522,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             ObjectMapper objectMapper = new ObjectMapper();
 
             Map<String, Object> jsonData = objectMapper.readValue(jsonContent,
-                    new TypeReference<Map<String, Object>>() {
-                    });
+                    new TypeReference<Map<String, Object>>() {});
             entriesItem.put("entries", flat(jsonData));
         } catch (IOException e) {
             return Result.validateFailed("parse Json error");
@@ -566,7 +567,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         try {
             // 将上传的文件保存到临时文件中
             File tempFile = File.createTempFile("/path/to/tmp", ".zip");
-            target = tempFile.getAbsolutePath();
+            target = tempFile.getCanonicalPath();
             file.transferTo(tempFile);
 
             // 解压ZIP文件并处理
@@ -613,7 +614,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param mimeTypes 文件类型集合
      */
     public void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) {
-        boolean condition = file.getOriginalFilename() != null && file.getName().matches("\\d+")
+        boolean condition = file.getOriginalFilename() != null
+                && file.getName().matches("\\d+")
                 && mimeTypes.contains(file.getContentType());
         if (condition) {
             return;
@@ -641,19 +643,24 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 String entryName = entry.getName();
-                if (entryName.endsWith(".json")) {
-                    // 处理JSON文件
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = zipInputStream.read(buffer)) > 0) {
-                        jsonResult.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
-                    }
-                    jsonResult.append("\n");
-                }
+                jsonResult.append(processJsonFileContent(entryName, zipInputStream));
             }
         }
-
         return jsonResult.toString();
+    }
+
+    private StringBuilder processJsonFileContent(String entryName, ZipInputStream zipFile) throws IOException {
+        StringBuilder result = new StringBuilder();
+        if (entryName.endsWith(".json")) {
+            // 处理JSON文件
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = zipFile.read(buffer)) > 0) {
+                result.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
+            }
+            result.append("\n");
+        }
+        return result;
     }
 
     /**
@@ -665,13 +672,18 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     private void cleanUp(String targetDir) throws IOException {
         Path directory = Paths.get(targetDir);
         // reverse order to delete deepest files first
+        Stream<Path> fileWalk = null;
         try {
-            Stream<Path> fileWalk = Files.walk(directory);
+            fileWalk = Files.walk(directory);
             fileWalk.sorted((o1, o2) -> {
                 return -o1.compareTo(o2);
             }).map(Path::toFile).forEach(File::delete);
         } catch (IOException e) {
             log.error("delete file fail:{}", e.getMessage());
+        } finally {
+            if (fileWalk != null) {
+                fileWalk.close();
+            }
         }
     }
 
