@@ -227,10 +227,7 @@ public class PageServiceImpl implements PageService {
         page.setIsDefault(false);
         page.setDepth(0);
 
-        Page pageParam = new Page();
-        pageParam.setName(page.getName());
-        pageParam.setApp(page.getApp());
-        List<Page> pageResult = pageMapper.queryPageByCondition(pageParam);
+        List<Page> pageResult = queryPages(page);
         if (!pageResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
@@ -249,6 +246,13 @@ public class PageServiceImpl implements PageService {
 
         pageInfo.setIsHome(page.getIsHome());
         return Result.success(pageInfo);
+    }
+
+    private List<Page> queryPages(Page page) {
+        Page pageParam = new Page();
+        pageParam.setName(page.getName());
+        pageParam.setApp(page.getApp());
+        return pageMapper.queryPageByCondition(pageParam);
     }
 
     /**
@@ -274,10 +278,7 @@ public class PageServiceImpl implements PageService {
         // needTODO 获取user的ID
         String userId = "1";
         page.setOccupierBy(userId);
-        Page pageParam = new Page();
-        pageParam.setName(page.getName());
-        pageParam.setApp(page.getApp());
-        List<Page> pageResult = pageMapper.queryPageByCondition(pageParam);
+        List<Page> pageResult = queryPages(page);
         if (!pageResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
