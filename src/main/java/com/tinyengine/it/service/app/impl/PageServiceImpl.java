@@ -13,10 +13,7 @@ import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.mapper.PageMapper;
-import com.tinyengine.it.model.dto.Collection;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.PreviewDto;
-import com.tinyengine.it.model.dto.PreviewParam;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.Block;
@@ -247,11 +244,11 @@ public class PageServiceImpl implements PageService {
     public Result<Page> createFolder(Page page) {
         String parentId = page.getParentId();
         // 通过parentId 计算depth
-        Map<String, Object> depthResult = getDepth(parentId);
-        if (depthResult.get("error") != null) {
-            return Result.failed(ExceptionEnum.CM001);
+        Result<Integer> depthResult = getDepth(parentId);
+        if (!depthResult.isSuccess()) {
+            return Result.failed(depthResult.getMessage());
         }
-        int depth = (int)depthResult.get("depth");
+        int depth = depthResult.getData();
         page.setDepth(depth + 1);
         page.setGroup("staticPages");
         page.setIsDefault(false);
@@ -331,11 +328,11 @@ public class PageServiceImpl implements PageService {
         String parentId = page.getParentId();
         // 校验parentId 带来的深度改变
         if (parentId != null) {
-            Map<String, Object> depthInfo = verifyParentId(parentId);
-            if (depthInfo.get("error") != null) {
+            Result<Integer> depthInfo = verifyParentId(parentId);
+            if (!depthInfo.isSuccess()) {
                 return Result.failed("parentId is invalid");
             }
-            page.setDepth((int)depthInfo.get("depth") + 1);
+            page.setDepth(depthInfo.getData() + 1);
         }
         // getFolder 获取父类信息
         Page parentInfo = pageMapper.queryPageById(page.getId());
@@ -348,13 +345,7 @@ public class PageServiceImpl implements PageService {
             Page pagesResult = queryPageById(page.getId());
             return Result.success(pagesResult);
         }
-        // 当文件夹改变父级且没有平级移动时
-        Collection collection = getUpdateTree(page.getId(), page.getDepth());
-        if (collection == null) {
-            return checkUpdate(page);
-        }
-
-        return null;
+        return Result.failed(ExceptionEnum.CM002);
     }
 
     /**
@@ -402,23 +393,18 @@ public class PageServiceImpl implements PageService {
      * @param parentId the parent id
      * @return depth
      */
-    public Map<String, Object> getDepth(String parentId) {
+    public Result<Integer> getDepth(String parentId) {
         int parent = Integer.parseInt(parentId);
-        Map<String, Object> result = new HashMap<>();
         if (parent == 0) {
-            result.put("depth", 0);
-            return result;
+            return Result.success(0);
         }
         // getFolder 获取父类信息
         Page parentInfo = pageMapper.queryPageById(parent);
         int depth = parentInfo.getDepth();
         if (depth < 5) {
-            result.put("depth", depth);
-            return result;
+            return Result.success(depth);
         }
-        result.put("error", "Exceeded depth");
-
-        return result;
+        return Result.failed("Exceeded depth");
     }
 
     /**
@@ -590,13 +576,12 @@ public class PageServiceImpl implements PageService {
      * @param parentId the parent id
      * @return map
      */
-    public Map<String, Object> verifyParentId(String parentId) {
+    public Result<Integer> verifyParentId(String parentId) {
         if (Pattern.matches("^[0-9]+$", parentId)) {
             return getDepth(parentId);
         }
-        Map<String, Object> result = new HashMap<>();
-        result.put("error", "parentId is invalid");
-        return result;
+
+        return Result.failed("parentId is invalid");
     }
 
     /**
@@ -606,13 +591,14 @@ public class PageServiceImpl implements PageService {
      * @param target the target
      * @return update tree
      */
-    public Collection getUpdateTree(int pid, int target) {
-        Collection collection = new Collection();
-        Map<String, Object> param = new HashMap<>();
-        param.put("collection", collection);
-        param.put("pids", Collections.singletonList(pid));
-        param.put("level", target + 1);
-        Collection getTreeNodesResult = getTreeNodes(param);
+    public TreeNodeCollection getUpdateTree(int pid, int target) {
+        TreeNodeCollection collection = new TreeNodeCollection();
+        TreeNodeDto treeNodeDto = new TreeNodeDto();
+        treeNodeDto.setPids(new ArrayList<>(Arrays.asList(pid)));
+        treeNodeDto.setLevel(target + 1);
+        treeNodeDto.setCollection(collection);
+
+        TreeNodeCollection getTreeNodesResult = getTreeNodes(treeNodeDto);
         if (getTreeNodesResult.getRange().isEmpty()) {
             return null;
         }
@@ -623,20 +609,14 @@ public class PageServiceImpl implements PageService {
     /**
      * 计算当前parent的深度信息
      *
-     * @param map the map
+     * @param treeNodeDto the treeNodeDto
      * @return the tree nodes
      */
-    public Collection getTreeNodes(Map<String, Object> map) {
-        int level = (int)map.get("level");
-        Collection collection = new Collection();
-        Object obj = map.get("pids");
-        List<Integer> pids = new ArrayList<>();
+    public TreeNodeCollection getTreeNodes(TreeNodeDto treeNodeDto) {
+        int level = treeNodeDto.getLevel();
+        TreeNodeCollection collection = treeNodeDto.getCollection();
+        List<Integer> pids = treeNodeDto.getPids();
 
-        if (obj instanceof List<?>) {
-            List<?> pidsList = (List<?>)obj;
-            pids = pidsList.stream().map(element -> (Integer)element).collect(Collectors.toList());
-
-        }
         // 没有子节点，返回收集的节点信息
         if (pids.isEmpty()) {
             return collection;
@@ -648,19 +628,18 @@ public class PageServiceImpl implements PageService {
         // 获取子节点的id
         List<Integer> childrenId = getChildrenId(pids);
         // 收集 id depth 信息
-        List<AbstractMap.SimpleEntry<Integer, Integer>> dps =
-            childrenId.stream().map(id -> new AbstractMap.SimpleEntry<>(id, level)).collect(Collectors.toList());
+        List<NodeData> dps =
+            childrenId.stream().map(id -> new NodeData(id, level)).collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
         collection.getRange().addAll(childrenId);
         collection.getData().addAll(dps);
 
         // 递归
-        Map<String, Object> mapParam = new HashMap<>();
-        mapParam.put("pids", childrenId);
-        mapParam.put("level", level + 1);
-        mapParam.put("collection", collection);
-
-        return getTreeNodes(mapParam);
+        TreeNodeDto treeNodeParam = new TreeNodeDto();
+        treeNodeParam.setPids(childrenId);
+        treeNodeParam.setLevel(level + 1);
+        treeNodeParam.setCollection(collection);
+        return getTreeNodes(treeNodeParam);
     }
 
     /**
@@ -693,13 +672,13 @@ public class PageServiceImpl implements PageService {
         AppExtension appExtension = new AppExtension();
         appExtension.setApp(previewParam.getApp());
         List<AppExtension> extensionsList = appExtensionMapper.queryAppExtensionByCondition(appExtension);
-        Map<String, Object> extensions = appV1ServiceImpl.getSchemaExtensions(extensionsList);
-        List<Map<String, Object>> utils = (List<Map<String, Object>>)extensions.get("utils");
+        Map<String, List<SchemaUtils>> extensions = appV1ServiceImpl.getSchemaExtensions(extensionsList);
+        List<SchemaUtils> utils = extensions.get("utils");
         // 拼装数据源
         Map<String, Object> dataSource = (Map<String, Object>)block.getContent().get("dataSource");
         // 拼装国际化词条
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
-        Map<String, Map<String, String>> i18n =
+        SchemaI18n i18n =
             appService.formatI18nEntrites(i18ns, Enums.E_i18Belongs.BLOCK.getValue(), previewParam.getId());
 
         PreviewDto previewDto = new PreviewDto();

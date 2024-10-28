@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.app.impl.v1;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.utils.Schema;
 import com.tinyengine.it.common.utils.Utils;
@@ -12,11 +13,7 @@ import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
 import com.tinyengine.it.mapper.PageMapper;
-import com.tinyengine.it.model.dto.BlockHistoryDto;
-import com.tinyengine.it.model.dto.BlockVersionDto;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.MaterialHistoryMsg;
-import com.tinyengine.it.model.dto.MetaDto;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.BlockGroup;
@@ -34,11 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -52,7 +45,6 @@ import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 @Service
 @Slf4j
 public class AppV1ServiceImpl implements AppV1Service {
-    private final List<String> exposedFields = Arrays.asList("config", "constants", "css");
     /**
      * The App mapper.
      */
@@ -113,73 +105,93 @@ public class AppV1ServiceImpl implements AppV1Service {
      */
     @SystemServiceLog(description = "获取app schema 实现类")
     @Override
-    public Map<String, Object> appSchema(Integer id) {
+    public SchemaDto appSchema(Integer id) {
         this.metaDto = setMeta(id);
-        Map<String, Object> schema = new HashMap<>();
-        Map<String, Object> meta = getSchemaMeta();
-        schema.put("meta", meta);
+        SchemaDto schema = new SchemaDto();
+        SchemaMeta meta = getSchemaMeta();
+        schema.setMeta(meta);
         List<Datasource> list = this.metaDto.getSource();
         Map<String, Object> dataHandler = this.metaDto.getApp().getDataSourceGlobal();
-        Map<String, Object> data = new HashMap<>();
-        data.put("list", list);
-        data.putAll(dataHandler);
-        schema.put("dataSource", data);
-        Map<String, Map<String, String>> i18n = getSchemaI18n();
-        schema.put("i18n", i18n);
-        List<Map<String, Object>> componentsTree = getSchemaComponentsTree(this.metaDto);
-        schema.put("componentsTree", componentsTree);
-        List<Map<String, Object>> componentsMap = getSchemaComponentsMap(this.metaDto);
-        schema.put("componentsMap", componentsMap);
-        // 单独处理混合了bridge和utils的extensions
-        Map<String, Object> extensions = getSchemaExtensions(this.metaDto.getExtension());
-        schema.put("bridge", extensions.get("bridge"));
-        schema.put("utils", extensions.get("utils"));
 
+        SchemaDataSource schemaDataSource = new SchemaDataSource();
+        schemaDataSource.setDataHandler(dataHandler);
+        schemaDataSource.setList(list);
+        schema.setDataSource(schemaDataSource);
+
+        SchemaI18n i18n = getSchemaI18n();
+        schema.setI18n(i18n);
+
+        List<ComponentTree> componentsTree = getSchemaComponentsTree(this.metaDto);
+        schema.setComponentTree(componentsTree);
+
+        List<Map<String, Object>> componentsMap = getSchemaComponentsMap(this.metaDto);
+        schema.setComponentsMap(componentsMap);
+
+        // 单独处理混合了bridge和utils的extensions
+        Map<String, List<SchemaUtils>> extensions = getSchemaExtensions(this.metaDto.getExtension());
+        schema.setUtils(extensions.get("utils"));
+        schema.setBridge(extensions.get("bridge"));
+        String constants = this.metaDto.getApp().getConstants();
+        String css = this.metaDto.getApp().getCss();
+        Map<String, Object> config = this.metaDto.getApp().getConfig();
         // 拷贝属性
-        Map<String, Object> app = Utils.convert(this.metaDto.getApp());
-        for (String field : exposedFields) {
-            schema.put(field, app.getOrDefault(field, ""));
+        if (constants == null) {
+            schema.setConstants("");
+        } else {
+            schema.setConstants(constants);
         }
-        schema.put("version", "");
+        if (css == null) {
+            schema.setCss("");
+        } else {
+            schema.setCss(css);
+        }
+        if (config == null || config.isEmpty()) {
+            schema.setConfig(Collections.emptyMap());
+        } else {
+            schema.setConfig(config);
+        }
+        schema.setVersion("");
         return schema;
     }
 
     @SystemServiceLog(description = "合并数据实现类")
     @Override
-    public Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries,
-        Map<String, Map<String, String>> blockEntries) {
-        // 直接将 blockEntries 赋值给 res
+    public SchemaI18n mergeEntries(SchemaI18n appEntries, SchemaI18n blockEntries) {
+        SchemaI18n mergedEntries = new SchemaI18n();
 
-        if (appEntries == null || blockEntries == null) {
-            return (appEntries != null) ? appEntries : blockEntries;
+        // 初始化合并后的语言映射
+        mergedEntries.setEn_US(new HashMap<>());
+        mergedEntries.setZh_CN(new HashMap<>());
+
+        // 合并 appEntries
+        if (appEntries != null) {
+            mergeMaps(appEntries.getEn_US(), mergedEntries.getEn_US());
+            mergeMaps(appEntries.getZh_CN(), mergedEntries.getZh_CN());
         }
 
-        // 遇到相同的key，用应用的词条覆盖区块的
-        for (Map.Entry<String, Map<String, String>> appEntry : appEntries.entrySet()) {
-            String lang = appEntry.getKey();
-            Map<String, String> langEntries = appEntry.getValue();
-
-            blockEntries.putIfAbsent(lang, new HashMap<>());
-
-            for (Map.Entry<String, String> langEntry : langEntries.entrySet()) {
-                String key = langEntry.getKey();
-                String value = langEntry.getValue();
-                blockEntries.get(lang).put(key, value);
-            }
-
-            // 如果区块没有这个国际化分组，把应用的合并进来
-            if (!blockEntries.containsKey(lang)) {
-                blockEntries.put(lang, langEntries);
-            }
+        // 合并 blockEntries
+        if (blockEntries != null) {
+            mergeMaps(blockEntries.getEn_US(), mergedEntries.getEn_US());
+            mergeMaps(blockEntries.getZh_CN(), mergedEntries.getZh_CN());
         }
 
-        return blockEntries;
+        return mergedEntries;
     }
+
+    // 辅助方法用于合并两个 Map
+    private void mergeMaps(Map<String, String> source, Map<String, String> target) {
+        if (source != null) {
+            for (Map.Entry<String, String> entry : source.entrySet()) {
+                target.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
 
     /**
      * 获取元数据
      */
-    private Map<String, Object> getSchemaMeta() {
+    private SchemaMeta getSchemaMeta() {
         Map<String, Object> appData = Utils.convert(this.metaDto.getApp());
         Map<String, Object> config = new HashMap<>();
         config.put("sdkVersion", "1.0.3");
@@ -188,7 +200,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         this.metaDto.getApp().setConfig(config);
         Schema schema = new Schema();
         String type = "app";
-        return schema.assembleFields(appData, type);
+        Map<String, Object> meta = schema.assembleFields(appData, type);
+        return BeanUtil.mapToBean(meta, SchemaMeta.class, true);
     }
 
     /**
@@ -234,7 +247,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         metaDto.setExtension(appExtensionList);
 
         MaterialHistory materialHistory =
-            materialHistoryMapper.queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
+                materialHistoryMapper.queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
         metaDto.setMaterialHistory(materialHistory);
 
         List<BlockHistory> blockHistory = getBlockHistory(app, materialhistoryMsg);
@@ -328,7 +341,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         // 遍历区块历史记录 综合信息映射关系
         for (String key : blocksVersionMap.keySet()) {
             Map<String, Object> keyMap = blocksVersionMap.get(key);
-            List<String> versions = (List<String>)keyMap.get("versions");
+            List<String> versions = (List<String>) keyMap.get("versions");
 
             String targetVersion;
             // 默认先取最新的
@@ -338,23 +351,23 @@ public class AppV1ServiceImpl implements AppV1Service {
                 targetVersion = versions.get(versions.size() - 1);
             }
             Map<String, Object> historyMap = new HashMap<>();
-            historyMap = (Map<String, Object>)keyMap.get("historyMap");
-            Integer historyId = (Integer)historyMap.get(targetVersion);
+            historyMap = (Map<String, Object>) keyMap.get("historyMap");
+            Integer historyId = (Integer) historyMap.get(targetVersion);
             historiesId.add(historyId);
         }
         return historiesId;
     }
 
-    private Map<String, Map<String, String>> getSchemaI18n() {
+    private SchemaI18n getSchemaI18n() {
         List<BlockHistory> blockHistoryList = this.metaDto.getBlockHistories();
         List<I18nEntryDto> i18n = this.metaDto.getI18n();
-        Map<String, Map<String, String>> blockEntries = new HashMap<>();
+        SchemaI18n blockEntries = new SchemaI18n();
         // 提取区块构建产物中的国际化词条
         for (BlockHistory blockHistory : blockHistoryList) {
-            blockEntries = mergeEntries(blockHistory.getI18n(), blockEntries);
+            blockEntries = mergeEntries(BeanUtil.mapToBean(blockHistory.getI18n(), SchemaI18n.class, true), blockEntries);
         }
         // 序列化国际化词条
-        Map<String, Map<String, String>> appEntries = i18nEntryService.formatEntriesList(i18n);
+        SchemaI18n appEntries = i18nEntryService.formatEntriesList(i18n);
 
         return mergeEntries(appEntries, blockEntries);
     }
@@ -366,8 +379,8 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @return the schema components tree
      * @throws ServiceException the service exception
      */
-    public List<Map<String, Object>> getSchemaComponentsTree(MetaDto metaDto) {
-        List<Map<String, Object>> pageSchemas = new ArrayList<>();
+    public List<ComponentTree> getSchemaComponentsTree(MetaDto metaDto) {
+        List<ComponentTree> pageSchemas = new ArrayList<>();
         List<Page> pageList = metaDto.getPages();
         App app = metaDto.getApp();
         // 创建字符串列表
@@ -392,7 +405,7 @@ public class AppV1ServiceImpl implements AppV1Service {
                 Map<String, Object> meta = schemaUtil.assembleFields(page, type);
                 schema.put("meta", meta);
             }
-            pageSchemas.add(schema);
+            pageSchemas.add(BeanUtil.mapToBean(schema, ComponentTree.class, true));
         }
         return pageSchemas;
     }
@@ -429,8 +442,8 @@ public class AppV1ServiceImpl implements AppV1Service {
                 throw new IllegalArgumentException("Each block history record must have content");
             }
 
-            String componentName = (String)content.get("fileName");
-            Map<String, Object> dependencies = (Map<String, Object>)content.get("dependencies");
+            String componentName = (String) content.get("fileName");
+            Map<String, Object> dependencies = (Map<String, Object>) content.get("dependencies");
 
             Map<String, Object> schema = new HashMap<>();
             schema.put("componentName", componentName);
@@ -453,10 +466,10 @@ public class AppV1ServiceImpl implements AppV1Service {
         for (Component component : components) {
             String componentName = component.getComponent();
             Map<String, Object> npm = component.getNpm();
-            String packageName = (String)npm.get("package");
-            String exportName = (String)npm.get("exportName");
-            String version = (String)npm.get("version");
-            Boolean destructuring = (Boolean)npm.get("destructuring");
+            String packageName = (String) npm.get("package");
+            String exportName = (String) npm.get("exportName");
+            String version = (String) npm.get("version");
+            Boolean destructuring = (Boolean) npm.get("destructuring");
 
             Map<String, Object> schema = new HashMap<>();
             schema.put("componentName", componentName);
@@ -476,20 +489,17 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @param appExtensionList the app extension list
      * @return the schema extensions
      */
-    public Map<String, Object> getSchemaExtensions(List<AppExtension> appExtensionList) {
-        List<Map<String, Object>> bridge = new ArrayList<>();
-        List<Map<String, Object>> utils = new ArrayList<>();
+    public Map<String, List<SchemaUtils>> getSchemaExtensions(List<AppExtension> appExtensionList) {
+        List<SchemaUtils> bridge = new ArrayList<>();
+        List<SchemaUtils> utils = new ArrayList<>();
 
         for (AppExtension item : appExtensionList) {
-            String name = item.getName();
-            String type = item.getType();
-            Object content = item.getContent();
             String category = item.getCategory();
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("name", name);
-            data.put("type", type);
-            data.put("content", content);
+            SchemaUtils data = new SchemaUtils();
+            data.setContent(item.getContent());
+            data.setType(item.getType());
+            data.setName(item.getName());
 
             if ("bridge".equals(category)) {
                 bridge.add(data);
@@ -498,7 +508,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             }
         }
 
-        Map<String, Object> result = new HashMap<>();
+        Map<String, List<SchemaUtils>> result = new HashMap<>();
         result.put("bridge", bridge);
         result.put("utils", utils);
         return result;
@@ -514,16 +524,16 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @throws ServiceException the service exception
      */
     public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine)
-        throws ServiceException {
+            throws ServiceException {
         // 获取 toLine 和 toHump 方法
         Function<String, String> format = isToLine ? Utils::toLine : Utils::toHump;
         // 将 fields 转换为 HashMap
         Map<String, Object> fieldsMap = new HashMap<>();
         for (Object field : fields) {
             if (field instanceof String) {
-                fieldsMap.put((String)field, true);
+                fieldsMap.put((String) field, true);
             } else if (field instanceof IFieldItem) {
-                IFieldItem fieldItem = (IFieldItem)field;
+                IFieldItem fieldItem = (IFieldItem) field;
                 fieldsMap.put(fieldItem.getKey(), fieldItem.getValue());
             }
         }
@@ -533,7 +543,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             String key = entry.getKey();
             Object val = fieldsMap.get(key);
             if (val != null) {
-                String convert = (val.equals(true)) ? format.apply(key) : (String)val;
+                String convert = (val.equals(true)) ? format.apply(key) : (String) val;
                 res.put(convert, entry.getValue());
             } else {
                 res.put(key, entry.getValue());

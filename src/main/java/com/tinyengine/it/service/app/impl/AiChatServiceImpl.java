@@ -5,6 +5,7 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.IBaseError;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.gateway.ai.AiChatClient;
+import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
 import com.tinyengine.it.service.app.AiChatService;
@@ -85,10 +86,10 @@ public class AiChatServiceImpl implements AiChatService {
         return Result.success(result);
     }
 
-    private Result<Map<String, Object>> requestAnswerFromAi(List<Map<String, String>> messages, String model) {
-        messages = formatMessage(messages);
+    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, String model) {
+        List<AiMessages> aiMessages = formatMessage(messages);
         AiChatClient aiChatClient = new AiChatClient();
-        OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, messages);
+        OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, aiMessages);
         Map<String, Object> response;
         try {
             response = aiChatClient.executeChatRequest(openAiBodyDto);
@@ -171,24 +172,33 @@ public class AiChatServiceImpl implements AiChatService {
         return content.substring(0, start) + "<代码在画布中展示>" + content.substring(end);
     }
 
-    private List<Map<String, String>> formatMessage(List<Map<String, String>> messages) {
-        Map<String, String> defaultWords = new HashMap<>();
-        defaultWords.put("role", "user");
-        defaultWords.put("content",
-            "你是一名前端开发专家，编码时遵从以下几条要求:\n" + "###\n" + "1. 只使用 element-ui组件库的el-button 和 el-table组件\n" + "2. el-table表格组件的使用方式为 <el-table :columns=\"columnData\" :data=\"tableData\"></el-table> columns的columnData表示列数据，其中用title表示列名，field表示表格数据字段； data的tableData表示表格展示的数据。 el-table标签内不得出现子元素\n" + "3. 使用vue2技术栈\n" + "4. 回复中只能有一个代码块\n" + "5. 不要加任何注释\n" + "6. el-table标签内不得出现el-table-column\n" + "###");
+    private List<AiMessages> formatMessage(List<AiMessages> messages) {
+        AiMessages defaultWords = new AiMessages();
+        defaultWords.setRole("user");
+        defaultWords.setContent("你是一名前端开发专家，编码时遵从以下几条要求:\n"
+                + "###\n"
+                + "1. 只使用 element-ui组件库的el-button 和 el-table组件\n"
+                + "2. el-table表格组件的使用方式为 <el-table :columns=\"columnData\" :data=\"tableData\"></el-table> columns的columnData表示列数据，其中用title表示列名，field表示表格数据字段； data的tableData表示表格展示的数据。 el-table标签内不得出现子元素\n"
+                + "3. 使用vue2技术栈\n"
+                + "4. 回复中只能有一个代码块\n"
+                + "5. 不要加任何注释\n"
+                + "6. el-table标签内不得出现el-table-column\n"
+                + "###");
 
         Pattern pattern = Pattern.compile(".*编码时遵从以下几条要求.*");
 
-        Map<String, String> firstMessage = messages.get(0);
-        String role = firstMessage.get("role");
-        String content = firstMessage.get("content");
+        String role = messages.get(0).getRole();
+        String content = messages.get(0).getContent();
+
+        List<AiMessages> aiMessages = new ArrayList<>();
 
         if (!"user".equals(role)) {
-            messages.add(0, defaultWords);
+            aiMessages.add(0, defaultWords);
         } else if (!pattern.matcher(content).matches()) {
-            firstMessage.put("content", defaultWords.get("content") + "\n" + content);
+            AiMessages aiMessagesResult = new AiMessages();
+            aiMessagesResult.setContent(defaultWords.getContent() + "\n" + content);
+            aiMessages.add(aiMessagesResult);
         }
-
-        return messages;
+        return aiMessages;
     }
 }

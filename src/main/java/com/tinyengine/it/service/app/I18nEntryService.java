@@ -52,7 +52,7 @@ public interface I18nEntryService {
      * @param i18nEntriesList the 18 n entries list
      * @return map
      */
-    Map<String, Map<String, String>> formatEntriesList(List<I18nEntryDto> i18nEntriesList);
+    SchemaI18n formatEntriesList(List<I18nEntryDto> i18nEntriesList);
 
     /**
      * 创建多词条国际化
