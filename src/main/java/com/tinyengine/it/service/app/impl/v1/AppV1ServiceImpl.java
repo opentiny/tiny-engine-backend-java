@@ -157,7 +157,8 @@ public class AppV1ServiceImpl implements AppV1Service {
 
     @SystemServiceLog(description = "合并数据实现类")
     @Override
-    public Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries, Map<String, Map<String, String>> blockEntries) {
+    public Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries,
+                                                         Map<String, Map<String, String>> blockEntries) {
         // 直接将 blockEntries 赋值给 res
         if (appEntries == null || blockEntries == null) {
             return (appEntries != null) ? appEntries : blockEntries;
@@ -238,7 +239,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<AppExtension> appExtensionList = appExtensionMapper.queryAppExtensionByCondition(appExtension);
         metaDto.setExtension(appExtensionList);
 
-        MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
+        MaterialHistory materialHistory = materialHistoryMapper
+                .queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
         metaDto.setMaterialHistory(materialHistory);
 
         List<BlockHistory> blockHistory = getBlockHistory(app, materialhistoryMsg);
@@ -516,7 +518,8 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @return the map
      * @throws ServiceException the service exception
      */
-    public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine) throws ServiceException {
+    public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine)
+            throws ServiceException {
         // 将 fields 转换为 HashMap
         Map<String, Object> fieldsMap = new HashMap<>();
         for (Object field : fields) {
