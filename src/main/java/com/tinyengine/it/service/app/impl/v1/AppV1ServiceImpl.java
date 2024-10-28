@@ -47,8 +47,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -119,7 +121,6 @@ public class AppV1ServiceImpl implements AppV1Service {
      */
     @Autowired
     private PlatformService platformService;
-    private MetaDto metaDto;
 
     /**
      * 获取应用schema
@@ -130,34 +131,34 @@ public class AppV1ServiceImpl implements AppV1Service {
     @SystemServiceLog(description = "获取app schema 实现类")
     @Override
     public SchemaDto appSchema(Integer id) {
-        this.metaDto = setMeta(id);
+        MetaDto metaDto = getMetaDto(id);
         SchemaDto schema = new SchemaDto();
-        SchemaMeta meta = getSchemaMeta();
+        SchemaMeta meta = getSchemaMeta(metaDto);
         schema.setMeta(meta);
-        List<Datasource> list = this.metaDto.getSource();
-        Map<String, Object> dataHandler = this.metaDto.getApp().getDataSourceGlobal();
+        List<Datasource> list = metaDto.getSource();
+        Map<String, Object> dataHandler = metaDto.getApp().getDataSourceGlobal();
 
         SchemaDataSource schemaDataSource = new SchemaDataSource();
         schemaDataSource.setDataHandler(dataHandler);
         schemaDataSource.setList(list);
         schema.setDataSource(schemaDataSource);
 
-        SchemaI18n i18n = getSchemaI18n();
+        SchemaI18n i18n = getSchemaI18n(metaDto);
         schema.setI18n(i18n);
 
-        List<ComponentTree> componentsTree = getSchemaComponentsTree(this.metaDto);
+        List<ComponentTree> componentsTree = getSchemaComponentsTree(metaDto);
         schema.setComponentTree(componentsTree);
 
-        List<Map<String, Object>> componentsMap = getSchemaComponentsMap(this.metaDto);
+        List<Map<String, Object>> componentsMap = getSchemaComponentsMap(metaDto);
         schema.setComponentsMap(componentsMap);
 
         // 单独处理混合了bridge和utils的extensions
-        Map<String, List<SchemaUtils>> extensions = getSchemaExtensions(this.metaDto.getExtension());
+        Map<String, List<SchemaUtils>> extensions = getSchemaExtensions(metaDto.getExtension());
         schema.setUtils(extensions.get("utils"));
         schema.setBridge(extensions.get("bridge"));
-        String constants = this.metaDto.getApp().getConstants();
-        String css = this.metaDto.getApp().getCss();
-        Map<String, Object> config = this.metaDto.getApp().getConfig();
+        String constants = metaDto.getApp().getConstants();
+        String css = metaDto.getApp().getCss();
+        Map<String, Object> config = metaDto.getApp().getConfig();
         // 拷贝属性
         if (constants == null) {
             schema.setConstants("");
@@ -211,13 +212,14 @@ public class AppV1ServiceImpl implements AppV1Service {
         }
     }
 
-    private SchemaMeta getSchemaMeta() {
-        Map<String, Object> appData = Utils.convert(this.metaDto.getApp());
+    private SchemaMeta getSchemaMeta(MetaDto metaDto) {
+        App metaDtoApp = metaDto.getApp();
+        Map<String, Object> appData = Utils.convert(metaDtoApp);
         Map<String, Object> config = new HashMap<>();
         config.put("sdkVersion", "1.0.3");
         config.put("historyMode", "hash");
         config.put("targetRootID", "app");
-        this.metaDto.getApp().setConfig(config);
+        metaDtoApp.setConfig(config);
         Schema schema = new Schema();
         String type = "app";
         Map<String, Object> meta = schema.assembleFields(appData, type);
@@ -230,7 +232,7 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @param id the id
      * @return the meta
      */
-    public MetaDto setMeta(Integer id) {
+    public MetaDto getMetaDto(Integer id) {
         App app = appMapper.queryAppById(id);
 
         Platform platform = platformService.queryPlatformById(app.getPlatformId());
@@ -358,8 +360,9 @@ public class AppV1ServiceImpl implements AppV1Service {
         }
 
         // 遍历区块历史记录 综合信息映射关系
-        for (String key : blocksVersionMap.keySet()) {
-            Map<String, Object> keyMap = blocksVersionMap.get(key);
+        Set<String> keySet = blocksVersionMap.keySet();
+        for (Iterator<String> it = keySet.iterator(); it.hasNext(); ) {
+            Map<String, Object> keyMap = blocksVersionMap.get(it.next());
             List<String> versions = (List<String>) keyMap.get("versions");
 
             String targetVersion;
@@ -375,9 +378,9 @@ public class AppV1ServiceImpl implements AppV1Service {
         return historiesId;
     }
 
-    private SchemaI18n getSchemaI18n() {
-        List<BlockHistory> blockHistoryList = this.metaDto.getBlockHistories();
-        List<I18nEntryDto> i18n = this.metaDto.getI18n();
+    private SchemaI18n getSchemaI18n(MetaDto metaDto) {
+        List<BlockHistory> blockHistoryList = metaDto.getBlockHistories();
+        List<I18nEntryDto> i18n = metaDto.getI18n();
         SchemaI18n blockEntries = new SchemaI18n();
         // 提取区块构建产物中的国际化词条
         for (BlockHistory blockHistory : blockHistoryList) {

@@ -95,13 +95,7 @@ public class AiChatServiceImpl implements AiChatService {
         List<AiMessages> aiMessages = formatMessage(messages);
         AiChatClient aiChatClient = new AiChatClient();
         OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, aiMessages);
-        Map<String, Object> response;
-        try {
-            response = aiChatClient.executeChatRequest(openAiBodyDto);
-        } catch (Exception e) {
-            return Result.failed("调用AI大模型接口失败");
-        }
-
+        Map<String, Object> response = aiChatClient.executeChatRequest(openAiBodyDto);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
         if (response.get("error_code") != null) {
             return Result.failed((IBaseError) response.get("error_msg"));
@@ -192,7 +186,6 @@ public class AiChatServiceImpl implements AiChatService {
                 + "6. el-table标签内不得出现el-table-column\n"
                 + "###");
 
-
         String role = messages.get(0).getRole();
         String content = messages.get(0).getContent();
 
@@ -207,21 +200,5 @@ public class AiChatServiceImpl implements AiChatService {
             aiMessages.add(aiMessagesResult);
         }
         return aiMessages;
-    }
-
-    private static Map<String, String> getStringStringMap() {
-        Map<String, String> defaultWords = new HashMap<>();
-        defaultWords.put("role", "user");
-        defaultWords.put("content", "你是一名前端开发专家，编码时遵从以下几条要求:\n" + "###\n"
-                + "1. 只使用 element-ui组件库的el-button 和 el-table组件\n"
-                + "2. el-table表格组件的使用方式为 <el-table :columns=\"columnData\" :data=\"tableData\"></el-table> "
-                + "columns的columnData表示列数据，其中用title表示列名，field表示表格数据字段； data的tableData表示表格展示的数据。"
-                + " el-table标签内不得出现子元素\n"
-                + "3. 使用vue2技术栈\n"
-                + "4. 回复中只能有一个代码块\n"
-                + "5. 不要加任何注释\n"
-                + "6. el-table标签内不得出现el-table-column\n"
-                + "###");
-        return defaultWords;
     }
 }
