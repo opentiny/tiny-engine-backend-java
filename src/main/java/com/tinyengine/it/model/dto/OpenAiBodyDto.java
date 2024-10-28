@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 public class OpenAiBodyDto {
     private String model;
-    private List<Map<String, String>> messages;
+    private List<AiMessages> messages;
 
     /**
      * Instantiates a new Open AI body dto.
@@ -22,7 +22,7 @@ public class OpenAiBodyDto {
      * @param model the model
      * @param messages the messages
      */
-    public OpenAiBodyDto(String model, List<Map<String, String>> messages) {
+    public OpenAiBodyDto(String model, List<AiMessages> messages) {
         this.model = model;
         this.messages = messages;
     }

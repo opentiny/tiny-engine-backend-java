@@ -15,6 +15,6 @@ import java.util.Map;
  */
 @Data
 public class I18nEntryListResult {
-    private Map<String, Map<String, String>> messages;
+    private SchemaI18n messages;
     private List<I18nLang> i18nLangsList;
 }
