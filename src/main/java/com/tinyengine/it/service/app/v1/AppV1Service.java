@@ -2,6 +2,8 @@
 package com.tinyengine.it.service.app.v1;
 
 import com.tinyengine.it.common.exception.ServiceException;
+import com.tinyengine.it.model.dto.SchemaDto;
+import com.tinyengine.it.model.dto.SchemaI18n;
 
 import java.util.Map;
 
@@ -18,7 +20,7 @@ public interface AppV1Service {
      * @return the map
      * @throws ServiceException the service exception
      */
-    Map<String, Object> appSchema(Integer id) throws ServiceException;
+    SchemaDto appSchema(Integer id) throws ServiceException;
 
     /**
      * Merge entries map.
@@ -27,6 +29,6 @@ public interface AppV1Service {
      * @param blockEntries the block entries
      * @return the map
      */
-    Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries,
-            Map<String, Map<String, String>> blockEntries);
+    SchemaI18n mergeEntries(SchemaI18n appEntries, SchemaI18n blockEntries);
+
 }
