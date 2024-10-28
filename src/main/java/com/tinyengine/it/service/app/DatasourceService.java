@@ -1,7 +1,9 @@
+
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Datasource;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -51,5 +53,5 @@ public interface DatasourceService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<Datasource> createDatasource(Datasource datasource) throws Exception;
+    Result<Datasource> createDatasource(Datasource datasource);
 }

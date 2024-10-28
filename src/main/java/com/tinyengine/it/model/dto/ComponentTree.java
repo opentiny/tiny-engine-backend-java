@@ -6,6 +6,11 @@ import lombok.Setter;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ComponentTree
+ *
+ * @since 2024-10-20
+ */
 @Getter
 @Setter
 public class ComponentTree {
@@ -13,10 +18,9 @@ public class ComponentTree {
     private String css;
     private String componentName;
     private String fileName;
-    private Map<String,Object> lifeCycles;
-    private Map<String,Object> meta;
-    private Map<String,Object> methods;
-    private Map<String,Object> props;
-    private Map<String,Object> state;
-
+    private Map<String, Object> lifeCycles;
+    private Map<String, Object> meta;
+    private Map<String, Object> methods;
+    private Map<String, Object> props;
+    private Map<String, Object> state;
 }

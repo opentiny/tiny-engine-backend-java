@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
@@ -5,10 +6,10 @@ import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.App;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The interface App service.
@@ -80,5 +81,4 @@ public interface AppService {
      * @return the app preview meta data
      */
     PreviewDto getAppPreviewMetaData(Integer id);
-
 }

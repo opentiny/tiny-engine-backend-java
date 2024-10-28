@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.config;
 
 import com.tinyengine.it.common.enums.Enums;
@@ -11,12 +12,13 @@ import java.util.Map;
  * @since 2024-10-20
  */
 public class AiChatConfig {
-    private static final String OPENAI_API_URL =
-        System.getenv("OPENAI_API_URL") != null ? System.getenv("OPENAI_API_URL") : "https://api.openai.com";
+    private static final String OPENAI_API_URL = System.getenv("OPENAI_API_URL") != null
+            ? System.getenv("OPENAI_API_URL")
+            : "https://api.openai.com";
     private static final String OPENAI_API_KEY = System.getenv("OPENAI_API_KEY");
 
-    private static final String LOCAL_GPT_API_URL =
-        System.getenv("Local_GPT_API_URL") != null ? System.getenv("Local_GPT_API_URL")
+    private static final String LOCAL_GPT_API_URL = System.getenv("Local_GPT_API_URL") != null
+            ? System.getenv("Local_GPT_API_URL")
             : "https://dashscope.aliyuncs.com/compatible-mode";
     private static final String LOCAL_GPT_API_KEY = System.getenv("Local_GPT_API_KEY");
 
@@ -38,17 +40,17 @@ public class AiChatConfig {
 
         Map<String, String> ernieBotHeaders = new HashMap<>();
 
-        config.put(Enums.E_FOUNDATION_MODEL.GPT_35_TURBO.getValue(),
-            new AiChatConfigData(OPENAI_API_URL + "/v1/chat/completions", createCommonRequestOption(), openaiHeaders,
-                "openai"));
+        config.put(Enums.FoundationModel.GPT_35_TURBO.getValue(), new AiChatConfigData(
+                OPENAI_API_URL + "/v1/chat/completions", createCommonRequestOption(), openaiHeaders, "openai"));
 
-        config.put(Enums.E_FOUNDATION_MODEL.LOCAL_GPT.getValue(),
-            new AiChatConfigData(LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(),
-                localGptHeaders, "!openai"));
+        config.put(Enums.FoundationModel.LOCAL_GPT.getValue(), new AiChatConfigData(
+                LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(), localGptHeaders, "!openai"));
 
-        config.put(Enums.E_FOUNDATION_MODEL.ERNIE_BOT_TURBO.getValue(), new AiChatConfigData(
-            "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=" + WENXIN_ACCESS_TOKEN,
-            createCommonRequestOption(), ernieBotHeaders, "baidu"));
+        config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(),
+                new AiChatConfigData(
+                        "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token="
+                                + WENXIN_ACCESS_TOKEN,
+                        createCommonRequestOption(), ernieBotHeaders, "baidu"));
 
         return config;
     }
@@ -66,18 +68,22 @@ public class AiChatConfig {
          * The Http request url.
          */
         public final String httpRequestUrl;
+
         /**
          * The Http request option.
          */
         public final HttpRequestOption httpRequestOption;
+
         /**
          * The Headers.
          */
         public final Map<String, String> headers;
+
         /**
          * The Manufacturer.
          */
         public final String manufacturer;
+
         /**
          * The Request body.
          */
@@ -86,13 +92,13 @@ public class AiChatConfig {
         /**
          * Instantiates a new Ai chat config data.
          *
-         * @param httpRequestUrl    the http request url
+         * @param httpRequestUrl the http request url
          * @param httpRequestOption the http request option
-         * @param headers           the headers
-         * @param manufacturer      the manufacturer
+         * @param headers the headers
+         * @param manufacturer the manufacturer
          */
         public AiChatConfigData(String httpRequestUrl, HttpRequestOption httpRequestOption, Map<String, String> headers,
-            String manufacturer) {
+                String manufacturer) {
             this.httpRequestUrl = httpRequestUrl;
             this.httpRequestOption = httpRequestOption;
             this.headers = headers;
@@ -109,14 +115,17 @@ public class AiChatConfig {
          * The Method.
          */
         public final String method;
+
         /**
          * The Data type.
          */
         public final String dataType;
+
         /**
          * The Content type.
          */
         public final String contentType;
+
         /**
          * The Timeout.
          */
@@ -125,10 +134,10 @@ public class AiChatConfig {
         /**
          * Instantiates a new Http request option.
          *
-         * @param method      the method
-         * @param dataType    the data type
+         * @param method the method
+         * @param dataType the data type
          * @param contentType the content type
-         * @param timeout     the timeout
+         * @param timeout the timeout
          */
         public HttpRequestOption(String method, String dataType, String contentType, int timeout) {
             this.method = method;

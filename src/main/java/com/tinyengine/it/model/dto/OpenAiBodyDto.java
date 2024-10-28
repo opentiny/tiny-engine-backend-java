@@ -1,9 +1,9 @@
+
 package com.tinyengine.it.model.dto;
 
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The type Open AI body dto.

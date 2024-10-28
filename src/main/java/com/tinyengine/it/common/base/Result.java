@@ -1,10 +1,15 @@
+
 package com.tinyengine.it.common.base;
+
+import static com.alibaba.druid.support.json.JSONUtils.toJSONString;
 
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.IBaseError;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -12,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.alibaba.druid.support.json.JSONUtils.toJSONString;
 
 /**
  * The type Result.
@@ -36,7 +39,7 @@ public class Result<T> {
     @Schema(name = "error", description = "失败对象")
     private Map<String, Object> error;
     @Schema(name = "err_msg", description = "失败信息")
-    private String err_msg;
+    private String errMsg;
 
     /**
      * Instantiates a new Result.
@@ -64,9 +67,9 @@ public class Result<T> {
         this(code, message, data);
         this.success = success;
         if (!success) {
-            this.err_msg = message;
-            this.error = Stream.of(new Object[][] {{"code", code}, {"message", message}})
-                .collect(Collectors.toMap(item -> (String)item[0], item -> item[1]));
+            this.errMsg = message;
+            this.error = Stream.of(new Object[][]{{"code", code}, {"message", message}})
+                    .collect(Collectors.toMap(item -> (String) item[0], item -> item[1]));
         }
     }
 
@@ -77,7 +80,7 @@ public class Result<T> {
      * @return the result
      */
     public static <T> Result<T> success() {
-        return success((T)null);
+        return success((T) null);
     }
 
     /**
@@ -201,4 +204,3 @@ public class Result<T> {
         return toJSONString(this);
     }
 }
-

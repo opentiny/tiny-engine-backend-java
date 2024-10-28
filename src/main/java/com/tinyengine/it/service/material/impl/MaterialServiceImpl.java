@@ -1,9 +1,12 @@
+
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.mapper.MaterialMapper;
 import com.tinyengine.it.model.entity.Material;
 import com.tinyengine.it.service.material.MaterialService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ public class MaterialServiceImpl implements MaterialService {
 
     /**
      * 查询表t_material所有数据
+     *
+     * @return Material
      */
     @Override
     public List<Material> queryAllMaterial() {

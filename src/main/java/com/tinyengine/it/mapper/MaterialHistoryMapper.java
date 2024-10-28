@@ -1,8 +1,10 @@
+
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.MaterialHistory;
+
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -30,8 +32,9 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
      * @param id the id
      * @return the material history
      */
-    @Results({@Result(property = "id", column = "id"), @Result(property = "components", column = "id",
-        many = @Many(select = "findUserComponentsByMaterialHistoryId"))})
+    @Results({@Result(property = "id", column = "id"),
+            @Result(property = "components", column = "id",
+                    many = @Many(select = "findUserComponentsByMaterialHistoryId"))})
     @Select("SELECT * FROM t_material_history WHERE id = #{id}")
     MaterialHistory queryMaterialHistoryById(@Param("id") Integer id);
 
@@ -41,8 +44,8 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
      * @param id the id
      * @return the list
      */
-    @Select(
-        "SELECT C.* FROM t_component C " + "JOIN r_material_history_component MHC ON C.id = MHC.`component_id` " + "WHERE MHC.`material_history_id` = #{id}")
+    @Select("SELECT C.* FROM t_component C " + "JOIN r_material_history_component MHC ON C.id = MHC.`component_id` "
+            + "WHERE MHC.`material_history_id` = #{id}")
     List<Component> findUserComponentsByMaterialHistoryId(@Param("id") Integer id);
 
     /**

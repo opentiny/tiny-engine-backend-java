@@ -5,6 +5,12 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
+
+/**
+ * SchemaMeta
+ *
+ * @since 2024-10-20
+ */
 @Getter
 @Setter
 public class SchemaMeta {
@@ -13,13 +19,11 @@ public class SchemaMeta {
     private String creator;
     private String description;
     private String name;
-    private String git_group;
-    private List<Map<String,Object>> global_state;
-    private String project_name;
+    private String gitGroup;
+    private List<Map<String, Object>> globalState;
+    private String projectName;
     private Integer tenant;
-    private String gmt_create;
-    private String gmt_modified;
+    private String gmtCreate;
+    private String gmtModified;
     private String isDemo;
-
-
 }

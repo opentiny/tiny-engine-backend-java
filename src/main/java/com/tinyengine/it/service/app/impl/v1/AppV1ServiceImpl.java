@@ -1,6 +1,7 @@
 package com.tinyengine.it.service.app.impl.v1;
 
-import cn.hutool.core.bean.BeanUtil;
+import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
+
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.utils.Schema;
 import com.tinyengine.it.common.utils.Utils;
@@ -13,29 +14,43 @@ import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
 import com.tinyengine.it.mapper.PageMapper;
-import com.tinyengine.it.model.dto.*;
+import com.tinyengine.it.model.dto.BlockHistoryDto;
+import com.tinyengine.it.model.dto.BlockVersionDto;
+import com.tinyengine.it.model.dto.ComponentTree;
+import com.tinyengine.it.model.dto.I18nEntryDto;
+import com.tinyengine.it.model.dto.MaterialHistoryMsg;
+import com.tinyengine.it.model.dto.MetaDto;
+import com.tinyengine.it.model.dto.SchemaDataSource;
+import com.tinyengine.it.model.dto.SchemaDto;
+import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.SchemaMeta;
+import com.tinyengine.it.model.dto.SchemaUtils;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.Datasource;
-import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.model.entity.Page;
 import com.tinyengine.it.model.entity.Platform;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.v1.AppV1Service;
 import com.tinyengine.it.service.platform.PlatformService;
+
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
 /**
  * The type App v 1 service.
@@ -50,46 +65,55 @@ public class AppV1ServiceImpl implements AppV1Service {
      */
     @Autowired
     private AppMapper appMapper;
+
     /**
      * The 18 n entry mapper.
      */
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+
     /**
      * The 18 n entry service.
      */
     @Autowired
     private I18nEntryService i18nEntryService;
+
     /**
      * The App extension mapper.
      */
     @Autowired
     private AppExtensionMapper appExtensionMapper;
+
     /**
      * The Datasource mapper.
      */
     @Autowired
     private DatasourceMapper datasourceMapper;
+
     /**
      * The Page mapper.
      */
     @Autowired
     private PageMapper pageMapper;
+
     /**
      * The Block history mapper.
      */
     @Autowired
     private BlockHistoryMapper blockHistoryMapper;
+
     /**
      * The Block group mapper.
      */
     @Autowired
     private BlockGroupMapper blockGroupMapper;
+
     /**
      * The Material history mapper.
      */
     @Autowired
     private MaterialHistoryMapper materialHistoryMapper;
+
     /**
      * The Platform service.
      */
@@ -160,19 +184,19 @@ public class AppV1ServiceImpl implements AppV1Service {
         SchemaI18n mergedEntries = new SchemaI18n();
 
         // 初始化合并后的语言映射
-        mergedEntries.setEn_US(new HashMap<>());
-        mergedEntries.setZh_CN(new HashMap<>());
+        mergedEntries.setEnUS(new HashMap<>());
+        mergedEntries.setZhCN(new HashMap<>());
 
         // 合并 appEntries
         if (appEntries != null) {
-            mergeMaps(appEntries.getEn_US(), mergedEntries.getEn_US());
-            mergeMaps(appEntries.getZh_CN(), mergedEntries.getZh_CN());
+            mergeMaps(appEntries.getEnUS(), mergedEntries.getEnUS());
+            mergeMaps(appEntries.getZhCN(), mergedEntries.getZhCN());
         }
 
         // 合并 blockEntries
         if (blockEntries != null) {
-            mergeMaps(blockEntries.getEn_US(), mergedEntries.getEn_US());
-            mergeMaps(blockEntries.getZh_CN(), mergedEntries.getZh_CN());
+            mergeMaps(blockEntries.getEnUS(), mergedEntries.getEnUS());
+            mergeMaps(blockEntries.getZhCN(), mergedEntries.getZhCN());
         }
 
         return mergedEntries;
@@ -187,10 +211,6 @@ public class AppV1ServiceImpl implements AppV1Service {
         }
     }
 
-
-    /**
-     * 获取元数据
-     */
     private SchemaMeta getSchemaMeta() {
         Map<String, Object> appData = Utils.convert(this.metaDto.getApp());
         Map<String, Object> config = new HashMap<>();
@@ -211,12 +231,12 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @return the meta
      */
     public MetaDto setMeta(Integer id) {
-
         App app = appMapper.queryAppById(id);
-        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
 
         Platform platform = platformService.queryPlatformById(app.getPlatformId());
+
         // 当前版本暂无设计器数据
+        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
         if (platform == null) {
             materialhistoryMsg.setMaterialHistoryId(1);
         } else {
@@ -230,9 +250,9 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Page> page = pageMapper.queryPageByApp(app.getId());
         metaDto.setPages(page);
 
-        I18nEntry i18nEntry = new I18nEntry();
-        i18nEntry.setHost(app.getId());
-        i18nEntry.setHostType("app");
+        // 无用的代码 I18nEntry i18nEntry = new I18nEntry();
+        // 无用的代码 i18nEntry.setHost(app.getId());
+        // 无用的代码 i18nEntry.setHostType("app");
         List<I18nEntryDto> i18n = i18nEntryMapper.findI18nEntriesByHostandHostType(app.getId(), "app");
         metaDto.setI18n(i18n);
 
@@ -257,10 +277,11 @@ public class AppV1ServiceImpl implements AppV1Service {
     }
 
     /**
-     * 获取区块历史信息
+     * 查询区块历史信息
      *
-     * @param app 应用信息 materialhistoryMsg 物料历史信息
-     * @return {Promise<any>} 区块历史信息
+     * @param app                应用信息 materialhistoryMsg 物料历史信息
+     * @param materialhistoryMsg materialhistoryMsg
+     * @return 区块历史信息
      */
     private List<BlockHistory> getBlockHistory(App app, MaterialHistoryMsg materialhistoryMsg) {
         Boolean isUnpkg = materialhistoryMsg.getIsUnpkg();
@@ -278,9 +299,7 @@ public class AppV1ServiceImpl implements AppV1Service {
              */
             Integer historyId = 0;
             blocksVersionCtl = getAppBlocksVersionCtl(app, historyId);
-
         } else {
-
             blocksVersionCtl = getAppBlocksVersionCtl(app, materialHistoryId);
         }
         if (blocksVersionCtl.isEmpty()) {
@@ -317,7 +336,7 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @return the block history id by semver
      */
     public List<Integer> getBlockHistoryIdBySemver(List<BlockVersionDto> blocksVersionCtl) {
-        // 获取 区块id-区块历史记录id-区块历史记录版本 集合  [{blockId:995,historyId:1145,version: '1.0.4'}]
+        // 获取 区块id-区块历史记录id-区块历史记录版本 集合 [{blockId:995,historyId:1145,version: '1.0.4'}]
         List<Integer> blockId = blocksVersionCtl.stream().map(BlockVersionDto::getBlock).collect(Collectors.toList());
         List<BlockHistoryDto> blockHistory = blockHistoryMapper.queryMapByIds(blockId);
         // 将 集合序列化为 综合信息映射(区块id 为key 的map, map 中保存了 k-v 为 区块版本-区块历史id的map 和 版本数组)
@@ -350,9 +369,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             } else {
                 targetVersion = versions.get(versions.size() - 1);
             }
-            Map<String, Object> historyMap = new HashMap<>();
-            historyMap = (Map<String, Object>) keyMap.get("historyMap");
-            Integer historyId = (Integer) historyMap.get(targetVersion);
+            Integer historyId = (Integer) ((Map<String, Object>) keyMap.get("historyMap")).get(targetVersion);
             historiesId.add(historyId);
         }
         return historiesId;
@@ -364,7 +381,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         SchemaI18n blockEntries = new SchemaI18n();
         // 提取区块构建产物中的国际化词条
         for (BlockHistory blockHistory : blockHistoryList) {
-            blockEntries = mergeEntries(BeanUtil.mapToBean(blockHistory.getI18n(), SchemaI18n.class, true), blockEntries);
+            SchemaI18n mappedToBean = BeanUtil.mapToBean(blockHistory.getI18n(), SchemaI18n.class, true);
+            blockEntries = mergeEntries(mappedToBean, blockEntries);
         }
         // 序列化国际化词条
         SchemaI18n appEntries = i18nEntryService.formatEntriesList(i18n);
@@ -435,9 +453,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Map<String, Object>> schemas = new ArrayList<>();
         for (BlockHistory blockHistory : blockHistories) {
             String path = blockHistory.getPath();
-            String version = blockHistory.getVersion();
             Map<String, Object> content = blockHistory.getContent();
-
             if (content == null) {
                 throw new IllegalArgumentException("Each block history record must have content");
             }
@@ -450,7 +466,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             schema.put("dependencies", dependencies);
             schema.put("path", path != null ? path : "");
             schema.put("destructuring", false);
-            schema.put("version", version != null ? version : "");
+            schema.put("version", blockHistory.getVersion() != null ? blockHistory.getVersion() : "");
 
             schemas.add(schema);
         }
@@ -478,7 +494,6 @@ public class AppV1ServiceImpl implements AppV1Service {
             schema.put("destructuring", destructuring != null ? destructuring : false);
             schema.put("version", version != null ? version : "");
             schemas.add(schema);
-
         }
         return schemas;
     }
@@ -525,32 +540,39 @@ public class AppV1ServiceImpl implements AppV1Service {
      */
     public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine)
             throws ServiceException {
-        // 获取 toLine 和 toHump 方法
-        Function<String, String> format = isToLine ? Utils::toLine : Utils::toHump;
         // 将 fields 转换为 HashMap
         Map<String, Object> fieldsMap = new HashMap<>();
         for (Object field : fields) {
             if (field instanceof String) {
                 fieldsMap.put((String) field, true);
-            } else if (field instanceof IFieldItem) {
+            }
+            if (field instanceof IFieldItem) {
                 IFieldItem fieldItem = (IFieldItem) field;
                 fieldsMap.put(fieldItem.getKey(), fieldItem.getValue());
             }
         }
 
+        // 获取 toLine 和 toHump 方法
+        Function<String, String> format = isToLine ? Utils::toLine : Utils::toHump;
         Map<String, Object> res = new HashMap<>();
         for (Map.Entry<String, Object> entry : data.entrySet()) {
             String key = entry.getKey();
             Object val = fieldsMap.get(key);
             if (val != null) {
-                String convert = (val.equals(true)) ? format.apply(key) : (String) val;
+                String convert = isTrue(val) ? format.apply(key) : String.valueOf(val);
                 res.put(convert, entry.getValue());
             } else {
                 res.put(key, entry.getValue());
             }
         }
-
         return res;
+    }
+
+    private static boolean isTrue(Object value) {
+        if (value == null) {
+            return false;
+        }
+        return "true".equals(value.toString());
     }
 
     /**

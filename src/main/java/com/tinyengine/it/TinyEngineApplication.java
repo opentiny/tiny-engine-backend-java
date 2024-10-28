@@ -1,3 +1,4 @@
+
 package com.tinyengine.it;
 
 import org.mybatis.spring.annotation.MapperScan;
