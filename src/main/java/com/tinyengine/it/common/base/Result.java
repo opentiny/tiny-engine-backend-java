@@ -44,9 +44,9 @@ public class Result<T> {
     /**
      * Instantiates a new Result.
      *
-     * @param code the code
+     * @param code    the code
      * @param message the message
-     * @param data the data
+     * @param data    the data
      */
     protected Result(String code, String message, T data) {
         this.code = code;
@@ -58,9 +58,9 @@ public class Result<T> {
     /**
      * Instantiates a new Result.
      *
-     * @param code the code
+     * @param code    the code
      * @param message the message
-     * @param data the data
+     * @param data    the data
      * @param success the success
      */
     protected Result(String code, String message, T data, boolean success) {
@@ -86,7 +86,7 @@ public class Result<T> {
     /**
      * 成功返回结果
      *
-     * @param <T> the type parameter
+     * @param <T>  the type parameter
      * @param data 获取的数据
      * @return result
      */
@@ -97,7 +97,7 @@ public class Result<T> {
     /**
      * 成功返回list结果
      *
-     * @param <T> the type parameter
+     * @param <T>  the type parameter
      * @param list 获取的数据
      * @return result
      */
@@ -108,8 +108,8 @@ public class Result<T> {
     /**
      * 成功返回结果
      *
-     * @param <T> the type parameter
-     * @param data 获取的数据
+     * @param <T>     the type parameter
+     * @param data    获取的数据
      * @param message 提示信息
      * @return the result
      */
@@ -120,7 +120,7 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T> the type parameter
+     * @param <T>   the type parameter
      * @param error 错误码
      * @return the result
      */
@@ -132,8 +132,8 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T> the type parameter
-     * @param error 错误码
+     * @param <T>     the type parameter
+     * @param error   错误码
      * @param message 错误信息
      * @return the result
      */
@@ -145,9 +145,9 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T> the type parameter
+     * @param <T>       the type parameter
      * @param errorCode 错误码
-     * @param message 错误信息
+     * @param message   错误信息
      * @return the result
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -158,7 +158,7 @@ public class Result<T> {
     /**
      * 失败返回结果
      *
-     * @param <T> the type parameter
+     * @param <T>     the type parameter
      * @param message 提示信息
      * @return the result
      */
@@ -191,7 +191,7 @@ public class Result<T> {
     /**
      * 参数验证失败返回结果
      *
-     * @param <T> the type parameter
+     * @param <T>     the type parameter
      * @param message 提示信息
      * @return the result
      */

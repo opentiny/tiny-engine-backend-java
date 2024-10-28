@@ -4,7 +4,6 @@ package com.tinyengine.it.model.dto;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The type Open AI body dto.
@@ -19,7 +18,7 @@ public class OpenAiBodyDto {
     /**
      * Instantiates a new Open AI body dto.
      *
-     * @param model the model
+     * @param model    the model
      * @param messages the messages
      */
     public OpenAiBodyDto(String model, List<AiMessages> messages) {

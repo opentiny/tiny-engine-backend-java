@@ -1,6 +1,5 @@
 package com.tinyengine.it.service.app.impl.v1;
 
-import cn.hutool.core.bean.BeanUtil;
 import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
 import com.tinyengine.it.common.exception.ServiceException;
@@ -15,14 +14,23 @@ import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
 import com.tinyengine.it.mapper.PageMapper;
-import com.tinyengine.it.model.dto.*;
+import com.tinyengine.it.model.dto.BlockHistoryDto;
+import com.tinyengine.it.model.dto.BlockVersionDto;
+import com.tinyengine.it.model.dto.ComponentTree;
+import com.tinyengine.it.model.dto.I18nEntryDto;
+import com.tinyengine.it.model.dto.MaterialHistoryMsg;
+import com.tinyengine.it.model.dto.MetaDto;
+import com.tinyengine.it.model.dto.SchemaDataSource;
+import com.tinyengine.it.model.dto.SchemaDto;
+import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.SchemaMeta;
+import com.tinyengine.it.model.dto.SchemaUtils;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.Datasource;
-import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.model.entity.Page;
 import com.tinyengine.it.model.entity.Platform;
@@ -30,16 +38,19 @@ import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.v1.AppV1Service;
 import com.tinyengine.it.service.platform.PlatformService;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
 /**
  * The type App v 1 service.
@@ -225,11 +236,11 @@ public class AppV1ServiceImpl implements AppV1Service {
      */
     public MetaDto setMeta(Integer id) {
         App app = appMapper.queryAppById(id);
-        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
 
         Platform platform = platformService.queryPlatformById(app.getPlatformId());
 
         // 当前版本暂无设计器数据
+        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
         if (platform == null) {
             materialhistoryMsg.setMaterialHistoryId(1);
         } else {
@@ -362,9 +373,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             } else {
                 targetVersion = versions.get(versions.size() - 1);
             }
-            Map<String, Object> historyMap = new HashMap<>();
-            historyMap = (Map<String, Object>) keyMap.get("historyMap");
-            Integer historyId = (Integer) historyMap.get(targetVersion);
+            Integer historyId = (Integer) ((Map<String, Object>) keyMap.get("historyMap")).get(targetVersion);
             historiesId.add(historyId);
         }
         return historiesId;
@@ -539,7 +548,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         for (Object field : fields) {
             if (field instanceof String) {
                 fieldsMap.put((String) field, true);
-            } else if (field instanceof IFieldItem) {
+            }
+            if (field instanceof IFieldItem) {
                 IFieldItem fieldItem = (IFieldItem) field;
                 fieldsMap.put(fieldItem.getKey(), fieldItem.getValue());
             }
@@ -552,7 +562,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             String key = entry.getKey();
             Object val = fieldsMap.get(key);
             if (val != null) {
-                String convert = isTrue(val) ? format.apply(key) : (String) val;
+                String convert = isTrue(val) ? format.apply(key) : String.valueOf(val);
                 res.put(convert, entry.getValue());
             } else {
                 res.put(key, entry.getValue());

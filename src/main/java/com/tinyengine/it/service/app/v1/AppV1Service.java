@@ -5,8 +5,6 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.model.dto.SchemaDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 
-import java.util.Map;
-
 /**
  * The interface App v 1 service.
  *
@@ -25,10 +23,9 @@ public interface AppV1Service {
     /**
      * Merge entries map.
      *
-     * @param appEntries the app entries
+     * @param appEntries   the app entries
      * @param blockEntries the block entries
      * @return the map
      */
     SchemaI18n mergeEntries(SchemaI18n appEntries, SchemaI18n blockEntries);
-
 }

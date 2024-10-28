@@ -6,7 +6,6 @@ import com.tinyengine.it.model.entity.I18nLang;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The type 18 n entry list result.
