@@ -137,8 +137,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
         // 格式化词条列表
         SchemaI18n messages = formatEntriesList(i18nEntriesList);
-        List<I18nLang> i18nLangsListTemp =
-                i18nLangsList.stream().map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
+        List<I18nLang> i18nLangsListTemp =  i18nLangsList.stream()
+                .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
                         .collect(Collectors.toList());
         I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
         i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);

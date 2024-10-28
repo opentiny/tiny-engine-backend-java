@@ -14,7 +14,14 @@ import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.mapper.PageMapper;
-import com.tinyengine.it.model.dto.*;
+import com.tinyengine.it.model.dto.I18nEntryDto;
+import com.tinyengine.it.model.dto.NodeData;
+import com.tinyengine.it.model.dto.PreviewDto;
+import com.tinyengine.it.model.dto.PreviewParam;
+import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.SchemaUtils;
+import com.tinyengine.it.model.dto.TreeNodeCollection;
+import com.tinyengine.it.model.dto.TreeNodeDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.Block;
@@ -35,11 +42,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -637,7 +641,7 @@ public class PageServiceImpl implements PageService {
         List<Integer> childrenId = getChildrenId(pids);
         // 收集 id depth 信息
         List<NodeData> dps =
-            childrenId.stream().map(id -> new NodeData(id, level)).collect(Collectors.toList());
+                childrenId.stream().map(id -> new NodeData(id, level)).collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
         collection.getRange().addAll(childrenId);
         collection.getData().addAll(dps);
@@ -687,7 +691,7 @@ public class PageServiceImpl implements PageService {
         // 拼装国际化词条
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
         SchemaI18n i18n =
-            appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
+                appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
 
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);

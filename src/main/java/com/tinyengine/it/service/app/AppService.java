@@ -10,7 +10,6 @@ import com.tinyengine.it.model.entity.App;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The interface App service.
@@ -69,8 +68,8 @@ public interface AppService {
      * 序列化国际化词条
      *
      * @param i18nEntries 国际化词条标准请求返回数据
-     * @param userdIn 国际化词条从属单元 （应用或区块）
-     * @param id 应用id或区块id
+     * @param userdIn     国际化词条从属单元 （应用或区块）
+     * @param id          应用id或区块id
      * @return the map
      */
     SchemaI18n formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn, Integer id);
