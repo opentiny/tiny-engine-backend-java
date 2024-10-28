@@ -741,7 +741,7 @@ public class Enums {
         /**
          * Semi public e public.
          */
-        SemiPublic(2);
+        SEMIPUBLIC(2);
 
         private final int value;
 

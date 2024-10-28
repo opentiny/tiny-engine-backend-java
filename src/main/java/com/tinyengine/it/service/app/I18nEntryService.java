@@ -7,6 +7,7 @@ import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.I18nEntryListResult;
 import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
 import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.I18nEntry;
 
 import org.apache.ibatis.annotations.Param;
@@ -58,7 +59,7 @@ public interface I18nEntryService {
      * @param i18nEntriesList the 18 n entries list
      * @return map
      */
-    Map<String, Map<String, String>> formatEntriesList(List<I18nEntryDto> i18nEntriesList);
+    SchemaI18n formatEntriesList(List<I18nEntryDto> i18nEntriesList);
 
     /**
      * 创建多词条国际化
