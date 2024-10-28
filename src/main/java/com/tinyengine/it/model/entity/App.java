@@ -63,8 +63,7 @@ public class App extends BaseEntity {
     private Integer homePage;
 
     @Schema(name = "css", description = "*设计预留字段*")
-    @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String, Object> css;
+    private String css;
 
     @Schema(name = "config", description = "*设计预留字段*")
     @TableField(typeHandler = MapTypeHandler.class)

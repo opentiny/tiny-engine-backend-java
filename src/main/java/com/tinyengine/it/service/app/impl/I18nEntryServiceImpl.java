@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.app.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -125,7 +127,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             return null;
         }
         // 格式化词条列表
-        Map<String, Map<String, String>> messages = formatEntriesList(i18nEntriesList);
+        SchemaI18n messages = formatEntriesList(i18nEntriesList);
         List<I18nLang> i18nLangsListTemp =
             i18nLangsList.stream().map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
                 .collect(Collectors.toList());
@@ -157,7 +159,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @SystemServiceLog(description = "formatEntriesList 国际化词条实现类里获取格式化词条列表")
     @Override
-    public Map<String, Map<String, String>> formatEntriesList(List<I18nEntryDto> i18nEntriesList) {
+    public SchemaI18n formatEntriesList(List<I18nEntryDto> i18nEntriesList) {
         // 格式化词条列表
         Map<String, Map<String, String>> messages = new HashMap<>();
         for (I18nEntryDto i18nEntries : i18nEntriesList) {
@@ -169,7 +171,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             // 现在可以将键值对存入 messages[lang] 对应的 map 中
             messages.get(lang).put(key, content);
         }
-        return messages;
+        return BeanUtil.mapToBean(messages,SchemaI18n.class,true);
     }
 
     /**
