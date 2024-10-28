@@ -14,14 +14,14 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class Collection {
+public class RangeData {
     private List<Object> range;
     private List<Object> data;
 
     /**
      * Instantiates a new Collection.
      */
-    public Collection() {
+    public RangeData() {
         this.range = new ArrayList<>();
         this.data = new ArrayList<>();
     }

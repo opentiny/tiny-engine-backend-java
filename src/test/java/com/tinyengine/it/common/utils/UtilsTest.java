@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * utils Test
+ *
+ * @since 2024-10-26
+ */
 class UtilsTest {
     @Test
     void removeDuplicates() {

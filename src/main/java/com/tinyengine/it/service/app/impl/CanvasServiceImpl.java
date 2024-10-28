@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
@@ -40,7 +39,7 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = page.getOccupier().getId();
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
+                int arg = Enums.CanvasEditorState.OCCUPY.getValue().equals(state) ? user.getId() : null;
                 Page updatePage = new Page();
                 updatePage.setId(id);
                 updatePage.setOccupierBy(String.valueOf(arg));
@@ -54,7 +53,7 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = Integer.parseInt(block.getOccupierBy());
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = state == Enums.CanvasEditorState.OCCUPY.getValue() ? user.getId() : null;
+                int arg = Enums.CanvasEditorState.OCCUPY.getValue().equals(state) ? user.getId() : null;
                 Block updateBlock = new Block();
                 updateBlock.setId(id);
                 updateBlock.setOccupierBy(String.valueOf(arg));

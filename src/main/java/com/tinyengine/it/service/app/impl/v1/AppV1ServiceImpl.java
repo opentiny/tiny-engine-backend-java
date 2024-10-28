@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.service.app.impl.v1;
 
 import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
@@ -34,6 +33,7 @@ import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.v1.AppV1Service;
 import com.tinyengine.it.service.platform.PlatformService;
 
+import cn.hutool.core.util.BooleanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,10 +159,8 @@ public class AppV1ServiceImpl implements AppV1Service {
 
     @SystemServiceLog(description = "合并数据实现类")
     @Override
-    public Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries,
-            Map<String, Map<String, String>> blockEntries) {
+    public Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries, Map<String, Map<String, String>> blockEntries) {
         // 直接将 blockEntries 赋值给 res
-
         if (appEntries == null || blockEntries == null) {
             return (appEntries != null) ? appEntries : blockEntries;
         }
@@ -209,10 +207,10 @@ public class AppV1ServiceImpl implements AppV1Service {
      */
     public MetaDto setMeta(Integer id) {
         App app = appMapper.queryAppById(id);
-        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
-
         Platform platform = platformService.queryPlatformById(app.getPlatformId());
+
         // 当前版本暂无设计器数据
+        MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
         if (platform == null) {
             materialhistoryMsg.setMaterialHistoryId(1);
         } else {
@@ -226,9 +224,9 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Page> page = pageMapper.queryPageByApp(app.getId());
         metaDto.setPages(page);
 
-        I18nEntry i18nEntry = new I18nEntry();
-        i18nEntry.setHost(app.getId());
-        i18nEntry.setHostType("app");
+        // 无用的代码 I18nEntry i18nEntry = new I18nEntry();
+        // 无用的代码 i18nEntry.setHost(app.getId());
+        // 无用的代码 i18nEntry.setHostType("app");
         List<I18nEntryDto> i18n = i18nEntryMapper.findI18nEntriesByHostandHostType(app.getId(), "app");
         metaDto.setI18n(i18n);
 
@@ -242,8 +240,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<AppExtension> appExtensionList = appExtensionMapper.queryAppExtensionByCondition(appExtension);
         metaDto.setExtension(appExtensionList);
 
-        MaterialHistory materialHistory = materialHistoryMapper
-                .queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
+        MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
         metaDto.setMaterialHistory(materialHistory);
 
         List<BlockHistory> blockHistory = getBlockHistory(app, materialhistoryMsg);
@@ -255,7 +252,7 @@ public class AppV1ServiceImpl implements AppV1Service {
     /**
      * 查询区块历史信息
      *
-     * @param app 应用信息 materialhistoryMsg 物料历史信息
+     * @param app                应用信息 materialhistoryMsg 物料历史信息
      * @param materialhistoryMsg materialhistoryMsg
      * @return 区块历史信息
      */
@@ -291,7 +288,7 @@ public class AppV1ServiceImpl implements AppV1Service {
     /**
      * 获取应用关联的区块及版本信息
      *
-     * @param app appInfo 应用信息
+     * @param app               appInfo 应用信息
      * @param materialHistoryId materialHistoryId
      * @return {Promise<any>} 应用关联的区块版本控制信息
      */
@@ -433,9 +430,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Map<String, Object>> schemas = new ArrayList<>();
         for (BlockHistory blockHistory : blockHistories) {
             String path = blockHistory.getPath();
-            String version = blockHistory.getVersion();
             Map<String, Object> content = blockHistory.getContent();
-
             if (content == null) {
                 throw new IllegalArgumentException("Each block history record must have content");
             }
@@ -448,7 +443,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             schema.put("dependencies", dependencies);
             schema.put("path", path != null ? path : "");
             schema.put("destructuring", false);
-            schema.put("version", version != null ? version : "");
+            schema.put("version", blockHistory.getVersion() != null ? blockHistory.getVersion() : "");
 
             schemas.add(schema);
         }
@@ -517,16 +512,13 @@ public class AppV1ServiceImpl implements AppV1Service {
     /**
      * Format data fields map.
      *
-     * @param data the data
-     * @param fields the fields
+     * @param data     the data
+     * @param fields   the fields
      * @param isToLine the is to line
      * @return the map
      * @throws ServiceException the service exception
      */
-    public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine)
-            throws ServiceException {
-        // 获取 toLine 和 toHump 方法
-        Function<String, String> format = isToLine ? Utils::toLine : Utils::toHump;
+    public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine) throws ServiceException {
         // 将 fields 转换为 HashMap
         Map<String, Object> fieldsMap = new HashMap<>();
         for (Object field : fields) {
@@ -539,19 +531,27 @@ public class AppV1ServiceImpl implements AppV1Service {
             }
         }
 
+        // 获取 toLine 和 toHump 方法
+        Function<String, String> format = isToLine ? Utils::toLine : Utils::toHump;
         Map<String, Object> res = new HashMap<>();
         for (Map.Entry<String, Object> entry : data.entrySet()) {
             String key = entry.getKey();
             Object val = fieldsMap.get(key);
             if (val != null) {
-                String convert = (val.equals(true)) ? format.apply(key) : (String) val;
+                String convert = isTrue(val) ? format.apply(key) : String.valueOf(val);
                 res.put(convert, entry.getValue());
             } else {
                 res.put(key, entry.getValue());
             }
         }
-
         return res;
+    }
+
+    private static boolean isTrue(Object value) {
+        if (value == null) {
+            return false;
+        }
+        return value.toString().equals("true");
     }
 
     /**

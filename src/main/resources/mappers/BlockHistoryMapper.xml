@@ -268,7 +268,7 @@
         <include refid="Base_Column_List"/>
         FROM t_block_history
         WHERE id IN
-        <foreach item="id" collection="blockHistoryIds" open="(" separator="," close=")">
+        <foreach item="id" rangeData="blockHistoryIds" open="(" separator="," close=")">
             #{id}
         </foreach>
     </select>

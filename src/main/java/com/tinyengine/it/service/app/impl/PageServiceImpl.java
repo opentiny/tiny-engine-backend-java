@@ -14,7 +14,7 @@ import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.mapper.PageMapper;
-import com.tinyengine.it.model.dto.Collection;
+import com.tinyengine.it.model.dto.RangeData;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
@@ -366,8 +366,8 @@ public class PageServiceImpl implements PageService {
             return Result.success(pagesResult);
         }
         // 当文件夹改变父级且没有平级移动时
-        Collection collection = getUpdateTree(page.getId(), page.getDepth());
-        if (collection == null) {
+        RangeData rangeData = getUpdateTree(page.getId(), page.getDepth());
+        if (rangeData == null) {
             return checkUpdate(page);
         }
 
@@ -614,15 +614,15 @@ public class PageServiceImpl implements PageService {
      * @param target the target
      * @return update tree
      */
-    public Collection getUpdateTree(int pid, int target) {
-        Collection collection = new Collection();
+    public RangeData getUpdateTree(int pid, int target) {
+        RangeData rangeData = new RangeData();
         Map<String, Object> param = new HashMap<>();
-        param.put("collection", collection);
+        param.put("collection", rangeData);
         param.put("pids", Collections.singletonList(pid));
         param.put("level", target + 1);
-        Collection getTreeNodesResult = getTreeNodes(param);
+        RangeData getTreeNodesResult = getTreeNodes(param);
         if (getTreeNodesResult.getRange().isEmpty()) {
-            return null;
+            return rangeData;
         }
         return getTreeNodesResult;
     }
@@ -633,9 +633,9 @@ public class PageServiceImpl implements PageService {
      * @param map the map
      * @return the tree nodes
      */
-    public Collection getTreeNodes(Map<String, Object> map) {
+    public RangeData getTreeNodes(Map<String, Object> map) {
         int level = (int) map.get("level");
-        Collection collection = new Collection();
+        RangeData rangeData = new RangeData();
         Object obj = map.get("pids");
         List<Integer> pids = new ArrayList<>();
 
@@ -645,7 +645,7 @@ public class PageServiceImpl implements PageService {
         }
         // 没有子节点，返回收集的节点信息
         if (pids.isEmpty()) {
-            return collection;
+            return rangeData;
         }
         // 当前的节点深度超过 配置的最大深度，返回失败信息
         if (level > 5) {
@@ -658,14 +658,14 @@ public class PageServiceImpl implements PageService {
                 .map(id -> new AbstractMap.SimpleEntry<>(id, level))
                 .collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
-        collection.getRange().addAll(childrenId);
-        collection.getData().addAll(dps);
+        rangeData.getRange().addAll(childrenId);
+        rangeData.getData().addAll(dps);
 
         // 递归
         Map<String, Object> mapParam = new HashMap<>();
         mapParam.put("pids", childrenId);
         mapParam.put("level", level + 1);
-        mapParam.put("collection", collection);
+        mapParam.put("collection", rangeData);
 
         return getTreeNodes(mapParam);
     }

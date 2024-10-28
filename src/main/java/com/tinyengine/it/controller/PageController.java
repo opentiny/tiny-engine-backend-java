@@ -119,7 +119,8 @@ public class PageController {
      * @return result
      * @throws Exception the exception
      */
-    @Operation(summary = "修改页面", description = "修改页面", parameters = {@Parameter(name = "id", description = "页面主键id"),
+    @Operation(summary = "修改页面", description = "修改页面",
+            parameters = {@Parameter(name = "id", description = "页面主键id"),
             @Parameter(name = "param", description = "入参对象")}, responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
