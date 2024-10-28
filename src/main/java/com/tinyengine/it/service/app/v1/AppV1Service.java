@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app.v1;
 
 import com.tinyengine.it.common.exception.ServiceException;
@@ -22,11 +23,10 @@ public interface AppV1Service {
     /**
      * Merge entries map.
      *
-     * @param appEntries   the app entries
+     * @param appEntries the app entries
      * @param blockEntries the block entries
      * @return the map
      */
     Map<String, Map<String, String>> mergeEntries(Map<String, Map<String, String>> appEntries,
-        Map<String, Map<String, String>> blockEntries);
-
+            Map<String, Map<String, String>> blockEntries);
 }

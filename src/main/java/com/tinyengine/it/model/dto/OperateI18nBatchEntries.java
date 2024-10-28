@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.model.dto;
 
 import lombok.Data;
@@ -13,5 +14,5 @@ import java.util.List;
 public class OperateI18nBatchEntries {
     private List<Entry> entries;
     private String host;
-    private String host_type;
+    private String hostType;
 }

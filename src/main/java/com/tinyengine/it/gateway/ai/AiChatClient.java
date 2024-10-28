@@ -1,11 +1,17 @@
+
 package com.tinyengine.it.gateway.ai;
+
+import static com.tinyengine.it.common.exception.ExceptionEnum.CM322;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -51,8 +57,8 @@ public class AiChatClient {
         log.info("Request Option: " + httpRequestOption.method);
         log.info("Headers: " + configData.headers);
 
-        WebClient.RequestHeadersSpec<?> requestSpec =
-            webClient.method("POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET)
+        WebClient.RequestHeadersSpec<?> requestSpec = webClient
+                .method("POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET)
                 .uri(httpRequestUrl);
 
         for (Map.Entry<String, String> header : configData.headers.entrySet()) {
@@ -60,7 +66,7 @@ public class AiChatClient {
         }
 
         if ("POST".equalsIgnoreCase(httpRequestOption.method) && !openAiBodyDto.getMessages().isEmpty()) {
-            requestSpec = ((WebClient.RequestBodySpec)requestSpec).bodyValue(openAiBodyDto);
+            requestSpec = ((WebClient.RequestBodySpec) requestSpec).bodyValue(openAiBodyDto);
             // Add request body
         }
 
@@ -69,7 +75,7 @@ public class AiChatClient {
                 return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {
                 });
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                throw new ServiceException(CM322.getResultCode(), e.getMessage());
             }
         }).block(); // 等待结果
     }

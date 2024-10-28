@@ -1,9 +1,11 @@
+
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.dto.BlockHistoryDto;
 import com.tinyengine.it.model.dto.BlockVersionDto;
 import com.tinyengine.it.model.entity.BlockHistory;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -76,21 +78,24 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
      * @param ids the ids
      * @return the list
      */
-    @Select(
-        "<script>" + "SELECT A.ref_id AS blockId, A.id AS historyId, A.version " + "FROM t_block_history A " + "WHERE A.version IS NOT NULL " + "AND A.version != 'N/A' " + "AND A.ref_id IN " + "<foreach item='id' collection='ids' open='(' separator=',' close=')'>" + "#{id}" + "</foreach>" + "</script>")
+    @Select("<script>" + "SELECT A.ref_id AS blockId, A.id AS historyId, A.version " + "FROM t_block_history A "
+            + "WHERE A.version IS NOT NULL " + "AND A.version != 'N/A' " + "AND A.ref_id IN "
+            + "<foreach item='id' collection='ids' open='(' separator=',' close=')'>" + "#{id}" + "</foreach>"
+            + "</script>")
     List<BlockHistoryDto> queryMapByIds(@Param("ids") List<Integer> ids);
 
     /**
      * Query block and version list.
      *
-     * @param ids               the ids
+     * @param ids the ids
      * @param materialHistoryId the material history id
      * @return the list
      */
     @Select({"<script>", "SELECT B.ref_id AS block, B.version", "FROM `t_block_history` B",
-        "LEFT JOIN r_material_history_block M ON M.material_history_id = #{materialHistoryId}",
-        "WHERE B.id = M.block_history_id", "AND B.block_group_id IN",
-        "<foreach item='id' collection='ids' open='(' separator=',' close=')'>", "#{id}", "</foreach>", "</script>"})
+            "LEFT JOIN r_material_history_block M ON M.material_history_id = #{materialHistoryId}",
+            "WHERE B.id = M.block_history_id", "AND B.block_group_id IN",
+            "<foreach item='id' collection='ids' open='(' separator=',' close=')'>", "#{id}", "</foreach>",
+            "</script>"})
     List<BlockVersionDto> queryBlockAndVersion(@Param("ids") List<Integer> ids,
-        @Param("materialHistoryId") Integer materialHistoryId);
+            @Param("materialHistoryId") Integer materialHistoryId);
 }

@@ -1,9 +1,12 @@
+
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 查询表t_user所有数据
+     *
+     * @return User
      */
     @Override
     public List<User> queryAllUser() {

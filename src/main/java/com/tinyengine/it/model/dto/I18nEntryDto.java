@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.model.dto;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -6,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.model.entity.I18nLang;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -13,7 +15,6 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- *
  * </p>
  *
  * @author zhangjuncao
@@ -71,5 +72,4 @@ public class I18nEntryDto {
 
     @Schema(name = "lang", description = "更新人")
     private I18nLang lang;
-
 }

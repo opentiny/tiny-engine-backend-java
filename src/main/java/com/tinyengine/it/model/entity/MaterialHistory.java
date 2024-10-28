@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -5,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.HistoryEntity;
 import com.tinyengine.it.config.handler.MapTypeHandler;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -68,5 +70,4 @@ public class MaterialHistory extends HistoryEntity {
 
     @Schema(name = "components", description = "组件")
     private List<Component> components;
-
 }

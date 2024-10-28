@@ -1,3 +1,4 @@
+
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
@@ -7,7 +8,9 @@ import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageTemplateMapper;
 import com.tinyengine.it.model.entity.PageTemplate;
 import com.tinyengine.it.service.app.PageTemplateService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,9 @@ public class PageTemplateServiceImpl implements PageTemplateService {
 
     /**
      * 查询表page_template所有数据
+     *
+     * @return PageTemplate
+     * @throws ServiceException ServiceException
      */
     @Override
     @SystemServiceLog(description = "获取页面模版列表实现方法")
@@ -40,9 +46,9 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      *
      * @param id id
      * @return query result
+     * @throws ServiceException ServiceException
      */
     @Override
-
     @SystemServiceLog(description = "根据id获取页面模版详情实现方法")
     public Result<PageTemplate> queryPageTemplateById(@Param("id") Integer id) throws ServiceException {
         PageTemplate pageTemplate = pageTemplateMapper.queryPageTemplateById(id);
@@ -54,6 +60,7 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      *
      * @param pageTemplate pageTemplate
      * @return query result
+     * @throws ServiceException ServiceException
      */
     @Override
     @SystemServiceLog(description = "获取页面模版条件查询实现方法")
@@ -63,21 +70,22 @@ public class PageTemplateServiceImpl implements PageTemplateService {
 
     /**
      * 根据主键id列表删除表page_template数据
-     * @param ids
-     *  @return execute success data number
+     *
+     * @param ids id
+     * @return execute success data number
+     * @throws ServiceException ServiceException
      */
     @Override
     @SystemServiceLog(description = "批量删除页面模版实现方法")
     public Result<Integer> deletePageTemplateByIds(@Param("ids") List<Integer> ids) throws ServiceException {
-        if(ids.isEmpty()){
+        if (ids.isEmpty()) {
             return Result.failed(ExceptionEnum.CM002);
         }
         Integer result = pageTemplateMapper.deletePageTemplateByIds(ids);
-        if(result != ids.size()){
+        if (result != ids.size()) {
             return Result.failed(ExceptionEnum.CM001);
         }
         return Result.success(result);
-
     }
 
     /**
@@ -96,6 +104,7 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      *
      * @param pageTemplate pageTemplate
      * @return execute success data number
+     * @throws ServiceException ServiceException
      */
     @Override
     @SystemServiceLog(description = "创建页面模版实现方法")
@@ -103,11 +112,11 @@ public class PageTemplateServiceImpl implements PageTemplateService {
         PageTemplate queryPageTemplate = new PageTemplate();
         queryPageTemplate.setName(pageTemplate.getName());
         List<PageTemplate> pageTemplateResult = pageTemplateMapper.queryPageTemplateByCondition(queryPageTemplate);
-        if(!pageTemplateResult.isEmpty()){
+        if (!pageTemplateResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
         int result = pageTemplateMapper.createPageTemplate(pageTemplate);
-        if(result < 1){
+        if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
         PageTemplate templateResult = pageTemplateMapper.queryPageTemplateById(pageTemplate.getId());

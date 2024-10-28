@@ -1,10 +1,13 @@
+
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.BusinessCategoryMapper;
 import com.tinyengine.it.model.entity.BusinessCategory;
 import com.tinyengine.it.service.material.BusinessCategoryService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
 
     /**
      * 查询表t_business_category所有数据
+     *
+     * @return BusinessCategory
      */
     @Override
     public List<BusinessCategory> queryAllBusinessCategory() {
@@ -46,10 +51,11 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      *
      * @param businessCategory businessCategory
      * @return BusinessCategory
+     * @throws ServiceException ServiceException
      */
     @Override
     public List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory)
-        throws ServiceException {
+            throws ServiceException {
         return businessCategoryMapper.queryBusinessCategoryByCondition(businessCategory);
     }
 
