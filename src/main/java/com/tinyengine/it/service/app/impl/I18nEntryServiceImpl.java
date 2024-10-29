@@ -675,9 +675,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         Stream<Path> fileWalk = null;
         try {
             fileWalk = Files.walk(directory);
-            fileWalk.sorted((o1, o2) -> {
-                return -o1.compareTo(o2);
-            }).map(Path::toFile).forEach(File::delete);
+            fileWalk.sorted(Path::compareTo)
+                    .map(Path::toFile)
+                    .forEach(File::delete);
         } catch (IOException e) {
             log.error("delete file fail:{}", e.getMessage());
         } finally {

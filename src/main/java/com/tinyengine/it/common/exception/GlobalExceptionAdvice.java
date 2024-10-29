@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestControllerAdvice
 @Slf4j
-public class GlobalException {
+public class GlobalExceptionAdvice {
     /**
      * 服务异常
      *
