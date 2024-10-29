@@ -37,13 +37,13 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      */
     @Override
     @SystemServiceLog(description = "获取页面模版列表实现方法")
-    public Result<List<PageTemplate>> queryAllPageTemplate(String name,String type) throws ServiceException {
+    public Result<List<PageTemplate>> queryAllPageTemplate(String name, String type) throws ServiceException {
         List<PageTemplate> pageTemplates = new ArrayList<>();
-        if(name == null || name.isEmpty()){
+        if (name == null || name.isEmpty()) {
             pageTemplates = pageTemplateMapper.queryAllPageTemplate(type);
             return Result.success(pageTemplates);
         }
-         pageTemplates = pageTemplateMapper.queryPageTemplateByName(name,type);
+        pageTemplates = pageTemplateMapper.queryPageTemplateByName(name, type);
         return Result.success(pageTemplates);
     }
 
