@@ -42,10 +42,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -687,7 +684,13 @@ public class PageServiceImpl implements PageService {
         Map<String, List<SchemaUtils>> extensions = appV1ServiceImpl.getSchemaExtensions(extensionsList);
         List<SchemaUtils> utils = extensions.get("utils");
         // 拼装数据源
-        Map<String, Object> dataSource = (Map<String, Object>) block.getContent().get("dataSource");
+        Map<String, Object> dataSource = new HashMap<>();
+        Object dataSourceObj = block.getContent().get("dataSource");
+
+        if (dataSourceObj instanceof Map) {
+            dataSource = (Map<String, Object>) dataSourceObj;
+        }
+
         // 拼装国际化词条
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
         SchemaI18n i18n =

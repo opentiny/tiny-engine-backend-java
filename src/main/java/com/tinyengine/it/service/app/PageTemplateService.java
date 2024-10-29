@@ -19,7 +19,7 @@ public interface PageTemplateService {
      *
      * @return the list
      */
-    Result<List<PageTemplate>> queryAllPageTemplate();
+    Result<List<PageTemplate>> queryAllPageTemplate(String name, String type);
 
     /**
      * 根据主键id查询表page_template信息
