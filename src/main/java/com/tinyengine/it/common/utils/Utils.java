@@ -143,24 +143,6 @@ public class Utils {
         return objectMapper.convertValue(obj, Map.class);
     }
 
-    /**
-     * Version a gte version b boolean.
-     *
-     * @param a the a
-     * @param b the b
-     * @return the boolean
-     */
-    // 判断两个版本号或范围，谁更高、更广
-    public static boolean versionAGteVersionB(String a, String b) {
-        if (isSubset(b, a)) {
-            return true;
-        }
-        if (isSubset(a, b)) {
-            return false;
-        }
-        return compareMinVersion(a, b) >= 0;
-    }
-
     private static boolean isSubset(String a, String b) {
         // 这里只做了简单的匹配，实际应用可能需要复杂的解析
         return a.equals(b) || a.endsWith("x") && b.startsWith(a.substring(0, a.length() - 1));
