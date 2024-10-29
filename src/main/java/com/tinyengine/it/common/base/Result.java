@@ -6,6 +6,7 @@ import static com.alibaba.druid.support.json.JSONUtils.toJSONString;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.IBaseError;
 
+import cn.hutool.core.map.MapUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -68,8 +70,9 @@ public class Result<T> {
         this.success = success;
         if (!success) {
             this.errMsg = message;
-            this.error = Stream.of(new Object[][]{{"code", code}, {"message", message}})
-                    .collect(Collectors.toMap(item -> (String) item[0], item -> item[1]));
+            this.error = MapUtil.builder(new HashMap<String, Object>())
+                    .put("code", code)
+                    .put("message", message).build();
         }
     }
 
@@ -95,17 +98,6 @@ public class Result<T> {
     }
 
     /**
-     * 成功返回list结果
-     *
-     * @param <T>  the type parameter
-     * @param list 获取的数据
-     * @return result
-     */
-    public static <T> Result<List<T>> success(List<T> list) {
-        return new Result<>(ExceptionEnum.SUCCESS.getResultCode(), ExceptionEnum.SUCCESS.getResultMsg(), list);
-    }
-
-    /**
      * 成功返回结果
      *
      * @param <T>     the type parameter
@@ -126,7 +118,7 @@ public class Result<T> {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static <T> Result<T> failed(IBaseError error) {
-        return new Result<>(error.getResultCode(), error.getResultMsg(), null, false);
+        return failed(error.getResultCode(), error.getResultMsg());
     }
 
     /**
@@ -139,7 +131,7 @@ public class Result<T> {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static <T> Result<T> failed(IBaseError error, String message) {
-        return new Result<>(error.getResultCode(), message, null, false);
+        return failed(error.getResultCode(), message);
     }
 
     /**
@@ -164,28 +156,7 @@ public class Result<T> {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public static <T> Result<T> failed(String message) {
-        return new Result<>(ExceptionEnum.CM001.getResultCode(), message, null, false);
-    }
-
-    /**
-     * 失败返回结果
-     *
-     * @param <T> the type parameter
-     * @return the result
-     */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public static <T> Result<T> failed() {
-        return failed(ExceptionEnum.CM001);
-    }
-
-    /**
-     * 参数验证失败返回结果
-     *
-     * @param <T> the type parameter
-     * @return the result
-     */
-    public static <T> Result<T> validateFailed() {
-        return failed(ExceptionEnum.CM002);
+        return failed(ExceptionEnum.CM001.getResultCode(), message);
     }
 
     /**
@@ -196,7 +167,7 @@ public class Result<T> {
      * @return the result
      */
     public static <T> Result<T> validateFailed(String message) {
-        return new Result<>(ExceptionEnum.CM002.getResultCode(), message, null, false);
+        return failed(ExceptionEnum.CM002.getResultCode(), message);
     }
 
     @Override
