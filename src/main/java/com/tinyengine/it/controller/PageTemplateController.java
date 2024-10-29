@@ -96,7 +96,7 @@ public class PageTemplateController {
      * @return PageTemplate
      */
     @Operation(summary = "获取页面模版信息列表", description = "获取页面模版信息列表", parameters = {
-            @Parameter(name = "", description = "")}, responses = {
+            @Parameter(name = "name", description = "模版名称")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PageTemplate.class))),
