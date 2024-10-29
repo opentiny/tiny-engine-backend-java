@@ -148,9 +148,15 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_page_template
-
+        WHERE `type` = #{type}
     </select>
-
+    <!-- 模糊查询表t_page_template所有数据 -->
+    <select id="queryPageTemplateByName" resultMap="PageTemplateMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_page_template
+        WHERE `type` = #{type} and name like concat('%',#{name},'%');
+    </select>
     <!-- 根据主键id查询表t_page_template信息 -->
     <select id="queryPageTemplateById" resultMap="PageTemplateMap">
         SELECT

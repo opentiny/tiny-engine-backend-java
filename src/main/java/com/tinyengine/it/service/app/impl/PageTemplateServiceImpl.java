@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,8 +37,13 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      */
     @Override
     @SystemServiceLog(description = "获取页面模版列表实现方法")
-    public Result<List<PageTemplate>> queryAllPageTemplate() throws ServiceException {
-        List<PageTemplate> pageTemplates = pageTemplateMapper.queryAllPageTemplate();
+    public Result<List<PageTemplate>> queryAllPageTemplate(String name,String type) throws ServiceException {
+        List<PageTemplate> pageTemplates = new ArrayList<>();
+        if(name == null || name.isEmpty()){
+            pageTemplates = pageTemplateMapper.queryAllPageTemplate(type);
+            return Result.success(pageTemplates);
+        }
+         pageTemplates = pageTemplateMapper.queryPageTemplateByName(name,type);
         return Result.success(pageTemplates);
     }
 
