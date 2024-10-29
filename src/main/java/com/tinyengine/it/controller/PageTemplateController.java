@@ -49,7 +49,7 @@ public class PageTemplateController {
                             schema = @Schema(implementation = PageTemplate.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "创建页面模版")
-    @PostMapping("/page_template/create")
+    @PostMapping("/page-template/create")
     public Result<PageTemplate> createPageTemplate(@Valid @RequestBody PageTemplate pageTemplate) {
         return pageTemplateService.createPageTemplate(pageTemplate);
     }
@@ -67,7 +67,7 @@ public class PageTemplateController {
                             schema = @Schema(implementation = PageTemplate.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "批量删除页面模版")
-    @PostMapping("/template_basic/bulk/delete")
+    @PostMapping("/template-basic/bulk/delete")
     public Result<Integer> deletePageTemplate(@RequestBody List<Integer> id) {
         return pageTemplateService.deletePageTemplateByIds(id);
     }
@@ -85,7 +85,7 @@ public class PageTemplateController {
                             schema = @Schema(implementation = PageTemplate.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面模版信息详情")
-    @GetMapping("/template_basic/detail/{id}")
+    @GetMapping("/template-basic/detail/{id}")
     public Result<PageTemplate> detail(@PathVariable Integer id) {
         return pageTemplateService.queryPageTemplateById(id);
     }
@@ -102,7 +102,7 @@ public class PageTemplateController {
                             schema = @Schema(implementation = PageTemplate.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面模版信息列表")
-    @GetMapping("/template_basic/list")
+    @GetMapping("/template-basic/list")
     public Result<List<PageTemplate>> findAllPageTemplate(@RequestParam(required = false) String name, @RequestParam String type) {
         return pageTemplateService.queryAllPageTemplate(name, type);
     }
