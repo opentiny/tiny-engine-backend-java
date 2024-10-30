@@ -23,9 +23,9 @@ import java.util.Map;
  */
 class AiChatControllerTest {
     @Mock
-    AiChatService aiChatService;
+    private AiChatService aiChatService;
     @InjectMocks
-    AiChatController aiChatController;
+    private AiChatController aiChatController;
 
     @BeforeEach
     void setUp() {

@@ -191,8 +191,7 @@ public class AppServiceImpl implements AppService {
      */
     @SystemServiceLog(description = "对应用id或区块id获取序列化国际化词条")
     @Override
-    public SchemaI18n formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn,
-                                         Integer id) {
+    public SchemaI18n formatI18nEntrites(List<I18nEntryDto> i18nEntries, Integer userdIn, Integer id) {
         if (i18nEntries.isEmpty()) {
             I18nEntry i18n = new I18nEntry();
             // 没有词条的时候，查询应用和区块对应的国家化关联，把默认空的关联分组返回

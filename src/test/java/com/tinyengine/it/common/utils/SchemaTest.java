@@ -22,9 +22,9 @@ import java.util.Set;
  */
 class SchemaTest {
     @Mock
-    Set<String> GROUPS;
+    private Set<String> GROUPS;
     @InjectMocks
-    Schema schema;
+    private Schema schema;
 
     @BeforeEach
     void setUp() {

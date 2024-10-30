@@ -35,9 +35,9 @@ import java.util.Map;
  */
 class I18nEntryControllerTest {
     @Mock
-    I18nEntryService i18nEntryService;
+    private I18nEntryService i18nEntryService;
     @InjectMocks
-    I18nEntryController i18nEntryController;
+    private I18nEntryController i18nEntryController;
 
     @BeforeEach
     void setUp() {
@@ -56,9 +56,9 @@ class I18nEntryControllerTest {
     @Test
     void testGetI18nEntriesById() {
         I18nEntryDto i18nEntry = new I18nEntryDto();
-        when(i18nEntryService.findI18nEntryById(anyInt())).thenReturn(i18nEntry);
+        when(i18nEntryService.findI18nEntryById(1)).thenReturn(i18nEntry);
 
-        Result<I18nEntryDto> result = i18nEntryController.getI18nEntriesById(Integer.valueOf(0));
+        Result<I18nEntryDto> result = i18nEntryController.getI18nEntriesById(1);
         Assertions.assertEquals(i18nEntry, result.getData());
     }
 
@@ -84,10 +84,10 @@ class I18nEntryControllerTest {
     @Test
     void testUpdateI18nEntries() {
         I18nEntryDto i18nEntry = new I18nEntryDto();
-        when(i18nEntryService.findI18nEntryById(anyInt())).thenReturn(i18nEntry);
-        when(i18nEntryService.updateI18nEntryById(any(I18nEntry.class))).thenReturn(Integer.valueOf(0));
+        when(i18nEntryService.findI18nEntryById(1)).thenReturn(i18nEntry);
+        when(i18nEntryService.updateI18nEntryById(any(I18nEntry.class))).thenReturn(1);
 
-        Result<I18nEntryDto> result = i18nEntryController.updateI18nEntries(Integer.valueOf(0), new I18nEntry());
+        Result<I18nEntryDto> result = i18nEntryController.updateI18nEntries(1, new I18nEntry());
         Assertions.assertEquals(i18nEntry, result.getData());
     }
 
@@ -104,7 +104,8 @@ class I18nEntryControllerTest {
     @Test
     void testDeleteI18nEntries() {
         List<I18nEntryDto> i18nEntryDtos = Arrays.<I18nEntryDto>asList(new I18nEntryDto());
-        when(i18nEntryService.deleteI18nEntriesByHostAndHostTypeAndKey(any(DeleteI18nEntry.class))).thenReturn(i18nEntryDtos);
+        when(i18nEntryService.deleteI18nEntriesByHostAndHostTypeAndKey(any(DeleteI18nEntry.class)))
+                .thenReturn(i18nEntryDtos);
 
         Result<List<I18nEntryDto>> result = i18nEntryController.deleteI18nEntries(new DeleteI18nEntry());
         Assertions.assertEquals(i18nEntryDtos, result.getData());
@@ -112,23 +113,30 @@ class I18nEntryControllerTest {
 
     @Test
     void testUpdateI18nSingleFile() throws Exception {
-        when(i18nEntryService.readSingleFileAndBulkCreate(anyString(), any(MultipartFile.class), anyInt())).thenReturn(new Result<Map<String, Object>>());
+        Result<Map<String, Object>> mockData = new Result<>();
+        mockData.setSuccess(true);
+        when(i18nEntryService.readSingleFileAndBulkCreate(anyString(), any(MultipartFile.class), anyInt()))
+                .thenReturn(mockData);
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        Result<Map<String, Object>> result = i18nEntryController.updateI18nSingleFile(Integer.valueOf(0), new HashMap<String, MultipartFile>() {{
+        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
             put("filesMap", file);
-        }});
-        Assertions.assertEquals(new Result<Map<String, Object>>(), result);
+        }};
+        Result<Map<String, Object>> result = i18nEntryController.updateI18nSingleFile(1, filesMap);
+        Assertions.assertTrue(result.isSuccess());
+        Assertions.assertEquals(mockData, result);
     }
 
     @Test
     void testUpdateI18nMultiFile() throws Exception {
-        when(i18nEntryService.readFilesAndbulkCreate(anyString(), any(MultipartFile.class), anyInt())).thenReturn(new Result<Map<String, Object>>());
+        when(i18nEntryService.readFilesAndbulkCreate(anyString(), any(MultipartFile.class), anyInt()))
+                .thenReturn(new Result<Map<String, Object>>());
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        Result<Map<String, Object>> result = i18nEntryController.updateI18nMultiFile(1, new HashMap<String, MultipartFile>() {{
+        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
             put("filesMap", file);
-        }});
+        }};
+        Result<Map<String, Object>> result = i18nEntryController.updateI18nMultiFile(1, filesMap);
         Assertions.assertEquals(new Result<Map<String, Object>>(), result);
     }
 }

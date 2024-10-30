@@ -19,11 +19,16 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
+/**
+ * test case
+ *
+ * @since 2024-10-29
+ */
 class PageTemplateControllerTest {
     @Mock
-    PageTemplateService pageTemplateService;
+    private PageTemplateService pageTemplateService;
     @InjectMocks
-    PageTemplateController pageTemplateController;
+    private PageTemplateController pageTemplateController;
 
     @BeforeEach
     void setUp() {
@@ -50,9 +55,9 @@ class PageTemplateControllerTest {
 
     @Test
     void testDetail() {
-        when(pageTemplateService.queryPageTemplateById(anyInt())).thenReturn(new Result<PageTemplate>());
+        when(pageTemplateService.queryPageTemplateById(1)).thenReturn(new Result<PageTemplate>());
 
-        Result<PageTemplate> result = pageTemplateController.detail(Integer.valueOf(0));
+        Result<PageTemplate> result = pageTemplateController.detail(1);
         Assertions.assertEquals(new Result<PageTemplate>(), result);
     }
 

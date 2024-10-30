@@ -24,9 +24,9 @@ import java.util.List;
  */
 class DataSourceControllerTest {
     @Mock
-    DatasourceService datasourceService;
+    private DatasourceService datasourceService;
     @InjectMocks
-    DataSourceController dataSourceController;
+    private DataSourceController dataSourceController;
 
     @BeforeEach
     void setUp() {

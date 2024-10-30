@@ -26,9 +26,9 @@ import java.util.List;
  */
 class AppExtensionControllerTest {
     @Mock
-    AppExtensionService appExtensionService;
+    private AppExtensionService appExtensionService;
     @InjectMocks
-    AppExtensionController appExtensionController;
+    private AppExtensionController appExtensionController;
 
     @BeforeEach
     void setUp() {
@@ -79,9 +79,9 @@ class AppExtensionControllerTest {
     @Test
     void testDeleteAppExtension() {
         Result<AppExtension> mockData = new Result<>();
-        when(appExtensionService.deleteAppExtensionById(anyInt())).thenReturn(mockData);
+        when(appExtensionService.deleteAppExtensionById(1)).thenReturn(mockData);
 
-        Result<AppExtension> result = appExtensionController.deleteAppExtension(Integer.valueOf(0));
+        Result<AppExtension> result = appExtensionController.deleteAppExtension(1);
         Assertions.assertEquals(mockData, result);
     }
 }

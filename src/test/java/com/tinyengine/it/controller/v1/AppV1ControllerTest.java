@@ -20,9 +20,9 @@ import org.mockito.MockitoAnnotations;
  */
 class AppV1ControllerTest {
     @Mock
-    AppV1Service appV1Service;
+    private AppV1Service appV1Service;
     @InjectMocks
-    AppV1Controller appV1Controller;
+    private AppV1Controller appV1Controller;
 
     @BeforeEach
     void setUp() {

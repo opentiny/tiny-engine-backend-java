@@ -24,13 +24,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * test case
+ *
+ * @since 2024-10-29
+ */
 class AiChatClientTest {
     @Mock
-    Map<String, AiChatConfig.AiChatConfigData> config;
+    private Map<String, AiChatConfig.AiChatConfigData> config;
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     WebClient webClient;
     @InjectMocks
-    AiChatClient aiChatClient;
+    private AiChatClient aiChatClient;
 
     @BeforeEach
     void setUp() {
