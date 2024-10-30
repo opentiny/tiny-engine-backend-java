@@ -7,7 +7,9 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, occupier_by, is_default, content_blocks, latest_version, latest_history_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, occupier_by, is_default,
+        content_blocks, latest_version, latest_history_id, created_by, last_updated_by, created_time, last_updated_time,
+        tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -219,7 +221,7 @@
         P.last_updated_time,
         P.tenant_id,
         P.site_id,
-        U.id AS occupierId,  -- 指定 t_user 的 id 列
+        U.id AS occupierId, -- 指定 t_user 的 id 列
         U.username,
         U.email,
         U.enable,
@@ -262,7 +264,7 @@
         P.last_updated_time,
         P.tenant_id,
         P.site_id,
-        U.id AS occupierId,  -- 指定 t_user 的 id 列
+        U.id AS occupierId, -- 指定 t_user 的 id 列
         U.username,
         U.email,
         U.enable,
@@ -304,46 +306,46 @@
     <insert id="createPage" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.Page">
         INSERT INTO t_page ( id
-                           , name
-                           , app_id
-                           , route
-                           , page_content
-                           , is_body
-                           , parent_id
-                           , `group`
-                           , `depth`
-                           , is_page
-                           , occupier_by
-                           , is_default
-                           , content_blocks
-                           , latest_version
-                           , latest_history_id
-                           , created_by
-                           , last_updated_by
-                           , created_time
-                           , last_updated_time
-                           , tenant_id
-                           , site_id)
+        , name
+        , app_id
+        , route
+        , page_content
+        , is_body
+        , parent_id
+        , `group`
+        , `depth`
+        , is_page
+        , occupier_by
+        , is_default
+        , content_blocks
+        , latest_version
+        , latest_history_id
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{name}
-               , #{app}
-               , #{route}
-               , #{pageContent}
-               , #{isBody}
-               , #{parentId}
-               , #{group}
-               , #{depth}
-               , #{isPage}
-               , #{occupierBy}
-               , #{isDefault}
-               , #{contentBlocks}
-               , #{latestVersion}
-               , #{latestHistoryId}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{name}
+        , #{app}
+        , #{route}
+        , #{pageContent}
+        , #{isBody}
+        , #{parentId}
+        , #{group}
+        , #{depth}
+        , #{isPage}
+        , #{occupierBy}
+        , #{isDefault}
+        , #{contentBlocks}
+        , #{latestVersion}
+        , #{latestHistoryId}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

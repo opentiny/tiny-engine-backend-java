@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
@@ -56,10 +55,10 @@ public class PageController {
      */
     @Operation(summary = "获取页面列表", description = "获取页面列表", parameters = {
             @Parameter(name = "aid", description = "appId")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Page.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Page.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面列表")
     @GetMapping("/pages/list/{aid}")
     public Result<List<Page>> getAllPage(@PathVariable Integer aid) {
@@ -76,10 +75,10 @@ public class PageController {
      */
     @Operation(summary = "获取页面明细", description = "获取页面明细", parameters = {
             @Parameter(name = "id", description = "page主键id")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Page.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Page.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面明细")
     @GetMapping("/pages/detail/{id}")
     public Result<Page> getPageById(@PathVariable Integer id) throws Exception {
@@ -96,10 +95,10 @@ public class PageController {
      */
     @Operation(summary = "创建页面", description = "创建页面", parameters = {
             @Parameter(name = "page", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Page.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Page.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "创建页面")
     @PostMapping("/pages/create")
     public Result<Page> createPage(@Valid @RequestBody Page page) throws Exception {
@@ -121,11 +120,11 @@ public class PageController {
      */
     @Operation(summary = "修改页面", description = "修改页面",
             parameters = {@Parameter(name = "id", description = "页面主键id"),
-            @Parameter(name = "param", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Page.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+                    @Parameter(name = "param", description = "入参对象")}, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Page.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改页面")
     @PostMapping("/pages/update/{id}")
     public Result<Page> updatePage(@RequestBody Page page) throws Exception {
@@ -150,10 +149,10 @@ public class PageController {
      */
     @Operation(summary = "删除页面", description = "删除页面", parameters = {
             @Parameter(name = "id", description = "页面主键id")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Page.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Page.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除页面")
     @GetMapping("/pages/delete/{id}")
     public Result<Page> deletePage(@PathVariable Integer id) throws Exception {
@@ -168,9 +167,9 @@ public class PageController {
      */
     @Operation(summary = "查询页面预览元数据", description = "查询页面预览元数据信息并返回", parameters = {
             @Parameter(name = "PreviewParam", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json", schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "查询页面预览元数据")
     @GetMapping("/preview/metadata")
     public Result<PreviewDto> previewData(@ModelAttribute PreviewParam previewParam) {

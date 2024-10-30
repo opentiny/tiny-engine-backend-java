@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.config.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

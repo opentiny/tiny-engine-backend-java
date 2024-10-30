@@ -7,7 +7,10 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , version, name, name_en, icon, description, doc_url, screenshot, tags, keywords, dev_mode, npm, `group`, category, priority, snippets, schema_fragment, configure, `public`, framework, is_official, is_default, tiny_reserved, component_metadata, library_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , version, name, name_en, icon, description, doc_url, screenshot, tags, keywords, dev_mode, npm, `group`,
+        category, priority, snippets, schema_fragment, configure, `public`, framework, is_official, is_default,
+        tiny_reserved, component_metadata, library_id, created_by, last_updated_by, created_time, last_updated_time,
+        tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -280,68 +283,69 @@
     </update>
 
     <!-- 新增表t_component数据 -->
-    <insert id="createComponent" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Component">
+    <insert id="createComponent" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.Component">
         INSERT INTO t_component ( id
-                                , version
-                                , name
-                                , name_en
-                                , icon
-                                , description
-                                , doc_url
-                                , screenshot
-                                , tags
-                                , keywords
-                                , dev_mode
-                                , npm
-                                , group
-                                , category
-                                , priority
-                                , snippets
-                                , schema_fragment
-                                , configure
-                                , public
-                                , framework
-                                , is_official
-                                , is_default
-                                , tiny_reserved
-                                , component_metadata
-                                , library_id
-                                , created_by
-                                , last_updated_by
-                                , created_time
-                                , last_updated_time
-                                , tenant_id
-                                , site_id)
+        , version
+        , name
+        , name_en
+        , icon
+        , description
+        , doc_url
+        , screenshot
+        , tags
+        , keywords
+        , dev_mode
+        , npm
+        , group
+        , category
+        , priority
+        , snippets
+        , schema_fragment
+        , configure
+        , public
+        , framework
+        , is_official
+        , is_default
+        , tiny_reserved
+        , component_metadata
+        , library_id
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{version}
-               , #{name}
-               , #{component}
-               , #{icon}
-               , #{description}
-               , #{docUrl}
-               , #{screenshot}
-               , #{tags}
-               , #{keywords}
-               , #{devMode}
-               , #{npm}
-               , #{group}
-               , #{category}
-               , #{priority}
-               , #{snippets}
-               , #{schemaFragment}
-               , #{configure}
-               , #{publicStatus}
-               , #{framework}
-               , #{isOfficial}
-               , #{isDefault}
-               , #{tinyReserved}
-               , #{componentMetadata}
-               , #{libraryId}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{version}
+        , #{name}
+        , #{component}
+        , #{icon}
+        , #{description}
+        , #{docUrl}
+        , #{screenshot}
+        , #{tags}
+        , #{keywords}
+        , #{devMode}
+        , #{npm}
+        , #{group}
+        , #{category}
+        , #{priority}
+        , #{snippets}
+        , #{schemaFragment}
+        , #{configure}
+        , #{publicStatus}
+        , #{framework}
+        , #{isOfficial}
+        , #{isDefault}
+        , #{tinyReserved}
+        , #{componentMetadata}
+        , #{libraryId}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

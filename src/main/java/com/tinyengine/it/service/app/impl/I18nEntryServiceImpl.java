@@ -522,7 +522,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             ObjectMapper objectMapper = new ObjectMapper();
 
             Map<String, Object> jsonData = objectMapper.readValue(jsonContent,
-                    new TypeReference<Map<String, Object>>() {});
+                    new TypeReference<Map<String, Object>>() {
+                    });
             entriesItem.put("entries", flat(jsonData));
         } catch (IOException e) {
             return Result.validateFailed("parse Json error");

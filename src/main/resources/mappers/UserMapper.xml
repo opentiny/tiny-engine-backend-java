@@ -7,7 +7,8 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , username, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id, is_admin, is_public
+        , username, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id,
+        is_admin, is_public
     </sql>
 
     <!-- 通用条件列 -->
@@ -142,30 +143,31 @@
         id=#{id}
     </update>
 
-    <insert id="createUser" useGeneratedKeys="true" keyProperty="id"  parameterType="com.tinyengine.it.model.entity.User">
+    <insert id="createUser" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.User">
         INSERT INTO t_user ( id
-                           , username
-                           , email
-                           , enable
-                           , created_by
-                           , last_updated_by
-                           , created_time
-                           , last_updated_time
-                           , tenant_id
-                           , site_id
-                           , is_admin
-                           , is_public)
+        , username
+        , email
+        , enable
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id
+        , is_admin
+        , is_public)
         VALUES ( #{id}
-               , #{username}
-               , #{email}
-               , #{enable}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId}
-               , #{isAdmin}
-               , #{isPublic})
+        , #{username}
+        , #{email}
+        , #{enable}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId}
+        , #{isAdmin}
+        , #{isPublic})
     </insert>
 </mapper>

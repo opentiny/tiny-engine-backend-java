@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.common.exception;
 
 import com.tinyengine.it.common.base.Result;

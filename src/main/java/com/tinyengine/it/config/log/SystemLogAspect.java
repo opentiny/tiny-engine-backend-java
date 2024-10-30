@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.config.log;
 
 import lombok.extern.slf4j.Slf4j;
