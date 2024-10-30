@@ -122,24 +122,25 @@
     </update>
 
     <!-- 新增表t_business_category数据 -->
-    <insert id="createBusinessCategory" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.BusinessCategory">
+    <insert id="createBusinessCategory" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.BusinessCategory">
         INSERT INTO t_business_category ( id
-                                        , code
-                                        , name
-                                        , created_by
-                                        , last_updated_by
-                                        , created_time
-                                        , last_updated_time
-                                        , tenant_id
-                                        , site_id)
+        , code
+        , name
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{code}
-               , #{name}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{code}
+        , #{name}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

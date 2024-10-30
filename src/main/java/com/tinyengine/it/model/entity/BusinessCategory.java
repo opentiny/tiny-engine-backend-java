@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;

@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.gateway.ai;
 
 import static com.tinyengine.it.common.exception.ExceptionEnum.CM322;

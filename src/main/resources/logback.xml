@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!-- 日志存放路径 -->
-    <property name="log.path" value="logs/tiny-engine-webservice-java" />
+    <property name="log.path" value="logs/tiny-engine-webservice-java"/>
     <!-- 日志输出格式 -->
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - [%X{requestId}] %msg%n"/>
 
@@ -58,9 +58,9 @@
     </appender>
 
     <!-- 系统模块日志级别控制 -->
-    <logger name="com.tinyengine.it" level="DEBUG" />
+    <logger name="com.tinyengine.it" level="DEBUG"/>
     <!-- Spring日志级别控制 -->
-    <logger name="org.springframework" level="warn" />
+    <logger name="org.springframework" level="warn"/>
     <!-- Elasticsearch日志 -->
     <logger name="org.springframework.data.elasticsearch.client.WIRE" level="trace"/>
     <!-- MongoDB日志 -->
@@ -68,10 +68,10 @@
 
     <!-- 合并后的root logger配置 -->
     <root level="info">
-        <appender-ref ref="file_info" />
-        <appender-ref ref="file_error" />
+        <appender-ref ref="file_info"/>
+        <appender-ref ref="file_error"/>
         <appender-ref ref="sql"/>
-        <appender-ref ref="console" />
+        <appender-ref ref="console"/>
     </root>
 
     <logger name="com.tinyengine.it.mapper" level="DEBUG">

@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.service.platform.impl;
 
 import com.tinyengine.it.mapper.TenantMapper;
