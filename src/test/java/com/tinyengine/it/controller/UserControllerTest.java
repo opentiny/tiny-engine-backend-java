@@ -16,9 +16,9 @@ import org.mockito.MockitoAnnotations;
 
 class UserControllerTest {
     @Mock
-    UserService userService;
+    private UserService userService;
     @InjectMocks
-    UserController userController;
+    private UserController userController;
 
     @BeforeEach
     void setUp() {

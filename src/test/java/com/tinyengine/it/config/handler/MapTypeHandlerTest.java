@@ -28,7 +28,7 @@ import java.util.Map;
  */
 class MapTypeHandlerTest {
     @InjectMocks
-    MapTypeHandler mapTypeHandler;
+    private MapTypeHandler mapTypeHandler;
 
     @BeforeEach
     void setUp() {

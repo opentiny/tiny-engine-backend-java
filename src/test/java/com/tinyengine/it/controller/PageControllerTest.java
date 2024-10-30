@@ -27,9 +27,9 @@ import java.util.List;
  */
 class PageControllerTest {
     @Mock
-    PageService pageService;
+    private PageService pageService;
     @InjectMocks
-    PageController pageController;
+    private PageController pageController;
 
     @BeforeEach
     void setUp() {
@@ -38,19 +38,20 @@ class PageControllerTest {
 
     @Test
     void testGetAllPage() {
-        List<Page> mockData = Arrays.<Page>asList(new Page());
-        when(pageService.queryAllPage(anyInt())).thenReturn(mockData);
+        Page page = new Page();
+        List<Page> mockData = Arrays.<Page>asList(page);
+        when(pageService.queryAllPage(1)).thenReturn(mockData);
 
-        Result<List<Page>> result = pageController.getAllPage(Integer.valueOf(0));
-        Assertions.assertEquals(1, result.getData().size());
+        Result<List<Page>> result = pageController.getAllPage(1);
+        Assertions.assertEquals(page, result.getData().get(0));
     }
 
     @Test
     void testGetPageById() throws Exception {
         Page mockData = new Page();
-        when(pageService.queryPageById(anyInt())).thenReturn(mockData);
+        when(pageService.queryPageById(1)).thenReturn(mockData);
 
-        Result<Page> result = pageController.getPageById(Integer.valueOf(0));
+        Result<Page> result = pageController.getPageById(1);
         Assertions.assertEquals(mockData, result.getData());
 
     }
@@ -77,10 +78,11 @@ class PageControllerTest {
 
     @Test
     void testDeletePage() throws Exception {
-        when(pageService.delPage(anyInt())).thenReturn(new Result<Page>());
+        Result<Page> pageResult = Result.success();
+        when(pageService.delPage(1)).thenReturn(pageResult);
 
-        Result<Page> result = pageController.deletePage(Integer.valueOf(0));
-        Assertions.assertEquals(new Result<Page>(), result);
+        Result<Page> result = pageController.deletePage(1);
+        Assertions.assertTrue(result.isSuccess());
     }
 
     @Test

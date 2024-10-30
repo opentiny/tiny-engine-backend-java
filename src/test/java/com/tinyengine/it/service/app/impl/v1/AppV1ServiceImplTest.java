@@ -45,29 +45,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * test case
+ *
+ * @since 2024-10-29
+ */
 class AppV1ServiceImplTest {
     @Mock
-    AppMapper appMapper;
+    private AppMapper appMapper;
     @Mock
-    I18nEntryMapper i18nEntryMapper;
+    private I18nEntryMapper i18nEntryMapper;
     @Mock
-    I18nEntryService i18nEntryService;
+    private I18nEntryService i18nEntryService;
     @Mock
-    AppExtensionMapper appExtensionMapper;
+    private AppExtensionMapper appExtensionMapper;
     @Mock
-    DatasourceMapper datasourceMapper;
+    private DatasourceMapper datasourceMapper;
     @Mock
-    PageMapper pageMapper;
+    private PageMapper pageMapper;
     @Mock
-    BlockHistoryMapper blockHistoryMapper;
+    private BlockHistoryMapper blockHistoryMapper;
     @Mock
-    BlockGroupMapper blockGroupMapper;
+    private BlockGroupMapper blockGroupMapper;
     @Mock
-    MaterialHistoryMapper materialHistoryMapper;
+    private MaterialHistoryMapper materialHistoryMapper;
     @Mock
-    PlatformService platformService;
+    private PlatformService platformService;
     @InjectMocks
-    AppV1ServiceImpl appV1ServiceImpl;
+    private AppV1ServiceImpl appV1ServiceImpl;
 
     @BeforeEach
     void setUp() {

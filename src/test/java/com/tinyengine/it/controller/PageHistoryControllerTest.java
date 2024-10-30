@@ -27,9 +27,9 @@ import java.util.List;
  */
 class PageHistoryControllerTest {
     @Mock
-    PageHistoryService pageHistoryService;
+    private PageHistoryService pageHistoryService;
     @InjectMocks
-    PageHistoryController pageHistoryController;
+    private PageHistoryController pageHistoryController;
 
     @BeforeEach
     void setUp() {
