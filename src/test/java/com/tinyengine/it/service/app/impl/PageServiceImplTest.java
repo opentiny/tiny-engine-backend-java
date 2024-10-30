@@ -227,9 +227,6 @@ class PageServiceImplTest {
         app.setFramework("Vue");
         app.setHomePage(1);
         when(appMapper.queryAppById(222)).thenReturn(app);
-//        when(blockServiceImpl.getBlockAssets(any(Map.class), anyString())).thenReturn(new HashMap<String, List<String>>() {{
-//            put("getBlockAssetsResponse", Arrays.<String>asList("getBlockAssetsResponse"));
-//        }});
         Page parentInfo = new Page();
         parentInfo.setDepth(4);
         parentInfo.setIsPage(false);
@@ -319,13 +316,6 @@ class PageServiceImplTest {
     void testGetTreeNodes() {
         when(pageMapper.selectList(any(Wrapper.class))).thenReturn(new ArrayList());
 
-//        when(appMapper.selectList(any(Wrapper.class))).thenReturn(asList(new App()));
-//        when(blockMapper.selectList(any(Wrapper.class))).thenReturn(asList(new Block()));
-//        when(pageHistoryMapper.selectList(any(Wrapper.class))).thenReturn(asList(new PageHistory()));
-//        when(blockHistoryMapper.selectList(any(Wrapper.class))).thenReturn(asList(new BlockHistory()));
-//        when(appExtensionMapper.selectList(any(Wrapper.class))).thenReturn(asList(new AppExtension()));
-//        when(i18nEntryMapper.selectList(any(Wrapper.class))).thenReturn(asList(new I18nEntry()));
-
         TreeNodeDto param = new TreeNodeDto();
         param.setLevel(1);
         TreeNodeCollection collection = new TreeNodeCollection();
@@ -350,8 +340,6 @@ class PageServiceImplTest {
     void testGetBlockPreviewMetaData() {
         PreviewParam param = new PreviewParam();
         param.setId(1);
-//        when(appService.formatI18nEntrites(any(List.class), anyInt(), anyInt())).thenReturn(new SchemaI18n());
-
         Block block = new Block();
         HashMap<String, Object> content = new HashMap<>();
         HashMap<Object, Object> datasource = new HashMap<>();
