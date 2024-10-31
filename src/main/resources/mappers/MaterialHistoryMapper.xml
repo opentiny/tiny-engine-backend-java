@@ -7,7 +7,9 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , ref_id, version, content, name, npm_name, framework, assets_url, image_url, build_info, description, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , ref_id, version, content, name, npm_name, framework, assets_url, image_url, build_info, description,
+        material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time,
+        last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -201,46 +203,46 @@
     <insert id="createMaterialHistory" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.MaterialHistory">
         INSERT INTO t_material_history ( id
-                                       , ref_id
-                                       , version
-                                       , content
-                                       , name
-                                       , npm_name
-                                       , framework
-                                       , assets_url
-                                       , image_url
-                                       , build_info
-                                       , description
-                                       , material_size
-                                       , tgz_url
-                                       , unzip_tgz_root_path_url
-                                       , unzip_tgz_files
-                                       , created_by
-                                       , last_updated_by
-                                       , created_time
-                                       , last_updated_time
-                                       , tenant_id
-                                       , site_id)
+        , ref_id
+        , version
+        , content
+        , name
+        , npm_name
+        , framework
+        , assets_url
+        , image_url
+        , build_info
+        , description
+        , material_size
+        , tgz_url
+        , unzip_tgz_root_path_url
+        , unzip_tgz_files
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{refId}
-               , #{version}
-               , #{content}
-               , #{name}
-               , #{npmName}
-               , #{framework}
-               , #{assetsUrl}
-               , #{imageUrl}
-               , #{buildInfo}
-               , #{description}
-               , #{materialSize}
-               , #{tgzUrl}
-               , #{unzipTgzRootPathUrl}
-               , #{unzipTgzFiles}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{refId}
+        , #{version}
+        , #{content}
+        , #{name}
+        , #{npmName}
+        , #{framework}
+        , #{assetsUrl}
+        , #{imageUrl}
+        , #{buildInfo}
+        , #{description}
+        , #{materialSize}
+        , #{tgzUrl}
+        , #{unzipTgzRootPathUrl}
+        , #{unzipTgzFiles}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

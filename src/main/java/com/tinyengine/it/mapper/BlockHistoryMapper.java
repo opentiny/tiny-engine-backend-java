@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -87,7 +86,7 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
     /**
      * Query block and version list.
      *
-     * @param ids the ids
+     * @param ids               the ids
      * @param materialHistoryId the material history id
      * @return the list
      */
@@ -97,5 +96,5 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
             "<foreach item='id' collection='ids' open='(' separator=',' close=')'>", "#{id}", "</foreach>",
             "</script>"})
     List<BlockVersionDto> queryBlockAndVersion(@Param("ids") List<Integer> ids,
-            @Param("materialHistoryId") Integer materialHistoryId);
+                                               @Param("materialHistoryId") Integer materialHistoryId);
 }

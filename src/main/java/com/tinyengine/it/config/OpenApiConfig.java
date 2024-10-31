@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.config;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;

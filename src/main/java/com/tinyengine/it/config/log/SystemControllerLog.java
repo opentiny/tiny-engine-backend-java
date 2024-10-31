@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.config.log;
 
 import java.lang.annotation.Documented;

@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
@@ -33,6 +32,8 @@ public class AiChatServiceImpl implements AiChatService {
     private static final Pattern PATTERN_TAG_START = Pattern.compile("```javascript|<template>");
     private static final Pattern PATTERN_TAG_END = Pattern.compile("```|</template>|</script>|</style>");
     private static final Pattern PATTERN_MESSAGE = Pattern.compile(".*编码时遵从以下几条要求.*");
+
+    private AiChatClient aiChatClient = new AiChatClient();
 
     /**
      * Get start and end int [ ].
@@ -93,7 +94,7 @@ public class AiChatServiceImpl implements AiChatService {
 
     private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, String model) {
         List<AiMessages> aiMessages = formatMessage(messages);
-        AiChatClient aiChatClient = new AiChatClient();
+
         OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, aiMessages);
         Map<String, Object> response = aiChatClient.executeChatRequest(openAiBodyDto);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
@@ -122,6 +123,7 @@ public class AiChatServiceImpl implements AiChatService {
             Map<String, Object> chatgptChoice = new HashMap<>();
             chatgptChoice.put("text", originalChoice.get("text"));
             chatgptChoice.put("index", originalChoice.get("index"));
+            chatgptChoice.put("message", originalChoice.get("message"));
             chatgptChoices.add(chatgptChoice);
             openAiResponse.put("choices", chatgptChoices);
 

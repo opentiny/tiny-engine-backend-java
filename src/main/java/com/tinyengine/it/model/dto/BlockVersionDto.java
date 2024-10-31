@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.model.dto;
 
 import lombok.Data;
