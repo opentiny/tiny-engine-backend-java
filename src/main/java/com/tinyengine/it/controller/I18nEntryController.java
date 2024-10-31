@@ -5,11 +5,7 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.log.SystemControllerLog;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.service.app.I18nEntryService;
 
@@ -213,13 +209,11 @@ public class I18nEntryController {
                     @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "应用下上传单文件处理国际化词条")
     @PostMapping("/apps/{id}/i18n/entries/update")
-    public Result<Map<String, Object>> updateI18nSingleFile(@PathVariable Integer id,
-            @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
-        Result<Map<String, Object>> result = new Result<>();
+    public Result<List<EntriesItem>> updateI18nSingleFile(@PathVariable Integer id,
+                                                    @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
+        List<EntriesItem> entriesItemList = new ArrayList<>();
         // 处理上传的文件
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
-            // 获取动态的参数名
-            String key = entry.getKey();
             // 获取对应的文件
             MultipartFile file = entry.getValue();
 
@@ -228,45 +222,12 @@ public class I18nEntryController {
             }
 
             // 返回插入和更新的条数
-            result = i18nEntryService.readSingleFileAndBulkCreate(key, file, id);
+            Result<List<EntriesItem>> entriesItemResult = i18nEntryService.readSingleFileAndBulkCreate(file, id);
+            entriesItemList.addAll(entriesItemResult.getData());
+
         }
 
-        return result;
+        return Result.success(entriesItemList);
     }
 
-    /**
-     * 应用下批量上传国际化词条文件
-     *
-     * @param id the id
-     * @param filesMap the files map
-     * @return result
-     * @throws Exception the exception
-     */
-    @Operation(summary = "应用下批量上传国际化词条文件", description = "应用下批量上传国际化词条文件", parameters = {
-            @Parameter(name = "id", description = "appId"),
-            @Parameter(name = "filesMap", description = "文件参数对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json", schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "应用下批量上传国际化词条文件")
-    @PostMapping("/apps/{id}/i18n/entries/multiUpdate")
-    public Result<Map<String, Object>> updateI18nMultiFile(@PathVariable Integer id,
-            @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
-        Result<Map<String, Object>> result = new Result<>();
-        // 处理上传的文件
-        for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
-            // 获取动态的参数名
-            String key = entry.getKey();
-            // 获取对应的文件
-            MultipartFile file = entry.getValue();
-
-            if (file.isEmpty()) {
-                return Result.failed(ExceptionEnum.CM307);
-            }
-
-            // 返回插入和更新的条数
-            result = i18nEntryService.readFilesAndbulkCreate(key, file, id);
-        }
-        return result;
-    }
 }
