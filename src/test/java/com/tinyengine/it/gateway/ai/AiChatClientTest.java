@@ -32,8 +32,10 @@ import java.util.Map;
 class AiChatClientTest {
     @Mock
     private Map<String, AiChatConfig.AiChatConfigData> config;
+
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private WebClient webClient;
+
     @InjectMocks
     private AiChatClient aiChatClient;
 

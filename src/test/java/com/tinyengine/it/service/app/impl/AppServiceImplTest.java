@@ -41,18 +41,25 @@ import java.util.List;
 class AppServiceImplTest {
     @Mock
     private AppMapper appMapper;
+
     @Mock
     private PlatformService platformService;
+
     @Mock
     private I18nEntryService i18nEntryService;
+
     @Mock
     private I18nEntryMapper i18nEntryMapper;
+
     @Mock
     private AppV1ServiceImpl appV1ServiceImpl;
+
     @Mock
     private BlockServiceImpl blockServiceImpl;
+
     @Mock
     private BlockGroupServiceImpl blockGroupServiceImpl;
+
     @InjectMocks
     private AppServiceImpl appServiceImpl;
 
