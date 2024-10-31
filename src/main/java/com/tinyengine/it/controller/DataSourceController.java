@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
@@ -53,10 +52,10 @@ public class DataSourceController {
      */
     @Operation(summary = "获取数据源列表", description = "获取数据源列表", parameters = {
             @Parameter(name = "aid", description = "appId")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Datasource.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Datasource.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取数据源列表")
     @GetMapping("/sources/list/{aid}")
     public Result<List<Datasource>> getAllSources(@PathVariable Integer aid) {
@@ -73,10 +72,10 @@ public class DataSourceController {
      */
     @Operation(summary = "获取某条数据源", description = "获取某条数据源", parameters = {
             @Parameter(name = "id", description = "数据源主键id")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Datasource.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Datasource.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取某条数据源")
     @GetMapping("/sources/detail/{id}")
     public Result<Datasource> getSourcesById(@PathVariable Integer id) {
@@ -92,10 +91,10 @@ public class DataSourceController {
      */
     @Operation(summary = "创建数据源", description = "创建数据源", parameters = {
             @Parameter(name = "sources", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Datasource.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Datasource.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "创建数据源")
     @PostMapping("/sources/create")
     public Result<Datasource> createSources(@Valid @RequestBody Datasource sources) {
@@ -105,17 +104,17 @@ public class DataSourceController {
     /**
      * 修改数据源某条数据
      *
-     * @param id the id
+     * @param id      the id
      * @param sources the sources
      * @return result
      */
     @Operation(summary = "修改数据源某条数据", description = "修改数据源某条数据", parameters = {
             @Parameter(name = "id", description = "数据源主键id"),
             @Parameter(name = "sources", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Datasource.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Datasource.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改数据源某条数据")
     @PostMapping("/sources/update/{id}")
     public Result<Datasource> updateSources(@PathVariable Integer id, @RequestBody Datasource sources) {
@@ -131,10 +130,10 @@ public class DataSourceController {
      */
     @Operation(summary = "删除数据源某条数据", description = "删除数据源某条数据", parameters = {
             @Parameter(name = "id", description = "数据源主键id")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Datasource.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Datasource.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除数据源某条数据")
     @GetMapping("/sources/delete/{id}")
     public Result<Datasource> deleteSources(@PathVariable Integer id) {

@@ -7,7 +7,9 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , ref_id, message, version, label, name, framework, content, assets, build_info, screenshot, path, description, tags, is_official, public, is_default, tiny_reserved, mode, platform_id, app_id, npm_name, i18n, block_group_id, content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , ref_id, message, version, label, name, framework, content, assets, build_info, screenshot, path, description,
+        tags, is_official, public, is_default, tiny_reserved, mode, platform_id, app_id, npm_name, i18n, block_group_id,
+        content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -294,66 +296,66 @@
     <insert id="createBlockHistory" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.BlockHistory">
         INSERT INTO t_block_history ( id
-                                    , ref_id
-                                    , message
-                                    , version
-                                    , label
-                                    , name
-                                    , framework
-                                    , content
-                                    , assets
-                                    , build_info
-                                    , screenshot
-                                    , path
-                                    , description
-                                    , tags
-                                    , is_official
-                                    , public
-                                    , is_default
-                                    , tiny_reserved
-                                    , mode
-                                    , platform_id
-                                    , app_id
-                                    , npm_name
-                                    , i18n
-                                    , block_group_id
-                                    , content_blocks
-                                    , created_by
-                                    , last_updated_by
-                                    , created_time
-                                    , last_updated_time
-                                    , tenant_id
-                                    , site_id)
+        , ref_id
+        , message
+        , version
+        , label
+        , name
+        , framework
+        , content
+        , assets
+        , build_info
+        , screenshot
+        , path
+        , description
+        , tags
+        , is_official
+        , public
+        , is_default
+        , tiny_reserved
+        , mode
+        , platform_id
+        , app_id
+        , npm_name
+        , i18n
+        , block_group_id
+        , content_blocks
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{refId}
-               , #{message}
-               , #{version}
-               , #{label}
-               , #{name}
-               , #{framework}
-               , #{content}
-               , #{assets}
-               , #{buildInfo}
-               , #{screenshot}
-               , #{path}
-               , #{description}
-               , #{tags}
-               , #{isOfficial}
-               , #{isPublic}
-               , #{isDefault}
-               , #{tinyReserved}
-               , #{mode}
-               , #{platformId}
-               , #{appId}
-               , #{npmName}
-               , #{i18n}
-               , #{blockGroupId}
-               , #{contentBlocks}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{refId}
+        , #{message}
+        , #{version}
+        , #{label}
+        , #{name}
+        , #{framework}
+        , #{content}
+        , #{assets}
+        , #{buildInfo}
+        , #{screenshot}
+        , #{path}
+        , #{description}
+        , #{tags}
+        , #{isOfficial}
+        , #{isPublic}
+        , #{isDefault}
+        , #{tinyReserved}
+        , #{mode}
+        , #{platformId}
+        , #{appId}
+        , #{npmName}
+        , #{i18n}
+        , #{blockGroupId}
+        , #{contentBlocks}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

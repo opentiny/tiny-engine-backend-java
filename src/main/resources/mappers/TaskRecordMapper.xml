@@ -7,7 +7,8 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , team_id, task_type_id, unique_id, task_name, task_status, task_result, progress, ratio, progress_percent, indicator, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , team_id, task_type_id, unique_id, task_name, task_status, task_result, progress, ratio, progress_percent,
+        indicator, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -178,40 +179,41 @@
     </update>
 
     <!-- 新增表t_task_record数据 -->
-    <insert id="createTaskRecord" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.TaskRecord">
+    <insert id="createTaskRecord" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.TaskRecord">
         INSERT INTO t_task_record ( id
-                                  , team_id
-                                  , task_type_id
-                                  , unique_id
-                                  , task_name
-                                  , task_status
-                                  , task_result
-                                  , progress
-                                  , ratio
-                                  , progress_percent
-                                  , indicator
-                                  , created_by
-                                  , last_updated_by
-                                  , created_time
-                                  , last_updated_time
-                                  , tenant_id
-                                  , site_id)
+        , team_id
+        , task_type_id
+        , unique_id
+        , task_name
+        , task_status
+        , task_result
+        , progress
+        , ratio
+        , progress_percent
+        , indicator
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{teamId}
-               , #{taskTypeId}
-               , #{uniqueId}
-               , #{taskName}
-               , #{taskStatus}
-               , #{taskResult}
-               , #{progress}
-               , #{ratio}
-               , #{progressPercent}
-               , #{indicator}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{teamId}
+        , #{taskTypeId}
+        , #{uniqueId}
+        , #{taskName}
+        , #{taskStatus}
+        , #{taskResult}
+        , #{progress}
+        , #{ratio}
+        , #{progressPercent}
+        , #{indicator}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

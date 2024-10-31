@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.gateway.ai;
 
 import static com.tinyengine.it.common.exception.ExceptionEnum.CM322;
@@ -57,9 +56,7 @@ public class AiChatClient {
         log.info("Request Option: " + httpRequestOption.method);
         log.info("Headers: " + configData.headers);
 
-        WebClient.RequestHeadersSpec<?> requestSpec = webClient
-                .method("POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET)
-                .uri(httpRequestUrl);
+        WebClient.RequestHeadersSpec<?> requestSpec = webClient.method("POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET).uri(httpRequestUrl);
 
         for (Map.Entry<String, String> header : configData.headers.entrySet()) {
             requestSpec.header(header.getKey(), header.getValue());
@@ -72,8 +69,7 @@ public class AiChatClient {
 
         return requestSpec.retrieve().bodyToMono(String.class).map(response -> {
             try {
-                return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {
-                });
+                return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {});
             } catch (JsonProcessingException e) {
                 throw new ServiceException(CM322.getResultCode(), e.getMessage());
             }

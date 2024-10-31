@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.config;
 
 import com.tinyengine.it.common.enums.Enums;
@@ -92,13 +91,13 @@ public class AiChatConfig {
         /**
          * Instantiates a new Ai chat config data.
          *
-         * @param httpRequestUrl the http request url
+         * @param httpRequestUrl    the http request url
          * @param httpRequestOption the http request option
-         * @param headers the headers
-         * @param manufacturer the manufacturer
+         * @param headers           the headers
+         * @param manufacturer      the manufacturer
          */
         public AiChatConfigData(String httpRequestUrl, HttpRequestOption httpRequestOption, Map<String, String> headers,
-                String manufacturer) {
+                                String manufacturer) {
             this.httpRequestUrl = httpRequestUrl;
             this.httpRequestOption = httpRequestOption;
             this.headers = headers;
@@ -134,10 +133,10 @@ public class AiChatConfig {
         /**
          * Instantiates a new Http request option.
          *
-         * @param method the method
-         * @param dataType the data type
+         * @param method      the method
+         * @param dataType    the data type
          * @param contentType the content type
-         * @param timeout the timeout
+         * @param timeout     the timeout
          */
         public HttpRequestOption(String method, String dataType, String contentType, int timeout) {
             this.method = method;

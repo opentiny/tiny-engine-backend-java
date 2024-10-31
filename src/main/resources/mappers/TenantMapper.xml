@@ -7,7 +7,8 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id,
+        site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -129,26 +130,27 @@
     </update>
 
     <!-- 新增表t_tenant数据 -->
-    <insert id="createTenant" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Tenant">
+    <insert id="createTenant" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.Tenant">
         INSERT INTO t_tenant ( id
-                             , name_cn
-                             , name_en
-                             , description
-                             , created_by
-                             , last_updated_by
-                             , created_time
-                             , last_updated_time
-                             , tenant_id
-                             , site_id)
+        , name_cn
+        , name_en
+        , description
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{nameCn}
-               , #{nameEn}
-               , #{description}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{nameCn}
+        , #{nameEn}
+        , #{description}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

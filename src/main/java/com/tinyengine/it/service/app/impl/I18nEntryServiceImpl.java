@@ -22,6 +22,7 @@ import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
@@ -558,7 +559,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
                 Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
 
-        ObjectMapper objectMapper = new ObjectMapper();
+
         Map<String, Object> entriesItem = new HashMap<>();
         entriesItem.put("lang", Integer.parseInt(lang));
         entriesItem.put("entries", new HashMap<String, Object>());
@@ -589,8 +590,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 }
 
                 // 将JSON字符串转换为Map对象
-                Map<String, Object> map = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
-                });
+                TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
+                Map<String, Object> map = JSONUtil.toBean(json, typeReference.getType(),true);
                 // 把转换后的map铺平合并到总的Map中
                 jsonData.putAll(flat(map));
             }
