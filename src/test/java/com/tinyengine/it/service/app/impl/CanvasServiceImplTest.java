@@ -58,7 +58,7 @@ class CanvasServiceImplTest {
 
         Result<CanvasDto> result = canvasServiceImpl.lockCanvas(pageId, "occupy", "page");
 
-        verify(pageMapper,times(1)).updatePageById(any());
+        verify(pageMapper, times(1)).updatePageById(any());
         Assertions.assertEquals("success", result.getData().getOperate());
         Assertions.assertEquals(userId, result.getData().getOccupier().getId());
     }
@@ -77,7 +77,7 @@ class CanvasServiceImplTest {
 
         Result<CanvasDto> result = canvasServiceImpl.lockCanvas(pageId, "occupy", "other");
 
-        verify(blockMapper,times(1)).updateBlockById(any());
+        verify(blockMapper, times(1)).updateBlockById(any());
         Assertions.assertEquals("success", result.getData().getOperate());
         Assertions.assertEquals(userId, result.getData().getOccupier().getId());
     }

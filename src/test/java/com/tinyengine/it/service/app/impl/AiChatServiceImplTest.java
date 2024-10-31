@@ -58,13 +58,13 @@ class AiChatServiceImplTest {
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("id",1);
+        dataMap.put("id", 1);
         ArrayList<Object> choices = new ArrayList<>();
         Map<String, Object> originalChoice = new HashMap<>();
         originalChoice.put("text", "text");
         originalChoice.put("index", "index");
         HashMap<Object, Object> message = new HashMap<>();
-        message.put("content","<template>str</template>");
+        message.put("content", "<template>str</template>");
         originalChoice.put("message", message);
         choices.add(originalChoice);
         dataMap.put("choices", choices);

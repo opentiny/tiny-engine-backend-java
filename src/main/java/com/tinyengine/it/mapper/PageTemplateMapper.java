@@ -16,6 +16,7 @@ public interface PageTemplateMapper extends BaseMapper<PageTemplate> {
     /**
      * 查询表page_template所有信息
      *
+     * @param type type
      * @return the list
      */
     List<PageTemplate> queryAllPageTemplate(@Param("type") String type);
@@ -68,5 +69,4 @@ public interface PageTemplateMapper extends BaseMapper<PageTemplate> {
      * @return the list
      */
     List<PageTemplate> queryPageTemplateByName(String name, String type);
-
 }

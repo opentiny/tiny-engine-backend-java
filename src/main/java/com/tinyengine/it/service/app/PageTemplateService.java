@@ -16,6 +16,8 @@ public interface PageTemplateService {
     /**
      * 查询表page_template所有信息
      *
+     * @param name name
+     * @param type name
      * @return the list
      */
     Result<List<PageTemplate>> queryAllPageTemplate(String name, String type);
