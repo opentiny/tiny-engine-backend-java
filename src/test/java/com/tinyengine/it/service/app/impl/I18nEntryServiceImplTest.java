@@ -78,7 +78,7 @@ class I18nEntryServiceImplTest {
     void testFindAllI18nEntry() {
         I18nEntryDto i18nEntryDto = new I18nEntryDto();
         List<I18nEntryDto> i18nEntryDtos = Arrays.<I18nEntryDto>asList(i18nEntryDto);
-        I18nLang lang = new I18nLang("zhCN", "label");
+        I18nLang lang = new I18nLang("zh_CN", "label");
         i18nEntryDto.setLang(lang);
         i18nEntryDto.setKey("key");
         i18nEntryDto.setContent("content");
@@ -89,11 +89,11 @@ class I18nEntryServiceImplTest {
         List<I18nEntry> mockEntry = Arrays.asList(i18nEntry);
         when(i18nEntryMapper.selectList(any(Wrapper.class))).thenReturn(mockEntry);
 
-        List<I18nLang> mockLang = Arrays.asList(new I18nLang("zhCN", "label"));
+        List<I18nLang> mockLang = Arrays.asList(new I18nLang("zh_CN", "label"));
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
 
         I18nEntryListResult result = i18nEntryServiceImpl.findAllI18nEntry();
-        Assertions.assertEquals("content", result.getMessages().getZhCN().get("key"));
+        Assertions.assertEquals("content", result.getMessages().getZh_CN().get("key"));
     }
 
     @Test
@@ -109,19 +109,19 @@ class I18nEntryServiceImplTest {
     @Test
     void testFormatEntriesList() {
         I18nEntryDto i18nEntryDto = new I18nEntryDto();
-        I18nLang lang = new I18nLang("zhCN", "label");
+        I18nLang lang = new I18nLang("zh_CN", "label");
         i18nEntryDto.setLang(lang);
         i18nEntryDto.setKey("key");
         i18nEntryDto.setContent("content");
         List<I18nEntryDto> i18nEntryDtos = Arrays.asList(i18nEntryDto);
 
         SchemaI18n result = i18nEntryServiceImpl.formatEntriesList(i18nEntryDtos);
-        Assertions.assertEquals("content", result.getZhCN().get("key"));
+        Assertions.assertEquals("content", result.getZh_CN().get("key"));
     }
 
     @Test
     void testCreate() {
-        I18nLang i18nLang = new I18nLang("zhCN", "label");
+        I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
@@ -130,7 +130,7 @@ class I18nEntryServiceImplTest {
 
         OperateI18nEntries param = new OperateI18nEntries();
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN", "content");
+        contents.put("zh_CN", "content");
         param.setContents(contents);
         param.setHost("1");
         List<I18nEntry> result = i18nEntryServiceImpl.create(param);
@@ -139,7 +139,7 @@ class I18nEntryServiceImplTest {
 
     @Test
     void testBulkCreate() {
-        I18nLang i18nLang = new I18nLang("zhCN", "label");
+        I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
@@ -149,7 +149,7 @@ class I18nEntryServiceImplTest {
         Entry entry = new Entry();
         entry.setKey("key");
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN", "text contents");
+        contents.put("zh_CN", "text contents");
         entry.setContents(contents);
         entries.add(entry);
         param.setEntries(entries);
@@ -163,7 +163,7 @@ class I18nEntryServiceImplTest {
 
     @Test
     void testGetEntriesParam() {
-        I18nLang i18nLang = new I18nLang("zhCN", "label");
+        I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
@@ -175,7 +175,7 @@ class I18nEntryServiceImplTest {
         Entry entry = new Entry();
         entry.setKey("key");
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN", "text contents");
+        contents.put("zh_CN", "text contents");
         entry.setContents(contents);
         entries.add(entry);
         param.setEntries(entries);
@@ -192,7 +192,7 @@ class I18nEntryServiceImplTest {
         List<I18nEntryDto> entryDtoList = Arrays.asList(new I18nEntryDto());
         when(i18nEntryMapper.queryI18nEntryByCondition(any(I18nEntry.class))).thenReturn(entryDtoList);
 
-        I18nLang i18nLang = new I18nLang("zhCN", "label");
+        I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
@@ -203,7 +203,7 @@ class I18nEntryServiceImplTest {
 
         OperateI18nEntries param = new OperateI18nEntries();
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN", "content");
+        contents.put("zh_CN", "content");
         param.setContents(contents);
         param.setHostType("app");
         param.setHost("1");
@@ -218,7 +218,7 @@ class I18nEntryServiceImplTest {
         List<I18nEntryDto> entryDtoList = Arrays.asList(new I18nEntryDto());
         when(i18nEntryMapper.queryI18nEntryByCondition(any(I18nEntry.class))).thenReturn(entryDtoList);
 
-        I18nLang i18nLang = new I18nLang("zhCN", "label");
+        I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
@@ -229,7 +229,7 @@ class I18nEntryServiceImplTest {
 
         OperateI18nEntries param = new OperateI18nEntries();
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN", "content");
+        contents.put("zh_CN", "content");
         param.setContents(contents);
         param.setHost("1");
 
@@ -240,14 +240,14 @@ class I18nEntryServiceImplTest {
 
     @Test
     void testBulkUpdateEntries() {
-        I18nLang i18nLang = new I18nLang("zhCN", "label");
+        I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
 
         OperateI18nEntries param = new OperateI18nEntries();
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN", "content");
+        contents.put("zh_CN", "content");
         param.setContents(contents);
         param.setHost("1");
         List<I18nEntry> result = i18nEntryServiceImpl.bulkUpdateEntries(param);
