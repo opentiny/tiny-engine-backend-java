@@ -157,9 +157,11 @@ class AppServiceImplTest {
         metaDto.setApp(app);
         metaDto.setI18n(new ArrayList<>());
         when(appV1ServiceImpl.getMetaDto(paramId)).thenReturn(metaDto);
-        HashMap<String, List<SchemaUtils>> extensionsResponse = new HashMap<String, List<SchemaUtils>>() { {
-            put("utils", Arrays.asList(new SchemaUtils()));
-        }};
+        HashMap<String, List<SchemaUtils>> extensionsResponse = new HashMap<String, List<SchemaUtils>>() {
+            {
+                put("utils", Arrays.asList(new SchemaUtils()));
+            }
+        };
         when(appV1ServiceImpl.getSchemaExtensions(any())).thenReturn(extensionsResponse);
 
         PreviewDto result = appServiceImpl.getAppPreviewMetaData(paramId);

@@ -44,9 +44,11 @@ class AiChatClientTest {
 
     @Test
     void testExecuteChatRequest() {
-        HashMap<String, String> headers = new HashMap<String, String>() { {
-            put("headers", "headers");
-        }};
+        HashMap<String, String> headers = new HashMap<String, String>() {
+            {
+                put("headers", "headers");
+            }
+        };
         AiChatConfig.HttpRequestOption option =
                 new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
         AiChatConfig.AiChatConfigData configData =

@@ -38,9 +38,11 @@ class MapTypeHandlerTest {
     @Test
     void testSetNonNullParameter() throws SQLException, JsonProcessingException {
         PreparedStatement ps = Mockito.mock(PreparedStatement.class);
-        Map<String, Object> mapData = new HashMap<String, Object>() {{
-            put("parameter", "parameter");
-        }};
+        Map<String, Object> mapData = new HashMap<String, Object>() {
+            {
+                put("parameter", "parameter");
+            }
+        };
         String json = JSONUtil.toJsonStr(mapData);
         mapTypeHandler.setNonNullParameter(ps, 0, mapData, null);
         verify(ps, times(1)).setString(0, json);
@@ -49,9 +51,11 @@ class MapTypeHandlerTest {
 
     @Test
     void testGetNullableResult() throws SQLException, JsonProcessingException {
-        Map<String, Object> mapData = new HashMap<String, Object>() {{
-            put("key", "value");
-        }};
+        Map<String, Object> mapData = new HashMap<String, Object>() {
+            {
+                put("key", "value");
+            }
+        };
         String json = JSONUtil.toJsonStr(mapData);
         String columnName = "columnName";
 

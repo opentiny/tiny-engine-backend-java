@@ -170,9 +170,11 @@ class PageServiceImplTest {
         app.setHomePage(1);
         // not home page
         when(appMapper.queryAppById(333)).thenReturn(app);
-        HashMap<String, List<String>> blockAsset = new HashMap<String, List<String>>() { {
-            put("blockAsset", Arrays.asList("getBlockAssetsResponse"));
-        }};
+        HashMap<String, List<String>> blockAsset = new HashMap<String, List<String>>() {
+            {
+                put("blockAsset", Arrays.asList("getBlockAssetsResponse"));
+            }
+        };
         when(blockServiceImpl.getBlockAssets(any(Map.class), anyString())).thenReturn(blockAsset);
 
         Result<Page> result = pageServiceImpl.createFolder(param);
