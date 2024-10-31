@@ -1,6 +1,7 @@
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,7 @@ public class BlockGroup extends BaseEntity {
     private String name;
 
     @Schema(name = "appId", description = "创建分组所在app")
+    @JsonProperty("app")
     private Integer appId;
 
     @Schema(name = "platformId", description = "设计器id")
