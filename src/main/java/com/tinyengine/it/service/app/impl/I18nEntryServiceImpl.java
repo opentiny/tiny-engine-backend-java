@@ -559,7 +559,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
                 Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
 
-
         Map<String, Object> entriesItem = new HashMap<>();
         entriesItem.put("lang", Integer.parseInt(lang));
         entriesItem.put("entries", new HashMap<String, Object>());
