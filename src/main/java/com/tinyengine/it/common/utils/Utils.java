@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import com.tinyengine.it.model.dto.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,6 +20,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * The type Utils.
@@ -198,4 +203,57 @@ public class Utils {
         }
         return 0;
     }
+
+    /**
+     * 解压并处理zip文件，把读取到的JSON文件内容以字符串返回
+     *
+     * @param zipFile zipFile
+     * @param  destDir destDir
+     * @return String
+     * @throws IOException IOException
+     */
+    public static List<FileInfo> unzip(File zipFile, String destDir) throws IOException {
+        List<FileInfo> fileInfoList = new ArrayList<>();
+        File dir = new File(destDir);
+        if (!dir.exists()) {
+            dir.mkdirs(); // 创建目标目录
+        }
+
+        try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
+            ZipEntry zipEntry;
+            while ((zipEntry = zis.getNextEntry()) != null) {
+                File newFile = new File(destDir, zipEntry.getName());
+                boolean isDirectory = zipEntry.isDirectory();
+
+                if (isDirectory) {
+                    newFile.mkdirs(); // 创建目录
+                } else {
+                    new File(newFile.getParent()).mkdirs(); // 确保父目录存在
+                    try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile))) {
+                        byte[] buffer = new byte[1024];
+                        int length;
+                        while ((length = zis.read(buffer)) >= 0) {
+                            bos.write(buffer, 0, length);
+                        }
+                    }
+                    // 添加文件信息到列表
+                    fileInfoList.add(new FileInfo(newFile.getName(), readFileContent(newFile), false));
+                }
+                zis.closeEntry();
+            }
+        }
+        return fileInfoList;
+    }
+
+    private static String readFileContent(File file) throws IOException {
+        StringBuilder contentBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                contentBuilder.append(line).append(System.lineSeparator());
+            }
+        }
+        return contentBuilder.toString();
+    }
+
 }
