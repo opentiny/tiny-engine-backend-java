@@ -14,6 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+/**
+ * test case
+ *
+ * @since 2024-10-29
+ */
 class UserControllerTest {
     @Mock
     private UserService userService;

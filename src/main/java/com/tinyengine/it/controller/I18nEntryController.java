@@ -192,7 +192,8 @@ public class I18nEntryController {
     @PostMapping("/i18n/entries/bulk/delete")
     public Result<List<I18nEntryDto>> deleteI18nEntries(@RequestBody DeleteI18nEntry deleteI18nEntry)
             throws ServiceException {
-        List<I18nEntryDto> i18nEntriesList = i18nEntryService.deleteI18nEntriesByHostAndHostTypeAndKey(deleteI18nEntry);
+        List<I18nEntryDto> i18nEntriesList = i18nEntryService
+                .deleteI18nEntriesByHostAndHostTypeAndKey(deleteI18nEntry);
         return Result.success(i18nEntriesList);
     }
 
@@ -213,7 +214,7 @@ public class I18nEntryController {
     @SystemControllerLog(description = "应用下上传单文件处理国际化词条")
     @PostMapping("/apps/{id}/i18n/entries/update")
     public Result<Map<String, Object>> updateI18nSingleFile(@PathVariable Integer id,
-                                                            @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
+                                  @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
         Result<Map<String, Object>> result = new Result<>();
         // 处理上传的文件
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
@@ -250,7 +251,7 @@ public class I18nEntryController {
     @SystemControllerLog(description = "应用下批量上传国际化词条文件")
     @PostMapping("/apps/{id}/i18n/entries/multiUpdate")
     public Result<Map<String, Object>> updateI18nMultiFile(@PathVariable Integer id,
-                                                           @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
+                                          @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
         Result<Map<String, Object>> result = new Result<>();
         // 处理上传的文件
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {

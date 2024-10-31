@@ -53,24 +53,34 @@ import java.util.Map;
 class AppV1ServiceImplTest {
     @Mock
     private AppMapper appMapper;
+
     @Mock
     private I18nEntryMapper i18nEntryMapper;
+
     @Mock
     private I18nEntryService i18nEntryService;
+
     @Mock
     private AppExtensionMapper appExtensionMapper;
+
     @Mock
     private DatasourceMapper datasourceMapper;
+
     @Mock
     private PageMapper pageMapper;
+
     @Mock
     private BlockHistoryMapper blockHistoryMapper;
+
     @Mock
     private BlockGroupMapper blockGroupMapper;
+
     @Mock
     private MaterialHistoryMapper materialHistoryMapper;
+
     @Mock
     private PlatformService platformService;
+
     @InjectMocks
     private AppV1ServiceImpl appV1ServiceImpl;
 
@@ -94,11 +104,12 @@ class AppV1ServiceImplTest {
 
         List<I18nEntryDto> i18nEntryDtos = Arrays.<I18nEntryDto>asList(new I18nEntryDto());
         when(i18nEntryMapper.findI18nEntriesByHostandHostType(appId, "app")).thenReturn(i18nEntryDtos);
-        when(blockGroupMapper.queryBlockGroupByApp(appId)).thenReturn(Arrays.<BlockGroup>asList(new BlockGroup()));
+        when(blockGroupMapper.queryBlockGroupByApp(appId)).thenReturn(Arrays.asList(new BlockGroup()));
         MaterialHistory materialHistory = new MaterialHistory();
         materialHistory.setComponents(new ArrayList<>());
         when(materialHistoryMapper.queryMaterialHistoryById(anyInt())).thenReturn(materialHistory);
-        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt())).thenReturn(Arrays.<Integer>asList(Integer.valueOf(0)));
+        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt()))
+                .thenReturn(Arrays.<Integer>asList(Integer.valueOf(0)));
 
         Platform platform = new Platform();
         platform.setMaterialHistoryId(3);
@@ -119,13 +130,17 @@ class AppV1ServiceImplTest {
     void testGetMetaDto() {
         App app = new App();
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
-        when(i18nEntryMapper.findI18nEntriesByHostandHostType(anyInt(), anyString())).thenReturn(Arrays.asList(new I18nEntryDto()));
-        when(appExtensionMapper.queryAppExtensionByCondition(any(AppExtension.class))).thenReturn(Arrays.asList(new AppExtension()));
-        when(datasourceMapper.queryDatasourceByCondition(any(Datasource.class))).thenReturn(Arrays.<Datasource>asList(new Datasource()));
+        when(i18nEntryMapper.findI18nEntriesByHostandHostType(anyInt(), anyString()))
+                .thenReturn(Arrays.asList(new I18nEntryDto()));
+        when(appExtensionMapper.queryAppExtensionByCondition(any(AppExtension.class)))
+                .thenReturn(Arrays.asList(new AppExtension()));
+        when(datasourceMapper.queryDatasourceByCondition(any(Datasource.class)))
+                .thenReturn(Arrays.<Datasource>asList(new Datasource()));
         when(pageMapper.queryPageByApp(anyInt())).thenReturn(Arrays.<Page>asList(new Page()));
         when(blockGroupMapper.queryBlockGroupByApp(anyInt())).thenReturn(Arrays.asList(new BlockGroup()));
         when(materialHistoryMapper.queryMaterialHistoryById(anyInt())).thenReturn(new MaterialHistory());
-        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt())).thenReturn(Arrays.<Integer>asList(Integer.valueOf(0)));
+        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt()))
+                .thenReturn(Arrays.<Integer>asList(Integer.valueOf(0)));
         when(platformService.queryPlatformById(anyInt())).thenReturn(new Platform());
 
         MetaDto result = appV1ServiceImpl.getMetaDto(Integer.valueOf(0));
@@ -139,7 +154,7 @@ class AppV1ServiceImplTest {
         List<BlockHistoryDto> historyDtos = Arrays.asList(historyDto);
         when(blockHistoryMapper.queryMapByIds(any(List.class))).thenReturn(historyDtos);
 
-        List<Integer> result = appV1ServiceImpl.getBlockHistoryIdBySemver(Arrays.<BlockVersionDto>asList(new BlockVersionDto()));
+        List<Integer> result = appV1ServiceImpl.getBlockHistoryIdBySemver(Arrays.asList(new BlockVersionDto()));
         Assertions.assertEquals(1, result.size());
     }
 
@@ -178,12 +193,16 @@ class AppV1ServiceImplTest {
 
     @Test
     void testFormatDataFields() {
-        Map<String, Object> result = appV1ServiceImpl.formatDataFields(new HashMap<String, Object>() {{
-            put("data", "data");
-        }}, Arrays.<String>asList("fields"), true);
-        Assertions.assertEquals(new HashMap<String, Object>() {{
-            put("data", "data");
-        }}, result);
+        Map<String, Object> result = appV1ServiceImpl.formatDataFields(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, Arrays.<String>asList("fields"), true);
+        Assertions.assertEquals(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, result);
     }
 }
 

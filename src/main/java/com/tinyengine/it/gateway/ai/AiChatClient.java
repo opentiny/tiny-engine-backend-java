@@ -56,7 +56,8 @@ public class AiChatClient {
         log.info("Request Option: " + httpRequestOption.method);
         log.info("Headers: " + configData.headers);
 
-        WebClient.RequestHeadersSpec<?> requestSpec = webClient.method("POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET).uri(httpRequestUrl);
+        HttpMethod method = "POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET;
+        WebClient.RequestHeadersSpec<?> requestSpec = webClient.method(method).uri(httpRequestUrl);
 
         for (Map.Entry<String, String> header : configData.headers.entrySet()) {
             requestSpec.header(header.getKey(), header.getValue());

@@ -1,7 +1,5 @@
 package com.tinyengine.it.service.app.impl;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.mapper.I18nLangMapper;
