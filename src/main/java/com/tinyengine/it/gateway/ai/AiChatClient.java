@@ -69,8 +69,7 @@ public class AiChatClient {
 
         return requestSpec.retrieve().bodyToMono(String.class).map(response -> {
             try {
-                return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {
-                });
+                return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {});
             } catch (JsonProcessingException e) {
                 throw new ServiceException(CM322.getResultCode(), e.getMessage());
             }

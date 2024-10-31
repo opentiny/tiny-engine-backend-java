@@ -141,42 +141,4 @@ public class Utils {
         // 将对象转换为 JSON 字符串，然后再解析为 Map
         return objectMapper.convertValue(obj, Map.class);
     }
-
-    private static boolean isSubset(String a, String b) {
-        // 这里只做了简单的匹配，实际应用可能需要复杂的解析
-        return a.equals(b) || a.endsWith("x") && b.startsWith(a.substring(0, a.length() - 1));
-    }
-
-    private static int compareMinVersion(String a, String b) {
-        String minVersionA = getMinVersion(a);
-        String minVersionB = getMinVersion(b);
-        return compareVersions(minVersionA, minVersionB);
-    }
-
-    private static String getMinVersion(String version) {
-        // 假设最小版本是版本号中的非 x 部分
-        if (version.contains("x")) {
-            return version.replaceAll("x", "0");
-        }
-        return version;
-    }
-
-    private static int compareVersions(String v1, String v2) {
-        String[] v1Parts = v1.split("\\.");
-        String[] v2Parts = v2.split("\\.");
-
-        int length = Math.max(v1Parts.length, v2Parts.length);
-        for (int i = 0; i < length; i++) {
-            int v1Part = i < v1Parts.length ? Integer.parseInt(v1Parts[i]) : 0;
-            int v2Part = i < v2Parts.length ? Integer.parseInt(v2Parts[i]) : 0;
-
-            if (v1Part < v2Part) {
-                return -1;
-            }
-            if (v1Part > v2Part) {
-                return 1;
-            }
-        }
-        return 0;
-    }
 }
