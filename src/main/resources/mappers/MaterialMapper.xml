@@ -7,7 +7,10 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, npm_name, framework, assets_url, image_url, published, latest_version, latest_history_id, `public`, last_build_info, description, is_official, is_default, tiny_reserved, component_library_id, material_category_id, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name, npm_name, framework, assets_url, image_url, published, latest_version, latest_history_id, `public`,
+        last_build_info, description, is_official, is_default, tiny_reserved, component_library_id,
+        material_category_id, material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by,
+        last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -252,60 +255,61 @@
     </update>
 
     <!-- 新增表t_material数据 -->
-    <insert id="createMaterial" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Material">
+    <insert id="createMaterial" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.Material">
         INSERT INTO t_material ( id
-                               , name
-                               , npm_name
-                               , framework
-                               , assets_url
-                               , image_url
-                               , published
-                               , latest_version
-                               , latest_history_id
-                               , public
-                               , last_build_info
-                               , description
-                               , is_official
-                               , is_default
-                               , tiny_reserved
-                               , component_library_id
-                               , material_category_id
-                               , material_size
-                               , tgz_url
-                               , unzip_tgz_root_path_url
-                               , unzip_tgz_files
-                               , created_by
-                               , last_updated_by
-                               , created_time
-                               , last_updated_time
-                               , tenant_id
-                               , site_id)
+        , name
+        , npm_name
+        , framework
+        , assets_url
+        , image_url
+        , published
+        , latest_version
+        , latest_history_id
+        , public
+        , last_build_info
+        , description
+        , is_official
+        , is_default
+        , tiny_reserved
+        , component_library_id
+        , material_category_id
+        , material_size
+        , tgz_url
+        , unzip_tgz_root_path_url
+        , unzip_tgz_files
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{name}
-               , #{npmName}
-               , #{framework}
-               , #{assetsUrl}
-               , #{imageUrl}
-               , #{published}
-               , #{latestVersion}
-               , #{latestHistoryId}
-               , #{publicStatus}
-               , #{lastBuildInfo}
-               , #{description}
-               , #{isOfficial}
-               , #{isDefault}
-               , #{tinyReserved}
-               , #{componentLibraryId}
-               , #{materialCategoryId}
-               , #{materialSize}
-               , #{tgzUrl}
-               , #{unzipTgzRootPathUrl}
-               , #{unzipTgzFiles}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{name}
+        , #{npmName}
+        , #{framework}
+        , #{assetsUrl}
+        , #{imageUrl}
+        , #{published}
+        , #{latestVersion}
+        , #{latestHistoryId}
+        , #{publicStatus}
+        , #{lastBuildInfo}
+        , #{description}
+        , #{isOfficial}
+        , #{isDefault}
+        , #{tinyReserved}
+        , #{componentLibraryId}
+        , #{materialCategoryId}
+        , #{materialSize}
+        , #{tgzUrl}
+        , #{unzipTgzRootPathUrl}
+        , #{unzipTgzFiles}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

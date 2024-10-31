@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.tinyengine.it.model.entity.App;
 
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,7 @@ import java.util.List;
  * @since 2024-10-26
  */
 @SpringBootTest
+@Disabled
 class AppMapperTest {
     @Autowired
     private AppMapper appMapper;

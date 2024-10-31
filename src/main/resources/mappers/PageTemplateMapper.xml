@@ -7,7 +7,8 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, page_content, framework, published, `public`, `type`, status, is_preset, image_url, description, platform_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , name, page_content, framework, published, `public`, `type`, status, is_preset, image_url, description,
+        platform_id, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -24,7 +25,7 @@
         <if test="published!=null and published!=''">
             AND published = #{published}
         </if>
-        <if test="public!=null and public!=''">
+        <if test="publicStatus!=null and publicStatus!=''">
             AND `public` = #{publicStatus}
         </if>
         <if test="type!=null and type!=''">
@@ -79,7 +80,7 @@
         <if test="published!=null and published!=''">
             published = #{published},
         </if>
-        <if test="public!=null and public!=''">
+        <if test="publicStatus!=null and publicStatus!=''">
             `public` = #{publicStatus},
         </if>
         <if test="type!=null and type!=''">
@@ -200,42 +201,43 @@
     </update>
 
     <!-- 新增表t_page_template数据 -->
-    <insert id="createPageTemplate" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.PageTemplate">
+    <insert id="createPageTemplate" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.PageTemplate">
         INSERT INTO t_page_template ( id
-                                  , name
-                                  , page_content
-                                  , framework
-                                  , published
-                                  , `public`
-                                  , type
-                                  , status
-                                  , is_preset
-                                  , image_url
-                                  , description
-                                  , platform_id
-                                  , created_by
-                                  , last_updated_by
-                                  , created_time
-                                  , last_updated_time
-                                  , tenant_id
-                                  , site_id)
+        , name
+        , page_content
+        , framework
+        , published
+        , `public`
+        , type
+        , status
+        , is_preset
+        , image_url
+        , description
+        , platform_id
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{name}
-               , #{pageContent}
-               , #{framework}
-               , #{published}
-               , #{publicStatus}
-               , #{type}
-               , #{status}
-               , #{isPreset}
-               , #{imageUrl}
-               , #{description}
-               , #{platformId}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{name}
+        , #{pageContent}
+        , #{framework}
+        , #{published}
+        , #{publicStatus}
+        , #{type}
+        , #{status}
+        , #{isPreset}
+        , #{imageUrl}
+        , #{description}
+        , #{platformId}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

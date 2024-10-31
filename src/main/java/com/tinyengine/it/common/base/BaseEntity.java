@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.common.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;

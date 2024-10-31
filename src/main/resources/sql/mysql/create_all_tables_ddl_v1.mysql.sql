@@ -365,7 +365,7 @@ create table `t_page_template` (
     `type` varchar(255) not null comment '模板类型',
     `status` varchar(255) not null comment '模板状态',
     `is_preset` tinyint(1) comment '设计预留字段',
-    `image_url` varchar(255) comment '封面图地址',
+    `image_url` longtext comment '封面图地址',
     `description` varchar(2000) comment '描述',
     `platform_id` int not null comment '设计器id',
     `tenant_id` varchar(60) not null comment '租户id',
