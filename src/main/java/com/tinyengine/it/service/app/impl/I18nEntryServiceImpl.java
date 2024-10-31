@@ -124,22 +124,23 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @Override
     public I18nEntryListResult findAllI18nEntry() {
+        I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
         // 获取所属应用/区块的 语言列表 getHostLangs
         List<I18nLang> i18nLangsList = getHostLangs();
         if (i18nLangsList == null || i18nLangsList.isEmpty()) {
-            return null;
+            return i18nEntriesListResult;
         }
         // 获取词条列表
         List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.queryAllI18nEntry();
         if (i18nEntriesList == null) {
-            return null;
+            return i18nEntriesListResult;
         }
         // 格式化词条列表
         SchemaI18n messages = formatEntriesList(i18nEntriesList);
         List<I18nLang> i18nLangsListTemp = i18nLangsList.stream()
                 .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
                 .collect(Collectors.toList());
-        I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
+
         i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);
         i18nEntriesListResult.setMessages(messages);
         return i18nEntriesListResult;
