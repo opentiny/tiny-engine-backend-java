@@ -1,6 +1,7 @@
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.mapper.BlockGroupMapper;
+import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.service.material.BlockGroupService;
 
@@ -40,7 +41,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return block group
      */
     @Override
-    public BlockGroup findBlockGroupById(@Param("id") Integer id) {
+    public BlockGroupDto findBlockGroupById(@Param("id") Integer id) {
         return blockGroupMapper.queryBlockGroupById(id);
     }
 
@@ -51,7 +52,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return block group
      */
     @Override
-    public List<BlockGroup> findBlockGroupByCondition(BlockGroup blockGroup) {
+    public List<BlockGroupDto> findBlockGroupByCondition(BlockGroup blockGroup) {
         return blockGroupMapper.queryBlockGroupByCondition(blockGroup);
     }
 

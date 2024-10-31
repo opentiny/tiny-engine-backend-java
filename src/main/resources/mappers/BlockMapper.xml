@@ -57,7 +57,7 @@
         <if test="isOfficial!=null and isOfficial!=''">
             AND is_official = #{isOfficial}
         </if>
-        <if test="public!=null and public!=''">
+        <if test="publicStatus!=null and publicStatus!=''">
             AND `public` = #{publicStatus}
         </if>
         <if test="isDefault!=null and isDefault!=''">
@@ -148,7 +148,7 @@
         <if test="isOfficial!=null and isOfficial!=''">
             is_official = #{isOfficial},
         </if>
-        <if test="public!=null and public!=''">
+        <if test="publicStatus!=null and publicStatus!=''">
             `public` = #{publicStatus},
         </if>
         <if test="isDefault!=null and isDefault!=''">
@@ -256,6 +256,42 @@
         FROM t_block
         WHERE 1=1
         <include refid="BlockByCondition"/>
+    </select>
+
+    <!--    根据区块分组appId查询表t_block信息-->
+    <select id="findBlocksByBlockGroupIdAppId" resultMap="BlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block
+        WHERE block_group_id in (
+
+        (SELECT id FROM `t_block_group` where app_id = #{appId}))
+    </select>
+
+    <!-- 根据name或者description模糊查询表t_block信息 -->
+    <select id="findBlocksByNameCnAndDes" resultMap="BlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="description != null and description != ''">
+                or description like concat('%',#{description},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据区块label查询表t_block信息 -->
+    <select id="findBlocksByLabels" resultMap="BlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block
+        WHERE label in
+        <foreach collection="labelList" item="item" open="(" separator="," close=")">
+            ${item}
+        </foreach>
     </select>
 
     <!-- 根据主键id删除表t_block数据 -->

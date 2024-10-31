@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.material;
 
+import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
 
 import org.apache.ibatis.annotations.Param;
@@ -23,9 +24,9 @@ public interface BlockGroupService {
      * 根据主键id查询表t_block_group信息
      *
      * @param id the id
-     * @return the block group
+     * @return the block group dto
      */
-    BlockGroup findBlockGroupById(@Param("id") Integer id);
+    BlockGroupDto findBlockGroupById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_block_group信息
@@ -33,7 +34,7 @@ public interface BlockGroupService {
      * @param blockGroup the block group
      * @return the list
      */
-    List<BlockGroup> findBlockGroupByCondition(BlockGroup blockGroup);
+    List<BlockGroupDto> findBlockGroupByCondition(BlockGroup blockGroup);
 
     /**
      * 根据主键id删除t_block_group数据
