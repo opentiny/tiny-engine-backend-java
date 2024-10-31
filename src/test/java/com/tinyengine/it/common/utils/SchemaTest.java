@@ -23,6 +23,7 @@ import java.util.Set;
 class SchemaTest {
     @Mock
     private Set<String> groups;
+
     @InjectMocks
     private Schema schema;
 

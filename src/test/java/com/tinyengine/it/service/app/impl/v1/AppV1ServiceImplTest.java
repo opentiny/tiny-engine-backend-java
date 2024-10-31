@@ -53,24 +53,34 @@ import java.util.Map;
 class AppV1ServiceImplTest {
     @Mock
     private AppMapper appMapper;
+
     @Mock
     private I18nEntryMapper i18nEntryMapper;
+
     @Mock
     private I18nEntryService i18nEntryService;
+
     @Mock
     private AppExtensionMapper appExtensionMapper;
+
     @Mock
     private DatasourceMapper datasourceMapper;
+
     @Mock
     private PageMapper pageMapper;
+
     @Mock
     private BlockHistoryMapper blockHistoryMapper;
+
     @Mock
     private BlockGroupMapper blockGroupMapper;
+
     @Mock
     private MaterialHistoryMapper materialHistoryMapper;
+
     @Mock
     private PlatformService platformService;
+
     @InjectMocks
     private AppV1ServiceImpl appV1ServiceImpl;
 
