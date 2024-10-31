@@ -160,17 +160,17 @@ public class AppV1ServiceImpl implements AppV1Service {
         String css = metaDto.getApp().getCss();
         Map<String, Object> config = metaDto.getApp().getConfig();
         // 拷贝属性
-        if (constants == null) {
+        if (constants==null) {
             schema.setConstants("");
         } else {
             schema.setConstants(constants);
         }
-        if (css == null) {
+        if (css==null) {
             schema.setCss("");
         } else {
             schema.setCss(css);
         }
-        if (config == null || config.isEmpty()) {
+        if (config==null || config.isEmpty()) {
             schema.setConfig(Collections.emptyMap());
         } else {
             schema.setConfig(config);
@@ -189,13 +189,13 @@ public class AppV1ServiceImpl implements AppV1Service {
         mergedEntries.setZh_CN(new HashMap<>());
 
         // 合并 appEntries
-        if (appEntries != null) {
+        if (appEntries!=null) {
             mergeMaps(appEntries.getEn_US(), mergedEntries.getEn_US());
             mergeMaps(appEntries.getZh_CN(), mergedEntries.getZh_CN());
         }
 
         // 合并 blockEntries
-        if (blockEntries != null) {
+        if (blockEntries!=null) {
             mergeMaps(blockEntries.getEn_US(), mergedEntries.getEn_US());
             mergeMaps(blockEntries.getZh_CN(), mergedEntries.getZh_CN());
         }
@@ -205,7 +205,7 @@ public class AppV1ServiceImpl implements AppV1Service {
 
     // 辅助方法用于合并两个 Map
     private void mergeMaps(Map<String, String> source, Map<String, String> target) {
-        if (source != null) {
+        if (source!=null) {
             for (Map.Entry<String, String> entry : source.entrySet()) {
                 target.put(entry.getKey(), entry.getValue());
             }
@@ -239,7 +239,7 @@ public class AppV1ServiceImpl implements AppV1Service {
 
         // 当前版本暂无设计器数据
         MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
-        if (platform == null) {
+        if (platform==null) {
             materialhistoryMsg.setMaterialHistoryId(1);
         } else {
             materialhistoryMsg.setMaterialHistoryId(platform.getMaterialHistoryId());
@@ -457,7 +457,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         for (BlockHistory blockHistory : blockHistories) {
             String path = blockHistory.getPath();
             Map<String, Object> content = blockHistory.getContent();
-            if (content == null) {
+            if (content==null) {
                 throw new IllegalArgumentException("Each block history record must have content");
             }
 
@@ -467,9 +467,9 @@ public class AppV1ServiceImpl implements AppV1Service {
             Map<String, Object> schema = new HashMap<>();
             schema.put("componentName", componentName);
             schema.put("dependencies", dependencies);
-            schema.put("path", path != null ? path : "");
+            schema.put("path", path!=null ? path : "");
             schema.put("destructuring", false);
-            schema.put("version", blockHistory.getVersion() != null ? blockHistory.getVersion() : "");
+            schema.put("version", blockHistory.getVersion()!=null ? blockHistory.getVersion() : "");
 
             schemas.add(schema);
         }
@@ -494,8 +494,8 @@ public class AppV1ServiceImpl implements AppV1Service {
             schema.put("componentName", componentName);
             schema.put("package", packageName);
             schema.put("exportName", exportName);
-            schema.put("destructuring", destructuring != null ? destructuring : false);
-            schema.put("version", version != null ? version : "");
+            schema.put("destructuring", destructuring!=null ? destructuring : false);
+            schema.put("version", version!=null ? version : "");
             schemas.add(schema);
         }
         return schemas;
@@ -561,7 +561,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         for (Map.Entry<String, Object> entry : data.entrySet()) {
             String key = entry.getKey();
             Object val = fieldsMap.get(key);
-            if (val != null) {
+            if (val!=null) {
                 String convert = isTrue(val) ? format.apply(key) : String.valueOf(val);
                 res.put(convert, entry.getValue());
             } else {
@@ -572,7 +572,7 @@ public class AppV1ServiceImpl implements AppV1Service {
     }
 
     private static boolean isTrue(Object value) {
-        if (value == null) {
+        if (value==null) {
             return false;
         }
         return "true".equals(value.toString());

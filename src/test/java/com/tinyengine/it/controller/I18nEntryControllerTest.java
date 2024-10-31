@@ -75,7 +75,7 @@ class I18nEntryControllerTest {
     @Test
     void testBatchCreateEntries() {
         I18nEntry i18nEntry = new I18nEntry();
-        when(i18nEntryService.bulkCreate(any(OperateI18nBatchEntries.class))).thenReturn(Arrays.<I18nEntry>asList(i18nEntry));
+        when(i18nEntryService.bulkCreate(any(OperateI18nBatchEntries.class))).thenReturn(Arrays.asList(i18nEntry));
 
         Result<List<I18nEntry>> result = i18nEntryController.batchCreateEntries(new OperateI18nBatchEntries());
         Assertions.assertEquals(i18nEntry, result.getData().get(0));
@@ -119,9 +119,11 @@ class I18nEntryControllerTest {
                 .thenReturn(mockData);
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
-            put("filesMap", file);
-        }};
+        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {
+            {
+                put("filesMap", file);
+            }
+        };
         Result<Map<String, Object>> result = i18nEntryController.updateI18nSingleFile(1, filesMap);
         Assertions.assertTrue(result.isSuccess());
         Assertions.assertEquals(mockData, result);
@@ -133,9 +135,11 @@ class I18nEntryControllerTest {
                 .thenReturn(new Result<Map<String, Object>>());
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() { {
-            put("filesMap", file);
-        }};
+        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {
+            {
+                put("filesMap", file);
+            }
+        };
         Result<Map<String, Object>> result = i18nEntryController.updateI18nMultiFile(1, filesMap);
         Assertions.assertEquals(new Result<Map<String, Object>>(), result);
     }

@@ -94,7 +94,7 @@ class AppV1ServiceImplTest {
 
         List<I18nEntryDto> i18nEntryDtos = Arrays.<I18nEntryDto>asList(new I18nEntryDto());
         when(i18nEntryMapper.findI18nEntriesByHostandHostType(appId, "app")).thenReturn(i18nEntryDtos);
-        when(blockGroupMapper.queryBlockGroupByApp(appId)).thenReturn(Arrays.<BlockGroup>asList(new BlockGroup()));
+        when(blockGroupMapper.queryBlockGroupByApp(appId)).thenReturn(Arrays.asList(new BlockGroup()));
         MaterialHistory materialHistory = new MaterialHistory();
         materialHistory.setComponents(new ArrayList<>());
         when(materialHistoryMapper.queryMaterialHistoryById(anyInt())).thenReturn(materialHistory);
@@ -144,7 +144,7 @@ class AppV1ServiceImplTest {
         List<BlockHistoryDto> historyDtos = Arrays.asList(historyDto);
         when(blockHistoryMapper.queryMapByIds(any(List.class))).thenReturn(historyDtos);
 
-        List<Integer> result = appV1ServiceImpl.getBlockHistoryIdBySemver(Arrays.<BlockVersionDto>asList(new BlockVersionDto()));
+        List<Integer> result = appV1ServiceImpl.getBlockHistoryIdBySemver(Arrays.asList(new BlockVersionDto()));
         Assertions.assertEquals(1, result.size());
     }
 
@@ -183,12 +183,16 @@ class AppV1ServiceImplTest {
 
     @Test
     void testFormatDataFields() {
-        Map<String, Object> result = appV1ServiceImpl.formatDataFields(new HashMap<String, Object>() { {
-            put("data", "data");
-        }}, Arrays.<String>asList("fields"), true);
-        Assertions.assertEquals(new HashMap<String, Object>() { {
-            put("data", "data");
-        }}, result);
+        Map<String, Object> result = appV1ServiceImpl.formatDataFields(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, Arrays.<String>asList("fields"), true);
+        Assertions.assertEquals(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, result);
     }
 }
 
