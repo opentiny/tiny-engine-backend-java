@@ -1,7 +1,7 @@
 package com.tinyengine.it.service.app.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
@@ -24,14 +25,17 @@ import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.json.JSONUtil;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -145,7 +149,7 @@ class I18nEntryServiceImplTest {
         Entry entry = new Entry();
         entry.setKey("key");
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN","text contents");
+        contents.put("zhCN", "text contents");
         entry.setContents(contents);
         entries.add(entry);
         param.setEntries(entries);
@@ -171,7 +175,7 @@ class I18nEntryServiceImplTest {
         Entry entry = new Entry();
         entry.setKey("key");
         HashMap<String, String> contents = new HashMap<>();
-        contents.put("zhCN","text contents");
+        contents.put("zhCN", "text contents");
         entry.setContents(contents);
         entries.add(entry);
         param.setEntries(entries);
@@ -311,7 +315,7 @@ class I18nEntryServiceImplTest {
         i18nEntry.setLang(1);
         List<I18nEntry> entryList = Arrays.asList(i18nEntry);
         Map<String, Object> result = i18nEntryServiceImpl.bulkInsertOrUpdate(entryList);
-        verify(i18nEntryMapper,times(1)).createI18nEntry(i18nEntry);
+        verify(i18nEntryMapper, times(1)).createI18nEntry(i18nEntry);
         Assertions.assertEquals(1, result.get("insertNum"));
         Assertions.assertEquals(0, result.get("updateNum"));
     }
@@ -367,6 +371,23 @@ class I18nEntryServiceImplTest {
 
         Integer result = i18nEntryServiceImpl.updateI18nEntryById(param);
         Assertions.assertEquals(1, result);
+    }
+
+    @Test
+    void parseZipFileStream() throws Exception {
+        MultipartFile file = new MockMultipartFile("123", "originalName",
+                "application/zip", "{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
+
+        try (MockedStatic<JSONUtil> jsonUtil = Mockito.mockStatic(JSONUtil.class)) {
+            HashMap<String, Object> objectHashMap = new HashMap<>();
+            objectHashMap.put("key", "value");
+            TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
+            jsonUtil.when(() -> JSONUtil.toBean("", typeReference.getType(), true))
+                    .thenReturn(objectHashMap);
+            Map<String, Object> result = i18nEntryServiceImpl.parseZipFileStream("1", file);
+
+            assertEquals(1, result.get("lang"));
+        }
     }
 }
 

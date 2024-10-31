@@ -78,12 +78,10 @@ public class ListTypeHandler extends BaseTypeHandler<List<?>> {
             return Collections.emptyList();
         } else if (jsonString.startsWith("[{") && jsonString.endsWith("}]")) {
             // 尝试将 JSON 字符串转换为 List<Map<String, Object>>
-            return objectMapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {
-            });
+            return objectMapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {});
         } else {
             // 尝试将 JSON 字符串转换为 List<String>
-            return objectMapper.readValue(jsonString, new TypeReference<List<String>>() {
-            });
+            return objectMapper.readValue(jsonString, new TypeReference<List<String>>() {});
         }
     }
 }

@@ -61,8 +61,7 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
             if (jsonNode.isObject()) {
-                return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
-                });
+                return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
             } else {
                 // 非对象类型也返回空的 Map
                 return new HashMap<>();
