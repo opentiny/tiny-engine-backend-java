@@ -84,7 +84,7 @@ public interface I18nEntryMapper extends BaseMapper<I18nEntry> {
      * @param lang       the lang
      * @return 18 n entry
      */
-    I18nEntryDto findI18nEntriesByKeyAndLang(@Param("key") String entriesKey, @Param("langId") int lang);
+    I18nEntryDto findI18nEntriesByKeyAndLang(@Param("key") String entriesKey, @Param("lang") int lang);
 
     /**
      * Find i 18 n entries by hostand host type list.

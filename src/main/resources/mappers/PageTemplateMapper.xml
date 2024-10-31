@@ -25,7 +25,7 @@
         <if test="published!=null and published!=''">
             AND published = #{published}
         </if>
-        <if test="public!=null and public!=''">
+        <if test="publicStatus!=null and publicStatus!=''">
             AND `public` = #{publicStatus}
         </if>
         <if test="type!=null and type!=''">
@@ -80,7 +80,7 @@
         <if test="published!=null and published!=''">
             published = #{published},
         </if>
-        <if test="public!=null and public!=''">
+        <if test="publicStatus!=null and publicStatus!=''">
             `public` = #{publicStatus},
         </if>
         <if test="type!=null and type!=''">
