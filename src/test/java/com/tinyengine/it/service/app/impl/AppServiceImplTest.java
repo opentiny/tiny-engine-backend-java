@@ -115,7 +115,7 @@ class AppServiceImplTest {
         platform.setAppExtendConfig(new HashMap<>());
         when(platformService.queryPlatformById(any())).thenReturn(platform);
         HashMap<String, Object> config = new HashMap<>();
-        config.put("test","test");
+        config.put("test", "test");
         param.setExtendConfig(config);
         Result<App> result = appServiceImpl.updateAppById(param);
         Assertions.assertEquals(resultApp, result.getData());
@@ -152,12 +152,12 @@ class AppServiceImplTest {
         App app = new App();
 
         HashMap<String, Object> dataSourceGlobal = new HashMap<>();
-        dataSourceGlobal.put("key","datasource");
+        dataSourceGlobal.put("key", "datasource");
         app.setDataSourceGlobal(dataSourceGlobal);
         metaDto.setApp(app);
         metaDto.setI18n(new ArrayList<>());
         when(appV1ServiceImpl.getMetaDto(paramId)).thenReturn(metaDto);
-        HashMap<String, List<SchemaUtils>> extensionsResponse = new HashMap<String, List<SchemaUtils>>() {{
+        HashMap<String, List<SchemaUtils>> extensionsResponse = new HashMap<String, List<SchemaUtils>>() { {
             put("utils", Arrays.asList(new SchemaUtils()));
         }};
         when(appV1ServiceImpl.getSchemaExtensions(any())).thenReturn(extensionsResponse);

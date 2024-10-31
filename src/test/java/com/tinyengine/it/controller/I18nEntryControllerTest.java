@@ -133,7 +133,7 @@ class I18nEntryControllerTest {
                 .thenReturn(new Result<Map<String, Object>>());
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
+        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() { {
             put("filesMap", file);
         }};
         Result<Map<String, Object>> result = i18nEntryController.updateI18nMultiFile(1, filesMap);
