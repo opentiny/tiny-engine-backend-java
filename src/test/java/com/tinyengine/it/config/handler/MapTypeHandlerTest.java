@@ -44,7 +44,7 @@ class MapTypeHandlerTest {
         String json = JSONUtil.toJsonStr(mapData);
         mapTypeHandler.setNonNullParameter(ps, 0, mapData, null);
         verify(ps, times(1)).setString(0, json);
-
+        ps.close();
     }
 
     @Test
@@ -60,6 +60,7 @@ class MapTypeHandlerTest {
 
         Map<String, Object> result = mapTypeHandler.getNullableResult(rs, "columnName");
         Assertions.assertEquals("value", result.get("key"));
+        rs.close();
     }
 }
 

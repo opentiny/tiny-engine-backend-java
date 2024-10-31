@@ -2,7 +2,6 @@ package com.tinyengine.it.controller;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
@@ -39,7 +38,8 @@ class PageHistoryControllerTest {
     @Test
     void testGetAllPageHistory() {
         PageHistory mockData = new PageHistory();
-        when(pageHistoryService.findPageHistoryByCondition(any(PageHistory.class))).thenReturn(Arrays.<PageHistory>asList(mockData));
+        when(pageHistoryService.findPageHistoryByCondition(any(PageHistory.class)))
+                .thenReturn(Arrays.<PageHistory>asList(mockData));
 
         Result<List<PageHistory>> result = pageHistoryController.getAllPageHistory(Integer.valueOf(0));
         Assertions.assertEquals(mockData, result.getData().get(0));

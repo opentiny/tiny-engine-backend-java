@@ -170,7 +170,7 @@ class PageServiceImplTest {
         app.setHomePage(1);
         // not home page
         when(appMapper.queryAppById(333)).thenReturn(app);
-        HashMap<String, List<String>> blockAsset = new HashMap<String, List<String>>() {{
+        HashMap<String, List<String>> blockAsset = new HashMap<String, List<String>>() { {
             put("blockAsset", Arrays.asList("getBlockAssetsResponse"));
         }};
         when(blockServiceImpl.getBlockAssets(any(Map.class), anyString())).thenReturn(blockAsset);
@@ -181,7 +181,6 @@ class PageServiceImplTest {
 
     @Test
     void testUpdatePage() {
-
         when(pageHistoryService.createPageHistory(any(PageHistory.class))).thenReturn(1);
 
         Page param = new Page();

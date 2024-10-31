@@ -47,8 +47,11 @@ public class SchemaConfig {
         this.appInclude = Arrays.asList("id", "name", "tenant", "git_group", "project_name", "is_demo", "description",
                 "createdBy", "created_at", "updated_at", "branch", "global_state");
 
-        this.appFormat = Stream.of(new Object[][]{{"id", "toFormatString"}, {"created_at", "toLocalTimestamp"},
-                        {"updated_at", "toLocalTimestamp"}, {"createdBy", "toCreatorName"}, {"global_state", "toArrayValue"}})
+        this.appFormat = Stream.of(new Object[][]{{"id", "toFormatString"},
+                        {"created_at", "toLocalTimestamp"},
+                        {"updated_at", "toLocalTimestamp"},
+                        {"createdBy", "toCreatorName"},
+                        {"global_state", "toArrayValue"}})
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
         // Initialize PageMetaConfig

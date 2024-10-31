@@ -99,6 +99,8 @@ public class PageTemplateController {
     /**
      * 获取页面模版信息列表
      *
+     * @param name name
+     * @param type name
      * @return PageTemplate
      */
     @Operation(summary = "获取页面模版信息列表", description = "获取页面模版信息列表", parameters = {
