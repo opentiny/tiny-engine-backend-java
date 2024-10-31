@@ -111,7 +111,8 @@ public class PageTemplateController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面模版信息列表")
     @GetMapping("/template-basic/list")
-    public Result<List<PageTemplate>> findAllPageTemplate(@RequestParam(required = false) String name, @RequestParam String type) {
+    public Result<List<PageTemplate>> findAllPageTemplate(@RequestParam(required = false) String name,
+                                                          @RequestParam String type) {
         return pageTemplateService.queryAllPageTemplate(name, type);
     }
 }
