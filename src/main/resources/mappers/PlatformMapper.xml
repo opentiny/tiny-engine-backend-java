@@ -7,7 +7,10 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, published, last_build_info, description, latest_version, latest_history_id, material_history_id, image_url, sort_plugins, sort_toolbar, is_default, prettier_opts, set_default_by, app_extend_config, data_hash, business_category_id, theme_id, platform_url, vscode_url, tenant_id, site_id, created_by, last_updated_by, created_time, last_updated_time
+        , name, published, last_build_info, description, latest_version, latest_history_id, material_history_id,
+        image_url, sort_plugins, sort_toolbar, is_default, prettier_opts, set_default_by, app_extend_config, data_hash,
+        business_category_id, theme_id, platform_url, vscode_url, tenant_id, site_id, created_by, last_updated_by,
+        created_time, last_updated_time
     </sql>
 
     <!-- 通用条件列 -->
@@ -204,7 +207,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_platform
-            </select>
+    </select>
 
     <!-- 根据主键id查询表t_platform信息 -->
     <select id="queryPlatformById" resultMap="PlatformMap">
@@ -245,58 +248,59 @@
     </update>
 
     <!-- 新增表t_platform数据 -->
-    <insert id="createPlatform" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.Platform">
+    <insert id="createPlatform" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.Platform">
         INSERT INTO t_platform ( id
-                               , name
-                               , published
-                               , last_build_info
-                               , description
-                               , latest_version
-                               , latest_history_id
-                               , material_history_id
-                               , image_url
-                               , sort_plugins
-                               , sort_toolbar
-                               , is_default
-                               , prettier_opts
-                               , set_default_by
-                               , app_extend_config
-                               , data_hash
-                               , business_category_id
-                               , theme_id
-                               , platform_url
-                               , vscode_url
-                               , tenant_id
-                               , site_id
-                               , created_by
-                               , last_updated_by
-                               , created_time
-                               , last_updated_time)
+        , name
+        , published
+        , last_build_info
+        , description
+        , latest_version
+        , latest_history_id
+        , material_history_id
+        , image_url
+        , sort_plugins
+        , sort_toolbar
+        , is_default
+        , prettier_opts
+        , set_default_by
+        , app_extend_config
+        , data_hash
+        , business_category_id
+        , theme_id
+        , platform_url
+        , vscode_url
+        , tenant_id
+        , site_id
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time)
         VALUES ( #{id}
-               , #{name}
-               , #{published}
-               , #{lastBuildInfo}
-               , #{description}
-               , #{latestVersion}
-               , #{latestHistoryId}
-               , #{materialHistoryId}
-               , #{imageUrl}
-               , #{sortPlugins}
-               , #{sortToolbar}
-               , #{isDefault}
-               , #{prettierOpts}
-               , #{setDefaultBy}
-               , #{appExtendConfig}
-               , #{dataHash}
-               , #{businessCategoryId}
-               , #{themeId}
-               , #{platformUrl}
-               , #{vscodeUrl}
-               , #{tenantId}
-               , #{siteId}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime})
+        , #{name}
+        , #{published}
+        , #{lastBuildInfo}
+        , #{description}
+        , #{latestVersion}
+        , #{latestHistoryId}
+        , #{materialHistoryId}
+        , #{imageUrl}
+        , #{sortPlugins}
+        , #{sortToolbar}
+        , #{isDefault}
+        , #{prettierOpts}
+        , #{setDefaultBy}
+        , #{appExtendConfig}
+        , #{dataHash}
+        , #{businessCategoryId}
+        , #{themeId}
+        , #{platformUrl}
+        , #{vscodeUrl}
+        , #{tenantId}
+        , #{siteId}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime})
     </insert>
 </mapper>

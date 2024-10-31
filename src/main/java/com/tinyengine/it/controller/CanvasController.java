@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
@@ -29,9 +28,9 @@ public class CanvasController {
     /**
      * 区块及页面锁
      *
-     * @param id the id
+     * @param id    the id
      * @param state the state
-     * @param type the type
+     * @param type  the type
      * @return CanvasDto
      */
     @GetMapping("/canvas/lock")

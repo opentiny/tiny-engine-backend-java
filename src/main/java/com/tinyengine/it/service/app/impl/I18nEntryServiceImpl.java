@@ -22,6 +22,7 @@ import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
@@ -124,22 +125,23 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @Override
     public I18nEntryListResult findAllI18nEntry() {
+        I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
         // 获取所属应用/区块的 语言列表 getHostLangs
         List<I18nLang> i18nLangsList = getHostLangs();
         if (i18nLangsList == null || i18nLangsList.isEmpty()) {
-            return null;
+            return i18nEntriesListResult;
         }
         // 获取词条列表
         List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.queryAllI18nEntry();
         if (i18nEntriesList == null) {
-            return null;
+            return i18nEntriesListResult;
         }
         // 格式化词条列表
         SchemaI18n messages = formatEntriesList(i18nEntriesList);
         List<I18nLang> i18nLangsListTemp = i18nLangsList.stream()
                 .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
                 .collect(Collectors.toList());
-        I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
+
         i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);
         i18nEntriesListResult.setMessages(messages);
         return i18nEntriesListResult;
@@ -557,7 +559,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
                 Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
 
-        ObjectMapper objectMapper = new ObjectMapper();
+
         Map<String, Object> entriesItem = new HashMap<>();
         entriesItem.put("lang", Integer.parseInt(lang));
         entriesItem.put("entries", new HashMap<String, Object>());
@@ -588,8 +590,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 }
 
                 // 将JSON字符串转换为Map对象
-                Map<String, Object> map = objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {
-                });
+                TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
+                Map<String, Object> map = JSONUtil.toBean(json, typeReference.getType(),true);
                 // 把转换后的map铺平合并到总的Map中
                 jsonData.putAll(flat(map));
             }

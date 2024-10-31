@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -22,7 +21,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-@TableName("page_template")
+@TableName("t_page_template")
 @Schema(name = "PageTemplate", description = "页面模板表")
 public class PageTemplate extends BaseEntity {
     @Schema(name = "name", description = "名称")
@@ -38,7 +37,7 @@ public class PageTemplate extends BaseEntity {
     @Schema(name = "published", description = "是否发布：1是，0否")
     private Integer published;
 
-    @Schema(name = "public", description = "公开状态：0,1,2")
+    @Schema(name = "publicStatus", description = "公开状态：0,1,2")
     private Integer publicStatus;
 
     @Schema(name = "type", description = "模版类型")
