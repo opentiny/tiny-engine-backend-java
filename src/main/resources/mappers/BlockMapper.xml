@@ -283,17 +283,6 @@
         </where>
     </select>
 
-    <!-- 根据区块label查询表t_block信息 -->
-    <select id="findBlocksByLabels" resultMap="BlockMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_block
-        WHERE label in
-        <foreach collection="labelList" item="item" open="(" separator="," close=")">
-            ${item}
-        </foreach>
-    </select>
-
     <!-- 根据主键id删除表t_block数据 -->
     <delete id="deleteBlockById">
         DELETE
@@ -315,64 +304,64 @@
     <insert id="createBlock" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.Block">
         INSERT INTO t_block ( id
-        , label
-        , name
-        , framework
-        , content
-        , assets
-        , last_build_info
-        , description
-        , tags
-        , latest_version
-        , latest_history_id
-        , screenshot
-        , path
-        , occupier_by
-        , is_official
-        , `public`
-        , is_default
-        , tiny_reserved
-        , npm_name
-        , i18n
-        , platform_id
-        , app_id
-        , content_blocks
-        , block_group_id
-        , created_by
-        , last_updated_by
-        , created_time
-        , last_updated_time
-        , tenant_id
-        , site_id)
+                            , label
+                            , name
+                            , framework
+                            , content
+                            , assets
+                            , last_build_info
+                            , description
+                            , tags
+                            , latest_version
+                            , latest_history_id
+                            , screenshot
+                            , path
+                            , occupier_by
+                            , is_official
+                            , `public`
+                            , is_default
+                            , tiny_reserved
+                            , npm_name
+                            , i18n
+                            , platform_id
+                            , app_id
+                            , content_blocks
+                            , block_group_id
+                            , created_by
+                            , last_updated_by
+                            , created_time
+                            , last_updated_time
+                            , tenant_id
+                            , site_id)
         VALUES ( #{id}
-        , #{label}
-        , #{name}
-        , #{framework}
-        , #{content}
-        , #{assets}
-        , #{lastBuildInfo}
-        , #{description}
-        , #{tags}
-        , #{latestVersion}
-        , #{latestHistoryId}
-        , #{screenshot}
-        , #{path}
-        , #{occupierBy}
-        , #{isOfficial}
-        , #{publicStatus}
-        , #{isDefault}
-        , #{tinyReserved}
-        , #{npmName}
-        , #{i18n}
-        , #{platformId}
-        , #{appId}
-        , #{contentBlocks}
-        , #{blockGroupId}
-        , #{createdBy}
-        , #{lastUpdatedBy}
-        , #{createdTime}
-        , #{lastUpdatedTime}
-        , #{tenantId}
-        , #{siteId})
+               , #{label}
+               , #{name}
+               , #{framework}
+               , #{content}
+               , #{assets}
+               , #{lastBuildInfo}
+               , #{description}
+               , #{tags}
+               , #{latestVersion}
+               , #{latestHistoryId}
+               , #{screenshot}
+               , #{path}
+               , #{occupierBy}
+               , #{isOfficial}
+               , #{publicStatus}
+               , #{isDefault}
+               , #{tinyReserved}
+               , #{npmName}
+               , #{i18n}
+               , #{platformId}
+               , #{appId}
+               , #{contentBlocks}
+               , #{blockGroupId}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{siteId})
     </insert>
 </mapper>
