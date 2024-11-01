@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.common.exception;
 
 import com.tinyengine.it.common.base.Result;
@@ -70,17 +69,17 @@ public class GlobalExceptionAdvice {
     /**
      * 处理方法参数验证异常
      *
-     * @param e the e
+     * @param exception the exception
      * @return the result
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException e) {
+    public Result<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception) {
         // 从异常对象中获取验证错误信息
-        String errorMessage = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
+        String errorMessage = Objects.requireNonNull(exception.getBindingResult().getFieldError()).getDefaultMessage();
         // 修改为 log.error，传递异常对象以打印堆栈信息
-        log.error("Validation exception occurred: ", e);
+        log.error("Validation exception occurred: ", exception);
         // 返回响应实体，其中包含错误消息
-        return Result.failed(ExceptionEnum.CM002, errorMessage);
+        return Result.failed(ExceptionEnum.CM002.getResultCode(), errorMessage);
     }
 }

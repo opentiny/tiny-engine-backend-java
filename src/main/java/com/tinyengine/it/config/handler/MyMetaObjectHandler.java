@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.config.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;

@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.common.utils;
 
 import cn.hutool.crypto.SecureUtil;

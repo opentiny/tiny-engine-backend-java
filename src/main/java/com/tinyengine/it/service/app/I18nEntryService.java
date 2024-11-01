@@ -96,7 +96,16 @@ public interface I18nEntryService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<List<EntriesItem>> readSingleFileAndBulkCreate(MultipartFile file, int host) throws Exception;
+    Result<I18nFileResult> readSingleFileAndBulkCreate(MultipartFile file, int host) throws Exception;
 
-
+    /**
+     * 批量上传词条数据
+     *
+     * @param lang the lang
+     * @param file the file
+     * @param host the host
+     * @return the result
+     * @throws Exception the exception
+     */
+    Result<I18nFileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception;
 }
