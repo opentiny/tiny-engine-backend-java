@@ -124,32 +124,6 @@ public interface BlockMapper extends BaseMapper<Block> {
             "group by b.id")
     List<BlockDto> findBlockAndHistorByBlockId(Integer blockId);
 
-    /**
-     * 根据分组id返回对应的区块信息及关联分组信息
-     *
-     * @param blockGroupId the block group id
-     * @return the list
-     */
-    @Results({
-            @Result(column = "occupier_by", property = "occupierId"),
-            @Result(column = "block_group_id", javaType = List.class, property = "groups",
-                    many = @Many(select = "com.tinyengine.it.mapper.BlockGroupMapper.queryBlockGroupById")),
-            @Result(column = "occupier_by", property = "occupier",
-                    one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
-    })
-    @Select("select b.*, bg.id as block_group_id " +
-            "from t_block b " +
-            "left join t_block_group bg on b.block_group_id = bg.id " +
-            "where bg.id = #{blockGroupId}")
-    List<BlockDto> findBlocksReturnByBlockGroupId(int blockGroupId);
-
-    /**
-     * 通过label列表查询区块数据
-     *
-     * @param labelList the label list
-     * @return the list
-     */
-    List<Block> findBlocksByLabels(List<String> labelList);
 
     /**
      * 通过区块分组id获取区块信息

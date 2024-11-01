@@ -110,16 +110,7 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
             "where bg.app_id = #{appId} " +
             "GROUP BY bg.id")
     List<BlockGroupDto> findGroupByAppId(int appId);
-
-
-    /**
-     * 根据appId查询区块分组信息
-     *
-     * @param appId the app id
-     * @return the list
-     */
-    @Select("select * from t_block_group where app_id = #{appId}")
-    List<BlockGroup> findBlockGroupByAppId(Integer appId);
+    
 
     /**
      * 根据区块id查询区块分组信息
