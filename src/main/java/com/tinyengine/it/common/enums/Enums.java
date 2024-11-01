@@ -825,44 +825,4 @@ public class Enums {
             return value;
         }
     }
-
-    /**
-     * The enum Types.
-     */
-    public enum TYPES {
-        /**
-         * Angular types.
-         */
-        ANGULAR("ng-tiny"),
-
-        /**
-         * React types.
-         */
-        REACT("react-fusion"),
-
-        /**
-         * Vue types.
-         */
-        VUE("vue-tiny"),
-
-        /**
-         * Html types.
-         */
-        HTML("html-vanilla");
-
-        private final String value;
-
-        TYPES(String value) {
-            this.value = value;
-        }
-
-        /**
-         * Gets value.
-         *
-         * @return the value
-         */
-        public String getValue() {
-            return value;
-        }
-    }
 }
