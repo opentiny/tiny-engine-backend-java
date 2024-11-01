@@ -1,22 +1,19 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
+import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.config.log.SystemServiceLog;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.Entry;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
-import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
@@ -32,9 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,56 +62,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Autowired
     private I18nLangMapper i18nLangMapper;
 
-    /**
-     * 将一个嵌套的 JSON 对象扁平化
-     *
-     * @param jsonData the json data
-     * @return map
-     */
-    public static Map<String, Object> flat(Map<String, Object> jsonData) {
-        Map<String, Object> flattenedMap = new HashMap<>();
-        flatten("", jsonData, flattenedMap);
-        return flattenedMap;
-    }
 
-    private static void flatten(String prefix, Map<String, Object> data, Map<String, Object> flattenedMap) {
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
-            if (entry.getValue() instanceof Map) {
-                flatten(key, (Map<String, Object>) entry.getValue(), flattenedMap);
-            } else {
-                flattenedMap.put(key, entry.getValue());
-            }
-        }
-    }
-
-    /**
-     * 检查对于读取到的JSON文件中的字符串缺失的是前花括号还是后花括号 (1: 缺失后花括号, 2: 缺失前花括号, 3:不缺)
-     *
-     * @param jsonString the json string
-     * @return the int
-     */
-    public static int checkMissingBrace(String jsonString) {
-        int openBraceCount = 0;
-        int closeBraceCount = 0;
-
-        for (char c : jsonString.toCharArray()) {
-            if (c == '{') {
-                openBraceCount++;
-            }
-            if (c == '}') {
-                closeBraceCount++;
-            }
-        }
-
-        if (openBraceCount > closeBraceCount) {
-            return 1;
-        } else if (closeBraceCount > openBraceCount) {
-            return 2;
-        } else {
-            return 3;
-        }
-    }
 
     /**
      * 查询表t_i18n_entry所有数据
@@ -360,7 +306,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     /**
      * 上传单个文件
      *
-     * @param lang the lang
      * @param file the file
      * @param host the host
      * @return bulk Create Or Update number
@@ -368,27 +313,62 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
     @Override
-    public Result<Map<String, Object>> readSingleFileAndBulkCreate(String lang, MultipartFile file, int host)
+    public Result<I18nFileResult> readSingleFileAndBulkCreate(MultipartFile file, int host)
             throws Exception {
-        List<Object> entriesArr = new ArrayList<>();
+        List<EntriesItem> entriesArr = new ArrayList<>();
         String contentType = file.getContentType();
 
         if (Objects.equals(contentType, Enums.MimeType.JSON.getValue())) {
-            Result<Map<String, Object>> parseJsonFileStreamResult = parseJsonFileStream(lang, file);
+            Result<EntriesItem> parseJsonFileStreamResult = parseJsonFileStream(file);
             if (!parseJsonFileStreamResult.isSuccess()) {
-                return parseJsonFileStreamResult;
+                return Result.failed(ExceptionEnum.CM001);
             }
             entriesArr.add(parseJsonFileStreamResult.getData());
         } else {
-            entriesArr.add(parseZipFileStream(lang, file));
+            entriesArr.addAll(parseZipFileStream(file));
         }
         // 批量上传接口未提交任何文件流时报错
         if (entriesArr.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM002.getResultCode(), "No file uploaded");
         }
 
-        Map<String, Object> bulkCreateOrUpdateNumReturn = bulkCreateOrUpdate(entriesArr, host);
-        return Result.success(bulkCreateOrUpdateNumReturn);
+
+        return bulkCreateOrUpdate(entriesArr, host);
+    }
+
+    /**
+     * 批量上传词条数据
+     *
+     * @param file
+     * @param host
+     */
+    @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
+    @Override
+    public Result<I18nFileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception {
+
+        List<EntriesItem> entriesArr = new ArrayList<>();
+        InputStream inputStream = file.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        Result<EntriesItem> parseJsonFileStreamResult = parseJsonFileStream(file);
+        // 解析 JSON 数据
+        if (!parseJsonFileStreamResult.isSuccess()) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
+        EntriesItem entriesItem = parseJsonFileStreamResult.getData();
+        entriesArr.add(entriesItem);
+        // 批量上传接口未提交任何文件流时报错
+        if (entriesArr.isEmpty()) {
+            throw new Exception("No file uploaded");
+        }
+
+        I18nFileResult i18nFileResult = bulkCreateOrUpdate(entriesArr, host).getData();
+        return Result.success(i18nFileResult);
+
     }
 
     /**
@@ -396,70 +376,37 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      *
      * @param entriesArr the entries arr
      * @param host       the host
-     * @return map
+     * @return result
      */
     @SystemServiceLog(description = "bulkCreateOrUpdate 批量创建或修改")
-    public Map<String, Object> bulkCreateOrUpdate(List<Object> entriesArr, int host) {
+    public Result<I18nFileResult> bulkCreateOrUpdate(List<EntriesItem> entriesArr, int host) {
         List<I18nEntry> entries = new ArrayList<>();
-        Map<String, Object> resultMap = new HashMap<>();
-        entriesArr.forEach(langEntry -> {
-            if (langEntry instanceof Map) {
-                resultMap.putAll((Map<? extends String, ?>) langEntry);
-            }
-
-            int lang = (int) resultMap.get("lang");
-            Map<String, Object> langEntries = (Map<String, Object>) resultMap.get("entries");
+        entriesArr.forEach(entriesItem -> {
+            Map<String, Object> langEntries = entriesItem.getEntries();
             langEntries.forEach((key, value) -> {
-                I18nEntry i18nEntries = new I18nEntry();
-                i18nEntries.setKey(key);
-                i18nEntries.setLang(lang);
-                i18nEntries.setHost(host);
-                i18nEntries.setHostType("app");
-                i18nEntries.setContent((String) value);
-                entries.add(i18nEntries);
+                I18nEntry i18nEntry = new I18nEntry();
+                i18nEntry.setKey(key);
+                i18nEntry.setLang(entriesItem.getLang());
+                i18nEntry.setHost(host);
+                i18nEntry.setHostType("app");
+                i18nEntry.setContent(value.toString());
+                entries.add(i18nEntry);
             });
         });
         // 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
-        return bulkInsertOrUpdate(entries);
+        I18nFileResult result = bulkInsertOrUpdate(entries);
+        return Result.success(result);
     }
 
-    /**
-     * 批量上传词条数据
-     *
-     * @param lang the lang
-     * @param file the file
-     * @param host the host
-     * @return bulk Create Or Update
-     */
-    @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
-    @Override
-    public Result<Map<String, Object>> readFilesAndbulkCreate(String lang, MultipartFile file, int host) {
-        List<Object> entriesArr = new ArrayList<>();
-
-        Result<Map<String, Object>> parseJsonFileStreamResult = parseJsonFileStream(lang, file);
-        // 解析 JSON 数据
-        if (!parseJsonFileStreamResult.isSuccess()) {
-            return parseJsonFileStreamResult;
-        }
-        Map<String, Object> entriesItem = parseJsonFileStreamResult.getData();
-        entriesArr.add(entriesItem);
-        // 批量上传接口未提交任何文件流时报错
-        if (entriesArr.isEmpty()) {
-            throw new ServiceException(ExceptionEnum.CM002.getResultCode(), "No file uploaded");
-        }
-
-        Map<String, Object> bulkCreateOrUpdateNumReturn = bulkCreateOrUpdate(entriesArr, host);
-        return Result.success(bulkCreateOrUpdateNumReturn);
-    }
 
     /**
      * 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
      *
      * @param entries the entries
-     * @return the map
+     * @return I18nFileResult the I18nFileResult
      */
     @SystemServiceLog(description = "bulkInsertOrUpdate 超大量数据更新")
-    public Map<String, Object> bulkInsertOrUpdate(List<I18nEntry> entries) {
+    public I18nFileResult bulkInsertOrUpdate(List<I18nEntry> entries) {
         int addNum = 0;
         int updateNum = 0;
         for (I18nEntry entry : entries) {
@@ -473,139 +420,93 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 addNum = addNum + 1;
             } else {
                 // 更新记录
-                I18nEntry i18nEntries = new I18nEntry();
-                i18nEntries.setContent(entry.getContent());
-                i18nEntries.setId(existingEntry.getId());
-                i18nEntryMapper.updateI18nEntryById(i18nEntries);
+                entry.setId(existingEntry.getId());
+                i18nEntryMapper.updateI18nEntryById(entry);
                 updateNum = updateNum + 1;
             }
         }
 
         // 构造返回插入和更新的条数
-        Map<String, Object> mapNumResult = new HashMap<>();
-        mapNumResult.put("insertNum", addNum);
-        mapNumResult.put("updateNum", updateNum);
-        return mapNumResult;
+        I18nFileResult i18nFileResult = new I18nFileResult();
+        i18nFileResult.setInsertNum(addNum);
+        i18nFileResult.setUpdateNum(updateNum);
+        return i18nFileResult;
     }
 
     /**
      * 解析JSON文件
      *
-     * @param lang the lang
      * @param file the file
      * @return result
      */
-    public Result<Map<String, Object>> parseJsonFileStream(String lang, MultipartFile file) {
-        // 默认使用UTF-8
-        String encoding = StandardCharsets.UTF_8.name();
-        // fieldname 为i18n_langs的id
-        String filename = file.getOriginalFilename();
-        logger.info("parseJsonFileStream field:{} , filename:{} ", lang, filename);
+    public Result<EntriesItem> parseJsonFileStream(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        log.info("Parsing JSON file: {}", fileName);
 
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.MimeType.JSON.getValue()));
 
+        // 根据文件名判断 lang value
+        EntriesItem entriesItem = setLang(fileName);
+
         // 解析国际化词条文件
-        Map<String, Object> entriesItem = new HashMap<>();
-        entriesItem.put("lang", Integer.parseInt(lang));
-        entriesItem.put("entries", new HashMap<String, Object>());
-
-        Path target = null;
         try {
-            // 读取上传的 JSON 文件内容
-            String jsonContent = new String(file.getBytes(), StandardCharsets.UTF_8);
-            String jsonFileName = UUID.randomUUID() + "_" + filename.toLowerCase(Locale.ROOT);
+            // 使用 try-with-resources 自动管理输入流
 
-            target = Paths.get("/path/to/tmp", jsonFileName);
-            try (FileOutputStream fos = new FileOutputStream(String.valueOf(target))) {
-                fos.write(jsonContent.getBytes(StandardCharsets.UTF_8));
-            }
-
+            byte[] fileBytes = Utils.readAllBytes(file.getInputStream());
+            String jsonContent = new String(fileBytes, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> jsonData = objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
+            });
+            entriesItem.setEntries(Utils.flat(jsonData));
 
-            Map<String, Object> jsonData = objectMapper.readValue(jsonContent,
-                    new TypeReference<Map<String, Object>>() {});
-            entriesItem.put("entries", flat(jsonData));
         } catch (IOException e) {
-            return Result.validateFailed("parse Json error");
-        } finally {
-            try {
-                if (target != null) {
-                    Files.deleteIfExists(target);
-                }
-                file.getInputStream().close(); // Close file stream
-            } catch (IOException e) {
-                log.error("file clean up fail:{}", e.getMessage());
-            }
+            log.error("Error parsing JSON: {}", e.getMessage());
+            return Result.validateFailed("Error parsing JSON");
         }
 
+        log.info("Successfully parsed JSON file: {}", fileName);
         return Result.success(entriesItem);
     }
+
 
     /**
      * 解析zip文件
      *
-     * @param lang the lang
      * @param file the file
-     * @return map
+     * @return EntriesItem
      * @throws Exception the exception
      */
-    public Map<String, Object> parseZipFileStream(String lang, MultipartFile file) throws Exception {
-        // 默认使用UTF-8
-        String encoding = StandardCharsets.UTF_8.name();
-        String filename = file.getOriginalFilename();
-        logger.info("parseZipFileStream field:{} , filename:{} ", lang, filename);
+    public List<EntriesItem> parseZipFileStream(MultipartFile file) throws Exception {
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
                 Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
+        List<EntriesItem> entriesItems = new ArrayList<>();
+        // 解压ZIP文件并处理
+        List<FileInfo> fileInfos = Utils.unzip(file);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        Map<String, Object> entriesItem = new HashMap<>();
-        entriesItem.put("lang", Integer.parseInt(lang));
-        entriesItem.put("entries", new HashMap<String, Object>());
-
-        // 解压zip文件
-        String target = null;
-        try {
-            // 将上传的文件保存到临时文件中
-            File tempFile = File.createTempFile("/path/to/tmp", ".zip");
-            target = tempFile.getCanonicalPath();
-            file.transferTo(tempFile);
-
-            // 解压ZIP文件并处理
-            String content = extractAndProcessZipFile(tempFile);
-            // 对返回的内容字符串进行组装
-            Map<String, Object> jsonData = new LinkedHashMap<>();
-
-            // 分割字符串并处理每个JSON对象
-            String[] jsonObjects = content.split("\\}\\s*\\{");
-            for (String json : jsonObjects) {
-                // 加上缺失的花括号
-                int num = checkMissingBrace(json);
-                if (num == 1) {
-                    json = json + "}";
-                }
-                if (num == 2) {
-                    json = "{" + json;
+        for (FileInfo fileInfo : fileInfos) {
+            if (!fileInfo.isDirectory()) {
+                EntriesItem entriesItem = setLang(fileInfo.getName());
+                // 处理 JSON 内容
+                try {
+                    Map<String, Object> jsonData = objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
+                    });
+                    entriesItem.setEntries(Utils.flat(jsonData));
+                } catch (JsonProcessingException e) {
+                    log.error("JSON processing error for file: " + fileInfo.getName(), e);
+                    throw new RuntimeException(e);
                 }
 
-                // 将JSON字符串转换为Map对象
-                TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
-                Map<String, Object> map = JSONUtil.toBean(json, typeReference.getType(), true);
-                // 把转换后的map铺平合并到总的Map中
-                jsonData.putAll(flat(map));
+                entriesItems.add(entriesItem);
+
             }
-
-            entriesItem.put("entries", jsonData);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw e;
-        } finally {
-            // 清理临时文件
-            cleanUp(target);
         }
 
-        return entriesItem;
+        return entriesItems;
     }
+
 
     /**
      * 校验文件流合法性
@@ -631,62 +532,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         throw new ServiceException(code, "validate file fail");
     }
 
-    /**
-     * 解压并处理zip文件，把读取到的JSON文件内容以字符串返回
-     *
-     * @param zipFile zipFile
-     * @return String
-     * @throws IOException IOException
-     */
-    private String extractAndProcessZipFile(File zipFile) throws IOException {
-        StringBuilder jsonResult = new StringBuilder();
-        try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
-            ZipEntry entry;
-            while ((entry = zipInputStream.getNextEntry()) != null) {
-                String entryName = entry.getName();
-                jsonResult.append(processJsonFileContent(entryName, zipInputStream));
-            }
-        }
-        return jsonResult.toString();
-    }
-
-    private StringBuilder processJsonFileContent(String entryName, ZipInputStream zipFile) throws IOException {
-        StringBuilder result = new StringBuilder();
-        if (entryName.endsWith(".json")) {
-            // 处理JSON文件
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = zipFile.read(buffer)) > 0) {
-                result.append(new String(buffer, 0, len, StandardCharsets.UTF_8));
-            }
-            result.append("\n");
-        }
-        return result;
-    }
-
-    /**
-     * 删除临时目录以及内容
-     *
-     * @param targetDir targetDir
-     * @throws IOException IOException
-     */
-    private void cleanUp(String targetDir) throws IOException {
-        Path directory = Paths.get(targetDir);
-        // reverse order to delete deepest files first
-        Stream<Path> fileWalk = null;
-        try {
-            fileWalk = Files.walk(directory);
-            fileWalk.sorted(Path::compareTo)
-                    .map(Path::toFile)
-                    .forEach(File::delete);
-        } catch (IOException e) {
-            log.error("delete file fail:{}", e.getMessage());
-        } finally {
-            if (fileWalk != null) {
-                fileWalk.close();
-            }
-        }
-    }
 
     /**
      * 根据主键id查询表t_i18n_entry信息
@@ -721,5 +566,30 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Override
     public Integer updateI18nEntryById(I18nEntry i18nEntry) {
         return i18nEntryMapper.updateI18nEntryById(i18nEntry);
+    }
+
+    /**
+     * 根据文件名判断lang值
+     *
+     * @param fileName the fileName
+     * @return EntriesItem the entriesItem
+     */
+    private EntriesItem setLang(String fileName) {
+        EntriesItem entriesItem = new EntriesItem();
+        String name;
+        int lastDotIndex = fileName.lastIndexOf('.'); // 找到最后一个点的索引
+        if (lastDotIndex == -1) {
+            name = fileName; // 如果没有扩展名，直接返回文件名
+        } else {
+            name = fileName.substring(0, lastDotIndex); // 返回不带扩展名的文件名
+        }
+        if (Enums.I18nFileName.EN_US.getValue().equals(name)) {
+            entriesItem.setLang(2);
+            return entriesItem;
+        } else if (Enums.I18nFileName.ZH_CN.getValue().equals(name)) {
+            entriesItem.setLang(1);
+            return entriesItem;
+        }
+        return entriesItem;
     }
 }
