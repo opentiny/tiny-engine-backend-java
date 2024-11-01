@@ -31,6 +31,8 @@ public class PageTemplateServiceImpl implements PageTemplateService {
     /**
      * 查询表page_template所有数据
      *
+     * @param name name
+     * @param type name
      * @return PageTemplate
      * @throws ServiceException ServiceException
      */

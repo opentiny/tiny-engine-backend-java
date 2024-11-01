@@ -215,20 +215,6 @@ public class Schema {
     }
 
     /**
-     * To array value object [ ].
-     *
-     * @param value the value
-     * @return the object [ ]
-     */
-    // 给global_state设置默认值
-    public Object[] toArrayValue(Object value) {
-        if (value instanceof Object[]) {
-            return (Object[]) value;
-        }
-        return new Object[]{value};
-    }
-
-    /**
      * To root element string.
      *
      * @param isBody the is body
