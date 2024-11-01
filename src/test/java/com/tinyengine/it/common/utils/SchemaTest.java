@@ -22,7 +22,8 @@ import java.util.Set;
  */
 class SchemaTest {
     @Mock
-    private Set<String> GROUPS;
+    private Set<String> groups;
+
     @InjectMocks
     private Schema schema;
 
@@ -33,69 +34,95 @@ class SchemaTest {
 
     @Test
     void testAssembleFieldsTypeApp() {
-        Map<String, Object> result = schema.assembleFields(new HashMap<String, Object>() {{
-            put("appData", "appData");
-        }}, "app");
-        Assertions.assertEquals(new HashMap<String, Object>() {{
-            put("appData", "appData");
-        }}, result);
+        Map<String, Object> result = schema.assembleFields(new HashMap<String, Object>() {
+            {
+                put("appData", "appData");
+            }
+        }, "app");
+        Assertions.assertEquals(new HashMap<String, Object>() {
+            {
+                put("appData", "appData");
+            }
+        }, result);
     }
 
     @Test
     void testGetFolderSchema() {
-        Map<String, Object> result = schema.getFolderSchema(new HashMap<String, Object>() {{
-            put("data", "data");
-        }});
-        Assertions.assertEquals(new HashMap<String, Object>() {{
-            put("data", "data");
-            put("componentName", "Folder");
-        }}, result);
+        Map<String, Object> result = schema.getFolderSchema(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        });
+        Assertions.assertEquals(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+                put("componentName", "Folder");
+            }
+        }, result);
     }
 
     @Test
     void testGetSchemaBase() {
-        HashMap<String, Object> data = new HashMap<String, Object>() {{
-            Map mapData = new HashMap();
-            put("page_content", mapData);
-            put("name", "name");
-        }};
+        HashMap<String, Object> data = new HashMap<String, Object>() {
+            {
+                Map mapData = new HashMap();
+                put("page_content", mapData);
+                put("name", "name");
+            }
+        };
         Map<String, Object> result = schema.getSchemaBase(data);
         Assertions.assertEquals("name", result.get("fileName"));
     }
 
     @Test
     void testFilterFields() {
-        Map<String, Object> result = schema.filterFields(new HashMap<String, Object>() {{
-            put("data", "data");
-        }}, Arrays.<String>asList("data"));
-        Assertions.assertEquals(new HashMap<String, Object>() {{
-            put("data", "data");
-        }}, result);
+        Map<String, Object> result = schema.filterFields(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, Arrays.<String>asList("data"));
+        Assertions.assertEquals(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, result);
     }
 
     @Test
     void testFormatFields() {
-        Map<String, Object> result = schema.formatFields(new HashMap<String, Object>() {{
-            put("data", "data");
-        }}, new HashMap<String, String>() {{
-            put("formatConfig", "formatConfig");
-        }});
-        Assertions.assertEquals(new HashMap<String, Object>() {{
-            put("data", "data");
-        }}, result);
+        Map<String, Object> result = schema.formatFields(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, new HashMap<String, String>() {
+            {
+                put("formatConfig", "formatConfig");
+            }
+        });
+        Assertions.assertEquals(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, result);
     }
 
     @Test
     void testConvertFields() {
-        Map<String, Object> result = schema.convertFields(new HashMap<String, Object>() {{
-            put("data", "data");
-            put("data2", "data2");
-        }}, new HashMap<String, String>() {{
-            put("data2", "data2");
-        }});
-        Assertions.assertEquals(new HashMap<String, Object>() {{
-            put("data", "data");
-        }}, result);
+        Map<String, Object> result = schema.convertFields(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+                put("data2", "data2");
+            }
+        }, new HashMap<String, String>() {
+            {
+                put("data2", "data2");
+            }
+        });
+        Assertions.assertEquals(new HashMap<String, Object>() {
+            {
+                put("data", "data");
+            }
+        }, result);
     }
 
     @Test
@@ -117,15 +144,6 @@ class SchemaTest {
     }
 
     @Test
-    void testToArrayValue() {
-        Object[] result = schema.toArrayValue("value");
-        Assertions.assertEquals("value", result[0].toString());
-        String[] strings = {"value1", "value2"};
-        result = schema.toArrayValue(strings);
-        Assertions.assertEquals(2, result.length);
-    }
-
-    @Test
     void testToRootElement() {
         String result = schema.toRootElement(Boolean.TRUE);
         Assertions.assertEquals("body", result);
@@ -135,7 +153,7 @@ class SchemaTest {
 
     @Test
     void testToGroupName() {
-        when(GROUPS.contains(any(Object.class))).thenReturn(true);
+        when(groups.contains(any(Object.class))).thenReturn(true);
 
         String result = schema.toGroupName("static");
         Assertions.assertEquals("staticPages", result);

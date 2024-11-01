@@ -41,18 +41,25 @@ import java.util.List;
 class AppServiceImplTest {
     @Mock
     private AppMapper appMapper;
+
     @Mock
     private PlatformService platformService;
+
     @Mock
     private I18nEntryService i18nEntryService;
+
     @Mock
     private I18nEntryMapper i18nEntryMapper;
+
     @Mock
     private AppV1ServiceImpl appV1ServiceImpl;
+
     @Mock
     private BlockServiceImpl blockServiceImpl;
+
     @Mock
     private BlockGroupServiceImpl blockGroupServiceImpl;
+
     @InjectMocks
     private AppServiceImpl appServiceImpl;
 
@@ -115,7 +122,7 @@ class AppServiceImplTest {
         platform.setAppExtendConfig(new HashMap<>());
         when(platformService.queryPlatformById(any())).thenReturn(platform);
         HashMap<String, Object> config = new HashMap<>();
-        config.put("test","test");
+        config.put("test", "test");
         param.setExtendConfig(config);
         Result<App> result = appServiceImpl.updateAppById(param);
         Assertions.assertEquals(resultApp, result.getData());
@@ -152,14 +159,16 @@ class AppServiceImplTest {
         App app = new App();
 
         HashMap<String, Object> dataSourceGlobal = new HashMap<>();
-        dataSourceGlobal.put("key","datasource");
+        dataSourceGlobal.put("key", "datasource");
         app.setDataSourceGlobal(dataSourceGlobal);
         metaDto.setApp(app);
         metaDto.setI18n(new ArrayList<>());
         when(appV1ServiceImpl.getMetaDto(paramId)).thenReturn(metaDto);
-        HashMap<String, List<SchemaUtils>> extensionsResponse = new HashMap<String, List<SchemaUtils>>() {{
-            put("utils", Arrays.asList(new SchemaUtils()));
-        }};
+        HashMap<String, List<SchemaUtils>> extensionsResponse = new HashMap<String, List<SchemaUtils>>() {
+            {
+                put("utils", Arrays.asList(new SchemaUtils()));
+            }
+        };
         when(appV1ServiceImpl.getSchemaExtensions(any())).thenReturn(extensionsResponse);
 
         PreviewDto result = appServiceImpl.getAppPreviewMetaData(paramId);
