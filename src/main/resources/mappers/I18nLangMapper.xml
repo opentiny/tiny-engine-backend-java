@@ -108,20 +108,21 @@
     </update>
 
     <!-- 新增表t_i18n_lang数据 -->
-    <insert id="createI18nLang" useGeneratedKeys="true" keyProperty="id" parameterType="com.tinyengine.it.model.entity.I18nLang">
+    <insert id="createI18nLang" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.I18nLang">
         INSERT INTO t_i18n_lang ( id
-                                , lang
-                                , label
-                                , created_by
-                                , last_updated_by
-                                , created_time
-                                , last_updated_time)
+        , lang
+        , label
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time)
         VALUES ( #{id}
-               , #{lang}
-               , #{label}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime})
+        , #{lang}
+        , #{label}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime})
     </insert>
 </mapper>

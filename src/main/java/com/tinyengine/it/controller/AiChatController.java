@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
@@ -46,9 +45,9 @@ public class AiChatController {
      */
     @Operation(summary = "获取ai回答信息", description = "获取ai回答信息", parameters = {
             @Parameter(name = "AiParam", description = "入参对象")}, responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json", schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "AI api")
     @PostMapping("/ai/chat")
     public Result<Map<String, Object>> aiChat(@RequestBody AiParam aiParam) {

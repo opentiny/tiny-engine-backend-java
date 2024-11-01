@@ -7,7 +7,8 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , ref_id, name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, is_default, message, is_home, content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        , ref_id, name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, is_default, message,
+        is_home, content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -213,46 +214,46 @@
     <insert id="createPageHistory" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.PageHistory">
         INSERT INTO t_page_history ( id
-                                   , ref_id
-                                   , name
-                                   , app_id
-                                   , route
-                                   , page_content
-                                   , is_body
-                                   , parent_id
-                                   , `group`
-                                   , `depth`
-                                   , is_page
-                                   , is_default
-                                   , message
-                                   , is_home
-                                   , content_blocks
-                                   , created_by
-                                   , last_updated_by
-                                   , created_time
-                                   , last_updated_time
-                                   , tenant_id
-                                   , site_id)
+        , ref_id
+        , name
+        , app_id
+        , route
+        , page_content
+        , is_body
+        , parent_id
+        , `group`
+        , `depth`
+        , is_page
+        , is_default
+        , message
+        , is_home
+        , content_blocks
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , site_id)
         VALUES ( #{id}
-               , #{page}
-               , #{name}
-               , #{app}
-               , #{route}
-               , #{pageContent}
-               , #{isBody}
-               , #{parentId}
-               , #{group}
-               , #{depth}
-               , #{isPage}
-               , #{isDefault}
-               , #{message}
-               , #{isHome}
-               , #{contentBlocks}
-               , #{createdBy}
-               , #{lastUpdatedBy}
-               , #{createdTime}
-               , #{lastUpdatedTime}
-               , #{tenantId}
-               , #{siteId})
+        , #{page}
+        , #{name}
+        , #{app}
+        , #{route}
+        , #{pageContent}
+        , #{isBody}
+        , #{parentId}
+        , #{group}
+        , #{depth}
+        , #{isPage}
+        , #{isDefault}
+        , #{message}
+        , #{isHome}
+        , #{contentBlocks}
+        , #{createdBy}
+        , #{lastUpdatedBy}
+        , #{createdTime}
+        , #{lastUpdatedTime}
+        , #{tenantId}
+        , #{siteId})
     </insert>
 </mapper>

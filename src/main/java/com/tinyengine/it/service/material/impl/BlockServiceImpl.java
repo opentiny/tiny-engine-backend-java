@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.service.material.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -102,7 +101,7 @@ public class BlockServiceImpl implements BlockService {
      * Gets block assets.
      *
      * @param pageContent the page content
-     * @param framework the framework
+     * @param framework   the framework
      * @return the block assets
      */
     public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
@@ -148,7 +147,7 @@ public class BlockServiceImpl implements BlockService {
     /**
      * Gets block info.
      *
-     * @param block the block
+     * @param block     the block
      * @param framework the framework
      * @return the block info
      */
@@ -176,7 +175,7 @@ public class BlockServiceImpl implements BlockService {
      * Traverse blocks.
      *
      * @param content the content
-     * @param block the block
+     * @param block   the block
      * @throws JsonProcessingException the json processing exception
      */
     public void traverseBlocks(String content, List<String> block) throws JsonProcessingException {

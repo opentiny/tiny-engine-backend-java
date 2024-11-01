@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.common.utils;
 
 import com.tinyengine.it.model.dto.SchemaConfig;

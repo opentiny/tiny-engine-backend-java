@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.controller.v1;
 
 import com.tinyengine.it.common.base.Result;
@@ -15,10 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 应用api v1版本
@@ -27,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Validated
 @RestController
+@CrossOrigin
 @RequestMapping("/app-center/v1/api")
 public class AppV1Controller {
     @Autowired

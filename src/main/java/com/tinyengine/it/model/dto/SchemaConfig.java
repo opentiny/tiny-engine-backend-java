@@ -1,4 +1,3 @@
-
 package com.tinyengine.it.model.dto;
 
 import lombok.Data;
@@ -49,7 +48,7 @@ public class SchemaConfig {
                 "createdBy", "created_at", "updated_at", "branch", "global_state");
 
         this.appFormat = Stream.of(new Object[][]{{"id", "toFormatString"}, {"created_at", "toLocalTimestamp"},
-                {"updated_at", "toLocalTimestamp"}, {"createdBy", "toCreatorName"}, {"global_state", "toArrayValue"}})
+                        {"updated_at", "toLocalTimestamp"}, {"createdBy", "toCreatorName"}, {"global_state", "toArrayValue"}})
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
         // Initialize PageMetaConfig
