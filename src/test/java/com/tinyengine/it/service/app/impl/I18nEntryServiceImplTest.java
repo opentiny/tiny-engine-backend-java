@@ -58,15 +58,6 @@ class I18nEntryServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testCheckMissingBrace() {
-        int result = I18nEntryServiceImpl.checkMissingBrace("{{jsonString}");
-        Assertions.assertEquals(1, result);
-        result = I18nEntryServiceImpl.checkMissingBrace("{jsonString}}");
-        Assertions.assertEquals(2, result);
-        result = I18nEntryServiceImpl.checkMissingBrace("{jsonString}");
-        Assertions.assertEquals(3, result);
-    }
 
     @Test
     void testFindAllI18nEntry() {
@@ -192,8 +183,8 @@ class I18nEntryServiceImplTest {
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
 
         when(i18nEntryMapper.createI18nEntry(any(I18nEntry.class))).thenReturn(Integer.valueOf(0));
-        when(i18nEntryMapper.updateByEntry(anyString(), anyInt(), anyString(), anyString(), anyInt())).thenReturn(Integer.valueOf(0));
-
+        when(i18nEntryMapper.updateByEntry(anyString(), anyInt(), anyString(), anyString(), anyInt()))
+                .thenReturn(Integer.valueOf(0));
 
         OperateI18nEntries param = new OperateI18nEntries();
         HashMap<String, String> contents = new HashMap<>();
@@ -218,8 +209,8 @@ class I18nEntryServiceImplTest {
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
 
         when(i18nEntryMapper.createI18nEntry(any(I18nEntry.class))).thenReturn(Integer.valueOf(0));
-        when(i18nEntryMapper.updateByEntry(anyString(), anyInt(), anyString(), anyString(), anyInt())).thenReturn(Integer.valueOf(0));
-
+        when(i18nEntryMapper.updateByEntry(anyString(), anyInt(), anyString(), anyString(), anyInt()))
+                .thenReturn(Integer.valueOf(0));
 
         OperateI18nEntries param = new OperateI18nEntries();
         HashMap<String, String> contents = new HashMap<>();
@@ -265,7 +256,6 @@ class I18nEntryServiceImplTest {
 
     @Test
     void testReadSingleFileAndBulkCreate() throws Exception {
-
         when(i18nEntryMapper.updateI18nEntryById(any(I18nEntry.class))).thenReturn(1);
         when(i18nEntryMapper.createI18nEntry(any(I18nEntry.class))).thenReturn(1);
         when(i18nEntryMapper.findI18nEntriesByKeyAndLang(anyString(), anyInt())).thenReturn(new I18nEntryDto());

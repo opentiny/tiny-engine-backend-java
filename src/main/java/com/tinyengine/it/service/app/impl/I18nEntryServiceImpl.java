@@ -481,7 +481,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
                 Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
-
         List<EntriesItem> entriesItems = new ArrayList<>();
         // 解压ZIP文件并处理
         List<FileInfo> fileInfos = Utils.unzip(file);
@@ -490,7 +489,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         for (FileInfo fileInfo : fileInfos) {
             if (!fileInfo.isDirectory()) {
                 EntriesItem entriesItem = setLang(fileInfo.getName());
-
                 // 处理 JSON 内容
                 try {
                     Map<String, Object> jsonData = objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
@@ -502,6 +500,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 }
 
                 entriesItems.add(entriesItem);
+
             }
         }
 

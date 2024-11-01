@@ -71,7 +71,7 @@ class I18nEntryControllerTest {
     @Test
     void testBatchCreateEntries() {
         I18nEntry i18nEntry = new I18nEntry();
-        when(i18nEntryService.bulkCreate(any(OperateI18nBatchEntries.class))).thenReturn(Arrays.<I18nEntry>asList(i18nEntry));
+        when(i18nEntryService.bulkCreate(any(OperateI18nBatchEntries.class))).thenReturn(Arrays.asList(i18nEntry));
 
         Result<List<I18nEntry>> result = i18nEntryController.batchCreateEntries(new OperateI18nBatchEntries());
         Assertions.assertEquals(i18nEntry, result.getData().get(0));
@@ -133,6 +133,7 @@ class I18nEntryControllerTest {
             put("filesMap", file);
         }};
         Result<I18nFileResult> result = i18nEntryController.updateI18nMultiFile(1, filesMap);
+
         Assertions.assertEquals(new Result<Map<String, Object>>(), result);
     }
 }

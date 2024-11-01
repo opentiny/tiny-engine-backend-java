@@ -1,8 +1,11 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tinyengine.it.common.base.BaseEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -23,7 +26,6 @@ import java.time.LocalDateTime;
 @TableName("t_i18n_lang")
 @Schema(name = "I18nLang", description = "国际化语言表")
 public class I18nLang {
-
     @Schema(name = "id", description = "主键id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
@@ -51,7 +53,6 @@ public class I18nLang {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "lastUpdatedTime", description = "更新时间")
     private LocalDateTime lastUpdatedTime;
-
 
     /**
      * Instantiates a new 18 n lang.
