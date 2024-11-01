@@ -10,14 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -224,5 +217,28 @@ public class Utils {
         }
 
         return byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 将一个嵌套的 JSON 对象扁平化
+     *
+     * @param jsonData the json data
+     * @return map
+     */
+    public static Map<String, Object> flat(Map<String, Object> jsonData) {
+        Map<String, Object> flattenedMap = new HashMap<>();
+        flatten("", jsonData, flattenedMap);
+        return flattenedMap;
+    }
+
+    private static void flatten(String prefix, Map<String, Object> data, Map<String, Object> flattenedMap) {
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
+            if (entry.getValue() instanceof Map) {
+                flatten(key, (Map<String, Object>) entry.getValue(), flattenedMap);
+            } else {
+                flattenedMap.put(key, entry.getValue());
+            }
+        }
     }
 }
