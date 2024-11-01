@@ -6,7 +6,6 @@ import com.tinyengine.it.common.base.Result;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindingResult;
@@ -51,8 +50,8 @@ class GlobalExceptionAdviceTest {
         FieldError fieldError = new FieldError("object", "field", "message");
         BindingResult bindingResult = Mockito.mock(BindingResult.class);
         when(bindingResult.getFieldError()).thenReturn(fieldError);
-        MethodParameter parameter= new MethodParameter(Object.class.getMethod("toString"),-1 );
-        MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameter,bindingResult);
+        MethodParameter parameter = new MethodParameter(Object.class.getMethod("toString"), -1);
+        MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameter, bindingResult);
 
         Result<Map<String, String>> result = globalExceptionAdvice.handleValidationExceptions(exception);
         Assertions.assertEquals(fieldError.getDefaultMessage(), result.getMessage());

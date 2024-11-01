@@ -2,7 +2,6 @@ package com.tinyengine.it.controller;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +36,8 @@ class PageTemplateControllerTest {
 
     @Test
     void testCreatePageTemplate() {
-        when(pageTemplateService.createPageTemplate(any(PageTemplate.class))).thenReturn(new Result<PageTemplate>());
+        when(pageTemplateService.createPageTemplate(any(PageTemplate.class)))
+                .thenReturn(new Result<PageTemplate>());
 
         Result<PageTemplate> result = pageTemplateController.createPageTemplate(new PageTemplate());
         Assertions.assertEquals(new Result<PageTemplate>(), result);
@@ -63,7 +63,8 @@ class PageTemplateControllerTest {
 
     @Test
     void testFindAllPageTemplate() {
-        when(pageTemplateService.queryAllPageTemplate(anyString(), anyString())).thenReturn(new Result<List<PageTemplate>>());
+        when(pageTemplateService.queryAllPageTemplate(anyString(), anyString()))
+                .thenReturn(new Result<List<PageTemplate>>());
 
         Result<List<PageTemplate>> result = pageTemplateController.findAllPageTemplate("name", "type");
         Assertions.assertEquals(new Result<List<PageTemplate>>(), result);

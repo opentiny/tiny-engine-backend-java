@@ -32,8 +32,10 @@ import java.util.Map;
 class AiChatClientTest {
     @Mock
     private Map<String, AiChatConfig.AiChatConfigData> config;
+
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    WebClient webClient;
+    private WebClient webClient;
+
     @InjectMocks
     private AiChatClient aiChatClient;
 
@@ -44,18 +46,24 @@ class AiChatClientTest {
 
     @Test
     void testExecuteChatRequest() {
-        HashMap<String, String> headers = new HashMap<String, String>() {{
-            put("headers", "headers");
-        }};
-        AiChatConfig.HttpRequestOption option = new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
-        AiChatConfig.AiChatConfigData configData = new AiChatConfig.AiChatConfigData("httpRequestUrl", option, headers, null);
+        HashMap<String, String> headers = new HashMap<String, String>() {
+            {
+                put("headers", "headers");
+            }
+        };
+        AiChatConfig.HttpRequestOption option =
+                new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
+        AiChatConfig.AiChatConfigData configData =
+                new AiChatConfig.AiChatConfigData("httpRequestUrl", option, headers, null);
 
         String modelName = "model";
         when(config.get(modelName)).thenReturn(configData);
 
-        WebClient.RequestBodyUriSpec bodyUriSpec = Mockito.mock(WebClient.RequestBodyUriSpec.class, RETURNS_DEEP_STUBS);
+        WebClient.RequestBodyUriSpec bodyUriSpec =
+                Mockito.mock(WebClient.RequestBodyUriSpec.class, RETURNS_DEEP_STUBS);
         when(webClient.method(any(HttpMethod.class))).thenReturn(bodyUriSpec);
-        WebClient.RequestHeadersSpec<?> requestSpec = Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
+        WebClient.RequestHeadersSpec<?> requestSpec =
+                Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
 
         when(bodyUriSpec.uri(anyString())).thenReturn(bodyUriSpec);
 

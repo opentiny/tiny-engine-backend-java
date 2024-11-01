@@ -10,7 +10,6 @@ import cn.hutool.json.JSONUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
@@ -42,6 +41,7 @@ class ListTypeHandlerTest {
         List<String> param = Arrays.<String>asList("a");
         listTypeHandler.setNonNullParameter(ps, 0, param, null);
         verify(ps, times(1)).setString(0, JSONUtil.toJsonStr(param));
+        ps.close();
     }
 
     @Test
@@ -52,6 +52,7 @@ class ListTypeHandlerTest {
         List<?> result = listTypeHandler.getNullableResult(rs, columnName);
         assertEquals(1, result.size());
         assertEquals("a", result.get(0));
+        rs.close();
     }
 
     @Test
@@ -62,6 +63,7 @@ class ListTypeHandlerTest {
         List<?> result = listTypeHandler.getNullableResult(rs, columnName);
         assertEquals(1, result.size());
         assertEquals("a", result.get(0));
+        rs.close();
     }
 
     @Test
@@ -72,6 +74,7 @@ class ListTypeHandlerTest {
         List<Map> result = (List<Map>) listTypeHandler.getNullableResult(cs, columnName);
         assertEquals(1, result.size());
         assertEquals("value", result.get(0).get("key"));
+        cs.close();
     }
 }
 
