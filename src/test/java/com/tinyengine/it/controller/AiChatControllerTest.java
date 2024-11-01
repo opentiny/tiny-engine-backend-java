@@ -35,9 +35,11 @@ class AiChatControllerTest {
     @Test
     void testAiChat() {
         AiParam aiParam = new AiParam();
-        HashMap<String, Object> mockData = new HashMap<String, Object>() {{
-            put("key", "parameter");
-        }};
+        HashMap<String, Object> mockData = new HashMap<String, Object>() {
+            {
+                put("key", "parameter");
+            }
+        };
         Result<Map<String, Object>> mapResult = Result.success(mockData);
 
         when(aiChatService.getAnswerFromAi(aiParam)).thenReturn(mapResult);

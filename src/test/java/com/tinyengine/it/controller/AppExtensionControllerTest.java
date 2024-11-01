@@ -1,7 +1,6 @@
 package com.tinyengine.it.controller;
 
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
@@ -51,9 +50,11 @@ class AppExtensionControllerTest {
         List<AppExtension> mockData = Arrays.asList(appExtension);
         when(appExtensionService.findAppExtensionByCondition(any(AppExtension.class))).thenReturn(mockData);
 
-        HashMap<String, String> param = new HashMap<String, String>() {{
-            put("app", "1");
-        }};
+        HashMap<String, String> param = new HashMap<String, String>() {
+            {
+                put("app", "1");
+            }
+        };
         Result<AppExtension> result = appExtensionController.getAppExtensionById(param);
         Assertions.assertEquals(2, result.getData().getApp());
     }
