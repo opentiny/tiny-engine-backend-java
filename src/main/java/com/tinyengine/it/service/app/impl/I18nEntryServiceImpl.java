@@ -62,56 +62,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Autowired
     private I18nLangMapper i18nLangMapper;
 
-    /**
-     * 将一个嵌套的 JSON 对象扁平化
-     *
-     * @param jsonData the json data
-     * @return map
-     */
-    public static Map<String, Object> flat(Map<String, Object> jsonData) {
-        Map<String, Object> flattenedMap = new HashMap<>();
-        flatten("", jsonData, flattenedMap);
-        return flattenedMap;
-    }
 
-    private static void flatten(String prefix, Map<String, Object> data, Map<String, Object> flattenedMap) {
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
-            if (entry.getValue() instanceof Map) {
-                flatten(key, (Map<String, Object>) entry.getValue(), flattenedMap);
-            } else {
-                flattenedMap.put(key, entry.getValue());
-            }
-        }
-    }
-
-    /**
-     * 检查对于读取到的JSON文件中的字符串缺失的是前花括号还是后花括号 (1: 缺失后花括号, 2: 缺失前花括号, 3:不缺)
-     *
-     * @param jsonString the json string
-     * @return the int
-     */
-    public static int checkMissingBrace(String jsonString) {
-        int openBraceCount = 0;
-        int closeBraceCount = 0;
-
-        for (char c : jsonString.toCharArray()) {
-            if (c == '{') {
-                openBraceCount++;
-            }
-            if (c == '}') {
-                closeBraceCount++;
-            }
-        }
-
-        if (openBraceCount > closeBraceCount) {
-            return 1;
-        } else if (closeBraceCount > openBraceCount) {
-            return 2;
-        } else {
-            return 3;
-        }
-    }
 
     /**
      * 查询表t_i18n_entry所有数据
@@ -425,7 +376,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      *
      * @param entriesArr the entries arr
      * @param host       the host
-     * @return map
+     * @return result
      */
     @SystemServiceLog(description = "bulkCreateOrUpdate 批量创建或修改")
     public Result<I18nFileResult> bulkCreateOrUpdate(List<EntriesItem> entriesArr, int host) {
@@ -452,7 +403,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
      *
      * @param entries the entries
-     * @return the map
+     * @return I18nFileResult the I18nFileResult
      */
     @SystemServiceLog(description = "bulkInsertOrUpdate 超大量数据更新")
     public I18nFileResult bulkInsertOrUpdate(List<I18nEntry> entries) {
@@ -507,7 +458,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Object> jsonData = objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
             });
-            entriesItem.setEntries(flat(jsonData));
+            entriesItem.setEntries(Utils.flat(jsonData));
 
         } catch (IOException e) {
             log.error("Error parsing JSON: {}", e.getMessage());
@@ -523,7 +474,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 解析zip文件
      *
      * @param file the file
-     * @return map
+     * @return EntriesItem
      * @throws Exception the exception
      */
     public List<EntriesItem> parseZipFileStream(MultipartFile file) throws Exception {
@@ -544,7 +495,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 try {
                     Map<String, Object> jsonData = objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
                     });
-                    entriesItem.setEntries(flat(jsonData));
+                    entriesItem.setEntries(Utils.flat(jsonData));
                 } catch (JsonProcessingException e) {
                     log.error("JSON processing error for file: " + fileInfo.getName(), e);
                     throw new RuntimeException(e);
