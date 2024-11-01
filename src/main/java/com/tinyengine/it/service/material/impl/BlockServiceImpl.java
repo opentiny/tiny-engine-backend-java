@@ -294,7 +294,7 @@ public class BlockServiceImpl implements BlockService {
 
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(nameCn)) {
-            queryWrapper.like("name_cn", nameCn);
+            queryWrapper.like("name", nameCn);
         }
         if (StringUtils.isNotEmpty(description)) {
             queryWrapper.or().like("description", description);
@@ -308,9 +308,9 @@ public class BlockServiceImpl implements BlockService {
             String[] temp = sort.split(":");
             String sortOrder = temp[1];
             if ("ASC".equalsIgnoreCase(sortOrder)) {
-                queryWrapper.orderByAsc("updated_at");
+                queryWrapper.orderByAsc("created_time");
             } else if ("DESC".equalsIgnoreCase(sortOrder)) {
-                queryWrapper.orderByDesc("updated_at");
+                queryWrapper.orderByDesc("last_updated_time");
             }
         }
 
