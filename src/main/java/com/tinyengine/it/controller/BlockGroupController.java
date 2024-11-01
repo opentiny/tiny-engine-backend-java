@@ -61,22 +61,7 @@ public class BlockGroupController {
     @SystemControllerLog(description = "获取区块分组")
     @GetMapping("/block-groups")
     public Result<List<BlockGroupDto>> getAllBlockGroups(@RequestParam(value = "id", required = false) List<Integer> ids, @RequestParam(value = "app", required = false) Integer appId) {
-        // 此接收到的两个参数不一定同时存在
-        BlockGroup blockGroups = new BlockGroup();
-        List<BlockGroupDto> blockGroupsListResult = new ArrayList<>();
-        List<BlockGroupDto> blockGroupsListTemp = new ArrayList<>();
-        if (ids != null) {
-            for (Integer id : ids) {
-                blockGroups.setId(id);
-                blockGroupsListTemp = blockGroupMapper.getBlockGroupsById(id);
-                blockGroupsListResult.addAll(blockGroupsListTemp);
-            }
-
-        }
-        if (appId != null) {
-            blockGroupsListResult = blockGroupMapper.findGroupByAppId(appId);
-        }
-
+        List<BlockGroupDto> blockGroupsListResult = blockGroupService.getBlockGroupByIdsOrAppId(ids, appId);
         return Result.success(blockGroupsListResult);
     }
 
@@ -107,7 +92,6 @@ public class BlockGroupController {
         } else {
             return Result.failed(ExceptionEnum.CM003);
         }
-
         // 页面返回数据显示
         List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroups.getId());
         return Result.success(blockGroupsListResult);
@@ -167,7 +151,6 @@ public class BlockGroupController {
         if (blockGroups == null) {
             return Result.failed(ExceptionEnum.CM009);
         }
-
         // 页面返回数据显示
         List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroups.getId());
         blockGroupService.deleteBlockGroupById(id);

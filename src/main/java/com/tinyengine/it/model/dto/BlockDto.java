@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
@@ -20,16 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class BlockDto {
+public class BlockDto extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    @Schema(name = "id", description = "主键id")
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
 
     @Schema(name = "label", description = "区块显示名称，严格大小写格式")
     private String label;
 
     @Schema(name = "name", description = "区块名称")
+    @JsonProperty("name_cn")
     private String name;
 
     @Schema(name = "framework", description = "技术栈")
@@ -100,7 +99,7 @@ public class BlockDto {
     private Integer platformId;
 
     @Schema(name = "appId", description = "创建区块时所在appId")
-    @JsonProperty("app_id")
+    @JsonProperty("created_app")
     private Integer appId;
 
     @Schema(name = "contentBlocks", description = "*设计预留字段用途*")
@@ -111,35 +110,7 @@ public class BlockDto {
     @JsonProperty("block_group_id")
     private Integer blockGroupId;
 
-    @Schema(name = "createdBy", description = "创建人")
-    @JsonProperty("created_by")
-    private String createdBy;
-
-    @Schema(name = "lastUpdatedBy", description = "最后修改人")
-    @JsonProperty("last_updated_by")
-    private String lastUpdatedBy;
-
-    @Schema(name = "createdTime", description = "创建时间")
-    @JsonProperty("created_time")
-    @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;
-
-    @Schema(name = "lastUpdatedTime", description = "更新时间")
-    @JsonProperty("last_updated_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime lastUpdatedTime;
-
-    @Schema(name = "tenantId", description = "租户ID")
-    @JsonProperty("tenant_id")
-    private String tenantId;
-
-    @Schema(name = "siteId", description = "站点ID")
-    @JsonProperty("site_id")
-    private String siteId;
-
-    @JsonProperty("occupierBy")
+    @JsonProperty("occupier")
     @Schema(name = "occupierBy", description = "当前锁定人")
     private User occupier;
 

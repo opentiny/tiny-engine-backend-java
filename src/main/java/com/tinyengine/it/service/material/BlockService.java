@@ -1,6 +1,7 @@
 package com.tinyengine.it.service.material;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.entity.Block;
 
@@ -58,10 +59,10 @@ public interface BlockService {
     /**
      * 新增表t_block数据
      *
-     * @param block the block
-     * @return the integer
+     * @param blockDto the block dto
+     * @return the result
      */
-    Integer createBlock(Block block);
+    Result<BlockDto> createBlock(BlockDto blockDto);
 
     /**
      * 区块分页查询
@@ -99,9 +100,8 @@ public interface BlockService {
     /**
      * 获取区块
      *
-     * @param groupId the group id
-     * @param appId   the app id
+     * @param map the map
      * @return the list
      */
-    List<Block> listNew(int groupId, int appId);
+    Result<List<Block>> listNew(Map<String, String> map);
 }

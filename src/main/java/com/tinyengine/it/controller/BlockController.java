@@ -2,16 +2,12 @@ package com.tinyengine.it.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.config.log.SystemControllerLog;
-import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.entity.*;
-import com.tinyengine.it.service.app.AppService;
 import com.tinyengine.it.service.material.BlockService;
 import com.tinyengine.it.service.material.TaskRecordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -52,8 +47,6 @@ public class BlockController {
     BlockMapper blockMapper;
     @Autowired
     TaskRecordService taskRecordService;
-    @Autowired
-    private AppMapper appMapper;
 
     /**
      * 获取block列表信息
@@ -109,9 +102,7 @@ public class BlockController {
     public Result<Integer> getCountByCondition(@RequestParam(value = "name_cn", required = false) String nameCn,
                                                @RequestParam(value = "description", required = false) String description) {
         // 获取查询条件name_cn、description,若为空查的是全部数据，若不为空按条件查询
-        List<Block> blocksList = (nameCn == null && description == null)
-                ? blockMapper.findBlocksByNameCnAndDes(null, null)
-                : blockMapper.findBlocksByNameCnAndDes(nameCn, description);
+        List<Block> blocksList = blockMapper.findBlocksByNameCnAndDes(nameCn, description);
         return Result.success(blocksList.size());
     }
 
@@ -142,9 +133,8 @@ public class BlockController {
     /**
      * 创建block
      *
-     * @param map map
+     * @param blockDto the block dto
      * @return BlockDto
-     * @throws Exception exception
      */
     @Operation(summary = "创建block",
             description = "创建block",
@@ -159,46 +149,8 @@ public class BlockController {
     )
     @SystemControllerLog(description = "区块创建api")
     @PostMapping("/block/create")
-    public Result<BlockDto> createBlocks(@Valid @RequestBody Map<String, Object> map) throws Exception {
-        // 对接收到的参数occupier为对应的一个对象，进行特殊处理并重新赋值
-        ObjectMapper objectMapper = new ObjectMapper();
-        if (!(map.get("occupier") instanceof Map && ((Map<?, ?>) map.get("occupier")).isEmpty())) {
-            int occupier = (int) objectMapper.convertValue(map.get("occupier"), Map.class).get("id");
-            map.put("occupier", occupier);
-        } else {
-            map.put("occupier", null);
-        }
-        Map<String, Object> mapTemp = new HashMap<>();
-        mapTemp.putAll(map);
-        // 判断创建区块时是否关联了分组
-        if (mapTemp.containsKey("groups")) {
-            mapTemp.remove("groups");
-        }
-        // 把map里的值对应赋值到实体类中
-        Block blocks = objectMapper.convertValue(mapTemp, Block.class);
-        blocks.setPublicStatus((Integer) map.get("public"));
-        blocks.setIsDefault(false);
-        blocks.setIsOfficial(false);
-        blocks.setName((String) map.get("name_cn"));
-        blocks.setAppId(Integer.parseInt((String) map.get("created_app")));
-        blocks.setPlatformId(1); //新建区块给默认值
-        // 在nodejs中不是数据库的属性也可以保存成功，会自动过滤，public_scope_tenants在java中不是数据库属性无需处理
-        blocks.setTags((List<String>) map.get("tags"));
-
-        // 判断创建区块时是否关联了分组,如果有，插入区块分类关联表数据
-        // todo 待前端设计更改成分组，区块表里直接由分组字段，只需把分组字段做更新赋值
-        if (map.containsKey("groups")) {
-            Object groupsObj = map.get("groups");
-            if (groupsObj instanceof List) {
-                List<Integer> groups = (List<Integer>) groupsObj;
-                int groupId = groups.get(0); // 获取区块关联的分组id
-                blocks.setBlockGroupId(groupId);
-            }
-        }
-        blockService.createBlock(blocks);
-        int id = blocks.getId();
-        BlockDto blocksResult = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
-        return Result.success(blocksResult);
+    public Result<BlockDto> createBlocks(@Valid @RequestBody BlockDto blockDto) {
+        return blockService.createBlock(blockDto);
     }
 
 
@@ -372,23 +324,7 @@ public class BlockController {
     @SystemControllerLog(description = "获取区块列表")
     @GetMapping("/blocks")
     public Result<List<Block>> getAllBlockCategories(@Valid @RequestParam Map<String, String> map) {
-        int groupId = 0;
-        int appId = 0;
-        if (map.get("groupId") != null) {
-            groupId = Integer.parseInt(map.get("groupId"));
-        }
-        if (map.get("appId") != null) {
-            appId = Integer.parseInt(map.get("appId"));
-        }
-        App apps = appMapper.queryAppById(appId);
-        if (groupId != 0) {
-            if (!apps.getId().equals(appId)) {
-                return Result.failed(ExceptionEnum.CM206);
-            }
-        }
-        // listNew
-        List<Block> blocksList = blockService.listNew(groupId, appId);
-        return Result.success(blocksList);
+        return blockService.listNew(map);
     }
 
 

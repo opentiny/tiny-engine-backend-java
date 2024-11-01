@@ -7,12 +7,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.config.log.SystemServiceLog;
+import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
+import org.springframework.beans.BeanUtils;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.common.enums.Enums;
@@ -45,7 +50,7 @@ public class BlockServiceImpl implements BlockService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private BlockHistoryMapper blockHistoryMapper;
+    private AppMapper appMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(BlockServiceImpl.class);
 
@@ -103,16 +108,8 @@ public class BlockServiceImpl implements BlockService {
         // public 不是部分公开, 则public_scope_tenants为空数组
         // 把前端传参赋值给实体
         Block blocks = new Block();
-        blocks.setId(blockDto.getId());
-        blocks.setContent(blockDto.getContent());
-        blocks.setDescription(blockDto.getDescription());
-        blocks.setLabel(blockDto.getLabel());
-        blocks.setName(blockDto.getName());
-        blocks.setPublicStatus(blockDto.getPublicStatus());
-        blocks.setPublic_scope_tenants(blockDto.getPublic_scope_tenants());
-        blocks.setScreenshot(blockDto.getScreenshot());
-        blocks.setTags(blockDto.getTags());
-        blocks.setOccupierBy(String.valueOf(86)); //todo 获取用户信息
+        BeanUtils.copyProperties(blockDto, blocks);
+        blocks.setOccupierBy(String.valueOf(1)); //todo 获取用户信息
         // 处理区块截图
         if (!blockDto.getScreenshot().isEmpty() && !blockDto.getLabel().isEmpty()) {
             // 图片上传,此处给默认值空字符
@@ -135,12 +132,34 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 新增表t_block数据
      *
-     * @param block block
-     * @return execute success data number
+     * @param blockDto the block dto
+     * @return execute success the result
      */
     @Override
-    public Integer createBlock(Block block) {
-        return blockMapper.createBlock(block);
+    public Result<BlockDto> createBlock(BlockDto blockDto) {
+        // 对接收到的参数occupier为对应的一个对象，进行特殊处理并重新赋值
+        Block blocks = new Block();
+        if (blockDto.getOccupier() != null) {
+            blocks.setOccupierBy(String.valueOf(blockDto.getOccupier().getId()));
+        }
+        BeanUtils.copyProperties(blockDto, blocks);
+        blocks.setIsDefault(false);
+        blocks.setIsOfficial(false);
+        blocks.setPlatformId(1); //新建区块给默认值
+        // 判断创建区块时是否关联了分组,如果有，插入区块分类关联表数据
+        // todo 待前端设计更改成分组，区块表里直接有分组字段，只需把分组字段做更新赋值
+        List<Object> groups = blockDto.getGroups();
+        if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
+            Integer groupId = (Integer) groups.get(0); // 强制类型转换
+            blocks.setBlockGroupId(groupId);
+        }
+        int result = blockMapper.createBlock(blocks);
+        if (result < 1) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
+        int id = blocks.getId();
+        BlockDto blocksResult = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
+        return Result.success(blocksResult);
     }
 
     /**
@@ -337,7 +356,7 @@ public class BlockServiceImpl implements BlockService {
 
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         queryWrapper.and(wrapper ->
-                wrapper.like(StringUtils.isNotEmpty(nameCn), "name_cn", nameCn)
+                wrapper.like(StringUtils.isNotEmpty(nameCn), "name", nameCn)
                         .or()
                         .like(StringUtils.isNotEmpty(description), "description", description)
         );
@@ -374,17 +393,30 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 获取区块
      *
-     * @param groupId the group id
-     * @param appId   the app id
+     * @param map the map
      * @return the list
      */
     @Override
-    public List<Block> listNew(int groupId, int appId) {
+    public Result<List<Block>> listNew(Map<String, String> map) {
+        int groupId = 0;
+        int appId = 0;
+        if (map.get("groupId") != null) {
+            groupId = Integer.parseInt(map.get("groupId"));
+        }
+        if (map.get("appId") != null) {
+            appId = Integer.parseInt(map.get("appId"));
+        }
+        App apps = appMapper.queryAppById(appId);
+        if (groupId != 0) {
+            if (!apps.getId().equals(appId)) {
+                return Result.failed(ExceptionEnum.CM206);
+            }
+        }
         List<Block> blocksList = new ArrayList<>();
         // 如果有 groupId, 只查group下的block
         if (groupId != 0) {
             blocksList = blockMapper.findBlocksByBlockGroupId(groupId);
-            return blocksList;
+            return Result.success(blocksList);
         }
         // 如果没有 groupId
         // 1. 查询和 app 相关的所有 group
@@ -418,7 +450,7 @@ public class BlockServiceImpl implements BlockService {
                 })
                 .collect(Collectors.toList());
 
-        return result;
+        return Result.success(result);
     }
 
 }
