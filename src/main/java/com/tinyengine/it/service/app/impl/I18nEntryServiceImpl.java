@@ -559,7 +559,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
                 Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
 
-
         Map<String, Object> entriesItem = new HashMap<>();
         entriesItem.put("lang", Integer.parseInt(lang));
         entriesItem.put("entries", new HashMap<String, Object>());
@@ -591,7 +590,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
                 // 将JSON字符串转换为Map对象
                 TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
-                Map<String, Object> map = JSONUtil.toBean(json, typeReference.getType(),true);
+                Map<String, Object> map = JSONUtil.toBean(json, typeReference.getType(), true);
                 // 把转换后的map铺平合并到总的Map中
                 jsonData.putAll(flat(map));
             }

@@ -103,10 +103,12 @@ class BlockServiceImplTest {
         block.setAssets(assetMap);
         when(blockMapper.selectList(any(Wrapper.class))).thenReturn(Arrays.asList(block));
 
-        HashMap<String, Object> pageContent = new HashMap<String, Object>() {{
-            put("componentName", "blockName1");
-            put("componentType", "Block");
-        }};
+        HashMap<String, Object> pageContent = new HashMap<String, Object>() {
+            {
+                put("componentName", "blockName1");
+                put("componentType", "Block");
+            }
+        };
 
         Map<String, List<String>> result = blockServiceImpl.getBlockAssets(pageContent, "framework");
         Assertions.assertEquals("material", result.get("material").get(0));
@@ -127,20 +129,20 @@ class BlockServiceImplTest {
     @Test
     void testTraverseBlocks() throws JsonProcessingException {
         // map
-        String mapContent = "{\n" +
-                "            \"componentName\":\"blockName1\",\n" +
-                "            \"componentType\":\"Block\"\n" +
-                "        }";
+        String mapContent = "{\n"
+                + "            \"componentName\":\"blockName1\",\n"
+                + "            \"componentType\":\"Block\"\n"
+                + "        }";
         List<String> nameList = new ArrayList<>();
         nameList.add("blockName");
         blockServiceImpl.traverseBlocks(mapContent, nameList);
         assertTrue(nameList.contains("blockName"));
         assertTrue(nameList.contains("blockName1"));
 
-        String listContent = " [\n" +
-                "        {\"componentName\":\"blockName2\", \"componentType\":\"Block\"},\n" +
-                "        {\"componentName\":\"blockName3\", \"componentType\":\"Block\"}" +
-                "        ]";
+        String listContent = " [\n"
+                + "        {\"componentName\":\"blockName2\", \"componentType\":\"Block\"},\n"
+                + "        {\"componentName\":\"blockName3\", \"componentType\":\"Block\"}"
+                + "        ]";
         nameList = new ArrayList<>();
         nameList.add("blockName");
         blockServiceImpl.traverseBlocks(listContent, nameList);
@@ -151,9 +153,11 @@ class BlockServiceImplTest {
 
     @Test
     void testIsBlock() {
-        boolean result = blockServiceImpl.isBlock(new HashMap() {{
-            put("componentType", "Block");
-        }});
+        boolean result = blockServiceImpl.isBlock(new HashMap() {
+            {
+                put("componentType", "Block");
+            }
+        });
         Assertions.assertEquals(true, result);
     }
 }
