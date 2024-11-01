@@ -833,22 +833,22 @@ public class Enums {
         /**
          * Angular types.
          */
-        Angular("ng-tiny"),
+        ANGULAR("ng-tiny"),
 
         /**
          * React types.
          */
-        React("react-fusion"),
+        REACT("react-fusion"),
 
         /**
          * Vue types.
          */
-        Vue("vue-tiny"),
+        VUE("vue-tiny"),
 
         /**
          * Html types.
          */
-        Html("html-vanilla");
+        HTML("html-vanilla");
 
         private final String value;
 

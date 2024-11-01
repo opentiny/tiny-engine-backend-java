@@ -59,4 +59,13 @@ public interface BlockGroupService {
      * @return the integer
      */
     Integer createBlockGroup(BlockGroup blockGroup);
+
+    /**
+     * 根据ids或者appId获取区块信息
+     *
+     * @param ids   ids
+     * @param appId the app id
+     * @return the list
+     */
+    List<BlockGroupDto> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId);
 }

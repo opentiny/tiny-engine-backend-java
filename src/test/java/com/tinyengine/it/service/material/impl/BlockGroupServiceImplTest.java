@@ -3,6 +3,7 @@ package com.tinyengine.it.service.material.impl;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.mapper.BlockGroupMapper;
+import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
 
 import org.junit.jupiter.api.Assertions;
@@ -42,20 +43,20 @@ class BlockGroupServiceImplTest {
 
     @Test
     void testFindBlockGroupById() {
-        BlockGroup mockData = new BlockGroup();
+        BlockGroupDto mockData = new BlockGroupDto();
         when(blockGroupMapper.queryBlockGroupById(1)).thenReturn(mockData);
 
-        BlockGroup result = blockGroupServiceImpl.findBlockGroupById(1);
+        BlockGroupDto result = blockGroupServiceImpl.findBlockGroupById(1);
         Assertions.assertEquals(mockData, result);
     }
 
     @Test
     void testFindBlockGroupByCondition() {
         BlockGroup param = new BlockGroup();
-        BlockGroup blockGroup = new BlockGroup();
+        BlockGroupDto blockGroup = new BlockGroupDto();
         when(blockGroupMapper.queryBlockGroupByCondition(param)).thenReturn(Arrays.asList(blockGroup));
 
-        List<BlockGroup> result = blockGroupServiceImpl.findBlockGroupByCondition(param);
+        List<BlockGroupDto> result = blockGroupServiceImpl.findBlockGroupByCondition(param);
         Assertions.assertEquals(blockGroup, result.get(0));
     }
 

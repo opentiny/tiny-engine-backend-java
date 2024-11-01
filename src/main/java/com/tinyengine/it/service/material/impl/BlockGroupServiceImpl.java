@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,5 +88,33 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     @Override
     public Integer createBlockGroup(BlockGroup blockGroup) {
         return blockGroupMapper.createBlockGroup(blockGroup);
+    }
+
+    /**
+     * 根据ids或者appId获取区块信息
+     *
+     * @param ids   ids
+     * @param appId the app id
+     * @return the list
+     */
+    @Override
+    public List<BlockGroupDto> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId) {
+        // 此接收到的两个参数不一定同时存在
+        BlockGroup blockGroups = new BlockGroup();
+        List<BlockGroupDto> blockGroupsListResult = new ArrayList<>();
+        List<BlockGroupDto> blockGroupsListTemp = new ArrayList<>();
+        if (ids != null) {
+            for (Integer id : ids) {
+                blockGroups.setId(id);
+                blockGroupsListTemp = blockGroupMapper.getBlockGroupsById(id);
+                blockGroupsListResult.addAll(blockGroupsListTemp);
+            }
+
+        }
+        if (appId != null) {
+            blockGroupsListResult = blockGroupMapper.findGroupByAppId(appId);
+        }
+
+        return blockGroupsListResult;
     }
 }
