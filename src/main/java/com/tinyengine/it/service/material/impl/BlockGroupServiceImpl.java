@@ -1,5 +1,7 @@
 package com.tinyengine.it.service.material.impl;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
@@ -86,8 +88,16 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return insert number
      */
     @Override
-    public Integer createBlockGroup(BlockGroup blockGroup) {
-        return blockGroupMapper.createBlockGroup(blockGroup);
+    public Result<List<BlockGroupDto>> createBlockGroup(BlockGroup blockGroup) {
+        List<BlockGroupDto> blockGroupsList = blockGroupMapper.queryBlockGroupByCondition(blockGroup);
+        if (blockGroupsList.isEmpty()) {
+            blockGroupMapper.createBlockGroup(blockGroup);
+        } else {
+            return Result.failed(ExceptionEnum.CM003);
+        }
+        // 页面返回数据显示
+        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroup.getId());
+        return Result.success(blockGroupsListResult);
     }
 
     /**
@@ -102,14 +112,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         // 此接收到的两个参数不一定同时存在
         BlockGroup blockGroups = new BlockGroup();
         List<BlockGroupDto> blockGroupsListResult = new ArrayList<>();
-        List<BlockGroupDto> blockGroupsListTemp = new ArrayList<>();
         if (ids != null) {
-            for (Integer id : ids) {
-                blockGroups.setId(id);
-                blockGroupsListTemp = blockGroupMapper.getBlockGroupsById(id);
-                blockGroupsListResult.addAll(blockGroupsListTemp);
-            }
-
+            blockGroupsListResult = blockGroupMapper.getBlockGroupsByIds(ids);
         }
         if (appId != null) {
             blockGroupsListResult = blockGroupMapper.findGroupByAppId(appId);

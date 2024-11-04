@@ -69,7 +69,7 @@ public class BlockGroupController {
     /**
      * 创建区块分组
      *
-     * @param blockGroups blockGroups
+     * @param blockGroup blockGroup
      * @return the list
      */
     @Operation(summary = "创建区块分组",
@@ -85,23 +85,15 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "创建区块分组")
     @PostMapping("/block-groups/create")
-    public Result<List<BlockGroupDto>> createBlockGroups(@Valid @RequestBody BlockGroup blockGroups) {
-        List<BlockGroupDto> blockGroupsList = blockGroupService.findBlockGroupByCondition(blockGroups);
-        if (blockGroupsList.isEmpty()) {
-            blockGroupService.createBlockGroup(blockGroups);
-        } else {
-            return Result.failed(ExceptionEnum.CM003);
-        }
-        // 页面返回数据显示
-        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroups.getId());
-        return Result.success(blockGroupsListResult);
+    public Result<List<BlockGroupDto>> createBlockGroups(@Valid @RequestBody BlockGroup blockGroup) {
+        return blockGroupService.createBlockGroup(blockGroup);
     }
 
     /**
      * 修改区块分组
      *
-     * @param id          id
-     * @param blockGroups blockGroups
+     * @param id         id
+     * @param blockGroup blockGroup
      * @return the list
      */
     @Operation(summary = "修改区块分组",
@@ -118,11 +110,11 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "修改区块分组")
     @PostMapping("/block-groups/update/{id}")
-    public Result<List<BlockGroupDto>> updateBlockGroups(@Valid @PathVariable Integer id, @RequestBody BlockGroup blockGroups) {
-        blockGroups.setId(id);
-        blockGroupService.updateBlockGroupById(blockGroups);
+    public Result<List<BlockGroupDto>> updateBlockGroups(@Valid @PathVariable Integer id, @RequestBody BlockGroup blockGroup) {
+        blockGroup.setId(id);
+        blockGroupService.updateBlockGroupById(blockGroup);
         // 页面返回数据显示
-        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroups.getId());
+        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroup.getId());
         return Result.success(blockGroupsListResult);
     }
 
