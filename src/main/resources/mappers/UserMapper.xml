@@ -117,6 +117,16 @@
         WHERE id=#{id}
     </select>
 
+    <!-- 根据ids范围内的查询表t_user数据 -->
+    <select id="selectUsersByIds" parameterType="java.util.List" resultMap="UserMap">
+        SELECT id, username
+        FROM t_user
+        WHERE id IN
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            ${item}
+        </foreach>
+    </select>
+
     <!-- 根据条件查询表t_user数据 -->
     <select id="queryUserByCondition" resultMap="UserMap">
         SELECT
