@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.material;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
 
@@ -56,9 +57,9 @@ public interface BlockGroupService {
      * 新增表t_block_group数据
      *
      * @param blockGroup the block group
-     * @return the integer
+     * @return the result
      */
-    Integer createBlockGroup(BlockGroup blockGroup);
+    Result<List<BlockGroupDto>> createBlockGroup(BlockGroup blockGroup);
 
     /**
      * 根据ids或者appId获取区块信息

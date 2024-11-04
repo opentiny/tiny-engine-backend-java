@@ -15,6 +15,7 @@ import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
 import org.springframework.beans.BeanUtils;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -276,18 +278,23 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 生态中心区块列表分页查询
      *
-     * @param request request
+     * @param blockParamDto blockParamDto
      * @return block
      */
     @Override
-    public IPage<Block> findBlocksByPagetionList(Map<String, String> request) {
+    public IPage<Block> findBlocksByPagetionList(BlockParamDto blockParamDto) {
+        String appId = blockParamDto.getAppId();
+        // 如果 appId 存在并且不匹配指定的正则表达式，则删除它
+        if (appId != null && !Pattern.matches("^[1-9]+[0-9]*$", appId)) {
+            blockParamDto.setAppId(null);//设置成null达到map中remove的效果
+        }
         // 获取查询条件
-        String sort = request.get("sort"); // nodejs中页面传参"updated_at:DESC"
-        String nameCn = request.get("name_cn");
-        String description = request.get("description");
-        String label = request.get("label");
-        int limit = request.get("limit") != null ? Integer.parseInt(request.get("limit")) : 0;
-        int start = request.get("start") != null ? Integer.parseInt(request.get("start")) : 0;
+        String sort = blockParamDto.getSort(); // nodejs中页面传参"updated_at:DESC"
+        String nameCn = blockParamDto.getName();
+        String description = blockParamDto.getDescription();
+        String label = blockParamDto.getLabel();
+        int limit = blockParamDto.getLimit() != null ? Integer.parseInt(blockParamDto.getLimit()) : 0;
+        int start = blockParamDto.getStart() != null ? Integer.parseInt(blockParamDto.getStart()) : 0;
         // 把start、limit转为java分页的pageNum、pageSize
         int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
         int pageSize = limit == 0 ? 10 : limit;

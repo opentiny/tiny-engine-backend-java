@@ -3,6 +3,7 @@ package com.tinyengine.it.service.material;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.Block;
 
 import com.tinyengine.it.model.entity.User;
@@ -67,10 +68,10 @@ public interface BlockService {
     /**
      * 区块分页查询
      *
-     * @param request request
+     * @param blockParamDto blockParamDto
      * @return the ipage
      */
-    IPage<Block> findBlocksByPagetionList(Map<String, String> request);
+    IPage<Block> findBlocksByPagetionList(BlockParamDto blockParamDto);
 
     /**
      * 查找表中所有tags

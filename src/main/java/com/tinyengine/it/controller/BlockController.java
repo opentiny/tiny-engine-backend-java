@@ -7,6 +7,7 @@ import com.tinyengine.it.config.log.SystemControllerLog;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.*;
 import com.tinyengine.it.service.material.BlockService;
 import com.tinyengine.it.service.material.TaskRecordService;
@@ -23,7 +24,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -51,7 +51,7 @@ public class BlockController {
     /**
      * 获取block列表信息
      *
-     * @param request request
+     * @param blockParamDto blockParamDto
      * @return block列表信息
      */
     @Operation(summary = "获取区块列表信息",
@@ -67,13 +67,8 @@ public class BlockController {
     )
     @SystemControllerLog(description = "获取区块列表api")
     @GetMapping("/block/list")
-    public Result<List<Block>> getAllBlocks(@RequestParam Map<String, String> request) {
-        String appId = request.get("appId");
-        // 如果 appId 存在并且不匹配指定的正则表达式，则删除它
-        if (appId != null && !Pattern.matches("^[1-9]+[0-9]*$", appId)) {
-            request.remove("appId");
-        }
-        IPage<Block> blocksList = blockService.findBlocksByPagetionList(request);
+    public Result<List<Block>> getAllBlocks(@RequestBody BlockParamDto blockParamDto) {
+        IPage<Block> blocksList = blockService.findBlocksByPagetionList(blockParamDto);
         List<Block> result = blocksList.getRecords();
         return Result.success(result);
     }
@@ -183,7 +178,7 @@ public class BlockController {
     /**
      * 生态中心区块列表分页查询
      *
-     * @param request request
+     * @param blockParamDto blockParamDto
      * @return BlockDto
      */
     @Operation(summary = "生态中心区块列表分页查询",
@@ -199,9 +194,8 @@ public class BlockController {
     )
     @SystemControllerLog(description = "生态中心区块列表分页查询api")
     @GetMapping("/block")
-    public Result<List<BlockDto>> find(@RequestParam Map<String, String> request) {
-
-        IPage<Block> blocksIPage = blockService.findBlocksByPagetionList(request);
+    public Result<List<BlockDto>> find(@RequestBody BlockParamDto blockParamDto) {
+        IPage<Block> blocksIPage = blockService.findBlocksByPagetionList(blockParamDto);
         List<Block> blocksList = blocksIPage.getRecords();
         List<BlockDto> result = new ArrayList<>();
         for (Block blocks : blocksList) {
@@ -252,7 +246,6 @@ public class BlockController {
     @SystemControllerLog(description = "获取区块列表api")
     @GetMapping("/block/list2")
     public Result<IPage<Block>> getBlocks(@RequestBody Map<String, String> request) {
-
         IPage<Block> BlocksList = blockService.findBlocksByConditionPagetion(request);
         return Result.success(BlocksList);
     }
