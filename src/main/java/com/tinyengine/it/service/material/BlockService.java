@@ -55,7 +55,7 @@ public interface BlockService {
      * @param blockDto the block dto
      * @return the BlockDto
      */
-    BlockDto updateBlockById(BlockDto blockDto);
+    Integer updateBlockById(BlockDto blockDto);
 
     /**
      * 新增表t_block数据
