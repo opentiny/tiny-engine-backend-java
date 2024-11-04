@@ -59,4 +59,12 @@ public interface UserMapper extends BaseMapper<User> {
      * @return the integer
      */
     Integer createUser(User user);
+
+    /**
+     * 通过ids获取用户列表信息
+     *
+     * @param ids the ids
+     * @return the list
+     */
+    List<User> selectUsersByIds(List<String> ids);
 }

@@ -97,4 +97,14 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
             "</script>"})
     List<BlockVersionDto> queryBlockAndVersion(@Param("ids") List<Integer> ids,
                                                @Param("materialHistoryId") Integer materialHistoryId);
+
+    /**
+     * 根据blockId获取区块历史记录信息
+     *
+     * @param blockId the block id
+     * @return the list
+     */
+    @Select("select * from t_block_history bh " +
+            "where bh.ref_id = #{blockId}")
+    List<BlockHistory> findBlockHistoriesByBlockId(int blockId);
 }
