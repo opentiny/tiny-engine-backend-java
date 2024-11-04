@@ -349,8 +349,7 @@ create table `t_page_history` (
     `created_time` timestamp not null default current_timestamp comment '创建时间',
     `last_updated_by` varchar(60) not null comment '最后修改人',
     `last_updated_time` timestamp not null default current_timestamp comment '更新时间',
-    primary key (`id`) using btree,
-    unique index `u_idx_page_history` (`app_id`, `ref_id`, `version`) using btree
+    primary key (`id`) using btree
   ) engine = innodb comment = '页面历史表';
 
 drop table if exists `t_page_template`;
