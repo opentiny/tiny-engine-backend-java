@@ -1,5 +1,6 @@
 package com.tinyengine.it.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.List;
 @Data
 public class DeleteI18nEntry {
     private String host;
+    @JsonProperty("host_type")
     private String hostType;
+    @JsonProperty("key_in")
     private List<String> keyIn;
 }
