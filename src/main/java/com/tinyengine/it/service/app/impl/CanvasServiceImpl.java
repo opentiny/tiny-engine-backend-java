@@ -39,10 +39,9 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = page.getOccupier().getId();
             Boolean iCaDoIt = iCanDoIt(occupier, user);
             if (iCaDoIt) {
-                int arg = Enums.CanvasEditorState.OCCUPY.getValue().equals(state) ? user.getId() : null;
                 Page updatePage = new Page();
                 updatePage.setId(id);
-                updatePage.setOccupierBy(String.valueOf(arg));
+                updatePage.setOccupierBy(String.valueOf(user.getId()));
                 pageMapper.updatePageById(updatePage);
                 canvasDto.setOperate("success");
                 canvasDto.setOccupier(user);
