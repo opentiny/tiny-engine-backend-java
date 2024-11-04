@@ -2,6 +2,7 @@ package com.tinyengine.it.service.material.impl;
 
 import static org.mockito.Mockito.when;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
@@ -81,8 +82,9 @@ class BlockGroupServiceImplTest {
     void testCreateBlockGroup() {
         BlockGroup param = new BlockGroup();
         when(blockGroupMapper.createBlockGroup(param)).thenReturn(1);
-
-        Integer result = blockGroupServiceImpl.createBlockGroup(param);
-        Assertions.assertEquals(1, result);
+        BlockGroup blockGroupParam = new BlockGroup();
+        blockGroupParam.setId(1);
+        Result<List<BlockGroupDto>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
+        Assertions.assertNotNull(result.getData());
     }
 }
