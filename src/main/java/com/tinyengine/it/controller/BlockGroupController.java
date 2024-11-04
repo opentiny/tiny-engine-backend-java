@@ -86,6 +86,7 @@ public class BlockGroupController {
     @SystemControllerLog(description = "创建区块分组")
     @PostMapping("/block-groups/create")
     public Result<List<BlockGroupDto>> createBlockGroups(@Valid @RequestBody BlockGroup blockGroup) {
+        blockGroup.setPlatformId(1);
         return blockGroupService.createBlockGroup(blockGroup);
     }
 
