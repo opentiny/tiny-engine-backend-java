@@ -324,9 +324,9 @@ create table t_page (
     unique index u_idx_page (app_id, name)
   ) comment = '页面表';
 
-drop table if exists t_pages_history;
+drop table if exists t_page_history;
 
-create table t_pages_history (
+create table t_page_history (
     id int not null auto_increment comment '主键id',
     ref_id int not null comment '关联主表id',
     version varchar(255) not null comment '版本',
@@ -350,7 +350,6 @@ create table t_pages_history (
     last_updated_by varchar(60) not null comment '最后修改人',
     last_updated_time timestamp not null default current_timestamp comment '更新时间',
     primary key (id),
-    unique index u_idx_page_history (app_id, ref_id, version)
   ) comment = '页面历史表';
 
 drop table if exists t_page_template;
