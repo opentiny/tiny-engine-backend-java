@@ -1,5 +1,6 @@
 package com.tinyengine.it.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -13,5 +14,6 @@ import java.util.List;
 public class OperateI18nBatchEntries {
     private List<Entry> entries;
     private String host;
+    @JsonProperty("host_type")
     private String hostType;
 }
