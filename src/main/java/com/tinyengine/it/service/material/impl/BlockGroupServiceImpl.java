@@ -1,6 +1,9 @@
 package com.tinyengine.it.service.material.impl;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.BlockGroupMapper;
+import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.service.material.BlockGroupService;
 
@@ -10,6 +13,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +44,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return block group
      */
     @Override
-    public BlockGroup findBlockGroupById(@Param("id") Integer id) {
+    public BlockGroupDto findBlockGroupById(@Param("id") Integer id) {
         return blockGroupMapper.queryBlockGroupById(id);
     }
 
@@ -51,7 +55,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return block group
      */
     @Override
-    public List<BlockGroup> findBlockGroupByCondition(BlockGroup blockGroup) {
+    public List<BlockGroupDto> findBlockGroupByCondition(BlockGroup blockGroup) {
         return blockGroupMapper.queryBlockGroupByCondition(blockGroup);
     }
 
@@ -84,7 +88,37 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return insert number
      */
     @Override
-    public Integer createBlockGroup(BlockGroup blockGroup) {
-        return blockGroupMapper.createBlockGroup(blockGroup);
+    public Result<List<BlockGroupDto>> createBlockGroup(BlockGroup blockGroup) {
+        List<BlockGroupDto> blockGroupsList = blockGroupMapper.queryBlockGroupByCondition(blockGroup);
+        if (blockGroupsList.isEmpty()) {
+            blockGroupMapper.createBlockGroup(blockGroup);
+        } else {
+            return Result.failed(ExceptionEnum.CM003);
+        }
+        // 页面返回数据显示
+        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroup.getId());
+        return Result.success(blockGroupsListResult);
+    }
+
+    /**
+     * 根据ids或者appId获取区块信息
+     *
+     * @param ids   ids
+     * @param appId the app id
+     * @return the list
+     */
+    @Override
+    public List<BlockGroupDto> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId) {
+        // 此接收到的两个参数不一定同时存在
+        BlockGroup blockGroups = new BlockGroup();
+        List<BlockGroupDto> blockGroupsListResult = new ArrayList<>();
+        if (ids != null) {
+            blockGroupsListResult = blockGroupMapper.getBlockGroupsByIds(ids);
+        }
+        if (appId != null) {
+            blockGroupsListResult = blockGroupMapper.findGroupByAppId(appId);
+        }
+
+        return blockGroupsListResult;
     }
 }
