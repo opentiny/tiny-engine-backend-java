@@ -14,6 +14,5 @@ import java.util.Map;
 @Setter
 public class SchemaI18n {
     private Map<String, String> en_US;
-
     private Map<String, String> zh_CN;
 }

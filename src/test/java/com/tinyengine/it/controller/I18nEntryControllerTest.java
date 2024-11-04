@@ -6,11 +6,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.service.app.I18nEntryService;
 
@@ -113,18 +109,16 @@ class I18nEntryControllerTest {
 
     @Test
     void testUpdateI18nSingleFile() throws Exception {
-        Result<Map<String, Object>> mockData = new Result<>();
+        Result<I18nFileResult> mockData = new Result<>();
         mockData.setSuccess(true);
-        when(i18nEntryService.readSingleFileAndBulkCreate(anyString(), any(MultipartFile.class), anyInt()))
+        when(i18nEntryService.readSingleFileAndBulkCreate(any(MultipartFile.class), anyInt()))
                 .thenReturn(mockData);
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {
-            {
-                put("filesMap", file);
-            }
-        };
-        Result<Map<String, Object>> result = i18nEntryController.updateI18nSingleFile(1, filesMap);
+        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
+            put("filesMap", file);
+        }};
+        Result<I18nFileResult> result = i18nEntryController.updateI18nSingleFile(1, filesMap);
         Assertions.assertTrue(result.isSuccess());
         Assertions.assertEquals(mockData, result);
     }
@@ -132,15 +126,14 @@ class I18nEntryControllerTest {
     @Test
     void testUpdateI18nMultiFile() throws Exception {
         when(i18nEntryService.readFilesAndbulkCreate(anyString(), any(MultipartFile.class), anyInt()))
-                .thenReturn(new Result<Map<String, Object>>());
+                .thenReturn(new Result<I18nFileResult>());
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {
-            {
-                put("filesMap", file);
-            }
-        };
-        Result<Map<String, Object>> result = i18nEntryController.updateI18nMultiFile(1, filesMap);
+        HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
+            put("filesMap", file);
+        }};
+        Result<I18nFileResult> result = i18nEntryController.updateI18nMultiFile(1, filesMap);
+
         Assertions.assertEquals(new Result<Map<String, Object>>(), result);
     }
 }

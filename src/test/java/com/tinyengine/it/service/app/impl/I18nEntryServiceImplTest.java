@@ -14,13 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.Entry;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
-import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 
@@ -64,15 +58,6 @@ class I18nEntryServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testCheckMissingBrace() {
-        int result = I18nEntryServiceImpl.checkMissingBrace("{{jsonString}");
-        Assertions.assertEquals(1, result);
-        result = I18nEntryServiceImpl.checkMissingBrace("{jsonString}}");
-        Assertions.assertEquals(2, result);
-        result = I18nEntryServiceImpl.checkMissingBrace("{jsonString}");
-        Assertions.assertEquals(3, result);
-    }
 
     @Test
     void testFindAllI18nEntry() {
@@ -282,14 +267,14 @@ class I18nEntryServiceImplTest {
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
         when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
 
-        Result<Map<String, Object>> result = i18nEntryServiceImpl.readSingleFileAndBulkCreate("1", file, 0);
+        Result<I18nFileResult> result = i18nEntryServiceImpl.readSingleFileAndBulkCreate(file, 0);
 
         Assertions.assertNull(result.getData());
         Assertions.assertFalse(result.isSuccess());
     }
 
     @Test
-    void testReadFilesAndbulkCreate() throws IOException {
+    void testReadFilesAndbulkCreate() throws Exception {
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.getContentType()).thenReturn("application/json");
         when(file.getOriginalFilename()).thenReturn("originalName");
@@ -297,7 +282,7 @@ class I18nEntryServiceImplTest {
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
         when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
         // file not existed
-        Result<Map<String, Object>> result = i18nEntryServiceImpl.readFilesAndbulkCreate("1", file, 0);
+        Result<I18nFileResult> result = i18nEntryServiceImpl.readFilesAndbulkCreate("1", file, 0);
         Assertions.assertNull(result.getData());
         Assertions.assertFalse(result.isSuccess());
     }
@@ -313,10 +298,10 @@ class I18nEntryServiceImplTest {
         I18nEntry i18nEntry = new I18nEntry();
         i18nEntry.setLang(1);
         List<I18nEntry> entryList = Arrays.asList(i18nEntry);
-        Map<String, Object> result = i18nEntryServiceImpl.bulkInsertOrUpdate(entryList);
+        I18nFileResult result = i18nEntryServiceImpl.bulkInsertOrUpdate(entryList);
         verify(i18nEntryMapper, times(1)).createI18nEntry(i18nEntry);
-        Assertions.assertEquals(1, result.get("insertNum"));
-        Assertions.assertEquals(0, result.get("updateNum"));
+        Assertions.assertEquals(1, result.getInsertNum());
+        Assertions.assertEquals(0, result.getUpdateNum());
     }
 
     @Test
@@ -328,7 +313,7 @@ class I18nEntryServiceImplTest {
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
         when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
 
-        Result<Map<String, Object>> result = i18nEntryServiceImpl.parseJsonFileStream("1", file);
+        Result<EntriesItem> result = i18nEntryServiceImpl.parseJsonFileStream(file);
         assertFalse(result.isSuccess());
     }
 
@@ -383,9 +368,9 @@ class I18nEntryServiceImplTest {
             TypeReference<Map<String, Object>> typeReference = new TypeReference<Map<String, Object>>() {};
             jsonUtil.when(() -> JSONUtil.toBean("", typeReference.getType(), true))
                     .thenReturn(objectHashMap);
-            Map<String, Object> result = i18nEntryServiceImpl.parseZipFileStream("1", file);
+            List<EntriesItem> result = i18nEntryServiceImpl.parseZipFileStream(file);
 
-            assertEquals(1, result.get("lang"));
+            assertEquals(1, result.get(0).getLang());
         }
     }
 }

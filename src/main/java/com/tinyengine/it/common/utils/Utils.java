@@ -4,18 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import com.tinyengine.it.model.dto.FileInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * The type Utils.
@@ -140,5 +139,106 @@ public class Utils {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         // 将对象转换为 JSON 字符串，然后再解析为 Map
         return objectMapper.convertValue(obj, Map.class);
+    }
+
+    /**
+     * 解压并处理zip文件，把读取到的JSON文件内容以字符串返回
+     *
+     * @param multipartFile multipartFile
+     * @return String
+     * @throws IOException IOException
+     */
+    public static List<FileInfo> unzip(MultipartFile multipartFile) throws IOException {
+        List<FileInfo> fileInfoList = new ArrayList<>();
+        File tempDir = Files.createTempDirectory("unzip").toFile(); // 创建临时目录
+
+        // 将 MultipartFile 转换为 File
+        File zipFile = convertMultipartFileToFile(multipartFile);
+
+        try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
+            ZipEntry zipEntry;
+            while ((zipEntry = zis.getNextEntry()) != null) {
+                File newFile = new File(tempDir, zipEntry.getName());
+
+                if (zipEntry.isDirectory()) {
+                    fileInfoList.add(new FileInfo(newFile.getName(), "", true));
+                } else {
+                    Files.createDirectories(newFile.getParentFile().toPath()); // 确保父目录存在
+                    try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile))) {
+                        byte[] buffer = new byte[1024];
+                        int length;
+                        while ((length = zis.read(buffer)) != -1) {
+                            bos.write(buffer, 0, length);
+                        }
+                    }
+                    fileInfoList.add(new FileInfo(newFile.getName(), readFileContent(newFile), false));
+                }
+                zis.closeEntry();
+            }
+        } finally {
+            // 清理临时目录和文件
+            for (File file : tempDir.listFiles()) {
+                file.delete();
+            }
+            tempDir.delete();
+            zipFile.delete(); // 删除临时的 zip 文件
+        }
+        return fileInfoList;
+    }
+
+    // 转换 MultipartFile 为 File 的方法
+    private static File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
+        File tempFile = File.createTempFile("temp", null);
+        tempFile.deleteOnExit();
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            fos.write(multipartFile.getBytes());
+        }
+        return tempFile;
+    }
+
+    public static String readFileContent(File file) throws IOException {
+        StringBuilder contentBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                contentBuilder.append(line).append(System.lineSeparator());
+            }
+        }
+        return contentBuilder.toString();
+    }
+
+    public static byte[] readAllBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, bytesRead);
+        }
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * 将一个嵌套的 JSON 对象扁平化
+     *
+     * @param jsonData the json data
+     * @return map
+     */
+    public static Map<String, Object> flat(Map<String, Object> jsonData) {
+        Map<String, Object> flattenedMap = new HashMap<>();
+        flatten("", jsonData, flattenedMap);
+        return flattenedMap;
+    }
+
+    private static void flatten(String prefix, Map<String, Object> data, Map<String, Object> flattenedMap) {
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();
+            if (entry.getValue() instanceof Map) {
+                flatten(key, (Map<String, Object>) entry.getValue(), flattenedMap);
+            } else {
+                flattenedMap.put(key, entry.getValue());
+            }
+        }
     }
 }
