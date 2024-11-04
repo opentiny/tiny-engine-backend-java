@@ -825,4 +825,34 @@ public class Enums {
             return value;
         }
     }
+
+    /**
+     * The enum I18n file name.
+     */
+    public enum I18nFileName {
+        /**
+         * En us e i 18 n name.
+         */
+        EN_US("en_us"),
+        /**
+         * Zh cn e i 18 n name.
+         */
+        ZH_CN("zh_cn");
+
+        private final String value;
+
+        I18nFileName(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+
 }
