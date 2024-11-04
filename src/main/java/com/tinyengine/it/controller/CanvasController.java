@@ -6,11 +6,7 @@ import com.tinyengine.it.service.app.CanvasService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * canvas api
@@ -33,8 +29,8 @@ public class CanvasController {
      * @param type  the type
      * @return CanvasDto
      */
-    @GetMapping("/canvas/lock")
-    public Result<CanvasDto> lock(@PathVariable Integer id, String state, String type) {
+    @GetMapping("apps/canvas/lock")
+    public Result<CanvasDto> lock(@RequestParam Integer id, @RequestParam String state, @RequestParam String type) {
         return canvasService.lockCanvas(id, state, type);
     }
 }
