@@ -161,6 +161,25 @@
         <include refid="TaskRecordByCondition"/>
     </select>
 
+    <!-- 根据taskTypeId、uniqueId按照created_time降序查询表t_task_record信息 -->
+    <select id="findTaskRecordByTaskIdAndUniqueid" resultMap="TaskRecordMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM t_task_record
+        WHERE task_type_id=#{taskTypeId} and unique_id=#{uniqueId}
+        order by created_time desc
+    </select>
+
+    <!-- 根据taskTypeId、uniqueId按照id降序查询表t_task_record信息 -->
+    <select id="getUnfinishedTask" resultMap="TaskRecordMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM t_task_record
+        WHERE task_type_id=#{taskTypeId} and unique_id=#{uniqueId}
+        order by id desc
+        LIMIT 1
+    </select>
+
     <!-- 根据主键id删除表t_task_record数据 -->
     <delete id="deleteTaskRecordById">
         DELETE
