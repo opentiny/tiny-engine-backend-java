@@ -1,14 +1,11 @@
 package com.tinyengine.it.service.material.impl;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
-
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.BlockMapper;
+import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.entity.Block;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 /**
  * test case
@@ -30,6 +27,7 @@ import java.util.Map;
 class BlockServiceImplTest {
     @Mock
     private BlockMapper blockMapper;
+
     @InjectMocks
     private BlockServiceImpl blockServiceImpl;
 
@@ -76,19 +74,33 @@ class BlockServiceImplTest {
 
     @Test
     void testCreateBlock() {
-        Block param = new Block();
-        when(blockMapper.createBlock(param)).thenReturn(1);
 
-        Integer result = blockServiceImpl.createBlock(param);
-        Assertions.assertEquals(1, result);
+        when(blockMapper.createBlock(any())).thenReturn(1);
+        BlockDto t = new BlockDto();
+        t.setName("test");
+        when(blockMapper.findBlockAndGroupAndHistoByBlockId(any())).thenReturn(t);
+        BlockDto blockDto = new BlockDto();
+        blockDto.setId(1);
+        blockDto.setScreenshot("aa");
+        blockDto.setLabel("bb");
+        blockDto.setFramework("cc");
+        blockDto.setPlatformId(1);
+        blockDto.setAppId(1);
+        blockDto.setGroups(Arrays.asList(1));
+        blockDto.setName("testBlock");
+        Result<BlockDto> result = blockServiceImpl.createBlock(blockDto);
+        Assertions.assertEquals("test", result.getData().getName());
     }
 
     @Test
     void testUpdateBlockById() {
-        Block param = new Block();
-        when(blockMapper.updateBlockById(param)).thenReturn(1);
-
-        Integer result = blockServiceImpl.updateBlockById(param);
+        when(blockMapper.updateBlockById(any())).thenReturn(1);
+        BlockDto blockDto = new BlockDto();
+        blockDto.setId(1);
+        blockDto.setName("BlockTest1");
+        blockDto.setScreenshot("aa");
+        blockDto.setLabel("bb");
+        Integer result = blockServiceImpl.updateBlockById(blockDto);
         Assertions.assertEquals(1, result);
     }
 

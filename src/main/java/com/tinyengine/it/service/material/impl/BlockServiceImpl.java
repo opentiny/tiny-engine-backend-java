@@ -106,7 +106,7 @@ public class BlockServiceImpl implements BlockService {
      * @return blockDto
      */
     @Override
-    public BlockDto updateBlockById(BlockDto blockDto) {
+    public Integer updateBlockById(BlockDto blockDto) {
         // public 不是部分公开, 则public_scope_tenants为空数组
         // 把前端传参赋值给实体
         Block blocks = new Block();
@@ -127,8 +127,7 @@ public class BlockServiceImpl implements BlockService {
             int groupId = groups.get(0);
             blocks.setBlockGroupId(groupId);
         }
-        blockMapper.updateBlockById(blocks);
-        return blockMapper.findBlockAndGroupAndHistoByBlockId(blockDto.getId());
+        return blockMapper.updateBlockById(blocks);
     }
 
     /**

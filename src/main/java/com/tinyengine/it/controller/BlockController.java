@@ -3,6 +3,7 @@ package com.tinyengine.it.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.config.log.SystemControllerLog;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
@@ -342,9 +343,13 @@ public class BlockController {
     )
     @SystemControllerLog(description = "区块修改api")
     @PostMapping("/block/update/{id}")
-    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockDto blockDto, @PathVariable Integer id, @RequestParam Integer appId) {
+    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockDto blockDto, @PathVariable Integer id) {
         blockDto.setId(id);
-        BlockDto blocksResult = blockService.updateBlockById(blockDto);
+        int result = blockService.updateBlockById(blockDto);
+        if (result < 1) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
+        BlockDto blocksResult = blockMapper.findBlockAndGroupAndHistoByBlockId(blockDto.getId());
         return Result.success(blocksResult);
     }
 
