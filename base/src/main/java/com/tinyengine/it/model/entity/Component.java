@@ -96,8 +96,8 @@ public class Component extends BaseEntity {
     @Schema(name = "isDefault", description = "标识默认组件")
     private Boolean isDefault;
 
-    @Schema(name = "tinyReserved", description = "是否tiny自有")
-    private Boolean tinyReserved;
+    @Schema(name = "isTinyReserved", description = "是否tiny自有")
+    private Boolean isTinyReserved;
 
     @JsonProperty("component_metadata")
     @TableField(typeHandler = MapTypeHandler.class)

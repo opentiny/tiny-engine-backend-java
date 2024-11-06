@@ -46,8 +46,8 @@
         <if test="state!=null and state!=''">
             AND state = #{state}
         </if>
-        <if test="published!=null and published!=''">
-            AND published = #{published}
+        <if test="isPublish!=null and isPublish!=''">
+            AND published = #{isPublish}
         </if>
         <if test="homePage!=null and homePage!=''">
             AND home_page_id = #{homePage}
@@ -170,8 +170,8 @@
         <if test="state!=null and state!=''">
             state = #{state},
         </if>
-        <if test="published!=null and published!=''">
-            published = #{published},
+        <if test="isPublish!=null and isPublish!=''">
+            published = #{isPublish},
         </if>
         <if test="homePage!=null and homePage!=''">
             home_page_id = #{homePage},
@@ -276,7 +276,7 @@
         <result column="image_url" property="imageUrl"/>
         <result column="assets_url" property="assetsUrl"/>
         <result column="state" property="state"/>
-        <result column="published" property="published"/>
+        <result column="published" property="isPublish"/>
         <result column="home_page_id" property="homePage"/>
         <result column="css" property="css"/>
         <result column="config" property="config"/>
@@ -407,7 +407,7 @@
         , #{imageUrl}
         , #{assetsUrl}
         , #{state}
-        , #{published}
+        , #{isPublish}
         , #{homePage}
         , #{css}
         , #{config}

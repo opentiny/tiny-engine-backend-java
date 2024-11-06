@@ -56,7 +56,6 @@ class AiChatServiceImplTest {
         foundationModel.put("model", "ERNIE-Bot-turbo");
         aiParam.setFoundationModel(foundationModel);
 
-        Map<String, Object> response = new HashMap<>();
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("id", 1);
         ArrayList<Object> choices = new ArrayList<>();
@@ -68,6 +67,8 @@ class AiChatServiceImplTest {
         originalChoice.put("message", message);
         choices.add(originalChoice);
         dataMap.put("choices", choices);
+
+        Map<String, Object> response = new HashMap<>();
         response.put("data", dataMap);
         when(aiChatClient.executeChatRequest(any(OpenAiBodyDto.class))).thenReturn(response);
         Result<Map<String, Object>> result = aiChatServiceImpl.getAnswerFromAi(aiParam);

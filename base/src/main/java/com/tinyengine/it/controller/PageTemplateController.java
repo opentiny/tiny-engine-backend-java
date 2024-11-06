@@ -40,7 +40,7 @@ import javax.validation.Valid;
 @RequestMapping("/material-center/api")
 public class PageTemplateController {
     @Autowired
-    PageTemplateService pageTemplateService;
+    private PageTemplateService pageTemplateService;
 
     /**
      * 创建pageTemplate
