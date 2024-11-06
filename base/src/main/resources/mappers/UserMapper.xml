@@ -19,8 +19,8 @@
         <if test="email!=null and email!=''">
             AND email = #{email}
         </if>
-        <if test="enable!=null and enable!=''">
-            AND enable = #{enable}
+        <if test="isEnable!=null and isEnable!=''">
+            AND enable = #{isEnable}
         </if>
         <if test="createdBy!=null and createdBy!=''">
             AND created_by = #{createdBy}
@@ -56,8 +56,8 @@
         <if test="email!=null and email!=''">
             email = #{email},
         </if>
-        <if test="enable!=null and enable!=''">
-            enable = #{enable},
+        <if test="isEnable!=null and isEnable!=''">
+            enable = #{isEnable},
         </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
@@ -91,7 +91,7 @@
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="email" property="email"/>
-        <result column="enable" property="enable"/>
+        <result column="enable" property="isEnable"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
@@ -170,7 +170,7 @@
         VALUES ( #{id}
         , #{username}
         , #{email}
-        , #{enable}
+        , #{isEnable}
         , #{createdBy}
         , #{lastUpdatedBy}
         , #{createdTime}
