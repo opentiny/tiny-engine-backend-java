@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskRecordMaterialServiceImpl implements TaskRecordService {
-
     @Autowired
     TaskRecordMapper taskRecordMapper;
 
