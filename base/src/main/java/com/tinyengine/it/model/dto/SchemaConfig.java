@@ -42,6 +42,7 @@ public class SchemaConfig {
         this.appConvert = Stream
                 .of(new Object[][]{{"id", "appId"}, {"createdBy", "creator"}, {"created_at", "gmt_create"},
                         {"updated_at", "gmt_modified"}})
+                .filter(data -> data[0] instanceof String && data[1] instanceof String) // 使用 instanceof 过滤
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
         this.appInclude = Arrays.asList("id", "name", "tenant", "git_group", "project_name", "is_demo", "description",
@@ -52,12 +53,14 @@ public class SchemaConfig {
                         {"updated_at", "toLocalTimestamp"},
                         {"createdBy", "toCreatorName"},
                         {"global_state", "toArrayValue"}})
+                .filter(data -> data[0] instanceof String && data[1] instanceof String) // 使用 instanceof 过滤
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
         // Initialize PageMetaConfig
         this.pageMetaConvert = Stream
                 .of(new Object[][]{{"page_desc", "description"}, {"route", "router"}, {"isBody", "rootElement"},
                         {"createdBy", "creator"}, {"created_at", "gmt_create"}, {"updated_at", "gmt_modified"}})
+                .filter(data -> data[0] instanceof String && data[1] instanceof String) // 使用 instanceof 过滤
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
         this.pageMetaInclude = Arrays.asList("id", "title", "page_desc", "createdBy", "parentId", "created_at",
@@ -66,6 +69,7 @@ public class SchemaConfig {
         this.pageMetaFormat = Stream
                 .of(new Object[][]{{"created_at", "toLocalTimestamp"}, {"updated_at", "toLocalTimestamp"},
                         {"isBody", "toRootElement"}, {"group", "toGroupName"}, {"createdBy", "toCreatorName"}})
+                .filter(data -> data[0] instanceof String && data[1] instanceof String) // 使用 instanceof 过滤
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
         // Initialize PageContentConfig
@@ -76,12 +80,14 @@ public class SchemaConfig {
         this.folderConvert = Stream
                 .of(new Object[][]{{"name", "folderName"}, {"route", "router"}, {"created_at", "gmt_create"},
                         {"updated_at", "gmt_modified"}})
+                .filter(data -> data[0] instanceof String && data[1] instanceof String) // 使用 instanceof 过滤
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
 
         this.folderInclude = Arrays.asList("name", "route", "created_at", "updated_at", "id", "parentId", "depth");
 
         this.folderFormat = Stream
                 .of(new Object[][]{{"created_at", "toLocalTimestamp"}, {"updated_at", "toLocalTimestamp"}})
+                .filter(data -> data[0] instanceof String && data[1] instanceof String) // 使用 instanceof 过滤
                 .collect(Collectors.toMap(data -> (String) data[0], data -> (String) data[1]));
     }
 }

@@ -52,13 +52,13 @@ import javax.validation.Valid;
 @RequestMapping("/material-center/api")
 public class BlockController {
     @Autowired
-    BlockService blockService;
+    private BlockService blockService;
     @Autowired
-    TenantMapper tenantMapper;
+    private TenantMapper tenantMapper;
     @Autowired
-    BlockMapper blockMapper;
+    private BlockMapper blockMapper;
     @Autowired
-    TaskRecordService taskRecordService;
+    private TaskRecordService taskRecordService;
 
     /**
      * 获取block列表信息

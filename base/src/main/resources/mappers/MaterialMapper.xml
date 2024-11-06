@@ -30,8 +30,8 @@
         <if test="imageUrl!=null and imageUrl!=''">
             AND image_url = #{imageUrl}
         </if>
-        <if test="published!=null and published!=''">
-            AND published = #{published}
+        <if test="isPublish!=null and isPublish!=''">
+            AND published = #{isPublish}
         </if>
         <if test="latestVersion!=null and latestVersion!=''">
             AND latest_version = #{latestVersion}
@@ -54,8 +54,8 @@
         <if test="isDefault!=null and isDefault!=''">
             AND is_default = #{isDefault}
         </if>
-        <if test="tinyReserved!=null and tinyReserved!=''">
-            AND tiny_reserved = #{tinyReserved}
+        <if test="isTinyReserved!=null and isTinyReserved!=''">
+            AND tiny_reserved = #{isTinyReserved}
         </if>
         <if test="componentLibraryId!=null and componentLibraryId!=''">
             AND component_library_id = #{componentLibraryId}
@@ -112,8 +112,8 @@
         <if test="imageUrl!=null and imageUrl!=''">
             image_url = #{imageUrl},
         </if>
-        <if test="published!=null and published!=''">
-            published = #{published},
+        <if test="isPublish!=null and isPublish!=''">
+            published = #{isPublish},
         </if>
         <if test="latestVersion!=null and latestVersion!=''">
             latest_version = #{latestVersion},
@@ -136,8 +136,8 @@
         <if test="isDefault!=null and isDefault!=''">
             is_default = #{isDefault},
         </if>
-        <if test="tinyReserved!=null and tinyReserved!=''">
-            tiny_reserved = #{tinyReserved},
+        <if test="isTinyReserved!=null and isTinyReserved!=''">
+            tiny_reserved = #{isTinyReserved},
         </if>
         <if test="componentLibraryId!=null and componentLibraryId!=''">
             component_library_id = #{componentLibraryId},
@@ -186,7 +186,7 @@
         <result column="framework" property="framework"/>
         <result column="assets_url" property="assetsUrl"/>
         <result column="image_url" property="imageUrl"/>
-        <result column="published" property="published"/>
+        <result column="published" property="isPublish"/>
         <result column="latest_version" property="latestVersion"/>
         <result column="latest_history_id" property="latestHistoryId"/>
         <result column="public" property="publicStatus"/>
@@ -194,7 +194,7 @@
         <result column="description" property="description"/>
         <result column="is_official" property="isOfficial"/>
         <result column="is_default" property="isDefault"/>
-        <result column="tiny_reserved" property="tinyReserved"/>
+        <result column="tiny_reserved" property="isTinyReserved"/>
         <result column="component_library_id" property="componentLibraryId"/>
         <result column="material_category_id" property="materialCategoryId"/>
         <result column="material_size" property="materialSize"/>
@@ -290,7 +290,7 @@
         , #{framework}
         , #{assetsUrl}
         , #{imageUrl}
-        , #{published}
+        , #{isPublish}
         , #{latestVersion}
         , #{latestHistoryId}
         , #{publicStatus}
@@ -298,7 +298,7 @@
         , #{description}
         , #{isOfficial}
         , #{isDefault}
-        , #{tinyReserved}
+        , #{isTinyReserved}
         , #{componentLibraryId}
         , #{materialCategoryId}
         , #{materialSize}

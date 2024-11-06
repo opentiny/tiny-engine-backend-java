@@ -78,8 +78,8 @@
         <if test="isDefault!=null and isDefault!=''">
             AND is_default = #{isDefault}
         </if>
-        <if test="tinyReserved!=null and tinyReserved!=''">
-            AND tiny_reserved = #{tinyReserved}
+        <if test="isTinyReserved!=null and isTinyReserved!=''">
+            AND tiny_reserved = #{isTinyReserved}
         </if>
         <if test="componentMetadata!=null and componentMetadata!=''">
             AND component_metadata = #{componentMetadata}
@@ -172,8 +172,8 @@
         <if test="isDefault!=null and isDefault!=''">
             is_default = #{isDefault},
         </if>
-        <if test="tinyReserved!=null and tinyReserved!=''">
-            tiny_reserved = #{tinyReserved},
+        <if test="isTinyReserved!=null and isTinyReserved!=''">
+            tiny_reserved = #{isTinyReserved},
         </if>
         <if test="componentMetadata!=null and componentMetadata!=''">
             component_metadata = #{componentMetadata},
@@ -226,7 +226,7 @@
         <result column="framework" property="framework"/>
         <result column="is_official" property="isOfficial"/>
         <result column="is_default" property="isDefault"/>
-        <result column="tiny_reserved" property="tinyReserved"/>
+        <result column="tiny_reserved" property="isTinyReserved"/>
         <result column="component_metadata" property="componentMetadata"/>
         <result column="library_id" property="libraryId"/>
         <result column="created_by" property="createdBy"/>
@@ -338,7 +338,7 @@
         , #{framework}
         , #{isOfficial}
         , #{isDefault}
-        , #{tinyReserved}
+        , #{isTinyReserved}
         , #{componentMetadata}
         , #{libraryId}
         , #{createdBy}

@@ -477,7 +477,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<FileInfo> fileInfos = Utils.unzip(file);
         ObjectMapper objectMapper = new ObjectMapper();
         for (FileInfo fileInfo : fileInfos) {
-            if (!fileInfo.isDirectory()) {
+            if (!fileInfo.getIsDirectory()) {
                 EntriesItem entriesItem = setLang(fileInfo.getName());
                 // 处理 JSON 内容
                 try {
