@@ -47,9 +47,20 @@ public class SystemLogAspect {
     }
 
     private static <T extends Annotation> T getMethodAnnotation(JoinPoint joinPoint, Class<T> annotationClass) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method1 = signature.getMethod();
-        return method1.getAnnotation(annotationClass);
+        // 确保 JoinPoint 是方法签名类型
+        if (!(joinPoint.getSignature() instanceof MethodSignature)) {
+            return null;
+        }
+
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+
+        // 检查方法是否为 null
+        if (method == null) {
+            return null;
+        }
+
+        // 获取并返回注解
+        return method.getAnnotation(annotationClass);
     }
 
     /**

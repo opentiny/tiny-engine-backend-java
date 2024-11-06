@@ -99,7 +99,7 @@ public class AiChatServiceImpl implements AiChatService {
         Map<String, Object> response = aiChatClient.executeChatRequest(openAiBodyDto);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
         if (response.get("error_code") != null) {
-            return Result.failed((IBaseError) response.get("error_msg"));
+            return Result.failed(response.get("error_msg").toString());
         }
         if (response.get("error") != null) {
             String code = (String) response.get("code");
@@ -108,24 +108,30 @@ public class AiChatServiceImpl implements AiChatService {
         }
         if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model)) {
             // 进行转换
-            Map<String, Object> responseData = (Map<String, Object>) response.get("data");
+            Object data = response.get("data");
+            if (data instanceof Map) {  // 确保数据是 Map 类型
+                Map<String, Object> responseData = (Map<String, Object>) data;
 
-            Map<String, Object> openAiResponse = new HashMap<>();
-            openAiResponse.put("id", responseData.get("id"));
-            openAiResponse.put("object", "text_completion");
-            openAiResponse.put("created", System.currentTimeMillis() / 1000);
-            // 设置创建时间戳
-            openAiResponse.put("model", responseData.get("model"));
+                Map<String, Object> openAiResponse = new HashMap<>();
+                openAiResponse.put("id", responseData.get("id"));
+                openAiResponse.put("object", "text_completion");
+                openAiResponse.put("created", System.currentTimeMillis() / 1000);  // 设置创建时间戳
+                openAiResponse.put("model", responseData.get("model"));
 
-            List<Map<String, Object>> chatgptChoices = new ArrayList<>();
-            List<Map<String, Object>> originalChoices = (List<Map<String, Object>>) responseData.get("choices");
-            Map<String, Object> originalChoice = originalChoices.get(0);
-            Map<String, Object> chatgptChoice = new HashMap<>();
-            chatgptChoice.put("text", originalChoice.get("text"));
-            chatgptChoice.put("index", originalChoice.get("index"));
-            chatgptChoice.put("message", originalChoice.get("message"));
-            chatgptChoices.add(chatgptChoice);
-            openAiResponse.put("choices", chatgptChoices);
+                List<Map<String, Object>> chatgptChoices = new ArrayList<>();
+                Object choices = responseData.get("choices");
+                if (choices instanceof List) {  // 确保 choices 是 List 类型
+                    List<Map<String, Object>> originalChoices = (List<Map<String, Object>>) choices;
+                    if (!originalChoices.isEmpty()) {
+                        Map<String, Object> originalChoice = originalChoices.get(0);
+                        Map<String, Object> chatgptChoice = new HashMap<>();
+                        chatgptChoice.put("text", originalChoice.get("text"));
+                        chatgptChoice.put("index", originalChoice.get("index"));
+                        chatgptChoice.put("message", originalChoice.get("message"));
+                        chatgptChoices.add(chatgptChoice);
+                    }
+                }
+                openAiResponse.put("choices", chatgptChoices);
 
             Map<String, Object> chatgptUsage = new HashMap<>();
             chatgptUsage.put("prompt_tokens", responseData.get("input_tokens"));
@@ -133,6 +139,9 @@ public class AiChatServiceImpl implements AiChatService {
             chatgptUsage.put("total_tokens", responseData.get("total_tokens"));
             openAiResponse.put("usage", chatgptUsage);
             return Result.success(openAiResponse);
+        }else {
+                return Result.failed("Invalid response format: 'data' is not a Map.");
+            }
         }
         return Result.success(response);
     }
