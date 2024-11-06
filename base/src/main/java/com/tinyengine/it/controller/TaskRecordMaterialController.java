@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/material-center/api")
 public class TaskRecordMaterialController {
     @Autowired
-    TaskRecordService taskRecordService;
+    private TaskRecordService taskRecordService;
 
     /**
      * 根据id查询task信息
@@ -73,7 +73,6 @@ public class TaskRecordMaterialController {
     @SystemControllerLog(description = "获取任务状态api")
     @GetMapping("/tasks/status")
     public Result<List<TaskRecord>> getTasksStatus(@RequestParam String taskTypeId, @RequestParam String uniqueIds) {
-
         // 使用 queries 上下文支持批量查询。若未指定 taskTypeId，则默认查询物料打包任务状态
         int taskTpyeIdTemp = Integer.parseInt(taskTypeId);
         if (taskTpyeIdTemp == 0) {
