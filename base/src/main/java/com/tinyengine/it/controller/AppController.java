@@ -154,8 +154,8 @@ public class AppController {
             return Result.failed("i18n_langs 是必须的");
         }
         // 判断参数i18n_langs是不是数组且是数字
-        boolean allAreNumbers = Arrays.stream((int[]) param.get("i18n_langs")).allMatch(Integer.class::isInstance);
-        if (!allAreNumbers) {
+        boolean isAreNumbers = Arrays.stream((int[]) param.get("i18n_langs")).allMatch(Integer.class::isInstance);
+        if (!isAreNumbers) {
             return Result.failed("i18n_langs[0] should be a number");
         }
         // needTODO 对于传参进行修改逻辑存疑

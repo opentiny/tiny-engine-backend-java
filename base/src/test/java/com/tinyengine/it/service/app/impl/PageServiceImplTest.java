@@ -248,8 +248,8 @@ class PageServiceImplTest {
     void testSetAppHomePage() {
         when(appMapper.updateAppById(any(App.class))).thenReturn(1);
 
-        boolean result = pageServiceImpl.setAppHomePage(1, 2);
-        assertEquals(true, result);
+        boolean isResult = pageServiceImpl.setAppHomePage(1, 2);
+        assertTrue(isResult);
     }
 
     @Test
@@ -299,8 +299,8 @@ class PageServiceImplTest {
         Page pageInfo = new Page();
         pageInfo.setIsHome(true);
         pageInfo.setParentId("1");
-        boolean result = pageServiceImpl.validateIsHome(param, pageInfo);
-        assertEquals(true, result);
+        boolean isResult = pageServiceImpl.validateIsHome(param, pageInfo);
+        assertTrue(isResult);
     }
 
     @Test

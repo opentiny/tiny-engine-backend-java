@@ -37,44 +37,45 @@ class ListTypeHandlerTest {
 
     @Test
     void testSetNonNullParameter() throws SQLException {
-        PreparedStatement ps = Mockito.mock(PreparedStatement.class);
-        List<String> param = Arrays.<String>asList("a");
-        listTypeHandler.setNonNullParameter(ps, 0, param, null);
-        verify(ps, times(1)).setString(0, JSONUtil.toJsonStr(param));
-        ps.close();
+        try (PreparedStatement ps = Mockito.mock(PreparedStatement.class)) {
+            List<String> param = Arrays.<String>asList("a");
+            listTypeHandler.setNonNullParameter(ps, 0, param, null);
+            verify(ps, times(1)).setString(0, JSONUtil.toJsonStr(param));
+        }
+        // 确保关闭资源
     }
 
     @Test
     void testGetNullableResult() throws SQLException {
-        ResultSet rs = Mockito.mock(ResultSet.class);
-        String columnName = "columnName";
-        when(rs.getString(columnName)).thenReturn("[\"a\"]");
-        List<?> result = listTypeHandler.getNullableResult(rs, columnName);
-        assertEquals(1, result.size());
-        assertEquals("a", result.get(0));
-        rs.close();
+        try (ResultSet rs = Mockito.mock(ResultSet.class)) {
+            String columnName = "columnName";
+            when(rs.getString(columnName)).thenReturn("[\"a\"]");
+            List<?> result = listTypeHandler.getNullableResult(rs, columnName);
+            assertEquals(1, result.size());
+            assertEquals("a", result.get(0));
+        }
     }
 
     @Test
     void testGetNullableResult2() throws SQLException {
-        ResultSet rs = Mockito.mock(ResultSet.class);
-        int columnName = 1;
-        when(rs.getString(columnName)).thenReturn("[\"a\"]");
-        List<?> result = listTypeHandler.getNullableResult(rs, columnName);
-        assertEquals(1, result.size());
-        assertEquals("a", result.get(0));
-        rs.close();
+        try (ResultSet rs = Mockito.mock(ResultSet.class)) {
+            int columnName = 1;
+            when(rs.getString(columnName)).thenReturn("[\"a\"]");
+            List<?> result = listTypeHandler.getNullableResult(rs, columnName);
+            assertEquals(1, result.size());
+            assertEquals("a", result.get(0));
+        }
     }
 
     @Test
     void testGetNullableResult3() throws SQLException {
-        CallableStatement cs = Mockito.mock(CallableStatement.class);
-        int columnName = 1;
-        when(cs.getString(columnName)).thenReturn("[{\"key\":\"value\"}]");
-        List<Map> result = (List<Map>) listTypeHandler.getNullableResult(cs, columnName);
-        assertEquals(1, result.size());
-        assertEquals("value", result.get(0).get("key"));
-        cs.close();
+        try (CallableStatement cs = Mockito.mock(CallableStatement.class)) {
+            int columnName = 1;
+            when(cs.getString(columnName)).thenReturn("[{\"key\":\"value\"}]");
+            List<Map> result = (List<Map>) listTypeHandler.getNullableResult(cs, columnName);
+            assertEquals(1, result.size());
+            assertEquals("value", result.get(0).get("key"));
+        }
     }
 }
 
