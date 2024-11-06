@@ -67,7 +67,8 @@ public interface TaskRecordMapper extends BaseMapper<TaskRecord> {
      * @param uniqueId   the unique id
      * @return the list
      */
-    List<TaskRecord> findTaskRecordByTaskIdAndUniqueid(@Param("taskTypeId") Integer taskTypeId, @Param("uniqueId") Integer uniqueId);
+    List<TaskRecord> findTaskRecordByTaskIdAndUniqueid(@Param("taskTypeId") Integer taskTypeId,
+                                                       @Param("uniqueId") Integer uniqueId);
 
     /**
      * 根据taskTypeId、uniqueId按照id降序查询表task_record一条信息
