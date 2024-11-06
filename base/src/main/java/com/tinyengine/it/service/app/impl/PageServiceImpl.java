@@ -565,7 +565,7 @@ public class PageServiceImpl implements PageService {
      * @return the result
      */
     public Result<Page> checkUpdate(Page page) {
-        // 获取占用着occupier todo 获取的时候从page实体类中获取是个对象
+        // 获取占用着occupier
         User occupier = userService.queryUserById(Integer.parseInt(page.getOccupierBy()));
         // 当前页面没有被锁定就请求更新页面接口，提示无权限
         if (occupier == null) {
