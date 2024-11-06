@@ -175,20 +175,7 @@ public class Utils {
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 File newFile = new File(tempDir, zipEntry.getName());
-
-                if (zipEntry.isDirectory()) {
-                    fileInfoList.add(new FileInfo(newFile.getName(), "", true));
-                } else {
-                    Files.createDirectories(newFile.getParentFile().toPath()); // 确保父目录存在
-                    try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile))) {
-                        byte[] buffer = new byte[1024];
-                        int length;
-                        while ((length = zis.read(buffer)) != -1) {
-                            bos.write(buffer, 0, length);
-                        }
-                    }
-                    fileInfoList.add(new FileInfo(newFile.getName(), readFileContent(newFile), false));
-                }
+                processZipFile(zipEntry, fileInfoList, newFile, zis);
                 zis.closeEntry();
             }
         } finally {
@@ -200,6 +187,23 @@ public class Utils {
             zipFile.delete(); // 删除临时的 zip 文件
         }
         return fileInfoList;
+    }
+
+    private static void processZipFile(ZipEntry zipEntry, List<FileInfo> fileInfoList, File newFile,
+                                       ZipInputStream zis) throws IOException {
+        if (zipEntry.isDirectory()) {
+            fileInfoList.add(new FileInfo(newFile.getName(), "", true));
+        } else {
+            Files.createDirectories(newFile.getParentFile().toPath()); // 确保父目录存在
+            try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile))) {
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = zis.read(buffer)) != -1) {
+                    bos.write(buffer, 0, length);
+                }
+            }
+            fileInfoList.add(new FileInfo(newFile.getName(), readFileContent(newFile), false));
+        }
     }
 
     // 转换 MultipartFile 为 File 的方法

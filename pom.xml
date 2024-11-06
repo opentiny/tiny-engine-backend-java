@@ -31,9 +31,9 @@
         <freemarker.version>2.3.32</freemarker.version>
         <spring-data-commons.version>2.5.4</spring-data-commons.version>
         <springdoc-openapi-ui.version>1.6.14</springdoc-openapi-ui.version>
+        <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
     </properties>
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -141,21 +141,18 @@
             <dependency>
                 <groupId>com.opentiny</groupId>
                 <artifactId>tiny-engine-app</artifactId>
+                <version>${tiny-engine.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.opentiny</groupId>
                 <artifactId>tiny-engine-base</artifactId>
+                <version>${tiny-engine.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
         <plugins>
-            <!-- 配置 Maven 插件来打包成 JAR -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
