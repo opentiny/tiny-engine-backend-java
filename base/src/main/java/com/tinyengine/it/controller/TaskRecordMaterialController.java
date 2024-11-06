@@ -42,7 +42,7 @@ public class TaskRecordMaterialController {
     /**
      * 根据id查询task信息
      *
-     * @param id
+     * @param id id
      * @return task信息
      */
     @GetMapping("/tasks/{id}")
@@ -54,9 +54,9 @@ public class TaskRecordMaterialController {
     /**
      * 获取任务状态
      *
-     * @param taskTypeId
-     * @param uniqueIds
-     * @return
+     * @param taskTypeId the task type id
+     * @param uniqueIds  the unique ids
+     * @return the result
      */
     @Operation(summary = "获取任务状态",
             description = "获取任务状态",
@@ -78,7 +78,6 @@ public class TaskRecordMaterialController {
         if (taskTpyeIdTemp == 0) {
             // 若未指定 taskTypeId，则默认查询物料打包任务状态
             taskTpyeIdTemp = Enums.TaskType.ASSETS_BUILD.getValue();
-
         }
         List<List<TaskRecord>> taskRecords = taskRecordService.status(taskTpyeIdTemp, uniqueIds);
         List<TaskRecord> taskRecordList = taskRecords.stream()
@@ -87,5 +86,4 @@ public class TaskRecordMaterialController {
                 .collect(Collectors.toList());
         return Result.success(taskRecordList);
     }
-
 }

@@ -68,7 +68,8 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "获取区块分组")
     @GetMapping("/block-groups")
-    public Result<List<BlockGroupDto>> getAllBlockGroups(@RequestParam(value = "id", required = false) List<Integer> ids, @RequestParam(value = "app", required = false) Integer appId) {
+    public Result<List<BlockGroupDto>> getAllBlockGroups(@RequestParam(value = "id", required = false) List<Integer> ids,
+                                                         @RequestParam(value = "app", required = false) Integer appId) {
         List<BlockGroupDto> blockGroupsListResult = blockGroupService.getBlockGroupByIdsOrAppId(ids, appId);
         return Result.success(blockGroupsListResult);
     }
@@ -119,7 +120,8 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "修改区块分组")
     @PostMapping("/block-groups/update/{id}")
-    public Result<List<BlockGroupDto>> updateBlockGroups(@Valid @PathVariable Integer id, @RequestBody BlockGroup blockGroup) {
+    public Result<List<BlockGroupDto>> updateBlockGroups(@Valid @PathVariable Integer id,
+                                                         @RequestBody BlockGroup blockGroup) {
         blockGroup.setId(id);
         blockGroupService.updateBlockGroupById(blockGroup);
         // 页面返回数据显示
