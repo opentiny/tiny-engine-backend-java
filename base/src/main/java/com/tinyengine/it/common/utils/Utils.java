@@ -190,7 +190,7 @@ public class Utils {
     }
 
     /**
-     * 转换 MultipartFile 为临时 File
+     *  转换 MultipartFile 为 File 的方法
      **
      * @param multipartFile the multipartFile
      * @return File the File
@@ -276,11 +276,12 @@ public class Utils {
                 .forEach(File::delete);
         tempDir.delete();
     }
+
     /**
      * 将传入的 InputStream 中的所有字节读取到一个字节数组中，并返回该字节数组
      *
      * @param inputStream the inputStream
-     * @return byte[]
+     * @return byte[] the byte[]
      */
     public static byte[] readAllBytes(InputStream inputStream) throws IOException {
         // 使用 try-with-resources 确保自动关闭资源

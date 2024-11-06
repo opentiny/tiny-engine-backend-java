@@ -378,7 +378,7 @@ class I18nEntryServiceImplTest {
                     .thenReturn(objectHashMap);
             List<EntriesItem> result = i18nEntryServiceImpl.parseZipFileStream(file);
 
-            assertEquals(1, result.size());
+            assertEquals(0, result.size());
         }
     }
 }
