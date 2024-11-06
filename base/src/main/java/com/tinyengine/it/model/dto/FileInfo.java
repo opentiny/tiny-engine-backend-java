@@ -15,5 +15,4 @@ public class FileInfo {
         this.content = content;
         this.isDirectory = isDirectory;
     }
-
 }

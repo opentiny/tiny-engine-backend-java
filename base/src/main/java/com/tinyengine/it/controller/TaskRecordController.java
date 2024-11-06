@@ -38,7 +38,7 @@ public class TaskRecordController {
     /**
      * 根据id查询task信息
      *
-     * @param id
+     * @param id id
      * @return task信息
      */
     @Operation(summary = "根据id查询task信息",
@@ -58,5 +58,4 @@ public class TaskRecordController {
         TaskRecord taskRecord = taskRecordService.queryTaskRecordById(id);
         return Result.success(taskRecord);
     }
-
 }

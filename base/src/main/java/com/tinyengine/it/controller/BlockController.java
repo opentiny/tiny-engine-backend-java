@@ -108,7 +108,7 @@ public class BlockController {
     @GetMapping("/block/count")
     public Result<Integer> getCountByCondition(@RequestParam(value = "name_cn", required = false) String nameCn,
                                                @RequestParam(value = "description", required = false) String description) {
-        // 获取查询条件name_cn、description,若为空查的是全部数据，若不为空按条件查询
+        // 获取查询条件name_cn和description,若为空查的是全部数据,若不为空按条件查询
         List<Block> blocksList = blockMapper.findBlocksByNameCnAndDes(nameCn, description);
         return Result.success(blocksList.size());
     }
@@ -258,8 +258,8 @@ public class BlockController {
     @SystemControllerLog(description = "获取区块列表api")
     @GetMapping("/block/list2")
     public Result<IPage<Block>> getBlocks(@RequestBody Map<String, String> request) {
-        IPage<Block> BlocksList = blockService.findBlocksByConditionPagetion(request);
-        return Result.success(BlocksList);
+        IPage<Block> blocksList = blockService.findBlocksByConditionPagetion(request);
+        return Result.success(blocksList);
     }
 
 
@@ -336,14 +336,14 @@ public class BlockController {
      * 修改block
      *
      * @param blockDto blockDto
+     * @param id       id
      * @return block dto
      */
     @Operation(summary = "修改区块",
             description = "修改区块",
             parameters = {
                     @Parameter(name = "blockDto", description = "入参对象"),
-                    @Parameter(name = "id", description = "区块id"),
-                    @Parameter(name = "appId", description = "appId")
+                    @Parameter(name = "id", description = "区块id")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
@@ -362,6 +362,4 @@ public class BlockController {
         BlockDto blocksResult = blockMapper.findBlockAndGroupAndHistoByBlockId(blockDto.getId());
         return Result.success(blocksResult);
     }
-
-
 }

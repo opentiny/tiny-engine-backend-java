@@ -63,8 +63,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @Autowired
     private I18nLangMapper i18nLangMapper;
 
-
-
     /**
      * 查询表t_i18n_entry所有数据
      *
@@ -332,16 +330,17 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         if (entriesArr.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM002.getResultCode(), "No file uploaded");
         }
-
-
         return bulkCreateOrUpdate(entriesArr, host);
     }
 
     /**
      * 批量上传词条数据
      *
-     * @param file
-     * @param host
+     * @param lang lang
+     * @param file the file
+     * @param host the host
+     * @return the result
+     * @throws Exception exception
      */
     @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
     @Override
@@ -365,10 +364,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         if (entriesArr.isEmpty()) {
             throw new Exception("No file uploaded");
         }
-
         I18nFileResult i18nFileResult = bulkCreateOrUpdate(entriesArr, host).getData();
         return Result.success(i18nFileResult);
-
     }
 
     /**
@@ -442,29 +439,23 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     public Result<EntriesItem> parseJsonFileStream(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         log.info("Parsing JSON file: {}", fileName);
-
         // 校验文件流合法性
         validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.MimeType.JSON.getValue()));
-
         // 根据文件名判断 lang value
         EntriesItem entriesItem = setLang(fileName);
-
         // 解析国际化词条文件
         try {
             // 使用 try-with-resources 自动管理输入流
-
             byte[] fileBytes = Utils.readAllBytes(file.getInputStream());
             String jsonContent = new String(fileBytes, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Object> jsonData = objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
             });
             entriesItem.setEntries(Utils.flat(jsonData));
-
         } catch (IOException e) {
             log.error("Error parsing JSON: {}", e.getMessage());
             return Result.validateFailed("Error parsing JSON");
         }
-
         log.info("Successfully parsed JSON file: {}", fileName);
         return Result.success(entriesItem);
     }
@@ -485,7 +476,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 解压ZIP文件并处理
         List<FileInfo> fileInfos = Utils.unzip(file);
         ObjectMapper objectMapper = new ObjectMapper();
-
         for (FileInfo fileInfo : fileInfos) {
             if (!fileInfo.isDirectory()) {
                 EntriesItem entriesItem = setLang(fileInfo.getName());
@@ -498,12 +488,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                     log.error("JSON processing error for file: " + fileInfo.getName(), e);
                     throw new RuntimeException(e);
                 }
-
                 entriesItems.add(entriesItem);
-
             }
         }
-
         return entriesItems;
     }
 
@@ -522,7 +509,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         if (condition) {
             return;
         }
-
         // 只要文件不合法就throw error， 无论是批量还是单个
         try {
             file.getInputStream().close();
