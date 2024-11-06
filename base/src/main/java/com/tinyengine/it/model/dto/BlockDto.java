@@ -15,6 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>
+ * 区块dto
+ * </p>
+ *
+ * @author zhangjuncao
+ * @since 2024-10-17
+ */
 @Data
 public class BlockDto extends BaseEntity {
     private static final long serialVersionUID = 1L;
@@ -110,15 +118,16 @@ public class BlockDto extends BaseEntity {
     private User occupier;
 
     @TableField(exist = false)
-    private List<Object> public_scope_tenants = new ArrayList<>();
+    @JsonProperty("public_scope_tenants")
+    private List<Object> publicScopeTenants = new ArrayList<>();
 
     @TableField(exist = false)
     @Schema(name = "groups", type = " List<BlockGroup>", description = "区块分组")
-    List<Object> groups = new ArrayList<>();
+    private List<Object> groups = new ArrayList<>();
 
     @TableField(exist = false)
     @Schema(name = "histories", type = " List<BlockHistory>", description = "区块历史")
-    List<BlockHistory> histories = new ArrayList<>();
+    private List<BlockHistory> histories = new ArrayList<>();
 
     @JsonProperty("public")
     public Integer getPublic() {

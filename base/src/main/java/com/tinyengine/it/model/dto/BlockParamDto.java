@@ -4,6 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+/**
+ * <p>
+ * 区块传参dto
+ * </p>
+ *
+ * @author zhangjuncao
+ * @since 2024-10-17
+ */
 @Data
 public class BlockParamDto {
     private String appId;
@@ -16,6 +24,4 @@ public class BlockParamDto {
     private String label;
     private String limit;
     private String start;
-
-
 }
