@@ -37,16 +37,16 @@ class MapTypeHandlerTest {
 
     @Test
     void testSetNonNullParameter() throws SQLException, JsonProcessingException {
-        PreparedStatement ps = Mockito.mock(PreparedStatement.class);
-        Map<String, Object> mapData = new HashMap<String, Object>() {
-            {
-                put("parameter", "parameter");
-            }
-        };
-        String json = JSONUtil.toJsonStr(mapData);
-        mapTypeHandler.setNonNullParameter(ps, 0, mapData, null);
-        verify(ps, times(1)).setString(0, json);
-        ps.close();
+        try(PreparedStatement ps = Mockito.mock(PreparedStatement.class)) {
+            Map<String, Object> mapData = new HashMap<String, Object>() {
+                {
+                    put("parameter", "parameter");
+                }
+            };
+            String json = JSONUtil.toJsonStr(mapData);
+            mapTypeHandler.setNonNullParameter(ps, 0, mapData, null);
+            verify(ps, times(1)).setString(0, json);
+        }
     }
 
     @Test
@@ -59,12 +59,12 @@ class MapTypeHandlerTest {
         String json = JSONUtil.toJsonStr(mapData);
         String columnName = "columnName";
 
-        ResultSet rs = Mockito.mock(ResultSet.class);
-        when(rs.getString(columnName)).thenReturn(json);
+        try(ResultSet rs = Mockito.mock(ResultSet.class)) {
+            when(rs.getString(columnName)).thenReturn(json);
 
-        Map<String, Object> result = mapTypeHandler.getNullableResult(rs, "columnName");
-        Assertions.assertEquals("value", result.get("key"));
-        rs.close();
+            Map<String, Object> result = mapTypeHandler.getNullableResult(rs, "columnName");
+            Assertions.assertEquals("value", result.get("key"));
+        }
     }
 }
 

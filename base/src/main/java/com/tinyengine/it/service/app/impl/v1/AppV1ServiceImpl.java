@@ -3,9 +3,9 @@ package com.tinyengine.it.service.app.impl.v1;
 import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
 import com.tinyengine.it.common.exception.ServiceException;
+import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.Schema;
 import com.tinyengine.it.common.utils.Utils;
-import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
@@ -252,9 +252,6 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Page> page = pageMapper.queryPageByApp(app.getId());
         metaDto.setPages(page);
 
-        // 无用的代码 I18nEntry i18nEntry = new I18nEntry();
-        // 无用的代码 i18nEntry.setHost(app.getId());
-        // 无用的代码 i18nEntry.setHostType("app");
         List<I18nEntryDto> i18n = i18nEntryMapper.findI18nEntriesByHostandHostType(app.getId(), "app");
         metaDto.setI18n(i18n);
 
@@ -362,17 +359,52 @@ public class AppV1ServiceImpl implements AppV1Service {
         // 遍历区块历史记录 综合信息映射关系
         Set<String> keySet = blocksVersionMap.keySet();
         for (Iterator<String> it = keySet.iterator(); it.hasNext(); ) {
-            Map<String, Object> keyMap = blocksVersionMap.get(it.next());
-            List<String> versions = (List<String>) keyMap.get("versions");
+            String key = it.next();
+            Map<String, Object> keyMap = blocksVersionMap.get(key);
 
-            String targetVersion;
-            // 默认先取最新的
+            // 检查 keyMap 是否为空，防止空指针异常
+            if (keyMap == null) {
+                continue;
+            }
+
+            // 获取 "versions" 字段并确保它是 List<String> 类型
+            List<String> versions = null;
+            Object versionsObj = keyMap.get("versions");
+            if (versionsObj instanceof List) {
+                versions = (List<String>) versionsObj; // 强制转换为 List<String>
+            } else {
+                // 处理错误情况：如果 "versions" 不是 List 类型
+                continue;  // 或者你可以抛出异常或其他处理
+            }
+
+            String targetVersion = null;
+            // 默认先取最新的版本
             if (!versions.isEmpty()) {
                 targetVersion = findMaxVersion(versions);
             } else {
-                targetVersion = versions.get(versions.size() - 1);
+                // 如果 "versions" 为空，获取最后一个版本
+                targetVersion = versions.isEmpty() ? null : versions.get(versions.size() - 1);
             }
-            Integer historyId = (Integer) ((Map<String, Object>) keyMap.get("historyMap")).get(targetVersion);
+
+            // 获取 "historyMap" 并确保它是 Map 类型
+            Map<String, Object> historyMap = null;
+            Object historyMapObj = keyMap.get("historyMap");
+            if (historyMapObj instanceof Map) {
+                historyMap = (Map<String, Object>) historyMapObj;
+            } else {
+                continue;
+            }
+
+            // 获取对应版本的 historyId，并确保它是 Integer 类型
+            Integer historyId = null;
+            Object historyIdObj = historyMap.get(targetVersion);
+            if (historyIdObj instanceof Integer) {
+                historyId = (Integer) historyIdObj;
+            } else {
+                continue;
+            }
+
+            // 将 historyId 添加到 historiesId 列表
             historiesId.add(historyId);
         }
         return historiesId;
@@ -461,12 +493,9 @@ public class AppV1ServiceImpl implements AppV1Service {
                 throw new IllegalArgumentException("Each block history record must have content");
             }
 
-            String componentName = (String) content.get("fileName");
-            Map<String, Object> dependencies = (Map<String, Object>) content.get("dependencies");
-
             Map<String, Object> schema = new HashMap<>();
-            schema.put("componentName", componentName);
-            schema.put("dependencies", dependencies);
+            schema.put("componentName", content.get("fileName"));
+            schema.put("dependencies", content.get("dependencies"));
             schema.put("path", path != null ? path : "");
             schema.put("destructuring", false);
             schema.put("version", blockHistory.getVersion() != null ? blockHistory.getVersion() : "");
@@ -485,17 +514,14 @@ public class AppV1ServiceImpl implements AppV1Service {
         for (Component component : components) {
             String componentName = component.getComponent();
             Map<String, Object> npm = component.getNpm();
-            String packageName = (String) npm.get("package");
-            String exportName = (String) npm.get("exportName");
-            String version = (String) npm.get("version");
-            Boolean destructuring = (Boolean) npm.get("destructuring");
-
             Map<String, Object> schema = new HashMap<>();
+
             schema.put("componentName", componentName);
-            schema.put("package", packageName);
-            schema.put("exportName", exportName);
-            schema.put("destructuring", destructuring != null ? destructuring : false);
-            schema.put("version", version != null ? version : "");
+            schema.put("package", npm.get("package"));
+            schema.put("exportName", npm.get("exportName"));
+            schema.put("destructuring", npm.get("destructuring") != null ? npm.get("destructuring") : false);
+            schema.put("version", npm.get("version") != null ? npm.get("version") : "");
+
             schemas.add(schema);
         }
         return schemas;
