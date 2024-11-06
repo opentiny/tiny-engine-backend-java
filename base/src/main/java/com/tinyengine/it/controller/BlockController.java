@@ -51,15 +51,14 @@ import javax.validation.Valid;
 @CrossOrigin
 @RequestMapping("/material-center/api")
 public class BlockController {
-
     @Autowired
-    BlockService blockService;
+    private BlockService blockService;
     @Autowired
-    TenantMapper tenantMapper;
+    private TenantMapper tenantMapper;
     @Autowired
-    BlockMapper blockMapper;
+    private BlockMapper blockMapper;
     @Autowired
-    TaskRecordService taskRecordService;
+    private TaskRecordService taskRecordService;
 
     /**
      * 获取block列表信息
@@ -304,7 +303,6 @@ public class BlockController {
     @SystemControllerLog(description = "获取所有用户api")
     @GetMapping("/block/users")
     public Result<List<User>> allAuthor() {
-
         List<Block> blocksList = blockMapper.queryAllBlock();
         List<User> userList = blockService.getUsers(blocksList);
         return Result.success(userList);

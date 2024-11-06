@@ -113,14 +113,14 @@ public class BlockServiceImpl implements BlockService {
         // 把前端传参赋值给实体
         Block blocks = new Block();
         BeanUtils.copyProperties(blockDto, blocks);
-        blocks.setOccupierBy(String.valueOf(1)); //todo 获取用户信息
+        blocks.setOccupierBy(String.valueOf(1)); // 获取用户信息
         // 处理区块截图
         if (!blockDto.getScreenshot().isEmpty() && !blockDto.getLabel().isEmpty()) {
             // 图片上传,此处给默认值空字符
             blocks.setScreenshot("");
         }
 
-        // todo 更新区块时去获取关联的分组id,进而去更新分组字段
+        // 更新区块时去获取关联的分组id,进而去更新分组字段
         List<Integer> groups = blockDto.getGroups().stream()
                 .filter(obj -> obj instanceof Integer) // 过滤出 Integer 类型的对象
                 .map(obj -> (Integer) obj) // 转换为 Integer 类型
@@ -150,7 +150,7 @@ public class BlockServiceImpl implements BlockService {
         blocks.setIsOfficial(false);
         blocks.setPlatformId(1); //新建区块给默认值
         // 判断创建区块时是否关联了分组,如果有，插入区块分类关联表数据
-        // todo 待前端设计更改成分组，区块表里直接有分组字段，只需把分组字段做更新赋值
+        // 待前端设计更改成分组，区块表里直接有分组字段，只需把分组字段做更新赋值
         List<Object> groups = blockDto.getGroups();
         if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
             Integer groupId = (Integer) groups.get(0); // 强制类型转换

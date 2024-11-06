@@ -17,7 +17,6 @@ import java.util.List;
 @TableName("t_block_group")
 @Schema(name = "BlockGroup对象", description = "返回对象")
 public class BlockGroupDto extends BaseEntity {
-
     private static final long serialVersionUID = 1L;
 
     @Schema(name = "name", description = "分组名称")

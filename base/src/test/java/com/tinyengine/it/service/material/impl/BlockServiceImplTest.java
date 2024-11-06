@@ -79,7 +79,6 @@ class BlockServiceImplTest {
 
     @Test
     void testCreateBlock() {
-
         when(blockMapper.createBlock(any())).thenReturn(1);
         BlockDto t = new BlockDto();
         t.setName("test");
