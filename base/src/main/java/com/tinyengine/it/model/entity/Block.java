@@ -116,13 +116,16 @@ public class Block extends BaseEntity {
     private Integer blockGroupId;
 
     @TableField(exist = false)
-    private List<Object> public_scope_tenants = new ArrayList<>();
+    @JsonProperty("public_scope_tenants")
+    private List<Object> publicScopeTenants = new ArrayList<>();
 
     @TableField(exist = false)
-    private Integer histories_length = 0;
+    @JsonProperty("histories_length")
+    private Integer historiesLength = 0;
 
     @TableField(exist = false)
-    private Boolean is_published;
+    @JsonProperty("is_published")
+    private Boolean isPublished;
 
     public Block(Map<String, Object> content, String label) {
         super();

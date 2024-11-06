@@ -87,12 +87,12 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
             @Result(column = "block_group_id", javaType = List.class, property = "blocks",
                     many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId"))
     })
-    @Select("SELECT bg.*, bs.block_group_id as block_group_id, a.id as app  " +
-            "FROM t_block_group bg " +
-            "left join t_app a on bg.app_id = a.id " +
-            "left join t_block bs on bg.id = bs.block_group_id " +
-            "WHERE bg.id = #{blockGroupId} " +
-            "GROUP BY bg.id")
+    @Select("SELECT bg.*, bs.block_group_id as block_group_id, a.id as app  "
+            + "FROM t_block_group bg "
+            + "left join t_app a on bg.app_id = a.id "
+            + "left join t_block bs on bg.id = bs.block_group_id "
+            + "WHERE bg.id = #{blockGroupId} "
+            + "GROUP BY bg.id")
     List<BlockGroupDto> getBlockGroupsById(int blockGroupId);
 
 
@@ -109,17 +109,17 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
             @Result(column = "block_group_id", javaType = List.class, property = "blocks",
                     many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId"))
     })
-    @Select("<script>" +
-            "SELECT bg.*, bs.block_group_id as block_group_id, a.id as app  " +
-            "FROM t_block_group bg " +
-            "left join t_app a on bg.app_id = a.id " +
-            "left join t_block bs on bg.id = bs.block_group_id " +
-            "WHERE bg.id in " +
-            "<foreach item='id' collection='ids' open='(' separator=',' close=')'>" +
-            "#{id}" +
-            "</foreach>" +
-            "GROUP BY bg.id" +
-            "</script>"
+    @Select("<script>"
+            + "SELECT bg.*, bs.block_group_id as block_group_id, a.id as app  "
+            + "FROM t_block_group bg "
+            + "left join t_app a on bg.app_id = a.id "
+            + "left join t_block bs on bg.id = bs.block_group_id "
+            + "WHERE bg.id in "
+            + "<foreach item='id' collection='ids' open='(' separator=',' close=')'>"
+            + "#{id}"
+            + "</foreach>"
+            + "GROUP BY bg.id"
+            + "</script>"
     )
     List<BlockGroupDto> getBlockGroupsByIds(List<Integer> ids);
 
@@ -137,12 +137,12 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
             @Result(column = "block_group_id", javaType = List.class, property = "blocks",
                     many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId"))
     })
-    @Select("select bg.*, bs.block_group_id as block_group_id " +
-            "from t_block_group bg " +
-            "left join t_app a on bg.app_id = a.id " +
-            "left join t_block bs on bg.id = bs.block_group_id " +
-            "where bg.app_id = #{appId} " +
-            "GROUP BY bg.id")
+    @Select("select bg.*, bs.block_group_id as block_group_id "
+            + "from t_block_group bg "
+            + "left join t_app a on bg.app_id = a.id "
+            + "left join t_block bs on bg.id = bs.block_group_id "
+            + "where bg.app_id = #{appId} "
+            + "GROUP BY bg.id")
     List<BlockGroupDto> findGroupByAppId(int appId);
 
 
@@ -152,8 +152,8 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
      * @param blockId the block id
      * @return the list
      */
-    @Select("select * from t_block_group bg " +
-            "left join t_block tb on bg.id = tb.block_group_id " +
-            "where tb.id = #{blockId}")
+    @Select("select * from t_block_group bg "
+            + "left join t_block tb on bg.id = tb.block_group_id "
+            + "where tb.id = #{blockId}")
     List<BlockGroup> findBlockGroupByBlockId(Integer blockId);
 }
