@@ -13,11 +13,18 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>
+ * 区块分组dto
+ * </p>
+ *
+ * @author zhangjuncao
+ * @since 2024-10-17
+ */
 @Data
 @TableName("t_block_group")
 @Schema(name = "BlockGroup对象", description = "返回对象")
 public class BlockGroupDto extends BaseEntity {
-
     private static final long serialVersionUID = 1L;
 
     @Schema(name = "name", description = "分组名称")
@@ -40,5 +47,4 @@ public class BlockGroupDto extends BaseEntity {
     @TableField(exist = false)
     @Schema(name = "blocks", description = "区块")
     private List<Block> blocks = new ArrayList<>();
-
 }

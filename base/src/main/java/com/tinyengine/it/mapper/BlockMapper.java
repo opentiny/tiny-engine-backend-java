@@ -72,8 +72,8 @@ public interface BlockMapper extends BaseMapper<Block> {
      * @param blockGroupId the block group id
      * @return the list
      */
-    @Select("select b.* from t_block b " +
-            "where b.block_group_id = #{blockGroupId}")
+    @Select("select b.* from t_block b "
+            + "where b.block_group_id = #{blockGroupId}")
     List<Block> findBlocksByBlockGroupId(int blockGroupId);
 
     /**
@@ -100,12 +100,12 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "occupier_by", property = "occupier",
                     one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
     })
-    @Select("select b.*, b.id as block_id " +
-            "from t_block b " +
-            "left join t_block_group bg on b.block_group_id = bg.id " +
-            "left join t_block_history bh on b.latest_history_id = bh.id " +
-            "where b.id = #{blockId} " +
-            "group by b.id")
+    @Select("select b.*, b.id as block_id "
+            + "from t_block b "
+            + "left join t_block_group bg on b.block_group_id = bg.id "
+            + "left join t_block_history bh on b.latest_history_id = bh.id "
+            + "where b.id = #{blockId} "
+            + "group by b.id")
     BlockDto findBlockAndGroupAndHistoByBlockId(Integer blockId);
 
 
@@ -122,11 +122,11 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "occupier_by", property = "occupier",
                     one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
     })
-    @Select("select b.*,bcbcb.block_id as block_categories_blocks_id,bsh.block_id as block_histories_block_id " +
-            "from t_block b " +
-            "left join t_block_history bh on b.latest_history_id = bh.id " +
-            "where b.id = #{blockId} " +
-            "group by b.id")
+    @Select("select b.*,bcbcb.block_id as block_categories_blocks_id,bsh.block_id as block_histories_block_id "
+            + "from t_block b "
+            + "left join t_block_history bh on b.latest_history_id = bh.id "
+            + "where b.id = #{blockId} "
+            + "group by b.id")
     List<BlockDto> findBlockAndHistorByBlockId(Integer blockId);
 
 
@@ -138,5 +138,4 @@ public interface BlockMapper extends BaseMapper<Block> {
      */
 
     List<Block> findBlocksByBlockGroupIdAppId(int appId);
-
 }
