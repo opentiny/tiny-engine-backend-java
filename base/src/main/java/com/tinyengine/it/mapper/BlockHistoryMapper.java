@@ -104,7 +104,7 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
      * @param blockId the block id
      * @return the list
      */
-    @Select("select * from t_block_history bh " +
-            "where bh.ref_id = #{blockId}")
+    @Select("select * from t_block_history bh "
+            + "where bh.ref_id = #{blockId}")
     List<BlockHistory> findBlockHistoriesByBlockId(int blockId);
 }
