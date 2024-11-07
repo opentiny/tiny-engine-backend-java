@@ -41,7 +41,6 @@ import java.util.zip.ZipInputStream;
  */
 @Slf4j
 public class Utils {
-
     /**
      * The Res keys.
      */
@@ -287,7 +286,6 @@ public class Utils {
         }
 
         // 删除临时解压目录及其内容
-        if (tempDir.exists()) {
             try (Stream<Path> paths = Files.walk(tempDir.toPath())) {  // 使用 try-with-resources 自动关闭流
                 paths.sorted(Comparator.reverseOrder())  // 反向删除
                         .map(Path::toFile)
@@ -301,7 +299,6 @@ public class Utils {
             } catch (IOException e) {
                 log.error("Error walking through temp directory: " + e.getMessage());
             }
-        }
     }
 
     /**
