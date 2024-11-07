@@ -169,11 +169,11 @@ class BlockServiceImplTest {
 
     @Test
     void testIsBlock() {
-        boolean result = blockServiceImpl.isBlock(new HashMap() {
+        boolean hasResult = blockServiceImpl.isBlock(new HashMap() {
             {
                 put("componentType", "Block");
             }
         });
-        Assertions.assertEquals(true, result);
+        Assertions.assertEquals(true, hasResult);
     }
 }

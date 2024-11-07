@@ -16,31 +16,29 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+/**
+ * <p>
+ * 物料模块任务记录实现类
+ * </p>
+ *
+ * @author zhangjuncao
+ * @since 2024-10-17
+ */
 @Service
 public class TaskRecordMaterialServiceImpl implements TaskRecordService {
     @Autowired
     TaskRecordMapper taskRecordMapper;
 
-
     /**
      * 根据主键id查询表task_record信息
      *
      * @param id id
+     * @return the task record
+     * @throws ServiceException serviceException
      */
     @Override
     public TaskRecord queryTaskRecordById(@Param("id") Integer id) throws ServiceException {
         return taskRecordMapper.queryTaskRecordById(id);
-    }
-
-
-    /**
-     * 新增表task_record数据
-     *
-     * @param taskRecord the task record
-     */
-    @Override
-    public Integer createTaskRecord(TaskRecord taskRecord) throws ServiceException {
-        return taskRecordMapper.createTaskRecord(taskRecord);
     }
 
     /**
@@ -65,17 +63,5 @@ public class TaskRecordMaterialServiceImpl implements TaskRecordService {
         return queryPromises.stream()
                 .map(CompletableFuture::join)
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * 获取未完成任务状态
-     *
-     * @param taskTypeId the task type id
-     * @param uniqueIds  the unique ids
-     * @return task record
-     */
-    @Override
-    public TaskRecord getUnfinishedTask(int taskTypeId, int uniqueIds) {
-        return taskRecordMapper.getUnfinishedTask(taskTypeId, uniqueIds);
     }
 }

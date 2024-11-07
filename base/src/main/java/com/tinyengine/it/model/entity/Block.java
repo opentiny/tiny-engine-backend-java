@@ -90,7 +90,7 @@ public class Block extends BaseEntity {
 
     @Schema(name = "tinyReserved", description = "是否是tiny专有")
     @JsonProperty("tiny_reserved")
-    private Boolean tinyReserved;
+    private Boolean isTinyReserved;
 
     @Schema(name = "npmName", description = "npm包名")
     @JsonProperty("npm_name")
