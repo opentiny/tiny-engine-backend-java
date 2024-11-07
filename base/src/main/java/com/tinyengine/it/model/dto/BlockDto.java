@@ -97,10 +97,6 @@ public class BlockDto extends BaseEntity {
     @Schema(name = "i18n", description = "国际化内容")
     private String i18n;
 
-    @Schema(name = "platformId", description = "设计器ID")
-    @JsonProperty("platform_id")
-    private Integer platformId;
-
     @Schema(name = "appId", description = "创建区块时所在appId")
     @JsonProperty("created_app")
     private Integer appId;
@@ -108,6 +104,10 @@ public class BlockDto extends BaseEntity {
     @Schema(name = "contentBlocks", description = "*设计预留字段用途*")
     @JsonProperty("content_blocks")
     private String contentBlocks;
+
+    @Schema(name = "platformId", description = "设计器ID")
+    @JsonProperty("platform_id")
+    private Integer platformId;
 
     @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
     @JsonProperty("block_group_id")
