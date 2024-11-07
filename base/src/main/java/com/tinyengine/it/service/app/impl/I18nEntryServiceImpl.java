@@ -489,7 +489,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      *
      * @param fileInfo the file info
      * @return the list
-     * @throws RuntimeException ec
+     * @throws ServiceException serviceException
      */
     public List<EntriesItem> parseZip(FileInfo fileInfo) throws ServiceException {
         List<EntriesItem> entriesItems = new ArrayList<>();
