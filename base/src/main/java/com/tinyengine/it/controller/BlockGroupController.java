@@ -43,9 +43,9 @@ import javax.validation.Valid;
 @RequestMapping("/material-center/api")
 public class BlockGroupController {
     @Autowired
-    BlockGroupService blockGroupService;
+    private BlockGroupService blockGroupService;
     @Autowired
-    BlockGroupMapper blockGroupMapper;
+    private BlockGroupMapper blockGroupMapper;
 
     /**
      * 获取区块分组

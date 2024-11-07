@@ -27,7 +27,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Schema(name = "enable", description = "账号是否可用")
-    private Boolean enable;
+    private Boolean isEnable;
 
     private Boolean isAdmin;
 

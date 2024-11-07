@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -31,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
 /**
  * The type Utils.
  *
@@ -164,45 +164,37 @@ public class Utils {
      * @return String
      * @throws IOException IOException
      */
+    // 主方法：解压 MultipartFile 文件
     public static List<FileInfo> unzip(MultipartFile multipartFile) throws IOException {
+        File tempDir = createTempDirectory();  // 创建临时目录
+        File zipFile = convertMultipartFileToFile(multipartFile);  // 转换 MultipartFile 为临时文件
         List<FileInfo> fileInfoList = new ArrayList<>();
-        File tempDir = Files.createTempDirectory("unzip").toFile(); // 创建临时目录
-
-        // 将 MultipartFile 转换为 File
-        File zipFile = convertMultipartFileToFile(multipartFile);
 
         try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
-            ZipEntry zipEntry;
-            while ((zipEntry = zis.getNextEntry()) != null) {
-                File newFile = new File(tempDir, zipEntry.getName());
-
-                if (zipEntry.isDirectory()) {
-                    fileInfoList.add(new FileInfo(newFile.getName(), "", true));
-                } else {
-                    Files.createDirectories(newFile.getParentFile().toPath()); // 确保父目录存在
-                    try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile))) {
-                        byte[] buffer = new byte[1024];
-                        int length;
-                        while ((length = zis.read(buffer)) != -1) {
-                            bos.write(buffer, 0, length);
-                        }
-                    }
-                    fileInfoList.add(new FileInfo(newFile.getName(), readFileContent(newFile), false));
-                }
-                zis.closeEntry();
-            }
+            fileInfoList = processZipEntries(zis, tempDir);  // 处理 zip 文件的内容
         } finally {
-            // 清理临时目录和文件
-            for (File file : tempDir.listFiles()) {
-                file.delete();
-            }
-            tempDir.delete();
-            zipFile.delete(); // 删除临时的 zip 文件
+            cleanUp(zipFile, tempDir);  // 清理临时文件和目录
         }
+
         return fileInfoList;
     }
 
-    // 转换 MultipartFile 为 File 的方法
+
+    /**
+     * 创建临时目录
+     **
+     * @return File the File
+     */
+    private static File createTempDirectory() throws IOException {
+        return Files.createTempDirectory("unzip").toFile();
+    }
+
+    /**
+     *  转换 MultipartFile 为 File 的方法
+     **
+     * @param multipartFile the multipartFile
+     * @return File the File
+     */
     private static File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
         File tempFile = File.createTempFile("temp", null);
         tempFile.deleteOnExit();
@@ -212,7 +204,56 @@ public class Utils {
         return tempFile;
     }
 
-    public static String readFileContent(File file) throws IOException {
+    /**
+     * 处理解压文件的每个条目，返回一个文件集合
+     *
+     * @param zis the zis
+     * @param tempDir the tempDir
+     * @return List<FileInfo> the List<FileInfo>
+     */
+    private static List<FileInfo> processZipEntries(ZipInputStream zis, File tempDir) throws IOException {
+        List<FileInfo> fileInfoList = new ArrayList<>();
+        ZipEntry zipEntry;
+
+        while ((zipEntry = zis.getNextEntry()) != null) {
+            File newFile = new File(tempDir, zipEntry.getName());
+
+            if (zipEntry.isDirectory()) {
+                fileInfoList.add(new FileInfo(newFile.getName(), "", true));  // 添加目录
+            } else {
+                extractFile(zis, newFile);  // 解压文件
+                fileInfoList.add(new FileInfo(newFile.getName(), readFileContent(newFile), false));  // 添加文件内容
+            }
+            zis.closeEntry();
+        }
+
+        return fileInfoList;
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param zis the zis
+     * @param newFile the newFile
+     */
+    private static void extractFile(ZipInputStream zis, File newFile) throws IOException {
+        Files.createDirectories(newFile.getParentFile().toPath());  // 确保父目录存在
+        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile))) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = zis.read(buffer)) != -1) {
+                bos.write(buffer, 0, length);
+            }
+        }
+    }
+
+    /**
+     * 读取传入的文件内容，并返回内容字符串
+     *
+     * @param file the file
+     * @return String the String
+     */
+    private static String readFileContent(File file) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
@@ -223,16 +264,43 @@ public class Utils {
         return contentBuilder.toString();
     }
 
+    // 清理临时文件和目录
+    private static void cleanUp(File zipFile, File tempDir) throws IOException {
+        // 删除临时的 zip 文件
+        zipFile.delete();
+
+        // 删除临时解压目录及其内容
+        Files.walk(tempDir.toPath())
+                .sorted(Comparator.reverseOrder())  // 反向删除
+                .map(Path::toFile)
+                .forEach(File::delete);
+        tempDir.delete();
+    }
+
+    /**
+     * 将传入的 InputStream 中的所有字节读取到一个字节数组中，并返回该字节数组
+     *
+     * @param inputStream the inputStream
+     * @return byte[] the byte[]
+     */
     public static byte[] readAllBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int bytesRead;
+        // 使用 try-with-resources 确保自动关闭资源
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
 
-        while ((bytesRead = inputStream.read(buffer)) != -1) {
-            byteArrayOutputStream.write(buffer, 0, bytesRead);
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+
+            // 返回读取的所有字节
+            return byteArrayOutputStream.toByteArray();
+        } finally {
+            // 显式关闭传入的 InputStream，防止未关闭的资源泄漏
+            if (inputStream != null) {
+                inputStream.close();
+            }
         }
-
-        return byteArrayOutputStream.toByteArray();
     }
 
     /**
