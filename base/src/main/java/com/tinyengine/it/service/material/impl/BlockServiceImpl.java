@@ -284,12 +284,9 @@ public class BlockServiceImpl implements BlockService {
             blockParamDto.setAppId(null); // 设置成null达到map中remove的效果
         }
         // 获取查询条件
-        String sort = blockParamDto.getSort(); // nodejs中页面传参"updated_at:DESC"
         String nameCn = blockParamDto.getName();
         String description = blockParamDto.getDescription();
         String label = blockParamDto.getLabel();
-        int limit = blockParamDto.getLimit() != null ? Integer.parseInt(blockParamDto.getLimit()) : 0;
-        int start = blockParamDto.getStart() != null ? Integer.parseInt(blockParamDto.getStart()) : 0;
 
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(nameCn)) {
@@ -301,7 +298,7 @@ public class BlockServiceImpl implements BlockService {
         if (StringUtils.isNotEmpty(label)) {
             queryWrapper.or().eq("label", label);
         }
-
+        String sort = blockParamDto.getSort(); // nodejs中页面传参"updated_at:DESC"
         // 获取是按升序还是降序排列
         if (sort != null) {
             String[] temp = sort.split(":");
@@ -313,6 +310,8 @@ public class BlockServiceImpl implements BlockService {
             }
         }
         // 把start、limit转为java分页的pageNum、pageSize
+        int limit = blockParamDto.getLimit() != null ? Integer.parseInt(blockParamDto.getLimit()) : 0;
+        int start = blockParamDto.getStart() != null ? Integer.parseInt(blockParamDto.getStart()) : 0;
         int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
         int pageSize = limit == 0 ? 10 : limit;
         Page<Block> page = new Page<>(pageNum, pageSize);
