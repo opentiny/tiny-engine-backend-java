@@ -196,7 +196,7 @@ public class Utils {
     }
 
     /**
-     *  转换 MultipartFile 为 File 的方法
+     * 转换 MultipartFile 为 File 的方法
      *
      * @param multipartFile the multipartFile
      * @return File the File
@@ -214,7 +214,7 @@ public class Utils {
     /**
      * 处理解压文件的每个条目，返回一个文件集合
      *
-     * @param zis the zis
+     * @param zis     the zis
      * @param tempDir the tempDir
      * @return List<FileInfo> the List<FileInfo>
      * @throws IOException IOException
@@ -241,7 +241,7 @@ public class Utils {
     /**
      * 解压文件
      *
-     * @param zis the zis
+     * @param zis     the zis
      * @param newFile the newFile
      * @throws IOException IOException
      */
@@ -286,19 +286,20 @@ public class Utils {
         }
 
         // 删除临时解压目录及其内容
-            try (Stream<Path> paths = Files.walk(tempDir.toPath())) {  // 使用 try-with-resources 自动关闭流
-                paths.sorted(Comparator.reverseOrder())  // 反向删除
-                        .map(Path::toFile)
-                        .forEach(file -> {
-                            if (!file.delete()) {
-                                log.error("Failed to delete file: " + file.getAbsolutePath());
-                            } else {
-                                log.info("Successfully deleted file: " + file.getAbsolutePath());
-                            }
+        try (Stream<Path> paths = Files.walk(tempDir.toPath())) {  // 使用 try-with-resources 自动关闭流
+            paths.sorted(Comparator.reverseOrder())  // 反向删除
+                    .map(Path::toFile)
+                    .forEach(file ->
+                        {
+                        if (!file.delete()) {
+                            log.error("Failed to delete file: " + file.getAbsolutePath());
+                        } else {
+                            log.info("Successfully deleted file: " + file.getAbsolutePath());
+                        }
                         });
-            } catch (IOException e) {
-                log.error("Error walking through temp directory: " + e.getMessage());
-            }
+        } catch (IOException e) {
+            log.error("Error walking through temp directory: " + e.getMessage());
+        }
     }
 
     /**
