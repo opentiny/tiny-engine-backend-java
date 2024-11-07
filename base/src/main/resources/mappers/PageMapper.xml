@@ -168,7 +168,7 @@
             <id column="occupierId" property="id"/>
             <result column="username" property="username"/>
             <result column="email" property="email"/>
-            <result column="enable" property="enable"/>
+            <result column="enable" property="isEnable"/>
             <result column="userCreatedBy" property="createdBy"/>
             <result column="userLastUpdatedBy" property="lastUpdatedBy"/>
             <result column="userCreatedTime" property="createdTime"/>

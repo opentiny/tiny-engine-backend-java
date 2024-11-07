@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/app-center/api")
 public class TaskRecordController {
     @Autowired
-    TaskRecordService taskRecordService;
+    private TaskRecordService taskRecordService;
 
     /**
      * 根据id查询task信息

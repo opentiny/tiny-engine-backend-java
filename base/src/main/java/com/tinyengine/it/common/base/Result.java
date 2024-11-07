@@ -24,8 +24,8 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
-@Schema(name = "Result<T>", description = "通用返回对象")
-public class Result<T> {
+@Schema(name = "Result<T extends Object>", description = "通用返回对象")
+public class Result<T extends Object> {
     @Schema(name = "data", description = "请求返回数据")
     private T data;
     @Schema(name = "code", description = "状态码")

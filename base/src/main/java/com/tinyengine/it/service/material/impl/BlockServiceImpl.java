@@ -290,9 +290,6 @@ public class BlockServiceImpl implements BlockService {
         String label = blockParamDto.getLabel();
         int limit = blockParamDto.getLimit() != null ? Integer.parseInt(blockParamDto.getLimit()) : 0;
         int start = blockParamDto.getStart() != null ? Integer.parseInt(blockParamDto.getStart()) : 0;
-        // 把start、limit转为java分页的pageNum、pageSize
-        int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
-        int pageSize = limit == 0 ? 10 : limit;
 
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(nameCn)) {
@@ -315,7 +312,9 @@ public class BlockServiceImpl implements BlockService {
                 queryWrapper.orderByDesc("last_updated_time");
             }
         }
-
+        // 把start、limit转为java分页的pageNum、pageSize
+        int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
+        int pageSize = limit == 0 ? 10 : limit;
         Page<Block> page = new Page<>(pageNum, pageSize);
         return blockMapper.selectPage(page, queryWrapper);
     }

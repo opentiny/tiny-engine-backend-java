@@ -42,7 +42,7 @@ public class Material extends BaseEntity {
     private String imageUrl;
 
     @Schema(name = "published", description = "是否发布：1是，0否")
-    private Boolean published;
+    private Boolean isPublish;
 
     @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
     private String latestVersion;
@@ -68,7 +68,7 @@ public class Material extends BaseEntity {
     private Boolean isDefault;
 
     @Schema(name = "tinyReserved", description = "是否是tiny专有")
-    private Boolean tinyReserved;
+    private Boolean isTinyReserved;
 
     @Schema(name = "componentLibraryId", description = "*设计预留字段*")
     private Integer componentLibraryId;

@@ -239,8 +239,8 @@ public class PageServiceImpl implements PageService {
         Page pageInfo = queryPageById(page.getId());
         // 对isHome 字段进行特殊处理
         if (page.getIsHome()) {
-            boolean res = setAppHomePage(Math.toIntExact(page.getApp()), pageInfo.getId());
-            if (!res) {
+            boolean isRes = setAppHomePage(Math.toIntExact(page.getApp()), pageInfo.getId());
+            if (!isRes) {
                 return Result.failed(ExceptionEnum.CM001);
             }
         }
@@ -685,7 +685,7 @@ public class PageServiceImpl implements PageService {
         appExtension.setApp(previewParam.getApp());
         List<AppExtension> extensionsList = appExtensionMapper.queryAppExtensionByCondition(appExtension);
         Map<String, List<SchemaUtils>> extensions = appV1ServiceImpl.getSchemaExtensions(extensionsList);
-        List<SchemaUtils> utils = extensions.get("utils");
+
         // 拼装数据源
         Map<String, Object> dataSource = new HashMap<>();
         Object dataSourceObj = block.getContent().get("dataSource");
@@ -698,7 +698,7 @@ public class PageServiceImpl implements PageService {
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
         SchemaI18n i18n =
                 appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
-
+        List<SchemaUtils> utils = extensions.get("utils");
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);
         previewDto.setI18n(i18n);

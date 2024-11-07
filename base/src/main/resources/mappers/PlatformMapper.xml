@@ -18,8 +18,8 @@
         <if test="name!=null and name!=''">
             AND name = #{name}
         </if>
-        <if test="published!=null and published!=''">
-            AND published = #{published}
+        <if test="isPublish!=null and isPublish!=''">
+            AND published = #{isPublish}
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
             AND last_build_info = #{lastBuildInfo}
@@ -97,8 +97,8 @@
         <if test="name!=null and name!=''">
             name = #{name},
         </if>
-        <if test="published!=null and published!=''">
-            published = #{published},
+        <if test="isPublish!=null and isPublish!=''">
+            published = #{isPublish},
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
             last_build_info = #{lastBuildInfo},
@@ -176,7 +176,7 @@
     <resultMap id="PlatformMap" type="com.tinyengine.it.model.entity.Platform">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
-        <result column="published" property="published"/>
+        <result column="published" property="isPublish"/>
         <result column="last_build_info" property="lastBuildInfo"/>
         <result column="description" property="description"/>
         <result column="latest_version" property="latestVersion"/>
@@ -278,7 +278,7 @@
         , last_updated_time)
         VALUES ( #{id}
         , #{name}
-        , #{published}
+        , #{isPublish}
         , #{lastBuildInfo}
         , #{description}
         , #{latestVersion}
