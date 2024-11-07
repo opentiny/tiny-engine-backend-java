@@ -491,7 +491,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @return the list
      * @throws RuntimeException ec
      */
-    public List<EntriesItem> parseZip(FileInfo fileInfo) throws RuntimeException {
+    public List<EntriesItem> parseZip(FileInfo fileInfo) throws ServiceException {
         List<EntriesItem> entriesItems = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         if (!fileInfo.getIsDirectory()) {
@@ -504,7 +504,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 entriesItem.setEntries(Utils.flat(jsonData));
             } catch (JsonProcessingException e) {
                 log.error("JSON processing error for file: " + fileInfo.getName(), e);
-                throw new RuntimeException(e);
+                throw new ServiceException(ExceptionEnum.CM308.getResultCode(), ExceptionEnum.CM308.getResultMsg());
             }
             entriesItems.add(entriesItem);
         }
