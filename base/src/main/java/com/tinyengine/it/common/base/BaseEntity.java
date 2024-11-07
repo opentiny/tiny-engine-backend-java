@@ -46,6 +46,10 @@ public class BaseEntity {
     @Schema(name = "tenantId", description = "租户ID")
     private String tenantId;
 
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "renterId", description = "业务租户ID")
+    private String renterId;
+
     @Schema(name = "siteId", description = "站点ID")
     private String siteId;
 }
