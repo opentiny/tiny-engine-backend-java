@@ -41,9 +41,11 @@ class BlockGroupControllerTest {
     @Test
     void testGetAllBlockGroups() {
         BlockGroupDto mockData = new BlockGroupDto();
-        when(blockGroupService.getBlockGroupByIdsOrAppId(any(List.class), anyInt())).thenReturn(Arrays.<BlockGroupDto>asList(mockData));
+        when(blockGroupService.getBlockGroupByIdsOrAppId(any(List.class), anyInt()))
+                .thenReturn(Arrays.<BlockGroupDto>asList(mockData));
 
-        Result<List<BlockGroupDto>> result = blockGroupController.getAllBlockGroups(Arrays.<Integer>asList(Integer.valueOf(0)), Integer.valueOf(0));
+        Result<List<BlockGroupDto>> result =
+                blockGroupController.getAllBlockGroups(Arrays.<Integer>asList(Integer.valueOf(0)), Integer.valueOf(0));
         Assertions.assertEquals(mockData, result.getData().get(0));
     }
 
@@ -61,7 +63,8 @@ class BlockGroupControllerTest {
         BlockGroupDto blockGroupDto = new BlockGroupDto();
         when(blockGroupMapper.getBlockGroupsById(anyInt())).thenReturn(Arrays.<BlockGroupDto>asList(blockGroupDto));
 
-        Result<List<BlockGroupDto>> result = blockGroupController.updateBlockGroups(Integer.valueOf(0), new BlockGroup());
+        Result<List<BlockGroupDto>> result =
+                blockGroupController.updateBlockGroups(Integer.valueOf(0), new BlockGroup());
         Assertions.assertEquals(blockGroupDto, result.getData().get(0));
     }
 
