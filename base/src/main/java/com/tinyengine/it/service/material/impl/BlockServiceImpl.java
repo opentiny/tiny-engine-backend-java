@@ -283,7 +283,7 @@ public class BlockServiceImpl implements BlockService {
         String appId = blockParamDto.getAppId();
         // 如果 appId 存在并且不匹配指定的正则表达式，则删除它
         if (appId != null && !Pattern.matches("^[1-9]+[0-9]*$", appId)) {
-            blockParamDto.setAppId(null);// 设置成null达到map中remove的效果
+            blockParamDto.setAppId(null); // 设置成null达到map中remove的效果
         }
         // 获取查询条件
         String sort = blockParamDto.getSort(); // nodejs中页面传参"updated_at:DESC"
@@ -313,7 +313,7 @@ public class BlockServiceImpl implements BlockService {
             String sortOrder = temp[1];
             if ("ASC".equalsIgnoreCase(sortOrder)) {
                 queryWrapper.orderByAsc("created_time");
-            } else if ("DESC".equalsIgnoreCase(sortOrder)) {
+            } else {
                 queryWrapper.orderByDesc("last_updated_time");
             }
         }
@@ -349,8 +349,8 @@ public class BlockServiceImpl implements BlockService {
      */
     @Override
     public IPage<Block> findBlocksByConditionPagetion(Map<String, String> request) {
-        String public_scope_mode = request.get("public_scope_mode");
-        if (public_scope_mode != null) {
+        String publicScopeMode = request.get("public_scope_mode");
+        if (publicScopeMode != null) {
             request.remove("public_scope_mode");
         }
 

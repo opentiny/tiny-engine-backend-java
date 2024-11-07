@@ -362,7 +362,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         entriesArr.add(entriesItem);
         // 批量上传接口未提交任何文件流时报错
         if (entriesArr.isEmpty()) {
-            throw new Exception("No file uploaded");
+            return Result.failed(ExceptionEnum.CM009);
         }
         I18nFileResult i18nFileResult = bulkCreateOrUpdate(entriesArr, host).getData();
         return Result.success(i18nFileResult);
@@ -488,7 +488,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                     entriesItem.setEntries(Utils.flat(jsonData));
                 } catch (JsonProcessingException e) {
                     log.error("JSON processing error for file: " + fileInfo.getName(), e);
-                    throw new RuntimeException(e);
+                    throw new Exception(e);
                 }
                 entriesItems.add(entriesItem);
             }
@@ -505,10 +505,10 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @param mimeTypes 文件类型集合
      */
     public void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) {
-        boolean condition = file.getOriginalFilename() != null
+        boolean hasCondition = file.getOriginalFilename() != null
                 && file.getName().matches("\\d+")
                 && mimeTypes.contains(file.getContentType());
-        if (condition) {
+        if (hasCondition) {
             return;
         }
         // 只要文件不合法就throw error， 无论是批量还是单个
@@ -573,10 +573,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
         if (Enums.I18nFileName.EN_US.getValue().equals(name)) {
             entriesItem.setLang(2);
-            return entriesItem;
-        } else if (Enums.I18nFileName.ZH_CN.getValue().equals(name)) {
+        } else {
             entriesItem.setLang(1);
-            return entriesItem;
         }
         return entriesItem;
     }
