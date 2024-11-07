@@ -30,8 +30,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 /**
  * The type Utils.
  *
@@ -39,6 +41,7 @@ import java.util.zip.ZipInputStream;
  */
 @Slf4j
 public class Utils {
+
     /**
      * The Res keys.
      */
@@ -170,9 +173,12 @@ public class Utils {
         File zipFile = convertMultipartFileToFile(multipartFile);  // 转换 MultipartFile 为临时文件
         List<FileInfo> fileInfoList = new ArrayList<>();
 
+        // 使用 try-with-resources 来自动关闭 ZipInputStream
         try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(zipFile.toPath()))) {
-            fileInfoList = processZipEntries(zis, tempDir);  // 处理 zip 文件的内容
+            // 处理 zip 文件的内容
+            fileInfoList = processZipEntries(zis, tempDir);
         } finally {
+            // 在 finally 块中执行资源清理
             cleanUp(zipFile, tempDir);  // 清理临时文件和目录
         }
 
@@ -182,8 +188,9 @@ public class Utils {
 
     /**
      * 创建临时目录
-     **
+     *
      * @return File the File
+     * @throws IOException IOException
      */
     private static File createTempDirectory() throws IOException {
         return Files.createTempDirectory("unzip").toFile();
@@ -191,9 +198,10 @@ public class Utils {
 
     /**
      *  转换 MultipartFile 为 File 的方法
-     **
+     *
      * @param multipartFile the multipartFile
      * @return File the File
+     * @throws IOException IOException
      */
     private static File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
         File tempFile = File.createTempFile("temp", null);
@@ -210,6 +218,7 @@ public class Utils {
      * @param zis the zis
      * @param tempDir the tempDir
      * @return List<FileInfo> the List<FileInfo>
+     * @throws IOException IOException
      */
     private static List<FileInfo> processZipEntries(ZipInputStream zis, File tempDir) throws IOException {
         List<FileInfo> fileInfoList = new ArrayList<>();
@@ -235,6 +244,7 @@ public class Utils {
      *
      * @param zis the zis
      * @param newFile the newFile
+     * @throws IOException IOException
      */
     private static void extractFile(ZipInputStream zis, File newFile) throws IOException {
         Files.createDirectories(newFile.getParentFile().toPath());  // 确保父目录存在
@@ -252,6 +262,7 @@ public class Utils {
      *
      * @param file the file
      * @return String the String
+     * @throws IOException IOException
      */
     private static String readFileContent(File file) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
@@ -265,16 +276,32 @@ public class Utils {
     }
 
     // 清理临时文件和目录
-    private static void cleanUp(File zipFile, File tempDir) throws IOException {
+    private static void cleanUp(File zipFile, File tempDir) {
         // 删除临时的 zip 文件
-        zipFile.delete();
+        if (zipFile.exists()) {
+            if (!zipFile.delete()) {
+                log.error("Failed to delete zip file: " + zipFile.getAbsolutePath());
+            } else {
+                log.info("Successfully deleted zip file: " + zipFile.getAbsolutePath());
+            }
+        }
 
         // 删除临时解压目录及其内容
-        Files.walk(tempDir.toPath())
-                .sorted(Comparator.reverseOrder())  // 反向删除
-                .map(Path::toFile)
-                .forEach(File::delete);
-        tempDir.delete();
+        if (tempDir.exists()) {
+            try (Stream<Path> paths = Files.walk(tempDir.toPath())) {  // 使用 try-with-resources 自动关闭流
+                paths.sorted(Comparator.reverseOrder())  // 反向删除
+                        .map(Path::toFile)
+                        .forEach(file -> {
+                            if (!file.delete()) {
+                                log.error("Failed to delete file: " + file.getAbsolutePath());
+                            } else {
+                                log.info("Successfully deleted file: " + file.getAbsolutePath());
+                            }
+                        });
+            } catch (IOException e) {
+                log.error("Error walking through temp directory: " + e.getMessage());
+            }
+        }
     }
 
     /**
@@ -282,6 +309,7 @@ public class Utils {
      *
      * @param inputStream the inputStream
      * @return byte[] the byte[]
+     * @throws IOException IOException
      */
     public static byte[] readAllBytes(InputStream inputStream) throws IOException {
         // 使用 try-with-resources 确保自动关闭资源
