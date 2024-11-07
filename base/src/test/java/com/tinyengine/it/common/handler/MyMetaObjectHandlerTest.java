@@ -22,7 +22,7 @@ class MyMetaObjectHandlerTest {
         MetaObject param = Mockito.mock(MetaObject.class);
         when(param.hasSetter("tenantId")).thenReturn(true);
         myMetaObjectHandler.insertFill(param);
-        verify(param, times(6)).hasSetter(anyString());
+        verify(param, times(7)).hasSetter(anyString());
     }
 
     @Test

@@ -9,7 +9,7 @@
         id
         , name, published, last_build_info, description, latest_version, latest_history_id, material_history_id,
         image_url, sort_plugins, sort_toolbar, is_default, prettier_opts, set_default_by, app_extend_config, data_hash,
-        business_category_id, theme_id, platform_url, vscode_url, tenant_id, site_id, created_by, last_updated_by,
+        business_category_id, theme_id, platform_url, vscode_url, tenant_id, renter_id, site_id, created_by, last_updated_by,
         created_time, last_updated_time
     </sql>
 
@@ -74,6 +74,9 @@
         </if>
         <if test="tenantId!=null and tenantId!=''">
             AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
         </if>
         <if test="siteId!=null and siteId!=''">
             AND site_id = #{siteId}
@@ -154,6 +157,9 @@
         <if test="tenantId!=null and tenantId!=''">
             tenant_id = #{tenantId},
         </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
         <if test="siteId!=null and siteId!=''">
             site_id = #{siteId},
         </if>
@@ -195,6 +201,7 @@
         <result column="platform_url" property="platformUrl"/>
         <result column="vscode_url" property="vscodeUrl"/>
         <result column="tenant_id" property="tenantId"/>
+        <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
@@ -270,7 +277,7 @@
         , theme_id
         , platform_url
         , vscode_url
-        , tenant_id
+        , tenant_id, renter_id
         , site_id
         , created_by
         , last_updated_by
@@ -297,6 +304,7 @@
         , #{platformUrl}
         , #{vscodeUrl}
         , #{tenantId}
+        , #{renterId}
         , #{siteId}
         , #{createdBy}
         , #{lastUpdatedBy}
