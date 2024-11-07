@@ -347,7 +347,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     public Result<I18nFileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception {
         List<EntriesItem> entriesArr = new ArrayList<>();
         InputStream inputStream = file.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader reader = new BufferedReader(new InputStreamReader((inputStream), StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
