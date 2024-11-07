@@ -23,8 +23,6 @@ import com.tinyengine.it.service.material.BlockService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -334,11 +332,9 @@ public class BlockServiceImpl implements BlockService {
         ObjectMapper objectMapper = new ObjectMapper();
         queryWrapper.select("tags").isNotNull("tags");
         List<Block> allBlocksList = blockMapper.selectList(queryWrapper);
-        List<String> allTagsList = allBlocksList.stream()
+        return allBlocksList.stream()
                 .flatMap(blocks -> blocks.getTags().stream())
                 .collect(Collectors.toList());
-
-        return allTagsList;
     }
 
     /**
