@@ -33,7 +33,7 @@ public class Result<T extends Object> {
     @Schema(name = "message", description = "提示信息")
     private String message;
     @Schema(name = "success", description = "成功还是失败")
-    private boolean success;
+    private boolean isSuccess;
     @Schema(name = "error", description = "失败对象")
     private Map<String, Object> error;
     @Schema(name = "err_msg", description = "失败信息")
@@ -50,7 +50,7 @@ public class Result<T extends Object> {
         this.code = code;
         this.message = message;
         this.data = data;
-        this.success = true;
+        this.isSuccess = true;
     }
 
     /**
@@ -63,7 +63,7 @@ public class Result<T extends Object> {
      */
     protected Result(String code, String message, T data, boolean success) {
         this(code, message, data);
-        this.success = success;
+        this.isSuccess = success;
         if (!success) {
             this.errMsg = message;
             this.error = MapUtil.builder(new HashMap<String, Object>())

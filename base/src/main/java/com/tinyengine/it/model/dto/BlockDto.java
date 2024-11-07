@@ -38,10 +38,6 @@ public class BlockDto extends BaseEntity {
     private String framework;
 
     @TableField(typeHandler = JacksonTypeHandler.class)
-    @Schema(name = "content", description = "区块内容")
-    private Map<String, Object> content;
-
-    @TableField(typeHandler = JacksonTypeHandler.class)
     @Schema(name = "assets", description = "构建资源")
     private Map<String, Object> assets;
 
@@ -50,16 +46,16 @@ public class BlockDto extends BaseEntity {
     @Schema(name = "lastBuildInfo", description = "最新一次构建信息")
     private Map<String, Object> lastBuildInfo;
 
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @Schema(name = "content", description = "区块内容")
+    private Map<String, Object> content;
+
     @Schema(name = "description", description = "描述")
     private String description;
 
     @Schema(name = "tags", description = "标签")
     @TableField(typeHandler = ListTypeHandler.class)
     private List<String> tags;
-
-    @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
-    @JsonProperty("latest_version")
-    private String latestVersion;
 
     @Schema(name = "latestHistoryId", description = "当前历史记录表ID")
     @JsonProperty("latest_history_id")
@@ -71,6 +67,10 @@ public class BlockDto extends BaseEntity {
     @Schema(name = "path", description = "区块路径")
     private String path;
 
+    @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
+    @JsonProperty("latest_version")
+    private String latestVersion;
+
     @Schema(name = "occupierId", description = "当前锁定人id")
     private String occupierId;
 
@@ -78,28 +78,24 @@ public class BlockDto extends BaseEntity {
     @JsonProperty("is_official")
     private Boolean isOfficial;
 
-    @Schema(name = "public", description = "公开状态：0,1,2")
-    @JsonProperty("public")
-    private Integer publicStatus;
-
     @Schema(name = "isDefault", description = "是否是默认")
     @JsonProperty("is_default")
     private Boolean isDefault;
 
     @Schema(name = "tinyReserved", description = "是否是tiny专有")
     @JsonProperty("tiny_reserved")
-    private Boolean tinyReserved;
+    private Boolean isTinyReserved;
 
     @Schema(name = "npmName", description = "npm包名")
     @JsonProperty("npm_name")
     private String npmName;
 
+    @Schema(name = "public", description = "公开状态：0,1,2")
+    @JsonProperty("public")
+    private Integer publicStatus;
+
     @Schema(name = "i18n", description = "国际化内容")
     private String i18n;
-
-    @Schema(name = "platformId", description = "设计器ID")
-    @JsonProperty("platform_id")
-    private Integer platformId;
 
     @Schema(name = "appId", description = "创建区块时所在appId")
     @JsonProperty("created_app")
@@ -108,6 +104,10 @@ public class BlockDto extends BaseEntity {
     @Schema(name = "contentBlocks", description = "*设计预留字段用途*")
     @JsonProperty("content_blocks")
     private String contentBlocks;
+
+    @Schema(name = "platformId", description = "设计器ID")
+    @JsonProperty("platform_id")
+    private Integer platformId;
 
     @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
     @JsonProperty("block_group_id")

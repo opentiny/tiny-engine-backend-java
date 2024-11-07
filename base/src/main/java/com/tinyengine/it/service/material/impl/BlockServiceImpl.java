@@ -23,8 +23,6 @@ import com.tinyengine.it.service.material.BlockService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,8 +53,6 @@ public class BlockServiceImpl implements BlockService {
     private UserMapper userMapper;
     @Autowired
     private AppMapper appMapper;
-
-    private static final Logger logger = LoggerFactory.getLogger(BlockServiceImpl.class);
 
     /**
      * 查询表t_block所有数据
@@ -146,7 +142,7 @@ public class BlockServiceImpl implements BlockService {
         BeanUtils.copyProperties(blockDto, blocks);
         blocks.setIsDefault(false);
         blocks.setIsOfficial(false);
-        blocks.setPlatformId(1); //新建区块给默认值
+        blocks.setPlatformId(1); // 新建区块给默认值
         List<Object> groups = blockDto.getGroups();
         if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
             Integer groupId = (Integer) groups.get(0); // 强制类型转换
@@ -254,7 +250,9 @@ public class BlockServiceImpl implements BlockService {
         } else {
             Map<?, ?> schemaMap = objectMapper.readValue(content, Map.class);
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
-                block.add((String) schemaMap.get("componentName"));
+                if (schemaMap.get("componentName") instanceof String) {
+                    block.add((String) schemaMap.get("componentName"));
+                }
             }
             if (schemaMap.containsKey("children") && schemaMap.get("children") instanceof List) {
                 traverseBlocks(objectMapper.writeValueAsString(schemaMap.get("children")), block);
@@ -283,18 +281,12 @@ public class BlockServiceImpl implements BlockService {
         String appId = blockParamDto.getAppId();
         // 如果 appId 存在并且不匹配指定的正则表达式，则删除它
         if (appId != null && !Pattern.matches("^[1-9]+[0-9]*$", appId)) {
-            blockParamDto.setAppId(null);//设置成null达到map中remove的效果
+            blockParamDto.setAppId(null); // 设置成null达到map中remove的效果
         }
         // 获取查询条件
-        String sort = blockParamDto.getSort(); // nodejs中页面传参"updated_at:DESC"
         String nameCn = blockParamDto.getName();
         String description = blockParamDto.getDescription();
         String label = blockParamDto.getLabel();
-        int limit = blockParamDto.getLimit() != null ? Integer.parseInt(blockParamDto.getLimit()) : 0;
-        int start = blockParamDto.getStart() != null ? Integer.parseInt(blockParamDto.getStart()) : 0;
-        // 把start、limit转为java分页的pageNum、pageSize
-        int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
-        int pageSize = limit == 0 ? 10 : limit;
 
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(nameCn)) {
@@ -306,18 +298,22 @@ public class BlockServiceImpl implements BlockService {
         if (StringUtils.isNotEmpty(label)) {
             queryWrapper.or().eq("label", label);
         }
-
+        String sort = blockParamDto.getSort(); // nodejs中页面传参"updated_at:DESC"
         // 获取是按升序还是降序排列
         if (sort != null) {
             String[] temp = sort.split(":");
             String sortOrder = temp[1];
             if ("ASC".equalsIgnoreCase(sortOrder)) {
                 queryWrapper.orderByAsc("created_time");
-            } else if ("DESC".equalsIgnoreCase(sortOrder)) {
+            } else {
                 queryWrapper.orderByDesc("last_updated_time");
             }
         }
-
+        // 把start、limit转为java分页的pageNum、pageSize
+        int limit = blockParamDto.getLimit() != null ? Integer.parseInt(blockParamDto.getLimit()) : 0;
+        int start = blockParamDto.getStart() != null ? Integer.parseInt(blockParamDto.getStart()) : 0;
+        int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
+        int pageSize = limit == 0 ? 10 : limit;
         Page<Block> page = new Page<>(pageNum, pageSize);
         return blockMapper.selectPage(page, queryWrapper);
     }
@@ -334,11 +330,9 @@ public class BlockServiceImpl implements BlockService {
         ObjectMapper objectMapper = new ObjectMapper();
         queryWrapper.select("tags").isNotNull("tags");
         List<Block> allBlocksList = blockMapper.selectList(queryWrapper);
-        List<String> allTagsList = allBlocksList.stream()
+        return allBlocksList.stream()
                 .flatMap(blocks -> blocks.getTags().stream())
                 .collect(Collectors.toList());
-
-        return allTagsList;
     }
 
     /**
@@ -349,8 +343,8 @@ public class BlockServiceImpl implements BlockService {
      */
     @Override
     public IPage<Block> findBlocksByConditionPagetion(Map<String, String> request) {
-        String public_scope_mode = request.get("public_scope_mode");
-        if (public_scope_mode != null) {
+        String publicScopeMode = request.get("public_scope_mode");
+        if (publicScopeMode != null) {
             request.remove("public_scope_mode");
         }
 
@@ -445,7 +439,8 @@ public class BlockServiceImpl implements BlockService {
         // 给is_published赋值
         List<Block> result = retBlocks.stream()
                 .map(b -> {
-                    boolean isPublished = b.getLastBuildInfo() != null && b.getLastBuildInfo().get("result") instanceof Boolean
+                    boolean isPublished = b.getLastBuildInfo() != null
+                            && b.getLastBuildInfo().get("result") instanceof Boolean
                             ? (Boolean) b.getLastBuildInfo().get("result") : Boolean.FALSE;
                     b.setIsPublished(isPublished);
                     return b;

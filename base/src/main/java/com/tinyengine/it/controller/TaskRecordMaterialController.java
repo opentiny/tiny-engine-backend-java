@@ -1,6 +1,5 @@
 package com.tinyengine.it.controller;
 
-
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.log.SystemControllerLog;

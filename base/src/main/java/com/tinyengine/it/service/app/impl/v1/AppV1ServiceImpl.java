@@ -362,37 +362,23 @@ public class AppV1ServiceImpl implements AppV1Service {
             String key = it.next();
             Map<String, Object> keyMap = blocksVersionMap.get(key);
 
-            // 检查 keyMap 是否为空，防止空指针异常
-            if (keyMap == null) {
-                continue;
-            }
-
             // 获取 "versions" 字段并确保它是 List<String> 类型
             List<String> versions = null;
             Object versionsObj = keyMap.get("versions");
             if (versionsObj instanceof List) {
                 versions = (List<String>) versionsObj; // 强制转换为 List<String>
-            } else {
-                // 处理错误情况：如果 "versions" 不是 List 类型
-                continue;  // 或者你可以抛出异常或其他处理
             }
 
             String targetVersion = null;
             // 默认先取最新的版本
             if (!versions.isEmpty()) {
                 targetVersion = findMaxVersion(versions);
-            } else {
-                // 如果 "versions" 为空，获取最后一个版本
-                targetVersion = versions.isEmpty() ? null : versions.get(versions.size() - 1);
             }
-
             // 获取 "historyMap" 并确保它是 Map 类型
             Map<String, Object> historyMap = null;
             Object historyMapObj = keyMap.get("historyMap");
             if (historyMapObj instanceof Map) {
                 historyMap = (Map<String, Object>) historyMapObj;
-            } else {
-                continue;
             }
 
             // 获取对应版本的 historyId，并确保它是 Integer 类型
@@ -400,8 +386,6 @@ public class AppV1ServiceImpl implements AppV1Service {
             Object historyIdObj = historyMap.get(targetVersion);
             if (historyIdObj instanceof Integer) {
                 historyId = (Integer) historyIdObj;
-            } else {
-                continue;
             }
 
             // 将 historyId 添加到 historiesId 列表
