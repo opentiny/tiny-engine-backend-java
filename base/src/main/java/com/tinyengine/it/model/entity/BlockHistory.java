@@ -80,7 +80,7 @@ public class BlockHistory extends HistoryEntity {
     private Boolean isDefault;
 
     @Schema(name = "tinyReserved", description = "是否是tiny专有")
-    private Boolean tinyReserved;
+    private Boolean isTinyReserved;
 
     @Schema(name = "mode", description = "模式：vscode")
     private String mode;

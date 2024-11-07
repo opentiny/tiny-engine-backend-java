@@ -17,9 +17,9 @@
         <dependency>
             <groupId>com.opentiny</groupId>
             <artifactId>tiny-engine-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <!-- 配置 Maven 插件来打包成 JAR -->

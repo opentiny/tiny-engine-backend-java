@@ -46,7 +46,8 @@ class TaskRecordMaterialControllerTest {
     @Test
     void testGetTasksStatus() {
         TaskRecord taskRecord = new TaskRecord();
-        when(taskRecordService.status(anyInt(), anyString())).thenReturn(Arrays.<List<TaskRecord>>asList(Arrays.<TaskRecord>asList(taskRecord)));
+        when(taskRecordService.status(anyInt(), anyString()))
+                .thenReturn(Arrays.<List<TaskRecord>>asList(Arrays.<TaskRecord>asList(taskRecord)));
 
         Result<List<TaskRecord>> result = taskRecordMaterialController.getTasksStatus("1", "2");
         Assertions.assertEquals(taskRecord, result.getData().get(0));
