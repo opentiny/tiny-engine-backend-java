@@ -27,6 +27,7 @@ import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
 
 import cn.hutool.core.bean.BeanUtil;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;

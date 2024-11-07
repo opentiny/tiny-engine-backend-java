@@ -254,8 +254,9 @@ public class I18nEntryController {
     )
     @SystemControllerLog(description = "应用下批量上传国际化词条文件")
     @PostMapping("/apps/{id}/i18n/entries/multiUpdate")
-    public Result<I18nFileResult> updateI18nMultiFile(@PathVariable Integer id,
-                                                      @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
+    public Result<I18nFileResult> updateI18nMultiFile(
+            @PathVariable Integer id,
+            @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
         Result<I18nFileResult> result = new Result<>();
         // 处理上传的文件
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
