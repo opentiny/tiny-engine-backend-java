@@ -476,7 +476,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<EntriesItem> entriesItems = new ArrayList<>();
         // 解压ZIP文件并处理
         List<FileInfo> fileInfos = Utils.unzip(file);
-        ObjectMapper objectMapper = new ObjectMapper();
         for (FileInfo fileInfo : fileInfos) {
             entriesItems = parseZip(fileInfo);
         }
@@ -488,9 +487,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      *
      * @param fileInfo the file info
      * @return the list
-     * @throws Exception ec
+     * @throws RuntimeException ec
      */
-    public List<EntriesItem> parseZip(FileInfo fileInfo) throws Exception {
+    public List<EntriesItem> parseZip(FileInfo fileInfo) throws RuntimeException {
         List<EntriesItem> entriesItems = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
         if (!fileInfo.isDirectory()) {
@@ -503,7 +502,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 entriesItem.setEntries(Utils.flat(jsonData));
             } catch (JsonProcessingException e) {
                 log.error("JSON processing error for file: " + fileInfo.getName(), e);
-                throw new Exception(e);
+                throw new RuntimeException(e);
             }
             entriesItems.add(entriesItem);
         }
