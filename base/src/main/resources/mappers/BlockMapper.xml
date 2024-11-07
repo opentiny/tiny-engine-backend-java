@@ -63,8 +63,8 @@
         <if test="isDefault!=null and isDefault!=''">
             AND is_default = #{isDefault}
         </if>
-        <if test="tinyReserved!=null and tinyReserved!=''">
-            AND tiny_reserved = #{tinyReserved}
+        <if test="isTinyReserved!=null and isTinyReserved!=''">
+            AND tiny_reserved = #{isTinyReserved}
         </if>
         <if test="npmName!=null and npmName!=''">
             AND npm_name = #{npmName}
@@ -154,8 +154,8 @@
         <if test="isDefault!=null and isDefault!=''">
             is_default = #{isDefault},
         </if>
-        <if test="tinyReserved!=null and tinyReserved!=''">
-            tiny_reserved = #{tinyReserved},
+        <if test="isTinyReserved!=null and isTinyReserved!=''">
+            tiny_reserved = #{isTinyReserved},
         </if>
         <if test="npmName!=null and npmName!=''">
             npm_name = #{npmName},
@@ -215,7 +215,7 @@
         <result column="is_official" property="isOfficial"/>
         <result column="public" property="publicStatus"/>
         <result column="is_default" property="isDefault"/>
-        <result column="tiny_reserved" property="tinyReserved"/>
+        <result column="tiny_reserved" property="isTinyReserved"/>
         <result column="npm_name" property="npmName"/>
         <result column="i18n" property="i18n"/>
         <result column="platform_id" property="platformId"/>
@@ -350,7 +350,7 @@
                , #{isOfficial}
                , #{publicStatus}
                , #{isDefault}
-               , #{tinyReserved}
+               , #{isTinyReserved}
                , #{npmName}
                , #{i18n}
                , #{platformId}

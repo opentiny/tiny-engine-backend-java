@@ -106,8 +106,10 @@ public class BlockController {
     )
     @SystemControllerLog(description = "获取区块列表满足查询条件下的条数")
     @GetMapping("/block/count")
-    public Result<Integer> getCountByCondition(@RequestParam(value = "name_cn", required = false) String nameCn,
-                                               @RequestParam(value = "description", required = false) String description) {
+    public Result<Integer> getCountByCondition(
+            @RequestParam(value = "name_cn", required = false) String nameCn,
+            @RequestParam(value = "description", required = false)
+            String description) {
         // 获取查询条件name_cn和description,若为空查的是全部数据,若不为空按条件查询
         List<Block> blocksList = blockMapper.findBlocksByNameCnAndDes(nameCn, description);
         return Result.success(blocksList.size());

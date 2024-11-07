@@ -40,10 +40,6 @@ public class I18nLang {
     @Schema(name = "createdBy", description = "创建人")
     private String createdBy;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @Schema(name = "lastUpdatedBy", description = "最后修改人")
-    private String lastUpdatedBy;
-
     @TableField(fill = FieldFill.INSERT)
     @Schema(name = "createdTime", description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -53,6 +49,10 @@ public class I18nLang {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "lastUpdatedTime", description = "更新时间")
     private LocalDateTime lastUpdatedTime;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(name = "lastUpdatedBy", description = "最后修改人")
+    private String lastUpdatedBy;
 
     /**
      * Instantiates a new 18 n lang.

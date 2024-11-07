@@ -68,8 +68,9 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "获取区块分组")
     @GetMapping("/block-groups")
-    public Result<List<BlockGroupDto>> getAllBlockGroups(@RequestParam(value = "id", required = false) List<Integer> ids,
-                                                         @RequestParam(value = "app", required = false) Integer appId) {
+    public Result<List<BlockGroupDto>> getAllBlockGroups(
+            @RequestParam(value = "id", required = false) List<Integer> ids,
+            @RequestParam(value = "app", required = false) Integer appId) {
         List<BlockGroupDto> blockGroupsListResult = blockGroupService.getBlockGroupByIdsOrAppId(ids, appId);
         return Result.success(blockGroupsListResult);
     }
