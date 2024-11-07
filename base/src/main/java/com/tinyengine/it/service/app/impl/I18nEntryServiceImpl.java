@@ -449,8 +449,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             byte[] fileBytes = Utils.readAllBytes(file.getInputStream());
             String jsonContent = new String(fileBytes, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Object> jsonData = objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
-            });
+            Map<String, Object> jsonData =
+                    objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
+                    });
             entriesItem.setEntries(Utils.flat(jsonData));
         } catch (IOException e) {
             log.error("Error parsing JSON: {}", e.getMessage());
@@ -481,8 +482,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 EntriesItem entriesItem = setLang(fileInfo.getName());
                 // 处理 JSON 内容
                 try {
-                    Map<String, Object> jsonData = objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
-                    });
+                    Map<String, Object> jsonData =
+                            objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
+                            });
                     entriesItem.setEntries(Utils.flat(jsonData));
                 } catch (JsonProcessingException e) {
                     log.error("JSON processing error for file: " + fileInfo.getName(), e);

@@ -38,10 +38,6 @@ public class BlockDto extends BaseEntity {
     private String framework;
 
     @TableField(typeHandler = JacksonTypeHandler.class)
-    @Schema(name = "content", description = "区块内容")
-    private Map<String, Object> content;
-
-    @TableField(typeHandler = JacksonTypeHandler.class)
     @Schema(name = "assets", description = "构建资源")
     private Map<String, Object> assets;
 
@@ -50,16 +46,16 @@ public class BlockDto extends BaseEntity {
     @Schema(name = "lastBuildInfo", description = "最新一次构建信息")
     private Map<String, Object> lastBuildInfo;
 
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @Schema(name = "content", description = "区块内容")
+    private Map<String, Object> content;
+
     @Schema(name = "description", description = "描述")
     private String description;
 
     @Schema(name = "tags", description = "标签")
     @TableField(typeHandler = ListTypeHandler.class)
     private List<String> tags;
-
-    @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
-    @JsonProperty("latest_version")
-    private String latestVersion;
 
     @Schema(name = "latestHistoryId", description = "当前历史记录表ID")
     @JsonProperty("latest_history_id")
@@ -71,16 +67,16 @@ public class BlockDto extends BaseEntity {
     @Schema(name = "path", description = "区块路径")
     private String path;
 
+    @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
+    @JsonProperty("latest_version")
+    private String latestVersion;
+
     @Schema(name = "occupierId", description = "当前锁定人id")
     private String occupierId;
 
     @Schema(name = "isOfficial", description = "是否是官方")
     @JsonProperty("is_official")
     private Boolean isOfficial;
-
-    @Schema(name = "public", description = "公开状态：0,1,2")
-    @JsonProperty("public")
-    private Integer publicStatus;
 
     @Schema(name = "isDefault", description = "是否是默认")
     @JsonProperty("is_default")
@@ -94,6 +90,10 @@ public class BlockDto extends BaseEntity {
     @JsonProperty("npm_name")
     private String npmName;
 
+    @Schema(name = "public", description = "公开状态：0,1,2")
+    @JsonProperty("public")
+    private Integer publicStatus;
+    
     @Schema(name = "i18n", description = "国际化内容")
     private String i18n;
 

@@ -182,14 +182,13 @@ class I18nEntryServiceImplTest {
 
     @Test
     void testBulkUpdateForApp() {
-        List<I18nEntryDto> entryDtoList = Arrays.asList(new I18nEntryDto());
-        when(i18nEntryMapper.queryI18nEntryByCondition(any(I18nEntry.class))).thenReturn(entryDtoList);
-
         I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
 
+        List<I18nEntryDto> entryDtoList = Arrays.asList(new I18nEntryDto());
+        when(i18nEntryMapper.queryI18nEntryByCondition(any(I18nEntry.class))).thenReturn(entryDtoList);
         when(i18nEntryMapper.createI18nEntry(any(I18nEntry.class))).thenReturn(Integer.valueOf(0));
         when(i18nEntryMapper.updateByEntry(anyString(), anyInt(), anyString(), anyString(), anyInt()))
                 .thenReturn(Integer.valueOf(0));
@@ -208,9 +207,6 @@ class I18nEntryServiceImplTest {
 
     @Test
     void testBulkUpdateWhenNotApp() {
-        List<I18nEntryDto> entryDtoList = Arrays.asList(new I18nEntryDto());
-        when(i18nEntryMapper.queryI18nEntryByCondition(any(I18nEntry.class))).thenReturn(entryDtoList);
-
         I18nLang i18nLang = new I18nLang("zh_CN", "label");
         i18nLang.setId(1);
         List<I18nLang> mockLang = Arrays.asList(i18nLang);
@@ -219,7 +215,8 @@ class I18nEntryServiceImplTest {
         when(i18nEntryMapper.createI18nEntry(any(I18nEntry.class))).thenReturn(Integer.valueOf(0));
         when(i18nEntryMapper.updateByEntry(anyString(), anyInt(), anyString(), anyString(), anyInt()))
                 .thenReturn(Integer.valueOf(0));
-
+        List<I18nEntryDto> entryDtoList = Arrays.asList(new I18nEntryDto());
+        when(i18nEntryMapper.queryI18nEntryByCondition(any(I18nEntry.class))).thenReturn(entryDtoList);
         OperateI18nEntries param = new OperateI18nEntries();
         HashMap<String, String> contents = new HashMap<>();
         contents.put("zh_CN", "content");

@@ -56,8 +56,6 @@ public class BlockServiceImpl implements BlockService {
     @Autowired
     private AppMapper appMapper;
 
-    private static final Logger logger = LoggerFactory.getLogger(BlockServiceImpl.class);
-
     /**
      * 查询表t_block所有数据
      *
@@ -146,7 +144,7 @@ public class BlockServiceImpl implements BlockService {
         BeanUtils.copyProperties(blockDto, blocks);
         blocks.setIsDefault(false);
         blocks.setIsOfficial(false);
-        blocks.setPlatformId(1); //新建区块给默认值
+        blocks.setPlatformId(1); // 新建区块给默认值
         List<Object> groups = blockDto.getGroups();
         if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
             Integer groupId = (Integer) groups.get(0); // 强制类型转换
@@ -254,7 +252,9 @@ public class BlockServiceImpl implements BlockService {
         } else {
             Map<?, ?> schemaMap = objectMapper.readValue(content, Map.class);
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
-                block.add((String) schemaMap.get("componentName"));
+                if (schemaMap.get("componentName") instanceof String) {
+                    block.add((String) schemaMap.get("componentName"));
+                }
             }
             if (schemaMap.containsKey("children") && schemaMap.get("children") instanceof List) {
                 traverseBlocks(objectMapper.writeValueAsString(schemaMap.get("children")), block);
@@ -283,7 +283,7 @@ public class BlockServiceImpl implements BlockService {
         String appId = blockParamDto.getAppId();
         // 如果 appId 存在并且不匹配指定的正则表达式，则删除它
         if (appId != null && !Pattern.matches("^[1-9]+[0-9]*$", appId)) {
-            blockParamDto.setAppId(null);//设置成null达到map中remove的效果
+            blockParamDto.setAppId(null);// 设置成null达到map中remove的效果
         }
         // 获取查询条件
         String sort = blockParamDto.getSort(); // nodejs中页面传参"updated_at:DESC"
@@ -445,7 +445,8 @@ public class BlockServiceImpl implements BlockService {
         // 给is_published赋值
         List<Block> result = retBlocks.stream()
                 .map(b -> {
-                    boolean isPublished = b.getLastBuildInfo() != null && b.getLastBuildInfo().get("result") instanceof Boolean
+                    boolean isPublished = b.getLastBuildInfo() != null
+                            && b.getLastBuildInfo().get("result") instanceof Boolean
                             ? (Boolean) b.getLastBuildInfo().get("result") : Boolean.FALSE;
                     b.setIsPublished(isPublished);
                     return b;
