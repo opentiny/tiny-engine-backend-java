@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , username, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id,
+        , username, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id,
         is_admin, is_public
     </sql>
 
@@ -36,6 +36,9 @@
         </if>
         <if test="tenantId!=null and tenantId!=''">
             AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
         </if>
         <if test="siteId!=null and siteId!=''">
             AND site_id = #{siteId}
@@ -74,9 +77,13 @@
         <if test="tenantId!=null and tenantId!=''">
             tenant_id = #{tenantId},
         </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
         <if test="siteId!=null and siteId!=''">
             site_id = #{siteId},
         </if>
+
         <if test="isAdmin!=null and isAdmin!=''">
             is_admin = #{isAdmin},
         </if>
@@ -97,6 +104,7 @@
         <result column="created_time" property="createdTime"/>
         <result column="last_updated_time" property="lastUpdatedTime"/>
         <result column="tenant_id" property="tenantId"/>
+        <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
         <result column="is_admin" property="isAdmin"/>
         <result column="is_public" property="isPublic"/>
@@ -163,7 +171,7 @@
         , last_updated_by
         , created_time
         , last_updated_time
-        , tenant_id
+        , tenant_id, renter_id
         , site_id
         , is_admin
         , is_public)
@@ -176,6 +184,7 @@
         , #{createdTime}
         , #{lastUpdatedTime}
         , #{tenantId}
+        , #{renterId}
         , #{siteId}
         , #{isAdmin}
         , #{isPublic})

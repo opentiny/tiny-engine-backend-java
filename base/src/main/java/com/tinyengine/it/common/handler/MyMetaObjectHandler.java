@@ -24,6 +24,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("createdBy", "1", metaObject);
         this.setFieldValByName("lastUpdatedBy", "1", metaObject);
         this.setFieldValByName("tenantId", "1", metaObject);
+        this.setFieldValByName("renterId", "1", metaObject);
         this.setFieldValByName("siteId", "1", metaObject);
     }
 
