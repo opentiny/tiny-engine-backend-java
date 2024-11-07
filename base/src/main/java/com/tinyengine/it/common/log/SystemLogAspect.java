@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hibernate.AnnotationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -49,14 +50,14 @@ public class SystemLogAspect {
     private static <T extends Annotation> T getMethodAnnotation(JoinPoint joinPoint, Class<T> annotationClass) {
         // 确保 JoinPoint 是方法签名类型
         if (!(joinPoint.getSignature() instanceof MethodSignature)) {
-            return null;
+            throw new AnnotationException("No method signature found.");
         }
 
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 
         // 检查方法是否为 null
         if (method == null) {
-            return null;
+            throw new AnnotationException("Method is null.");
         }
 
         // 获取并返回注解
