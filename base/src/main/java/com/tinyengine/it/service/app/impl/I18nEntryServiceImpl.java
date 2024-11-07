@@ -478,20 +478,34 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<FileInfo> fileInfos = Utils.unzip(file);
         ObjectMapper objectMapper = new ObjectMapper();
         for (FileInfo fileInfo : fileInfos) {
-            if (!fileInfo.isDirectory()) {
-                EntriesItem entriesItem = setLang(fileInfo.getName());
-                // 处理 JSON 内容
-                try {
-                    Map<String, Object> jsonData =
-                            objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
-                            });
-                    entriesItem.setEntries(Utils.flat(jsonData));
-                } catch (JsonProcessingException e) {
-                    log.error("JSON processing error for file: " + fileInfo.getName(), e);
-                    throw new Exception(e);
-                }
-                entriesItems.add(entriesItem);
+            entriesItems = parseZip(fileInfo);
+        }
+        return entriesItems;
+    }
+
+    /**
+     * 解压ZIP文件并处理
+     *
+     * @param fileInfo the file info
+     * @return the list
+     * @throws Exception ec
+     */
+    public List<EntriesItem> parseZip(FileInfo fileInfo) throws Exception {
+        List<EntriesItem> entriesItems = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        if (!fileInfo.isDirectory()) {
+            EntriesItem entriesItem = setLang(fileInfo.getName());
+            // 处理 JSON 内容
+            try {
+                Map<String, Object> jsonData =
+                        objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
+                        });
+                entriesItem.setEntries(Utils.flat(jsonData));
+            } catch (JsonProcessingException e) {
+                log.error("JSON processing error for file: " + fileInfo.getName(), e);
+                throw new Exception(e);
             }
+            entriesItems.add(entriesItem);
         }
         return entriesItems;
     }
