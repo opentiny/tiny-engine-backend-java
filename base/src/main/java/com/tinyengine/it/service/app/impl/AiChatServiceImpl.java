@@ -2,7 +2,6 @@ package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
-import com.tinyengine.it.common.exception.IBaseError;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiMessages;
@@ -102,36 +101,50 @@ public class AiChatServiceImpl implements AiChatService {
             return Result.failed(response.get("error_msg").toString());
         }
         if (response.get("error") != null) {
-            String code = (String) response.get("code");
-            String message = (String) response.get("message");
+            String code = (response.get("code") != null) ? response.get("code").toString() : "";
+            String message = (response.get("message") != null) ? response.get("message").toString() : "";
             return Result.failed(code, message);
         }
         if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model)) {
-            // 进行转换
-            Object data = response.get("data");
-            if (data instanceof Map) {  // 确保数据是 Map 类型
-                Map<String, Object> responseData = (Map<String, Object>) data;
+            return modelResultConvet(response);
+        }
+        return Result.success(response);
+    }
 
-                Map<String, Object> openAiResponse = new HashMap<>();
-                openAiResponse.put("id", responseData.get("id"));
-                openAiResponse.put("object", "text_completion");
-                openAiResponse.put("created", System.currentTimeMillis() / 1000);  // 设置创建时间戳
-                openAiResponse.put("model", responseData.get("model"));
+    /**
+     * 转换模型返回格式
+     * <p>
+     * 暂且只满足回复中只包括一个代码块的场景
+     *
+     * @param response ai返回内容
+     * @return result 返回结果
+     */
+    private Result<Map<String, Object>> modelResultConvet(Map<String, Object> response) {
+        // 进行转换
+        Object data = response.get("data");
+        if (data instanceof Map) {  // 确保数据是 Map 类型
+            Map<String, Object> responseData = (Map<String, Object>) data;
 
-                List<Map<String, Object>> chatgptChoices = new ArrayList<>();
-                Object choices = responseData.get("choices");
-                if (choices instanceof List) {  // 确保 choices 是 List 类型
-                    List<Map<String, Object>> originalChoices = (List<Map<String, Object>>) choices;
-                    if (!originalChoices.isEmpty()) {
-                        Map<String, Object> originalChoice = originalChoices.get(0);
-                        Map<String, Object> chatgptChoice = new HashMap<>();
-                        chatgptChoice.put("text", originalChoice.get("text"));
-                        chatgptChoice.put("index", originalChoice.get("index"));
-                        chatgptChoice.put("message", originalChoice.get("message"));
-                        chatgptChoices.add(chatgptChoice);
-                    }
+            Map<String, Object> openAiResponse = new HashMap<>();
+            openAiResponse.put("id", responseData.get("id"));
+            openAiResponse.put("object", "text_completion");
+            openAiResponse.put("created", System.currentTimeMillis() / 1000);  // 设置创建时间戳
+            openAiResponse.put("model", responseData.get("model"));
+
+            List<Map<String, Object>> chatgptChoices = new ArrayList<>();
+            Object choices = responseData.get("choices");
+            if (choices instanceof List) {  // 确保 choices 是 List 类型
+                List<Map<String, Object>> originalChoices = (List<Map<String, Object>>) choices;
+                if (!originalChoices.isEmpty()) {
+                    Map<String, Object> originalChoice = originalChoices.get(0);
+                    Map<String, Object> chatgptChoice = new HashMap<>();
+                    chatgptChoice.put("text", originalChoice.get("text"));
+                    chatgptChoice.put("index", originalChoice.get("index"));
+                    chatgptChoice.put("message", originalChoice.get("message"));
+                    chatgptChoices.add(chatgptChoice);
                 }
-                openAiResponse.put("choices", chatgptChoices);
+            }
+            openAiResponse.put("choices", chatgptChoices);
 
             Map<String, Object> chatgptUsage = new HashMap<>();
             chatgptUsage.put("prompt_tokens", responseData.get("input_tokens"));
@@ -139,11 +152,9 @@ public class AiChatServiceImpl implements AiChatService {
             chatgptUsage.put("total_tokens", responseData.get("total_tokens"));
             openAiResponse.put("usage", chatgptUsage);
             return Result.success(openAiResponse);
-        }else {
-                return Result.failed("Invalid response format: 'data' is not a Map.");
-            }
+        } else {
+            return Result.failed("Invalid response format: 'data' is not a Map.");
         }
-        return Result.success(response);
     }
 
     /**
