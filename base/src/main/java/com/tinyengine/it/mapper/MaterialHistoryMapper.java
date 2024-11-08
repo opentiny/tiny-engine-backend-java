@@ -36,7 +36,6 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
     @Select("SELECT * FROM t_material_history WHERE id = #{id}")
     MaterialHistory queryMaterialHistoryById(@Param("id") Integer id);
 
-
     /**
      * 根据条件查询表t_material_history数据
      *
