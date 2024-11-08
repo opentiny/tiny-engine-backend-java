@@ -279,14 +279,14 @@ public class Utils {
         // 删除临时解压目录及其内容
         try (Stream<Path> paths = Files.walk(tempDir.toPath())) {  // 使用 try-with-resources 自动关闭流
             paths.sorted(Comparator.reverseOrder())  // 反向删除
-                    .map(Path::toFile).forEach(file ->
-                        {
+                    .map(Path::toFile)
+                    .forEach(file -> {
                         if (!file.delete()) {
                             log.error("Failed to delete file: " + file.getAbsolutePath());
                         } else {
                             log.info("Successfully deleted file: " + file.getAbsolutePath());
                         }
-                        });
+                    });
         } catch (IOException e) {
             log.error("Error walking through temp directory: " + e.getMessage());
         }
