@@ -59,4 +59,12 @@ public interface ComponentMapper extends BaseMapper<Component> {
      * @return the integer
      */
     Integer createComponent(Component component);
+
+    /**
+     * Find user components by material history id list.
+     *
+     * @param id the id
+     * @return the list
+     */
+    List<Component> findUserComponentsByMaterialHistoryId(@Param("id") Integer id);
 }
