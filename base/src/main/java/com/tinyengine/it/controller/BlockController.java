@@ -12,7 +12,6 @@ import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.material.BlockService;
-import com.tinyengine.it.service.material.TaskRecordService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,8 +55,6 @@ public class BlockController {
     private TenantMapper tenantMapper;
     @Autowired
     private BlockMapper blockMapper;
-    @Autowired
-    private TaskRecordService taskRecordService;
 
     /**
      * 获取block列表信息
