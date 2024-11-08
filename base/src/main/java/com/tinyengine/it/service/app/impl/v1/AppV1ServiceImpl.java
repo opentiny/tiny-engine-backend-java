@@ -359,8 +359,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         // 遍历区块历史记录 综合信息映射关系
         Set<String> keySet = blocksVersionMap.keySet();
         for (Iterator<String> it = keySet.iterator(); it.hasNext(); ) {
-            String key = it.next();
-            Map<String, Object> keyMap = blocksVersionMap.get(key);
+            Map<String, Object> keyMap = blocksVersionMap.get(it.next());
 
             // 获取 "versions" 字段并确保它是 List<String> 类型
             List<String> versions = null;

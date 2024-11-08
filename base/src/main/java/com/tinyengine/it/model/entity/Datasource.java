@@ -66,6 +66,9 @@ public class Datasource extends BaseEntity {
     @Schema(name = "tenantId", description = "租户id")
     private String tenantId;
 
+    @Schema(name = "renterId", description = "业务租户ID")
+    private String renterId;
+
     @Schema(name = "siteId", description = "站点id")
     private String siteId;
 }
