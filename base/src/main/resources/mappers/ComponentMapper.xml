@@ -263,6 +263,14 @@
         </where>
     </select>
 
+    <!-- 根据物料历史id查询表t_component数据 -->
+   <select id="findUserComponentsByMaterialHistoryId" resultMap="ComponentMap">
+       SELECT C.*
+       FROM t_component C
+       JOIN r_material_history_component MHC ON C.id = MHC.`component_id`
+       WHERE MHC.`material_history_id` = #{id}
+   </select>
+
     <!-- 根据条件查询表t_component数据 -->
     <select id="queryComponentByCondition" resultMap="ComponentMap">
         SELECT
