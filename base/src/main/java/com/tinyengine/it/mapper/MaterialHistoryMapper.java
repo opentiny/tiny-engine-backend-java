@@ -33,19 +33,10 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
      */
     @Results({@Result(property = "id", column = "id"),
             @Result(property = "components", column = "id",
-                    many = @Many(select = "findUserComponentsByMaterialHistoryId"))})
+                    many = @Many(select = "com.tinyengine.it.mapper.ComponentMapper.findUserComponentsByMaterialHistoryId"))})
     @Select("SELECT * FROM t_material_history WHERE id = #{id}")
     MaterialHistory queryMaterialHistoryById(@Param("id") Integer id);
 
-    /**
-     * Find user components by material history id list.
-     *
-     * @param id the id
-     * @return the list
-     */
-    @Select("SELECT C.* FROM t_component C " + "JOIN r_material_history_component MHC ON C.id = MHC.`component_id` "
-            + "WHERE MHC.`material_history_id` = #{id}")
-    List<Component> findUserComponentsByMaterialHistoryId(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_material_history数据
