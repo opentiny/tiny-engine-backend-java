@@ -1,10 +1,13 @@
 package com.tinyengine.it.common.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,19 +35,19 @@ class UtilsTest {
     @Test
     void testFindMaxVersion() {
         String result = Utils.findMaxVersion(Arrays.<String>asList("versions"));
-        Assertions.assertEquals("versions", result);
+        assertEquals("versions", result);
     }
 
     @Test
     void testToHump() {
         String result = Utils.toHump("name");
-        Assertions.assertEquals("name", result);
+        assertEquals("name", result);
     }
 
     @Test
     void testToLine() {
         String result = Utils.toLine("name");
-        Assertions.assertEquals("name", result);
+        assertEquals("name", result);
     }
 
     @Test
@@ -52,7 +55,25 @@ class UtilsTest {
         Map<String, Object> mapData = new HashMap();
         mapData.put("key", "value");
         Map<String, Object> result = Utils.convert(mapData);
-        Assertions.assertEquals("value", result.get("key"));
+        assertEquals("value", result.get("key"));
+    }
+
+    @Test
+    void testFlat() {
+        Map<String, Object> mapData = new HashMap();
+        mapData.put("key", "value");
+        Map<String, Object> flat = Utils.flat(mapData);
+        assertTrue(flat.keySet().contains("key"));
+    }
+
+    @Test
+    void testReadFileContent() {
+        URL resource = UtilsTest.class.getClassLoader().getResource("testFile.txt");
+        if (resource != null) {
+            File file = new File(resource.getFile());
+            String fileContent = Utils.readFileContent(file);
+            assertEquals("abc" + System.lineSeparator(), fileContent);
+        }
     }
 }
 

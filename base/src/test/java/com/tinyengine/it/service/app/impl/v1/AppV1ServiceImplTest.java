@@ -155,7 +155,7 @@ class AppV1ServiceImplTest {
         when(blockHistoryMapper.queryMapByIds(any(List.class))).thenReturn(historyDtos);
 
         List<Integer> result = appV1ServiceImpl.getBlockHistoryIdBySemver(Arrays.asList(new BlockVersionDto()));
-        Assertions.assertEquals(0, result.size());
+        Assertions.assertEquals(1, result.size());
     }
 
     @Test

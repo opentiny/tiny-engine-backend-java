@@ -65,6 +65,10 @@ public class I18nEntryDto {
     @JsonProperty("tenant_id")
     private String tenantId;
 
+    @Schema(name = "renterId", description = "业务租户id")
+    @JsonProperty("renter_id")
+    private String renterId;
+
     @Schema(name = "siteId", description = "站点id")
     @JsonProperty("site_id")
     private String siteId;

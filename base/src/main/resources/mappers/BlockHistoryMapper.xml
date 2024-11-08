@@ -9,7 +9,7 @@
         id
         , ref_id, message, version, label, name, framework, content, assets, build_info, screenshot, path, description,
         tags, is_official, public, is_default, tiny_reserved, mode, platform_id, app_id, npm_name, i18n, block_group_id,
-        content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, site_id
+        content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -100,6 +100,9 @@
         </if>
         <if test="tenantId!=null and tenantId!=''">
             AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
         </if>
         <if test="siteId!=null and siteId!=''">
             AND site_id = #{siteId}
@@ -195,6 +198,9 @@
         <if test="tenantId!=null and tenantId!=''">
             tenant_id = #{tenantId},
         </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
         <if test="siteId!=null and siteId!=''">
             site_id = #{siteId},
         </if>
@@ -233,6 +239,7 @@
         <result column="created_time" property="createdTime"/>
         <result column="last_updated_time" property="lastUpdatedTime"/>
         <result column="tenant_id" property="tenantId"/>
+        <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
     </resultMap>
 
@@ -325,6 +332,7 @@
                                     , created_time
                                     , last_updated_time
                                     , tenant_id
+                                    , renter_id
                                     , site_id)
         VALUES ( #{id}
                , #{refId}
@@ -356,6 +364,7 @@
                , #{createdTime}
                , #{lastUpdatedTime}
                , #{tenantId}
+               , #{renterId}
                , #{siteId})
     </insert>
 </mapper>

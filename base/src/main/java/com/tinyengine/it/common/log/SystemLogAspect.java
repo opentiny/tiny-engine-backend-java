@@ -102,8 +102,7 @@ public class SystemLogAspect {
      */
     @Before("controllerAspect()")
     public void doBefore(JoinPoint joinPoint) {
-        logger.debug("Method: {}",
-                (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName()));
+        logger.debug("Method: {}", joinPoint.getSignature().getName());
     }
 
     /**
@@ -114,13 +113,7 @@ public class SystemLogAspect {
      */
     @AfterThrowing(pointcut = "serviceAspect()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        logger.error("Method:"
-                + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
-        logger.error("Exception ClassName:" + e.getClass().getName());
+        logger.error("Method: {}", joinPoint.getSignature().getName());
         logger.error("Exception Message:" + e.getMessage());
-        logger.error("Exception Stack:");
-        for (StackTraceElement element : e.getStackTrace()) {
-            logger.error("\t" + element.toString());
-        }
     }
 }
