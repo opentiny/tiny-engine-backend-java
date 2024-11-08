@@ -5,18 +5,18 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tinyengine.it.model.dto.FileInfo;
 
+import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -71,14 +71,7 @@ public class Utils {
      */
     // 查找最大版本
     public static String findMaxVersion(List<String> versions) {
-        return versions.stream()
-                .max(Comparator.comparing(
-                        version -> Arrays.stream(version.split("\\."))
-                                .mapToInt(Integer::parseInt).toArray(),
-                        Comparator.comparingInt((int[] arr) -> arr[0])
-                                .thenComparingInt(arr -> arr[1])
-                                .thenComparingInt(arr -> arr[2])))
-                .orElse(null);
+        return versions.stream().max(Comparator.comparing(version -> Arrays.stream(version.split("\\.")).mapToInt(Integer::parseInt).toArray(), Comparator.comparingInt((int[] arr) -> arr[0]).thenComparingInt(arr -> arr[1]).thenComparingInt(arr -> arr[2]))).orElse(null);
     }
 
     /**
@@ -261,15 +254,13 @@ public class Utils {
      *
      * @param file the file
      * @return String the String
-     * @throws IOException IOException
      */
-    private static String readFileContent(File file) throws IOException {
+    public static String readFileContent(File file) {
+        List<String> lines = FileUtil.readLines(file, Charset.defaultCharset());
+
         StringBuilder contentBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                contentBuilder.append(line).append(System.lineSeparator());
-            }
+        for (String line : lines) {
+            contentBuilder.append(line).append(System.lineSeparator());
         }
         return contentBuilder.toString();
     }
@@ -288,8 +279,7 @@ public class Utils {
         // 删除临时解压目录及其内容
         try (Stream<Path> paths = Files.walk(tempDir.toPath())) {  // 使用 try-with-resources 自动关闭流
             paths.sorted(Comparator.reverseOrder())  // 反向删除
-                    .map(Path::toFile)
-                    .forEach(file ->
+                    .map(Path::toFile).forEach(file ->
                         {
                         if (!file.delete()) {
                             log.error("Failed to delete file: " + file.getAbsolutePath());

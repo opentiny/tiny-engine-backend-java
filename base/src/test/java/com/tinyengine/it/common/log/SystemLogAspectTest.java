@@ -61,5 +61,31 @@ class SystemLogAspectTest {
             return "ControllerLog";
         }
     }
+
+    @Test
+    void testServiceAspect() {
+        systemLogAspect.serviceAspect();
+    }
+
+    @Test
+    void testControllerAspect() {
+        systemLogAspect.controllerAspect();
+    }
+
+    @Test
+    void testDoBefore() {
+        JoinPoint joinPoint = Mockito.mock(JoinPoint.class);
+        MethodSignature signature = Mockito.mock(MethodSignature.class);
+        when(joinPoint.getSignature()).thenReturn(signature);
+        systemLogAspect.doBefore(joinPoint);
+    }
+
+    @Test
+    void testDoAfterThrowing() {
+        JoinPoint joinPoint = Mockito.mock(JoinPoint.class);
+        MethodSignature signature = Mockito.mock(MethodSignature.class);
+        when(joinPoint.getSignature()).thenReturn(signature);
+        systemLogAspect.doAfterThrowing(joinPoint, new Throwable("message"));
+    }
 }
 
