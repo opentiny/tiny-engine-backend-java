@@ -346,14 +346,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
     @Override
     public Result<I18nFileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception {
-        try (InputStream inputStream = file.getInputStream()) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader((inputStream), StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-        }
         Result<EntriesItem> parseJsonFileStreamResult = parseJsonFileStream(file);
         // 解析 JSON 数据
         if (!parseJsonFileStreamResult.isSuccess()) {
