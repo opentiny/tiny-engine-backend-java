@@ -10,6 +10,7 @@ import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,7 +26,7 @@ import java.util.Map;
 @Slf4j
 public class AiChatClient {
     private final Map<String, AiChatConfig.AiChatConfigData> config;
-    private final WebClient webClient;
+    private WebClient webClient;
 
     /**
      * Instantiates a new Ai chat client.
@@ -70,12 +71,14 @@ public class AiChatClient {
             }
         }
 
-        return requestSpec.retrieve().bodyToMono(String.class).map(response -> {
+        Mono<String> stringMono = requestSpec.retrieve().bodyToMono(String.class);
+        return stringMono.map(response ->
+            {
             try {
                 return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {});
             } catch (JsonProcessingException e) {
                 throw new ServiceException(CM322.getResultCode(), e.getMessage());
             }
-        }).block(); // 等待结果
+            }).block(); // 等待结果
     }
 }

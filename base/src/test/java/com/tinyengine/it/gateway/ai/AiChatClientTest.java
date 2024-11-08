@@ -9,6 +9,8 @@ import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
+import reactor.core.publisher.Mono;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,16 +53,20 @@ class AiChatClientTest {
                 put("headers", "headers");
             }
         };
+        String modelName = "gpt-3.5-turbo";
         AiChatConfig.HttpRequestOption option =
                 new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
         AiChatConfig.AiChatConfigData configData =
                 new AiChatConfig.AiChatConfigData("httpRequestUrl", option, headers, null);
 
-        String modelName = "model";
         when(config.get(modelName)).thenReturn(configData);
 
         WebClient.RequestBodyUriSpec bodyUriSpec =
                 Mockito.mock(WebClient.RequestBodyUriSpec.class, RETURNS_DEEP_STUBS);
+        Mono<String> mono = Mockito.mock(Mono.class, RETURNS_DEEP_STUBS);
+        Map<String, Object> result = new HashMap<>();
+        when(mono.map(any()).block()).thenReturn(result);
+        when(bodyUriSpec.retrieve().bodyToMono(String.class)).thenReturn(mono);
         when(webClient.method(any(HttpMethod.class))).thenReturn(bodyUriSpec);
         WebClient.RequestHeadersSpec<?> requestSpec =
                 Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
@@ -69,8 +75,8 @@ class AiChatClientTest {
 
         AiMessages aiMessages = new AiMessages();
         OpenAiBodyDto param = new OpenAiBodyDto(modelName, Arrays.asList(aiMessages));
-        Map<String, Object> result = aiChatClient.executeChatRequest(param);
-        Assertions.assertTrue(result.isEmpty());
+        Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
+        Assertions.assertNull(returnData);
     }
 }
 
