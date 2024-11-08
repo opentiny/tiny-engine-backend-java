@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.Component;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -59,4 +60,12 @@ public interface ComponentMapper extends BaseMapper<Component> {
      * @return the integer
      */
     Integer createComponent(Component component);
+
+    /**
+     * Find user components by material history id list.
+     *
+     * @param id the id
+     * @return the list
+     */
+    List<Component> findUserComponentsByMaterialHistoryId(@Param("id") Integer id);
 }
