@@ -1,7 +1,6 @@
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.MaterialHistory;
 
 import org.apache.ibatis.annotations.Many;
