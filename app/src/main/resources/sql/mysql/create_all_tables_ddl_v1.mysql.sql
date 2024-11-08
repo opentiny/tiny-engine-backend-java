@@ -340,7 +340,7 @@ drop table if exists `t_page_history`;
 create table `t_page_history` (
     `id` int not null auto_increment comment '主键id',
     `ref_id` int not null comment '关联主表id',
-    `version` varchar(255) not null comment '版本',
+    `version` varchar(255) comment '版本',
     `name` varchar(255) not null comment '名称',
     `app_id` int not null comment '关联appid',
     `route` varchar(255) not null comment '访问路径',
