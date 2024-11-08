@@ -59,12 +59,12 @@ public class Result<T extends Object> {
      * @param code    the code
      * @param message the message
      * @param data    the data
-     * @param success the success
+     * @param isSuccess the isSuccess
      */
-    protected Result(String code, String message, T data, boolean success) {
+    protected Result(String code, String message, T data, boolean isSuccess) {
         this(code, message, data);
-        this.isSuccess = success;
-        if (!success) {
+        this.isSuccess = isSuccess;
+        if (!isSuccess) {
             this.errMsg = message;
             this.error = MapUtil.builder(new HashMap<String, Object>())
                     .put("code", code)
