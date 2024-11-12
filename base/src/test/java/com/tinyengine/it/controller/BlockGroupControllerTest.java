@@ -70,7 +70,7 @@ class BlockGroupControllerTest {
 
     @Test
     void testDeleteBlockGroups() {
-        BlockGroupDto mockData = new BlockGroupDto();
+        BlockGroup mockData = new BlockGroup();
         mockData.setId(1);
         when(blockGroupService.findBlockGroupById(anyInt())).thenReturn(mockData);
         when(blockGroupService.deleteBlockGroupById(anyInt())).thenReturn(Integer.valueOf(0));

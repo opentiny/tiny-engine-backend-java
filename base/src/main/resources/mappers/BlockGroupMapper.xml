@@ -129,12 +129,6 @@
             <if test="id != null">
                 AND id = #{id}
             </if>
-            <if test="tenantId != null">
-                AND tenant_id = #{tenantId}
-            </if>
-            <if test="renterId != null">
-                AND renter_id = #{renterId}
-            </if>
         </where>
     </select>
 
@@ -168,28 +162,28 @@
     <insert id="createBlockGroup" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.BlockGroup">
         INSERT INTO t_block_group ( id
-        , name
-        , app_id
-        , platform_id
-        , description
-        , created_by
-        , last_updated_by
-        , created_time
-        , last_updated_time
-        , tenant_id
-        , renter_id
-        , site_id)
+                                  , name
+                                  , app_id
+                                  , platform_id
+                                  , description
+                                  , created_by
+                                  , last_updated_by
+                                  , created_time
+                                  , last_updated_time
+                                  , tenant_id
+                                  , renter_id
+                                  , site_id)
         VALUES ( #{id}
-        , #{name}
-        , #{appId}
-        , #{platformId}
-        , #{description}
-        , #{createdBy}
-        , #{lastUpdatedBy}
-        , #{createdTime}
-        , #{lastUpdatedTime}
-        , #{tenantId}
-        , #{renterId}
-        , #{siteId})
+               , #{name}
+               , #{appId}
+               , #{platformId}
+               , #{description}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{renterId}
+               , #{siteId})
     </insert>
 </mapper>

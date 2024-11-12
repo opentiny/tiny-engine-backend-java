@@ -1,11 +1,14 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tinyengine.it.common.base.BaseEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -19,7 +22,11 @@ import lombok.Setter;
 @Setter
 @TableName("t_tenant")
 @Schema(name = "Tenant", description = "组织表")
-public class Tenant extends BaseEntity {
+public class Tenant {
+    @Schema(name = "id", description = "主键id")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     @Schema(name = "nameCn", description = "组织唯一代码")
     private String orgCode;
 
@@ -31,4 +38,27 @@ public class Tenant extends BaseEntity {
 
     @Schema(name = "description", description = "组织描述")
     private String description;
+
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "renterId", description = "业务租户ID")
+    private String renterId;
+
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "createdBy", description = "创建人")
+    private String createdBy;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(name = "lastUpdatedBy", description = "最后修改人")
+    private String lastUpdatedBy;
+
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "createdTime", description = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(name = "lastUpdatedTime", description = "更新时间")
+    private LocalDateTime lastUpdatedTime;
+
 }
