@@ -44,7 +44,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return block group
      */
     @Override
-    public BlockGroupDto findBlockGroupById(@Param("id") Integer id) {
+    public BlockGroup findBlockGroupById(@Param("id") Integer id) {
         return blockGroupMapper.queryBlockGroupById(id);
     }
 
@@ -110,13 +110,15 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     @Override
     public List<BlockGroupDto> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId) {
         // 此接收到的两个参数不一定同时存在
-        BlockGroup blockGroups = new BlockGroup();
         List<BlockGroupDto> blockGroupsListResult = new ArrayList<>();
         if (ids != null) {
             blockGroupsListResult = blockGroupMapper.getBlockGroupsByIds(ids);
         }
         if (appId != null) {
             blockGroupsListResult = blockGroupMapper.findGroupByAppId(appId);
+        }
+        if (ids == null && appId == null) {
+            blockGroupsListResult = blockGroupMapper.getBlockGroups();
         }
 
         return blockGroupsListResult;

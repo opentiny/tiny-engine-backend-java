@@ -235,6 +235,28 @@ public class BlockController {
         return Result.success(allTagsList);
     }
 
+    /**
+     * @param groupId the groupId
+     * @return the list
+     */
+    @Operation(summary = "查找不在分组内的区块",
+            description = "查找不在分组内的区块",
+            parameters = {
+                    @Parameter(name = "groupId", description = "分组id"),
+                    @Parameter(name = "map", description = "入参对象")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Block.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "查找不在分组内的区块api")
+    @GetMapping("/block/notgroup/{groupId}")
+    public Result<List<BlockDto>> findBlocksNotInGroup(@PathVariable Integer groupId) {
+        List<BlockDto> blocksList = blockService.getNotInGroupBlocks(groupId);
+        return Result.success(blocksList);
+    }
 
     /**
      * 获取区块列表list2

@@ -152,7 +152,7 @@ public class BlockGroupController {
     @SystemControllerLog(description = "根据id删除区块分组")
     @GetMapping("/block-groups/delete/{id}")
     public Result<List<BlockGroupDto>> deleteBlockGroups(@PathVariable Integer id) throws ServiceException {
-        BlockGroupDto blockGroups = blockGroupService.findBlockGroupById(id);
+        BlockGroup blockGroups = blockGroupService.findBlockGroupById(id);
         if (blockGroups == null) {
             return Result.failed(ExceptionEnum.CM009);
         }
