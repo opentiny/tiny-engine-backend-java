@@ -8,15 +8,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockNotGroupParamDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.material.BlockService;
 
@@ -332,6 +335,43 @@ public class BlockServiceImpl implements BlockService {
         List<Block> allBlocksList = blockMapper.selectList(queryWrapper);
         return allBlocksList.stream()
                 .flatMap(blocks -> blocks.getTags().stream())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 获取不在分组内的区块
+     *
+     * @param groupId groupId
+     * @return the list
+     */
+    @SystemServiceLog(description = "getNotInGroupBlocks 获取不在分组内的区块 实现类")
+    @Override
+    public List<BlockDto> getNotInGroupBlocks(Integer groupId) {
+        // 获取缓存中的登录用户
+        int userId = 1;
+        User user = userMapper.queryUserById(userId);
+        int limit = 10;
+        int start = 0;
+        List<BlockDto> blocksList = blockMapper.findBlocksReturnByBlockGroupId(groupId);
+        return blocksList.stream()
+                .filter(item -> {
+                    // 过滤已发布的
+                    if (item.getLastBuildInfo() == null || item.getContent() == null || item.getAssets() == null) {
+                        return false;
+                    }
+                    // 组过滤
+                    if (item.getGroups() != null && item.getGroups().stream().anyMatch(group -> group instanceof BlockGroup
+                            && ((BlockGroup) group).getId().equals(groupId))) {
+                        return false;
+                    }
+                    // 公开范围过滤
+                    if (item.getPublicStatus() == Enums.Scope.FULL_PUBLIC.getValue()) {
+                        return true;
+                    }
+                    return user != null && item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
+                })
+                .skip(start)
+                .limit(limit)
                 .collect(Collectors.toList());
     }
 

@@ -44,10 +44,10 @@ class BlockGroupServiceImplTest {
 
     @Test
     void testFindBlockGroupById() {
-        BlockGroupDto mockData = new BlockGroupDto();
+        BlockGroup mockData = new BlockGroup();
         when(blockGroupMapper.queryBlockGroupById(1)).thenReturn(mockData);
 
-        BlockGroupDto result = blockGroupServiceImpl.findBlockGroupById(1);
+        BlockGroup result = blockGroupServiceImpl.findBlockGroupById(1);
         Assertions.assertEquals(mockData, result);
     }
 
