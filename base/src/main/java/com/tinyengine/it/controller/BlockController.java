@@ -7,7 +7,6 @@ import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockDto;
-import com.tinyengine.it.model.dto.BlockNotGroupParamDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Tenant;
@@ -237,8 +236,7 @@ public class BlockController {
     }
 
     /**
-     * @param groupId               the groupId
-     * @param blockNotGroupParamDto the blockNotGroupParamDto
+     * @param groupId the groupId
      * @return the list
      */
     @Operation(summary = "查找不在分组内的区块",
