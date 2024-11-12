@@ -27,7 +27,7 @@ public interface BlockGroupService {
      * @param id the id
      * @return the block group dto
      */
-    BlockGroupDto findBlockGroupById(@Param("id") Integer id);
+    BlockGroup findBlockGroupById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_block_group信息
