@@ -32,7 +32,7 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
      * @param id the id
      * @return the block group
      */
-    BlockGroupDto queryBlockGroupById(@Param("id") Integer id);
+    BlockGroup queryBlockGroupById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_block_group数据
@@ -95,6 +95,25 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
             + "GROUP BY bg.id")
     List<BlockGroupDto> getBlockGroupsById(int blockGroupId);
 
+    /**
+     * 查询区块分组信息以及关联的app和block信息
+     *
+     * @return the list
+     */
+    @Results({
+            @Result(column = "app", property = "appId"),
+            @Result(column = "app", property = "app",
+                    one = @One(select = "com.tinyengine.it.mapper.AppMapper.queryAppById")),
+            @Result(column = "block_group_id", javaType = List.class, property = "blocks",
+                    many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId"))
+    })
+    @Select("SELECT bg.*, bs.block_group_id as block_group_id, a.id as app  "
+            + "FROM t_block_group bg "
+            + "left join t_app a on bg.app_id = a.id "
+            + "left join t_block bs on bg.id = bs.block_group_id "
+            + "GROUP BY bg.id")
+    List<BlockGroupDto> getBlockGroups();
+
 
     /**
      * 根据blockGroupIds获取区块分组信息以及关联的app和block信息
@@ -137,7 +156,7 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
             @Result(column = "block_group_id", javaType = List.class, property = "blocks",
                     many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId"))
     })
-    @Select("select bg.*, bs.block_group_id as block_group_id "
+    @Select("select bg.*, bs.block_group_id as block_group_id, a.id as app "
             + "from t_block_group bg "
             + "left join t_app a on bg.app_id = a.id "
             + "left join t_block bs on bg.id = bs.block_group_id "

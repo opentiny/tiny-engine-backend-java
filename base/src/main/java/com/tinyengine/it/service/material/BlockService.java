@@ -105,4 +105,12 @@ public interface BlockService {
      * @return the list
      */
     Result<List<Block>> listNew(Map<String, String> map);
+
+    /**
+     * 获取不在分组内的区块
+     *
+     * @param groupId groupId
+     * @return the list
+     */
+    List<BlockDto> getNotInGroupBlocks(Integer groupId);
 }

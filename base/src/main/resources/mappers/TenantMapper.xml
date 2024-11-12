@@ -7,8 +7,8 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id,
-        site_id
+        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, renter_id,
+        org_code
     </sql>
 
     <!-- 通用条件列 -->
@@ -34,14 +34,11 @@
         <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
-        <if test="tenantId!=null and tenantId!=''">
-            AND tenant_id = #{tenantId}
-        </if>
         <if test="renterId!=null and renterId!=''">
             AND renter_id = #{renterId}
         </if>
-        <if test="siteId!=null and siteId!=''">
-            AND site_id = #{siteId}
+        <if test="orgCode!=null and orgCode!=''">
+            AND org_code = #{orgCode}
         </if>
     </sql>
 
@@ -68,14 +65,11 @@
         <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
             last_updated_time = #{lastUpdatedTime},
         </if>
-        <if test="tenantId!=null and tenantId!=''">
-            tenant_id = #{tenantId},
-        </if>
         <if test="renterId!=null and renterId!=''">
-            renter_id = #{renterId},
+            AND renter_id = #{renterId}
         </if>
-        <if test="siteId!=null and siteId!=''">
-            site_id = #{siteId},
+        <if test="orgCode!=null and orgCode!=''">
+            org_code = #{orgCode},
         </if>
     </sql>
 
@@ -90,9 +84,8 @@
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
         <result column="last_updated_time" property="lastUpdatedTime"/>
-        <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
-        <result column="site_id" property="siteId"/>
+        <result column="org_code" property="orgCode"/>
     </resultMap>
 
     <!-- 查询表t_tenant所有数据 -->
@@ -140,25 +133,24 @@
     <insert id="createTenant" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.Tenant">
         INSERT INTO t_tenant ( id
-        , name_cn
-        , name_en
-        , description
-        , created_by
-        , last_updated_by
-        , created_time
-        , last_updated_time
-        , tenant_id, renter_id
-        , site_id)
+                             , name_cn
+                             , name_en
+                             , description
+                             , created_by
+                             , last_updated_by
+                             , created_time
+                             , last_updated_time
+                             , renter_id
+                             , org_code)
         VALUES ( #{id}
-        , #{nameCn}
-        , #{nameEn}
-        , #{description}
-        , #{createdBy}
-        , #{lastUpdatedBy}
-        , #{createdTime}
-        , #{lastUpdatedTime}
-        , #{tenantId}
-        , #{renterId}
-        , #{siteId})
+               , #{nameCn}
+               , #{nameEn}
+               , #{description}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{renterId}
+               , #{orgCode}
     </insert>
 </mapper>
