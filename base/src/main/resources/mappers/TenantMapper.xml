@@ -7,7 +7,8 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, renter_id,org_code
+        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, renter_id,
+        org_code
     </sql>
 
     <!-- 通用条件列 -->
