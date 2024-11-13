@@ -73,7 +73,7 @@ public interface BlockMapper extends BaseMapper<Block> {
      * @return the list
      */
     @Select("select b.* from t_block b "
-            + "where b.block_group_id = #{blockGroupId}")
+            + "where b.block_group_id = #{blockGroupId} and b.last_build_info != null and b.content != null and b.assets != null")
     List<Block> findBlocksByBlockGroupId(int blockGroupId);
 
     /**
@@ -148,6 +148,7 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "occupier_by", property = "occupierId"),
             @Result(column = "public", property = "publicStatus"),
             @Result(column = "tiny_reserved", property = "isTinyReserved"),
+            @Result(column = "block_group_id", property = "blockGroupId"),
             @Result(column = "block_group_id", javaType = List.class, property = "groups",
                     many = @Many(select = "com.tinyengine.it.mapper.BlockGroupMapper.queryBlockGroupById")),
             @Result(column = "occupier_by", property = "occupier",
