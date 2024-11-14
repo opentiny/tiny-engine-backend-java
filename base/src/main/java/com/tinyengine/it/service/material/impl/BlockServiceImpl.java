@@ -15,7 +15,6 @@ import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
-import com.tinyengine.it.model.dto.BlockNotGroupParamDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
