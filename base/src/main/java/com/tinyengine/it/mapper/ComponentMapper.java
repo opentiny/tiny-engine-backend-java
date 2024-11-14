@@ -3,6 +3,8 @@ package com.tinyengine.it.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.Component;
 
+import com.tinyengine.it.model.entity.MaterialComponent;
+import com.tinyengine.it.model.entity.MaterialHistoryComponent;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 
@@ -70,12 +72,21 @@ public interface ComponentMapper extends BaseMapper<Component> {
     List<Component> findUserComponentsByMaterialHistoryId(@Param("id") Integer id);
 
     /**
-     * Find user components by material history id list.
+     * 新增表r_material_component数据
      *
-     * @param materialId the materialId
-     * @param componentId the componentId
+     * @param materialComponent the materialComponent
      * @return the integer
      */
-    @Insert("INSERT INTO r_material_component values (#{materialId},#{componentId})")
-    Integer createMaterialComponent(@Param("materialId") Integer materialId,@Param("componentId") Integer componentId);
+    @Insert("INSERT INTO r_material_component (id,material_id,component_id )values (#{id},#{materialId},#{componentId})")
+    Integer createMaterialComponent(MaterialComponent materialComponent);
+
+
+    /**
+     * 新增表r_material_component数据
+     *
+     * @param materialHistoryComponent the materialHistoryComponent
+     * @return the integer
+     */
+    @Insert("INSERT INTO r_material_history_component (id,material_history_id,component_id )values (#{id},#{materialHistoryId},#{componentId})")
+    Integer createMaterialHistoryComponent(MaterialHistoryComponent materialHistoryComponent);
 }

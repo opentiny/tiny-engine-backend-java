@@ -390,7 +390,6 @@ public class Utils {
      */
     public static void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) {
         boolean hasCondition = file.getOriginalFilename() != null
-                && file.getName().matches("\\d+")
                 && mimeTypes.contains(file.getContentType());
         if (hasCondition) {
             return;

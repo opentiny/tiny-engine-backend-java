@@ -34,29 +34,21 @@ public class ComponentController {
     /**
      * 上传bunled.json文件处理自定义组件
      *
-     * @param filesMap the files map
+     * @param file the file
      * @return result
      */
     @Operation(summary = "上传bunled.json文件处理自定义组件", description = "上传bunled.json文件处理自定义组件", parameters = {
-            @Parameter(name = "filesMap", description = "文件参数对象")}, responses = {
+            @Parameter(name = "file", description = "文件参数对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json", schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "上传bunled.json文件处理自定义组件")
     @PostMapping("/component/custom/create")
-    public Result<FileResult> createCustComponent(@RequestParam Map<String, MultipartFile> filesMap) {
-        Result<FileResult> result = new Result<>();
-
-        for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
-            // 获取对应的文件
-            MultipartFile file = entry.getValue();
-
-            if (file.isEmpty()) {
-                return Result.failed(ExceptionEnum.CM307);
-            }
-            // 返回插入和更新的条数
-            result = componentService.readFileAndBulkCreate(file);
+    public Result<FileResult> createCustComponent(@RequestParam MultipartFile file) {
+        if (file.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM307);
         }
-        return result;
+        // 返回插入和更新的条数
+        return componentService.readFileAndBulkCreate(file);
     }
 }
