@@ -14,9 +14,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 
 /**
  * 组件api
@@ -28,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin
 @RequestMapping("/material-center/api")
 public class ComponentController {
-
     @Autowired
     private ComponentService componentService;
 
