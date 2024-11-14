@@ -130,6 +130,7 @@ public class ComponentServiceImpl implements ComponentService {
         List<Component> componentList = new ArrayList<>();
         for (Map<String, Object> comp : components) {
             Component component = BeanUtil.mapToBean(comp, Component.class, true);
+            component.setId(null);
             component.setIsDefault(true);
             component.setIsOfficial(true);
             component.setDevMode("proCode");
