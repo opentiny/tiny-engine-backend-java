@@ -9,9 +9,9 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.model.dto.FileInfo;
+import com.tinyengine.it.model.dto.JsonFile;
 
 import cn.hutool.core.io.FileUtil;
-import com.tinyengine.it.model.dto.JsonFile;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -78,7 +78,13 @@ public class Utils {
      */
     // 查找最大版本
     public static String findMaxVersion(List<String> versions) {
-        return versions.stream().max(Comparator.comparing(version -> Arrays.stream(version.split("\\.")).mapToInt(Integer::parseInt).toArray(), Comparator.comparingInt((int[] arr) -> arr[0]).thenComparingInt(arr -> arr[1]).thenComparingInt(arr -> arr[2]))).orElse(null);
+        return versions.stream().max(
+                Comparator.comparing(
+                        version -> Arrays.stream(version.split("\\."))
+                                .mapToInt(Integer::parseInt).toArray(), Comparator
+                                .comparingInt((int[] arr) -> arr[0])
+                                .thenComparingInt(arr -> arr[1])
+                                .thenComparingInt(arr -> arr[2]))).orElse(null);
     }
 
     /**
