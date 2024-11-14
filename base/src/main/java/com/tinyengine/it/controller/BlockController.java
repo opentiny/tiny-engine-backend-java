@@ -236,6 +236,8 @@ public class BlockController {
     }
 
     /**
+     * 查找不在分组内的区块
+     *
      * @param groupId the groupId
      * @return the list
      */
