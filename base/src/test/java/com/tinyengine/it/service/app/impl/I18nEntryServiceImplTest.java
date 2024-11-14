@@ -12,17 +12,10 @@ import static org.mockito.Mockito.when;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.EntriesItem;
-import com.tinyengine.it.model.dto.Entry;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.I18nFileResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
-import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 
@@ -272,7 +265,7 @@ class I18nEntryServiceImplTest {
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
         when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
 
-        Result<I18nFileResult> result = i18nEntryServiceImpl.readSingleFileAndBulkCreate(file, 0);
+        Result<FileResult> result = i18nEntryServiceImpl.readSingleFileAndBulkCreate(file, 0);
 
         Assertions.assertNull(result.getData());
         Assertions.assertFalse(result.isSuccess());
@@ -287,7 +280,7 @@ class I18nEntryServiceImplTest {
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
         when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
         // file not existed
-        Result<I18nFileResult> result = i18nEntryServiceImpl.readFilesAndbulkCreate("1", file, 0);
+        Result<FileResult> result = i18nEntryServiceImpl.readFilesAndbulkCreate("1", file, 0);
         Assertions.assertNull(result.getData());
         Assertions.assertFalse(result.isSuccess());
     }
@@ -303,7 +296,7 @@ class I18nEntryServiceImplTest {
         I18nEntry i18nEntry = new I18nEntry();
         i18nEntry.setLang(1);
         List<I18nEntry> entryList = Arrays.asList(i18nEntry);
-        I18nFileResult result = i18nEntryServiceImpl.bulkInsertOrUpdate(entryList);
+        FileResult result = i18nEntryServiceImpl.bulkInsertOrUpdate(entryList);
         verify(i18nEntryMapper, times(1)).createI18nEntry(i18nEntry);
         Assertions.assertEquals(1, result.getInsertNum());
         Assertions.assertEquals(0, result.getUpdateNum());
@@ -318,7 +311,7 @@ class I18nEntryServiceImplTest {
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
         when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
 
-        Result<EntriesItem> result = i18nEntryServiceImpl.parseJsonFileStream(file);
+        Result<JsonFile> result = Utils.parseJsonFileStream(file);
         assertFalse(result.isSuccess());
     }
 
@@ -328,8 +321,7 @@ class I18nEntryServiceImplTest {
         when(file.getContentType()).thenReturn("application/json");
         when(file.getOriginalFilename()).thenReturn("originalName");
         when(file.getName()).thenReturn("123");
-
-        i18nEntryServiceImpl.validateFileStream(file, "code", Arrays.asList("application/json"));
+        Utils.validateFileStream(file, "code", Arrays.asList("application/json"));
         verify(file, times(0)).getInputStream();
     }
 
