@@ -83,7 +83,6 @@ public class BlockDto extends BaseEntity {
     private Boolean isDefault;
 
     @Schema(name = "tinyReserved", description = "是否是tiny专有")
-    @JsonProperty("tiny_reserved")
     private Boolean isTinyReserved;
 
     @Schema(name = "npmName", description = "npm包名")
@@ -110,7 +109,6 @@ public class BlockDto extends BaseEntity {
     private Integer platformId;
 
     @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
-    @JsonProperty("block_group_id")
     private Integer blockGroupId;
 
     @JsonProperty("occupier")

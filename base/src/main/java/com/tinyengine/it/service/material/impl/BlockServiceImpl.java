@@ -15,7 +15,6 @@ import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
-import com.tinyengine.it.model.dto.BlockNotGroupParamDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
@@ -350,9 +349,7 @@ public class BlockServiceImpl implements BlockService {
         // 获取缓存中的登录用户
         int userId = 1;
         User user = userMapper.queryUserById(userId);
-        int limit = 10;
-        int start = 0;
-        List<BlockDto> blocksList = blockMapper.findBlocksReturnByBlockGroupId(groupId);
+        List<BlockDto> blocksList = blockMapper.findBlocksReturn();
         return blocksList.stream()
                 .filter(item -> {
                     // 过滤已发布的
@@ -370,8 +367,6 @@ public class BlockServiceImpl implements BlockService {
                     }
                     return user != null && item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
                 })
-                .skip(start)
-                .limit(limit)
                 .collect(Collectors.toList());
     }
 
