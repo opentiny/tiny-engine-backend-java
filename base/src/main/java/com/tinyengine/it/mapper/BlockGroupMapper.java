@@ -102,10 +102,10 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
      */
     @Results({
             @Result(column = "app", property = "appId"),
-            @Result(column = "app", property = "app",
-                    one = @One(select = "com.tinyengine.it.mapper.AppMapper.queryAppById")),
             @Result(column = "block_group_id", javaType = List.class, property = "blocks",
-                    many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId"))
+                    many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId")),
+            @Result(column = "app", property = "app",
+                    one = @One(select = "com.tinyengine.it.mapper.AppMapper.queryAppById"))
     })
     @Select("SELECT bg.*, bs.block_group_id as block_group_id, a.id as app  "
             + "FROM t_block_group bg "
