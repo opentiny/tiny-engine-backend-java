@@ -11,10 +11,10 @@ import java.util.Map;
  */
 @Data
 public class Snippet {
-private Map<String,String> name;
-private String icon;
-private String screenshot;
-private String snippetName;
-private Map<String,Object> schema;
+    private Map<String, String> name;
+    private String icon;
+    private String screenshot;
+    private String snippetName;
+    private Map<String, Object> schema;
 
 }

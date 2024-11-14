@@ -12,5 +12,5 @@ import java.util.Map;
 @Data
 public class JsonFile {
     private String fileName;
-    private Map<String,Object> fileContent;
+    private Map<String, Object> fileContent;
 }
