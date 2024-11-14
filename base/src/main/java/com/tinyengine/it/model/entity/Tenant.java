@@ -1,8 +1,11 @@
 package com.tinyengine.it.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tinyengine.it.common.base.BaseEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -44,6 +47,11 @@ public class Tenant {
     private String renterId;
 
     @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "createdTime", description = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+
+    @TableField(fill = FieldFill.INSERT)
     @Schema(name = "createdBy", description = "创建人")
     private String createdBy;
 
@@ -51,14 +59,8 @@ public class Tenant {
     @Schema(name = "lastUpdatedBy", description = "最后修改人")
     private String lastUpdatedBy;
 
-    @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "createdTime", description = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdTime;
-
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "lastUpdatedTime", description = "更新时间")
     private LocalDateTime lastUpdatedTime;
-
 }
