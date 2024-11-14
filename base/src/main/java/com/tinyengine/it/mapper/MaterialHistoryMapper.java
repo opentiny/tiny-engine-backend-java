@@ -32,7 +32,7 @@ public interface MaterialHistoryMapper extends BaseMapper<MaterialHistory> {
      */
     @Results({@Result(property = "id", column = "id"),
             @Result(property = "components", column = "id",
-                    many = @Many(select = "com.tinyengine.it.mapper.ComponentMapper.findUserComponentsByMaterialHistoryId"))})
+            many = @Many(select = "com.tinyengine.it.mapper.ComponentMapper.findUserComponentsByMaterialHistoryId"))})
     @Select("SELECT * FROM t_material_history WHERE id = #{id}")
     MaterialHistory queryMaterialHistoryById(@Param("id") Integer id);
 

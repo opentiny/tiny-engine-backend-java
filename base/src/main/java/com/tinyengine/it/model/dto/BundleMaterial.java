@@ -12,7 +12,7 @@ import java.util.Map;
  */
 @Data
 public class BundleMaterial {
-    private List<Map<String,Object>> components;
+    private List<Map<String, Object>> components;
     private List<Child> snippets;
-    private List<Map<String,Object>> blocks;
+    private List<Map<String, Object>> blocks;
 }

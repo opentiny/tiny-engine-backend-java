@@ -1,17 +1,20 @@
 package com.tinyengine.it.service.material.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ComponentMapper;
-import com.tinyengine.it.model.dto.*;
+import com.tinyengine.it.model.dto.BundleDto;
+import com.tinyengine.it.model.dto.Child;
+import com.tinyengine.it.model.dto.FileResult;
+import com.tinyengine.it.model.dto.JsonFile;
+import com.tinyengine.it.model.dto.Snippet;
 import com.tinyengine.it.model.entity.Component;
-import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.MaterialComponent;
 import com.tinyengine.it.model.entity.MaterialHistoryComponent;
 import com.tinyengine.it.service.material.ComponentService;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
@@ -19,7 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * The type Component service.
@@ -144,7 +152,8 @@ public class ComponentServiceImpl implements ComponentService {
             for (Child child : snippets) {
 
                 Snippet snippet = child.getChildren().stream()
-                        .filter(item -> toPascalCase(comp.get("component").toString()).equals(toPascalCase(item.getSnippetName())))
+                        .filter(item -> toPascalCase(comp.get("component").toString())
+                                .equals(toPascalCase(item.getSnippetName())))
                         .findFirst()
                         .orElse(null);
 
@@ -201,16 +210,16 @@ public class ComponentServiceImpl implements ComponentService {
         return Result.success(fileResult);
     }
 
-    public static String toPascalCase(String input) {
+    private String toPascalCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
         StringBuilder result = new StringBuilder();
-        boolean nextUpper = true;
+        boolean isNextUpper = true;
         for (char c : input.toCharArray()) {
-            if (nextUpper) {
+            if (isNextUpper) {
                 result.append(Character.toUpperCase(c));
-                nextUpper = false;
+                isNextUpper = false;
             } else {
                 result.append(Character.toLowerCase(c));
             }
