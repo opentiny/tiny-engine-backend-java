@@ -73,7 +73,8 @@ public interface BlockMapper extends BaseMapper<Block> {
      * @return the list
      */
     @Select("select b.* from t_block b "
-            + "where b.block_group_id = #{blockGroupId} and b.last_build_info != null and b.content != null and b.assets != null")
+            + "where b.block_group_id = #{blockGroupId} "
+            + "and b.last_build_info != null and b.content != null and b.assets != null")
     List<Block> findBlocksByBlockGroupId(int blockGroupId);
 
     /**
