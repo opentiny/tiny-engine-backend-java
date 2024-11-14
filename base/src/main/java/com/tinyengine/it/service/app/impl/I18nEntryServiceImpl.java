@@ -12,16 +12,7 @@ import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.EntriesItem;
-import com.tinyengine.it.model.dto.Entry;
-import com.tinyengine.it.model.dto.FileInfo;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.I18nFileResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
-import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
@@ -37,8 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -310,17 +299,20 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
     @Override
-    public Result<I18nFileResult> readSingleFileAndBulkCreate(MultipartFile file, int host)
+    public Result<FileResult> readSingleFileAndBulkCreate(MultipartFile file, int host)
             throws Exception {
         List<EntriesItem> entriesArr = new ArrayList<>();
         String contentType = file.getContentType();
 
         if (Objects.equals(contentType, Enums.MimeType.JSON.getValue())) {
-            Result<EntriesItem> parseJsonFileStreamResult = parseJsonFileStream(file);
+            Result<JsonFile> parseJsonFileStreamResult = Utils.parseJsonFileStream(file);
             if (!parseJsonFileStreamResult.isSuccess()) {
                 return Result.failed(ExceptionEnum.CM001);
             }
-            entriesArr.add(parseJsonFileStreamResult.getData());
+            JsonFile jsonFile = parseJsonFileStreamResult.getData();
+            EntriesItem entriesItem = setLang(jsonFile.getFileName());
+            entriesItem.setEntries(Utils.flat(jsonFile.getFileContent()));
+            entriesArr.add(entriesItem);
         } else {
             entriesArr.addAll(parseZipFileStream(file));
         }
@@ -342,20 +334,22 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
     @Override
-    public Result<I18nFileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception {
-        Result<EntriesItem> parseJsonFileStreamResult = parseJsonFileStream(file);
+    public Result<FileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception {
+        Result<JsonFile> parseJsonFileStreamResult = Utils.parseJsonFileStream(file);
         // 解析 JSON 数据
         if (!parseJsonFileStreamResult.isSuccess()) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        EntriesItem entriesItem = parseJsonFileStreamResult.getData();
+        JsonFile jsonFile = parseJsonFileStreamResult.getData();
+        EntriesItem entriesItem = setLang(jsonFile.getFileName());
+        entriesItem.setEntries(Utils.flat(jsonFile.getFileContent()));
         List<EntriesItem> entriesArr = new ArrayList<>();
         entriesArr.add(entriesItem);
         // 批量上传接口未提交任何文件流时报错
         if (entriesArr.isEmpty()) {
             return Result.failed(ExceptionEnum.CM009);
         }
-        I18nFileResult i18nFileResult = bulkCreateOrUpdate(entriesArr, host).getData();
+        FileResult i18nFileResult = bulkCreateOrUpdate(entriesArr, host).getData();
         return Result.success(i18nFileResult);
     }
 
@@ -367,7 +361,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @return result
      */
     @SystemServiceLog(description = "bulkCreateOrUpdate 批量创建或修改")
-    public Result<I18nFileResult> bulkCreateOrUpdate(List<EntriesItem> entriesArr, int host) {
+    public Result<FileResult> bulkCreateOrUpdate(List<EntriesItem> entriesArr, int host) {
         List<I18nEntry> entries = new ArrayList<>();
         entriesArr.forEach(entriesItem -> {
             Map<String, Object> langEntries = entriesItem.getEntries();
@@ -382,7 +376,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             });
         });
         // 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
-        I18nFileResult result = bulkInsertOrUpdate(entries);
+        FileResult result = bulkInsertOrUpdate(entries);
         return Result.success(result);
     }
 
@@ -394,7 +388,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @return I18nFileResult the I18nFileResult
      */
     @SystemServiceLog(description = "bulkInsertOrUpdate 超大量数据更新")
-    public I18nFileResult bulkInsertOrUpdate(List<I18nEntry> entries) {
+    public FileResult bulkInsertOrUpdate(List<I18nEntry> entries) {
         int addNum = 0;
         int updateNum = 0;
         for (I18nEntry entry : entries) {
@@ -415,42 +409,12 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
 
         // 构造返回插入和更新的条数
-        I18nFileResult i18nFileResult = new I18nFileResult();
+        FileResult i18nFileResult = new FileResult();
         i18nFileResult.setInsertNum(addNum);
         i18nFileResult.setUpdateNum(updateNum);
         return i18nFileResult;
     }
 
-    /**
-     * 解析JSON文件
-     *
-     * @param file the file
-     * @return result
-     */
-    public Result<EntriesItem> parseJsonFileStream(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        log.info("Parsing JSON file: {}", fileName);
-        // 校验文件流合法性
-        validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.MimeType.JSON.getValue()));
-        // 根据文件名判断 lang value
-        EntriesItem entriesItem = setLang(fileName);
-        // 解析国际化词条文件
-        try {
-            // 使用 try-with-resources 自动管理输入流
-            byte[] fileBytes = Utils.readAllBytes(file.getInputStream());
-            String jsonContent = new String(fileBytes, StandardCharsets.UTF_8);
-            ObjectMapper objectMapper = new ObjectMapper();
-            Map<String, Object> jsonData =
-                    objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
-                    });
-            entriesItem.setEntries(Utils.flat(jsonData));
-        } catch (IOException e) {
-            log.error("Error parsing JSON: {}", e.getMessage());
-            return Result.validateFailed("Error parsing JSON");
-        }
-        log.info("Successfully parsed JSON file: {}", fileName);
-        return Result.success(entriesItem);
-    }
 
 
     /**
@@ -462,7 +426,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     public List<EntriesItem> parseZipFileStream(MultipartFile file) throws Exception {
         // 校验文件流合法性
-        validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
+        Utils.validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
                 Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
         List<EntriesItem> entriesItems = new ArrayList<>();
         // 解压ZIP文件并处理
@@ -499,31 +463,6 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
         return entriesItems;
     }
-
-
-    /**
-     * 校验文件流合法性
-     *
-     * @param file      文件
-     * @param code      报错码
-     * @param mimeTypes 文件类型集合
-     */
-    public void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) {
-        boolean hasCondition = file.getOriginalFilename() != null
-                && file.getName().matches("\\d+")
-                && mimeTypes.contains(file.getContentType());
-        if (hasCondition) {
-            return;
-        }
-        // 只要文件不合法就throw error， 无论是批量还是单个
-        try {
-            file.getInputStream().close();
-        } catch (IOException e) {
-            log.error("file close fail:{}", e.getMessage());
-        }
-        throw new ServiceException(code, "validate file fail");
-    }
-
 
     /**
      * 根据主键id查询表t_i18n_entry信息

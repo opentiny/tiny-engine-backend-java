@@ -2,13 +2,7 @@
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.model.dto.DeleteI18nEntry;
-import com.tinyengine.it.model.dto.I18nEntryDto;
-import com.tinyengine.it.model.dto.I18nEntryListResult;
-import com.tinyengine.it.model.dto.I18nFileResult;
-import com.tinyengine.it.model.dto.OperateI18nBatchEntries;
-import com.tinyengine.it.model.dto.OperateI18nEntries;
-import com.tinyengine.it.model.dto.SchemaI18n;
+import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.I18nEntry;
 
 import org.apache.ibatis.annotations.Param;
@@ -101,7 +95,7 @@ public interface I18nEntryService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<I18nFileResult> readSingleFileAndBulkCreate(MultipartFile file, int host) throws Exception;
+    Result<FileResult> readSingleFileAndBulkCreate(MultipartFile file, int host) throws Exception;
 
     /**
      * 批量上传词条数据
@@ -112,5 +106,5 @@ public interface I18nEntryService {
      * @return the result
      * @throws Exception the exception
      */
-    Result<I18nFileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception;
+    Result<FileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception;
 }

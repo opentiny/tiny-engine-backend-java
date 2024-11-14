@@ -13,7 +13,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class I18nFileResult {
+public class FileResult {
     private Integer insertNum;
     private Integer updateNum;
 }
