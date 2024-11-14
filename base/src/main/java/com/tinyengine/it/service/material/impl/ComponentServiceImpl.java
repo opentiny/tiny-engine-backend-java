@@ -8,6 +8,8 @@ import com.tinyengine.it.mapper.ComponentMapper;
 import com.tinyengine.it.model.dto.*;
 import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.I18nEntry;
+import com.tinyengine.it.model.entity.MaterialComponent;
+import com.tinyengine.it.model.entity.MaterialHistoryComponent;
 import com.tinyengine.it.service.material.ComponentService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -105,58 +107,60 @@ public class ComponentServiceImpl implements ComponentService {
     public Result<FileResult> readFileAndBulkCreate(MultipartFile file) {
         // 获取bundle.json数据
         Result<JsonFile> result = Utils.parseJsonFileStream(file);
-        if(!result.isSuccess()){
-            return  Result.failed(ExceptionEnum.CM001);
+        if (!result.isSuccess()) {
+            return Result.failed(ExceptionEnum.CM001);
         }
         JsonFile jsonFile = result.getData();
 
         // 获取组件数据
         Object dataObj = jsonFile.getFileContent().get("data");
-        Map<String,Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
 
-        if (dataObj instanceof Map){
+        if (dataObj instanceof Map) {
             data = (Map<String, Object>) dataObj;
         }
         BundleDto bundleDto = BeanUtil.mapToBean(data, BundleDto.class, true);
 
-        List<Map<String,Object>> components = bundleDto.getMaterials().getComponents();
+        List<Map<String, Object>> components = bundleDto.getMaterials().getComponents();
         List<Child> snippets = bundleDto.getMaterials().getSnippets();
 
-        if(components.isEmpty()){
-            return Result.failed(ExceptionEnum.CM009);
-        }
-        if(snippets.isEmpty()){
+        if (components == null || components.isEmpty()) {
             return Result.failed(ExceptionEnum.CM009);
         }
         List<Component> componentList = new ArrayList<>();
-       for(Map<String,Object> comp : components){
-           Component component = BeanUtil.mapToBean(comp,Component.class,true);
-           component.setIsDefault(true);
-           component.setIsOfficial(true);
-           component.setDevMode("proCode");
-           component.setFramework(bundleDto.getFramework());
-           component.setPublicStatus(1);
-           component.setIsTinyReserved(false);
-           for (Child child : snippets) {
+        for (Map<String, Object> comp : components) {
+            Component component = BeanUtil.mapToBean(comp, Component.class, true);
+            component.setIsDefault(true);
+            component.setIsOfficial(true);
+            component.setDevMode("proCode");
+            component.setFramework(bundleDto.getFramework());
+            component.setPublicStatus(1);
+            component.setIsTinyReserved(false);
+            if (snippets == null || snippets.isEmpty()) {
+                componentList.add(component);
+                continue;
+            }
+            for (Child child : snippets) {
 
-               Snippet snippet = child.getChildren().stream()
-                       .filter(item -> toPascalCase(comp.get("component").toString()).equals(toPascalCase(item.getSnippetName())))
-                       .findFirst()
-                       .orElse(null);
+                Snippet snippet = child.getChildren().stream()
+                        .filter(item -> toPascalCase(comp.get("component").toString()).equals(toPascalCase(item.getSnippetName())))
+                        .findFirst()
+                        .orElse(null);
 
-               if (snippet != null) {
-                   Map<String,Object> snippetMap = BeanUtil.beanToMap(snippet);
-                   component.setSnippets(Arrays.asList(snippetMap));
+                if (snippet != null) {
+                    Map<String, Object> snippetMap = BeanUtil.beanToMap(snippet);
+                    component.setSnippets(Arrays.asList(snippetMap));
 
-                   component.setCategory(child.getGroup());
-               }
-           }
-           componentList.add(component);
-       }
+                    component.setCategory(child.getGroup());
+                }
+            }
+            componentList.add(component);
+        }
 
         return bulkCreate(componentList);
     }
-    private Result<FileResult> bulkCreate(List<Component> componentList){
+
+    private Result<FileResult> bulkCreate(List<Component> componentList) {
         int addNum = 0;
         int updateNum = 0;
         for (Component component : componentList) {
@@ -169,10 +173,17 @@ public class ComponentServiceImpl implements ComponentService {
 
             if (queryComponent.isEmpty()) {
                 // 插入新记录
-               Integer result = createComponent(component);
-               if(result == 1){
-                   componentMapper.createMaterialComponent(1,component.getId());
-               }
+                Integer result = createComponent(component);
+                if (result == 1) {
+                    MaterialComponent materialComponent = new MaterialComponent();
+                    materialComponent.setMaterialId(1);
+                    materialComponent.setComponentId(component.getId());
+                    componentMapper.createMaterialComponent(materialComponent);
+                    MaterialHistoryComponent materialHistoryComponent = new MaterialHistoryComponent();
+                    materialHistoryComponent.setComponentId(component.getId());
+                    materialHistoryComponent.setMaterialHistoryId(1);
+                    componentMapper.createMaterialHistoryComponent(materialHistoryComponent);
+                }
                 addNum = addNum + 1;
             } else {
                 // 更新记录
@@ -188,6 +199,7 @@ public class ComponentServiceImpl implements ComponentService {
         fileResult.setUpdateNum(updateNum);
         return Result.success(fileResult);
     }
+
     public static String toPascalCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
