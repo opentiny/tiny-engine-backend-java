@@ -1,11 +1,17 @@
 package com.tinyengine.it.common.utils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.model.dto.FileInfo;
 
 import cn.hutool.core.io.FileUtil;
+import com.tinyengine.it.model.dto.JsonFile;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -340,5 +347,59 @@ public class Utils {
                 flattenedMap.put(key, entry.getValue());
             }
         }
+    }
+
+    /**
+     * 解析JSON文件
+     *
+     * @param file the file
+     * @return result
+     */
+    public static Result<JsonFile> parseJsonFileStream(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        log.info("Parsing JSON file: {}", fileName);
+        // 校验文件流合法性
+        validateFileStream(file, ExceptionEnum.CM308.getResultCode(), Arrays.asList(Enums.MimeType.JSON.getValue()));
+        JsonFile jsonFile = new JsonFile();
+        // 解析国际化词条文件
+        try {
+            // 使用 try-with-resources 自动管理输入流
+            byte[] fileBytes = Utils.readAllBytes(file.getInputStream());
+            String jsonContent = new String(fileBytes, StandardCharsets.UTF_8);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> jsonData =
+                    objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
+                    });
+
+            jsonFile.setFileName(fileName);
+            jsonFile.setFileContent(jsonData);
+        } catch (IOException e) {
+            log.error("Error parsing JSON: {}", e.getMessage());
+            return Result.validateFailed("Error parsing JSON");
+        }
+        log.info("Successfully parsed JSON file: {}", fileName);
+        return Result.success(jsonFile);
+    }
+
+    /**
+     * 校验文件流合法性
+     *
+     * @param file      文件
+     * @param code      报错码
+     * @param mimeTypes 文件类型集合
+     */
+    public static void validateFileStream(MultipartFile file, String code, List<String> mimeTypes) {
+        boolean hasCondition = file.getOriginalFilename() != null
+                && mimeTypes.contains(file.getContentType());
+        if (hasCondition) {
+            return;
+        }
+        // 只要文件不合法就throw error， 无论是批量还是单个
+        try {
+            file.getInputStream().close();
+        } catch (IOException e) {
+            log.error("file close fail:{}", e.getMessage());
+        }
+        throw new ServiceException(code, "validate file fail");
     }
 }
