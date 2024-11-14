@@ -16,5 +16,4 @@ public class Snippet {
     private String screenshot;
     private String snippetName;
     private Map<String, Object> schema;
-
 }

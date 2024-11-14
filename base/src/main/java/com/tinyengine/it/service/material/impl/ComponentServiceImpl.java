@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * The type Component service.
  *
@@ -150,7 +149,6 @@ public class ComponentServiceImpl implements ComponentService {
                 continue;
             }
             for (Child child : snippets) {
-
                 Snippet snippet = child.getChildren().stream()
                         .filter(item -> toPascalCase(comp.get("component").toString())
                                 .equals(toPascalCase(item.getSnippetName())))
