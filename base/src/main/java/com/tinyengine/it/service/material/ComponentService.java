@@ -1,8 +1,11 @@
 package com.tinyengine.it.service.material;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.entity.Component;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -58,4 +61,12 @@ public interface ComponentService {
      * @return the integer
      */
     Integer createComponent(Component component);
+
+    /**
+     * 通过bundle.json新增表t_component数据
+     *
+     * @param file the file
+     * @return result the result
+     */
+    Result<FileResult> readFileAndBulkCreate(MultipartFile file);
 }
