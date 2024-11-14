@@ -52,10 +52,9 @@ public class CanvasServiceImpl implements CanvasService {
             occupier = Integer.parseInt(block.getOccupierBy());
             Boolean isCaDoIt = isCanDoIt(occupier, user);
             if (isCaDoIt) {
-                int arg = Enums.CanvasEditorState.OCCUPY.getValue().equals(state) ? user.getId() : null;
                 Block updateBlock = new Block();
                 updateBlock.setId(id);
-                updateBlock.setOccupierBy(String.valueOf(arg));
+                updateBlock.setOccupierBy(String.valueOf(user.getId()));
                 blockMapper.updateBlockById(updateBlock);
                 canvasDto.setOperate("success");
                 canvasDto.setOccupier(user);
