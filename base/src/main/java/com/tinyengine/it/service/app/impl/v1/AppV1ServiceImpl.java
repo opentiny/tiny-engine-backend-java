@@ -239,11 +239,9 @@ public class AppV1ServiceImpl implements AppV1Service {
 
         // 当前版本暂无设计器数据
         MaterialHistoryMsg materialhistoryMsg = new MaterialHistoryMsg();
-        if (platform == null) {
-            materialhistoryMsg.setMaterialHistoryId(1);
-        } else {
-            materialhistoryMsg.setMaterialHistoryId(platform.getMaterialHistoryId());
-        }
+
+        materialhistoryMsg.setMaterialHistoryId(platform.getMaterialHistoryId());
+
         materialhistoryMsg.setIsUnpkg(true);
 
         MetaDto metaDto = new MetaDto();
