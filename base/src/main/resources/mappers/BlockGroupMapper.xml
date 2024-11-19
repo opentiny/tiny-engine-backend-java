@@ -100,34 +100,213 @@
         <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
+        <collection property="blocks" ofType="com.tinyengine.it.model.entity.Block">
+            <id column="block_id" property="id"/>
+            <result column="label" property="label"/>
+            <result column="block_name" property="name"/>
+            <result column="framework" property="framework"/>
+            <result column="content" property="content"/>
+            <result column="assets" property="assets"/>
+            <result column="last_build_info" property="lastBuildInfo"/>
+            <result column="block_description" property="description"/>
+            <result column="tags" property="tags"/>
+            <result column="latest_version" property="latestVersion"/>
+            <result column="latest_history_id" property="latestHistoryId"/>
+            <result column="screenshot" property="screenshot"/>
+            <result column="path" property="path"/>
+            <result column="occupier_by" property="occupierBy"/>
+            <result column="is_official" property="isOfficial"/>
+            <result column="public" property="publicStatus"/>
+            <result column="is_default" property="isDefault"/>
+            <result column="tiny_reserved" property="isTinyReserved"/>
+            <result column="npm_name" property="npmName"/>
+            <result column="i18n" property="i18n"/>
+            <result column="block_platform_id" property="platformId"/>
+            <result column="block_app_id" property="appId"/>
+            <result column="content_blocks" property="contentBlocks"/>
+            <result column="block_group_id" property="blockGroupId"/>
+            <result column="block_created_by" property="createdBy"/>
+            <result column="block_last_updated_by" property="lastUpdatedBy"/>
+            <result column="block_created_time" property="createdTime"/>
+            <result column="block_last_updated_time" property="lastUpdatedTime"/>
+            <result column="block_tenant_id" property="tenantId"/>
+            <result column="block_renter_id" property="renterId"/>
+            <result column="block_site_id" property="siteId"/>
+        </collection>
     </resultMap>
 
     <!-- 查询表t_block_group所有数据 -->
-    <select id="queryAllBlockGroup" resultMap="BlockGroupMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_block_group
+    <select id="queryAllBlockGroupAndBlock" resultMap="BlockGroupMap">
+        SELECT bg.id,
+        bg.name,
+        bg.app_id,
+        bg.platform_id,
+        bg.description,
+        bg.created_by,
+        bg.last_updated_by,
+        bg.created_time,
+        bg.last_updated_time,
+        bg.tenant_id,
+        bg.renter_id,
+        bg.site_id,
+        b.id as block_id,
+        b.label,
+        b.name as block_name,
+        b.framework,
+        b.content,
+        b.assets,
+        b.last_build_info,
+        b.description as block_description,
+        b.tags,
+        b.latest_version,
+        b.latest_history_id,
+        b.screenshot,
+        b.path,
+        b.occupier_by,
+        b.is_official,
+        b.`public`,
+        b.is_default,
+        b.tiny_reserved,
+        b.npm_name,
+        b.i18n,
+        b.platform_id as block_platform_id,
+        b.app_id as block_app_id,
+        b.content_blocks,
+        b.block_group_id,
+        b.created_by as block_created_by,
+        b.last_updated_by as block_last_updated_by,
+        b.created_time as block_created_time,
+        b.last_updated_time as block_last_updated_time,
+        b.tenant_id as block_tenant_id,
+        b.renter_id as block_renter_id,
+        b.site_id as block_site_id
+        FROM t_block_group bg
+        left join t_block b on bg.id = b.block_group_id
+        <if test="createdBy != null">
+            AND b.created_by = #{createdBy}
+        </if>
+        <if test="createdBy == null">
+            AND b.last_build_info != null and b.content != null and b.assets != null
+        </if>
     </select>
 
     <!-- 根据app查询表block_group -->
-    <select id="queryBlockGroupByApp" resultMap="BlockGroupMap">
+    <select id="queryBlockGroupByAppId" resultMap="BlockGroupMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_block_group
+        bg.id,
+        bg.name,
+        bg.app_id,
+        bg.platform_id,
+        bg.description,
+        bg.created_by,
+        bg.last_updated_by,
+        bg.created_time,
+        bg.last_updated_time,
+        bg.tenant_id,
+        bg.renter_id,
+        bg.site_id,
+        b.id as block_id,
+        b.label,
+        b.name as block_name,
+        b.framework,
+        b.content,
+        b.assets,
+        b.last_build_info,
+        b.description as block_description,
+        b.tags,
+        b.latest_version,
+        b.latest_history_id,
+        b.screenshot,
+        b.path,
+        b.occupier_by,
+        b.is_official,
+        b.`public`,
+        b.is_default,
+        b.tiny_reserved,
+        b.npm_name,
+        b.i18n,
+        b.platform_id as block_platform_id,
+        b.app_id as block_app_id,
+        b.content_blocks,
+        b.block_group_id,
+        b.created_by as block_created_by,
+        b.last_updated_by as block_last_updated_by,
+        b.created_time as block_created_time,
+        b.last_updated_time as block_last_updated_time,
+        b.tenant_id as block_tenant_id,
+        b.renter_id as block_renter_id,
+        b.site_id as block_site_id
+        FROM t_block_group bg
+        left join t_block b on bg.id = b.block_group_id
+        <if test="createdBy != null">
+            AND b.created_by = #{createdBy}
+        </if>
+        <if test="createdBy == null">
+            AND b.last_build_info != null and b.content != null and b.assets != null
+        </if>
         <where>
             <if test="appId != null">
-                AND app_id = #{appId}
+                AND bg.app_id = #{appId}
             </if>
         </where>
     </select>
     <!-- 根据主键id查询表t_block_group信息 -->
-    <select id="queryBlockGroupById" resultMap="BlockGroupMap">
+    <select id="queryBlockGroupAndBlockById" resultMap="BlockGroupMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_block_group
+        bg.id,
+        bg.name,
+        bg.app_id,
+        bg.platform_id,
+        bg.description,
+        bg.created_by,
+        bg.last_updated_by,
+        bg.created_time,
+        bg.last_updated_time,
+        bg.tenant_id,
+        bg.renter_id,
+        bg.site_id,
+        b.id as block_id,
+        b.label,
+        b.name as block_name,
+        b.framework,
+        b.content,
+        b.assets,
+        b.last_build_info,
+        b.description as block_description,
+        b.tags,
+        b.latest_version,
+        b.latest_history_id,
+        b.screenshot,
+        b.path,
+        b.occupier_by,
+        b.is_official,
+        b.`public`,
+        b.is_default,
+        b.tiny_reserved,
+        b.npm_name,
+        b.i18n,
+        b.platform_id as block_platform_id,
+        b.app_id as block_app_id,
+        b.content_blocks,
+        b.block_group_id,
+        b.created_by as block_created_by,
+        b.last_updated_by as block_last_updated_by,
+        b.created_time as block_created_time,
+        b.last_updated_time as block_last_updated_time,
+        b.tenant_id as block_tenant_id,
+        b.renter_id as block_renter_id,
+        b.site_id as block_site_id
+        FROM t_block_group bg
+        left join t_block b on bg.id = b.block_group_id
+        <if test="createdBy != null">
+            AND b.created_by = #{createdBy}
+        </if>
+        <if test="createdBy == null">
+            AND b.last_build_info != null and b.content != null and b.assets != null
+        </if>
         <where>
             <if test="id != null">
-                AND id = #{id}
+                AND bg.id = #{id}
             </if>
         </where>
     </select>

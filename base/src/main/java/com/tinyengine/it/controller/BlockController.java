@@ -333,7 +333,8 @@ public class BlockController {
     /**
      * 获取区块列表
      *
-     * @param map map
+     * @param appId   appId
+     * @param groupId groupId
      * @return the list
      */
     @Operation(summary = "获取区块列表",
@@ -349,8 +350,10 @@ public class BlockController {
     )
     @SystemControllerLog(description = "获取区块列表")
     @GetMapping("/blocks")
-    public Result<List<Block>> getAllBlockCategories(@Valid @RequestParam Map<String, String> map) {
-        return blockService.listNew(map);
+    public Result<List<Block>> getBlockGroups(
+            @Valid @RequestParam(required = false) String appId,
+            @RequestParam(required = false) String groupId) {
+        return blockService.listNew(appId, groupId);
     }
 
 

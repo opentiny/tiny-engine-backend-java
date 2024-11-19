@@ -108,19 +108,41 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return the list
      */
     @Override
-    public List<BlockGroupDto> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId) {
+    public List<BlockGroup> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId, String from) {
+        String createdBy = "1"; // 获取登录用户信息
         // 此接收到的两个参数不一定同时存在
-        List<BlockGroupDto> blockGroupsListResult = new ArrayList<>();
-        if (ids != null) {
-            blockGroupsListResult = blockGroupMapper.getBlockGroupsByIds(ids);
+        List<BlockGroup> blockGroupsListResult = new ArrayList<>();
+        // 判断是否是区块管理还是物料区块查询
+        BlockGroup blockGroup = new BlockGroup();
+        if (!from.equals("block")) {
+            // 物料管理的分组查询
+            if (ids != null) {
+                for (int blockgroupId : ids) {
+                    blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, null);
+                    blockGroupsListResult.add(blockGroup);
+                }
+            }
+            if (appId != null) {
+                blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, null);
+            }
+            if (ids == null && appId == null) {
+                blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock(null);
+            }
+        } else {
+            // 区块管理差分组，过滤个人创建的
+            if (ids != null) {
+                for (int blockgroupId : ids) {
+                    blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, createdBy);
+                    blockGroupsListResult.add(blockGroup);
+                }
+            }
+            if (appId != null) {
+                blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, createdBy);
+            }
+            if (ids == null && appId == null) {
+                blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock(createdBy);
+            }
         }
-        if (appId != null) {
-            blockGroupsListResult = blockGroupMapper.findGroupByAppId(appId);
-        }
-        if (ids == null && appId == null) {
-            blockGroupsListResult = blockGroupMapper.getBlockGroups();
-        }
-
         return blockGroupsListResult;
     }
 }

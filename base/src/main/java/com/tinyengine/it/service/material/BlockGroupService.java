@@ -66,7 +66,8 @@ public interface BlockGroupService {
      *
      * @param ids   ids
      * @param appId the app id
+     * @param from  the from
      * @return the list
      */
-    List<BlockGroupDto> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId);
+    List<BlockGroup> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId, String from);
 }
