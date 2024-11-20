@@ -100,7 +100,7 @@
         <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
-        <collection property="blocks" ofType="com.tinyengine.it.model.entity.Block">
+        <collection property="blocks" ofType="com.tinyengine.it.model.entity.Block" column="block_id">
             <id column="block_id" property="id"/>
             <result column="label" property="label"/>
             <result column="block_name" property="name"/>
@@ -186,7 +186,7 @@
             AND b.created_by = #{createdBy}
         </if>
         <if test="createdBy == null">
-            AND b.last_build_info != null and b.content != null and b.assets != null
+            AND b.last_build_info is not null and b.content is not null and b.assets is not null
         </if>
     </select>
 
@@ -242,7 +242,7 @@
             AND b.created_by = #{createdBy}
         </if>
         <if test="createdBy == null">
-            AND b.last_build_info != null and b.content != null and b.assets != null
+            AND b.last_build_info is not null and b.content is not null and b.assets is not null
         </if>
         <where>
             <if test="appId != null">
@@ -302,7 +302,7 @@
             AND b.created_by = #{createdBy}
         </if>
         <if test="createdBy == null">
-            AND b.last_build_info != null and b.content != null and b.assets != null
+            AND b.last_build_info is not null and b.content is not null and b.assets is not null
         </if>
         <where>
             <if test="id != null">
