@@ -560,7 +560,6 @@ create table `t_tenant` (
     `name_cn` varchar(255) not null comment '组织中文名',
     `name_en` varchar(255) comment '组织英文名',
     `description` varchar(2000) comment '组织描述',
-    `renter_id` varchar(60) comment '业务租户id',
     `created_by` varchar(60) not null comment '创建人',
     `created_time` timestamp not null default current_timestamp comment '创建时间',
     `last_updated_by` varchar(60) not null comment '最后修改人',
