@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -86,5 +87,26 @@ class BlockGroupServiceImplTest {
         blockGroupParam.setId(1);
         Result<List<BlockGroupDto>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
         Assertions.assertNotNull(result.getData());
+    }
+
+    @Test
+    void testGetBlockGroupByIdsOrAppId() {
+        Integer appId = 1;
+        List<Integer> paramIdList = new ArrayList<>();
+
+        List<BlockGroupDto> mockData = new ArrayList<>();
+        when(blockGroupMapper.getBlockGroupsByIds(paramIdList)).thenReturn(mockData);
+        when(blockGroupMapper.findGroupByAppId(appId)).thenReturn(mockData);
+
+        // not empty param
+        List<BlockGroupDto> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId);
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result.isEmpty());
+
+        // empty param
+        when(blockGroupMapper.getBlockGroups()).thenReturn(mockData);
+        result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(null, null);
+        Assertions.assertNotNull(result);
+        Assertions.assertTrue(result.isEmpty());
     }
 }
