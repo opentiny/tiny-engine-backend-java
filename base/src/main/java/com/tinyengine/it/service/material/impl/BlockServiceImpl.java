@@ -329,7 +329,6 @@ public class BlockServiceImpl implements BlockService {
     @Override
     public List<String> allTags() {
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
-        ObjectMapper objectMapper = new ObjectMapper();
         queryWrapper.select("tags").isNotNull("tags");
         List<Block> allBlocksList = blockMapper.selectList(queryWrapper);
         return allBlocksList.stream()

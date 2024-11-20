@@ -1,15 +1,25 @@
 package com.tinyengine.it.service.material.impl;
 
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
+import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockMapper;
+import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.User;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +45,11 @@ class BlockServiceImplTest {
 
     @InjectMocks
     private BlockServiceImpl blockServiceImpl;
+
+    @Mock
+    private UserMapper userMapper;
+    @Mock
+    private AppMapper appMapper;
 
     @BeforeEach
     void setUp() {
@@ -90,7 +105,7 @@ class BlockServiceImplTest {
         blockDto.setFramework("cc");
         blockDto.setPlatformId(1);
         blockDto.setAppId(1);
-        blockDto.setGroups(Arrays.asList(1));
+        blockDto.setGroups(asList(1));
         blockDto.setName("testBlock");
         Result<BlockDto> result = blockServiceImpl.createBlock(blockDto);
         Assertions.assertEquals("test", result.getData().getName());
@@ -111,13 +126,13 @@ class BlockServiceImplTest {
     @Test
     void testGetBlockAssets() {
         Map<String, Object> assetMap = new HashMap<>();
-        assetMap.put("material", Arrays.asList("material"));
-        assetMap.put("scripts", Arrays.asList("scripts"));
-        assetMap.put("styles", Arrays.asList("styles"));
+        assetMap.put("material", asList("material"));
+        assetMap.put("scripts", asList("scripts"));
+        assetMap.put("styles", asList("styles"));
 
         Block block = new Block();
         block.setAssets(assetMap);
-        when(blockMapper.selectList(any(Wrapper.class))).thenReturn(Arrays.asList(block));
+        when(blockMapper.selectList(any(Wrapper.class))).thenReturn(asList(block));
 
         HashMap<String, Object> pageContent = new HashMap<String, Object>() {
             {
@@ -137,7 +152,7 @@ class BlockServiceImplTest {
         List<Object> mockData = new ArrayList<>();
         when(blockMapper.selectList(any(Wrapper.class))).thenReturn(mockData);
 
-        List<String> param = Arrays.asList("block");
+        List<String> param = asList("block");
         List<Block> result = blockServiceImpl.getBlockInfo(param, "framework");
         Assertions.assertTrue(result.isEmpty());
     }
@@ -175,5 +190,103 @@ class BlockServiceImplTest {
             }
         });
         Assertions.assertEquals(true, hasResult);
+    }
+
+    @Test
+    void testFindBlocksByPagetionList() {
+        IPage<Block> page = new Page<>();
+        when(blockMapper.selectPage(any(), any(Wrapper.class))).thenReturn(page);
+        BlockParamDto param = new BlockParamDto();
+        param.setAppId("1");
+        param.setName("name");
+        param.setDescription("desc");
+        param.setLabel("label");
+        param.setSort("sort:sort");
+        param.setLimit("1");
+        param.setStart("1");
+
+        IPage<Block> result = blockServiceImpl.findBlocksByPagetionList(param);
+        Assertions.assertEquals(page, result);
+    }
+
+
+    @Test
+    void testAllTags() {
+        List<Block> mockData = new ArrayList<>();
+        Block block = new Block();
+        block.setTags(asList("tag"));
+        mockData.add(block);
+        when(blockMapper.selectList(any(Wrapper.class))).thenReturn(mockData);
+
+        List<String> result = blockServiceImpl.allTags();
+        Assertions.assertEquals("tag", result.get(0));
+    }
+
+    @Test
+    void testGetNotInGroupBlocks() {
+        BlockDto blockDto = new BlockDto();
+        blockDto.setLastBuildInfo(new HashMap<>());
+        blockDto.setContent(new HashMap<>());
+        blockDto.setAssets(new HashMap<>());
+        blockDto.setPublicStatus(Enums.Scope.PUBLIC_IN_TENANTS.getValue());
+        List<BlockDto> mockData = Arrays.asList(blockDto);
+        when(blockMapper.findBlocksReturn()).thenReturn(mockData);
+        when(userMapper.queryUserById(anyInt())).thenReturn(new User());
+
+        List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(1);
+        Assertions.assertEquals(blockDto, result.get(0));
+    }
+
+    @Test
+    void testFindBlocksByConditionPagetion() {
+        when(blockMapper.selectList(any(Wrapper.class))).thenReturn(Arrays.asList(new Block()));
+
+        IPage<Block> page = new Page<>();
+        when(blockMapper.selectPage(any(), any(Wrapper.class))).thenReturn(page);
+
+        HashMap<String, String> request = new HashMap<>();
+        request.put("public_scope_mode", "request");
+        request.put("name_cn", "name_cn");
+        request.put("description", "description");
+        IPage<Block> result = blockServiceImpl.findBlocksByConditionPagetion(request);
+        Assertions.assertEquals(page, result);
+    }
+
+    @Test
+    void testListNewWhenGroupIdNotEmpty() {
+        List<Block> blocksList = new ArrayList<>();
+        when(blockMapper.findBlocksByBlockGroupId(anyInt())).thenReturn(blocksList);
+
+        App app = new App();
+        app.setId(1);
+        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("groupId", "1");
+        param.put("appId", "1");
+        param.put("description", "description");
+        Result<List<Block>> result = blockServiceImpl.listNew(param);
+        Assertions.assertEquals(blocksList, result.getData());
+    }
+
+    @Test
+    void testListNewWhenGroupIdIsEmpty() {
+        List<Block> blocksList1 = new ArrayList<>();
+        blocksList1.add(new Block());
+        when(blockMapper.queryBlockByCondition(any(Block.class))).thenReturn(blocksList1);
+
+        List<Block> blocksList2 = new ArrayList<>();
+        when(blockMapper.findBlocksByBlockGroupIdAppId(anyInt())).thenReturn(blocksList2);
+
+        App app = new App();
+        app.setId(1);
+        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+
+        HashMap<String, String> param = new HashMap<>();
+
+        param.put("appId", "1");
+        param.put("description", "description");
+        Result<List<Block>> result = blockServiceImpl.listNew(param);
+        Assertions.assertEquals(1, result.getData().size());
     }
 }
