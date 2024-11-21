@@ -163,6 +163,7 @@ public interface BlockMapper extends BaseMapper<Block> {
      * 通过区块分组id获取自己创建的区块信息
      *
      * @param blockGroupId the block group id
+     * @param createdBy    createdBy
      * @return the list
      */
     @Select("select b.* from t_block b "

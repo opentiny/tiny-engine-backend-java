@@ -45,7 +45,8 @@ class BlockGroupControllerTest {
                 .thenReturn(Arrays.asList(mockData));
 
         Result<List<BlockGroup>> result =
-                blockGroupController.getAllBlockGroups(Arrays.<Integer>asList(Integer.valueOf(0)), Integer.valueOf(0), "block");
+                blockGroupController.getAllBlockGroups(
+                        Arrays.<Integer>asList(Integer.valueOf(0)), Integer.valueOf(0), "block");
         Assertions.assertEquals(mockData, result.getData().get(0));
     }
 

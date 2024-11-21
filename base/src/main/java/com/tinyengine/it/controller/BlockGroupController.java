@@ -53,6 +53,7 @@ public class BlockGroupController {
      *
      * @param ids   ids
      * @param appId appid
+     * @param from  from
      * @return the list
      */
     @Operation(summary = "获取区块分组",

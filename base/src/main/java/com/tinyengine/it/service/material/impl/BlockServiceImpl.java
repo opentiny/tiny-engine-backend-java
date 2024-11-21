@@ -432,7 +432,6 @@ public class BlockServiceImpl implements BlockService {
     public Result<List<Block>> listNew(String appId, String groupId) {
         int groupIdTemp = 0;
         int appIdTemp = 0;
-        String createdBy = "1"; // 获取用户登录id
         if (groupId != null && !groupId.isEmpty()) {
             groupIdTemp = Integer.parseInt(groupId);
         }
@@ -446,6 +445,7 @@ public class BlockServiceImpl implements BlockService {
             }
         }
         List<Block> blocksList = new ArrayList<>();
+        String createdBy = "1"; // 获取用户登录id
         // 如果有 groupId, 只查group下的block,以及自己创建的区块
         if (groupIdTemp != 0) {
             blocksList = blockMapper.findBlockByBlockGroupId(groupIdTemp, createdBy);

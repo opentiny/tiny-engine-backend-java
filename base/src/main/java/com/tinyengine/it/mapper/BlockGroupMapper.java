@@ -22,6 +22,7 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
     /**
      * 查询表t_block_group所有信息及关联的区块信息
      *
+     * @param createdBy createdBy
      * @return the list
      */
     List<BlockGroup> queryAllBlockGroupAndBlock(String createdBy);
@@ -37,7 +38,8 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
     /**
      * 根据主键id查询表t_block_group数据
      *
-     * @param id the id
+     * @param id        the id
+     * @param createdBy createdBy
      * @return the block group
      */
     BlockGroup queryBlockGroupAndBlockById(@Param("id") Integer id, String createdBy);
@@ -86,7 +88,8 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
     /**
      * 通过appId和createdBy查区块分组关联的区块信息
      *
-     * @param appId the app id
+     * @param appId     the app id
+     * @param createdBy createdBy
      * @return the list
      */
     List<BlockGroup> queryBlockGroupByAppId(Integer appId, String createdBy);
