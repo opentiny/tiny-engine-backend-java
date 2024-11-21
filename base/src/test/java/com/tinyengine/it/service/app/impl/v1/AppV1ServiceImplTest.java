@@ -114,7 +114,7 @@ class AppV1ServiceImplTest {
         Platform platform = new Platform();
         platform.setMaterialHistoryId(3);
 
-        when(platformService.queryPlatformById(anyInt())).thenReturn(platform);
+        when(platformService.queryPlatformById(any())).thenReturn(platform);
 
         SchemaDto result = appV1ServiceImpl.appSchema(appId);
         Assertions.assertEquals("2", result.getMeta().getAppId());
@@ -141,7 +141,7 @@ class AppV1ServiceImplTest {
         when(materialHistoryMapper.queryMaterialHistoryById(anyInt())).thenReturn(new MaterialHistory());
         when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt()))
                 .thenReturn(Arrays.<Integer>asList(Integer.valueOf(0)));
-        when(platformService.queryPlatformById(anyInt())).thenReturn(new Platform());
+        when(platformService.queryPlatformById(any())).thenReturn(new Platform());
 
         MetaDto result = appV1ServiceImpl.getMetaDto(Integer.valueOf(0));
         Assertions.assertEquals(app, result.getApp());
