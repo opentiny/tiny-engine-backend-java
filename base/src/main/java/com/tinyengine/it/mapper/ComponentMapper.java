@@ -78,7 +78,7 @@ public interface ComponentMapper extends BaseMapper<Component> {
      * @return the integer
      */
     @Insert("INSERT INTO r_material_component (id,material_id,component_id )"
-            +"values (#{id},#{materialId},#{componentId})")
+            + "values (#{id},#{materialId},#{componentId})")
     Integer createMaterialComponent(MaterialComponent materialComponent);
 
 
@@ -89,6 +89,6 @@ public interface ComponentMapper extends BaseMapper<Component> {
      * @return the integer
      */
     @Insert("INSERT INTO r_material_history_component (id,material_history_id,component_id )"
-            +"values (#{id},#{materialHistoryId},#{componentId})")
+            + "values (#{id},#{materialHistoryId},#{componentId})")
     Integer createMaterialHistoryComponent(MaterialHistoryComponent materialHistoryComponent);
 }
