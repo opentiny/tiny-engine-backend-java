@@ -123,6 +123,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      *
      * @param ids   ids
      * @param appId the app id
+     * @param from  the from
      * @return the list
      */
     @Override
@@ -130,8 +131,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         String createdBy = "1"; // 获取登录用户信息
         // 此接收到的两个参数不一定同时存在
         List<BlockGroup> blockGroupsListResult = new ArrayList<>();
-        List<BlockGroup> blockGroupsListTemp = new ArrayList<>();
-        createdBy = from != null && from.equals("block") ? createdBy : null; // from值为block在区块管理处增加createdBy条件
+        createdBy = ("block").equals(from) ? createdBy : null; // from值为block在区块管理处增加createdBy条件
         BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {
             for (int blockgroupId : ids) {
@@ -150,6 +150,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         if (blockGroupsListResult.isEmpty()) {
             return blockGroupsListResult;
         }
+        List<BlockGroup> blockGroupsListTemp = new ArrayList<>();
         // 对查询的结果过滤blocks中id为null的情况
         for (BlockGroup blockGroupTemp : blockGroupsListResult) {
             if (blockGroupTemp != null && blockGroupTemp.getBlocks() != null) {
