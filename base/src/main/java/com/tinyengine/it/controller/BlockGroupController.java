@@ -53,6 +53,7 @@ public class BlockGroupController {
      *
      * @param ids   ids
      * @param appId appid
+     * @param from  from
      * @return the list
      */
     @Operation(summary = "获取区块分组",
@@ -69,10 +70,11 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "获取区块分组")
     @GetMapping("/block-groups")
-    public Result<List<BlockGroupDto>> getAllBlockGroups(
+    public Result<List<BlockGroup>> getAllBlockGroups(
             @RequestParam(value = "id", required = false) List<Integer> ids,
-            @RequestParam(value = "app", required = false) Integer appId) {
-        List<BlockGroupDto> blockGroupsListResult = blockGroupService.getBlockGroupByIdsOrAppId(ids, appId);
+            @RequestParam(value = "app", required = false) Integer appId,
+            @RequestParam(value = "from", required = false) String from) {
+        List<BlockGroup> blockGroupsListResult = blockGroupService.getBlockGroupByIdsOrAppId(ids, appId, from);
         return Result.success(blockGroupsListResult);
     }
 

@@ -101,10 +101,11 @@ public interface BlockService {
     /**
      * 获取区块
      *
-     * @param map the map
+     * @param appId   the appId
+     * @param groupId the group id
      * @return the list
      */
-    Result<List<Block>> listNew(Map<String, String> map);
+    Result<List<Block>> listNew(String appId, String groupId);
 
     /**
      * 获取不在分组内的区块

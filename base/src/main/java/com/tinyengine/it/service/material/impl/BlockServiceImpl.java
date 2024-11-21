@@ -312,8 +312,8 @@ public class BlockServiceImpl implements BlockService {
             }
         }
         // 把start、limit转为java分页的pageNum、pageSize
-        int limit = blockParamDto.getLimit() != null ? Integer.parseInt(blockParamDto.getLimit()) : 0;
-        int start = blockParamDto.getStart() != null ? Integer.parseInt(blockParamDto.getStart()) : 0;
+        int limit = blockParamDto.getLimit() != null ? blockParamDto.getLimit() : 0;
+        int start = blockParamDto.getStart() != null ? blockParamDto.getStart() : 0;
         int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
         int pageSize = limit == 0 ? 10 : limit;
         Page<Block> page = new Page<>(pageNum, pageSize);
@@ -424,29 +424,31 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 获取区块
      *
-     * @param map the map
+     * @param appId   the appId
+     * @param groupId the groupId
      * @return the list
      */
     @Override
-    public Result<List<Block>> listNew(Map<String, String> map) {
-        int groupId = 0;
-        int appId = 0;
-        if (map.get("groupId") != null && !map.get("groupId").isEmpty()) {
-            groupId = Integer.parseInt(map.get("groupId"));
+    public Result<List<Block>> listNew(String appId, String groupId) {
+        int groupIdTemp = 0;
+        int appIdTemp = 0;
+        if (groupId != null && !groupId.isEmpty()) {
+            groupIdTemp = Integer.parseInt(groupId);
         }
-        if (map.get("appId") != null && !map.get("appId").isEmpty()) {
-            appId = Integer.parseInt(map.get("appId"));
+        if (appId != null && !appId.isEmpty()) {
+            appIdTemp = Integer.parseInt(appId);
         }
-        App apps = appMapper.queryAppById(appId);
-        if (groupId != 0) {
-            if (!apps.getId().equals(appId)) {
+        App apps = appMapper.queryAppById(appIdTemp);
+        if (groupIdTemp != 0) {
+            if (!apps.getId().equals(appIdTemp)) {
                 return Result.failed(ExceptionEnum.CM206);
             }
         }
         List<Block> blocksList = new ArrayList<>();
-        // 如果有 groupId, 只查group下的block
-        if (groupId != 0) {
-            blocksList = blockMapper.findBlocksByBlockGroupId(groupId);
+        String createdBy = "1"; // 获取用户登录id
+        // 如果有 groupId, 只查group下的block,以及自己创建的区块
+        if (groupIdTemp != 0) {
+            blocksList = blockMapper.findBlockByBlockGroupId(groupIdTemp, createdBy);
             return Result.success(blocksList);
         }
         // 如果没有 groupId
@@ -454,10 +456,11 @@ public class BlockServiceImpl implements BlockService {
         // 2. 组合 groups 下的所有 block
         // 3. 查询个人创建的 blocks
         // 4. 将个人的和 groups 下的 blocks 合并去重
-        blocksList = blockMapper.findBlocksByBlockGroupIdAppId(appId);
+        blocksList = blockMapper.findBlocksByBlockGroupIdAppId(appIdTemp);
         List<Block> appBlocks = blocksList;
         // 通过createBy查询区块表数据
         Block blocks = new Block();
+        blocks.setCreatedBy(createdBy);
         List<Block> personalBlocks = queryBlockByCondition(blocks);
         List<Block> retBlocks = new ArrayList<>();
         // 合并 personalBlocks 和 appBlocks 数组

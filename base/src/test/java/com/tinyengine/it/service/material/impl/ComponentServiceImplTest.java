@@ -14,8 +14,6 @@ import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.model.entity.MaterialComponent;
 import com.tinyengine.it.model.entity.MaterialHistoryComponent;
 
-import cn.hutool.json.JSONUtil;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -114,26 +112,26 @@ class ComponentServiceImplTest {
         when(componentMapper.createMaterialComponent(any(MaterialComponent.class))).thenReturn(Integer.valueOf(0));
         when(componentMapper.createMaterialHistoryComponent(any(MaterialHistoryComponent.class))).thenReturn(Integer.valueOf(0));
 
-        MultipartFile file=mock(MultipartFile.class);
-        JsonFile jsonFile=new JsonFile();
+        MultipartFile file = mock(MultipartFile.class);
+        JsonFile jsonFile = new JsonFile();
         HashMap<String, Object> fileContent = new HashMap<>();
-        BundleMaterial bundleMaterial=new BundleMaterial();
+        BundleMaterial bundleMaterial = new BundleMaterial();
         ArrayList<Map<String, Object>> components = new ArrayList<>();
         HashMap<String, Object> componentdata = new HashMap<>();
-        componentdata.put("component","name");
+        componentdata.put("component", "name");
         components.add(componentdata);
         bundleMaterial.setComponents(components);
         bundleMaterial.setSnippets(new ArrayList<>());
         HashMap<Object, Object> material = new HashMap<>();
-        material.put("framework","Vue");
-        material.put("materials",bundleMaterial);
+        material.put("framework", "Vue");
+        material.put("materials", bundleMaterial);
 
         fileContent.put("data", material);
         jsonFile.setFileContent(fileContent);
         jsonFile.setFileName("fileName");
-        Result<JsonFile> mockData =Result.success(jsonFile);
+        Result<JsonFile> mockData = Result.success(jsonFile);
         try (MockedStatic<Utils> utils = Mockito.mockStatic(Utils.class)) {
-            utils.when(()->Utils.parseJsonFileStream(file)).thenReturn(mockData);
+            utils.when(() -> Utils.parseJsonFileStream(file)).thenReturn(mockData);
             Result<FileResult> result = componentServiceImpl.readFileAndBulkCreate(file);
             Assertions.assertEquals(1, result.getData().getUpdateNum());
         }
