@@ -73,8 +73,7 @@ public interface BlockMapper extends BaseMapper<Block> {
      * @return the list
      */
     @Select("select b.* from t_block b "
-            + "where b.block_group_id = #{blockGroupId} "
-            + "and b.last_build_info != null and b.content != null and b.assets != null")
+            + "where b.block_group_id = #{blockGroupId} ")
     List<Block> findBlocksByBlockGroupId(int blockGroupId);
 
     /**
@@ -159,4 +158,15 @@ public interface BlockMapper extends BaseMapper<Block> {
             + "from t_block b "
     )
     List<BlockDto> findBlocksReturn();
+
+    /**
+     * 通过区块分组id获取自己创建的区块信息
+     *
+     * @param blockGroupId the block group id
+     * @param createdBy    createdBy
+     * @return the list
+     */
+    @Select("select b.* from t_block b "
+            + "where b.block_group_id = #{blockGroupId} and b.created_by = #{createdBy}")
+    List<Block> findBlockByBlockGroupId(int blockGroupId, String createdBy);
 }

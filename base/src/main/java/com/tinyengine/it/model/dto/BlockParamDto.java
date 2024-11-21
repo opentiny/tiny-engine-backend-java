@@ -22,6 +22,6 @@ public class BlockParamDto {
 
     private String description;
     private String label;
-    private String limit;
-    private String start;
+    private Integer limit;
+    private Integer start;
 }

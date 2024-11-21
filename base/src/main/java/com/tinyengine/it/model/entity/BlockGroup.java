@@ -1,5 +1,6 @@
 package com.tinyengine.it.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
@@ -7,6 +8,9 @@ import com.tinyengine.it.common.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -33,4 +37,8 @@ public class BlockGroup extends BaseEntity {
 
     @Schema(name = "description", description = "分组描述")
     private String description;
+
+    @TableField(exist = false)
+    @Schema(name = "blocks", description = "区块")
+    private List<Block> blocks = new ArrayList<>();
 }

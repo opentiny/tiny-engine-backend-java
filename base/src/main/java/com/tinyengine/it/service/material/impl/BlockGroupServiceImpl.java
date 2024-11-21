@@ -3,7 +3,9 @@ package com.tinyengine.it.service.material.impl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.BlockGroupMapper;
+import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.model.dto.BlockGroupDto;
+import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.service.material.BlockGroupService;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type Block group service.
@@ -26,6 +29,8 @@ import java.util.List;
 public class BlockGroupServiceImpl implements BlockGroupService {
     @Autowired
     private BlockGroupMapper blockGroupMapper;
+    @Autowired
+    private BlockMapper blockMapper;
 
     /**
      * 查询表t_block_group所有数据
@@ -78,6 +83,19 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public Integer updateBlockGroupById(BlockGroup blockGroup) {
+        // 判断是对正常的分组修改，还是在分组下添加区块操作的修改
+        List<Block> blockList = blockGroup.getBlocks();
+        Block blockTemp = new Block();
+        if (!blockList.isEmpty()) {
+            // 对分组下添加别人区块的操作进行区块分组的更新
+            for (Block block : blockList) {
+                blockTemp = blockMapper.queryBlockById(block.getId());
+                blockTemp.setBlockGroupId(blockGroup.getId());
+                blockTemp.setCreatedTime(null);
+                blockTemp.setLastUpdatedTime(null);
+                blockMapper.updateBlockById(blockTemp);
+            }
+        }
         return blockGroupMapper.updateBlockGroupById(blockGroup);
     }
 
@@ -105,22 +123,44 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      *
      * @param ids   ids
      * @param appId the app id
+     * @param from  the from
      * @return the list
      */
     @Override
-    public List<BlockGroupDto> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId) {
+    public List<BlockGroup> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId, String from) {
+        String createdBy = "1"; // 获取登录用户信息
         // 此接收到的两个参数不一定同时存在
-        List<BlockGroupDto> blockGroupsListResult = new ArrayList<>();
+        List<BlockGroup> blockGroupsListResult = new ArrayList<>();
+        createdBy = ("block").equals(from) ? createdBy : null; // from值为block在区块管理处增加createdBy条件
+        BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {
-            blockGroupsListResult = blockGroupMapper.getBlockGroupsByIds(ids);
+            for (int blockgroupId : ids) {
+                blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, createdBy);
+                blockGroupsListResult.add(blockGroup);
+            }
         }
         if (appId != null) {
-            blockGroupsListResult = blockGroupMapper.findGroupByAppId(appId);
+            blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, createdBy);
         }
         if (ids == null && appId == null) {
-            blockGroupsListResult = blockGroupMapper.getBlockGroups();
+            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock(createdBy);
         }
 
-        return blockGroupsListResult;
+        // 对查询结果做相关处理和判断
+        if (blockGroupsListResult.isEmpty()) {
+            return blockGroupsListResult;
+        }
+        List<BlockGroup> blockGroupsListTemp = new ArrayList<>();
+        // 对查询的结果过滤blocks中id为null的情况
+        for (BlockGroup blockGroupTemp : blockGroupsListResult) {
+            if (blockGroupTemp != null && blockGroupTemp.getBlocks() != null) {
+                List<Block> blocks = blockGroupTemp.getBlocks().stream()
+                        .filter(block -> block.getId() != null)
+                        .collect(Collectors.toList());
+                blockGroupTemp.setBlocks(blocks);
+                blockGroupsListTemp.add(blockGroupTemp);
+            }
+        }
+        return blockGroupsListTemp;
     }
 }
