@@ -357,8 +357,9 @@ public class BlockServiceImpl implements BlockService {
                         return false;
                     }
                     // 组过滤
-                    if (item.getGroups() != null && item.getGroups().stream().anyMatch(group -> group instanceof BlockGroup
-                            && ((BlockGroup) group).getId().equals(groupId))) {
+                    if (item.getGroups() != null && item.getGroups().stream()
+                            .anyMatch(group -> group instanceof BlockGroup
+                                    && ((BlockGroup) group).getId().equals(groupId))) {
                         return false;
                     }
                     // 公开范围过滤
@@ -431,10 +432,10 @@ public class BlockServiceImpl implements BlockService {
     public Result<List<Block>> listNew(Map<String, String> map) {
         int groupId = 0;
         int appId = 0;
-        if (map.get("groupId") != null) {
+        if (map.get("groupId") != null && !map.get("groupId").isEmpty()) {
             groupId = Integer.parseInt(map.get("groupId"));
         }
-        if (map.get("appId") != null) {
+        if (map.get("appId") != null && !map.get("appId").isEmpty()) {
             appId = Integer.parseInt(map.get("appId"));
         }
         App apps = appMapper.queryAppById(appId);
