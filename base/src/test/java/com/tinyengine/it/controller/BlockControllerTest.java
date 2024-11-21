@@ -159,9 +159,9 @@ class BlockControllerTest {
     @Test
     void testGetAllBlockCategories() {
         List<Block> mockData = new ArrayList<>();
-        when(blockService.listNew(any(Map.class))).thenReturn(Result.success(mockData));
+        when(blockService.listNew(anyString(), anyString())).thenReturn(Result.success(mockData));
 
-        Result<List<Block>> result = blockController.getAllBlockCategories(new HashMap<>());
+        Result<List<Block>> result = blockController.getBlockGroups(anyString(), anyString());
         Assertions.assertEquals(mockData, result.getData());
     }
 

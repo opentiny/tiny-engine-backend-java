@@ -59,7 +59,7 @@ public class Block extends BaseEntity {
     private List<String> tags;
 
     @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
-    @JsonProperty("latest_version")
+    @JsonProperty("version")
     private String latestVersion;
 
     @Schema(name = "latestHistoryId", description = "当前历史记录表ID")
