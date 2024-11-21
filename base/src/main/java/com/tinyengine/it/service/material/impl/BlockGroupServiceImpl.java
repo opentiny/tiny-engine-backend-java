@@ -131,8 +131,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         // 此接收到的两个参数不一定同时存在
         List<BlockGroup> blockGroupsListResult = new ArrayList<>();
         List<BlockGroup> blockGroupsListTemp = new ArrayList<>();
-        from = from != null ? from : "";
-        createdBy = from.equals("block") ? createdBy : null; // from值为block在区块管理处增加createdBy条件
+        createdBy = from != null && from.equals("block") ? createdBy : null; // from值为block在区块管理处增加createdBy条件
         BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {
             for (int blockgroupId : ids) {
