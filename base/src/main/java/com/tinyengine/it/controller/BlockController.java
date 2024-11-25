@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,7 +76,7 @@ public class BlockController {
     )
     @SystemControllerLog(description = "获取区块列表api")
     @GetMapping("/block/list")
-    public Result<List<Block>> getAllBlocks(@RequestBody BlockParamDto blockParamDto) {
+    public Result<List<Block>> getAllBlocks(@ModelAttribute BlockParamDto blockParamDto) {
         IPage<Block> blocksList = blockService.findBlocksByPagetionList(blockParamDto);
         List<Block> result = blocksList.getRecords();
         return Result.success(result);
@@ -204,7 +205,7 @@ public class BlockController {
     )
     @SystemControllerLog(description = "生态中心区块列表分页查询api")
     @GetMapping("/block")
-    public Result<List<BlockDto>> find(@RequestBody BlockParamDto blockParamDto) {
+    public Result<List<BlockDto>> find(@ModelAttribute BlockParamDto blockParamDto) {
         IPage<Block> blocksIPage = blockService.findBlocksByPagetionList(blockParamDto);
         List<Block> blocksList = blocksIPage.getRecords();
         List<BlockDto> result = new ArrayList<>();
