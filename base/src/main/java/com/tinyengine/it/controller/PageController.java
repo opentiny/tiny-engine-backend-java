@@ -5,6 +5,8 @@ import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
 import com.tinyengine.it.model.entity.Page;
+import com.tinyengine.it.model.entity.PageHistory;
+import com.tinyengine.it.service.app.PageHistoryService;
 import com.tinyengine.it.service.app.PageService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +17,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,6 @@ import javax.validation.Valid;
  */
 @Validated
 @RestController
-@CrossOrigin
 @RequestMapping("/app-center/api")
 public class PageController {
     /**
@@ -47,6 +47,8 @@ public class PageController {
     @Autowired
     private PageService pageService;
 
+    @Autowired
+    private PageHistoryService pageHistoryService;
     /**
      * 获取页面列表
      *
@@ -176,4 +178,23 @@ public class PageController {
         PreviewDto previewDto = pageService.getPreviewMetaData(previewParam);
         return Result.success(previewDto);
     }
+
+    /**
+     * GET /api/pages/deploy 获取预览元数据
+     *
+     * @param pageHistory the preview param
+     * @return Integer the Integer
+     */
+    @Operation(summary = "页面发布", description = "页面发布", parameters = {
+            @Parameter(name = "PageHistory", description = "入参对象")}, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "页面发布")
+    @PostMapping("/pages/deploy")
+    public Result<Integer> pageDeploy(@RequestBody PageHistory pageHistory) {
+         Integer result = pageHistoryService.createPageHistory(pageHistory);
+         return Result.success(result);
+    }
+
 }
