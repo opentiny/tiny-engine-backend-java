@@ -170,7 +170,7 @@ drop table if exists `t_block`;
 create table `t_block` (
     `id` int not null auto_increment comment '主键id',
     `label` varchar(255) not null comment '区块编码',
-    `name` varchar(255) comment '技术栈',
+    `name` varchar(255) comment '名称',
     `framework` varchar(255) comment '技术栈',
     `content` longtext comment '区块内容',
     `assets` longtext comment '构建资源',

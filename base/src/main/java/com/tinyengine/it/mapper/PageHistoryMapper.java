@@ -59,4 +59,12 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
      * @return the integer
      */
     Integer createPageHistory(PageHistory pageHistory);
+
+    /**
+     * 新增表t_page_history数据
+     *
+     * @param name the page name
+     * @return the List<PageHistory>
+     */
+    List<PageHistory> queryPageHistoryByName(String name);
 }
