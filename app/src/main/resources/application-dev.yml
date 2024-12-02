@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 9090
 
 spring:
   jackson:
@@ -7,8 +7,8 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
-    password: 123456
-    url: jdbc:mariadb://localhost:3306/tiny?useUnicode=true&useSSL=false&characterEncoding=utf8
+    password: 111111
+    url: jdbc:mariadb://localhost:3306/tiny_engine_data_java?useUnicode=true&useSSL=false&characterEncoding=utf8
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5 # 连接池初始化时建立的连接数，默认值为 0。
@@ -28,7 +28,6 @@ spring:
   aop:
     proxy-target-class: true        #默认为false
     auto: true        #默认为false
-
 springdoc:
   api-docs:
     #是否开启文档功能
@@ -60,6 +59,11 @@ logging:
   file:
     name: /logs
 
-
+cors:
+  allowed-origins: "http://127.0.0.1:8090"
+  allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+  allowed-headers: "Accept,Referer,User-Agent,x-lowcode-mode,x-lowcode-org,Content-Type,Authorization"
+  exposed-headers: "Authorization"
+  allow-credentials: true
 
 
