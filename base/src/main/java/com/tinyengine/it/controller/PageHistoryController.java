@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +36,6 @@ import javax.validation.Valid;
  */
 @Validated
 @RestController
-@CrossOrigin
 @RequestMapping("/app-center/api")
 public class PageHistoryController {
     /**
@@ -98,7 +96,7 @@ public class PageHistoryController {
                             schema = @Schema(implementation = PageHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "创建页面历史记录")
-    @PostMapping("/pages/histories/create")
+    @PostMapping("/pages/history/create")
     public Result<PageHistory> createPageHistory(@Valid @RequestBody PageHistory pageHistory) {
         PageHistory result;
         if (pageHistory.getPage() != null && Pattern.matches("^[0-9]+$", pageHistory.getPage().toString())
@@ -130,5 +128,24 @@ public class PageHistoryController {
         PageHistory pageHistory = pageHistoryService.findPageHistoryById(id);
         pageHistoryService.deletePageHistoryById(id);
         return Result.success(pageHistory);
+    }
+
+    /**
+     * 删除页面历史记录
+     *
+     * @param name the name
+     * @return result
+     */
+    @Operation(summary = "根据名称查询页面历史记录", description = "根据名称查询页面历史记录", parameters = {
+            @Parameter(name = "name", description = "页面名称")}, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PageHistory.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "根据名称查询页面历史记录")
+    @GetMapping("/pages/histories/find")
+    public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name) {
+        List<PageHistory> pageHistoryList = pageHistoryService.findPageHistoryByName(name);
+        return Result.success(pageHistoryList);
     }
 }
