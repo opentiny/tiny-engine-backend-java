@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , ref_id, name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, is_default, message,
+        , ref_id,version, name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, is_default, message,
         is_home, content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
@@ -15,6 +15,9 @@
     <sql id="PageHistoryByCondition">
         <if test="page!=null and page!=''">
             AND ref_id = #{page}
+        </if>
+        <if test="version!=null and version!=''">
+            AND version = #{version}
         </if>
         <if test="name!=null and name!=''">
             AND name = #{name}
@@ -83,6 +86,9 @@
         <if test="page!=null and page!=''">
             ref_id = #{page},
         </if>
+        <if test="version!=null and version!=''">
+            version = #{version}
+        </if>
         <if test="name!=null and name!=''">
             name = #{name},
         </if>
@@ -150,6 +156,7 @@
     <resultMap id="PageHistoryMap" type="com.tinyengine.it.model.entity.PageHistory">
         <id column="id" property="id"/>
         <result column="ref_id" property="page"/>
+        <result column="version" property="version"/>
         <result column="name" property="name"/>
         <result column="app_id" property="app"/>
         <result column="route" property="route"/>
@@ -186,7 +193,7 @@
         FROM t_page_history
         <where>
             <if test="id != null">
-                AND id = #{id}
+                AND ref_id = #{id}
             </if>
         </where>
     </select>
@@ -198,6 +205,12 @@
         FROM t_page_history
         WHERE 1=1
         <include refid="PageHistoryByCondition"/>
+    </select>
+    <select id="queryPageHistoryByName" resultMap="PageHistoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_page_history
+        WHERE name like concat('%',#{name},'%')
     </select>
 
     <!-- 根据主键id删除表t_page_history数据 -->
@@ -222,6 +235,7 @@
             parameterType="com.tinyengine.it.model.entity.PageHistory">
         INSERT INTO t_page_history ( id
         , ref_id
+        , version
         , name
         , app_id
         , route
@@ -243,6 +257,7 @@
         , site_id)
         VALUES ( #{id}
         , #{page}
+        , #{version}
         , #{name}
         , #{app}
         , #{route}
