@@ -66,5 +66,5 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
      * @param name the page name
      * @return the List<PageHistory>
      */
-    List<PageHistory> queryPageHistoryByName(String name);
+    List<PageHistory> queryPageHistoryByName(String name, Integer app);
 }
