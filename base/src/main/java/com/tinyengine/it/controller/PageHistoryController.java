@@ -144,8 +144,6 @@ public class PageHistoryController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "根据名称查询页面历史记录")
     @GetMapping("/pages/histories/find")
-    public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name) {
-        List<PageHistory> pageHistoryList = pageHistoryService.findPageHistoryByName(name);
-        return Result.success(pageHistoryList);
-    }
+    public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name, @RequestParam Integer app) {
+        List<PageHistory> pageHistoryList = pageHistoryService.findPageHistoryByName(name, app);
 }

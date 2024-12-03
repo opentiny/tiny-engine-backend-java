@@ -49,6 +49,7 @@ public class PageController {
 
     @Autowired
     private PageHistoryService pageHistoryService;
+
     /**
      * 获取页面列表
      *
@@ -193,8 +194,7 @@ public class PageController {
     @SystemControllerLog(description = "页面发布")
     @PostMapping("/pages/deploy")
     public Result<Integer> pageDeploy(@RequestBody PageHistory pageHistory) {
-         Integer result = pageHistoryService.createPageHistory(pageHistory);
-         return Result.success(result);
+        Integer result = pageHistoryService.createPageHistory(pageHistory);
+        return Result.success(result);
     }
-
 }
