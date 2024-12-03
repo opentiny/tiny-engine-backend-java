@@ -1,18 +1,16 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.app.impl;
 
-import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.model.entity.PageHistory;
@@ -110,7 +108,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      * @return the List<PageHistory>
      */
     @Override
-    public List<PageHistory> findPageHistoryByName(String name) {
-        return pageHistoryMapper.queryPageHistoryByName(name);
+    public List<PageHistory> findPageHistoryByName(String name, Integer app) {
+        return pageHistoryMapper.queryPageHistoryByName(name,app);
     }
 }
