@@ -145,7 +145,7 @@ public class PageHistoryController {
     @SystemControllerLog(description = "根据名称查询页面历史记录")
     @GetMapping("/pages/histories/find")
     public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name, @RequestParam Integer app) {
-        List<PageHistory> pageHistoryList = pageHistoryService.findPageHistoryByName(name,app);
+        List<PageHistory> pageHistoryList = pageHistoryService.findPageHistoryByName(name, app);
         return Result.success(pageHistoryList);
     }
 }
