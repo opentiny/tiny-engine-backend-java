@@ -146,4 +146,6 @@ public class PageHistoryController {
     @GetMapping("/pages/histories/find")
     public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name, @RequestParam Integer app) {
         List<PageHistory> pageHistoryList = pageHistoryService.findPageHistoryByName(name, app);
+        return Result.success(pageHistoryList);
+    }
 }
