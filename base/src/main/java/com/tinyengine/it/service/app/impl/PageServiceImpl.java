@@ -37,7 +37,6 @@ import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Page;
-import com.tinyengine.it.model.entity.PageHistory;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.AppService;
 import com.tinyengine.it.service.app.PageHistoryService;
@@ -49,7 +48,6 @@ import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -104,18 +102,6 @@ public class PageServiceImpl implements PageService {
      */
     @Autowired
     private BlockServiceImpl blockServiceImpl;
-
-    /**
-     * The Page history service.
-     */
-    @Autowired
-    private PageHistoryService pageHistoryService;
-
-    /**
-     * The Page history mapper.
-     */
-    @Autowired
-    private PageHistoryMapper pageHistoryMapper;
 
     /**
      * The App v 1 service.
