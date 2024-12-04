@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * test cas
+ * test case
  *
  * @since 2024-10-29
  */
