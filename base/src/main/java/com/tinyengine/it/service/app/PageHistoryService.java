@@ -77,5 +77,5 @@ public interface PageHistoryService {
      * @param name the page name
      * @return the List<PageHistory>
      */
-   List<PageHistory> findPageHistoryByName(String name);
+   List<PageHistory> findPageHistoryByName(String name, Integer app);
 }
