@@ -59,7 +59,7 @@ public class PageTemplateController {
      * @return pageTemplate信息
      */
     @Operation(summary = "创建页面模版", description = "创建页面模版", parameters = {
-            @Parameter(name = "pageTemplate", description = "PageTemplate")}, responses = {
+            @Parameter(name = "pageTemplate", description = "页面模版参数对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PageTemplate.class))),
@@ -77,7 +77,7 @@ public class PageTemplateController {
      * @return pageTemplate信息
      */
     @Operation(summary = "批量删除页面模版", description = "批量删除页面模版", parameters = {
-            @Parameter(name = "id", description = "ids")}, responses = {
+            @Parameter(name = "id", description = "页面模版多个主键ids")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PageTemplate.class))),
@@ -95,7 +95,7 @@ public class PageTemplateController {
      * @return PageTemplate
      */
     @Operation(summary = "获取页面模版信息详情", description = "获取页面模版信息详情", parameters = {
-            @Parameter(name = "id", description = "id")}, responses = {
+            @Parameter(name = "id", description = "页面模板主键id")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PageTemplate.class))),
