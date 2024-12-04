@@ -1,5 +1,18 @@
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 package com.tinyengine.it.service.material.impl;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
@@ -92,20 +105,20 @@ class BlockGroupServiceImplTest {
     @Test
     void testGetBlockGroupByIdsOrAppId() {
         Integer appId = 1;
+        String from = "block";
         List<Integer> paramIdList = new ArrayList<>();
-
-        List<BlockGroupDto> mockData = new ArrayList<>();
-        when(blockGroupMapper.getBlockGroupsByIds(paramIdList)).thenReturn(mockData);
-        when(blockGroupMapper.findGroupByAppId(appId)).thenReturn(mockData);
+        List<BlockGroup> mockData = new ArrayList<>();
+        when(blockGroupMapper.queryBlockGroupAndBlockById(any(),any())).thenReturn(new BlockGroup());
+        when(blockGroupMapper.queryBlockGroupByAppId(appId,"1")).thenReturn(mockData);
 
         // not empty param
-        List<BlockGroupDto> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId);
+        List<BlockGroup> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId,from);
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
 
         // empty param
-        when(blockGroupMapper.getBlockGroups()).thenReturn(mockData);
-        result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(null, null);
+        when(blockGroupMapper.queryAllBlockGroupAndBlock(any())).thenReturn(mockData);
+        result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(null, null,null);
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
     }
