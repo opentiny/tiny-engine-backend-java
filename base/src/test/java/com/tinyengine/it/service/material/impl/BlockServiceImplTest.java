@@ -273,10 +273,6 @@ class BlockServiceImplTest {
         app.setId(1);
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
 
-//        HashMap<String, String> param = new HashMap<>();
-//        param.put("groupId", "1");
-//        param.put("appId", "1");
-//        param.put("description", "description");
         Result<List<Block>> result = blockServiceImpl.listNew("1","1");
         Assertions.assertEquals(blocksList, result.getData());
     }
