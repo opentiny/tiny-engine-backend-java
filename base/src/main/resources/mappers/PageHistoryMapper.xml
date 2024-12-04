@@ -211,6 +211,7 @@
         <include refid="Base_Column_List"/>
         FROM t_page_history
         WHERE name like concat('%',#{name},'%')
+        and app_id = #{app}
     </select>
 
     <!-- 根据主键id删除表t_page_history数据 -->

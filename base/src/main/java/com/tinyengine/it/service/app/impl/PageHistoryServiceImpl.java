@@ -12,7 +12,6 @@
 
 package com.tinyengine.it.service.app.impl;
 
-import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.model.entity.PageHistory;
@@ -110,7 +109,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      * @return the List<PageHistory>
      */
     @Override
-    public List<PageHistory> findPageHistoryByName(String name) {
-        return pageHistoryMapper.queryPageHistoryByName(name);
+    public List<PageHistory> findPageHistoryByName(String name, Integer app) {
+        return pageHistoryMapper.queryPageHistoryByName(name, app);
     }
 }
