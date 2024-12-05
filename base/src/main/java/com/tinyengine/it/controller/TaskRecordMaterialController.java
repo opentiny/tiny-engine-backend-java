@@ -7,7 +7,6 @@
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.controller;
@@ -56,6 +55,18 @@ public class TaskRecordMaterialController {
      * @param id id
      * @return task信息
      */
+    @Operation(summary = "根据id查询task信息",
+            description = "根据id查询task信息",
+            parameters = {
+                    @Parameter(name = "id", description = "任务id")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = TaskRecord.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "根据id查询task信息api")
     @GetMapping("/tasks/{id}")
     public Result<TaskRecord> getTaskRecordById(@PathVariable Integer id) {
         TaskRecord taskRecord = taskRecordService.queryTaskRecordById(id);
