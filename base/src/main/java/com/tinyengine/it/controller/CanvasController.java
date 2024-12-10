@@ -13,9 +13,15 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.dto.CanvasDto;
 import com.tinyengine.it.service.app.CanvasService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +49,20 @@ public class CanvasController {
      * @param type  the type
      * @return CanvasDto
      */
+    @Operation(summary = "区块及页面锁",
+            description = "区块及页面锁",
+            parameters = {
+                    @Parameter(name = "id", description = "页面id"),
+                    @Parameter(name = "state", description = "状态"),
+                    @Parameter(name = "type", description = "区分是页面还是区块")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema())),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "区块及页面锁")
     @GetMapping("apps/canvas/lock")
     public Result<CanvasDto> lock(@RequestParam Integer id, @RequestParam String state, @RequestParam String type) {
         return canvasService.lockCanvas(id, state, type);

@@ -145,6 +145,7 @@ public class App extends BaseEntity {
     private String canAssociate;
 
     @Schema(name = "dataSourceGlobal", description = "数据源全局配置")
+    @JsonProperty("data_source_global")
     @TableField(typeHandler = MapTypeHandler.class)
     private Map<String, Object> dataSourceGlobal;
 }

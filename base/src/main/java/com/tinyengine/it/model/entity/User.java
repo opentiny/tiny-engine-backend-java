@@ -41,7 +41,9 @@ public class User extends BaseEntity {
     @Schema(name = "enable", description = "账号是否可用")
     private Boolean isEnable;
 
+    @Schema(name = "isAdmin", description = "是否管理员")
     private Boolean isAdmin;
 
+    @Schema(name = "isPublic", description = "是否公共账号")
     private Boolean isPublic;
 }
