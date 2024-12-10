@@ -7,14 +7,12 @@
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
-import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.service.app.AppService;
 
@@ -55,16 +53,18 @@ public class AppController {
     private AppService appService;
 
     /**
-     * The App mapper.
-     */
-    @Autowired
-    private AppMapper appMapper;
-
-    /**
      * 查询表App信息
      *
      * @return App信息 all app
      */
+    @Operation(summary = "查询表App信息",
+            description = "查询表App信息",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "查询表App信息")
     @GetMapping("/apps/list")
     public Result<List<App>> getAllApp() {
         List<App> appList = appService.queryAllApp();
@@ -77,6 +77,18 @@ public class AppController {
      * @param id the id
      * @return App信息 app by id
      */
+    @Operation(summary = "根据id查询表App信息",
+            description = "根据id查询表App信息",
+            parameters = {
+                    @Parameter(name = "id", description = "App主键id")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "根据id查询表App信息")
     @GetMapping("/apps/{id}")
     public Result<App> getAppById(@PathVariable Integer id) {
         return appService.queryAppById(id);
@@ -88,6 +100,18 @@ public class AppController {
      * @param app the app
      * @return App信息 result
      */
+    @Operation(summary = "创建app",
+            description = "创建app",
+            parameters = {
+                    @Parameter(name = "app", description = "App入参对象")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "创建app")
     @PostMapping("/apps/create")
     public Result<App> createApp(@Valid @RequestBody App app) {
         return appService.createApp(app);
@@ -120,6 +144,18 @@ public class AppController {
      * @param id the id
      * @return app信息 result
      */
+    @Operation(summary = "删除app信息",
+            description = "删除app信息",
+            parameters = {
+                    @Parameter(name = "id", description = "App主键id")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = App.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "删除app信息")
     @GetMapping("/apps/delete/{id}")
     public Result<App> deleteApp(@PathVariable Integer id) {
         return appService.deleteAppById(id);

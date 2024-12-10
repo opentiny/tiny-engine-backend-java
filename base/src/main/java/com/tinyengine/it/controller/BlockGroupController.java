@@ -70,7 +70,8 @@ public class BlockGroupController {
             description = "获取区块分组",
             parameters = {
                     @Parameter(name = "ids", description = "分组ids"),
-                    @Parameter(name = "appId", description = "appId")
+                    @Parameter(name = "appId", description = "appId"),
+                    @Parameter(name = "from", description = "区分是在物料管理还是区块管理(block：在区块管理)")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",

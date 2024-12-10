@@ -7,7 +7,6 @@
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.controller;
@@ -113,8 +112,11 @@ public class PageTemplateController {
      * @param type name
      * @return PageTemplate
      */
-    @Operation(summary = "获取页面模版信息列表", description = "获取页面模版信息列表", parameters = {
-            @Parameter(name = "name", description = "模版名称")}, responses = {
+    @Operation(summary = "获取页面模版信息列表", description = "获取页面模版信息列表",
+            parameters = {
+                    @Parameter(name = "name", description = "模版名称"),
+                    @Parameter(name = "type", description = "模版类型")
+            }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = PageTemplate.class))),

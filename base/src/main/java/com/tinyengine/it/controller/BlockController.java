@@ -7,7 +7,6 @@
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.controller;
@@ -76,7 +75,7 @@ public class BlockController {
     @Operation(summary = "获取区块列表信息",
             description = "获取区块列表信息",
             parameters = {
-                    @Parameter(name = "request", description = "入参对象")
+                    @Parameter(name = "blockParamDto", description = "入参对象")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
@@ -155,7 +154,7 @@ public class BlockController {
     @Operation(summary = "创建block",
             description = "创建block",
             parameters = {
-                    @Parameter(name = "map", description = "入参对象")
+                    @Parameter(name = "blockDto", description = "入参对象")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
@@ -205,7 +204,7 @@ public class BlockController {
     @Operation(summary = "生态中心区块列表分页查询",
             description = "生态中心区块列表分页查询",
             parameters = {
-                    @Parameter(name = "request", description = "入参对象")
+                    @Parameter(name = "blockParamDto", description = "入参对象")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
@@ -255,8 +254,7 @@ public class BlockController {
     @Operation(summary = "查找不在分组内的区块",
             description = "查找不在分组内的区块",
             parameters = {
-                    @Parameter(name = "groupId", description = "分组id"),
-                    @Parameter(name = "map", description = "入参对象")
+                    @Parameter(name = "groupId", description = "分组id")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
@@ -324,9 +322,6 @@ public class BlockController {
      */
     @Operation(summary = "获取所有用户",
             description = "获取所有用户",
-            parameters = {
-                    @Parameter(name = "blocks", description = "入参对象")
-            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
@@ -351,7 +346,8 @@ public class BlockController {
     @Operation(summary = "获取区块列表",
             description = "获取区块列表",
             parameters = {
-                    @Parameter(name = "map", description = "入参对象")
+                    @Parameter(name = "appId", description = "app主键id"),
+                    @Parameter(name = "groupId", description = "区块分组id")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
