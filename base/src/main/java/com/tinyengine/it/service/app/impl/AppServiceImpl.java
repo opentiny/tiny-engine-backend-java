@@ -157,7 +157,7 @@ public class AppServiceImpl implements AppService {
     @SystemServiceLog(description = "应用修改实现方法")
     public Result<App> updateAppById(App app) {
         // 如果更新extend_config字段，从platform获取数据，继承非route部分
-        if (!app.getExtendConfig().isEmpty()) {
+        if (app.getExtendConfig() != null && !app.getExtendConfig().isEmpty()) {
             App appResult = appMapper.queryAppById(app.getId());
             Platform platform = platformService.queryPlatformById(appResult.getPlatformId());
             Map<String, Object> appExtendConfig = platform.getAppExtendConfig();

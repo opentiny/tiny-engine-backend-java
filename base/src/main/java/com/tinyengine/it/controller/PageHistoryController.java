@@ -148,12 +148,16 @@ public class PageHistoryController {
      * @param name the name
      * @return result
      */
-    @Operation(summary = "根据名称查询页面历史记录", description = "根据名称查询页面历史记录", parameters = {
-            @Parameter(name = "name", description = "页面名称")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PageHistory.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @Operation(summary = "根据名称查询页面历史记录", description = "根据名称查询页面历史记录",
+            parameters = {
+                    @Parameter(name = "name", description = "页面名称"),
+                    @Parameter(name = "app", description = "appId")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = PageHistory.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "根据名称查询页面历史记录")
     @GetMapping("/pages/histories/find")
     public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name, @RequestParam Integer app) {

@@ -159,7 +159,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         schema.setI18n(i18n);
 
         List<ComponentTree> componentsTree = getSchemaComponentsTree(metaDto);
-        schema.setComponentTree(componentsTree);
+        schema.setComponentsTree(componentsTree);
 
         List<Map<String, Object>> componentsMap = getSchemaComponentsMap(metaDto);
         schema.setComponentsMap(componentsMap);
