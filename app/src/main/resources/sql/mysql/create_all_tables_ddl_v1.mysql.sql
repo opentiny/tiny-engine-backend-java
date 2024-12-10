@@ -425,7 +425,7 @@ create table `t_component` (
     `last_updated_by` varchar(60) not null comment '最后修改人',
     `last_updated_time` timestamp not null default current_timestamp comment '更新时间',
     primary key (`id`) using btree,
-    unique index `u_idx_component` (`tenant_id`, `name`, `version`) using btree
+    unique index `u_idx_component` (`tenant_id`, `name_en`, `version`) using btree
   ) engine = innodb comment = '组件表';
 
 drop table if exists `r_material_category`;

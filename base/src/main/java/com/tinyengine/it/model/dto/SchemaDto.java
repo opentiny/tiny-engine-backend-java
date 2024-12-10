@@ -28,7 +28,7 @@ import java.util.Map;
 public class SchemaDto {
     private List<SchemaUtils> bridge;
     private List<Map<String, Object>> componentsMap;
-    private List<ComponentTree> componentTree;
+    private List<ComponentTree> componentsTree;
     private Map<String, Object> config;
     private String constants;
     private String css;
