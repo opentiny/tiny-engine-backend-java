@@ -131,7 +131,7 @@
         FROM t_user
         WHERE id IN
         <foreach collection="ids" item="item" open="(" separator="," close=")">
-            ${item}
+            #{item}
         </foreach>
     </select>
 
