@@ -197,19 +197,19 @@ public class AppV1ServiceImpl implements AppV1Service {
         SchemaI18n mergedEntries = new SchemaI18n();
 
         // 初始化合并后的语言映射
-        mergedEntries.setEn_US(new HashMap<>());
-        mergedEntries.setZh_CN(new HashMap<>());
+        mergedEntries.setEnUs(new HashMap<>());
+        mergedEntries.setZhCn(new HashMap<>());
 
         // 合并 appEntries
         if (appEntries != null) {
-            mergeMaps(appEntries.getEn_US(), mergedEntries.getEn_US());
-            mergeMaps(appEntries.getZh_CN(), mergedEntries.getZh_CN());
+            mergeMaps(appEntries.getEnUs(), mergedEntries.getEnUs());
+            mergeMaps(appEntries.getZhCn(), mergedEntries.getZhCn());
         }
 
         // 合并 blockEntries
         if (blockEntries != null) {
-            mergeMaps(blockEntries.getEn_US(), mergedEntries.getEn_US());
-            mergeMaps(blockEntries.getZh_CN(), mergedEntries.getZh_CN());
+            mergeMaps(blockEntries.getEnUs(), mergedEntries.getEnUs());
+            mergeMaps(blockEntries.getZhCn(), mergedEntries.getZhCn());
         }
 
         return mergedEntries;
