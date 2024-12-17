@@ -12,6 +12,8 @@
 
 package com.tinyengine.it.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +27,8 @@ import java.util.Map;
 @Getter
 @Setter
 public class SchemaI18n {
-    private Map<String, String> en_US;
-    private Map<String, String> zh_CN;
+    @JsonProperty("en_US")
+    private Map<String, String> enUs;
+    @JsonProperty("zh_CN")
+    private Map<String, String> zhCn;
 }
