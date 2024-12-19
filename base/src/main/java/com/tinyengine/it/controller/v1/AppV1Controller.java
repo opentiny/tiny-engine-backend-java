@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/app-center/v1/api")
-@Tag(name= "应用")
+@Tag(name = "应用")
 public class AppV1Controller {
     @Autowired
     private AppV1Service appV1Service;

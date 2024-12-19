@@ -50,7 +50,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "页面历史")
+@Tag(name = "页面历史")
 public class PageHistoryController {
     /**
      * The Page history service.
@@ -146,7 +146,7 @@ public class PageHistoryController {
 
     /**
      * 删除页面历史记录
-     *
+     * @param app the app
      * @param name the name
      * @return result
      */

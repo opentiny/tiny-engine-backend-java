@@ -41,7 +41,7 @@ import java.util.Map;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "AIChat")
+@Tag(name = "AIChat")
 public class AiChatController {
     /**
      * The Ai chat service.

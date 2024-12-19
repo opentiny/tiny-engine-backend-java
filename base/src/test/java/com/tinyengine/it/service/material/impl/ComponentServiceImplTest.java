@@ -126,7 +126,6 @@ class ComponentServiceImplTest {
                 .thenReturn(Integer.valueOf(0));
 
         MultipartFile file = mock(MultipartFile.class);
-        JsonFile jsonFile = new JsonFile();
         HashMap<String, Object> fileContent = new HashMap<>();
         BundleMaterial bundleMaterial = new BundleMaterial();
         ArrayList<Map<String, Object>> components = new ArrayList<>();
@@ -140,6 +139,7 @@ class ComponentServiceImplTest {
         material.put("materials", bundleMaterial);
 
         fileContent.put("data", material);
+        JsonFile jsonFile = new JsonFile();
         jsonFile.setFileContent(fileContent);
         jsonFile.setFileName("fileName");
         Result<JsonFile> mockData = Result.success(jsonFile);

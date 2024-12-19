@@ -60,7 +60,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "国际化")
+@Tag(name = "国际化")
 public class I18nEntryController {
     /**
      * The 18 n entry service.

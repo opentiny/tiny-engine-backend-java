@@ -17,11 +17,13 @@ import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.entity.BlockCurrentHistory;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.service.material.BlockCurrentHistoryService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +33,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
+
+import javax.validation.Valid;
+
 
 /**
  *
@@ -86,7 +90,8 @@ public class BlockCurrentHistoryController {
     )
     @SystemControllerLog(description = "创建BlockCurrentHistory")
     @PostMapping("/block/current-history/create")
-    public Result<BlockCurrentHistory> createBlockCurrentHistory(@Valid @RequestBody BlockCurrentHistory BlockCurrentHistory) {
+    public Result<BlockCurrentHistory> createBlockCurrentHistory(
+            @Valid @RequestBody BlockCurrentHistory BlockCurrentHistory) {
         return blockCurrentHistoryService.createBlockCurrentHistory(BlockCurrentHistory);
     }
 
@@ -94,7 +99,7 @@ public class BlockCurrentHistoryController {
      * 修改BlockCurrentHistory信息
      *
      * @param id                  the id
-     * @param BlockCurrentHistory the BlockCurrentHistory
+     * @param blockCurrentHistory the blockCurrentHistory
      * @return BlockCurrentHistory信息 result
      */
     @Operation(summary = "修改单个BlockCurrentHistory信息", description = "修改单个BlockCurrentHistory信息", parameters = {
@@ -106,9 +111,10 @@ public class BlockCurrentHistoryController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "修改单个BlockCurrentHistory信息")
     @PostMapping("/block/current-history/update/{id}")
-    public Result<BlockCurrentHistory> updateBlockCurrentHistory(@PathVariable Integer id, @RequestBody BlockCurrentHistory BlockCurrentHistory) {
-        BlockCurrentHistory.setId(id);
-        return blockCurrentHistoryService.updateBlockCurrentHistoryById(BlockCurrentHistory);
+    public Result<BlockCurrentHistory> updateBlockCurrentHistory(
+            @PathVariable Integer id, @RequestBody BlockCurrentHistory blockCurrentHistory) {
+        blockCurrentHistory.setId(id);
+        return blockCurrentHistoryService.updateBlockCurrentHistoryById(blockCurrentHistory);
     }
 
     /**
@@ -152,5 +158,4 @@ public class BlockCurrentHistoryController {
         BlockHistory blockHistory = blockCurrentHistoryService.queryBlockCurrentHistoryById(id);
         return Result.success(blockHistory);
     }
-
 }

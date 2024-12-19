@@ -14,6 +14,7 @@ package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.BlockCurrentHistory;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -43,10 +44,10 @@ public interface BlockCurrentHistoryMapper extends BaseMapper<BlockCurrentHistor
     /**
      * 根据条件查询表t_block_current_history数据
      *
-     * @param BlockCurrentHistory the block current history
+     * @param blockCurrentHistory the block current history
      * @return the list
      */
-    List<BlockCurrentHistory> queryBlockCurrentHistoryByCondition(BlockCurrentHistory BlockCurrentHistory);
+    List<BlockCurrentHistory> queryBlockCurrentHistoryByCondition(BlockCurrentHistory blockCurrentHistory);
 
     /**
      * 根据主键id删除表t_block_current_history数据
@@ -59,18 +60,18 @@ public interface BlockCurrentHistoryMapper extends BaseMapper<BlockCurrentHistor
     /**
      * 根据主键id更新表t_block_current_history数据
      *
-     * @param BlockCurrentHistory the block current history
+     * @param blockCurrentHistory the block current history
      * @return the integer
      */
-    Integer updateBlockCurrentHistoryById(BlockCurrentHistory BlockCurrentHistory);
+    Integer updateBlockCurrentHistoryById(BlockCurrentHistory blockCurrentHistory);
 
     /**
      * 新增表t_block_current_history数据
      *
-     * @param BlockCurrentHistory the block current history
+     * @param blockCurrentHistory the block current history
      * @return the integer
      */
-    Integer createBlockCurrentHistory(BlockCurrentHistory BlockCurrentHistory);
+    Integer createBlockCurrentHistory(BlockCurrentHistory blockCurrentHistory);
 
     /**
      * 根据区块id查询t_block_current_history数据
