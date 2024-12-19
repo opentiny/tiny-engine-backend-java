@@ -73,9 +73,9 @@ public interface PageHistoryService {
 
     /**
      * 新增表t_page_history数据
-     *
+     * @param app the app
      * @param name the page name
      * @return the List<PageHistory>
      */
-   List<PageHistory> findPageHistoryByName(String name, Integer app);
+    List<PageHistory> findPageHistoryByName(String name, Integer app);
 }

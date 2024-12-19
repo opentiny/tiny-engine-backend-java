@@ -53,7 +53,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "页面")
+@Tag(name = "页面")
 public class PageController {
     /**
      * The Page service.
