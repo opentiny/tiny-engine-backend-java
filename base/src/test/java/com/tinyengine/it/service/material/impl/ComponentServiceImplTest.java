@@ -122,7 +122,8 @@ class ComponentServiceImplTest {
         when(componentMapper.updateComponentById(any(Component.class))).thenReturn(Integer.valueOf(0));
         when(componentMapper.createComponent(any(Component.class))).thenReturn(Integer.valueOf(0));
         when(componentMapper.createMaterialComponent(any(MaterialComponent.class))).thenReturn(Integer.valueOf(0));
-        when(componentMapper.createMaterialHistoryComponent(any(MaterialHistoryComponent.class))).thenReturn(Integer.valueOf(0));
+        when(componentMapper.createMaterialHistoryComponent(any(MaterialHistoryComponent.class)))
+                .thenReturn(Integer.valueOf(0));
 
         MultipartFile file = mock(MultipartFile.class);
         JsonFile jsonFile = new JsonFile();

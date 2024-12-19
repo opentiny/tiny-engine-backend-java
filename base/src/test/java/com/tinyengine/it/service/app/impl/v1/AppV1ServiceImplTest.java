@@ -135,7 +135,7 @@ class AppV1ServiceImplTest {
     @Test
     void testMergeEntries() {
         SchemaI18n result = appV1ServiceImpl.mergeEntries(new SchemaI18n(), new SchemaI18n());
-        Assertions.assertEquals(0, result.getEn_US().size());
+        Assertions.assertEquals(0, result.getEnUs().size());
     }
 
     @Test
