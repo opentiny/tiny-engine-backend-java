@@ -146,7 +146,7 @@ public class BlockCurrentHistoryController {
                     content = @Content(mediaType = "BlockCurrentHistorylication/json",
                             schema = @Schema(implementation = BlockCurrentHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "获取应用信息详情")
+    @SystemControllerLog(description = "获取区块历史信息详情")
     @GetMapping("/block/current-history/detail/{id}")
     public Result<BlockHistory> detail(@PathVariable Integer id) {
         BlockHistory blockHistory = blockCurrentHistoryService.queryBlockCurrentHistoryById(id);
