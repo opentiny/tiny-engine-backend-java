@@ -392,8 +392,8 @@ public class BlockServiceImpl implements BlockService {
     public Result<BlockDto> getBlockByLabel(String lable) {
         Block block = new Block();
         block.setLabel(lable);
-        List<Block> blockList= blockMapper.queryBlockByCondition(block);
-        if(blockList.isEmpty()){
+        List<Block> blockList = blockMapper.queryBlockByCondition(block);
+        if (blockList.isEmpty()) {
             return Result.success();
         }
         int id = blockList.get(0).getId();

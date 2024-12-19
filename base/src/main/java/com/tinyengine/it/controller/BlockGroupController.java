@@ -53,7 +53,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/material-center/api")
-@Tag(name= "区块")
+@Tag(name = "区块")
 public class BlockGroupController {
     @Autowired
     private BlockGroupService blockGroupService;
