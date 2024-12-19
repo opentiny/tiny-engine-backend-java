@@ -49,7 +49,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/material-center/api")
-@Tag(name= "页面模板")
+@Tag(name = "页面模板")
 public class PageTemplateController {
     @Autowired
     private PageTemplateService pageTemplateService;

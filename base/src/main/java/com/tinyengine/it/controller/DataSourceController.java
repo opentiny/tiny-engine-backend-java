@@ -48,7 +48,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "数据源")
+@Tag(name = "数据源")
 public class DataSourceController {
     /**
      * The Datasource service.

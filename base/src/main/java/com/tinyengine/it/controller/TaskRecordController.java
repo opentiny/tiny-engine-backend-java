@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "任务")
+@Tag(name = "任务")
 public class TaskRecordController {
     @Autowired
     private TaskRecordService taskRecordService;

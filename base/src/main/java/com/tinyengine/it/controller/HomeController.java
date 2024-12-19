@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-@Tag(name= "健康检查")
+@Tag(name = "健康检查")
 public class HomeController {
     /**
      * 健康检测

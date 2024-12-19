@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 @Validated
 @RestController
 @RequestMapping("/material-center/api")
-@Tag(name= "任务")
+@Tag(name = "任务")
 public class TaskRecordMaterialController {
     @Autowired
     private TaskRecordService taskRecordService;

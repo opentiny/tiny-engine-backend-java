@@ -273,7 +273,7 @@ class BlockServiceImplTest {
         app.setId(1);
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
 
-        Result<List<Block>> result = blockServiceImpl.listNew("1","1");
+        Result<List<Block>> result = blockServiceImpl.listNew("1", "1");
         Assertions.assertEquals(blocksList, result.getData());
     }
 
@@ -294,7 +294,7 @@ class BlockServiceImplTest {
 
         param.put("appId", "1");
         param.put("description", "description");
-        Result<List<Block>> result = blockServiceImpl.listNew("1",null);
+        Result<List<Block>> result = blockServiceImpl.listNew("1", null);
         Assertions.assertEquals(1, result.getData().size());
     }
 }

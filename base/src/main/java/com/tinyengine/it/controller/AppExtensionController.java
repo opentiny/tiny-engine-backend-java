@@ -49,7 +49,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "应用")
+@Tag(name = "应用")
 public class AppExtensionController {
     /**
      * The App extension service.

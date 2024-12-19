@@ -34,8 +34,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +59,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/material-center/api")
-@Tag(name= "区块")
+@Tag(name = "区块")
 public class BlockController {
     @Autowired
     private BlockService blockService;
@@ -399,7 +399,7 @@ public class BlockController {
 
     /**
      * 根据label查询区块详情
-     *
+     *@param label the label
      * @return the result
      */
     @Operation(summary = "根据label查询区块详情",
