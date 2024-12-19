@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.controller;
@@ -394,5 +393,25 @@ public class BlockController {
         }
         BlockDto blocksResult = blockMapper.findBlockAndGroupAndHistoByBlockId(blockDto.getId());
         return Result.success(blocksResult);
+    }
+
+    /**
+     * 根据label查询区块详情
+     *
+     * @return the result
+     */
+    @Operation(summary = "根据label查询区块详情",
+            description = "根据label查询区块详情",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Block.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "获取所有用户api")
+    @GetMapping("/block/label")
+    public Result<BlockDto> getBlockByLabel(@RequestParam(value = "label")
+                                            String label) {
+        return blockService.getBlockByLabel(label);
     }
 }

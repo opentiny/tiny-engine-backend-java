@@ -94,6 +94,7 @@ public class Block extends BaseEntity {
 
     @Schema(name = "public", description = "公开状态：0,1,2")
     @JsonProperty("public")
+    @TableField("public")
     private Integer publicStatus;
 
     @Schema(name = "isDefault", description = "是否是默认")
@@ -102,6 +103,7 @@ public class Block extends BaseEntity {
 
     @Schema(name = "tinyReserved", description = "是否是tiny专有")
     @JsonProperty("tiny_reserved")
+    @TableField("tiny_reserved")
     private Boolean isTinyReserved;
 
     @Schema(name = "npmName", description = "npm包名")

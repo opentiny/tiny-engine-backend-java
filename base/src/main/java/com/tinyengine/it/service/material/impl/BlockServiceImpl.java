@@ -383,6 +383,25 @@ public class BlockServiceImpl implements BlockService {
     }
 
     /**
+     * 通过lable查询区块
+     *
+     * @param lable lable
+     * @return the BlockDto
+     */
+    @Override
+    public Result<BlockDto> getBlockByLabel(String lable) {
+        Block block = new Block();
+        block.setLabel(lable);
+        List<Block> blockList= blockMapper.queryBlockByCondition(block);
+        if(blockList.isEmpty()){
+            return Result.success();
+        }
+        int id = blockList.get(0).getId();
+        BlockDto blockDto = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
+        return Result.success(blockDto);
+    }
+
+    /**
      * 根据条件进行分页查询
      *
      * @param request request

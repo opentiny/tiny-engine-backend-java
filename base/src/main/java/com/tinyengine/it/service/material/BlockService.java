@@ -126,4 +126,13 @@ public interface BlockService {
      * @return the list
      */
     List<BlockDto> getNotInGroupBlocks(Integer groupId);
+
+
+    /**
+     * 通过lable查询区块
+     *
+     * @param lable lable
+     * @return the BlockDto
+     */
+    Result<BlockDto> getBlockByLabel(String lable);
 }
