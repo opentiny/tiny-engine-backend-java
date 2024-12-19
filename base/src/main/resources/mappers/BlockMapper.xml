@@ -339,7 +339,7 @@
                             , created_time
                             , last_updated_time
                             , tenant_id
-        , renter_id
+                            , renter_id
                             , site_id)
         VALUES ( #{id}
                , #{label}
