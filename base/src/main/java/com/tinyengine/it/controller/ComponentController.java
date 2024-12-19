@@ -41,7 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @RestController
 @RequestMapping("/material-center/api")
-@Tag(name= "组件")
+@Tag(name = "组件")
 public class ComponentController {
     @Autowired
     private ComponentService componentService;

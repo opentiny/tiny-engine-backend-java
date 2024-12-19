@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.material.impl;
@@ -273,7 +272,7 @@ class BlockServiceImplTest {
         app.setId(1);
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
 
-        Result<List<Block>> result = blockServiceImpl.listNew("1","1");
+        Result<List<Block>> result = blockServiceImpl.listNew("1", "1");
         Assertions.assertEquals(blocksList, result.getData());
     }
 
@@ -294,7 +293,7 @@ class BlockServiceImplTest {
 
         param.put("appId", "1");
         param.put("description", "description");
-        Result<List<Block>> result = blockServiceImpl.listNew("1",null);
+        Result<List<Block>> result = blockServiceImpl.listNew("1", null);
         Assertions.assertEquals(1, result.getData().size());
     }
 }

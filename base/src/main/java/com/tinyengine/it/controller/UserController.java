@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @RequestMapping("/platform-center/api")
-@Tag(name= "用户")
+@Tag(name = "用户")
 public class UserController {
     /**
      * The User service.

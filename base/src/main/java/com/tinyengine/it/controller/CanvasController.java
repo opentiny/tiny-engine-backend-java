@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
-@Tag(name= "区块")
+@Tag(name = "区块")
 public class CanvasController {
     @Autowired
     private CanvasService canvasService;

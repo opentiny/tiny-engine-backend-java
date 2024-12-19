@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.material.impl;
@@ -108,17 +107,17 @@ class BlockGroupServiceImplTest {
         String from = "block";
         List<Integer> paramIdList = new ArrayList<>();
         List<BlockGroup> mockData = new ArrayList<>();
-        when(blockGroupMapper.queryBlockGroupAndBlockById(any(),any())).thenReturn(new BlockGroup());
-        when(blockGroupMapper.queryBlockGroupByAppId(appId,"1")).thenReturn(mockData);
+        when(blockGroupMapper.queryBlockGroupAndBlockById(any(), any())).thenReturn(new BlockGroup());
+        when(blockGroupMapper.queryBlockGroupByAppId(appId, "1")).thenReturn(mockData);
 
         // not empty param
-        List<BlockGroup> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId,from);
+        List<BlockGroup> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId, from);
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
 
         // empty param
         when(blockGroupMapper.queryAllBlockGroupAndBlock(any())).thenReturn(mockData);
-        result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(null, null,null);
+        result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(null, null, null);
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
     }
