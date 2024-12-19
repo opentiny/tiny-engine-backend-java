@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.common.handler.ListTypeHandler;
+import com.tinyengine.it.model.entity.BlockCurrentHistory;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
 
@@ -126,6 +127,10 @@ public class BlockDto extends BaseEntity {
     @JsonProperty("occupier")
     @Schema(name = "occupierBy", description = "当前锁定人")
     private User occupier;
+
+    @JsonProperty("current_history")
+    @Schema(name = "currentHistory", description = "当前区块使用版本记录")
+    private BlockCurrentHistory currentHistory;
 
     @TableField(exist = false)
     @JsonProperty("public_scope_tenants")

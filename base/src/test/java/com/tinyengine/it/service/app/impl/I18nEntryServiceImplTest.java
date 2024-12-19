@@ -100,7 +100,7 @@ class I18nEntryServiceImplTest {
         when(i18nLangMapper.selectList(any(Wrapper.class))).thenReturn(mockLang);
 
         I18nEntryListResult result = i18nEntryServiceImpl.findAllI18nEntry();
-        Assertions.assertEquals("content", result.getMessages().getZh_CN().get("key"));
+        Assertions.assertEquals("content", result.getMessages().getZhCn().get("key"));
     }
 
     @Test
@@ -123,7 +123,7 @@ class I18nEntryServiceImplTest {
         List<I18nEntryDto> i18nEntryDtos = Arrays.asList(i18nEntryDto);
 
         SchemaI18n result = i18nEntryServiceImpl.formatEntriesList(i18nEntryDtos);
-        Assertions.assertEquals("content", result.getZh_CN().get("key"));
+        Assertions.assertEquals("content", result.getZhCn().get("key"));
     }
 
     @Test

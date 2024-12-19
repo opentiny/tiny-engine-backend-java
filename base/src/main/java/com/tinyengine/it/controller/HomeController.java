@@ -14,6 +14,8 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name= "健康检查")
 public class HomeController {
     /**
      * 健康检测

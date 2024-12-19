@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -47,6 +48,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequestMapping("/app-center/api")
+@Tag(name= "数据源")
 public class DataSourceController {
     /**
      * The Datasource service.

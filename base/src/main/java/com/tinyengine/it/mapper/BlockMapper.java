@@ -110,7 +110,9 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "block_id", javaType = List.class, property = "histories",
                     many = @Many(select = "com.tinyengine.it.mapper.BlockHistoryMapper.findBlockHistoriesByBlockId")),
             @Result(column = "occupier_by", property = "occupier",
-                    one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
+                    one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById")),
+            @Result(column = "block_id", property = "currentHistory",
+                    one = @One(select = "com.tinyengine.it.mapper.BlockCurrentHistoryMapper.findBlockCurrentHistoriesByBlockId"))
     })
     @Select("select b.*, b.id as block_id "
             + "from t_block b "
