@@ -89,7 +89,7 @@ class BlockControllerTest {
     @Test
     void testGetBlocksById() {
         BlockDto mockData = new BlockDto();
-        when(blockMapper.findBlockAndGroupAndHistoByBlockId(anyInt())).thenReturn(mockData);
+        when(blockService.queryBlockById(anyInt())).thenReturn(mockData);
 
         Result<BlockDto> result = blockController.getBlocksById(Integer.valueOf(0));
         Assertions.assertEquals(mockData, result.getData());
@@ -107,9 +107,9 @@ class BlockControllerTest {
     @Test
     void testDeleteBlocks() {
         BlockDto queryDto = new BlockDto();
-        when(blockMapper.findBlockAndGroupAndHistoByBlockId(anyInt())).thenReturn(queryDto);
+        when(blockService.queryBlockById(anyInt())).thenReturn(queryDto);
 
-        Result<BlockDto> result = blockController.deleteBlocks(Integer.valueOf(0));
+        Result<BlockDto> result = blockController.deleteBlock(Integer.valueOf(0));
         Assertions.assertEquals(queryDto, result.getData());
     }
 
@@ -181,7 +181,7 @@ class BlockControllerTest {
     void testUpdateBlocks() {
         when(blockService.updateBlockById(any(BlockDto.class))).thenReturn(1);
         BlockDto returnData = new BlockDto();
-        when(blockMapper.findBlockAndGroupAndHistoByBlockId(anyInt())).thenReturn(returnData);
+        when(blockService.queryBlockById(anyInt())).thenReturn(returnData);
 
         Result<BlockDto> result = blockController.updateBlocks(returnData, Integer.valueOf(0));
         Assertions.assertEquals(returnData, result.getData());

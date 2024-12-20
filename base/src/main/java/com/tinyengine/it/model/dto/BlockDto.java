@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.common.handler.ListTypeHandler;
+import com.tinyengine.it.common.handler.MapTypeHandler;
 import com.tinyengine.it.model.entity.BlockCurrentHistory;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
@@ -81,7 +82,7 @@ public class BlockDto extends BaseEntity {
     private String path;
 
     @Schema(name = "latestVersion", description = "当前历史记录表最新版本")
-    @JsonProperty("latest_version")
+    @JsonProperty("version")
     private String latestVersion;
 
     @Schema(name = "occupierId", description = "当前锁定人id")
@@ -96,6 +97,7 @@ public class BlockDto extends BaseEntity {
     private Boolean isDefault;
 
     @Schema(name = "tinyReserved", description = "是否是tiny专有")
+    @JsonProperty("tiny_reserved")
     private Boolean isTinyReserved;
 
     @Schema(name = "npmName", description = "npm包名")
@@ -106,8 +108,9 @@ public class BlockDto extends BaseEntity {
     @JsonProperty("public")
     private Integer publicStatus;
 
-    @Schema(name = "i18n", description = "国际化内容")
-    private String i18n;
+    @Schema(name = "i18n", description = "国际化")
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Map<String, String>> i18n;
 
     @Schema(name = "appId", description = "创建区块时所在appId")
     @JsonProperty("created_app")
@@ -122,6 +125,7 @@ public class BlockDto extends BaseEntity {
     private Integer platformId;
 
     @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
+    @JsonProperty("block_group_id")
     private Integer blockGroupId;
 
     @JsonProperty("occupier")
@@ -143,6 +147,14 @@ public class BlockDto extends BaseEntity {
     @TableField(exist = false)
     @Schema(name = "histories", type = " List<BlockHistory>", description = "区块历史")
     private List<BlockHistory> histories = new ArrayList<>();
+
+    @TableField(exist = false)
+    @JsonProperty("histories_length")
+    private Integer historiesLength = 0;
+
+    @TableField(exist = false)
+    @JsonProperty("is_published")
+    private Boolean isPublished;
 
     @JsonProperty("public")
     public Integer getPublic() {
