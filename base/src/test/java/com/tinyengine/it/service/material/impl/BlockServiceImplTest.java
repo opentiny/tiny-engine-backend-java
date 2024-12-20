@@ -79,10 +79,10 @@ class BlockServiceImplTest {
 
     @Test
     void testQueryBlockById() {
-        Block mockData = new Block();
-        when(blockMapper.queryBlockById(1)).thenReturn(mockData);
+        BlockDto mockData = new BlockDto();
+        when(blockMapper.findBlockAndGroupAndHistoByBlockId(1)).thenReturn(mockData);
 
-        Block result = blockServiceImpl.queryBlockById(1);
+        BlockDto result = blockServiceImpl.queryBlockById(1);
         Assertions.assertEquals(mockData, result);
     }
 

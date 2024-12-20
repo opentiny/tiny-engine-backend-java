@@ -18,6 +18,7 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
+import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.Block;
@@ -143,8 +144,8 @@ public class BlockController {
     @SystemControllerLog(description = "获取区块详情api")
     @GetMapping("/block/detail/{id}")
     public Result<BlockDto> getBlocksById(@PathVariable Integer id) {
-        BlockDto blocks = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
-        return Result.success(blocks);
+        BlockDto block = blockService.queryBlockById(id);
+        return Result.success(block);
     }
 
     /**
@@ -190,9 +191,9 @@ public class BlockController {
     )
     @SystemControllerLog(description = "删除blocks信息")
     @GetMapping("/block/delete/{id}")
-    public Result<BlockDto> deleteBlocks(@PathVariable Integer id) {
+    public Result<BlockDto> deleteBlock(@PathVariable Integer id) {
         // 页面返回数据
-        BlockDto result = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
+        BlockDto result = blockService.queryBlockById(id);
         blockService.deleteBlockById(id);
         return Result.success(result);
     }
@@ -393,13 +394,14 @@ public class BlockController {
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        BlockDto blocksResult = blockMapper.findBlockAndGroupAndHistoByBlockId(blockDto.getId());
+        BlockDto blocksResult = blockService.queryBlockById(blockDto.getId());
         return Result.success(blocksResult);
     }
 
     /**
      * 根据label查询区块详情
-     *@param label the label
+     *
+     * @param label the label
      * @return the result
      */
     @Operation(summary = "根据label查询区块详情",
@@ -415,5 +417,28 @@ public class BlockController {
     public Result<BlockDto> getBlockByLabel(@RequestParam(value = "label")
                                             String label) {
         return blockService.getBlockByLabel(label);
+    }
+
+    /**
+     * block发布
+     *
+     * @param blockBuildDto
+     * @return blcok信息
+     */
+    @Operation(summary = "区块发布",
+            description = "区块发布",
+            parameters = {
+                    @Parameter(name = "blockBuildDto", description = "入参对象")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Block.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "区块发布api")
+    @PostMapping("/block/deploy")
+    public Result<BlockDto> build(@Valid @RequestBody BlockBuildDto blockBuildDto) {
+        return blockService.deploy(blockBuildDto);
     }
 }
