@@ -14,6 +14,7 @@ package com.tinyengine.it.service.material;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.Block;
@@ -41,9 +42,9 @@ public interface BlockService {
      * 根据主键id查询表t_block信息
      *
      * @param id the id
-     * @return the block
+     * @return the BlockDto
      */
-    Block queryBlockById(@Param("id") Integer id);
+    BlockDto queryBlockById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_block信息
@@ -135,4 +136,12 @@ public interface BlockService {
      * @return the BlockDto
      */
     Result<BlockDto> getBlockByLabel(String lable);
+
+    /**
+     * block发布
+     *
+     * @param blockBuildDto
+     * @return blcok信息
+     */
+    Result<BlockDto> deploy(BlockBuildDto blockBuildDto);
 }

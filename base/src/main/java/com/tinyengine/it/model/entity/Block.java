@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.common.handler.ListTypeHandler;
 
+import com.tinyengine.it.common.handler.MapTypeHandler;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -111,7 +112,8 @@ public class Block extends BaseEntity {
     private String npmName;
 
     @Schema(name = "i18n", description = "国际化内容")
-    private String i18n;
+    @TableField(typeHandler = MapTypeHandler.class)
+    private Map<String, Map<String, String>> i18n;
 
     @Schema(name = "platformId", description = "设计器ID")
     @JsonProperty("platform_id")

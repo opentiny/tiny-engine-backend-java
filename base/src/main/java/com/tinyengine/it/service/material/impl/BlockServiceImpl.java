@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -24,14 +25,21 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.mapper.BlockMapper;
+import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.UserMapper;
+import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.dto.I18nEntryDto;
+import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.BlockGroup;
+import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
+import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.material.BlockService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +49,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,6 +78,12 @@ public class BlockServiceImpl implements BlockService {
     private UserMapper userMapper;
     @Autowired
     private AppMapper appMapper;
+    @Autowired
+    private BlockHistoryMapper blockHistoryMapper;
+    @Autowired
+    private I18nEntryService i18nEntryService;
+    @Autowired
+    private I18nEntryMapper i18nEntryMapper;
 
     /**
      * 查询表t_block所有数据
@@ -85,8 +102,13 @@ public class BlockServiceImpl implements BlockService {
      * @return block
      */
     @Override
-    public Block queryBlockById(@Param("id") Integer id) {
-        return blockMapper.queryBlockById(id);
+    public BlockDto queryBlockById(@Param("id") Integer id) {
+        BlockDto blockDto = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
+        boolean isPublished = blockDto.getLastBuildInfo() != null
+                && blockDto.getLastBuildInfo().get("result") instanceof Boolean
+                ? (Boolean) blockDto.getLastBuildInfo().get("result") : Boolean.FALSE;
+        blockDto.setIsPublished(isPublished);
+        return blockDto;
     }
 
     /**
@@ -167,7 +189,7 @@ public class BlockServiceImpl implements BlockService {
             return Result.failed(ExceptionEnum.CM001);
         }
         int id = blocks.getId();
-        BlockDto blocksResult = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
+        BlockDto blocksResult = queryBlockById(id);
         return Result.success(blocksResult);
     }
 
@@ -397,8 +419,70 @@ public class BlockServiceImpl implements BlockService {
             return Result.success();
         }
         int id = blockList.get(0).getId();
-        BlockDto blockDto = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
+        BlockDto blockDto = queryBlockById(id);
         return Result.success(blockDto);
+    }
+
+    /**
+     * block发布
+     *
+     * @param blockBuildDto
+     * @return blcok信息
+     */
+    @Override
+    public Result<BlockDto> deploy(BlockBuildDto blockBuildDto) {
+        Map<String, Object> content = blockBuildDto.getBlock().getContent();
+        if (content.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM204);
+        }
+        // 区块不存在的情况下先创建新区块
+        int id = ensureBlockId(blockBuildDto.getBlock());
+        // 对版本号是否存在进行校验
+        boolean isHistory = isHistoryExisted(id, blockBuildDto.getVersion());
+        if (isHistory) {
+            return Result.failed(ExceptionEnum.CM205);
+        }
+        BlockDto blockDto = blockBuildDto.getBlock();
+        List<I18nEntryDto> i18nList = i18nEntryMapper.findI18nEntriesByHostandHostType(id, "block");
+        // 序列化国际化词条
+        SchemaI18n appEntries = i18nEntryService.formatEntriesList(i18nList);
+        BlockHistory blockHistory = new BlockHistory();
+        blockDto.setCreatedTime(null);
+        blockDto.setLastUpdatedTime(null);
+        blockDto.setTenantId(null);
+        Map<String, Map<String, String>> i18n = new HashMap<>();
+        i18n.put("zh_CN",appEntries.getZhCn());
+        i18n.put("en_US",appEntries.getEnUs());
+
+        blockDto.setI18n(i18n);
+        blockHistory.setIsPublic(blockDto.getPublic());
+        BeanUtil.copyProperties(blockDto, blockHistory);
+        blockHistory.setRefId(id);
+        blockHistory.setVersion(blockBuildDto.getVersion());
+        blockHistory.setMessage(blockBuildDto.getDeployInfo());
+        Map<String,Object> buildInfo = new HashMap<>();
+        buildInfo.put("result",true);
+        buildInfo.put("versions",Arrays.asList(blockBuildDto.getVersion()));
+        // 获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+
+        // 使用自定义格式化输出
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = now.format(formatter);
+        buildInfo.put("endTime",formattedDate);
+        blockHistory.setBuildInfo(buildInfo);
+        blockHistory.setId(null);
+        int blockHistoryResult = blockHistoryMapper.createBlockHistory(blockHistory);
+        if(blockHistoryResult < 1){
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        blockDto.setLastBuildInfo(buildInfo);
+        int blockResult = updateBlockById(blockDto);
+        if(blockResult < 1){
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        BlockDto result = queryBlockById(id);
+        return Result.success(result);
     }
 
     /**
@@ -516,5 +600,48 @@ public class BlockServiceImpl implements BlockService {
                 })
                 .collect(Collectors.toList());
         return Result.success(result);
+    }
+
+    /**
+     * 判断区块是否存在，不存在创建
+     *
+     * @param blockDto the blockDto
+     * @return the id
+     */
+    public int ensureBlockId(BlockDto blockDto) {
+        if (blockDto.getId() != null) {
+            return blockDto.getId();
+        }
+        // 查询当前用户信息
+        int userId = 86;
+        Block queryBlock = new Block();
+        queryBlock.setLabel(blockDto.getLabel());
+        queryBlock.setFramework(blockDto.getFramework());
+        queryBlock.setCreatedBy(String.valueOf(userId));
+        List<Block> blockList = blockMapper.queryBlockByCondition(queryBlock);
+        if (blockList.isEmpty()) {
+            createBlock(blockDto);
+            return blockDto.getId();
+        }
+
+        return blockList.get(0).getId();
+    }
+
+    /**
+     * 判断区块版本是否存在
+     *
+     * @param id      the id
+     * @param version the version
+     * @return the id
+     */
+    public boolean isHistoryExisted(Integer id, String version) {
+        BlockHistory query = new BlockHistory();
+        query.setRefId(id);
+        query.setVersion(version);
+        List<BlockHistory> blockHistory = blockHistoryMapper.queryBlockHistoryByCondition(query);
+        if (blockHistory.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
