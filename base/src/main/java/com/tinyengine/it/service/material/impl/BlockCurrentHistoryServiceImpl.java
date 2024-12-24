@@ -70,7 +70,7 @@ public class BlockCurrentHistoryServiceImpl implements BlockCurrentHistoryServic
      */
     @Override
     public List<BlockCurrentHistory> queryBlockCurrentHistoryByCondition(BlockCurrentHistory blockCurrentHistory) {
-        return queryBlockCurrentHistoryByCondition(blockCurrentHistory);
+        return blockCurrentHistoryMapper.queryBlockCurrentHistoryByCondition(blockCurrentHistory);
     }
 
     /**
