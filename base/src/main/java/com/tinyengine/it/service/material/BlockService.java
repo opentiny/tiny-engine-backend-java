@@ -130,12 +130,13 @@ public interface BlockService {
 
 
     /**
-     * 通过lable查询区块
+     * 通过label和appId查询区块
      *
-     * @param lable lable
+     * @param label label
+     * @param appId appId
      * @return the BlockDto
      */
-    Result<BlockDto> getBlockByLabel(String lable);
+    Result<BlockDto> getBlockByLabel(String label, Integer appId);
 
     /**
      * block发布
