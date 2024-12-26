@@ -34,10 +34,10 @@ public interface PageHistoryService {
     /**
      * 根据主键id查询表t_page_history信息
      *
-     * @param id the id
+     * @param historyId the id
      * @return the page history
      */
-    PageHistory findPageHistoryById(@Param("id") Integer id);
+    PageHistory findPageHistoryById(Integer historyId);
 
     /**
      * 根据条件查询表t_page_history信息
@@ -73,6 +73,7 @@ public interface PageHistoryService {
 
     /**
      * 新增表t_page_history数据
+     *
      * @param app the app
      * @param name the page name
      * @return the List<PageHistory>
