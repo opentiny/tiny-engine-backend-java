@@ -74,6 +74,7 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
 
     /**
      * 新增表t_page_history数据
+     *
      * @param app the app
      * @param name the page name
      * @return the List<PageHistory>

@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE BlockCurrentHistoryLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.controller;
@@ -36,7 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import javax.validation.Valid;
-
 
 /**
  *
@@ -67,14 +65,14 @@ public class BlockCurrentHistoryController {
     @SystemControllerLog(description = "查询表BlockCurrentHistory信息")
     @GetMapping("/block/current-history/list")
     public Result<List<BlockCurrentHistory>> getAllBlockCurrentHistory() {
-        List<BlockCurrentHistory> BlockCurrentHistoryList = blockCurrentHistoryService.queryAllBlockCurrentHistory();
-        return Result.success(BlockCurrentHistoryList);
+        List<BlockCurrentHistory> blockCurrentHistories = blockCurrentHistoryService.queryAllBlockCurrentHistory();
+        return Result.success(blockCurrentHistories);
     }
 
     /**
      * 创建BlockCurrentHistory
      *
-     * @param BlockCurrentHistory the BlockCurrentHistory
+     * @param blockCurrentHistory the BlockCurrentHistory
      * @return BlockCurrentHistory信息 result
      */
     @Operation(summary = "创建BlockCurrentHistory",
@@ -91,8 +89,8 @@ public class BlockCurrentHistoryController {
     @SystemControllerLog(description = "创建BlockCurrentHistory")
     @PostMapping("/block/current-history/create")
     public Result<BlockCurrentHistory> createBlockCurrentHistory(
-            @Valid @RequestBody BlockCurrentHistory BlockCurrentHistory) {
-        return blockCurrentHistoryService.createBlockCurrentHistory(BlockCurrentHistory);
+            @Valid @RequestBody BlockCurrentHistory blockCurrentHistory) {
+        return blockCurrentHistoryService.createBlockCurrentHistory(blockCurrentHistory);
     }
 
     /**
