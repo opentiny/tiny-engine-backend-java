@@ -81,7 +81,7 @@ public class PageHistoryController {
     /**
      * 获取页面历史记录明细
      *
-     * @param id the id
+     * @param historyId the id
      * @return page history by id
      */
     @Operation(summary = "获取页面历史记录明细", description = "获取页面历史记录明细", parameters = {
@@ -91,9 +91,9 @@ public class PageHistoryController {
                             schema = @Schema(implementation = PageHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面历史记录明细")
-    @GetMapping("/pages/histories/{id}")
-    public Result<PageHistory> getPageHistoryById(@PathVariable Integer id) {
-        PageHistory pageHistory = pageHistoryService.findPageHistoryById(id);
+    @GetMapping("/pages/histories/{historyId}")
+    public Result<PageHistory> getPageHistoryById(@PathVariable Integer historyId) {
+        PageHistory pageHistory = pageHistoryService.findPageHistoryById(historyId);
         return Result.success(pageHistory);
     }
 
@@ -116,8 +116,8 @@ public class PageHistoryController {
         if (pageHistory.getPage() != null && Pattern.matches("^[0-9]+$", pageHistory.getPage().toString())
                 && pageHistory.getPageContent() != null) {
             pageHistoryService.createPageHistory(pageHistory);
-            int id = pageHistory.getId();
-            result = pageHistoryService.findPageHistoryById(id);
+            int historyId = pageHistory.getId();
+            result = pageHistoryService.findPageHistoryById(historyId);
         } else {
             return Result.failed("The request body is missing some parameters");
         }
@@ -127,7 +127,7 @@ public class PageHistoryController {
     /**
      * 删除页面历史记录
      *
-     * @param id the id
+     * @param historyId the id
      * @return result
      */
     @Operation(summary = "删除页面历史记录", description = "删除页面历史记录", parameters = {
@@ -137,10 +137,10 @@ public class PageHistoryController {
                             schema = @Schema(implementation = PageHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除页面历史记录")
-    @GetMapping("/pages/histories/delete/{id}")
-    public Result<PageHistory> deletePageHistory(@PathVariable Integer id) {
-        PageHistory pageHistory = pageHistoryService.findPageHistoryById(id);
-        pageHistoryService.deletePageHistoryById(id);
+    @GetMapping("/pages/histories/delete/{historyId}")
+    public Result<PageHistory> deletePageHistory(@PathVariable Integer historyId) {
+        PageHistory pageHistory = pageHistoryService.findPageHistoryById(historyId);
+        pageHistoryService.deletePageHistoryById(historyId);
         return Result.success(pageHistory);
     }
 

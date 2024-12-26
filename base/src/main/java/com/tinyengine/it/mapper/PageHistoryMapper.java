@@ -35,10 +35,10 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
     /**
      * 根据主键id查询表t_page_history数据
      *
-     * @param id the id
+     * @param historyId the id
      * @return the page history
      */
-    PageHistory queryPageHistoryById(@Param("id") Integer id);
+    PageHistory queryPageHistoryById(@Param("historyId") Integer historyId);
 
     /**
      * 根据条件查询表t_page_history数据

@@ -49,12 +49,12 @@ public class PageHistoryServiceImpl implements PageHistoryService {
     /**
      * 根据主键id查询表t_page_history信息
      *
-     * @param id id
+     * @param historyId id
      * @return query result
      */
     @Override
-    public PageHistory findPageHistoryById(@Param("id") Integer id) {
-        return pageHistoryMapper.queryPageHistoryById(id);
+    public PageHistory findPageHistoryById(Integer historyId) {
+        return pageHistoryMapper.queryPageHistoryById(historyId);
     }
 
     /**
