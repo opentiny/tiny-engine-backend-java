@@ -1,18 +1,16 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.material.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -42,6 +40,7 @@ import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.material.BlockService;
 
+import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
@@ -221,23 +220,26 @@ public class BlockServiceImpl implements BlockService {
         mergedAssets.put("styles", new ArrayList<>());
 
         // Merge the assets using streams
-        return blocksList.stream().map(Block::getAssets).map(assetsMap -> {
+        return blocksList.stream().map(Block::getAssets).map(assetsMap ->
+            {
             Map<String, List<String>> tempMap = new HashMap<>();
             tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
             tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
             tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
             return tempMap;
-        }).reduce(mergedAssets, (acc, curr) -> {
+            }).reduce(mergedAssets, (acc, curr) ->
+            {
             acc.get("material").addAll(curr.get("material"));
             acc.get("scripts").addAll(curr.get("scripts"));
             acc.get("styles").addAll(curr.get("styles"));
             return acc;
-        }, (map1, map2) -> {
+            }, (map1, map2) ->
+            {
             map1.get("material").addAll(map2.get("material"));
             map1.get("scripts").addAll(map2.get("scripts"));
             map1.get("styles").addAll(map2.get("styles"));
             return map1;
-        });
+            });
     }
 
     /**
@@ -384,7 +386,8 @@ public class BlockServiceImpl implements BlockService {
         User user = userMapper.queryUserById(userId);
         List<BlockDto> blocksList = blockMapper.findBlocksReturn();
         return blocksList.stream()
-                .filter(item -> {
+                .filter(item ->
+                    {
                     // 过滤已发布的
                     if (item.getLastBuildInfo() == null || item.getContent() == null || item.getAssets() == null) {
                         return false;
@@ -400,7 +403,7 @@ public class BlockServiceImpl implements BlockService {
                         return true;
                     }
                     return user != null && item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
-                })
+                    })
                 .collect(Collectors.toList());
     }
 
@@ -453,8 +456,8 @@ public class BlockServiceImpl implements BlockService {
         blockDto.setLastUpdatedTime(null);
         blockDto.setTenantId(null);
         Map<String, Map<String, String>> i18n = new HashMap<>();
-        i18n.put("zh_CN",appEntries.getZhCn());
-        i18n.put("en_US",appEntries.getEnUs());
+        i18n.put("zh_CN", appEntries.getZhCn());
+        i18n.put("en_US", appEntries.getEnUs());
 
         blockDto.setI18n(i18n);
         blockHistory.setIsPublic(blockDto.getPublic());
@@ -462,25 +465,25 @@ public class BlockServiceImpl implements BlockService {
         blockHistory.setRefId(id);
         blockHistory.setVersion(blockBuildDto.getVersion());
         blockHistory.setMessage(blockBuildDto.getDeployInfo());
-        Map<String,Object> buildInfo = new HashMap<>();
-        buildInfo.put("result",true);
-        buildInfo.put("versions",Arrays.asList(blockBuildDto.getVersion()));
+        Map<String, Object> buildInfo = new HashMap<>();
+        buildInfo.put("result", true);
+        buildInfo.put("versions", Arrays.asList(blockBuildDto.getVersion()));
         // 获取当前时间
         LocalDateTime now = LocalDateTime.now();
 
         // 使用自定义格式化输出
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDate = now.format(formatter);
-        buildInfo.put("endTime",formattedDate);
+        buildInfo.put("endTime", formattedDate);
         blockHistory.setBuildInfo(buildInfo);
         blockHistory.setId(null);
         int blockHistoryResult = blockHistoryMapper.createBlockHistory(blockHistory);
-        if(blockHistoryResult < 1){
+        if (blockHistoryResult < 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         blockDto.setLastBuildInfo(buildInfo);
         int blockResult = updateBlockById(blockDto);
-        if(blockResult < 1){
+        if (blockResult < 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         BlockDto result = queryBlockById(id);
@@ -526,11 +529,12 @@ public class BlockServiceImpl implements BlockService {
         Set<String> userSet = new HashSet<>();
 
         // 提取 createdBy 列表中的唯一值
-        blocksList.forEach(item -> {
+        blocksList.forEach(item ->
+            {
             if (item.getCreatedBy() != null && !userSet.contains(item.getCreatedBy())) {
                 userSet.add(String.valueOf(item.getCreatedBy()));
             }
-        });
+            });
 
         List<String> userIdsList = new ArrayList<>(userSet);
 
@@ -584,22 +588,24 @@ public class BlockServiceImpl implements BlockService {
         List<Block> combinedBlocks = Stream.concat(personalBlocks.stream(), appBlocks.stream())
                 .collect(Collectors.toList());
         // 遍历合并后的数组，检查是否存在具有相同 id 的元素
-        combinedBlocks.forEach(block -> {
+        combinedBlocks.forEach(block ->
+            {
             boolean isFind = retBlocks.stream()
                     .anyMatch(retBlock -> Objects.equals(retBlock.getId(), block.getId()));
             if (!isFind) {
                 retBlocks.add(block);
             }
-        });
+            });
         // 给is_published赋值
         List<Block> result = retBlocks.stream()
-                .map(b -> {
+                .map(b ->
+                    {
                     boolean isPublished = b.getLastBuildInfo() != null
                             && b.getLastBuildInfo().get("result") instanceof Boolean
                             ? (Boolean) b.getLastBuildInfo().get("result") : Boolean.FALSE;
                     b.setIsPublished(isPublished);
                     return b;
-                })
+                    })
                 .collect(Collectors.toList());
         return Result.success(result);
     }

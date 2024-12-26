@@ -424,7 +424,7 @@ public class BlockController {
     /**
      * block发布
      *
-     * @param blockBuildDto
+     * @param blockBuildDto block
      * @return blcok信息
      */
     @Operation(summary = "区块发布",
