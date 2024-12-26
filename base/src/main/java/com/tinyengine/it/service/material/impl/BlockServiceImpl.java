@@ -408,15 +408,17 @@ public class BlockServiceImpl implements BlockService {
     }
 
     /**
-     * 通过lable查询区块
+     * 通过label和appId查询区块
      *
-     * @param lable lable
+     * @param label label
+     * @param appId appId
      * @return the BlockDto
      */
     @Override
-    public Result<BlockDto> getBlockByLabel(String lable) {
+    public Result<BlockDto> getBlockByLabel(String label, Integer appId) {
         Block block = new Block();
-        block.setLabel(lable);
+        block.setLabel(label);
+        block.setAppId(appId);
         List<Block> blockList = blockMapper.queryBlockByCondition(block);
         if (blockList.isEmpty()) {
             return Result.success();

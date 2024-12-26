@@ -399,24 +399,26 @@ public class BlockController {
     }
 
     /**
-     * 根据label查询区块详情
+     * 通过lable和appId查询区块
      *
-     * @param label the label
+     * @param label label
+     * @param appId appId
      * @return the result
      */
-    @Operation(summary = "根据label查询区块详情",
-            description = "根据label查询区块详情",
+    @Operation(summary = "根据lable和appId查询区块详情",
+            description = "根据lable和appId查询区块详情",
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = Block.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
-    @SystemControllerLog(description = "获取所有用户api")
+    @SystemControllerLog(description = "根据lable和appId查询区块详情api")
     @GetMapping("/block/label")
-    public Result<BlockDto> getBlockByLabel(@RequestParam(value = "label")
-                                            String label) {
-        return blockService.getBlockByLabel(label);
+    public Result<BlockDto> getBlockByLabel(
+            @RequestParam(value = "label") String label,
+            @RequestParam(value = "appId") Integer appId) {
+        return blockService.getBlockByLabel(label, appId);
     }
 
     /**
