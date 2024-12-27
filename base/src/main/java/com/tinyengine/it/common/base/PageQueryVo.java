@@ -19,23 +19,34 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @since 2024-10-20
  */
 public class PageQueryVo<T> {
+    /**
+     * 最大分页数量
+     */
     public static final int PAGESIZE_MAX = 200;
+    /**
+     * 默认分页数量
+     */
     public static final int PAGESIZE_DEFAULT = 10;
+
     private int pageSize = PAGESIZE_DEFAULT;
+
     private int current = 0;
+
     private T data;
 
     /**
-     * @param pageSize
+     * set page size
+     *
+     * @param pageSize page size
      */
     public void setPageSize(int pageSize) {
         if (pageSize > PAGESIZE_MAX) {
-            pageSize = 200;
+            this.pageSize = 200;
+        } else if (pageSize <= 0) {
+            this.pageSize = 10;
+        } else {
+            this.pageSize = pageSize;
         }
-        if (pageSize <= 0) {
-            pageSize = 10;
-        }
-        this.pageSize = pageSize;
     }
 
     /**
@@ -59,7 +70,7 @@ public class PageQueryVo<T> {
     /**
      * set page num
      *
-     * @param current
+     * @param current current
      */
     public void setCurrent(int current) {
         this.current = current;
@@ -77,7 +88,7 @@ public class PageQueryVo<T> {
     /**
      * set query data
      *
-     * @param data
+     * @param data data
      */
     public void setData(T data) {
         this.data = data;

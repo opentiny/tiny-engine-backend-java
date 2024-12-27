@@ -30,7 +30,7 @@ public class PageHistoryVo {
     /**
      * 版本
      */
-    private String versions;
+    private String version;
 
     /**
      * Id

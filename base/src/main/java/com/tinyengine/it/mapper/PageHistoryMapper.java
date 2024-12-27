@@ -13,7 +13,6 @@ package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tinyengine.it.model.dto.PageHistoryVo;
 import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
 
@@ -86,6 +85,7 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
     /**
      * 查询发布的页面记录
      *
+     * @param iPage the iPage
      * @param pageHistoryVo the pageQueryVo
      * @return page history
      */

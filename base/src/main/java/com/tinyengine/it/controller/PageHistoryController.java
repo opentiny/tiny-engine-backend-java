@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
-import com.tinyengine.it.model.dto.PageHistoryVo;
 import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
 import com.tinyengine.it.service.app.PageHistoryService;
@@ -96,7 +95,7 @@ public class PageHistoryController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面历史记录列表")
     @GetMapping("/pages/history/published")
-    public Result<IPage<PublishedPageVo>> getLatestPublishPage(PageQueryVo<PublishedPageVo> pageQueryVo) {
+    public Result<IPage<PublishedPageVo>> getLatestPublishPage(@RequestBody PageQueryVo<PublishedPageVo> pageQueryVo) {
         IPage<PublishedPageVo> pageHistoryVoList = pageHistoryService.findLatestPublishPage(pageQueryVo);
         return Result.success(pageHistoryVoList);
     }
