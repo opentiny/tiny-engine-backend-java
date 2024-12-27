@@ -15,7 +15,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageHistoryMapper;
-import com.tinyengine.it.model.dto.PageHistoryVo;
 import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
 import com.tinyengine.it.service.app.PageHistoryService;

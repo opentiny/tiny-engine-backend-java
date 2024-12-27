@@ -188,7 +188,11 @@
         <result column="parent_id" property="parentId"/>
         <result column="group" property="group"/>
         <result column="is_page" property="isPage"/>
-        <collection property="refId" select="findAllHistoryVersions">
+        <collection property="historyVersions" ofType="com.tinyengine.it.model.dto.PageHistoryVo">
+            <result column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="ref_id" property="refId"/>
+            <result column="version" property="version"/>
         </collection>
     </resultMap>
 
@@ -296,30 +300,15 @@
 
     <select id="findLatestPublishPage" resultType="com.tinyengine.it.model.dto.PublishedPageVo">
         SELECT
-        distinct ref_id,name, app_id, route, parent_id, `group`, is_page
+        id, ref_id,name,version, app_id, route, parent_id, `group`, is_page
         FROM t_page_history
-        where app_id = #{appId}
-        <if test="refId!=null and refId!=''">
-            AND ref_id = #{refId}
+        where app_id = #{pageHistory.appId}
+        <if test="pageHistory.refId!=null and pageHistory.refId!=''">
+            AND ref_id = #{pageHistory.refId}
         </if>
-        <if test="name!=null and name!=''">
-            AND name like concat('%',#{name},'%')
+        <if test="pageHistory.name!=null and pageHistory.name!=''">
+            AND name like concat('%',#{pageHistory.name},'%')
         </if>
-        <if test="tenantId!=null and tenantId!=''">
-            AND tenant_id = #{tenantId}
-        </if>
-        <if test="renterId!=null and renterId!=''">
-            AND renter_id = #{renterId}
-        </if>
-        <if test="siteId!=null and siteId!=''">
-            AND site_id = #{siteId}
-        </if>
-    </select>
-
-    <select id="findAllHistoryVersions" resultType="com.tinyengine.it.model.dto.PageHistoryVo">
-        SELECT
-        distinct ref_id,name, id, version
-        FROM t_page_history
-        where ref_id = #{refId}
+        order by created_time desc
     </select>
 </mapper>

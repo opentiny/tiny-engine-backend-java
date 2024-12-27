@@ -59,6 +59,10 @@ public class PublishedPageVo {
      */
     private Boolean isPage;
 
+    /**
+     * 页面id
+     * @return page id
+     */
     public Integer getPageId() {
         return this.getRefId();
     }
