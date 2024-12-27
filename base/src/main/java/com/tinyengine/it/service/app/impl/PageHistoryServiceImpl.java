@@ -1,19 +1,22 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageHistoryMapper;
+import com.tinyengine.it.model.dto.PageHistoryVo;
+import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
 import com.tinyengine.it.service.app.PageHistoryService;
 
@@ -105,12 +108,18 @@ public class PageHistoryServiceImpl implements PageHistoryService {
     /**
      * 新增表t_page_history数据
      *
-     * @param app the app
+     * @param app  the app
      * @param name the page name
      * @return the List<PageHistory>
      */
     @Override
     public List<PageHistory> findPageHistoryByName(String name, Integer app) {
         return pageHistoryMapper.queryPageHistoryByName(name, app);
+    }
+
+    @Override
+    public IPage<PublishedPageVo> findLatestPublishPage(PageQueryVo<PublishedPageVo> pageQueryVo) {
+        PublishedPageVo queryData = pageQueryVo.getData();
+        return pageHistoryMapper.findLatestPublishPage(pageQueryVo.getPage(), queryData);
     }
 }
