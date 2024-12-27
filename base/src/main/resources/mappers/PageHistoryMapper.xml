@@ -179,6 +179,23 @@
         <result column="site_id" property="siteId"/>
     </resultMap>
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PageHistoryVoMap" type="com.tinyengine.it.model.dto.PublishedPageVo">
+        <result column="ref_id" property="refId"/>
+        <result column="name" property="name"/>
+        <result column="app_id" property="appId"/>
+        <result column="route" property="route"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="group" property="group"/>
+        <result column="is_page" property="isPage"/>
+        <collection property="historyVersions" ofType="com.tinyengine.it.model.dto.PageHistoryVo">
+            <result column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="ref_id" property="refId"/>
+            <result column="version" property="version"/>
+        </collection>
+    </resultMap>
+
     <!-- 查询表t_page_history所有数据 -->
     <select id="queryAllPageHistory" resultMap="PageHistoryMap">
         SELECT
@@ -280,4 +297,18 @@
         , #{renterId}
         , #{siteId})
     </insert>
+
+    <select id="findLatestPublishPage" resultType="com.tinyengine.it.model.dto.PublishedPageVo">
+        SELECT
+        id, ref_id,name,version, app_id, route, parent_id, `group`, is_page
+        FROM t_page_history
+        where app_id = #{pageHistory.appId}
+        <if test="pageHistory.refId!=null and pageHistory.refId!=''">
+            AND ref_id = #{pageHistory.refId}
+        </if>
+        <if test="pageHistory.name!=null and pageHistory.name!=''">
+            AND name like concat('%',#{pageHistory.name},'%')
+        </if>
+        order by created_time desc
+    </select>
 </mapper>
