@@ -32,12 +32,9 @@ import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.dto.SchemaUtils;
 import com.tinyengine.it.model.dto.TreeNodeCollection;
 import com.tinyengine.it.model.dto.TreeNodeDto;
-import com.tinyengine.it.model.entity.App;
-import com.tinyengine.it.model.entity.AppExtension;
-import com.tinyengine.it.model.entity.Block;
-import com.tinyengine.it.model.entity.Page;
-import com.tinyengine.it.model.entity.User;
+import com.tinyengine.it.model.entity.*;
 import com.tinyengine.it.service.app.AppService;
+import com.tinyengine.it.service.app.PageHistoryService;
 import com.tinyengine.it.service.app.PageService;
 import com.tinyengine.it.service.app.UserService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
@@ -46,6 +43,7 @@ import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -124,6 +122,9 @@ public class PageServiceImpl implements PageService {
      */
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+
+    @Autowired
+    private PageHistoryService pageHistoryService;
 
     /**
      * 通过appId查询page所有数据实现方法
@@ -242,6 +243,20 @@ public class PageServiceImpl implements PageService {
         }
 
         pageInfo.setIsHome(page.getIsHome());
+        // 保存成功，异步生成页面历史记录快照,不保证生成成功
+        PageHistory pageHistory = new PageHistory();
+
+        // 把Pages中的属性值赋值到PagesHistories中
+        BeanUtils.copyProperties(pageInfo, pageHistory);
+        pageHistory.setPage(pageInfo.getId());
+        pageHistory.setId(null);
+        pageHistory.setMessage(page.getMessage());
+        pageHistory.setIsPublished(false);
+        pageHistory.setVersion("draft");
+        int resultPageHistory = pageHistoryService.createPageHistory(pageHistory);
+        if (resultPageHistory < 1) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
         return Result.success(pageInfo);
     }
 
@@ -318,6 +333,20 @@ public class PageServiceImpl implements PageService {
         }
 
         page.setIsHome(isHomeVal);
+        pageTemp.setMessage(page.getMessage());
+        // 保存成功，异步生成页面历史记录快照,不保证生成成功
+        PageHistory pageHistory = new PageHistory();
+
+        // 把Pages中的属性值赋值到PagesHistories中en
+        BeanUtils.copyProperties(page, pageHistory);
+        pageHistory.setPage(pageTemp.getId());
+        pageHistory.setId(null);
+        pageHistory.setIsPublished(false);
+        pageHistory.setVersion("draft");
+        int resultPageHistory = pageHistoryService.createPageHistory(pageHistory);
+        if (resultPageHistory < 1) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
         return checkUpdate(page);
     }
 
