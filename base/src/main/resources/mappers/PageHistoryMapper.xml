@@ -8,7 +8,7 @@
     <sql id="Base_Column_List">
         id
         , ref_id,version, name, app_id, route, page_content, is_body, parent_id, `group`, `depth`, is_page, is_default, message,
-        is_home, content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
+        is_home, content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id,is_published
     </sql>
 
     <!-- 通用条件列 -->
@@ -78,6 +78,9 @@
         </if>
         <if test="siteId!=null and siteId!=''">
             AND site_id = #{siteId}
+        </if>
+        <if test="isPublished!=null and isPublished!=''">
+            AND is_published = #{isPublished}
         </if>
     </sql>
 
@@ -149,6 +152,9 @@
         <if test="siteId!=null and siteId!=''">
             site_id = #{siteId},
         </if>
+        <if test="isPublished!=null and isPublished!=''">
+            is_published = #{isPublished}
+        </if>
     </sql>
 
 
@@ -177,6 +183,7 @@
         <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
+        <result column="is_published" property="isPublished"/>
     </resultMap>
 
     <!-- 通用查询映射结果 -->
@@ -229,6 +236,7 @@
         FROM t_page_history
         WHERE name like concat('%',#{name},'%')
         and app_id = #{app}
+        and is_published = 1
     </select>
 
     <!-- 根据主键id删除表t_page_history数据 -->
@@ -272,7 +280,8 @@
         , created_time
         , last_updated_time
         , tenant_id, renter_id
-        , site_id)
+        , site_id
+        , is_published)
         VALUES ( #{id}
         , #{page}
         , #{version}
@@ -295,7 +304,8 @@
         , #{lastUpdatedTime}
         , #{tenantId}
         , #{renterId}
-        , #{siteId})
+        , #{siteId}
+        , #{isPublished})
     </insert>
 
     <select id="findLatestPublishPage" resultType="com.tinyengine.it.model.dto.PublishedPageVo">
