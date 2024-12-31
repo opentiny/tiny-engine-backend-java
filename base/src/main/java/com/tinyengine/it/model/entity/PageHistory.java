@@ -83,6 +83,9 @@ public class PageHistory extends HistoryEntity {
     @Schema(name = "isHome", description = "是否为主页")
     private Boolean isHome;
 
+    @Schema(name = "isPublished", description = "是否发布：0：草稿状态 1：已发布")
+    private Boolean isPublished;
+
     @Schema(name = "contentBlocks", description = "*设计预留字段*")
     @TableField(typeHandler = ListTypeHandler.class)
     private List<BlockVersionDto> contentBlocks;
