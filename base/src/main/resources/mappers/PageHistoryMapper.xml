@@ -216,7 +216,7 @@
         <include refid="Base_Column_List"/>
         FROM t_page_history
         <where>
-            <if test="id != null">
+            <if test="historyId != null">
                 AND id = #{historyId}
             </if>
         </where>
