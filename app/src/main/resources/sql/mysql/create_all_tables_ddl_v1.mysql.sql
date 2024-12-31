@@ -369,6 +369,7 @@ create table `t_page_history`
     `tenant_id`         varchar(60)  not null comment '租户id',
     `renter_id`         varchar(60) comment '业务租户id',
     `site_id`           varchar(60) comment '站点id，设计预留字段',
+    `is_published`      tinyint(1) not null comment '是否发布',
     `created_by`        varchar(60)  not null comment '创建人',
     `created_time`      timestamp    not null default current_timestamp comment '创建时间',
     `last_updated_by`   varchar(60)  not null comment '最后修改人',
