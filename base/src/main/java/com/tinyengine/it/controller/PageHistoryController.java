@@ -113,7 +113,7 @@ public class PageHistoryController {
                             schema = @Schema(implementation = PageHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面历史记录明细")
-    @GetMapping("/pages/histories/{historyId}")
+    @GetMapping("/pages/histories/detail/{historyId}")
     public Result<PageHistory> getPageHistoryById(@PathVariable Integer historyId) {
         PageHistory pageHistory = pageHistoryService.findPageHistoryById(historyId);
         return Result.success(pageHistory);
