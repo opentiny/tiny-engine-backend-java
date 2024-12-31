@@ -347,7 +347,7 @@ create table t_page_history (
     page_content longtext comment '页面内容',
     is_body tinyint(1) comment '根元素是否是body',
     parent_id int not null comment '父文件夹id',
-    `group` varchar(255) comment '分组',
+    "group" varchar(255) comment '分组',
     depth int comment '页面/文件夹深度，更改层级时服务端校验用（校验可有可无）',
     is_page tinyint(1) not null comment '是否为页面：分为页面和文件夹',
     is_default tinyint(1) not null comment '是否是默认页面',
@@ -362,7 +362,7 @@ create table t_page_history (
     created_time timestamp not null default current_timestamp comment '创建时间',
     last_updated_by varchar(60) not null comment '最后修改人',
     last_updated_time timestamp not null default current_timestamp comment '更新时间',
-    primary key (id)
+    primary key (id),
   ) comment = '页面历史表';
 
 drop table if exists t_page_template;
