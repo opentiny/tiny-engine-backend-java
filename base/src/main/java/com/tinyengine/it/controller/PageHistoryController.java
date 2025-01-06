@@ -94,7 +94,7 @@ public class PageHistoryController {
                             schema = @Schema(implementation = PageHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面历史记录列表")
-    @GetMapping("/pages/history/published")
+    @PostMapping("/pages/history/published")
     public Result<IPage<PublishedPageVo>> getLatestPublishPage(@RequestBody PageQueryVo<PublishedPageVo> pageQueryVo) {
         IPage<PublishedPageVo> pageHistoryVoList = pageHistoryService.findLatestPublishPage(pageQueryVo);
         return Result.success(pageHistoryVoList);
