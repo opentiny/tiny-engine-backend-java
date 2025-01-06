@@ -150,10 +150,13 @@ public class BlockServiceImpl implements BlockService {
             // 图片上传,此处给默认值空字符
             blocks.setScreenshot("");
         }
+        // 过滤出 Integer 类型的对象
+        // 转换为 Integer 类型
+        // 收集为 List<Integer>;
         List<Integer> groups = blockDto.getGroups().stream()
-                .filter(obj -> obj instanceof Integer) // 过滤出 Integer 类型的对象
-                .map(obj -> (Integer) obj) // 转换为 Integer 类型
-                .collect(Collectors.toList()); // 收集为 List<Integer>;
+                .filter(obj -> obj instanceof Integer)
+                .map(obj -> (Integer) obj)
+                .collect(Collectors.toList());
         if (!groups.isEmpty()) {
             int groupId = groups.get(0);
             blocks.setBlockGroupId(groupId);
@@ -431,7 +434,7 @@ public class BlockServiceImpl implements BlockService {
     /**
      * block发布
      *
-     * @param blockBuildDto
+     * @param blockBuildDto block
      * @return blcok信息
      */
     @Override

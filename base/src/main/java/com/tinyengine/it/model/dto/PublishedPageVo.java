@@ -11,8 +11,6 @@
 
 package com.tinyengine.it.model.dto;
 
-import com.tinyengine.it.common.base.HistoryEntity;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -61,6 +59,7 @@ public class PublishedPageVo {
 
     /**
      * 页面id
+     *
      * @return page id
      */
     public Integer getPageId() {
