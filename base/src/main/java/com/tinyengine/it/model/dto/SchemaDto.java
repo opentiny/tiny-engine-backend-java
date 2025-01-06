@@ -32,7 +32,7 @@ public class SchemaDto {
     private Map<String, Object> config;
     private String constants;
     private String css;
-    private SchemaDataSource dataSource;
+    private Map<String, Object> dataSource;
     private SchemaI18n i18n;
     private SchemaMeta meta;
     private List<SchemaUtils> utils;
