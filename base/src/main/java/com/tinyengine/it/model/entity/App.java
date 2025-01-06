@@ -128,6 +128,7 @@ public class App extends BaseEntity {
     private String framework;
 
     @Schema(name = "globalState", description = "应用全局状态")
+    @JsonProperty("global_state")
     @TableField(typeHandler = ListTypeHandler.class)
     private List<Map<String, Object>> globalState;
 
