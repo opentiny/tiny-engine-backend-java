@@ -137,7 +137,7 @@ public interface BlockService {
     /**
      * block发布
      *
-     * @param blockBuildDto
+     * @param blockBuildDto block
      * @return blcok信息
      */
     Result<BlockDto> deploy(BlockBuildDto blockBuildDto);
