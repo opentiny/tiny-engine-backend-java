@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.app.impl;
@@ -40,7 +39,6 @@ import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nEntryService;
 
 import cn.hutool.core.bean.BeanUtil;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
@@ -169,7 +167,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         Map<String, String> contents = operateI18nEntries.getContents();
 
-        contents.keySet().forEach(item -> {
+        contents.keySet().forEach(item ->
+            {
             int lang = langsDic.get(item);
             if (lang != 0) {
                 I18nEntry i18nEntries = new I18nEntry();
@@ -180,7 +179,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 i18nEntries.setContent(contents.get(item));
                 i18nEntriesList.add(i18nEntries);
             }
-        });
+            });
         return i18nEntriesList;
     }
 
@@ -385,9 +384,11 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "bulkCreateOrUpdate 批量创建或修改")
     public Result<FileResult> bulkCreateOrUpdate(List<EntriesItem> entriesArr, int host) {
         List<I18nEntry> entries = new ArrayList<>();
-        entriesArr.forEach(entriesItem -> {
+        entriesArr.forEach(entriesItem ->
+            {
             Map<String, Object> langEntries = entriesItem.getEntries();
-            langEntries.forEach((key, value) -> {
+            langEntries.forEach((key, value) ->
+                {
                 I18nEntry i18nEntry = new I18nEntry();
                 i18nEntry.setKey(key);
                 i18nEntry.setLang(entriesItem.getLang());
@@ -395,8 +396,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 i18nEntry.setHostType("app");
                 i18nEntry.setContent(value.toString());
                 entries.add(i18nEntry);
+                });
             });
-        });
         // 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
         FileResult result = bulkInsertOrUpdate(entries);
         return Result.success(result);

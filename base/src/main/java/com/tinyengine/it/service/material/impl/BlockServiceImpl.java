@@ -223,26 +223,23 @@ public class BlockServiceImpl implements BlockService {
         mergedAssets.put("styles", new ArrayList<>());
 
         // Merge the assets using streams
-        return blocksList.stream().map(Block::getAssets).map(assetsMap ->
-            {
+        return blocksList.stream().map(Block::getAssets).map(assetsMap -> {
             Map<String, List<String>> tempMap = new HashMap<>();
             tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
             tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
             tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
             return tempMap;
-            }).reduce(mergedAssets, (acc, curr) ->
-            {
+        }).reduce(mergedAssets, (acc, curr) -> {
             acc.get("material").addAll(curr.get("material"));
             acc.get("scripts").addAll(curr.get("scripts"));
             acc.get("styles").addAll(curr.get("styles"));
             return acc;
-            }, (map1, map2) ->
-            {
+        }, (map1, map2) -> {
             map1.get("material").addAll(map2.get("material"));
             map1.get("scripts").addAll(map2.get("scripts"));
             map1.get("styles").addAll(map2.get("styles"));
             return map1;
-            });
+        });
     }
 
     /**
@@ -388,26 +385,23 @@ public class BlockServiceImpl implements BlockService {
         int userId = 1;
         User user = userMapper.queryUserById(userId);
         List<BlockDto> blocksList = blockMapper.findBlocksReturn();
-        return blocksList.stream()
-                .filter(item ->
-                    {
-                    // 过滤已发布的
-                    if (item.getLastBuildInfo() == null || item.getContent() == null || item.getAssets() == null) {
-                        return false;
-                    }
-                    // 组过滤
-                    if (item.getGroups() != null && item.getGroups().stream()
-                            .anyMatch(group -> group instanceof BlockGroup
-                                    && ((BlockGroup) group).getId().equals(groupId))) {
-                        return false;
-                    }
-                    // 公开范围过滤
-                    if (item.getPublicStatus() == Enums.Scope.FULL_PUBLIC.getValue()) {
-                        return true;
-                    }
-                    return user != null && item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
-                    })
-                .collect(Collectors.toList());
+        return blocksList.stream().filter(item ->{
+            // 过滤已发布的
+            if (item.getLastBuildInfo() == null || item.getContent() == null || item.getAssets() == null) {
+                return false;
+            }
+            // 组过滤
+            if (item.getGroups() != null && item.getGroups().stream()
+                    .anyMatch(group -> group instanceof BlockGroup
+                            && ((BlockGroup) group).getId().equals(groupId))) {
+                return false;
+            }
+            // 公开范围过滤
+            if (item.getPublicStatus() == Enums.Scope.FULL_PUBLIC.getValue()) {
+                return true;
+            }
+            return user != null && item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -532,12 +526,11 @@ public class BlockServiceImpl implements BlockService {
         Set<String> userSet = new HashSet<>();
 
         // 提取 createdBy 列表中的唯一值
-        blocksList.forEach(item ->
-            {
+        blocksList.forEach(item -> {
             if (item.getCreatedBy() != null && !userSet.contains(item.getCreatedBy())) {
                 userSet.add(String.valueOf(item.getCreatedBy()));
             }
-            });
+        });
 
         List<String> userIdsList = new ArrayList<>(userSet);
 
@@ -591,25 +584,21 @@ public class BlockServiceImpl implements BlockService {
         List<Block> combinedBlocks = Stream.concat(personalBlocks.stream(), appBlocks.stream())
                 .collect(Collectors.toList());
         // 遍历合并后的数组，检查是否存在具有相同 id 的元素
-        combinedBlocks.forEach(block ->
-            {
+        combinedBlocks.forEach(block -> {
             boolean isFind = retBlocks.stream()
                     .anyMatch(retBlock -> Objects.equals(retBlock.getId(), block.getId()));
             if (!isFind) {
                 retBlocks.add(block);
             }
-            });
+        });
         // 给is_published赋值
-        List<Block> result = retBlocks.stream()
-                .map(b ->
-                    {
-                    boolean isPublished = b.getLastBuildInfo() != null
-                            && b.getLastBuildInfo().get("result") instanceof Boolean
-                            ? (Boolean) b.getLastBuildInfo().get("result") : Boolean.FALSE;
-                    b.setIsPublished(isPublished);
-                    return b;
-                    })
-                .collect(Collectors.toList());
+        List<Block> result = retBlocks.stream().map(b ->{
+            boolean isPublished = b.getLastBuildInfo() != null
+                    && b.getLastBuildInfo().get("result") instanceof Boolean
+                    ? (Boolean) b.getLastBuildInfo().get("result") : Boolean.FALSE;
+            b.setIsPublished(isPublished);
+            return b;
+        }).collect(Collectors.toList());
         return Result.success(result);
     }
 

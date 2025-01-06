@@ -23,6 +23,7 @@ public class PageQueryVo<T> {
      * 最大分页数量
      */
     public static final int PAGESIZE_MAX = 200;
+
     /**
      * 默认分页数量
      */

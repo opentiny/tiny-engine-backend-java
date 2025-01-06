@@ -25,6 +25,7 @@ import java.util.List;
 @Getter
 public class PublishedPageVo {
     private Integer refId;
+
     /**
      * 名称
      */

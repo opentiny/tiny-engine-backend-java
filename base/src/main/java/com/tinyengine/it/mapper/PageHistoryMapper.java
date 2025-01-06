@@ -85,10 +85,10 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
     /**
      * 查询发布的页面记录
      *
-     * @param iPage the iPage
+     * @param iPage         the iPage
      * @param pageHistoryVo the pageQueryVo
      * @return page history
      */
     IPage<PublishedPageVo> findLatestPublishPage(IPage<PublishedPageVo> iPage,
-                                               @Param("pageHistory") PublishedPageVo pageHistoryVo);
+        @Param("pageHistory") PublishedPageVo pageHistoryVo);
 }
