@@ -20,7 +20,6 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
-import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.PageMapper;
@@ -107,11 +106,6 @@ public class PageServiceImpl implements PageService {
     @Autowired
     private AppV1ServiceImpl appV1ServiceImpl;
 
-    /**
-     * The Block history mapper.
-     */
-    @Autowired
-    private BlockHistoryMapper blockHistoryMapper;
 
     /**
      * The App extension mapper.

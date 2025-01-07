@@ -193,7 +193,7 @@
         FROM t_page_history
         <where>
             <if test="id != null">
-                AND id = #{id}
+                AND ref_id = #{id}
             </if>
         </where>
     </select>
