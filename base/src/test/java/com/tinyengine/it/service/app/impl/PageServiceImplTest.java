@@ -149,6 +149,7 @@ class PageServiceImplTest {
         app.setHomePage(1);
         // not home page
         when(appMapper.queryAppById(333)).thenReturn(app);
+        when(pageHistoryService.createPageHistory(any(PageHistory.class))).thenReturn(1);
 
         Result<Page> result = pageServiceImpl.createPage(param);
         assertEquals(returnPage, result.getData());

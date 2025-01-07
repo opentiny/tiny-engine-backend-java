@@ -1,17 +1,19 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tinyengine.it.common.base.PageQueryVo;
+import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
 
 import org.apache.ibatis.annotations.Param;
@@ -34,10 +36,10 @@ public interface PageHistoryService {
     /**
      * 根据主键id查询表t_page_history信息
      *
-     * @param id the id
+     * @param historyId the id
      * @return the page history
      */
-    PageHistory findPageHistoryById(@Param("id") Integer id);
+    PageHistory findPageHistoryById(Integer historyId);
 
     /**
      * 根据条件查询表t_page_history信息
@@ -73,9 +75,18 @@ public interface PageHistoryService {
 
     /**
      * 新增表t_page_history数据
+     *
      * @param app the app
      * @param name the page name
      * @return the List<PageHistory>
      */
     List<PageHistory> findPageHistoryByName(String name, Integer app);
+
+    /**
+     * 查询发布的页面记录
+     *
+     * @param pageQueryVo the pageQueryVo
+     * @return page history
+     */
+    IPage<PublishedPageVo> findLatestPublishPage(PageQueryVo<PublishedPageVo> pageQueryVo);
 }

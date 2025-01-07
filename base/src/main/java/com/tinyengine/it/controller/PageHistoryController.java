@@ -12,8 +12,11 @@
 
 package com.tinyengine.it.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
 import com.tinyengine.it.service.app.PageHistoryService;
 
@@ -79,9 +82,28 @@ public class PageHistoryController {
     }
 
     /**
+     * 查询发布的页面记录
+     *
+     * @param pageQueryVo the pageQueryVo
+     * @return  page history
+     */
+    @Operation(summary = "获取页面历史记录列表", description = "获取页面历史记录列表", parameters = {
+            @Parameter(name = "page", description = "page页面主键id")}, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PageHistory.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "获取页面历史记录列表")
+    @PostMapping("/pages/history/published")
+    public Result<IPage<PublishedPageVo>> getLatestPublishPage(@RequestBody PageQueryVo<PublishedPageVo> pageQueryVo) {
+        IPage<PublishedPageVo> pageHistoryVoList = pageHistoryService.findLatestPublishPage(pageQueryVo);
+        return Result.success(pageHistoryVoList);
+    }
+
+    /**
      * 获取页面历史记录明细
      *
-     * @param id the id
+     * @param historyId the id
      * @return page history by id
      */
     @Operation(summary = "获取页面历史记录明细", description = "获取页面历史记录明细", parameters = {
@@ -91,9 +113,9 @@ public class PageHistoryController {
                             schema = @Schema(implementation = PageHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取页面历史记录明细")
-    @GetMapping("/pages/histories/{id}")
-    public Result<PageHistory> getPageHistoryById(@PathVariable Integer id) {
-        PageHistory pageHistory = pageHistoryService.findPageHistoryById(id);
+    @GetMapping("/pages/histories/detail/{historyId}")
+    public Result<PageHistory> getPageHistoryById(@PathVariable Integer historyId) {
+        PageHistory pageHistory = pageHistoryService.findPageHistoryById(historyId);
         return Result.success(pageHistory);
     }
 
@@ -116,8 +138,8 @@ public class PageHistoryController {
         if (pageHistory.getPage() != null && Pattern.matches("^[0-9]+$", pageHistory.getPage().toString())
                 && pageHistory.getPageContent() != null) {
             pageHistoryService.createPageHistory(pageHistory);
-            int id = pageHistory.getId();
-            result = pageHistoryService.findPageHistoryById(id);
+            int historyId = pageHistory.getId();
+            result = pageHistoryService.findPageHistoryById(historyId);
         } else {
             return Result.failed("The request body is missing some parameters");
         }
@@ -127,7 +149,7 @@ public class PageHistoryController {
     /**
      * 删除页面历史记录
      *
-     * @param id the id
+     * @param historyId the id
      * @return result
      */
     @Operation(summary = "删除页面历史记录", description = "删除页面历史记录", parameters = {
@@ -137,16 +159,17 @@ public class PageHistoryController {
                             schema = @Schema(implementation = PageHistory.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "删除页面历史记录")
-    @GetMapping("/pages/histories/delete/{id}")
-    public Result<PageHistory> deletePageHistory(@PathVariable Integer id) {
-        PageHistory pageHistory = pageHistoryService.findPageHistoryById(id);
-        pageHistoryService.deletePageHistoryById(id);
+    @GetMapping("/pages/histories/delete/{historyId}")
+    public Result<PageHistory> deletePageHistory(@PathVariable Integer historyId) {
+        PageHistory pageHistory = pageHistoryService.findPageHistoryById(historyId);
+        pageHistoryService.deletePageHistoryById(historyId);
         return Result.success(pageHistory);
     }
 
     /**
      * 删除页面历史记录
-     * @param app the app
+     *
+     * @param app  the app
      * @param name the name
      * @return result
      */
