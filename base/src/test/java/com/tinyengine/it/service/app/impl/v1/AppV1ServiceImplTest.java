@@ -107,6 +107,7 @@ class AppV1ServiceImplTest {
         int appId = 2;
         app.setId(appId);
         app.setHomePage(1);
+        app.setPlatformId(1);
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
         Page page = new Page();
         page.setIsPage(true);
@@ -141,6 +142,7 @@ class AppV1ServiceImplTest {
     @Test
     void testGetMetaDto() {
         App app = new App();
+        app.setPlatformId(1);
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
         when(i18nEntryMapper.findI18nEntriesByHostandHostType(anyInt(), anyString()))
                 .thenReturn(Arrays.asList(new I18nEntryDto()));
