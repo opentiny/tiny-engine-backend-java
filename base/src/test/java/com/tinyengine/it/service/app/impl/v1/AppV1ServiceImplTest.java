@@ -17,6 +17,8 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
@@ -102,12 +104,18 @@ class AppV1ServiceImplTest {
     }
 
     @Test
-    void testAppSchema() {
+    void testAppSchema() throws JsonProcessingException {
         App app = new App();
         int appId = 2;
         app.setId(appId);
         app.setHomePage(1);
         app.setPlatformId(1);
+
+        String json = "{\"dataHandler\":{\"type\":\"JSFunction\",\"value\":\"function dataHanlder(res){\\n return res;\\n}\"}}";
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> dataSourceGlobal = objectMapper.readValue(json, Map.class);
+        app.setDataSourceGlobal(dataSourceGlobal);
+
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
         Page page = new Page();
         page.setIsPage(true);
