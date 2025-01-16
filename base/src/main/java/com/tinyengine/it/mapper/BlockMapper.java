@@ -137,7 +137,7 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "occupier_by", property = "occupier",
                     one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
     })
-    @Select("select b.*,bcbcb.block_id as block_categories_blocks_id,bsh.block_id as block_histories_block_id "
+    @Select("select b.*,bh.ref_id as block_id "
             + "from t_block b "
             + "left join t_block_history bh on b.latest_history_id = bh.id "
             + "where b.id = #{blockId} "
