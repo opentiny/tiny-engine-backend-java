@@ -16,6 +16,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.mapper.BlockCarriersRelationMapper;
+import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
@@ -26,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +44,10 @@ class BlockGroupServiceImplTest {
     private BlockGroupMapper blockGroupMapper;
     @InjectMocks
     private BlockGroupServiceImpl blockGroupServiceImpl;
+    @Mock
+    private BlockCarriersRelationMapper blockCarriersRelationMapper;
+    @Mock
+    private BlockGroupBlockMapper blockGroupBlockMapper;
 
     @BeforeEach
     void setUp() {
@@ -86,8 +93,11 @@ class BlockGroupServiceImplTest {
     @Test
     void testUpdateBlockGroupById() {
         BlockGroup param = new BlockGroup();
+        param.setId(1);
+        param.setBlocks(new ArrayList<>());
         when(blockGroupMapper.updateBlockGroupById(param)).thenReturn(1);
-
+        when(blockGroupBlockMapper.deleteBlockGroupBlockByGroupId(null)).thenReturn(1);
+        when(blockCarriersRelationMapper.deleteBlockCarriersRelation(null, null, null)).thenReturn(1);
         Integer result = blockGroupServiceImpl.updateBlockGroupById(param);
         Assertions.assertEquals(1, result);
     }
