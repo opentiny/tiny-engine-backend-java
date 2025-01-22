@@ -103,7 +103,6 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     public Integer updateBlockGroupById(BlockGroup blockGroup) {
         // 判断是对正常的分组修改，还是在分组下添加区块操作的修改
         List<Block> blockList = blockGroup.getBlocks();
-        List<Integer> blockIds = blockList.stream().map(Block::getId).collect(Collectors.toList());
         List<BlockGroupBlock> blockGroupBlocks = blockGroupBlockMapper.findBlockGroupBlockByBlockGroupId(blockGroup.getId());
         List<Integer> groupBlockIds = blockGroupBlocks.stream().map(BlockGroupBlock::getBlockId).collect(Collectors.toList());
 
@@ -113,9 +112,11 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             // 删除区块分组与区块历史版本关系
             blockCarriersRelationMapper.deleteBlockCarriersRelation(blockGroup.getId(), hostType, null);
             // 删除区块分组与区块关系
-            return blockGroupBlockMapper.deleteBlockGroupBlockByGroupId(blockGroup.getId());
+            blockGroupBlockMapper.deleteBlockGroupBlockByGroupId(blockGroup.getId());
+            return blockGroupMapper.updateBlockGroupById(blockGroup);
         }
         // 处理参数分组区块
+        List<Integer> blockIds = blockList.stream().map(Block::getId).collect(Collectors.toList());
         int result = getBlockGroupIds(groupBlockIds, blockIds, blockGroup.getId());
         // 更新区块分组和区块历史关系表
         List<BlockCarriersRelation> blockCarriersRelations = new ArrayList<>();

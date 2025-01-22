@@ -24,6 +24,7 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.mapper.BlockMapper;
@@ -37,7 +38,9 @@ import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.BlockCarriersRelation;
 import com.tinyengine.it.model.entity.BlockGroup;
+import com.tinyengine.it.model.entity.BlockGroupBlock;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.I18nEntryService;
@@ -88,6 +91,8 @@ public class BlockServiceImpl implements BlockService {
     private I18nEntryMapper i18nEntryMapper;
     @Autowired
     private BlockGroupMapper blockGroupMapper;
+    @Autowired
+    private BlockGroupBlockMapper blockGroupBlockMapper;
 
     /**
      * 查询表t_block所有数据
@@ -150,12 +155,19 @@ public class BlockServiceImpl implements BlockService {
         Block blocks = new Block();
         BeanUtils.copyProperties(blockDto, blocks);
         blocks.setOccupierBy(String.valueOf(1));
-        blocks.setLatestHistoryId(blockDto.getLatestHistoryId().getId());
+        if(blockDto.getLatestHistoryId() != null){
+            blocks.setLatestHistoryId(blockDto.getLatestHistoryId().getId());
+        }
         // 处理区块截图
         if (!blockDto.getScreenshot().isEmpty() && !blockDto.getLabel().isEmpty()) {
             // 图片上传,此处给默认值空字符
             blocks.setScreenshot("");
         }
+
+        if(blockDto.getGroups().isEmpty()){
+            return blockMapper.updateBlockById(blocks);
+        }
+
         // 过滤出 Integer 类型的对象
         // 转换为 Integer 类型
         // 收集为 List<Integer>;
@@ -163,10 +175,13 @@ public class BlockServiceImpl implements BlockService {
                 .filter(obj -> obj instanceof Integer)
                 .map(obj -> (Integer) obj)
                 .collect(Collectors.toList());
-        if (!groups.isEmpty()) {
+
             int groupId = groups.get(0);
-            blocks.setBlockGroupId(groupId);
-        }
+            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+            blockGroupBlock.setBlockGroupId(groupId);
+            blockGroupBlock.setBlockId(blockDto.getId());
+            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
+
         return blockMapper.updateBlockById(blocks);
     }
 
@@ -190,7 +205,10 @@ public class BlockServiceImpl implements BlockService {
         List<Object> groups = blockDto.getGroups();
         if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
             Integer groupId = (Integer) groups.get(0); // 强制类型转换
-            blocks.setBlockGroupId(groupId);
+            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+            blockGroupBlock.setBlockGroupId(groupId);
+            blockGroupBlock.setBlockId(blockDto.getId());
+            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
         }
         int result = blockMapper.createBlock(blocks);
         if (result < 1) {
@@ -394,6 +412,9 @@ public class BlockServiceImpl implements BlockService {
         int userId = 1;
         User user = userMapper.queryUserById(userId);
         List<BlockDto> blocksList = blockMapper.findBlocksReturn(notGroupDto);
+        if(blocksList == null || blocksList.isEmpty()){
+            return blocksList;
+        }
         for (BlockDto blockDto : blocksList) {
             List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId());
             List<Object> objectGroups = new ArrayList<>(blockGroups);
