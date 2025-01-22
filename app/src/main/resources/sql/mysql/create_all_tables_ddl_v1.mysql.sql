@@ -511,7 +511,7 @@ create table `t_i18n_entry`
     `last_updated_by`   varchar(60)   not null comment '最后修改人',
     `last_updated_time` timestamp     not null default current_timestamp comment '更新时间',
     primary key (`id`) using btree,
-    unique index `u_idx_i18n_entity` (`key`, `host_id`, `host_type`) using btree
+    unique index `u_idx_i18n_entity` (`key`, `host_id`, `host_type`,`lang_id`) using btree
 ) engine = innodb comment = '国际化语言配置表';
 
 drop table if exists `t_i18n_lang`;
