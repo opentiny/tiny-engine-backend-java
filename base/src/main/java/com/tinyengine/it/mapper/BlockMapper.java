@@ -14,6 +14,7 @@ package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
 
 import org.apache.ibatis.annotations.Many;
@@ -111,9 +112,9 @@ public interface BlockMapper extends BaseMapper<Block> {
                     many = @Many(select = "com.tinyengine.it.mapper.BlockHistoryMapper.findBlockHistoriesByBlockId")),
             @Result(column = "occupier_by", property = "occupier",
                     one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById")),
-            @Result(column = "block_id", property = "currentHistory",
+            @Result(column = "latest_history_id", property = "latestHistoryId",
                     one = @One(select =
-                            "com.tinyengine.it.mapper.BlockCurrentHistoryMapper.findBlockCurrentHistoriesByBlockId"))
+                            "com.tinyengine.it.mapper.BlockHistoryMapper.queryBlockHistoryById"))
     })
     @Select("select b.*, b.id as block_id "
             + "from t_block b "
@@ -137,7 +138,7 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "occupier_by", property = "occupier",
                     one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
     })
-    @Select("select b.*,bcbcb.block_id as block_categories_blocks_id,bsh.block_id as block_histories_block_id "
+    @Select("select b.*,bh.ref_id as block_id "
             + "from t_block b "
             + "left join t_block_history bh on b.latest_history_id = bh.id "
             + "where b.id = #{blockId} "
@@ -163,16 +164,25 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "occupier_by", property = "occupierId"),
             @Result(column = "public", property = "publicStatus"),
             @Result(column = "tiny_reserved", property = "isTinyReserved"),
-            @Result(column = "block_group_id", property = "blockGroupId"),
-            @Result(column = "block_group_id", javaType = List.class, property = "groups",
-                    many = @Many(select = "com.tinyengine.it.mapper.BlockGroupMapper.queryBlockGroupById")),
             @Result(column = "occupier_by", property = "occupier",
                     one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
     })
-    @Select("select b.*, b.block_group_id as block_group_id "
-            + "from t_block b "
-    )
-    List<BlockDto> findBlocksReturn();
+    @Select("<script>" +
+            "SELECT b.* " +
+            "FROM t_block b " +
+            "<where>" +
+            "  <if test='notGroupDto.label != null and notGroupDto.label != \"\"'> " +
+            "    AND b.label LIKE CONCAT('%', #{notGroupDto.label}, '%') " +
+            "  </if>" +
+            "  <if test='notGroupDto.createdBy != null and notGroupDto.createdBy != \"\"'> " +
+            "    AND b.created_by LIKE CONCAT('%', #{notGroupDto.createdBy}, '%') " +
+            "  </if>" +
+            "  <if test='notGroupDto.tags != null and notGroupDto.tags.length > 0'> " +
+            "    AND JSON_CONTAINS(b.tags, #{notGroupDto.tags})" +
+            "  </if>" +
+            "</where>" +
+            "</script>")
+    List<BlockDto> findBlocksReturn(@Param("notGroupDto") NotGroupDto notGroupDto);
 
     /**
      * 通过区块分组id获取自己创建的区块信息

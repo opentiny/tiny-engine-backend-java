@@ -58,5 +58,5 @@ public class BlockGroupDto extends BaseEntity {
 
     @TableField(exist = false)
     @Schema(name = "blocks", description = "区块")
-    private List<Block> blocks = new ArrayList<>();
+    private List<BlockDto> blocks = new ArrayList<>();
 }
