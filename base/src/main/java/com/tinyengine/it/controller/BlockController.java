@@ -21,6 +21,7 @@ import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
@@ -45,13 +46,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 /**
- *
  * 区块
  *
  * @author zhangjuncao
@@ -267,8 +268,17 @@ public class BlockController {
     )
     @SystemControllerLog(description = "查找不在分组内的区块api")
     @GetMapping("/block/notgroup/{groupId}")
-    public Result<List<BlockDto>> findBlocksNotInGroup(@PathVariable Integer groupId) {
-        List<BlockDto> blocksList = blockService.getNotInGroupBlocks(groupId);
+    public Result<List<BlockDto>> findBlocksNotInGroup(@PathVariable Integer groupId,
+                                                       @RequestParam(value = "label_contains", required = false) String label,
+                                                       @RequestParam(value = "tags_contains", required = false) String [] tags,
+                                                       @RequestParam(value = "createdBy", required = false) String createdBy) {
+        NotGroupDto notGroupDto = new NotGroupDto();
+        notGroupDto.setGroupId(groupId);
+        notGroupDto.setLabel(label);
+        notGroupDto.setCreatedBy(createdBy);
+        notGroupDto.setTags(null);
+
+        List<BlockDto> blocksList = blockService.getNotInGroupBlocks(notGroupDto);
         return Result.success(blocksList);
     }
 

@@ -12,32 +12,33 @@
 
 package com.tinyengine.it.model.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tinyengine.it.common.base.BaseEntity;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * <p>
- * 区块当前使用版本历史表
+ * 区块分组与区块关系
  * </p>
  *
- * @author lu-yg
- * @since 2024-12-16
+ * @author lu -yg
+ * @since 2024-01-20
  */
 @Getter
 @Setter
-@TableName("t_block_current_history")
-@Schema(name = "BlockCurrentHistory", description = "区块表")
-public class BlockCurrentHistory extends BaseEntity {
-    @Schema(name = "blockHistoryId", description = "区块历史id")
-    private Integer blockHistoryId;
+@TableName("r_block_group_block")
+@Schema(name = "BlockGroupBlock", description = "区块分组与区块")
+public class BlockGroupBlock {
+    @Schema(name = "id", description = "主键id")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     @Schema(name = "blockId", description = "区块id")
     private Integer blockId;
 
-    @Schema(name = "appId", description = "应用id")
-    private Integer appId;
+    @Schema(name = "blockGroupId", description = "区块分组id")
+    private Integer blockGroupId;
 }

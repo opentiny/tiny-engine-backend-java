@@ -144,7 +144,7 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
      * @return the list
      */
     @Select("select * from t_block_group bg "
-            + "left join t_block tb on bg.id = tb.block_group_id "
-            + "where tb.id = #{blockId}")
+            + "left join r_block_group_block bgb on bgb.block_group_id = bg.id "
+            + "where bgb.block_id = #{blockId}")
     List<BlockGroup> findBlockGroupByBlockId(Integer blockId);
 }

@@ -29,6 +29,7 @@ import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.User;
@@ -242,10 +243,12 @@ class BlockServiceImplTest {
         blockDto.setAssets(new HashMap<>());
         blockDto.setPublicStatus(Enums.Scope.PUBLIC_IN_TENANTS.getValue());
         List<BlockDto> mockData = Arrays.asList(blockDto);
-        when(blockMapper.findBlocksReturn()).thenReturn(mockData);
+        NotGroupDto notGroupDto =new NotGroupDto();
+        notGroupDto.setGroupId(1);
+        when(blockMapper.findBlocksReturn(notGroupDto)).thenReturn(mockData);
         when(userMapper.queryUserById(anyInt())).thenReturn(new User());
 
-        List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(1);
+        List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(notGroupDto);
         Assertions.assertEquals(blockDto, result.get(0));
     }
 
