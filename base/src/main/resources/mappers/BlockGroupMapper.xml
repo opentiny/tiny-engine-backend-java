@@ -181,9 +181,9 @@
         b.renter_id as block_renter_id,
         b.site_id as block_site_id
         FROM t_block_group bg
-        JOIN
+        LEFT JOIN
         r_block_group_block rbg ON rbg.block_group_id = bg.id
-        JOIN
+        LEFT JOIN
         t_block b ON b.id = rbg.block_id
         <if test="createdBy != null">
             AND b.created_by = #{createdBy}
@@ -240,9 +240,9 @@
         b.renter_id as block_renter_id,
         b.site_id as block_site_id
         FROM t_block_group bg
-        JOIN
+        LEFT JOIN
         r_block_group_block rbg ON rbg.block_group_id = bg.id
-        JOIN
+        LEFT JOIN
         t_block b ON b.id = rbg.block_id
         <if test="createdBy != null">
             AND b.created_by = #{createdBy}
@@ -303,9 +303,9 @@
         b.renter_id as block_renter_id,
         b.site_id as block_site_id
         FROM t_block_group bg
-        JOIN
+        LEFT JOIN
         r_block_group_block rbg ON rbg.block_group_id = bg.id
-        JOIN
+        LEFT JOIN
         t_block b ON b.id = rbg.block_id
         <if test="createdBy != null">
             AND b.created_by = #{createdBy}
