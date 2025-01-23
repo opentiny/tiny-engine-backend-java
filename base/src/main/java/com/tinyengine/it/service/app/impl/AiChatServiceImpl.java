@@ -14,6 +14,8 @@ package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiMessages;
@@ -89,15 +91,19 @@ public class AiChatServiceImpl implements AiChatService {
         }
         List<Map<String, Object>> choices = (List<Map<String, Object>>) data.get("choices");
         Map<String, String> message = (Map<String, String>) choices.get(0).get("message");
-        boolean isFinish = false;
+
         String answerContent = "";
-        isFinish = choices.get(0).get("finish_reason") != null || isFinish;
+        String isFinish = "";
+        Object finishReason = choices.get(0).get("finish_reason");
+        if (finishReason instanceof String) {
+            isFinish = (String) finishReason;
+        }
         if (!"length".equals(isFinish)) {
             answerContent = message.get("content");
         }
 
         // 若内容被截断，继续请求AI
-        while (isFinish) {
+        while ("length".equals(isFinish)) {
             String prefix = message.get("content");
             answerContent = answerContent + prefix;
 
@@ -115,12 +121,15 @@ public class AiChatServiceImpl implements AiChatService {
             try {
                 data = requestAnswerFromAi(aiParam.getMessages(), model).getData();
             } catch (Exception e) {
-                e.printStackTrace();
+                new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
             }
             choices = (List<Map<String, Object>>) data.get("choices");
             message = (Map<String, String>) choices.get(0).get("message");
             answerContent += message.get("content");
-            isFinish = (boolean) choices.get(0).get("finish_reason");
+            finishReason = choices.get(0).get("finish_reason");
+            if (finishReason instanceof String) {
+                isFinish = (String) finishReason;
+            }
         }
 
 

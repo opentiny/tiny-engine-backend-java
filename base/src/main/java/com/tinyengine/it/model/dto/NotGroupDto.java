@@ -15,8 +15,6 @@ package com.tinyengine.it.model.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * <p>
  * 条件查询不在区块分组参数

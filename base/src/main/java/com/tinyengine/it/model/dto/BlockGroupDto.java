@@ -17,7 +17,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.model.entity.App;
-import com.tinyengine.it.model.entity.Block;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

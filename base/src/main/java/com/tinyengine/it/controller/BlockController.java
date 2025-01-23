@@ -14,7 +14,6 @@ package com.tinyengine.it.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
@@ -46,7 +45,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 

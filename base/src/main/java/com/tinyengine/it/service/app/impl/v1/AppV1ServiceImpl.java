@@ -32,7 +32,6 @@ import com.tinyengine.it.model.dto.ComponentTree;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.MaterialHistoryMsg;
 import com.tinyengine.it.model.dto.MetaDto;
-import com.tinyengine.it.model.dto.SchemaDataSource;
 import com.tinyengine.it.model.dto.SchemaDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.dto.SchemaMeta;
