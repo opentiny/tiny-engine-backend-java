@@ -788,7 +788,7 @@ public class Enums {
          * Ernie bot turbo e foundation model.
          */
         // 文心一言
-        ERNIBOT_TURBO("ERNIE-Bot-turbo");
+        ERNIBOT_TURBO("ERNIE-4.0-8K");
         private final String value;
 
         FoundationModel(String value) {
