@@ -23,7 +23,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockMapper;
@@ -136,7 +135,7 @@ class BlockServiceImplTest {
         block.setAppId(1);
         when(blockMapper.queryBlockById(blockDto.getId())).thenReturn(block);
 
-        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockDto,1);
+        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockDto, 1);
         Assertions.assertEquals(null, result.getData());
     }
 
@@ -243,11 +242,11 @@ class BlockServiceImplTest {
     void testGetNotInGroupBlocks() {
         BlockDto blockDto = new BlockDto();
         List<BlockDto> mockData = Arrays.asList(blockDto);
-        NotGroupDto notGroupDto =new NotGroupDto();
+        NotGroupDto notGroupDto = new NotGroupDto();
         List<BlockGroup> blockGroups = new ArrayList<>();
         when(blockMapper.findBlocksReturn(notGroupDto)).thenReturn(mockData);
         when(userMapper.queryUserById(anyInt())).thenReturn(new User());
-        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(),blockDto.getCreatedBy())).thenReturn(blockGroups);
+        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), blockDto.getCreatedBy())).thenReturn(blockGroups);
 
         List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(notGroupDto);
         Assertions.assertEquals(new ArrayList<>(), result);
