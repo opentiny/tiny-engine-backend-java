@@ -153,6 +153,7 @@ public class BlockServiceImpl implements BlockService {
     @Override
     public Result<BlockDto> updateBlockById(BlockDto blockDto, Integer appId) {
         Block blockResult = blockMapper.queryBlockById(blockDto.getId());
+
         if (!Objects.equals(blockResult.getAppId(), appId)) {
             return Result.failed(ExceptionEnum.CM007);
         }
