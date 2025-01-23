@@ -398,14 +398,10 @@ public class BlockController {
     )
     @SystemControllerLog(description = "区块修改api")
     @PostMapping("/block/update/{id}")
-    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockDto blockDto, @PathVariable Integer id) {
+    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockDto blockDto, @PathVariable Integer id,
+                                         @RequestParam(value = "appId", required = false) Integer appId) {
         blockDto.setId(id);
-        int result = blockService.updateBlockById(blockDto);
-        if (result < 1) {
-            return Result.failed(ExceptionEnum.CM001);
-        }
-        BlockDto blocksResult = blockService.queryBlockById(blockDto.getId());
-        return Result.success(blocksResult);
+        return blockService.updateBlockById(blockDto,appId);
     }
 
     /**

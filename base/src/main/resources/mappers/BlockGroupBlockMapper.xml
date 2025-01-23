@@ -98,6 +98,6 @@
         UPDATE
             block_id =
         VALUES (block_id), block_group_id =
-        VALUES (block_group_id)
+        VALUES (block_group_id);
     </insert>
 </mapper>

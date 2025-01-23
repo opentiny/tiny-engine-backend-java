@@ -36,8 +36,9 @@ class GlobalExceptionAdviceTest {
 
     @Test
     void testHandleException() {
-        Result<Map<String, String>> result = globalExceptionAdvice.handleException(new Exception("message",
-                new Throwable("message")));
+        // 创建一个新的异常对象并传递给 handleException
+        Exception e = new Exception("message", new Throwable("message"));
+        Result<Map<String, String>> result = globalExceptionAdvice.handleException(e);
         Assertions.assertEquals(ExceptionEnum.CM001.getResultMsg(), result.getMessage());
         Assertions.assertEquals(ExceptionEnum.CM001.getResultCode(), result.getCode());
     }

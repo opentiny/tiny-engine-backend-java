@@ -13,6 +13,7 @@ package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.BlockGroupBlock;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -87,4 +88,13 @@ public interface BlockGroupBlockMapper extends BaseMapper<BlockGroupBlock> {
      */
     @Select("select * from r_block_group_block where block_group_id = #{blockGroupId}")
     List<BlockGroupBlock> findBlockGroupBlockByBlockGroupId(Integer blockGroupId);
+
+    /**
+     * 通过区块分组id查询分组下区块
+     * @param blockId the block id
+     * @param groupId the block group id
+     * @return the list
+     */
+    @Delete("delete from r_block_group_block where block_group_id = #{groupId} and block_id = #{blockId}")
+    Integer deleteByGroupIdAndBlockId(Integer groupId, Integer blockId);
 }

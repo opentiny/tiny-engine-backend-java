@@ -129,14 +129,15 @@ class BlockServiceImplTest {
 
     @Test
     void testUpdateBlockById() {
-        when(blockMapper.updateBlockById(any())).thenReturn(1);
         BlockDto blockDto = new BlockDto();
-        blockDto.setId(1);
-        blockDto.setName("BlockTest1");
-        blockDto.setScreenshot("aa");
-        blockDto.setLabel("bb");
-        Integer result = blockServiceImpl.updateBlockById(blockDto);
-        Assertions.assertEquals(1, result);
+        when(blockMapper.updateBlockById(any())).thenReturn(1);
+        when(blockMapper.findBlockAndGroupAndHistoByBlockId(anyInt())).thenReturn(new BlockDto());
+        Block block = new Block();
+        block.setAppId(1);
+        when(blockMapper.queryBlockById(blockDto.getId())).thenReturn(block);
+
+        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockDto,1);
+        Assertions.assertEquals(null, result.getData());
     }
 
     @Test
@@ -246,7 +247,7 @@ class BlockServiceImplTest {
         List<BlockGroup> blockGroups = new ArrayList<>();
         when(blockMapper.findBlocksReturn(notGroupDto)).thenReturn(mockData);
         when(userMapper.queryUserById(anyInt())).thenReturn(new User());
-        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId())).thenReturn(blockGroups);
+        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(),blockDto.getCreatedBy())).thenReturn(blockGroups);
 
         List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(notGroupDto);
         Assertions.assertEquals(new ArrayList<>(), result);
