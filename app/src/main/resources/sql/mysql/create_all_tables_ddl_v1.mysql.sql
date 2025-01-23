@@ -343,7 +343,7 @@ create table `t_page`
     `last_updated_by`   varchar(60)  not null comment '最后修改人',
     `last_updated_time` timestamp    not null default current_timestamp comment '更新时间',
     primary key (`id`) using btree,
-    unique index `u_idx_page` (`app_id`, `name`) using btree
+    unique index `u_idx_page` (`app_id`,`parent_id`,`route`,`is_page`,`tenant_id`, `name`) using btree
 ) engine = innodb comment = '页面表';
 
 drop table if exists `t_page_history`;
