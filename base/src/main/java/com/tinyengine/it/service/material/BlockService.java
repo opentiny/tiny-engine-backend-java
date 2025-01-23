@@ -69,7 +69,7 @@ public interface BlockService {
      * @param blockDto the block dto
      * @return the BlockDto
      */
-    Integer updateBlockById(BlockDto blockDto);
+    Result<BlockDto> updateBlockById(BlockDto blockDto, Integer appId);
 
     /**
      * 新增表t_block数据
