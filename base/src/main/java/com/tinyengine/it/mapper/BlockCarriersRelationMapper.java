@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.BlockCarriersRelation;
 
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -44,10 +43,10 @@ public interface BlockCarriersRelationMapper extends BaseMapper<BlockCarriersRel
     /**
      * 根据条件查询表t_block_carriers_relation数据
      *
-     * @param BlockCarriersRelation the Block Carriers Relation
+     * @param blockCarriersRelation the Block Carriers Relation
      * @return the list
      */
-    List<BlockCarriersRelation> queryBlockCarriersRelationByCondition(BlockCarriersRelation BlockCarriersRelation);
+    List<BlockCarriersRelation> queryBlockCarriersRelationByCondition(BlockCarriersRelation blockCarriersRelation);
 
     /**
      * 根据主键id删除表t_block_carriers_relation数据
@@ -60,30 +59,28 @@ public interface BlockCarriersRelationMapper extends BaseMapper<BlockCarriersRel
     /**
      * 根据主键id更新表t_block_carriers_relation数据
      *
-     * @param BlockCarriersRelation the Block Carriers Relation
+     * @param blockCarriersRelation the Block Carriers Relation
      * @return the integer
      */
-    Integer updateBlockCarriersRelationById(BlockCarriersRelation BlockCarriersRelation);
+    Integer updateBlockCarriersRelationById(BlockCarriersRelation blockCarriersRelation);
 
     /**
      * 新增表t_block_carriers_relation数据
      *
-     * @param BlockCarriersRelation the Block Carriers Relation
+     * @param blockCarriersRelation the Block Carriers Relation
      * @return the integer
      */
-    Integer createBlockCarriersRelation(BlockCarriersRelation BlockCarriersRelation);
-
+    Integer createBlockCarriersRelation(BlockCarriersRelation blockCarriersRelation);
 
     /**
      * 通过区块分组id和类型删除分组下区块
      *
-     * @param hostId the block group id
+     * @param hostId   the block group id
      * @param hostType the host type
-     * @param blockId the block id
+     * @param blockId  the block id
      * @return the int
      */
     Integer deleteBlockCarriersRelation(Integer hostId, String hostType, Integer blockId);
-
 
     /**
      * 批量新增表t_block_carriers_relation数据
