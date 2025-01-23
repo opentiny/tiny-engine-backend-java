@@ -179,11 +179,12 @@ class BlockControllerTest {
 
     @Test
     void testUpdateBlocks() {
-        when(blockService.updateBlockById(any(BlockDto.class))).thenReturn(1);
         BlockDto returnData = new BlockDto();
+        when(blockService.updateBlockById(any(BlockDto.class), anyInt())).thenReturn(Result.success(returnData));
+
         when(blockService.queryBlockById(anyInt())).thenReturn(returnData);
 
-        Result<BlockDto> result = blockController.updateBlocks(returnData, Integer.valueOf(0));
+        Result<BlockDto> result = blockController.updateBlocks(returnData, Integer.valueOf(0), Integer.valueOf(1));
         Assertions.assertEquals(returnData, result.getData());
     }
 }

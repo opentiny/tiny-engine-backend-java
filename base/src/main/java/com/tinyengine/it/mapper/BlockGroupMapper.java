@@ -139,12 +139,13 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
 
     /**
      * 根据区块id查询区块分组信息
-     *
+     * @param createdBy the user id
      * @param blockId the block id
      * @return the list
      */
     @Select("select * from t_block_group bg "
             + "left join r_block_group_block bgb on bgb.block_group_id = bg.id "
-            + "where bgb.block_id = #{blockId}")
-    List<BlockGroup> findBlockGroupByBlockId(Integer blockId);
+            + "where bgb.block_id = #{blockId} and created_by = #{createdBy}")
+    List<BlockGroup> findBlockGroupByBlockId(Integer blockId,String createdBy);
+
 }
