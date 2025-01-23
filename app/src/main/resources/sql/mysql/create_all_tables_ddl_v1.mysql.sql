@@ -511,7 +511,7 @@ create table `t_i18n_entry`
     `last_updated_by`   varchar(60)   not null comment '最后修改人',
     `last_updated_time` timestamp     not null default current_timestamp comment '更新时间',
     primary key (`id`) using btree,
-    unique index `u_idx_i18n_entity` (`tenant_id`, `key`, `lang_id`) using btree
+    unique index `u_idx_i18n_entity` (`key`, `host_id`, `host_type`,`lang_id`) using btree
 ) engine = innodb comment = '国际化语言配置表';
 
 drop table if exists `t_i18n_lang`;
@@ -615,14 +615,15 @@ create table `t_user`
     unique index `u_idx_user` (`username`) using btree
 ) engine = innodb comment = '用户表';
 
-drop table if exists `t_block_current_history`;
+drop table if exists `t_block_carriers_relation`;
 
-create table `t_block_current_history`
+create table `t_block_carriers_relation`
 (
     `id`                int         not null auto_increment comment '主键id',
-    `block_history_id`  int         not null comment '区块历史id',
     `block_id`          int         not null comment '区块id',
-    `app_id`            int         not null comment '应用id',
+    `host_id`              int         not null comment '类型id',
+    `host_type`         varchar(60) comment '类型：blockGroup,materialHistory',
+    `version`           varchar(60) not null comment '区块当前使用版本',
     `tenant_id`         varchar(60) not null comment '租户id',
     `renter_id`         varchar(60) comment '业务租户id',
     `site_id`           varchar(60) comment '站点id，设计预留字段',
@@ -631,5 +632,16 @@ create table `t_block_current_history`
     `last_updated_by`   varchar(60) not null comment '最后修改人',
     `last_updated_time` timestamp   not null default current_timestamp comment '更新时间',
     primary key (`id`) using btree,
-    unique index `u_idx_current` (`app_id`, `block_history_id`) using btree
-) engine = innodb comment = '区块当前使用版本历史表';
+    unique index `u_idx_block_carriers_relation` (`host_id`, `host_type`, `block_id`) using btree
+) engine = innodb comment = '区块分组与区块历史版本';
+
+drop table if exists `r_block_group_block`;
+
+create table `r_block_group_block`
+(
+    `id`             int not null auto_increment comment '主键id',
+    `block_id`       int not null comment '区块id',
+    `block_group_id` int not null comment '区块分组id',
+    primary key (`id`) using btree,
+    unique index `u_idx_block_group_block` (block_id, block_group_id) using btree
+) engine = innodb comment = '区块分组和区块关系表';

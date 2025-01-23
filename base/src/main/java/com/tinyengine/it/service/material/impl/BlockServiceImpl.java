@@ -1,12 +1,13 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- * <p>
+ *
  * Use of this source code is governed by an MIT-style license.
- * <p>
+ *
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
  */
 
 package com.tinyengine.it.service.material.impl;
@@ -23,6 +24,8 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.mapper.BlockGroupBlockMapper;
+import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
@@ -31,10 +34,13 @@ import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.dto.I18nEntryDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.BlockCarriersRelation;
 import com.tinyengine.it.model.entity.BlockGroup;
+import com.tinyengine.it.model.entity.BlockGroupBlock;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.I18nEntryService;
@@ -83,6 +89,10 @@ public class BlockServiceImpl implements BlockService {
     private I18nEntryService i18nEntryService;
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+    @Autowired
+    private BlockGroupMapper blockGroupMapper;
+    @Autowired
+    private BlockGroupBlockMapper blockGroupBlockMapper;
 
     /**
      * 查询表t_block所有数据
@@ -145,11 +155,19 @@ public class BlockServiceImpl implements BlockService {
         Block blocks = new Block();
         BeanUtils.copyProperties(blockDto, blocks);
         blocks.setOccupierBy(String.valueOf(1));
+        if(blockDto.getLatestHistoryId() != null){
+            blocks.setLatestHistoryId(blockDto.getLatestHistoryId().getId());
+        }
         // 处理区块截图
         if (!blockDto.getScreenshot().isEmpty() && !blockDto.getLabel().isEmpty()) {
             // 图片上传,此处给默认值空字符
             blocks.setScreenshot("");
         }
+
+        if(blockDto.getGroups().isEmpty()){
+            return blockMapper.updateBlockById(blocks);
+        }
+
         // 过滤出 Integer 类型的对象
         // 转换为 Integer 类型
         // 收集为 List<Integer>;
@@ -157,10 +175,13 @@ public class BlockServiceImpl implements BlockService {
                 .filter(obj -> obj instanceof Integer)
                 .map(obj -> (Integer) obj)
                 .collect(Collectors.toList());
-        if (!groups.isEmpty()) {
+
             int groupId = groups.get(0);
-            blocks.setBlockGroupId(groupId);
-        }
+            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+            blockGroupBlock.setBlockGroupId(groupId);
+            blockGroupBlock.setBlockId(blockDto.getId());
+            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
+
         return blockMapper.updateBlockById(blocks);
     }
 
@@ -184,7 +205,10 @@ public class BlockServiceImpl implements BlockService {
         List<Object> groups = blockDto.getGroups();
         if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
             Integer groupId = (Integer) groups.get(0); // 强制类型转换
-            blocks.setBlockGroupId(groupId);
+            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+            blockGroupBlock.setBlockGroupId(groupId);
+            blockGroupBlock.setBlockId(blockDto.getId());
+            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
         }
         int result = blockMapper.createBlock(blocks);
         if (result < 1) {
@@ -224,25 +248,25 @@ public class BlockServiceImpl implements BlockService {
 
         // Merge the assets using streams
         return blocksList.stream().map(Block::getAssets).map(assetsMap ->
-            {
+        {
             Map<String, List<String>> tempMap = new HashMap<>();
             tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
             tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
             tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
             return tempMap;
-            }).reduce(mergedAssets, (acc, curr) ->
-            {
+        }).reduce(mergedAssets, (acc, curr) ->
+        {
             acc.get("material").addAll(curr.get("material"));
             acc.get("scripts").addAll(curr.get("scripts"));
             acc.get("styles").addAll(curr.get("styles"));
             return acc;
-            }, (map1, map2) ->
-            {
+        }, (map1, map2) ->
+        {
             map1.get("material").addAll(map2.get("material"));
             map1.get("scripts").addAll(map2.get("scripts"));
             map1.get("styles").addAll(map2.get("styles"));
             return map1;
-            });
+        });
     }
 
     /**
@@ -378,27 +402,35 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 获取不在分组内的区块
      *
-     * @param groupId groupId
+     * @param notGroupDto notGroupDto
      * @return the list
      */
     @SystemServiceLog(description = "getNotInGroupBlocks 获取不在分组内的区块 实现类")
     @Override
-    public List<BlockDto> getNotInGroupBlocks(Integer groupId) {
+    public List<BlockDto> getNotInGroupBlocks(NotGroupDto notGroupDto) {
         // 获取缓存中的登录用户
         int userId = 1;
         User user = userMapper.queryUserById(userId);
-        List<BlockDto> blocksList = blockMapper.findBlocksReturn();
+        List<BlockDto> blocksList = blockMapper.findBlocksReturn(notGroupDto);
+        if(blocksList == null || blocksList.isEmpty()){
+            return blocksList;
+        }
+        for (BlockDto blockDto : blocksList) {
+            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId());
+            List<Object> objectGroups = new ArrayList<>(blockGroups);
+            blockDto.setGroups(objectGroups);
+        }
         return blocksList.stream()
                 .filter(item ->
-                    {
-                    // 过滤已发布的
+                {
+                    // 过滤掉未发布的
                     if (item.getLastBuildInfo() == null || item.getContent() == null || item.getAssets() == null) {
                         return false;
                     }
                     // 组过滤
                     if (item.getGroups() != null && item.getGroups().stream()
                             .anyMatch(group -> group instanceof BlockGroup
-                                    && ((BlockGroup) group).getId().equals(groupId))) {
+                                    && ((BlockGroup) group).getId().equals(notGroupDto.getGroupId()))) {
                         return false;
                     }
                     // 公开范围过滤
@@ -406,7 +438,7 @@ public class BlockServiceImpl implements BlockService {
                         return true;
                     }
                     return user != null && item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
-                    })
+                })
                 .collect(Collectors.toList());
     }
 
@@ -485,6 +517,7 @@ public class BlockServiceImpl implements BlockService {
             return Result.failed(ExceptionEnum.CM008);
         }
         blockDto.setLastBuildInfo(buildInfo);
+        blockDto.setLatestHistoryId(blockHistory);
         int blockResult = updateBlockById(blockDto);
         if (blockResult < 1) {
             return Result.failed(ExceptionEnum.CM008);
@@ -533,11 +566,11 @@ public class BlockServiceImpl implements BlockService {
 
         // 提取 createdBy 列表中的唯一值
         blocksList.forEach(item ->
-            {
+        {
             if (item.getCreatedBy() != null && !userSet.contains(item.getCreatedBy())) {
                 userSet.add(String.valueOf(item.getCreatedBy()));
             }
-            });
+        });
 
         List<String> userIdsList = new ArrayList<>(userSet);
 
@@ -592,23 +625,23 @@ public class BlockServiceImpl implements BlockService {
                 .collect(Collectors.toList());
         // 遍历合并后的数组，检查是否存在具有相同 id 的元素
         combinedBlocks.forEach(block ->
-            {
+        {
             boolean isFind = retBlocks.stream()
                     .anyMatch(retBlock -> Objects.equals(retBlock.getId(), block.getId()));
             if (!isFind) {
                 retBlocks.add(block);
             }
-            });
+        });
         // 给is_published赋值
         List<Block> result = retBlocks.stream()
                 .map(b ->
-                    {
+                {
                     boolean isPublished = b.getLastBuildInfo() != null
                             && b.getLastBuildInfo().get("result") instanceof Boolean
                             ? (Boolean) b.getLastBuildInfo().get("result") : Boolean.FALSE;
                     b.setIsPublished(isPublished);
                     return b;
-                    })
+                })
                 .collect(Collectors.toList());
         return Result.success(result);
     }

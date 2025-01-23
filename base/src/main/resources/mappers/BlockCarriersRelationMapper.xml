@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.BlockCarriersRelationMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , host_id, block_id, host_type, version, tenant_id, renter_id, site_id, created_by, last_updated_by, created_time, last_updated_time
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="BlockCarriersRelationByCondition">
+        <if test="hostId!=null and hostId!=''">
+            AND host_id = #{hostId}
+        </if>
+        <if test="blockId!=null and blockId!=''">
+            AND block_id = #{blockId}
+        </if>
+        <if test="hostType!=null and hostType!=''">
+            AND host_type = #{hostType}
+        </if>
+        <if test="version!=null and version!=''">
+            AND version = #{version}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="BlockCarriersRelationSetColumns">
+        <if test="hostId!=null and hostId!=''">
+            host_id = #{hostId},
+        </if>
+        <if test="blockId!=null and blockId!=''">
+            block_id = #{blockId},
+        </if>
+        <if test="hostType!=null and hostType!=''">
+            host_type = #{hostType},
+        </if>
+        <if test="version!=null and version!=''">
+            version = #{version},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BlockCarriersRelationMap" type="com.tinyengine.it.model.entity.BlockCarriersRelation">
+        <id column="id" property="id"/>
+        <result column="host_id" property="hostId"/>
+        <result column="block_id" property="blockId"/>
+        <result column="host_type" property="hostType"/>
+        <result column="version" property="version"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="site_id" property="siteId"/>
+        <result column="renter_id" property="renterId"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+    </resultMap>
+
+    <!-- 查询表t_block_carriers_relation所有数据 -->
+    <select id="queryAllBlockCarriersRelation" resultMap="BlockCarriersRelationMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block_carriers_relation
+    </select>
+
+    <!-- 根据主键id查询表t_block_carriers_relation信息 -->
+    <select id="queryBlockCarriersRelationById" resultMap="BlockCarriersRelationMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block_carriers_relation
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表t_block_carriers_relation数据 -->
+    <select id="queryBlockCarriersRelationByCondition" resultMap="BlockCarriersRelationMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_block_carriers_relation
+        WHERE 1=1
+        <include refid="BlockCarriersRelationByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_block_carriers_relation数据 -->
+    <delete id="deleteBlockCarriersRelationById">
+        DELETE
+        FROM t_block_carriers_relation
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据条件删除表t_block_carriers_relation数据 -->
+    <delete id="deleteBlockCarriersRelation">
+        DELETE
+        FROM t_block_carriers_relation
+        WHERE 1 = 1
+        <if test="hostId != null">
+            AND host_id = #{hostId}
+        </if>
+        <if test="hostType != null">
+            AND host_type = #{hostType}
+        </if>
+        <if test="blockId != null">
+            AND block_id = #{blockId}
+        </if>
+    </delete>
+    <!-- 根据主键id更新表t_block_carriers_relation数据 -->
+    <update id="updateBlockCarriersRelationById" parameterType="com.tinyengine.it.model.entity.BlockCarriersRelation">
+        UPDATE t_block_carriers_relation
+        <set>
+            <include refid="BlockCarriersRelationSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <insert id="createOrUpdateBatch" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.BlockCarriersRelation">
+        INSERT INTO t_block_carriers_relation ( id
+        , host_id
+        , block_id
+        , host_type
+        , version
+        , created_by
+        , last_updated_by
+        , created_time
+        , last_updated_time
+        , tenant_id
+        , renter_id
+        , site_id)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            ( #{item.id}
+            , #{item.hostId}
+            , #{item.blockId}
+            , #{item.hostType}
+            , #{item.version}
+            , #{item.createdBy}
+            , #{item.lastUpdatedBy}
+            , #{item.createdTime}
+            , #{item.lastUpdatedTime}
+            , #{item.tenantId}
+            , #{item.renterId}
+            , #{item.siteId})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        version = VALUES(version)
+    </insert>
+    <!-- 新增表t_block_carriers_relation数据 -->
+    <insert id="createBlockCarriersRelation" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.BlockCarriersRelation">
+        INSERT INTO t_block_carriers_relation ( id
+                                              , host_id
+                                              , block_id
+                                              , host_type
+                                              , version
+                                              , created_by
+                                              , last_updated_by
+                                              , created_time
+                                              , last_updated_time
+                                              , tenant_id
+                                              , renter_id
+                                              , site_id)
+        VALUES ( #{id}
+               , #{hostId}
+               , #{blockId}
+               , #{hostType}
+               , #{version},
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{renterId}
+               , #{siteId})
+    </insert>
+</mapper>

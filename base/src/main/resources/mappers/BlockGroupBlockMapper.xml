@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.BlockGroupBlockMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , block_id, block_group_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="BlockGroupBlockByCondition">
+        <if test="blockId!=null and blockId!=''">
+            AND block_id = #{blockId}
+        </if>
+        <if test="blockGroupId!=null and blockGroupId!=''">
+            AND block_group_id = #{blockGroupId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="BlockGroupBlockSetColumns">
+        <if test="blockId!=null and blockId!=''">
+            block_id = #{blockId},
+        </if>
+        <if test="blockGroupId!=null and blockGroupId!=''">
+            block_group_id = #{blockGroupId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BlockGroupBlockMap" type="com.tinyengine.it.model.entity.BlockGroupBlock">
+        <id column="id" property="id"/>
+        <result column="block_id" property="blockId"/>
+        <result column="block_group_id" property="blockGroupId"/>
+    </resultMap>
+
+    <!-- 查询表r_block_group_block所有数据 -->
+    <select id="queryAllBlockGroupBlock" resultMap="BlockGroupBlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_block_group_block
+    </select>
+
+    <!-- 根据主键id查询表r_block_group_block信息 -->
+    <select id="queryBlockGroupBlockById" resultMap="BlockGroupBlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_block_group_block
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表r_block_group_block数据 -->
+    <select id="queryBlockGroupBlockByCondition" resultMap="BlockGroupBlockMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_block_group_block
+        WHERE 1=1
+        <include refid="BlockGroupBlockByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表r_block_group_block数据 -->
+    <delete id="deleteBlockGroupBlockById">
+        DELETE
+        FROM r_block_group_block
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据区块分组id删除表r_block_group_block数据 -->
+    <delete id="deleteBlockGroupBlockByGroupId">
+        DELETE
+        FROM r_block_group_block
+        WHERE block_group_id = #{blockGroupId}
+    </delete>
+
+    <!-- 根据主键id更新表r_block_group_block数据 -->
+    <update id="updateBlockGroupBlockById" parameterType="com.tinyengine.it.model.entity.BlockGroupBlock">
+        UPDATE r_block_group_block
+        <set>
+            <include refid="BlockGroupBlockSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表r_block_group_block数据 -->
+    <insert id="createBlockGroupBlock" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.BlockGroupBlock">
+        INSERT INTO r_block_group_block ( id
+                                        , block_id
+                                        , block_group_id)
+        VALUES ( #{id}
+               , #{blockId}
+               , #{blockGroupId}) ON DUPLICATE KEY
+        UPDATE
+            block_id =
+        VALUES (block_id), block_group_id =
+        VALUES (block_group_id)
+    </insert>
+</mapper>

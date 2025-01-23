@@ -866,4 +866,36 @@ public class Enums {
             return value;
         }
     }
+
+    public enum BlockGroup {
+        /**
+         * block group name.
+         */
+        BLOCK_GROUP("blockGroup"),
+
+        /**
+         * block  name.
+         */
+        BLOCK("block"),
+        /**
+         * material history name.
+         */
+        MATERIAL_HISTORY("materialHistory");
+
+
+        private final String value;
+
+        BlockGroup(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
 }

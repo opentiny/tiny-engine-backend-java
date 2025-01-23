@@ -25,12 +25,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
 import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.User;
 
 import org.junit.jupiter.api.Assertions;
@@ -62,6 +65,8 @@ class BlockServiceImplTest {
     private UserMapper userMapper;
     @Mock
     private AppMapper appMapper;
+    @Mock
+    private BlockGroupMapper blockGroupMapper;
 
     @BeforeEach
     void setUp() {
@@ -117,7 +122,6 @@ class BlockServiceImplTest {
         blockDto.setFramework("cc");
         blockDto.setPlatformId(1);
         blockDto.setAppId(1);
-        blockDto.setGroups(asList(1));
         blockDto.setName("testBlock");
         Result<BlockDto> result = blockServiceImpl.createBlock(blockDto);
         Assertions.assertEquals("test", result.getData().getName());
@@ -237,16 +241,15 @@ class BlockServiceImplTest {
     @Test
     void testGetNotInGroupBlocks() {
         BlockDto blockDto = new BlockDto();
-        blockDto.setLastBuildInfo(new HashMap<>());
-        blockDto.setContent(new HashMap<>());
-        blockDto.setAssets(new HashMap<>());
-        blockDto.setPublicStatus(Enums.Scope.PUBLIC_IN_TENANTS.getValue());
         List<BlockDto> mockData = Arrays.asList(blockDto);
-        when(blockMapper.findBlocksReturn()).thenReturn(mockData);
+        NotGroupDto notGroupDto =new NotGroupDto();
+        List<BlockGroup> blockGroups = new ArrayList<>();
+        when(blockMapper.findBlocksReturn(notGroupDto)).thenReturn(mockData);
         when(userMapper.queryUserById(anyInt())).thenReturn(new User());
+        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId())).thenReturn(blockGroups);
 
-        List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(1);
-        Assertions.assertEquals(blockDto, result.get(0));
+        List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(notGroupDto);
+        Assertions.assertEquals(new ArrayList<>(), result);
     }
 
     @Test
