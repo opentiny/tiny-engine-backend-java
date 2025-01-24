@@ -187,17 +187,17 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         }
         // 对查询的结果的区块赋值current_version
         for (BlockGroup blockGroupTemp : blockGroupsListResult) {
-            for (Block block: blockGroupTemp.getBlocks()){
+            for (Block block : blockGroupTemp.getBlocks()) {
                 BlockCarriersRelation queryParam = new BlockCarriersRelation();
                 queryParam.setBlockId(block.getId());
                 queryParam.setHostId(blockGroup.getId());
                 queryParam.setHostType(Enums.BlockGroup.BLOCK_GROUP.getValue());
-             List<BlockCarriersRelation> blockCarriersRelations = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
-             if (blockCarriersRelations.isEmpty()){
-                 continue;
-             }
-             String version = blockCarriersRelations.get(0).getVersion();
-             block.setCurrentVersion(version);
+                List<BlockCarriersRelation> blockCarriersRelations = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
+                if (blockCarriersRelations.isEmpty()) {
+                    continue;
+                }
+                String version = blockCarriersRelations.get(0).getVersion();
+                block.setCurrentVersion(version);
             }
 
         }

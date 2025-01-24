@@ -23,7 +23,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockMapper;
@@ -243,7 +242,7 @@ class BlockServiceImplTest {
     void testGetNotInGroupBlocks() {
         BlockDto blockDto = new BlockDto();
         List<BlockDto> mockData = Arrays.asList(blockDto);
-        NotGroupDto notGroupDto =new NotGroupDto();
+        NotGroupDto notGroupDto = new NotGroupDto();
         List<BlockGroup> blockGroups = new ArrayList<>();
         when(blockMapper.findBlocksReturn(notGroupDto)).thenReturn(mockData);
         when(userMapper.queryUserById(anyInt())).thenReturn(new User());
