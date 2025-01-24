@@ -87,7 +87,7 @@ class AiChatServiceImplTest {
 
         Map<String, Object> response = new HashMap<>();
         response.put("data", dataMap);
-        response.put("result",(String) "<template>str</template>");
+        response.put("result", (String) "<template>str</template>");
         when(aiChatClient.executeChatRequest(any(OpenAiBodyDto.class))).thenReturn(response);
         Result<Map<String, Object>> result = aiChatServiceImpl.getAnswerFromAi(aiParam);
         Map<String, Object> resultData = result.getData();

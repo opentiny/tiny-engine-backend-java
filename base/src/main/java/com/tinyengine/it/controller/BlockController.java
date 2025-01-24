@@ -399,7 +399,7 @@ public class BlockController {
     public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockDto blockDto, @PathVariable Integer id,
                                          @RequestParam(value = "appId", required = false) Integer appId) {
         blockDto.setId(id);
-        return blockService.updateBlockById(blockDto,appId);
+        return blockService.updateBlockById(blockDto, appId);
     }
 
     /**
