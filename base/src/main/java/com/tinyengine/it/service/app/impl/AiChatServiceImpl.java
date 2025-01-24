@@ -121,11 +121,12 @@ public class AiChatServiceImpl implements AiChatService {
             try {
                 data = requestAnswerFromAi(aiParam.getMessages(), model).getData();
             } catch (Exception e) {
-                new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
+               throw  new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
             }
             choices = (List<Map<String, Object>>) data.get("choices");
             message = (Map<String, String>) choices.get(0).get("message");
-            answerContent += message.get("content");
+            StringBuilder sb = new StringBuilder();
+            answerContent = String.valueOf(sb.append(message.get("content")));
             finishReason = choices.get(0).get("finish_reason");
             if (finishReason instanceof String) {
                 isFinish = (String) finishReason;
