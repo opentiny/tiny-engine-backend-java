@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '8.*'
+          distribution: temurin
 
       # 安装 Checkstyle（如果你是用 Maven 或 Gradle）
       - name: Install dependencies
