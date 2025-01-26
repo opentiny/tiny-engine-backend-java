@@ -362,7 +362,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             historyMap.put(version, item.getHistoryId());
             itemMap.put("historyMap", historyMap);
             itemMap.put("versions", versionList);
-            blocksVersionMap.put("blockId", itemMap);
+            blocksVersionMap.put(String.valueOf(item.getBlockId()), itemMap);
         }
 
         // 遍历区块历史记录 综合信息映射关系

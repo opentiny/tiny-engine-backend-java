@@ -1,0 +1,45 @@
+name: Checkstyle Code Quality
+
+on:
+  push:
+    branches:
+      - develop  # 或者你想要检查的分支
+  pull_request:
+    branches:
+      - develop  # 你可以在 PR 时检查代码
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+
+    steps:
+      # 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 设置 JDK（如果是 Java 项目）
+      - name: Set up JDK 8.*
+        uses: actions/setup-java@v4
+        with:
+          java-version: '8.*'
+
+      # 安装 Checkstyle（如果你是用 Maven 或 Gradle）
+      - name: Install dependencies
+        run: |
+          ./mvnw install # 如果是 Maven 项目
+          # 或者
+          # ./gradlew build # 如果是 Gradle 项目
+
+      # 运行 Checkstyle
+      - name: Run Checkstyle
+        run: |
+          ./mvnw checkstyle:check # 如果是 Maven 项目
+          # 或者
+          # ./gradlew check # 如果是 Gradle 项目
+
+      # 查看 Checkstyle 检查报告
+      - name: Upload Checkstyle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: target/checkstyle-result.xml # 如果是 Maven 项目

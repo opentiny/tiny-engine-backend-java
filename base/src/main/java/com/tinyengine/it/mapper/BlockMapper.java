@@ -80,16 +80,6 @@ public interface BlockMapper extends BaseMapper<Block> {
     Integer createBlock(Block block);
 
     /**
-     * 通过区块分组id获取区块信息
-     *
-     * @param blockGroupId the block group id
-     * @return the list
-     */
-    @Select("select b.* from t_block b "
-            + "where b.block_group_id = #{blockGroupId} ")
-    List<Block> findBlocksByBlockGroupId(int blockGroupId);
-
-    /**
      * 根据name或者description查询表t_block信息
      *
      * @param nameCn      name
@@ -118,10 +108,7 @@ public interface BlockMapper extends BaseMapper<Block> {
     })
     @Select("select b.*, b.id as block_id "
             + "from t_block b "
-            + "left join t_block_group bg on b.block_group_id = bg.id "
-            + "left join t_block_history bh on b.latest_history_id = bh.id "
-            + "where b.id = #{blockId} "
-            + "group by b.id")
+            + "where b.id = #{blockId} ")
     BlockDto findBlockAndGroupAndHistoByBlockId(Integer blockId);
 
 
@@ -156,7 +143,7 @@ public interface BlockMapper extends BaseMapper<Block> {
     List<Block> findBlocksByBlockGroupIdAppId(int appId);
 
     /**
-     * 根据分组id返回对应的区块信息及关联分组信息
+     * 根据条件返回对应的区块信息及关联分组信息
      *
      * @return the list
      */
@@ -191,7 +178,5 @@ public interface BlockMapper extends BaseMapper<Block> {
      * @param createdBy    createdBy
      * @return the list
      */
-    @Select("select b.* from t_block b "
-            + "where b.block_group_id = #{blockGroupId} and b.created_by = #{createdBy}")
     List<Block> findBlockByBlockGroupId(int blockGroupId, String createdBy);
 }

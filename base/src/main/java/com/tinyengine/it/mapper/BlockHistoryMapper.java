@@ -104,8 +104,10 @@ public interface BlockHistoryMapper extends BaseMapper<BlockHistory> {
      */
     @Select({"<script>", "SELECT B.ref_id AS block, B.version", "FROM `t_block_history` B",
             "LEFT JOIN r_material_history_block M ON M.material_history_id = #{materialHistoryId}",
-            "WHERE B.id = M.block_history_id", "AND B.block_group_id IN",
+            "LEFT JOIN r_block_group_block BGB ON BGB.block_group_id IN",
             "<foreach item='id' collection='ids' open='(' separator=',' close=')'>", "#{id}", "</foreach>",
+            "WHERE B.id = M.block_history_id", "OR B.ref_id = BGB.block_id",
+            "GROUP BY B.ref_id,B.version",
             "</script>"})
     List<BlockVersionDto> queryBlockAndVersion(@Param("ids") List<Integer> ids,
                                                @Param("materialHistoryId") Integer materialHistoryId);
