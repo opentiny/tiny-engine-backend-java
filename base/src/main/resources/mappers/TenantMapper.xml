@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time, renter_id,
+        , name_cn, name_en, description, created_by, last_updated_by, created_time, last_updated_time,
         org_code
     </sql>
 
@@ -33,9 +33,6 @@
         </if>
         <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
             AND last_updated_time = #{lastUpdatedTime}
-        </if>
-        <if test="renterId!=null and renterId!=''">
-            AND renter_id = #{renterId}
         </if>
         <if test="orgCode!=null and orgCode!=''">
             AND org_code = #{orgCode}
@@ -65,9 +62,6 @@
         <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
             last_updated_time = #{lastUpdatedTime},
         </if>
-        <if test="renterId!=null and renterId!=''">
-            renter_id = #{renterId},
-        </if>
         <if test="orgCode!=null and orgCode!=''">
             org_code = #{orgCode},
         </if>
@@ -84,7 +78,6 @@
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
         <result column="last_updated_time" property="lastUpdatedTime"/>
-        <result column="renter_id" property="renterId"/>
         <result column="org_code" property="orgCode"/>
     </resultMap>
 
@@ -140,7 +133,6 @@
                              , last_updated_by
                              , created_time
                              , last_updated_time
-                             , renter_id
                              , org_code)
         VALUES ( #{id}
                , #{nameCn}
@@ -150,7 +142,6 @@
                , #{lastUpdatedBy}
                , #{createdTime}
                , #{lastUpdatedTime}
-               , #{renterId}
                , #{orgCode}
     </insert>
 </mapper>

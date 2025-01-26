@@ -55,10 +55,6 @@ public class Tenant {
     private String description;
 
     @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "renterId", description = "业务租户ID")
-    private String renterId;
-
-    @TableField(fill = FieldFill.INSERT)
     @Schema(name = "createdTime", description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdTime;
