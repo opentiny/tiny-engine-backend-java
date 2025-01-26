@@ -226,20 +226,21 @@ public class BlockServiceImpl implements BlockService {
         blocks.setIsDefault(false);
         blocks.setIsOfficial(false);
         blocks.setPlatformId(1); // 新建区块给默认值
-        List<Object> groups = blockDto.getGroups();
-        if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
-            Integer groupId = (Integer) groups.get(0); // 强制类型转换
-            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
-            blockGroupBlock.setBlockGroupId(groupId);
-            blockGroupBlock.setBlockId(blockDto.getId());
-            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
-        }
+
         int result = blockMapper.createBlock(blocks);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
         int id = blocks.getId();
         BlockDto blocksResult = queryBlockById(id);
+        List<Object> groups = blockDto.getGroups();
+        if (!groups.isEmpty() && groups.get(0) instanceof Integer) {
+            Integer groupId = (Integer) groups.get(0); // 强制类型转换
+            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+            blockGroupBlock.setBlockGroupId(groupId);
+            blockGroupBlock.setBlockId(id);
+            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
+        }
         return Result.success(blocksResult);
     }
 

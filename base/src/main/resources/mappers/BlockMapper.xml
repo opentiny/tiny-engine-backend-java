@@ -9,7 +9,7 @@
         id
         , label, name, framework, content, assets, last_build_info, description, tags, latest_version,
         latest_history_id, screenshot, path, occupier_by, is_official, `public`, is_default, tiny_reserved, npm_name,
-        i18n, platform_id, app_id, content_blocks, block_group_id, created_by, last_updated_by, created_time,
+        i18n, platform_id, app_id, content_blocks, created_by, last_updated_by, created_time,
         last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
@@ -80,9 +80,6 @@
         </if>
         <if test="contentBlocks!=null and contentBlocks!=''">
             AND content_blocks = #{contentBlocks}
-        </if>
-        <if test="blockGroupId!=null and blockGroupId!=''">
-            AND block_group_id = #{blockGroupId}
         </if>
         <if test="createdBy!=null and createdBy!=''">
             AND created_by = #{createdBy}
@@ -175,9 +172,6 @@
         <if test="contentBlocks!=null and contentBlocks!=''">
             content_blocks = #{contentBlocks},
         </if>
-        <if test="blockGroupId!=null and blockGroupId!=''">
-            block_group_id = #{blockGroupId},
-        </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
         </if>
@@ -227,7 +221,6 @@
         <result column="platform_id" property="platformId"/>
         <result column="app_id" property="appId"/>
         <result column="content_blocks" property="contentBlocks"/>
-        <result column="block_group_id" property="blockGroupId"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
@@ -267,14 +260,27 @@
 
     <!--    根据区块分组appId查询表t_block信息-->
     <select id="findBlocksByBlockGroupIdAppId" resultMap="BlockMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_block
-        WHERE block_group_id in (
-
-        (SELECT id FROM `t_block_group` where app_id = #{appId}))
+        SELECT b.*
+        FROM t_block b
+                 left JOIN r_block_group_block rbgb ON b.id = rbgb.block_id
+                 left JOIN t_block_group bg ON rbgb.block_group_id = bg.id
+        WHERE bg.app_id = #{appId}
+        GROUP BY b.id
     </select>
-
+    <select id="findBlockByBlockGroupId" resultMap="BlockMap">
+        SELECT b.* FROM t_block b
+        LEFT JOIN r_block_group_block bgb on bgb.block_id = b.id
+        LEFT JOIN t_block_group bg ON bgb.block_group_id = bg.id
+        <where>
+            <if test="blockGroupId != null and blockGroupId != ''">
+                AND bg.id = #{blockGroupId}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                AND b.created_by = #{createdBy}
+            </if>
+        </where>
+        GROUP BY b.id
+    </select>
     <!-- 根据name或者description模糊查询表t_block信息 -->
     <select id="findBlocksByNameCnAndDes" resultMap="BlockMap">
         SELECT
@@ -333,7 +339,6 @@
                             , platform_id
                             , app_id
                             , content_blocks
-                            , block_group_id
                             , created_by
                             , last_updated_by
                             , created_time
@@ -364,7 +369,6 @@
                , #{platformId}
                , #{appId}
                , #{contentBlocks}
-               , #{blockGroupId}
                , #{createdBy}
                , #{lastUpdatedBy}
                , #{createdTime}

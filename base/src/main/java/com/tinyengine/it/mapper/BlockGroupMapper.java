@@ -33,11 +33,11 @@ import java.util.List;
 public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
     /**
      * 查询表t_block_group所有信息及关联的区块信息
-     *
-     * @param createdBy createdBy
+     * @param blockCreatedBy the blockCreatedBy
+     * @param groupCreatedBy the groupCreatedBy
      * @return the list
      */
-    List<BlockGroup> queryAllBlockGroupAndBlock(String createdBy);
+    List<BlockGroup> queryAllBlockGroupAndBlock(String blockCreatedBy, String groupCreatedBy);
 
     /**
      * 查询表t_block_group所有信息
@@ -51,10 +51,11 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
      * 根据主键id查询表t_block_group数据
      *
      * @param id        the id
-     * @param createdBy createdBy
+     * @param blockCreatedBy the lockCreatedBy
+     * @param groupCreatedBy the groupCreatedBy
      * @return the block group
      */
-    BlockGroup queryBlockGroupAndBlockById(@Param("id") Integer id, String createdBy);
+    BlockGroup queryBlockGroupAndBlockById(@Param("id") Integer id, String blockCreatedBy, String groupCreatedBy);
 
     /**
      * 通过ID查询分组信息
@@ -101,10 +102,11 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
      * 通过appId和createdBy查区块分组关联的区块信息
      *
      * @param appId     the app id
-     * @param createdBy createdBy
+     * @param blockCreatedBy the blockCreatedBy
+     * @param groupCreatedBy the groupCreatedBy
      * @return the list
      */
-    List<BlockGroup> queryBlockGroupByAppId(Integer appId, String createdBy);
+    List<BlockGroup> queryBlockGroupByAppId(Integer appId, String blockCreatedBy, String groupCreatedBy);
 
     /**
      * 通过appId获取分组信息
@@ -125,15 +127,13 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
             @Result(column = "app", property = "appId"),
             @Result(column = "app", property = "app",
                     one = @One(select = "com.tinyengine.it.mapper.AppMapper.queryAppById")),
-            @Result(column = "block_group_id", javaType = List.class, property = "blocks",
-                    many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlocksByBlockGroupId"))
+            @Result(column = "id", javaType = List.class, property = "blocks",
+                    many = @Many(select = "com.tinyengine.it.mapper.BlockMapper.findBlockByBlockGroupId"))
     })
-    @Select("SELECT bg.*, bs.block_group_id as block_group_id, a.id as app  "
+    @Select("SELECT bg.*, a.id as app "
             + "FROM t_block_group bg "
             + "left join t_app a on bg.app_id = a.id "
-            + "left join t_block bs on bg.id = bs.block_group_id "
-            + "WHERE bg.id = #{blockGroupId} "
-            + "GROUP BY bg.id")
+            + "WHERE bg.id = #{blockGroupId} ")
     List<BlockGroupDto> getBlockGroupsById(int blockGroupId);
 
 
@@ -145,7 +145,7 @@ public interface BlockGroupMapper extends BaseMapper<BlockGroup> {
      */
     @Select("select * from t_block_group bg "
             + "left join r_block_group_block bgb on bgb.block_group_id = bg.id "
-            + "where bgb.block_id = #{blockId} and created_by = #{createdBy}")
+            + "where bgb.block_id = #{blockId} and bg.created_by = #{createdBy}")
     List<BlockGroup> findBlockGroupByBlockId(Integer blockId, String createdBy);
 
 }

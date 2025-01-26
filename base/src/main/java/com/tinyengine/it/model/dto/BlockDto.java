@@ -123,10 +123,6 @@ public class BlockDto extends BaseEntity {
     @JsonProperty("platform_id")
     private Integer platformId;
 
-    @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
-    @JsonProperty("block_group_id")
-    private Integer blockGroupId;
-
     @JsonProperty("occupier")
     @Schema(name = "occupierBy", description = "当前锁定人")
     private User occupier;

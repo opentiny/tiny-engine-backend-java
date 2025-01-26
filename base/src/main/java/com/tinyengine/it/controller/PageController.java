@@ -71,8 +71,8 @@ public class PageController {
      * @return allpage
      */
     @Operation(summary = "获取页面列表", description = "获取页面列表", parameters = {
-            @Parameter(name = "aid", description = "appId")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
+        @Parameter(name = "aid", description = "appId")}, responses = {
+                @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Page.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})

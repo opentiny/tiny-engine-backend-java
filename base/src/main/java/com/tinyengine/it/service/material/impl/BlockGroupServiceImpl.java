@@ -164,22 +164,23 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public List<BlockGroup> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId, String from) {
-        String createdBy = "1"; // 获取登录用户信息
         // 此接收到的两个参数不一定同时存在
         List<BlockGroup> blockGroupsListResult = new ArrayList<>();
-        createdBy = (Enums.BlockGroup.BLOCK.getValue()).equals(from) ? createdBy : null; // from值为block在区块管理处增加createdBy条件
+        String groupCreatedBy = "1"; // 获取登录用户id
+        String blockCreatedBy = "1";
+        blockCreatedBy = (Enums.BlockGroup.BLOCK.getValue()).equals(from) ? blockCreatedBy : null; // from值为block在区块管理处增加createdBy条件
         BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {
             for (int blockgroupId : ids) {
-                blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, createdBy);
+                blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, blockCreatedBy, groupCreatedBy);
                 blockGroupsListResult.add(blockGroup);
             }
         }
         if (appId != null) {
-            blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, createdBy);
+            blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, blockCreatedBy, groupCreatedBy);
         }
         if (ids == null && appId == null) {
-            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock(createdBy);
+            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock( blockCreatedBy, groupCreatedBy);
         }
 
         if (blockGroupsListResult.isEmpty()) {
@@ -216,7 +217,6 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         int result = 0;
         if (groupBlockIds.size() > paramIds.size()) {
             Block block = new Block();
-            block.setBlockGroupId(null);
             for (Integer blockId : groupBlockIds) {
                 if (!paramIds.contains(blockId)) {
                     result = blockId;

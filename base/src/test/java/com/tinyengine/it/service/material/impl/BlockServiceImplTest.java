@@ -270,7 +270,7 @@ class BlockServiceImplTest {
     @Test
     void testListNewWhenGroupIdNotEmpty() {
         List<Block> blocksList = new ArrayList<>();
-        when(blockMapper.findBlocksByBlockGroupId(anyInt())).thenReturn(blocksList);
+        when(blockMapper.findBlockByBlockGroupId(anyInt(), any())).thenReturn(blocksList);
 
         App app = new App();
         app.setId(1);

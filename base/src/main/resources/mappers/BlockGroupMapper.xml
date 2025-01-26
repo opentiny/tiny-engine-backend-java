@@ -185,12 +185,17 @@
         r_block_group_block rbg ON rbg.block_group_id = bg.id
         LEFT JOIN
         t_block b ON b.id = rbg.block_id
-        <if test="createdBy != null">
-            AND b.created_by = #{createdBy}
+        <if test="blockCreatedBy != null">
+            AND b.created_by = #{blockCreatedBy}
         </if>
-        <if test="createdBy == null">
+        <if test="blockCreatedBy == null">
             AND b.last_build_info is not null and b.content is not null and b.assets is not null
         </if>
+        <where>
+            <if test="groupCreatedBy != null">
+                AND bg.created_by = #{groupCreatedBy}
+            </if>
+        </where>
     </select>
 
     <!-- 根据app查询表block_group -->
@@ -244,15 +249,18 @@
         r_block_group_block rbg ON rbg.block_group_id = bg.id
         LEFT JOIN
         t_block b ON b.id = rbg.block_id
-        <if test="createdBy != null">
-            AND b.created_by = #{createdBy}
+        <if test="blockCreatedBy != null">
+            AND b.created_by = #{blockCreatedBy}
         </if>
-        <if test="createdBy == null">
+        <if test="blockCreatedBy == null">
             AND b.last_build_info is not null and b.content is not null and b.assets is not null
         </if>
         <where>
             <if test="appId != null">
                 AND bg.app_id = #{appId}
+            </if>
+            <if test="groupCreatedBy != null">
+                AND bg.created_by = #{groupCreatedBy}
             </if>
         </where>
     </select>
@@ -307,15 +315,18 @@
         r_block_group_block rbg ON rbg.block_group_id = bg.id
         LEFT JOIN
         t_block b ON b.id = rbg.block_id
-        <if test="createdBy != null">
-            AND b.created_by = #{createdBy}
+        <if test="blockCreatedBy != null">
+            AND b.created_by = #{blockCreatedBy}
         </if>
-        <if test="createdBy == null">
+        <if test="blockCreatedBy == null">
             AND b.last_build_info is not null and b.content is not null and b.assets is not null
         </if>
         <where>
             <if test="id != null">
                 AND bg.id = #{id}
+            </if>
+            <if test="groupCreatedBy != null">
+                AND bg.created_by = #{groupCreatedBy}
             </if>
         </where>
     </select>

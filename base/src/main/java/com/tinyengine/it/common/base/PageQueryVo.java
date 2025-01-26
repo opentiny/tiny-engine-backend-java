@@ -96,7 +96,7 @@ public class PageQueryVo<T> {
 
     /**
      * 分页查询对象
-     *
+     * @param <E> 泛型类型参数 E，代表分页数据的类型
      * @return page
      */
     public <E> Page<E> getPage() {

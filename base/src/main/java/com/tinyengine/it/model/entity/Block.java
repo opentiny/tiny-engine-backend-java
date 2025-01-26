@@ -127,10 +127,6 @@ public class Block extends BaseEntity {
     @JsonProperty("content_blocks")
     private String contentBlocks;
 
-    @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
-    @JsonProperty("block_group_id")
-    private Integer blockGroupId;
-
     @TableField(exist = false)
     @JsonProperty("public_scope_tenants")
     private List<Object> publicScopeTenants = new ArrayList<>();

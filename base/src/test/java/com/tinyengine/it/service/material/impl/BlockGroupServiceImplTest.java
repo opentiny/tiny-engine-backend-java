@@ -117,8 +117,8 @@ class BlockGroupServiceImplTest {
         String from = "block";
         List<Integer> paramIdList = new ArrayList<>();
         List<BlockGroup> mockData = new ArrayList<>();
-        when(blockGroupMapper.queryBlockGroupAndBlockById(any(), any())).thenReturn(new BlockGroup());
-        when(blockGroupMapper.queryBlockGroupByAppId(appId, "1")).thenReturn(mockData);
+        when(blockGroupMapper.queryBlockGroupAndBlockById(any(), any(), any())).thenReturn(new BlockGroup());
+        when(blockGroupMapper.queryBlockGroupByAppId(any(), any(), any())).thenReturn(mockData);
 
         // not empty param
         List<BlockGroup> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId, from);
@@ -126,7 +126,7 @@ class BlockGroupServiceImplTest {
         Assertions.assertTrue(result.isEmpty());
 
         // empty param
-        when(blockGroupMapper.queryAllBlockGroupAndBlock(any())).thenReturn(mockData);
+        when(blockGroupMapper.queryAllBlockGroupAndBlock(any(), any())).thenReturn(mockData);
         result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(null, null, null);
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
