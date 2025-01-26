@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,11 +48,13 @@ public class BaseEntity {
     @TableField(fill = FieldFill.INSERT)
     @Schema(name = "createdTime", description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("created_at")
     private LocalDateTime createdTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "lastUpdatedTime", description = "更新时间")
+    @JsonProperty("updated_at")
     private LocalDateTime lastUpdatedTime;
 
     @TableField(fill = FieldFill.INSERT)
