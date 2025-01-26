@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<!-- 指定检查的类和方法命名规则 -->
+<module name="Checker">
+
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="warning"/>
+
+    <!-- Checks for Size Violations.  -->
+    <!-- 检查文件的长度（行） default max=2000 -->
+    <module name="FileLength">
+        <property name="max" value="2500"/>
+    </module>
+    <!-- 设定代码格式规则 -->
+    <module name="TreeWalker">
+        <!-- Checks for imports    -->
+        <!-- 必须导入类的完整路径，即不能使用*导入所需的类 -->
+        <module name="AvoidStarImport"/>
+
+        <!-- 检查是否从非法的包中导入了类 illegalPkgs: 定义非法的包名称-->
+        <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
+
+        <!-- 检查是否导入了不必显示导入的类-->
+        <module name="RedundantImport"/>
+
+        <!-- 检查是否导入的包没有使用-->
+        <module name="UnusedImports"/>
+
+        <!-- 检查类和接口的javadoc 默认不检查author 和version tags
+         authorFormat: 检查author标签的格式
+        versionFormat: 检查version标签的格式
+        scope: 可以检查的类的范围，例如：public只能检查public修饰的类，private可以检查所有的类
+        excludeScope: 不能检查的类的范围，例如：public，public的类将不被检查，但访问权限小于public的类仍然会检查，其他的权限以此类推
+        tokens: 该属性适用的类型，例如：CLASS_DEF,INTERFACE_DEF -->
+        <module name="JavadocType">
+            <property name="scope" value="protected"/>
+            <property name="tokens" value="CLASS_DEF,INTERFACE_DEF"/>
+        </module>
+
+        <!-- 检查方法的javadoc的注释
+       scope: 可以检查的方法的范围，例如：public只能检查public修饰的方法，private可以检查所有的方法
+       allowMissingParamTags: 是否忽略对参数注释的检查
+       allowMissingThrowsTags: 是否忽略对throws注释的检查
+       allowMissingReturnTag: 是否忽略对return注释的检查 -->
+        <module name="JavadocMethod">
+            <property name="allowMissingParamTags" value="false"/>
+            <property name="allowMissingReturnTag" value="false"/>
+            <property name="tokens" value="METHOD_DEF"/>
+        </module>
+        <!--option: 定义左大括号'{'显示位置，eol在同一行显示，nl在下一行显示
+              maxLineLength: 大括号'{'所在行行最多容纳的字符数
+              tokens: 该属性适用的类型，例：CLASS_DEF,INTERFACE_DEF,METHOD_DEF,CTOR_DEF -->
+        <module name="LeftCurly">
+            <property name="option" value="eol"/>
+        </module>
+
+        <!-- 检查 else、try 和 catch 关键字后的右大括号 (}) 放置位置。验证的规则通过 option 属性指定。
+            option: 右大括号是否单独一行显示
+            tokens: 定义要检查的类型
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+        </module> -->
+
+        <!-- 检查在重写了 `equals` 方法后是否重写了 `hashCode` 方法 -->
+        <module name="EqualsHashCode"/>
+
+        <!-- 检查非法实例化，建议使用工厂方法。
+             原因：根据项目需求，对于某些类，通过工厂方法来创建实例可能比直接调用构造函数更为优选。
+             一个简单的例子是 `java.lang.Boolean` 类。为了节省内存和 CPU 循环，优先使用预定义常量 `TRUE` 和 `FALSE`。应将构造函数调用替换为 `Boolean.valueOf()` 方法的调用。
+             一些对性能非常敏感的项目可能也要求为其他类使用工厂方法，以强制使用数字缓存或对象池。 -->
+        <module name="IllegalInstantiation">
+            <property name="classes" value="java.lang.Boolean"/>
+        </module>
+
+        <!-- 检查命名规范 -->
+        <!-- 本地的 final 变量，包括 catch 参数 -->
+        <module name="LocalFinalVariableName"/>
+
+        <!-- 静态的非 final 字段 -->
+        <module name="StaticVariableName">
+            <property name="format" value="(^[A-Z0-9_]{0,19}$)"/>
+        </module>
+
+        <!-- 包名 -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+        </module>
+        <!-- 类名应该大写并采用驼峰命名法 -->
+        <module name="TypeName"/>
+
+        <!-- 方法名应该采用驼峰命名法 -->
+        <module name="MethodName"/>
+
+        <!-- 变量名采用小写字母并使用下划线分隔 -->
+        <module name="LocalVariableName">
+            <property name="format" value="^[a-z][a-z0-9]*(_[a-z0-9]+)*$"/>
+        </module>
+
+        <!-- 常量名全大写并使用下划线分隔 -->
+<!--        <module name="FieldName">-->
+<!--            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>-->
+<!--            <property name="allowMultiple" value="false"/>-->
+<!--        </module>-->
+
+        <!-- 检查类的继承结构是否符合规范 -->
+        <module name="AbstractClassName"/>
+
+        <!-- 配置 Indentation 模块 -->
+        <module name="Indentation"/>
+
+        <!-- 每个方法后必须有空行 -->
+        <module name="MethodParamPad"/>
+
+        <!-- 强制使用强制括号 -->
+        <module name="NeedBraces"/>
+
+        <!-- 禁止在代码中使用多余的空格 -->
+        <module name="WhitespaceAfter"/>
+
+        <!--检查switch中case后是否加入了跳出语句，例如：return、break、throw、continue -->
+        <module name="FallThrough"/>
+
+        <!-- 检查方法或构造函数的参数数量，默认最大为7个。 -->
+        <module name="ParameterNumber">
+            <property name="max" value="5"/>
+        </module>
+        <!-- 非静态字段 -->
+        <module name="MemberName">
+            <property name="format" value="(^[a-z][a-z0-9][a-zA-Z0-9]{0,19}$)"/>
+        </module>
+
+        <!-- 参数 -->
+        <module name="ParameterName">
+            <property name="format" value="(^[a-z][a-zA-Z0-9_]{0,19}$)"/>
+        </module>
+
+        <!-- 常量（静态 final 字段） -->
+        <module name="ConstantName">
+            <property name="format" value="(^[A-Z0-9_]{0,19}$)"/>
+        </module>
+
+        <!-- 检查布尔表达式是否可以简化。 -->
+        <module name="SimplifyBooleanExpression"/>
+
+        <!-- 检查是否存在过度复杂的布尔返回值。例如，以下代码
+             if (valid())
+                return false;
+             else
+                return true;
+             可以简化为
+                return !valid(); -->
+        <module name="SimplifyBooleanReturn"/>
+        <!-- 检查类成员的可见性。只有 static final 修饰的成员可以是 public 的；其他的成员属性必须是 private 的，除非属性 protectedAllowed 或者 packageAllowed 被设置为 true。
+             如果公共成员的名称匹配公共成员正则表达式（默认包含 "^serialVersionUID$"），则不会标记为违规。
+             注意：Checkstyle 2 之前的默认模式包括了 "^f[A-Z][a-zA-Z0-9]*$"，允许 EJB 1.1 的 CMP 使用默认设置。
+             对于 EJB 2.0，不再需要为持久字段提供公共访问权限，因此默认模式已被更改。
+             理由：强制封装。-->
+        <module name="VisibilityModifier"/>
+
+        <!-- 每一行只能定义一个变量 -->
+        <module name="MultipleVariableDeclarations">
+        </module>
+
+        <!-- 检查数组类型定义的风格。有些采用 Java 风格，例如：public static void main(String[] args)，有些采用 C 风格，例如：public static void main(String args[])
+             检查定义数组时采用 Java 风格还是 C 风格，例如：int[] num 是 Java 风格，int num[] 是 C 风格。默认是 Java 风格 -->
+        <module name="ArrayTypeStyle">
+        </module>
+
+        <!-- 检查是否存在 "魔法数字"，魔法数字是没有定义为常量的数值字面量。默认情况下，-1、0、1 和 2 不被视为魔法数字。
+        <module name="MagicNumber">
+        </module>
+        -->
+
+        <!-- 检查是否存在 TODO（待处理）注释。实际上，这是对 Java 注释的通用正则表达式匹配器。要检查 Java 注释中的其他模式，请设置属性 format。
+             检查是否存在 TODO（待处理）注释。TODO 是 Java IDE 自动生成的，代码写完后通常会去掉。-->
+        <module name="TodoComment"/>
+
+        <!-- 检查 long 类型常量是否使用大写的 'L' 来表示，而不是小写的 'l'。这是遵循 Java 语言规范，第 3.10.1 节。
+             检查 long 类型常量是否定义了大写的 'L'。字母小写的 l 与数字 1（或者一）非常相似。 -->
+        <module name="UpperEll"/>
+
+        <!-- 检查一个只有私有构造器的类是否声明为 final。只有私有构造器的类必须声明为 final -->
+        <module name="FinalClass"/>
+
+        <!-- 检查方法和构造函数是否过长。默认最大行数为 150 行。可以通过设置 max=300 来调整最大行数为 300。 -->
+        <module name="MethodLength">
+            <property name="max" value="300"/>
+        </module>
+
+        <!-- ModifierOrder 检查修饰符的顺序，默认是 public,protected,private,abstract,static,final,transient,volatile,synchronized,native -->
+        <module name="ModifierOrder">
+        </module>
+
+        <!-- 检查是否有多余的修饰符，例如：接口中的方法不必使用public、abstract修饰  -->
+        <module name="RedundantModifier">
+        </module>
+
+        <!--- 字符串比较必须使用 equals() -->
+        <module name="StringLiteralEquality">
+        </module>
+
+        <!-- if-else嵌套语句个数 最多4层 -->
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+        </module>
+
+        <!-- try-catch 嵌套语句个数 最多2层 -->
+        <module name="NestedTryDepth">
+            <property name="max" value="2"/>
+        </module>
+
+        <!-- 返回个数 -->
+        <module name="ReturnCount">
+            <property name="max" value="5"/>
+            <property name="format" value="^$"/>
+        </module>
+    </module>
+
+    <!-- LineLength 配置独立于 TreeWalker -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="ignorePattern" value="^package|^import"/>
+    </module>
+</module>
