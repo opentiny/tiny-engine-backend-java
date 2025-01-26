@@ -27,8 +27,7 @@ jobs:
       # 安装依赖并运行 Checkstyle（如果是 Maven 项目）
       - name: Install dependencies and run Checkstyle
         run: |
-          ./mvnw install
-          ./mvnw checkstyle:check
+          mvn clean install
 
       # 查看 Checkstyle 检查报告
       - name: Upload Checkstyle report
