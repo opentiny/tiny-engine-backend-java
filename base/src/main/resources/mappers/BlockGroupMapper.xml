@@ -124,7 +124,6 @@
             <result column="block_platform_id" property="platformId"/>
             <result column="block_app_id" property="appId"/>
             <result column="content_blocks" property="contentBlocks"/>
-            <result column="block_group_id" property="blockGroupId"/>
             <result column="block_created_by" property="createdBy"/>
             <result column="block_last_updated_by" property="lastUpdatedBy"/>
             <result column="block_created_time" property="createdTime"/>
@@ -172,7 +171,6 @@
         b.platform_id as block_platform_id,
         b.app_id as block_app_id,
         b.content_blocks,
-        b.block_group_id,
         b.created_by as block_created_by,
         b.last_updated_by as block_last_updated_by,
         b.created_time as block_created_time,
@@ -236,7 +234,6 @@
         b.platform_id as block_platform_id,
         b.app_id as block_app_id,
         b.content_blocks,
-        b.block_group_id,
         b.created_by as block_created_by,
         b.last_updated_by as block_last_updated_by,
         b.created_time as block_created_time,
@@ -302,7 +299,6 @@
         b.platform_id as block_platform_id,
         b.app_id as block_app_id,
         b.content_blocks,
-        b.block_group_id,
         b.created_by as block_created_by,
         b.last_updated_by as block_last_updated_by,
         b.created_time as block_created_time,
