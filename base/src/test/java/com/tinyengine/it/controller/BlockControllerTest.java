@@ -23,6 +23,7 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParam;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Tenant;
@@ -97,10 +98,11 @@ class BlockControllerTest {
 
     @Test
     void testCreateBlocks() {
+        BlockParam mockParam = new BlockParam();
         BlockDto mockData = new BlockDto();
-        when(blockService.createBlock(any(BlockDto.class))).thenReturn(Result.success(mockData));
+        when(blockService.createBlock(any(BlockParam.class))).thenReturn(Result.success(mockData));
 
-        Result<BlockDto> result = blockController.createBlocks(new BlockDto());
+        Result<BlockDto> result = blockController.createBlocks(mockParam);
         Assertions.assertEquals(mockData, result.getData());
     }
 
@@ -179,12 +181,13 @@ class BlockControllerTest {
 
     @Test
     void testUpdateBlocks() {
+        BlockParam blockParam = new BlockParam();
         BlockDto returnData = new BlockDto();
-        when(blockService.updateBlockById(any(BlockDto.class), anyInt())).thenReturn(Result.success(returnData));
+        when(blockService.updateBlockById(any(BlockParam.class), anyInt())).thenReturn(Result.success(returnData));
 
         when(blockService.queryBlockById(anyInt())).thenReturn(returnData);
 
-        Result<BlockDto> result = blockController.updateBlocks(returnData, Integer.valueOf(0), Integer.valueOf(1));
+        Result<BlockDto> result = blockController.updateBlocks(blockParam, Integer.valueOf(0), Integer.valueOf(1));
         Assertions.assertEquals(returnData, result.getData());
     }
 }

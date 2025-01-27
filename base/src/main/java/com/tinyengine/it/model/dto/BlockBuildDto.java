@@ -23,7 +23,7 @@ import lombok.Data;
  */
 @Data
 public class BlockBuildDto {
-    private BlockDto block;
+    private BlockParam block;
     @JsonProperty("deploy_info")
     private String deployInfo;
     @JsonProperty("is_compile")
