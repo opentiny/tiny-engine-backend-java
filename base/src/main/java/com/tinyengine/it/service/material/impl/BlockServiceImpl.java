@@ -57,7 +57,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,6 +93,8 @@ public class BlockServiceImpl implements BlockService {
     @Autowired
     private BlockGroupBlockMapper blockGroupBlockMapper;
 
+    private static final int DEFAULT_PLATFORM_ID = 1;
+    private static final String DEFAULT_USER_ID = "1";
     /**
      * 查询表t_block所有数据
      *
@@ -120,8 +121,7 @@ public class BlockServiceImpl implements BlockService {
                 && blockDto.getLastBuildInfo().get("result") instanceof Boolean
                 ? (Boolean) blockDto.getLastBuildInfo().get("result") : Boolean.FALSE;
         blockDto.setIsPublished(isPublished);
-        String createdBy = "1";
-        List<BlockGroup> groups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), createdBy);
+        List<BlockGroup> groups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), DEFAULT_USER_ID);
         blockDto.setGroups(groups);
         return blockDto;
     }
@@ -156,15 +156,20 @@ public class BlockServiceImpl implements BlockService {
      */
     @Override
     public Result<BlockDto> updateBlockById(BlockParam blockParam, Integer appId) {
+        if (blockParam == null || blockParam.getId() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         Block blockResult = blockMapper.queryBlockById(blockParam.getId());
-
+        if (blockResult == null) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
         if (!Objects.equals(blockResult.getAppId(), appId)) {
             return Result.failed(ExceptionEnum.CM007);
         }
         // 把前端传参赋值给实体
         Block blocks = new Block();
         BeanUtils.copyProperties(blockParam, blocks);
-        blocks.setOccupierBy(String.valueOf(1));
+        blocks.setOccupierBy(DEFAULT_USER_ID);
         if (blockParam.getLatestHistoryId() != null) {
             blocks.setLatestHistoryId(blockParam.getLatestHistoryId().getId());
         }
@@ -180,10 +185,8 @@ public class BlockServiceImpl implements BlockService {
             return Result.success(blockDtoResult);
         }
 
-        // 对接登录后获取用户id
-        String createdBy = "1";
         // 根据区块id获取区块所在分组
-        List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(), createdBy);
+        List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(), DEFAULT_USER_ID);
         if (!blockGroups.isEmpty()) {
             List<Integer> blockGroupIds = blockGroups.stream().map(BlockGroup::getId).collect(Collectors.toList());
             for (Integer id : blockGroupIds) {
@@ -212,6 +215,9 @@ public class BlockServiceImpl implements BlockService {
      */
     @Override
     public Result<BlockDto> createBlock(BlockParam blockParam) {
+        if (blockParam == null || blockParam.getLabel() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         // 对接收到的参数occupier为对应的一个对象，进行特殊处理并重新赋值
         Block blocks = new Block();
         if (blockParam.getOccupier() != null) {
@@ -220,7 +226,7 @@ public class BlockServiceImpl implements BlockService {
         BeanUtils.copyProperties(blockParam, blocks);
         blocks.setIsDefault(false);
         blocks.setIsOfficial(false);
-        blocks.setPlatformId(1); // 新建区块给默认值
+        blocks.setPlatformId(DEFAULT_PLATFORM_ID); // 新建区块给默认值
 
         int result = blockMapper.createBlock(blocks);
         if (result < 1) {
@@ -229,12 +235,17 @@ public class BlockServiceImpl implements BlockService {
         int id = blocks.getId();
         BlockDto blocksResult = queryBlockById(id);
         List<Integer> groups = blockParam.getGroups();
-        if (groups != null && !groups.isEmpty()) {
-            Integer groupId = groups.get(0); // 强制类型转换
-            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
-            blockGroupBlock.setBlockGroupId(groupId);
-            blockGroupBlock.setBlockId(id);
-            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
+        if (groups == null || groups.isEmpty()) {
+            return Result.success(blocksResult);
+        }
+
+        Integer groupId = groups.get(0); // 强制类型转换
+        BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+        blockGroupBlock.setBlockGroupId(groupId);
+        blockGroupBlock.setBlockId(id);
+        int groupResult = blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
+        if (groupResult < 1) {
+            return Result.failed(ExceptionEnum.CM001);
         }
         return Result.success(blocksResult);
     }
@@ -428,16 +439,13 @@ public class BlockServiceImpl implements BlockService {
     @SystemServiceLog(description = "getNotInGroupBlocks 获取不在分组内的区块 实现类")
     @Override
     public List<BlockDto> getNotInGroupBlocks(NotGroupDto notGroupDto) {
-        // 获取缓存中的登录用户
-        int userId = 1;
-        User user = userMapper.queryUserById(userId);
         List<BlockDto> blocksList = blockMapper.findBlocksReturn(notGroupDto);
         if (blocksList == null || blocksList.isEmpty()) {
             return blocksList;
         }
 
         for (BlockDto blockDto : blocksList) {
-            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), String.valueOf(userId));
+            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), DEFAULT_USER_ID);
             blockDto.setGroups(blockGroups);
         }
         return blocksList.stream()
@@ -449,15 +457,15 @@ public class BlockServiceImpl implements BlockService {
                     }
                     // 组过滤
                     if (item.getGroups() != null && item.getGroups().stream()
-                            .anyMatch(group -> group instanceof BlockGroup
-                                    && ((BlockGroup) group).getId().equals(notGroupDto.getGroupId()))) {
+                            .anyMatch(group -> group != null
+                                    && group.getId().equals(notGroupDto.getGroupId()))) {
                         return false;
                     }
                     // 公开范围过滤
                     if (item.getPublicStatus() == Enums.Scope.FULL_PUBLIC.getValue()) {
                         return true;
                     }
-                    return user != null && item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
+                    return item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
                 })
                 .collect(Collectors.toList());
     }
@@ -491,6 +499,9 @@ public class BlockServiceImpl implements BlockService {
      */
     @Override
     public Result<BlockDto> deploy(BlockBuildDto blockBuildDto) {
+        if (blockBuildDto == null || blockBuildDto.getBlock() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         Map<String, Object> content = blockBuildDto.getBlock().getContent();
         if (content.isEmpty()) {
             return Result.failed(ExceptionEnum.CM204);
@@ -502,45 +513,43 @@ public class BlockServiceImpl implements BlockService {
         if (isHistory) {
             return Result.failed(ExceptionEnum.CM205);
         }
-        BlockParam blockParam = blockBuildDto.getBlock();
-        List<I18nEntryDto> i18nList = i18nEntryMapper.findI18nEntriesByHostandHostType(id, "block");
-        // 序列化国际化词条
-        SchemaI18n appEntries = i18nEntryService.formatEntriesList(i18nList);
-        BlockHistory blockHistory = new BlockHistory();
-        blockParam.setCreatedTime(null);
-        blockParam.setLastUpdatedTime(null);
-        blockParam.setTenantId(null);
-        Map<String, Map<String, String>> i18n = new HashMap<>();
-        i18n.put("zh_CN", appEntries.getZhCn());
-        i18n.put("en_US", appEntries.getEnUs());
+        try {
+            BlockParam blockParam = blockBuildDto.getBlock();
+            List<I18nEntryDto> i18nList = i18nEntryMapper.findI18nEntriesByHostandHostType(id, "block");
+            // 序列化国际化词条
+            SchemaI18n appEntries = i18nEntryService.formatEntriesList(i18nList);
+            BlockHistory blockHistory = new BlockHistory();
+            blockParam.setCreatedTime(null);
+            blockParam.setLastUpdatedTime(null);
+            blockParam.setTenantId(null);
+            Map<String, Map<String, String>> i18n = new HashMap<>();
+            i18n.put("zh_CN", appEntries.getZhCn());
+            i18n.put("en_US", appEntries.getEnUs());
 
-        blockParam.setI18n(i18n);
-        blockHistory.setIsPublic(blockParam.getPublic());
-        BeanUtil.copyProperties(blockParam, blockHistory);
-        blockHistory.setRefId(id);
-        blockHistory.setVersion(blockBuildDto.getVersion());
-        blockHistory.setMessage(blockBuildDto.getDeployInfo());
-        Map<String, Object> buildInfo = new HashMap<>();
-        buildInfo.put("result", true);
-        buildInfo.put("versions", Arrays.asList(blockBuildDto.getVersion()));
-        // 获取当前时间
-        LocalDateTime now = LocalDateTime.now();
+            blockParam.setI18n(i18n);
+            blockHistory.setIsPublic(blockParam.getPublic());
+            BeanUtil.copyProperties(blockParam, blockHistory);
+            blockHistory.setRefId(id);
+            blockHistory.setVersion(blockBuildDto.getVersion());
+            blockHistory.setMessage(blockBuildDto.getDeployInfo());
 
-        // 使用自定义格式化输出
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = now.format(formatter);
-        buildInfo.put("endTime", formattedDate);
-        blockHistory.setBuildInfo(buildInfo);
-        blockHistory.setId(null);
-        int blockHistoryResult = blockHistoryMapper.createBlockHistory(blockHistory);
-        if (blockHistoryResult < 1) {
-            return Result.failed(ExceptionEnum.CM008);
+            // 获取当前时间
+            LocalDateTime now = LocalDateTime.now();
+            Map<String, Object> buildInfo = createBuildInfo(blockBuildDto.getVersion(), now);
+            blockHistory.setBuildInfo(buildInfo);
+            blockHistory.setId(null);
+            int blockHistoryResult = blockHistoryMapper.createBlockHistory(blockHistory);
+            if (blockHistoryResult < 1) {
+                return Result.failed(ExceptionEnum.CM008);
+            }
+            blockParam.setLastBuildInfo(buildInfo);
+            blockParam.setLatestHistoryId(blockHistory);
+            blockParam.setLatestVersion(blockHistory.getVersion());
+
+            return updateBlockById(blockParam, blockParam.getAppId());
+        } catch (Exception e) {
+            return Result.failed(ExceptionEnum.CM001);
         }
-        blockParam.setLastBuildInfo(buildInfo);
-        blockParam.setLatestHistoryId(blockHistory);
-        blockParam.setLatestVersion(blockHistory.getVersion());
-
-        return updateBlockById(blockParam, blockParam.getAppId());
     }
 
     /**
@@ -619,10 +628,9 @@ public class BlockServiceImpl implements BlockService {
             }
         }
         List<Block> blocksList = new ArrayList<>();
-        String createdBy = "1"; // 获取用户登录id
         // 如果有 groupId, 只查group下的block,以及自己创建的区块
         if (groupIdTemp != 0) {
-            blocksList = blockMapper.findBlockByBlockGroupId(groupIdTemp, createdBy);
+            blocksList = blockMapper.findBlockByBlockGroupId(groupIdTemp, DEFAULT_USER_ID);
             return Result.success(blocksList);
         }
         // 如果没有 groupId
@@ -634,7 +642,7 @@ public class BlockServiceImpl implements BlockService {
         List<Block> appBlocks = blocksList;
         // 通过createBy查询区块表数据
         Block blocks = new Block();
-        blocks.setCreatedBy(createdBy);
+        blocks.setCreatedBy(DEFAULT_USER_ID);
         List<Block> personalBlocks = queryBlockByCondition(blocks);
         List<Block> retBlocks = new ArrayList<>();
         // 合并 personalBlocks 和 appBlocks 数组
@@ -670,15 +678,16 @@ public class BlockServiceImpl implements BlockService {
      * @return the id
      */
     public int ensureBlockId(BlockParam blockParam) {
+        log.debug("Ensuring block ID for label: {}", blockParam.getLabel());
         if (blockParam.getId() != null) {
+            log.debug("Block ID already exists: {}", blockParam.getId());
             return blockParam.getId();
         }
         // 查询当前用户信息
-        int userId = 86;
         Block queryBlock = new Block();
         queryBlock.setLabel(blockParam.getLabel());
         queryBlock.setFramework(blockParam.getFramework());
-        queryBlock.setCreatedBy(String.valueOf(userId));
+        queryBlock.setCreatedBy(DEFAULT_USER_ID);
         List<Block> blockList = blockMapper.queryBlockByCondition(queryBlock);
         if (blockList.isEmpty()) {
             createBlock(blockParam);
@@ -704,5 +713,21 @@ public class BlockServiceImpl implements BlockService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 创建构建信息
+     *
+     * @param version     the id
+     * @param buildTime the buildTime
+     * @return buildInfo the buildInfo
+     */
+    private Map<String, Object> createBuildInfo(String version, LocalDateTime buildTime) {
+        Map<String, Object> buildInfo = new HashMap<>();
+        buildInfo.put("result", true);
+        buildInfo.put("versions", Collections.singletonList(version));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        buildInfo.put("endTime", buildTime.format(formatter));
+        return buildInfo;
     }
 }

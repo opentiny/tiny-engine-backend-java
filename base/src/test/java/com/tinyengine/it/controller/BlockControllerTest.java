@@ -12,9 +12,12 @@
 
 package com.tinyengine.it.controller;
 
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -99,11 +102,18 @@ class BlockControllerTest {
     @Test
     void testCreateBlocks() {
         BlockParam mockParam = new BlockParam();
+        mockParam.setName("Test Block");
+        mockParam.setLabel("test-block");
         BlockDto mockData = new BlockDto();
+        mockData.setName("Test Block");
+        mockData.setLabel("test-block");
         when(blockService.createBlock(any(BlockParam.class))).thenReturn(Result.success(mockData));
 
         Result<BlockDto> result = blockController.createBlocks(mockParam);
         Assertions.assertEquals(mockData, result.getData());
+        verify(blockService).createBlock(argThat(param ->
+                param.getName().equals("Test Block") && param.getLabel().equals("test-block")
+        ));
     }
 
     @Test
@@ -179,15 +189,21 @@ class BlockControllerTest {
         Assertions.assertEquals(mockData, result.getData());
     }
 
+
     @Test
     void testUpdateBlocks() {
         BlockParam blockParam = new BlockParam();
+        blockParam.setName("Updated Block");
         BlockDto returnData = new BlockDto();
+        returnData.setName("Updated Block");
         when(blockService.updateBlockById(any(BlockParam.class), anyInt())).thenReturn(Result.success(returnData));
-
         when(blockService.queryBlockById(anyInt())).thenReturn(returnData);
 
         Result<BlockDto> result = blockController.updateBlocks(blockParam, Integer.valueOf(0), Integer.valueOf(1));
         Assertions.assertEquals(returnData, result.getData());
+        verify(blockService).updateBlockById(argThat(param ->
+                param.getName().equals("Updated Block") &&
+                        param.getId().equals(0)
+        ), eq(1));
     }
 }

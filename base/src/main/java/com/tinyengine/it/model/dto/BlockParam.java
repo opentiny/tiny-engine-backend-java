@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,10 @@ import java.util.Map;
  * <p>
  * 区块param
  * </p>
- *
+ * This class serves as a parameter object for block creation and updates,
+ * working in conjunction with {@link BlockDto}. While BlockDto represents
+ * the full block data model, BlockParam is specifically designed for
+ * handling input parameters during block operations.
  * @author lu-yg
  * @since 2024-01-27
  */
@@ -151,6 +155,9 @@ public class BlockParam extends BaseEntity {
     private String currentVersion;
     @JsonProperty("public")
     public Integer getPublic() {
+        if (this.publicStatus != null && !Arrays.asList(0, 1, 2).contains(this.publicStatus)) {
+            throw new IllegalStateException("Invalid public status value: " + this.publicStatus);
+        }
         return this.publicStatus;
     }
 }

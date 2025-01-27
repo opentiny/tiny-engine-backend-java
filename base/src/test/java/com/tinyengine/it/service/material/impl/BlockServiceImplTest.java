@@ -117,8 +117,16 @@ class BlockServiceImplTest {
         when(blockMapper.findBlockAndGroupAndHistoByBlockId(any())).thenReturn(t);
         BlockParam blockParam = new BlockParam();
         blockParam.setId(0);
+        // Add test cases for required fields
+        blockParam.setName("test");
+        blockParam.setLabel("test-label");
+        blockParam.setFramework("vue");
         Result<BlockDto> result = blockServiceImpl.createBlock(blockParam);
         Assertions.assertEquals("test", result.getData().getName());
+        // Test validation failure
+        BlockParam invalidParam = new BlockParam();
+        Result<BlockDto> invalidResult = blockServiceImpl.createBlock(invalidParam);
+        Assertions.assertFalse(invalidResult.isSuccess());
     }
 
     @Test
