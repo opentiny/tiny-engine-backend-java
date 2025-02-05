@@ -237,7 +237,6 @@ create table `t_block_history`
     `npm_name`          varchar(255) comment 'npm包名',
     `i18n`              longtext NULL COMMENT '国际化',
     `content_blocks`    longtext comment '设计预留字段',
-    `block_group_id`    int comment '区块分组id',
     `tenant_id`         varchar(60)  not null comment '租户id',
     `renter_id`         varchar(60) comment '业务租户id',
     `site_id`           varchar(60) comment '站点id，设计预留字段',

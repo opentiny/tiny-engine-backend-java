@@ -110,9 +110,6 @@ public class BlockHistory extends HistoryEntity {
     @TableField(typeHandler = MapTypeHandler.class)
     private Map<String, Object> i18n;
 
-    @Schema(name = "blockGroupId", description = "区块分组关联Id")
-    private Integer blockGroupId;
-
     @Schema(name = "contentBlocks", description = "*暂不清楚*")
     @TableField(typeHandler = MapTypeHandler.class)
     private List<BlockVersionDto> contentBlocks;
