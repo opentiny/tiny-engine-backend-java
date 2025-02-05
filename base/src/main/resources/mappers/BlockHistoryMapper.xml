@@ -8,7 +8,7 @@
     <sql id="Base_Column_List">
         id
         , ref_id, message, version, label, name, framework, content, assets, build_info, screenshot, path, description,
-        tags, is_official, public, is_default, tiny_reserved, mode, platform_id, app_id, npm_name, i18n, block_group_id,
+        tags, is_official, public, is_default, tiny_reserved, mode, platform_id, app_id, npm_name, i18n,
         content_blocks, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
@@ -79,9 +79,6 @@
         </if>
         <if test="i18n!=null and i18n!=''">
             AND i18n = #{i18n}
-        </if>
-        <if test="blockGroupId!=null and blockGroupId!=''">
-            AND block_group_id = #{blockGroupId}
         </if>
         <if test="contentBlocks!=null and contentBlocks!=''">
             AND content_blocks = #{contentBlocks}
@@ -177,9 +174,6 @@
         <if test="i18n!=null and i18n!=''">
             i18n = #{i18n},
         </if>
-        <if test="blockGroupId!=null and blockGroupId!=''">
-            block_group_id = #{blockGroupId},
-        </if>
         <if test="contentBlocks!=null and contentBlocks!=''">
             content_blocks = #{contentBlocks},
         </if>
@@ -232,7 +226,6 @@
         <result column="app_id" property="appId"/>
         <result column="npm_name" property="npmName"/>
         <result column="i18n" property="i18n"/>
-        <result column="block_group_id" property="blockGroupId"/>
         <result column="content_blocks" property="contentBlocks"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
@@ -325,7 +318,6 @@
                                     , app_id
                                     , npm_name
                                     , i18n
-                                    , block_group_id
                                     , content_blocks
                                     , created_by
                                     , last_updated_by
@@ -357,7 +349,6 @@
                , #{appId}
                , #{npmName}
                , #{i18n}
-               , #{blockGroupId}
                , #{contentBlocks}
                , #{createdBy}
                , #{lastUpdatedBy}
