@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParam;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
@@ -66,18 +67,18 @@ public interface BlockService {
     /**
      * 根据主键id更新表t_block信息
      *
-     * @param blockDto the block dto
+     * @param blockParam the block param
      * @return the BlockDto
      */
-    Result<BlockDto> updateBlockById(BlockDto blockDto, Integer appId);
+    Result<BlockDto> updateBlockById(BlockParam blockParam, Integer appId);
 
     /**
      * 新增表t_block数据
      *
-     * @param blockDto the block dto
+     * @param blockParam the blockParam
      * @return the result
      */
-    Result<BlockDto> createBlock(BlockDto blockDto);
+    Result<BlockDto> createBlock(BlockParam blockParam);
 
     /**
      * 区块分页查询

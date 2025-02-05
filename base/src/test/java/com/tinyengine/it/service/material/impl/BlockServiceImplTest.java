@@ -28,6 +28,7 @@ import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParam;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.App;
@@ -114,28 +115,30 @@ class BlockServiceImplTest {
         BlockDto t = new BlockDto();
         t.setName("test");
         when(blockMapper.findBlockAndGroupAndHistoByBlockId(any())).thenReturn(t);
-        BlockDto blockDto = new BlockDto();
-        blockDto.setId(1);
-        blockDto.setScreenshot("aa");
-        blockDto.setLabel("bb");
-        blockDto.setFramework("cc");
-        blockDto.setPlatformId(1);
-        blockDto.setAppId(1);
-        blockDto.setName("testBlock");
-        Result<BlockDto> result = blockServiceImpl.createBlock(blockDto);
+        BlockParam blockParam = new BlockParam();
+        blockParam.setId(0);
+        // Add test cases for required fields
+        blockParam.setName("test");
+        blockParam.setLabel("test-label");
+        blockParam.setFramework("vue");
+        Result<BlockDto> result = blockServiceImpl.createBlock(blockParam);
         Assertions.assertEquals("test", result.getData().getName());
+        // Test validation failure
+        BlockParam invalidParam = new BlockParam();
+        Result<BlockDto> invalidResult = blockServiceImpl.createBlock(invalidParam);
+        Assertions.assertFalse(invalidResult.isSuccess());
     }
 
     @Test
     void testUpdateBlockById() {
-        BlockDto blockDto = new BlockDto();
+        BlockParam blockParam = new BlockParam();
         when(blockMapper.updateBlockById(any())).thenReturn(1);
         when(blockMapper.findBlockAndGroupAndHistoByBlockId(anyInt())).thenReturn(new BlockDto());
         Block block = new Block();
         block.setAppId(1);
-        when(blockMapper.queryBlockById(blockDto.getId())).thenReturn(block);
+        when(blockMapper.queryBlockById(blockParam.getId())).thenReturn(block);
 
-        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockDto, 1);
+        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockParam, 1);
         Assertions.assertEquals(null, result.getData());
     }
 

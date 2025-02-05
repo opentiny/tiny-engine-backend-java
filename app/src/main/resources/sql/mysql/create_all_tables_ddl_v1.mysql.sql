@@ -198,7 +198,6 @@ create table `t_block`
     `platform_id`       int          not null comment '设计器id',
     `app_id`            int          not null comment '创建区块时所在appid',
     `content_blocks`    longtext comment '设计预留字段',
-    `block_group_id`    int comment '区块分组id',
     `tenant_id`         varchar(60)  not null comment '租户id',
     `renter_id`         varchar(60) comment '业务租户id',
     `site_id`           varchar(60) comment '站点id，设计预留字段',
