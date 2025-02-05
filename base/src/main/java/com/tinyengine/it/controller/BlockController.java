@@ -19,6 +19,7 @@ import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParam;
 import com.tinyengine.it.model.dto.BlockParamDto;
 import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
@@ -150,13 +151,13 @@ public class BlockController {
     /**
      * 创建block
      *
-     * @param blockDto the block dto
+     * @param blockParam the blockParam
      * @return BlockDto
      */
     @Operation(summary = "创建block",
             description = "创建block",
             parameters = {
-                    @Parameter(name = "blockDto", description = "入参对象")
+                    @Parameter(name = "blockParam", description = "入参对象")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
@@ -166,8 +167,8 @@ public class BlockController {
     )
     @SystemControllerLog(description = "区块创建api")
     @PostMapping("/block/create")
-    public Result<BlockDto> createBlocks(@Valid @RequestBody BlockDto blockDto) {
-        return blockService.createBlock(blockDto);
+    public Result<BlockDto> createBlocks(@Valid @RequestBody BlockParam blockParam) {
+        return blockService.createBlock(blockParam);
     }
 
 
@@ -268,7 +269,7 @@ public class BlockController {
     @GetMapping("/block/notgroup/{groupId}")
     public Result<List<BlockDto>> findBlocksNotInGroup(@PathVariable Integer groupId,
                                                        @RequestParam(value = "label_contains", required = false) String label,
-                                                       @RequestParam(value = "tags_contains", required = false) String [] tags,
+                                                       @RequestParam(value = "tags_contains", required = false) String[] tags,
                                                        @RequestParam(value = "createdBy", required = false) String createdBy) {
         NotGroupDto notGroupDto = new NotGroupDto();
         notGroupDto.setGroupId(groupId);
@@ -378,14 +379,14 @@ public class BlockController {
     /**
      * 修改block
      *
-     * @param blockDto blockDto
+     * @param blockParam blockParam
      * @param id       id
      * @return block dto
      */
     @Operation(summary = "修改区块",
             description = "修改区块",
             parameters = {
-                    @Parameter(name = "blockDto", description = "入参对象"),
+                    @Parameter(name = "blockParam", description = "入参对象"),
                     @Parameter(name = "id", description = "区块id")
             },
             responses = {
@@ -396,10 +397,10 @@ public class BlockController {
     )
     @SystemControllerLog(description = "区块修改api")
     @PostMapping("/block/update/{id}")
-    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockDto blockDto, @PathVariable Integer id,
+    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockParam blockParam, @PathVariable Integer id,
                                          @RequestParam(value = "appId", required = false) Integer appId) {
-        blockDto.setId(id);
-        return blockService.updateBlockById(blockDto, appId);
+        blockParam.setId(id);
+        return blockService.updateBlockById(blockParam, appId);
     }
 
     /**

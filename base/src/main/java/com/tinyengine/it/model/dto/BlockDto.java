@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.common.handler.ListTypeHandler;
 import com.tinyengine.it.common.handler.MapTypeHandler;
+import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
 
@@ -133,7 +134,7 @@ public class BlockDto extends BaseEntity {
 
     @TableField(exist = false)
     @Schema(name = "groups", type = " List<BlockGroup>", description = "区块分组")
-    private List<Object> groups = new ArrayList<>();
+    private List<BlockGroup> groups = new ArrayList<>();
 
     @TableField(exist = false)
     @Schema(name = "histories", type = " List<BlockHistory>", description = "区块历史")

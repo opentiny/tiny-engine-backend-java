@@ -22,24 +22,16 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '8.*'
+          distribution: 'temurin'
 
-      # 安装 Checkstyle（如果你是用 Maven 或 Gradle）
-      - name: Install dependencies
+      # 安装依赖并运行 Checkstyle（如果是 Maven 项目）
+      - name: Install dependencies and run Checkstyle
         run: |
-          ./mvnw install # 如果是 Maven 项目
-          # 或者
-          # ./gradlew build # 如果是 Gradle 项目
-
-      # 运行 Checkstyle
-      - name: Run Checkstyle
-        run: |
-          ./mvnw checkstyle:check # 如果是 Maven 项目
-          # 或者
-          # ./gradlew check # 如果是 Gradle 项目
+          mvn checkstyle：check
 
       # 查看 Checkstyle 检查报告
       - name: Upload Checkstyle report
         uses: actions/upload-artifact@v4
         with:
           name: checkstyle-report
-          path: target/checkstyle-result.xml # 如果是 Maven 项目
+          path: target/checkstyle-result.xml  # 这个路径应该是 Maven 生成的检查报告路径
