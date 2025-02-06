@@ -556,7 +556,6 @@ public class BlockServiceImpl implements BlockService {
             blockParam.setLatestVersion(blockHistory.getVersion());
             blockParam.setId(blockDto.getId());
             blockParam.setGroups(null);
-
             return updateBlockById(blockParam, blockDto.getAppId());
         } catch (Exception e) {
             return Result.failed(ExceptionEnum.CM001);
