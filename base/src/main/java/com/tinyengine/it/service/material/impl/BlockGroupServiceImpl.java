@@ -183,7 +183,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock( blockCreatedBy, groupCreatedBy);
         }
 
-        if (blockGroupsListResult.isEmpty()) {
+        if (blockGroupsListResult.get(0).getId() == null) {
             return blockGroupsListResult;
         }
         // 对查询的结果的区块赋值current_version

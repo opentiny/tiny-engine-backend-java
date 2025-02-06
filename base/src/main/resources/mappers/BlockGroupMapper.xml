@@ -311,12 +311,14 @@
         r_block_group_block rbg ON rbg.block_group_id = bg.id
         LEFT JOIN
         t_block b ON b.id = rbg.block_id
-        <if test="blockCreatedBy != null">
-            AND b.created_by = #{blockCreatedBy}
-        </if>
-        <if test="blockCreatedBy == null">
-            AND b.last_build_info is not null and b.content is not null and b.assets is not null
-        </if>
+        <choose>
+            <when test="blockCreatedBy != null">
+                AND b.created_by = #{blockCreatedBy}
+            </when>
+            <otherwise>
+                AND b.last_build_info is not null and b.content is not null
+            </otherwise>
+        </choose>
         <where>
             <if test="id != null">
                 AND bg.id = #{id}
@@ -326,6 +328,7 @@
             </if>
         </where>
     </select>
+
 
     <!-- 根据条件查询表t_block_group数据 -->
     <select id="queryBlockGroupByCondition" resultMap="BlockGroupMap">
