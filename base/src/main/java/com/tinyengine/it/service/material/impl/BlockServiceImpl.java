@@ -254,7 +254,7 @@ public class BlockServiceImpl implements BlockService {
         if (groupResult < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        return Result.success(blocksResult);
+        return Result.success(queryBlockById(id));
     }
 
     /**
@@ -555,6 +555,7 @@ public class BlockServiceImpl implements BlockService {
             blockParam.setLatestHistoryId(blockHistory);
             blockParam.setLatestVersion(blockHistory.getVersion());
             blockParam.setId(blockDto.getId());
+            blockParam.setGroups(null);
             return updateBlockById(blockParam, blockDto.getAppId());
         } catch (Exception e) {
             return Result.failed(ExceptionEnum.CM001);

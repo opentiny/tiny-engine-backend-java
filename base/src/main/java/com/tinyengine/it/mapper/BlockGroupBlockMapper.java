@@ -90,7 +90,7 @@ public interface BlockGroupBlockMapper extends BaseMapper<BlockGroupBlock> {
     List<BlockGroupBlock> findBlockGroupBlockByBlockGroupId(Integer blockGroupId);
 
     /**
-     * 通过区块分组id查询分组下区块
+     * 通过区块分组id和区块删除区块与分组关联关系
      * @param blockId the block id
      * @param groupId the block group id
      * @return the list
