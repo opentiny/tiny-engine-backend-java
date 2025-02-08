@@ -185,6 +185,7 @@ public class AppServiceImpl implements AppService {
         if (!appResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
+        app.setIsPublish(false);
         int result = appMapper.createApp(app);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
