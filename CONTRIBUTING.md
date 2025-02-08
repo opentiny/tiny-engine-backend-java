@@ -21,8 +21,7 @@ If the issue is a defect, select the bug report template when creating a new iss
 
 To report a defect, you need to fill in the following information:
 
-* TinyEngine-backend-java and node version numbers
-*Screenshots can be used to describe the defect. If an error is reported, the error information can be posted.
+* Screenshots can be used to describe the defect. If an error is reported, the error information can be posted.
 * It is recommended that a minimum demo link be provided to reproduce the defect.
 
 If the feature is a new feature, select the Feature request template. The title complies with the format of the new feature description, for example, [TinyEngine-backend-java].
