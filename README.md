@@ -15,7 +15,7 @@ Local Boot Steps:
 * Modify the configuration of the connection database in the tiny-engine-backend-java/app/src/main/resources/application-dev.yml file
 * Start the project in tiny-engine-backend-java/app/src/main/java/com/tinyengine/it/TinyEngineApplication for local development
 
-For details, see the section on how to start a local front-end and backend in [TinyEngine Official Website - User Manual](https://opentiny.design/tiny-engine#/help-center/course/backend/51).
+For details, please refer to [TinyEngine Official Website - User Manual - Platform Development Guide - Local Startup Joint Debugging of Front-end and Backend Codes](https://opentiny.design/tiny-engine#/help-center/course/dev/1200).
 
 ### Directory Rules
 
@@ -157,7 +157,7 @@ Before development, you need to understand the overall directory structure of th
 
 ### Manual
 
-For more information about how to use the server, please refer to [TinyEngine Official Website - User Manual](https://opentiny.design/tiny-engine#/help-center/course/backend/51)
+For more information about how to use the server, please refer to [TinyEngine Official Website - User Manual - Platform Development Guide](https://opentiny.design/tiny-engine#/help-center/course/dev/90)
 
 
 #### Local Runtime Configuration:

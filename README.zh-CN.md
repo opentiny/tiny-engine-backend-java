@@ -17,7 +17,7 @@
 * 在 tiny-engine-backend-java/app/src/main/resources/application-dev.yml文件里修改连接数据库相关配置
 * 在 tiny-engine-backend-java/app/src/main/java/com/tinyengine/it/TinyEngineApplication主函数入口启动项目进行本地开发
 
-详细请看[TinyEngine 官网-使用手册](https://opentiny.design/tiny-engine#/help-center/course/backend/51)中的前后端本地如何启动章节
+详细请看[TinyEngine 官网-使用手册-平台开发指南-前后端代码本地启动联调](https://opentiny.design/tiny-engine#/help-center/course/dev/1200)章节
 
 
 ### 目录规则
@@ -160,7 +160,7 @@
 
 ### 使用手册
 
-具体服务端使用文档请查看[TinyEngine 官网-使用手册](https://opentiny.design/tiny-engine#/help-center/course/backend/51)
+具体服务端使用文档请查看[TinyEngine 官网-使用手册-平台开发指南](https://opentiny.design/tiny-engine#/help-center/course/dev/90)
 
 
 #### 本地运行时配置：
