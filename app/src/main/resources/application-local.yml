@@ -40,3 +40,10 @@ logging:
     file: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
   file:
     name: /logs
+
+cors:
+  allowed-origins: "http://127.0.0.1:8090"
+  allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+  allowed-headers: "Accept,Referer,User-Agent,x-lowcode-mode,x-lowcode-org,Content-Type,Authorization"
+  exposed-headers: "Authorization"
+  allow-credentials: true
