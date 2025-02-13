@@ -72,7 +72,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     public BlockGroup findBlockGroupById(@Param("id") Integer id) {
         BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null, DEFAULT_USER_ID);
         // 对查询的结果的区块赋值current_version
-        if (blockGroupResult.getBlocks().isEmpty()) {
+        if (blockGroupResult == null || blockGroupResult.getBlocks().isEmpty()) {
             return blockGroupResult;
         }
         for (Block block : blockGroupResult.getBlocks()) {

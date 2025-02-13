@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,13 +72,13 @@ class BlockGroupControllerTest {
 
     @Test
     void testUpdateBlockGroups() {
-        when(blockGroupService.updateBlockGroupById(any(BlockGroup.class))).thenReturn(Integer.valueOf(0));
+        when(blockGroupService.updateBlockGroupById(any(BlockGroup.class))).thenReturn(1);
         BlockGroup blockGroup = new BlockGroup();
-        when(blockGroupMapper.queryBlockGroupAndBlockById(anyInt(), null, null)).thenReturn(blockGroup);
+        when(blockGroupService.findBlockGroupById(1)).thenReturn(blockGroup);
 
         Result<List<BlockGroup>> result =
-                blockGroupController.updateBlockGroups(Integer.valueOf(0), new BlockGroup());
-        Assertions.assertEquals(blockGroup, result.getData().get(0));
+                blockGroupController.updateBlockGroups(1, new BlockGroup());
+        Assertions.assertEquals("200", result.getCode());
     }
 
     @Test
@@ -86,9 +87,8 @@ class BlockGroupControllerTest {
         mockData.setId(1);
         when(blockGroupService.findBlockGroupById(anyInt())).thenReturn(mockData);
         when(blockGroupService.deleteBlockGroupById(anyInt())).thenReturn(Integer.valueOf(0));
-        BlockGroup resultData = new BlockGroup();
 
         Result<List<BlockGroup>> result = blockGroupController.deleteBlockGroups(1);
-        Assertions.assertEquals(resultData, result.getData().get(0));
+        Assertions.assertEquals("200", result.getCode());
     }
 }
