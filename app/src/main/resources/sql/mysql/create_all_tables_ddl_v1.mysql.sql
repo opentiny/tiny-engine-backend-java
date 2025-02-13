@@ -67,7 +67,7 @@ create table `t_app`
     `id`                  int          not null auto_increment comment '主键id',
     `name`                varchar(255) not null comment '应用名称',
     `platform_id`         int          not null comment '关联设计器id',
-    `platform_history_id` int          not null comment '关联设计器历史版本id',
+    `platform_history_id` int comment '关联设计器历史版本id',
     `publish_url`         varchar(255) comment '应用静态资源托管地址',
     `editor_url`          varchar(255) comment '设计器地址',
     `visit_url`           varchar(255) comment '访问地址',
