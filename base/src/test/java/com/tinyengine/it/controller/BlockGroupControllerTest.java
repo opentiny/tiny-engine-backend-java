@@ -18,7 +18,6 @@ import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.BlockGroupMapper;
-import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.service.material.BlockGroupService;
 
@@ -67,7 +66,7 @@ class BlockGroupControllerTest {
         when(blockGroupService.createBlockGroup(any(BlockGroup.class))).thenReturn(new Result<List<BlockGroup>>());
 
         Result<List<BlockGroup>> result = blockGroupController.createBlockGroups(new BlockGroup());
-        Assertions.assertEquals(new Result<List<BlockGroupDto>>(), result);
+        Assertions.assertEquals(new Result<List<BlockGroup>>(), result);
     }
 
     @Test
@@ -87,7 +86,7 @@ class BlockGroupControllerTest {
         mockData.setId(1);
         when(blockGroupService.findBlockGroupById(anyInt())).thenReturn(mockData);
         when(blockGroupService.deleteBlockGroupById(anyInt())).thenReturn(Integer.valueOf(0));
-        BlockGroupDto resultData = new BlockGroupDto();
+        BlockGroup resultData = new BlockGroup();
 
         Result<List<BlockGroup>> result = blockGroupController.deleteBlockGroups(1);
         Assertions.assertEquals(resultData, result.getData().get(0));

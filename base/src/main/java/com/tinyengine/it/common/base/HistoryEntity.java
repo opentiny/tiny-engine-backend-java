@@ -25,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HistoryEntity extends BaseEntity {
-    @Schema(name = "refId", description = "关联主表id")
+    @Schema(name = "block_id", description = "关联主表id")
     @JsonProperty("block_id")
     private Integer refId;
 
