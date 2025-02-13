@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.common.base;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,7 @@ import lombok.Setter;
 @Setter
 public class HistoryEntity extends BaseEntity {
     @Schema(name = "refId", description = "关联主表id")
+    @JsonProperty("block_id")
     private Integer refId;
 
     @Schema(name = "version", description = "版本")

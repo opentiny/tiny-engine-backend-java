@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -111,7 +112,7 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "创建区块分组")
     @PostMapping("/block-groups/create")
-    public Result<List<BlockGroupDto>> createBlockGroups(@Valid @RequestBody BlockGroup blockGroup) {
+    public Result<List<BlockGroup>> createBlockGroups(@Valid @RequestBody BlockGroup blockGroup) {
         blockGroup.setPlatformId(1);
         return blockGroupService.createBlockGroup(blockGroup);
     }
@@ -137,13 +138,13 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "修改区块分组")
     @PostMapping("/block-groups/update/{id}")
-    public Result<List<BlockGroupDto>> updateBlockGroups(@Valid @PathVariable Integer id,
-                                                         @RequestBody BlockGroup blockGroup) {
+    public Result<List<BlockGroup>> updateBlockGroups(@Valid @PathVariable Integer id,
+                                                      @RequestBody BlockGroup blockGroup) {
         blockGroup.setId(id);
         blockGroupService.updateBlockGroupById(blockGroup);
         // 页面返回数据显示
-        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroup.getId());
-        return Result.success(blockGroupsListResult);
+        BlockGroup blockGroupResult = blockGroupService.findBlockGroupById(id);
+        return Result.success(Collections.singletonList(blockGroupResult));
     }
 
     /**
@@ -166,14 +167,14 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "根据id删除区块分组")
     @GetMapping("/block-groups/delete/{id}")
-    public Result<List<BlockGroupDto>> deleteBlockGroups(@PathVariable Integer id) throws ServiceException {
-        BlockGroup blockGroups = blockGroupService.findBlockGroupById(id);
-        if (blockGroups == null) {
+    public Result<List<BlockGroup>> deleteBlockGroups(@PathVariable Integer id) throws ServiceException {
+        BlockGroup blockGroup = blockGroupService.findBlockGroupById(id);
+        if (blockGroup == null) {
             return Result.failed(ExceptionEnum.CM009);
         }
         // 页面返回数据显示
-        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroups.getId());
         blockGroupService.deleteBlockGroupById(id);
-        return Result.success(blockGroupsListResult);
+        return Result.success(Collections.singletonList(blockGroup));
+
     }
 }

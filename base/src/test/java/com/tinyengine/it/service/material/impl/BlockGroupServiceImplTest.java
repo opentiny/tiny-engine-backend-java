@@ -107,7 +107,7 @@ class BlockGroupServiceImplTest {
         when(blockGroupMapper.createBlockGroup(param)).thenReturn(1);
         BlockGroup blockGroupParam = new BlockGroup();
         blockGroupParam.setId(1);
-        Result<List<BlockGroupDto>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
+        Result<List<BlockGroup>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
         Assertions.assertNotNull(result.getData());
     }
 

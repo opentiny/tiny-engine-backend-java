@@ -64,21 +64,21 @@ class BlockGroupControllerTest {
 
     @Test
     void testCreateBlockGroups() {
-        when(blockGroupService.createBlockGroup(any(BlockGroup.class))).thenReturn(new Result<List<BlockGroupDto>>());
+        when(blockGroupService.createBlockGroup(any(BlockGroup.class))).thenReturn(new Result<List<BlockGroup>>());
 
-        Result<List<BlockGroupDto>> result = blockGroupController.createBlockGroups(new BlockGroup());
+        Result<List<BlockGroup>> result = blockGroupController.createBlockGroups(new BlockGroup());
         Assertions.assertEquals(new Result<List<BlockGroupDto>>(), result);
     }
 
     @Test
     void testUpdateBlockGroups() {
         when(blockGroupService.updateBlockGroupById(any(BlockGroup.class))).thenReturn(Integer.valueOf(0));
-        BlockGroupDto blockGroupDto = new BlockGroupDto();
-        when(blockGroupMapper.getBlockGroupsById(anyInt())).thenReturn(Arrays.<BlockGroupDto>asList(blockGroupDto));
+        BlockGroup blockGroup = new BlockGroup();
+        when(blockGroupMapper.queryBlockGroupAndBlockById(anyInt(), null, null)).thenReturn(blockGroup);
 
-        Result<List<BlockGroupDto>> result =
+        Result<List<BlockGroup>> result =
                 blockGroupController.updateBlockGroups(Integer.valueOf(0), new BlockGroup());
-        Assertions.assertEquals(blockGroupDto, result.getData().get(0));
+        Assertions.assertEquals(blockGroup, result.getData().get(0));
     }
 
     @Test
@@ -88,9 +88,8 @@ class BlockGroupControllerTest {
         when(blockGroupService.findBlockGroupById(anyInt())).thenReturn(mockData);
         when(blockGroupService.deleteBlockGroupById(anyInt())).thenReturn(Integer.valueOf(0));
         BlockGroupDto resultData = new BlockGroupDto();
-        when(blockGroupMapper.getBlockGroupsById(anyInt())).thenReturn(Arrays.<BlockGroupDto>asList(resultData));
 
-        Result<List<BlockGroupDto>> result = blockGroupController.deleteBlockGroups(1);
+        Result<List<BlockGroup>> result = blockGroupController.deleteBlockGroups(1);
         Assertions.assertEquals(resultData, result.getData().get(0));
     }
 }
