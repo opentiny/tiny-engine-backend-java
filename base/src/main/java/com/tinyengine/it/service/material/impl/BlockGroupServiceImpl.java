@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     @Autowired
     private BlockGroupBlockMapper blockGroupBlockMapper;
 
+    private static final String DEFAULT_USER_ID = "1";
     /**
      * 查询表t_block_group所有数据
      *
@@ -68,7 +70,24 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public BlockGroup findBlockGroupById(@Param("id") Integer id) {
-        return blockGroupMapper.queryBlockGroupById(id);
+        BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null, DEFAULT_USER_ID);
+        // 对查询的结果的区块赋值current_version
+        if (blockGroupResult == null || blockGroupResult.getBlocks().isEmpty()) {
+            return blockGroupResult;
+        }
+        for (Block block : blockGroupResult.getBlocks()) {
+            BlockCarriersRelation queryParam = new BlockCarriersRelation();
+            queryParam.setBlockId(block.getId());
+            queryParam.setHostId(id);
+            queryParam.setHostType(Enums.BlockGroup.BLOCK_GROUP.getValue());
+            List<BlockCarriersRelation> blockCarriersRelations = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
+            if (blockCarriersRelations.isEmpty()) {
+                continue;
+            }
+            String version = blockCarriersRelations.get(0).getVersion();
+            block.setCurrentVersion(version);
+        }
+        return blockGroupResult;
     }
 
     /**
@@ -142,7 +161,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return insert number
      */
     @Override
-    public Result<List<BlockGroupDto>> createBlockGroup(BlockGroup blockGroup) {
+    public Result<List<BlockGroup>> createBlockGroup(BlockGroup blockGroup) {
         List<BlockGroupDto> blockGroupsList = blockGroupMapper.queryBlockGroupByCondition(blockGroup);
         if (blockGroupsList.isEmpty()) {
             blockGroupMapper.createBlockGroup(blockGroup);
@@ -150,8 +169,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             return Result.failed(ExceptionEnum.CM003);
         }
         // 页面返回数据显示
-        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroup.getId());
-        return Result.success(blockGroupsListResult);
+        BlockGroup blockGroupResult = findBlockGroupById(blockGroup.getId());
+        return Result.success(Collections.singletonList(blockGroupResult));
     }
 
     /**
