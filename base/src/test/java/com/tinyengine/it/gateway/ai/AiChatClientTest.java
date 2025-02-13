@@ -17,8 +17,10 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
+import com.sun.javafx.collections.MappingChange;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiMessages;
+import com.tinyengine.it.model.dto.AiParam;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
 import reactor.core.publisher.Mono;
@@ -84,9 +86,11 @@ class AiChatClientTest {
                 Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
 
         when(bodyUriSpec.uri(anyString())).thenReturn(bodyUriSpec);
-
+        Map<String,String> map = new HashMap<>();
+        map.put("model",modelName);
         AiMessages aiMessages = new AiMessages();
-        OpenAiBodyDto param = new OpenAiBodyDto(modelName, Arrays.asList(aiMessages));
+        //OpenAiBodyDto param = new OpenAiBodyDto(modelName, Arrays.asList(aiMessages));
+        AiParam param = new AiParam(map,Arrays.asList(aiMessages));
         Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
         Assertions.assertNull(returnData);
     }

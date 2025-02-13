@@ -17,8 +17,10 @@ import static com.tinyengine.it.common.exception.ExceptionEnum.CM322;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.AiChatConfig;
+import com.tinyengine.it.model.dto.AiParam;
 import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +45,8 @@ public class AiChatClient {
     /**
      * Instantiates a new Ai chat client.
      */
-    public AiChatClient() {
-        this.config = AiChatConfig.getAiChatConfig();
+    public AiChatClient(String model,String token) {
+        this.config = AiChatConfig.getAiChatConfig(model,token);
         // Optional: Default base URL
         this.webClient = WebClient.builder().baseUrl("https://default.api.url").build();
     }
@@ -55,10 +57,10 @@ public class AiChatClient {
      * @param openAiBodyDto the open AI body dto
      * @return the map
      */
-    public Map<String, Object> executeChatRequest(OpenAiBodyDto openAiBodyDto) {
-        AiChatConfig.AiChatConfigData configData = config.get(openAiBodyDto.getModel());
+    public Map<String, Object> executeChatRequest(AiParam openAiBodyDto) {
+        AiChatConfig.AiChatConfigData configData = config.get(openAiBodyDto.getFoundationModel().get("model"));
         if (configData == null) {
-            log.error("No configuration found for model: " + openAiBodyDto.getModel());
+            log.error("No configuration found for model: " + openAiBodyDto.getFoundationModel().get("model"));
             return Collections.emptyMap();
         }
 

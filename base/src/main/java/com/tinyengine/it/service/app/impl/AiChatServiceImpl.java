@@ -45,8 +45,7 @@ public class AiChatServiceImpl implements AiChatService {
     private static final Pattern PATTERN_TAG_START = Pattern.compile("```javascript|<template>");
     private static final Pattern PATTERN_TAG_END = Pattern.compile("```|</template>|</script>|</style>");
     private static final Pattern PATTERN_MESSAGE = Pattern.compile(".*编码时遵从以下几条要求.*");
-
-    private AiChatClient aiChatClient = new AiChatClient();
+    //private AiChatClient aiChatClient = new AiChatClient();
 
     /**
      * Get start and end int [ ].
@@ -81,11 +80,14 @@ public class AiChatServiceImpl implements AiChatService {
         if (aiParam.getMessages().isEmpty()) {
             return Result.failed("Not passing the correct message parameter");
         }
+        Map<String, String> foundationModel = aiParam.getFoundationModel();
         String model = aiParam.getFoundationModel().get("model");
         if (aiParam.getFoundationModel().get("model").isEmpty()) {
             model = Enums.FoundationModel.GPT_35_TURBO.getValue();
         }
-        Map<String, Object> data = requestAnswerFromAi(aiParam.getMessages(), model).getData();
+        foundationModel.put("model",model);
+        aiParam.setFoundationModel(foundationModel);
+        Map<String, Object> data = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel()).getData();
         if (data.isEmpty()) {
             return Result.failed("调用AI大模型接口未返回正确数据");
         }
@@ -119,7 +121,7 @@ public class AiChatServiceImpl implements AiChatService {
 
             // 再次请求AI
             try {
-                data = requestAnswerFromAi(aiParam.getMessages(), model).getData();
+                data = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel()).getData();
             } catch (Exception e) {
                throw  new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
             }
@@ -151,11 +153,13 @@ public class AiChatServiceImpl implements AiChatService {
         return Result.success(result);
     }
 
-    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, String model) {
+    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, Map<String, String> foundationModel) {
         List<AiMessages> aiMessages = formatMessage(messages);
 
-        OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, aiMessages);
-        Map<String, Object> response = aiChatClient.executeChatRequest(openAiBodyDto);
+        //OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(Map<String, String> foundationModel, aiMessages);
+        AiParam aiParam = new AiParam(foundationModel,aiMessages);
+        AiChatClient aiChatClient = new AiChatClient(foundationModel.get("model"), foundationModel.get("token"));
+        Map<String, Object> response = aiChatClient.executeChatRequest(aiParam);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
         if (response.get("error_code") != null) {
             return Result.failed(response.get("error_msg").toString());
@@ -165,7 +169,7 @@ public class AiChatServiceImpl implements AiChatService {
             String message = (response.get("message") != null) ? response.get("message").toString() : "";
             return Result.failed(code, message);
         }
-        if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model)) {
+        if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(foundationModel.get("model"))) {
             return modelResultConvet(response);
         }
         return Result.success(response);
