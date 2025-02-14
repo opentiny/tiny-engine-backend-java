@@ -36,6 +36,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +68,7 @@ class AiChatClientTest {
                 put("headers", "headers");
             }
         };
-        String modelName = "gpt-3.5-turbo";
+        String modelName = "ERNIE-4.0-8K";
         AiChatConfig.HttpRequestOption option =
                 new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
         AiChatConfig.AiChatConfigData configData =
@@ -86,13 +87,18 @@ class AiChatClientTest {
                 Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
 
         when(bodyUriSpec.uri(anyString())).thenReturn(bodyUriSpec);
-        Map<String,String> map = new HashMap<>();
-        map.put("model",modelName);
+        HashMap<String, String> foundationModel = new HashMap<>();
+        foundationModel.put("model", "ERNIE-4.0-8K");
+        foundationModel.put("token","asdf");
+        ArrayList<AiMessages> messages = new ArrayList<>();
         AiMessages aiMessages = new AiMessages();
-        //OpenAiBodyDto param = new OpenAiBodyDto(modelName, Arrays.asList(aiMessages));
-        AiParam param = new AiParam(map,Arrays.asList(aiMessages));
+        aiMessages.setContent("dddd编码时遵从以下几条要求aaa");
+        aiMessages.setName("John");
+        aiMessages.setRole("user");
+        messages.add(aiMessages);
+        AiParam param = new AiParam(foundationModel,Arrays.asList(aiMessages));
         Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
-        Assertions.assertNull(returnData);
+        Assertions.assertNull(returnData.get("data"));
     }
 }
 

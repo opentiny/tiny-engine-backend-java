@@ -45,7 +45,6 @@ public class AiChatServiceImpl implements AiChatService {
     private static final Pattern PATTERN_TAG_START = Pattern.compile("```javascript|<template>");
     private static final Pattern PATTERN_TAG_END = Pattern.compile("```|</template>|</script>|</style>");
     private static final Pattern PATTERN_MESSAGE = Pattern.compile(".*编码时遵从以下几条要求.*");
-    //private AiChatClient aiChatClient = new AiChatClient();
 
     /**
      * Get start and end int [ ].
