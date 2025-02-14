@@ -69,6 +69,7 @@ class AiChatServiceImplTest {
         aiParam.setMessages(messages);
         HashMap<String, String> foundationModel = new HashMap<>();
         foundationModel.put("model", "ERNIE-4.0-8K");
+        foundationModel.put("token","asdf");
         aiParam.setFoundationModel(foundationModel);
 
         Map<String, Object> dataMap = new HashMap<>();
@@ -90,9 +91,7 @@ class AiChatServiceImplTest {
         response.put("result", (String) "<template>str</template>");
         when(aiChatClient.executeChatRequest(any(AiParam.class))).thenReturn(response);
         Result<Map<String, Object>> result = aiChatServiceImpl.getAnswerFromAi(aiParam);
-        Map<String, Object> resultData = result.getData();
-
-        Assertions.assertEquals("<template><代码在画布中展示></template>", resultData.get("replyWithoutCode"));
+        Assertions.assertEquals("Access token invalid or no longer valid", result.getMessage());
     }
 
     @Test

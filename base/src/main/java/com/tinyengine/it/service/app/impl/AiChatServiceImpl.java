@@ -77,6 +77,9 @@ public class AiChatServiceImpl implements AiChatService {
     @SystemServiceLog(description = "getAnswerFromAi 获取ai回答")
     @Override
     public Result<Map<String, Object>> getAnswerFromAi(AiParam aiParam) {
+        if(aiParam.getFoundationModel().get("token").isEmpty() || aiParam.getFoundationModel().get("token") == null){
+            return Result.failed("The token cannot be empty");
+        }
         if (aiParam.getMessages().isEmpty()) {
             return Result.failed("Not passing the correct message parameter");
         }
@@ -87,7 +90,12 @@ public class AiChatServiceImpl implements AiChatService {
         }
         foundationModel.put("model",model);
         aiParam.setFoundationModel(foundationModel);
-        Map<String, Object> data = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel()).getData();
+        Result<Map<String, Object>> resultData = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel());
+        // 调用接口失败时且data为null
+        if(!resultData.isSuccess() && resultData.getData() == null){
+            return Result.failed(resultData.getCode(),resultData.getMessage());
+        }
+        Map<String, Object> data = resultData.getData();
         if (data.isEmpty()) {
             return Result.failed("调用AI大模型接口未返回正确数据");
         }
@@ -156,13 +164,14 @@ public class AiChatServiceImpl implements AiChatService {
     private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, Map<String, String> foundationModel) {
         List<AiMessages> aiMessages = formatMessage(messages);
 
-        //OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(Map<String, String> foundationModel, aiMessages);
         AiParam aiParam = new AiParam(foundationModel,aiMessages);
         AiChatClient aiChatClient = new AiChatClient(foundationModel.get("model"), foundationModel.get("token"));
         Map<String, Object> response = aiChatClient.executeChatRequest(aiParam);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
         if (response.get("error_code") != null) {
-            return Result.failed(response.get("error_msg").toString());
+            String code =  response.get("error_code").toString();
+            String message = response.get("error_msg").toString();
+            return Result.failed(code,message);
         }
         if (response.get("error") != null) {
             String code = (response.get("code") != null) ? response.get("code").toString() : "";
