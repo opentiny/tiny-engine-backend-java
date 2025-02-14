@@ -76,7 +76,8 @@ public class AiChatServiceImpl implements AiChatService {
     @SystemServiceLog(description = "getAnswerFromAi 获取ai回答")
     @Override
     public Result<Map<String, Object>> getAnswerFromAi(AiParam aiParam) {
-        if(aiParam.getFoundationModel().get("token").isEmpty() || aiParam.getFoundationModel().get("token") == null){
+        String token = aiParam.getFoundationModel().get("token");
+        if(token == null || token.isEmpty()){
             return Result.failed("The token cannot be empty");
         }
         if (aiParam.getMessages().isEmpty()) {
