@@ -17,11 +17,9 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
-import com.sun.javafx.collections.MappingChange;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
-import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
 import reactor.core.publisher.Mono;
 
@@ -99,6 +97,20 @@ class AiChatClientTest {
         AiParam param = new AiParam(foundationModel,Arrays.asList(aiMessages));
         Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
         Assertions.assertNull(returnData.get("data"));
+    }
+
+    @Test
+    void testInvalidTokenExecuteChatRequest() {
+        HashMap<String, String> foundationModel = new HashMap<>();
+        foundationModel.put("model", "gpt-3.5-turbo");
+        foundationModel.put("token","你好");
+        ArrayList<AiMessages> messages = new ArrayList<>();
+        AiMessages aiMessages = new AiMessages();
+        aiMessages.setContent("dddd编码时遵从以下几条要求aaa");
+        messages.add(aiMessages);
+        AiParam param = new AiParam(foundationModel,Arrays.asList(aiMessages));
+        Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
+        Assertions.assertEquals("Invalid token format",returnData.get("error_message"));
     }
 }
 

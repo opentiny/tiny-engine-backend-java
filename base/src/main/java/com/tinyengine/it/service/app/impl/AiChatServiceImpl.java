@@ -77,9 +77,13 @@ public class AiChatServiceImpl implements AiChatService {
     @Override
     public Result<Map<String, Object>> getAnswerFromAi(AiParam aiParam) {
         String token = aiParam.getFoundationModel().get("token");
-        if(token == null || token.isEmpty()){
+        if (token == null || token.isEmpty()) {
             return Result.failed("The token cannot be empty");
         }
+        if (!Pattern.matches("^[A-Za-z0-9_.-]+$", token)) {
+            return Result.failed("Invalid token format");
+        }
+
         if (aiParam.getMessages().isEmpty()) {
             return Result.failed("Not passing the correct message parameter");
         }
