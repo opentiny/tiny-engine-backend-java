@@ -23,31 +23,26 @@ import java.util.Map;
  * @since 2024-10-20
  */
 public class AiChatConfig {
-    private static final String OPENAI_API_URL = System.getenv("OPENAI_API_URL") != null
-            ? System.getenv("OPENAI_API_URL")
-            : "https://api.openai.com";
-    private static final String OPENAI_API_KEY = System.getenv("OPENAI_API_KEY");
+    private static final String OPENAI_API_URL =  "https://api.openai.com";
+    private static final String LOCAL_GPT_API_URL =  "https://dashscope.aliyuncs.com/compatible-mode";
 
-    private static final String LOCAL_GPT_API_URL = System.getenv("Local_GPT_API_URL") != null
-            ? System.getenv("Local_GPT_API_URL")
-            : "https://dashscope.aliyuncs.com/compatible-mode";
-    private static final String LOCAL_GPT_API_KEY = System.getenv("Local_GPT_API_KEY");
-
-    private static final String WENXIN_ACCESS_TOKEN = System.getenv("WENXIN_ACCESS_TOKEN");
 
     /**
      * Gets AI chat config.
      *
      * @return the AI chat config
      */
-    public static Map<String, AiChatConfigData> getAiChatConfig() {
+    public static Map<String, AiChatConfigData> getAiChatConfig(String model,String token) {
         Map<String, AiChatConfigData> config = new HashMap<>();
 
         Map<String, String> openaiHeaders = new HashMap<>();
-        openaiHeaders.put("Authorization", "Bearer " + OPENAI_API_KEY);
+        // 根据model值判断添加对应的header
+        String openAiApiKey = Enums.FoundationModel.GPT_35_TURBO.getValue().equals(model) ? token : null;
+        openaiHeaders.put("Authorization", "Bearer " + openAiApiKey);
 
         Map<String, String> localGptHeaders = new HashMap<>();
-        localGptHeaders.put("Authorization", "Bearer " + LOCAL_GPT_API_KEY);
+        String localGptApiKey = Enums.FoundationModel.LOCAL_GPT.getValue().equals(model) ? token : null;
+        localGptHeaders.put("Authorization", "Bearer " + localGptApiKey);
 
         Map<String, String> ernieBotHeaders = new HashMap<>();
 
@@ -57,12 +52,12 @@ public class AiChatConfig {
         config.put(Enums.FoundationModel.LOCAL_GPT.getValue(), new AiChatConfigData(
                 LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(), localGptHeaders, "!openai"));
 
+        String ernieBotAccessToken = Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model) ? token : null;
         config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(),
                 new AiChatConfigData(
-                        "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token="
-                                + WENXIN_ACCESS_TOKEN,
+                        "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token="
+                                + ernieBotAccessToken,
                         createCommonRequestOption(), ernieBotHeaders, "baidu"));
-
         return config;
     }
 
