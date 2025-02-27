@@ -26,4 +26,13 @@ import java.util.Map;
 public class AiParam {
     private Map<String, String> foundationModel;
     private List<AiMessages> messages;
+
+    public AiParam(Map<String, String> foundationModel, List<AiMessages> messages) {
+        this.foundationModel = foundationModel;
+        this.messages = messages;
+    }
+
+    public AiParam() {
+
+    }
 }
