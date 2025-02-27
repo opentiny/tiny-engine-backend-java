@@ -1,0 +1,18 @@
+version: 2.0
+
+steps:
+  pre_codecheck:
+    - checkout
+    - sh:
+        command:
+          cd${WORKSPACE}/code && export PATH=/opt/buildtools/maven/apache-maven-3.6.3/bin:$PATH && mvn -version && mvn clean compile -Dmaven.test.skip=true -gs /usr1/maven/settings/cbu-maven-user-settings.xml -S /usr1/maven/settings/cbu-maven-user-settings.xml
+        effect_tool: spotbugs
+tool_params:
+  secsolar:
+    compile_script: export PATH=/opt/buildtools/maven/apache-maven-3.6.3/bin:$PATH && mvn -version && mvn clean compile -Dmaven.test.skip=true -gs /usr1/maven/settings/cbu-maven-user-settings.xml -S /usr1/maven/settings/cbu-maven-user-settings.xml
+  spotbugs:
+   compileScriptCmd:
+   workingPath: ./
+   compileScriptNote:
+   compileScriptType:
+   jdkVersion:
