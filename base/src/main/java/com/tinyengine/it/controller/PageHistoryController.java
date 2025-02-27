@@ -167,7 +167,7 @@ public class PageHistoryController {
     }
 
     /**
-     * 删除页面历史记录
+     * 查询页面历史记录
      *
      * @param app  the app
      * @param name the name

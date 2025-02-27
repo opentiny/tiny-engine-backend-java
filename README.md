@@ -212,7 +212,7 @@ mysql 8
 |platform_histories|t_platform_history|publish_url、image_url、tenant_id、site_id、renter_id | |platform -> ref_id、material_history -> material_history_id、created_at -> created_time、updated_by -> last_updated_by、updated_at -> last_updated_time |
 
 
-### 🤝 Participating in contributions  Q
+### 🤝 Participating in contributions
 
 If you are interested in our open source project, please join us!
 
