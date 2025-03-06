@@ -20,7 +20,6 @@ import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
-import com.tinyengine.it.model.dto.OpenAiBodyDto;
 import com.tinyengine.it.service.app.AiChatService;
 
 import lombok.extern.slf4j.Slf4j;

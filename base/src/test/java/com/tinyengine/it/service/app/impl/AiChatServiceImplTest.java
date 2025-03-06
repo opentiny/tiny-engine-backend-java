@@ -19,7 +19,6 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
-import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

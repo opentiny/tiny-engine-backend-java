@@ -95,6 +95,7 @@ public class BlockServiceImpl implements BlockService {
 
     private static final int DEFAULT_PLATFORM_ID = 1;
     private static final String DEFAULT_USER_ID = "1";
+
     /**
      * 查询表t_block所有数据
      *
