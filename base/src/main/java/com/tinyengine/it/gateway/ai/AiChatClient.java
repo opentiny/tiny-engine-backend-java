@@ -17,11 +17,9 @@ import static com.tinyengine.it.common.exception.ExceptionEnum.CM322;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiParam;
-import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;

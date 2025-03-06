@@ -15,7 +15,6 @@ package com.tinyengine.it.controller;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
 import com.tinyengine.it.service.app.AiChatService;
 
@@ -26,7 +25,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -52,6 +52,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     private BlockGroupBlockMapper blockGroupBlockMapper;
 
     private static final String DEFAULT_USER_ID = "1";
+
     /**
      * 查询表t_block_group所有数据
      *
