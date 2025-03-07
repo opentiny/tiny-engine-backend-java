@@ -414,17 +414,15 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         int addNum = 0;
         int updateNum = 0;
         for (I18nEntry entry : entries) {
-            // 构建查询条件，假设 key 作为唯一键
             // 查询数据库中是否存在该记录
-            I18nEntryDto existingEntry = i18nEntryMapper.findI18nEntriesByKeyAndLang(entry.getKey(), entry.getLang());
-
-            if (existingEntry == null) {
+            List<I18nEntryDto> i18nEntryList = i18nEntryMapper.queryI18nEntryByCondition(entry);
+            if (i18nEntryList.isEmpty()) {
                 // 插入新记录
                 i18nEntryMapper.createI18nEntry(entry);
                 addNum = addNum + 1;
             } else {
                 // 更新记录
-                entry.setId(existingEntry.getId());
+                entry.setId(i18nEntryList.get(0).getId());
                 i18nEntryMapper.updateI18nEntryById(entry);
                 updateNum = updateNum + 1;
             }
