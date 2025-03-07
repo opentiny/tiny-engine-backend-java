@@ -414,10 +414,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         int addNum = 0;
         int updateNum = 0;
         for (I18nEntry entry : entries) {
-
             // 查询数据库中是否存在该记录
             List<I18nEntryDto> i18nEntryList = i18nEntryMapper.queryI18nEntryByCondition(entry);
-
             if (i18nEntryList.isEmpty()) {
                 // 插入新记录
                 i18nEntryMapper.createI18nEntry(entry);
