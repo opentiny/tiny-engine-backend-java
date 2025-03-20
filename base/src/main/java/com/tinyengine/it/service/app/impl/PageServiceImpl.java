@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
@@ -190,9 +191,6 @@ public class PageServiceImpl implements PageService {
             // 如果是文件夹，调folder service的处理逻辑
             return del(id);
         }
-        // 保护默认页面
-        protectDefaultPage(pages, id);
-
         // 删除
         Page pageResult = pageMapper.queryPageById(id);
         int result = pageMapper.deletePageById(id);
@@ -317,9 +315,11 @@ public class PageServiceImpl implements PageService {
             return Result.failed("isHome parameter error");
         }
         int appId = pageTemp.getApp();
-        // 保护默认页面
-        protectDefaultPage(pageTemp, appId);
-
+        // 默认页面
+        boolean isUpdate = protectDefaultPage(pageTemp);
+        if (!isUpdate) {
+            return Result.failed(ExceptionEnum.CM301);
+        }
         // 针对参数中isHome的传值进行isHome字段的判定
         if (page.getIsHome()) {
             setAppHomePage(appId, id);
@@ -531,18 +531,74 @@ public class PageServiceImpl implements PageService {
 
     /**
      * 保护默认页面
-     *
-     * @param pages the pages
-     * @param id    the id
+     * @param page the pages
+     * @return boolean
      */
-    public void protectDefaultPage(Page pages, Integer id) {
-        if (pages.getIsDefault()) {
-            // 查询是否是模板应用，不是的话不能删除或修改
-            App app = appMapper.queryAppById(id);
-            if (app.getTemplateType() == null) {
-                Result.failed(ExceptionEnum.CM310.getResultCode());
+    public boolean protectDefaultPage(Page page) {
+        String id = page.getParentId();
+        if("0".equals(id)){
+            return true;
+        }
+        String parentId = this.getParentPage(id);
+        int subPageId = this.getSubPage(parentId);
+        if (subPageId == 0) {
+            return true;
+        }
+
+        UpdateWrapper<Page> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", subPageId)
+                .set("is_default", false);
+        int result = pageMapper.update(null, updateWrapper);
+
+        if (result < 1) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 查询父页面
+     * @param parentId the parentId
+     * @return parentId the parentId
+     */
+    private String getParentPage(String parentId) {
+
+        Page page = pageMapper.queryPageById(Integer.parseInt(parentId));
+        if (page.getIsPage() || "0".equals(page.getParentId())) {
+            return parentId;
+        }
+        return this.getParentPage(page.getParentId());
+    }
+
+    /**
+     * 查询默认子页面
+     * @param parentId the parentId
+     * @return subPageId the subPageId
+     */
+    private int getSubPage(String parentId) {
+        // 基础的检查
+        if ("0".equals(parentId)) {
+            return 0; // 0 表示没有父页面
+        }
+        // 查找子页面列表
+        Page pageParam = new Page();
+        pageParam.setParentId(parentId);
+        List<Page> pageList = pageMapper.queryPageByCondition(pageParam);
+
+        // 遍历页面列表，查找默认的子页面
+        for (Page page : pageList) {
+            if (page.getIsPage() && page.getIsDefault()) {
+                return page.getId(); // 找到默认子页面，返回其ID
+            } else if (!page.getIsPage()) {
+                // 如果不是页面，递归查找子页面
+                int subPageId = getSubPage(String.valueOf(page.getId()));
+                if (subPageId > 0) {
+                    return subPageId; // 如果找到了子页面ID，返回
+                }
             }
         }
+
+        return 0; // 如果没有找到符合条件的子页面，返回null
     }
 
     /**

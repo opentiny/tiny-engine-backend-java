@@ -202,14 +202,14 @@ class PageServiceImplTest {
         int pageId = 123;
         param.setId(pageId);
         param.setIsHome(false);
-        param.setParentId("1");
+        param.setParentId("0");
         param.setOccupierBy("555");
 
         Page queryPage = new Page();
         queryPage.setApp(222);
         queryPage.setIsPage(false);
         queryPage.setIsHome(false);
-        queryPage.setParentId("1");
+        queryPage.setParentId("0");
         queryPage.setIsDefault(false);
         when(pageMapper.queryPageById(pageId)).thenReturn(queryPage);
 
