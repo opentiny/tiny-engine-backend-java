@@ -513,6 +513,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             schema.put("exportName", npm.get("exportName"));
             schema.put("destructuring", npm.get("destructuring") != null ? npm.get("destructuring") : false);
             schema.put("version", npm.get("version") != null ? npm.get("version") : "");
+            schema.put("npmrc", npm.get("npmrc") != null ? npm.get("npmrc") : null);
 
             schemas.add(schema);
         }
