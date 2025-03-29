@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockMapper;
@@ -68,9 +69,13 @@ class BlockServiceImplTest {
     @Mock
     private BlockGroupMapper blockGroupMapper;
 
+    @Mock
+    private LoginUserContext loginUserContext;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
     }
 
     @Test

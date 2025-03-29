@@ -13,10 +13,12 @@
 package com.tinyengine.it.common.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.tinyengine.it.common.context.LoginUserContext;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -29,15 +31,17 @@ import java.time.LocalDateTime;
 @Component
 @Slf4j
 public class MyMetaObjectHandler implements MetaObjectHandler {
+    @Autowired
+    private LoginUserContext loginUserContext;
+
     @Override
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("createdTime", LocalDateTime.now(), metaObject);
         this.setFieldValByName("lastUpdatedTime", LocalDateTime.now(), metaObject);
-        this.setFieldValByName("createdBy", "1", metaObject);
-        this.setFieldValByName("lastUpdatedBy", "1", metaObject);
-        this.setFieldValByName("tenantId", "1", metaObject);
-        this.setFieldValByName("renterId", "1", metaObject);
-        this.setFieldValByName("siteId", "1", metaObject);
+        this.setFieldValByName("createdBy", loginUserContext.getLoginUserId(), metaObject);
+        this.setFieldValByName("lastUpdatedBy", loginUserContext.getLoginUserId(), metaObject);
+        this.setFieldValByName("tenantId", loginUserContext.getTenantId(), metaObject);
+        this.setFieldValByName("renterId", loginUserContext.getRenterId(), metaObject);
     }
 
     @Override

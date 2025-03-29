@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
@@ -93,8 +94,8 @@ public class BlockServiceImpl implements BlockService {
     @Autowired
     private BlockGroupBlockMapper blockGroupBlockMapper;
 
-    private static final int DEFAULT_PLATFORM_ID = 1;
-    private static final String DEFAULT_USER_ID = "1";
+    @Autowired
+    private LoginUserContext loginUserContext;
 
     /**
      * 查询表t_block所有数据
@@ -122,7 +123,7 @@ public class BlockServiceImpl implements BlockService {
                 && blockDto.getLastBuildInfo().get("result") instanceof Boolean
                 ? (Boolean) blockDto.getLastBuildInfo().get("result") : Boolean.FALSE;
         blockDto.setIsPublished(isPublished);
-        List<BlockGroup> groups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), DEFAULT_USER_ID);
+        List<BlockGroup> groups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), loginUserContext.getLoginUserId());
         blockDto.setGroups(groups);
         return blockDto;
     }
@@ -170,7 +171,7 @@ public class BlockServiceImpl implements BlockService {
         // 把前端传参赋值给实体
         Block blocks = new Block();
         BeanUtils.copyProperties(blockParam, blocks);
-        blocks.setOccupierBy(DEFAULT_USER_ID);
+        blocks.setOccupierBy(loginUserContext.getLoginUserId());
         if (blockParam.getLatestHistoryId() != null) {
             blocks.setLatestHistoryId(blockParam.getLatestHistoryId().getId());
         }
@@ -187,7 +188,7 @@ public class BlockServiceImpl implements BlockService {
         }
 
         // 根据区块id获取区块所在分组
-        List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(), DEFAULT_USER_ID);
+        List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(), loginUserContext.getLoginUserId());
         // 删除区块与分组关系
         if(blockGroups != null && !blockGroups.isEmpty()){
             List<Integer> blockGroupIds = blockGroups.stream().map(BlockGroup::getId).collect(Collectors.toList());
@@ -234,7 +235,7 @@ public class BlockServiceImpl implements BlockService {
         BeanUtils.copyProperties(blockParam, blocks);
         blocks.setIsDefault(false);
         blocks.setIsOfficial(false);
-        blocks.setPlatformId(DEFAULT_PLATFORM_ID); // 新建区块给默认值
+        blocks.setPlatformId(loginUserContext.getPlatformId()); // 新建区块给默认值
 
         int result = blockMapper.createBlock(blocks);
         if (result < 1) {
@@ -453,7 +454,7 @@ public class BlockServiceImpl implements BlockService {
         }
 
         for (BlockDto blockDto : blocksList) {
-            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), DEFAULT_USER_ID);
+            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), loginUserContext.getLoginUserId());
             blockDto.setGroups(blockGroups);
         }
         return blocksList.stream()
@@ -641,7 +642,7 @@ public class BlockServiceImpl implements BlockService {
         List<Block> blocksList = new ArrayList<>();
         // 如果有 groupId, 只查group下的block,以及自己创建的区块
         if (groupIdTemp != 0) {
-            blocksList = blockMapper.findBlockByBlockGroupId(groupIdTemp, DEFAULT_USER_ID);
+            blocksList = blockMapper.findBlockByBlockGroupId(groupIdTemp, loginUserContext.getLoginUserId());
             return Result.success(blocksList);
         }
         // 如果没有 groupId
@@ -653,7 +654,7 @@ public class BlockServiceImpl implements BlockService {
         List<Block> appBlocks = blocksList;
         // 通过createBy查询区块表数据
         Block blocks = new Block();
-        blocks.setCreatedBy(DEFAULT_USER_ID);
+        blocks.setCreatedBy(loginUserContext.getLoginUserId());
         List<Block> personalBlocks = queryBlockByCondition(blocks);
         List<Block> retBlocks = new ArrayList<>();
         // 合并 personalBlocks 和 appBlocks 数组
@@ -698,7 +699,7 @@ public class BlockServiceImpl implements BlockService {
         Block queryBlock = new Block();
         queryBlock.setLabel(blockDto.getLabel());
         queryBlock.setFramework(blockDto.getFramework());
-        queryBlock.setCreatedBy(DEFAULT_USER_ID);
+        queryBlock.setCreatedBy(loginUserContext.getLoginUserId());
         List<Block> blockList = blockMapper.queryBlockByCondition(queryBlock);
         List<Integer> groups = blockDto.getGroups().stream().map(BlockGroup::getId).collect(Collectors.toList());
         ;
