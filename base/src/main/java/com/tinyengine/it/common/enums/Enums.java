@@ -788,7 +788,12 @@ public class Enums {
          * Ernie bot turbo e foundation model.
          */
         // 文心一言
-        ERNIBOT_TURBO("ERNIE-Bot-turbo");
+        ERNIBOT_TURBO("ERNIE-4.0-8K"),
+        /**
+         * Moonshot v1 8k e foundation model.
+         */
+        // kimi
+        MOONSHOT_V1_8K("moonshot-v1-8k");
         private final String value;
 
         FoundationModel(String value) {
@@ -854,6 +859,38 @@ public class Enums {
         private final String value;
 
         I18nFileName(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum BlockGroup {
+        /**
+         * block group name.
+         */
+        BLOCK_GROUP("blockGroup"),
+
+        /**
+         * block  name.
+         */
+        BLOCK("block"),
+        /**
+         * material history name.
+         */
+        MATERIAL_HISTORY("materialHistory");
+
+
+        private final String value;
+
+        BlockGroup(String value) {
             this.value = value;
         }
 

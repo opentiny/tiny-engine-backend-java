@@ -24,6 +24,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +49,7 @@ public class App extends BaseEntity {
     private String appWebsite;
 
     @Schema(name = "platformId", description = "设计器id")
+    @JsonProperty("platform")
     private Integer platformId;
 
     @Schema(name = "platformHistoryId", description = "关联设计器的历史版本ID")
@@ -62,6 +65,7 @@ public class App extends BaseEntity {
     private String visitUrl;
 
     @Schema(name = "imageUrl", description = "封面图地址")
+    @JsonProperty("image_url")
     private String imageUrl;
 
     @Schema(name = "assetsUrl", description = "应用资源url")
@@ -82,14 +86,14 @@ public class App extends BaseEntity {
 
     @Schema(name = "config", description = "*设计预留字段*")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String, Object> config;
+    private Map<String, Object> config = new HashMap<>();
 
     @Schema(name = "constants", description = "*设计预留字段*")
     private String constants;
 
     @Schema(name = "dataHandler", description = "数据源的拦截器")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String, Object> dataHandler;
+    private Map<String, Object> dataHandler = new HashMap<>();
 
     @Schema(name = "description", description = "描述")
     private String description;
@@ -130,14 +134,14 @@ public class App extends BaseEntity {
     @Schema(name = "globalState", description = "应用全局状态")
     @JsonProperty("global_state")
     @TableField(typeHandler = ListTypeHandler.class)
-    private List<Map<String, Object>> globalState;
+    private List<Map<String, Object>> globalState = new ArrayList<>();
 
     @Schema(name = "defaultLang", description = "默认语言")
     private String defaultLang;
 
     @Schema(name = "extendConfig", description = "应用扩展config")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String, Object> extendConfig;
+    private Map<String, Object> extendConfig = new HashMap<>();
 
     @Schema(name = "dataHash", description = "应用内容哈希值")
     private String dataHash;
@@ -148,5 +152,5 @@ public class App extends BaseEntity {
     @Schema(name = "dataSourceGlobal", description = "数据源全局配置")
     @JsonProperty("data_source_global")
     @TableField(typeHandler = MapTypeHandler.class)
-    private Map<String, Object> dataSourceGlobal;
+    private Map<String, Object> dataSourceGlobal = new HashMap<>();
 }

@@ -14,13 +14,14 @@ package com.tinyengine.it.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParam;
 import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
@@ -51,7 +52,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 /**
- *
  * 区块
  *
  * @author zhangjuncao
@@ -151,13 +151,13 @@ public class BlockController {
     /**
      * 创建block
      *
-     * @param blockDto the block dto
+     * @param blockParam the blockParam
      * @return BlockDto
      */
     @Operation(summary = "创建block",
             description = "创建block",
             parameters = {
-                    @Parameter(name = "blockDto", description = "入参对象")
+                    @Parameter(name = "blockParam", description = "入参对象")
             },
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
@@ -167,8 +167,8 @@ public class BlockController {
     )
     @SystemControllerLog(description = "区块创建api")
     @PostMapping("/block/create")
-    public Result<BlockDto> createBlocks(@Valid @RequestBody BlockDto blockDto) {
-        return blockService.createBlock(blockDto);
+    public Result<BlockDto> createBlocks(@Valid @RequestBody BlockParam blockParam) {
+        return blockService.createBlock(blockParam);
     }
 
 
@@ -267,8 +267,17 @@ public class BlockController {
     )
     @SystemControllerLog(description = "查找不在分组内的区块api")
     @GetMapping("/block/notgroup/{groupId}")
-    public Result<List<BlockDto>> findBlocksNotInGroup(@PathVariable Integer groupId) {
-        List<BlockDto> blocksList = blockService.getNotInGroupBlocks(groupId);
+    public Result<List<BlockDto>> findBlocksNotInGroup(@PathVariable Integer groupId,
+                                                       @RequestParam(value = "label_contains", required = false) String label,
+                                                       @RequestParam(value = "tags_contains", required = false) String[] tags,
+                                                       @RequestParam(value = "createdBy", required = false) String createdBy) {
+        NotGroupDto notGroupDto = new NotGroupDto();
+        notGroupDto.setGroupId(groupId);
+        notGroupDto.setLabel(label);
+        notGroupDto.setCreatedBy(createdBy);
+        notGroupDto.setTags(null);
+
+        List<BlockDto> blocksList = blockService.getNotInGroupBlocks(notGroupDto);
         return Result.success(blocksList);
     }
 
@@ -370,14 +379,14 @@ public class BlockController {
     /**
      * 修改block
      *
-     * @param blockDto blockDto
+     * @param blockParam blockParam
      * @param id       id
      * @return block dto
      */
     @Operation(summary = "修改区块",
             description = "修改区块",
             parameters = {
-                    @Parameter(name = "blockDto", description = "入参对象"),
+                    @Parameter(name = "blockParam", description = "入参对象"),
                     @Parameter(name = "id", description = "区块id")
             },
             responses = {
@@ -388,14 +397,10 @@ public class BlockController {
     )
     @SystemControllerLog(description = "区块修改api")
     @PostMapping("/block/update/{id}")
-    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockDto blockDto, @PathVariable Integer id) {
-        blockDto.setId(id);
-        int result = blockService.updateBlockById(blockDto);
-        if (result < 1) {
-            return Result.failed(ExceptionEnum.CM001);
-        }
-        BlockDto blocksResult = blockService.queryBlockById(blockDto.getId());
-        return Result.success(blocksResult);
+    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockParam blockParam, @PathVariable Integer id,
+                                         @RequestParam(value = "appId", required = false) Integer appId) {
+        blockParam.setId(id);
+        return blockService.updateBlockById(blockParam, appId);
     }
 
     /**

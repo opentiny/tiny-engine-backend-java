@@ -32,7 +32,6 @@ import com.tinyengine.it.model.dto.ComponentTree;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.MaterialHistoryMsg;
 import com.tinyengine.it.model.dto.MetaDto;
-import com.tinyengine.it.model.dto.SchemaDataSource;
 import com.tinyengine.it.model.dto.SchemaDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.dto.SchemaMeta;
@@ -150,10 +149,10 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Datasource> list = metaDto.getSource();
         Map<String, Object> dataHandler = metaDto.getApp().getDataSourceGlobal();
 
-        SchemaDataSource schemaDataSource = new SchemaDataSource();
-        schemaDataSource.setDataHandler(dataHandler);
-        schemaDataSource.setList(list);
-        schema.setDataSource(schemaDataSource);
+        Map<String, Object> data = new HashMap<>();
+        data.put("list", list);
+        data.putAll(dataHandler);
+        schema.setDataSource(data);
 
         SchemaI18n i18n = getSchemaI18n(metaDto);
         schema.setI18n(i18n);
@@ -363,7 +362,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             historyMap.put(version, item.getHistoryId());
             itemMap.put("historyMap", historyMap);
             itemMap.put("versions", versionList);
-            blocksVersionMap.put("blockId", itemMap);
+            blocksVersionMap.put(String.valueOf(item.getBlockId()), itemMap);
         }
 
         // 遍历区块历史记录 综合信息映射关系
@@ -514,6 +513,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             schema.put("exportName", npm.get("exportName"));
             schema.put("destructuring", npm.get("destructuring") != null ? npm.get("destructuring") : false);
             schema.put("version", npm.get("version") != null ? npm.get("version") : "");
+            schema.put("npmrc", npm.get("npmrc") != null ? npm.get("npmrc") : null);
 
             schemas.add(schema);
         }

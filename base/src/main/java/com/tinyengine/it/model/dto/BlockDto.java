@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.common.handler.ListTypeHandler;
 import com.tinyengine.it.common.handler.MapTypeHandler;
-import com.tinyengine.it.model.entity.BlockCurrentHistory;
+import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.User;
 
@@ -72,8 +72,8 @@ public class BlockDto extends BaseEntity {
     private List<String> tags;
 
     @Schema(name = "latestHistoryId", description = "当前历史记录表ID")
-    @JsonProperty("latest_history_id")
-    private Integer latestHistoryId;
+    @JsonProperty("current_history")
+    private BlockHistory latestHistoryId;
 
     @Schema(name = "screenshot", description = "截屏")
     private String screenshot;
@@ -124,17 +124,9 @@ public class BlockDto extends BaseEntity {
     @JsonProperty("platform_id")
     private Integer platformId;
 
-    @Schema(name = "blockGroupId", description = "区块分组id,关联t_block_group表id")
-    @JsonProperty("block_group_id")
-    private Integer blockGroupId;
-
     @JsonProperty("occupier")
     @Schema(name = "occupierBy", description = "当前锁定人")
     private User occupier;
-
-    @JsonProperty("current_history")
-    @Schema(name = "currentHistory", description = "当前区块使用版本记录")
-    private BlockCurrentHistory currentHistory;
 
     @TableField(exist = false)
     @JsonProperty("public_scope_tenants")
@@ -142,7 +134,7 @@ public class BlockDto extends BaseEntity {
 
     @TableField(exist = false)
     @Schema(name = "groups", type = " List<BlockGroup>", description = "区块分组")
-    private List<Object> groups = new ArrayList<>();
+    private List<BlockGroup> groups = new ArrayList<>();
 
     @TableField(exist = false)
     @Schema(name = "histories", type = " List<BlockHistory>", description = "区块历史")
@@ -156,6 +148,9 @@ public class BlockDto extends BaseEntity {
     @JsonProperty("is_published")
     private Boolean isPublished;
 
+    @TableField(exist = false)
+    @JsonProperty("current_version")
+    private String currentVersion;
     @JsonProperty("public")
     public Integer getPublic() {
         return this.publicStatus;

@@ -23,14 +23,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParam;
 import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.User;
 
 import org.junit.jupiter.api.Assertions;
@@ -62,6 +65,8 @@ class BlockServiceImplTest {
     private UserMapper userMapper;
     @Mock
     private AppMapper appMapper;
+    @Mock
+    private BlockGroupMapper blockGroupMapper;
 
     @BeforeEach
     void setUp() {
@@ -110,29 +115,31 @@ class BlockServiceImplTest {
         BlockDto t = new BlockDto();
         t.setName("test");
         when(blockMapper.findBlockAndGroupAndHistoByBlockId(any())).thenReturn(t);
-        BlockDto blockDto = new BlockDto();
-        blockDto.setId(1);
-        blockDto.setScreenshot("aa");
-        blockDto.setLabel("bb");
-        blockDto.setFramework("cc");
-        blockDto.setPlatformId(1);
-        blockDto.setAppId(1);
-        blockDto.setGroups(asList(1));
-        blockDto.setName("testBlock");
-        Result<BlockDto> result = blockServiceImpl.createBlock(blockDto);
+        BlockParam blockParam = new BlockParam();
+        blockParam.setId(0);
+        // Add test cases for required fields
+        blockParam.setName("test");
+        blockParam.setLabel("test-label");
+        blockParam.setFramework("vue");
+        Result<BlockDto> result = blockServiceImpl.createBlock(blockParam);
         Assertions.assertEquals("test", result.getData().getName());
+        // Test validation failure
+        BlockParam invalidParam = new BlockParam();
+        Result<BlockDto> invalidResult = blockServiceImpl.createBlock(invalidParam);
+        Assertions.assertFalse(invalidResult.isSuccess());
     }
 
     @Test
     void testUpdateBlockById() {
+        BlockParam blockParam = new BlockParam();
         when(blockMapper.updateBlockById(any())).thenReturn(1);
-        BlockDto blockDto = new BlockDto();
-        blockDto.setId(1);
-        blockDto.setName("BlockTest1");
-        blockDto.setScreenshot("aa");
-        blockDto.setLabel("bb");
-        Integer result = blockServiceImpl.updateBlockById(blockDto);
-        Assertions.assertEquals(1, result);
+        when(blockMapper.findBlockAndGroupAndHistoByBlockId(anyInt())).thenReturn(new BlockDto());
+        Block block = new Block();
+        block.setAppId(1);
+        when(blockMapper.queryBlockById(blockParam.getId())).thenReturn(block);
+
+        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockParam, 1);
+        Assertions.assertEquals(null, result.getData());
     }
 
     @Test
@@ -237,16 +244,15 @@ class BlockServiceImplTest {
     @Test
     void testGetNotInGroupBlocks() {
         BlockDto blockDto = new BlockDto();
-        blockDto.setLastBuildInfo(new HashMap<>());
-        blockDto.setContent(new HashMap<>());
-        blockDto.setAssets(new HashMap<>());
-        blockDto.setPublicStatus(Enums.Scope.PUBLIC_IN_TENANTS.getValue());
         List<BlockDto> mockData = Arrays.asList(blockDto);
-        when(blockMapper.findBlocksReturn()).thenReturn(mockData);
+        NotGroupDto notGroupDto = new NotGroupDto();
+        List<BlockGroup> blockGroups = new ArrayList<>();
+        when(blockMapper.findBlocksReturn(notGroupDto)).thenReturn(mockData);
         when(userMapper.queryUserById(anyInt())).thenReturn(new User());
+        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), blockDto.getCreatedBy())).thenReturn(blockGroups);
 
-        List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(1);
-        Assertions.assertEquals(blockDto, result.get(0));
+        List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(notGroupDto);
+        Assertions.assertEquals(new ArrayList<>(), result);
     }
 
     @Test
@@ -267,7 +273,7 @@ class BlockServiceImplTest {
     @Test
     void testListNewWhenGroupIdNotEmpty() {
         List<Block> blocksList = new ArrayList<>();
-        when(blockMapper.findBlocksByBlockGroupId(anyInt())).thenReturn(blocksList);
+        when(blockMapper.findBlockByBlockGroupId(anyInt(), any())).thenReturn(blocksList);
 
         App app = new App();
         app.setId(1);

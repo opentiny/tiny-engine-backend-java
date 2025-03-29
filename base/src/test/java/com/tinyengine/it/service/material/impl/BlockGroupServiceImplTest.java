@@ -16,6 +16,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.mapper.BlockCarriersRelationMapper;
+import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
@@ -41,6 +43,10 @@ class BlockGroupServiceImplTest {
     private BlockGroupMapper blockGroupMapper;
     @InjectMocks
     private BlockGroupServiceImpl blockGroupServiceImpl;
+    @Mock
+    private BlockCarriersRelationMapper blockCarriersRelationMapper;
+    @Mock
+    private BlockGroupBlockMapper blockGroupBlockMapper;
 
     @BeforeEach
     void setUp() {
@@ -59,7 +65,7 @@ class BlockGroupServiceImplTest {
     @Test
     void testFindBlockGroupById() {
         BlockGroup mockData = new BlockGroup();
-        when(blockGroupMapper.queryBlockGroupById(1)).thenReturn(mockData);
+        when(blockGroupMapper.queryBlockGroupAndBlockById(any(),any(),any())).thenReturn(mockData);
 
         BlockGroup result = blockGroupServiceImpl.findBlockGroupById(1);
         Assertions.assertEquals(mockData, result);
@@ -77,17 +83,20 @@ class BlockGroupServiceImplTest {
 
     @Test
     void testDeleteBlockGroupById() {
-        when(blockGroupMapper.deleteBlockGroupById(1)).thenReturn(2);
+        when(blockGroupMapper.deleteBlockGroupById(any())).thenReturn(1);
 
         Integer result = blockGroupServiceImpl.deleteBlockGroupById(1);
-        Assertions.assertEquals(2, result);
+        Assertions.assertEquals(1, result);
     }
 
     @Test
     void testUpdateBlockGroupById() {
         BlockGroup param = new BlockGroup();
+        param.setId(1);
+        param.setBlocks(new ArrayList<>());
         when(blockGroupMapper.updateBlockGroupById(param)).thenReturn(1);
-
+        when(blockGroupBlockMapper.deleteBlockGroupBlockByGroupId(null)).thenReturn(1);
+        when(blockCarriersRelationMapper.deleteBlockCarriersRelation(null, null, null)).thenReturn(1);
         Integer result = blockGroupServiceImpl.updateBlockGroupById(param);
         Assertions.assertEquals(1, result);
     }
@@ -98,7 +107,7 @@ class BlockGroupServiceImplTest {
         when(blockGroupMapper.createBlockGroup(param)).thenReturn(1);
         BlockGroup blockGroupParam = new BlockGroup();
         blockGroupParam.setId(1);
-        Result<List<BlockGroupDto>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
+        Result<List<BlockGroup>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
         Assertions.assertNotNull(result.getData());
     }
 
@@ -108,8 +117,8 @@ class BlockGroupServiceImplTest {
         String from = "block";
         List<Integer> paramIdList = new ArrayList<>();
         List<BlockGroup> mockData = new ArrayList<>();
-        when(blockGroupMapper.queryBlockGroupAndBlockById(any(), any())).thenReturn(new BlockGroup());
-        when(blockGroupMapper.queryBlockGroupByAppId(appId, "1")).thenReturn(mockData);
+        when(blockGroupMapper.queryBlockGroupAndBlockById(any(), any(), any())).thenReturn(new BlockGroup());
+        when(blockGroupMapper.queryBlockGroupByAppId(any(), any(), any())).thenReturn(mockData);
 
         // not empty param
         List<BlockGroup> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId, from);
@@ -117,7 +126,7 @@ class BlockGroupServiceImplTest {
         Assertions.assertTrue(result.isEmpty());
 
         // empty param
-        when(blockGroupMapper.queryAllBlockGroupAndBlock(any())).thenReturn(mockData);
+        when(blockGroupMapper.queryAllBlockGroupAndBlock(any(), any())).thenReturn(mockData);
         result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(null, null, null);
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());

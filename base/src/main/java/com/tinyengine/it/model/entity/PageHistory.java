@@ -12,10 +12,13 @@
 
 package com.tinyengine.it.model.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tinyengine.it.common.base.HistoryEntity;
 import com.tinyengine.it.common.handler.ListTypeHandler;
 import com.tinyengine.it.common.handler.MapTypeHandler;
 import com.tinyengine.it.model.dto.BlockVersionDto;
@@ -24,6 +27,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +43,11 @@ import java.util.Map;
 @Setter
 @TableName("t_page_history")
 @Schema(name = "PageHistory", description = "页面历史")
-public class PageHistory extends HistoryEntity {
+public class PageHistory {
+    @Schema(name = "id", description = "主键id")
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     @Schema(name = "name", description = "名称")
     private String name;
 
@@ -89,4 +97,36 @@ public class PageHistory extends HistoryEntity {
     @Schema(name = "contentBlocks", description = "*设计预留字段*")
     @TableField(typeHandler = ListTypeHandler.class)
     private List<BlockVersionDto> contentBlocks;
+
+
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "createdBy", description = "创建人")
+    private String createdBy;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @Schema(name = "lastUpdatedBy", description = "最后修改人")
+    private String lastUpdatedBy;
+
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "created_at", description = "创建时间")
+    @JsonProperty("created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdTime;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("updated_at")
+    @Schema(name = "updated_at", description = "更新时间")
+    private LocalDateTime lastUpdatedTime;
+
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "tenantId", description = "租户ID")
+    private String tenantId;
+
+    @TableField(fill = FieldFill.INSERT)
+    @Schema(name = "renterId", description = "业务租户ID")
+    private String renterId;
+
+    @Schema(name = "siteId", description = "站点ID")
+    private String siteId;
 }

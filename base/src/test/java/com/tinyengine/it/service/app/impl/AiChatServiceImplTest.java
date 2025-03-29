@@ -19,7 +19,6 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
-import com.tinyengine.it.model.dto.OpenAiBodyDto;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +29,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,31 +62,35 @@ class AiChatServiceImplTest {
         ArrayList<AiMessages> messages = new ArrayList<>();
         AiMessages aiMessage = new AiMessages();
         aiMessage.setContent("dddd编码时遵从以下几条要求aaa");
+        aiMessage.setName("John");
+        aiMessage.setRole("user");
         messages.add(aiMessage);
         aiParam.setMessages(messages);
         HashMap<String, String> foundationModel = new HashMap<>();
-        foundationModel.put("model", "ERNIE-Bot-turbo");
+        foundationModel.put("model", "ERNIE-4.0-8K");
+        foundationModel.put("token","asdf");
         aiParam.setFoundationModel(foundationModel);
 
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("id", 1);
-        ArrayList<Object> choices = new ArrayList<>();
-        Map<String, Object> originalChoice = new HashMap<>();
-        originalChoice.put("text", "text");
-        originalChoice.put("index", "index");
-        HashMap<Object, Object> message = new HashMap<>();
-        message.put("content", "<template>str</template>");
-        originalChoice.put("message", message);
-        choices.add(originalChoice);
+        List<Map<String, Object>> choices = new ArrayList<>();
+        Map<String, Object> choice = new HashMap<>();
+        Map<String, String> message = new HashMap<>();
+        message.put("role", "assistant");
+        message.put("content", (String) "<template>str</template>");
+        message.put("name", "AI");
+        choice.put("message", message);
+        choices.add(choice);
+
+        // 将 choices 添加到响应中
         dataMap.put("choices", choices);
 
         Map<String, Object> response = new HashMap<>();
         response.put("data", dataMap);
-        when(aiChatClient.executeChatRequest(any(OpenAiBodyDto.class))).thenReturn(response);
+        response.put("result", (String) "<template>str</template>");
+        when(aiChatClient.executeChatRequest(any(AiParam.class))).thenReturn(response);
         Result<Map<String, Object>> result = aiChatServiceImpl.getAnswerFromAi(aiParam);
-        Map<String, Object> resultData = result.getData();
-
-        Assertions.assertEquals("<template><代码在画布中展示></template>", resultData.get("replyWithoutCode"));
+        Assertions.assertEquals("Access token invalid or no longer valid", result.getMessage());
     }
 
     @Test

@@ -148,7 +148,7 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 301 exception enum.
      */
-    CM301("CM301", "默认页面不能删除和修改"),
+    CM301("CM301", "默认页面修改失败"),
     /**
      * Cm 302 exception enum.
      */

@@ -1,12 +1,13 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- * <p>
+ *
  * Use of this source code is governed by an MIT-style license.
- * <p>
+ *
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
  */
 
 package com.tinyengine.it.service.material;
@@ -15,7 +16,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
+import com.tinyengine.it.model.dto.BlockParam;
 import com.tinyengine.it.model.dto.BlockParamDto;
+import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.User;
 
@@ -64,18 +67,18 @@ public interface BlockService {
     /**
      * 根据主键id更新表t_block信息
      *
-     * @param blockDto the block dto
+     * @param blockParam the block param
      * @return the BlockDto
      */
-    Integer updateBlockById(BlockDto blockDto);
+    Result<BlockDto> updateBlockById(BlockParam blockParam, Integer appId);
 
     /**
      * 新增表t_block数据
      *
-     * @param blockDto the block dto
+     * @param blockParam the blockParam
      * @return the result
      */
-    Result<BlockDto> createBlock(BlockDto blockDto);
+    Result<BlockDto> createBlock(BlockParam blockParam);
 
     /**
      * 区块分页查询
@@ -120,10 +123,10 @@ public interface BlockService {
     /**
      * 获取不在分组内的区块
      *
-     * @param groupId groupId
+     * @param notGroupDto notGroupDto
      * @return the list
      */
-    List<BlockDto> getNotInGroupBlocks(Integer groupId);
+    List<BlockDto> getNotInGroupBlocks(NotGroupDto notGroupDto);
 
     /**
      * 通过label和appId查询区块

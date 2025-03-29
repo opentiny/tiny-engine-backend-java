@@ -13,12 +13,16 @@
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.mapper.BlockCarriersRelationMapper;
+import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
-import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.Block;
+import com.tinyengine.it.model.entity.BlockCarriersRelation;
 import com.tinyengine.it.model.entity.BlockGroup;
+import com.tinyengine.it.model.entity.BlockGroupBlock;
 import com.tinyengine.it.service.material.BlockGroupService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +47,11 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     @Autowired
     private BlockGroupMapper blockGroupMapper;
     @Autowired
-    private BlockMapper blockMapper;
+    private BlockCarriersRelationMapper blockCarriersRelationMapper;
+    @Autowired
+    private BlockGroupBlockMapper blockGroupBlockMapper;
+
+    private static final String DEFAULT_USER_ID = "1";
 
     /**
      * 查询表t_block_group所有数据
@@ -62,7 +71,24 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public BlockGroup findBlockGroupById(@Param("id") Integer id) {
-        return blockGroupMapper.queryBlockGroupById(id);
+        BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null, DEFAULT_USER_ID);
+        // 对查询的结果的区块赋值current_version
+        if (blockGroupResult == null || blockGroupResult.getBlocks().isEmpty()) {
+            return blockGroupResult;
+        }
+        for (Block block : blockGroupResult.getBlocks()) {
+            BlockCarriersRelation queryParam = new BlockCarriersRelation();
+            queryParam.setBlockId(block.getId());
+            queryParam.setHostId(id);
+            queryParam.setHostType(Enums.BlockGroup.BLOCK_GROUP.getValue());
+            List<BlockCarriersRelation> blockCarriersRelations = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
+            if (blockCarriersRelations.isEmpty()) {
+                continue;
+            }
+            String version = blockCarriersRelations.get(0).getVersion();
+            block.setCurrentVersion(version);
+        }
+        return blockGroupResult;
     }
 
     /**
@@ -97,16 +123,34 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     public Integer updateBlockGroupById(BlockGroup blockGroup) {
         // 判断是对正常的分组修改，还是在分组下添加区块操作的修改
         List<Block> blockList = blockGroup.getBlocks();
-        Block blockTemp = new Block();
-        if (!blockList.isEmpty()) {
-            // 对分组下添加别人区块的操作进行区块分组的更新
-            for (Block block : blockList) {
-                blockTemp = blockMapper.queryBlockById(block.getId());
-                blockTemp.setBlockGroupId(blockGroup.getId());
-                blockTemp.setCreatedTime(null);
-                blockTemp.setLastUpdatedTime(null);
-                blockMapper.updateBlockById(blockTemp);
-            }
+        List<BlockGroupBlock> blockGroupBlocks = blockGroupBlockMapper.findBlockGroupBlockByBlockGroupId(blockGroup.getId());
+        List<Integer> groupBlockIds = blockGroupBlocks.stream().map(BlockGroupBlock::getBlockId).collect(Collectors.toList());
+
+        String hostType = Enums.BlockGroup.BLOCK_GROUP.getValue();
+        // 区块列表为空，分组下无区块
+        if (blockList.isEmpty()) {
+            // 删除区块分组与区块历史版本关系
+            blockCarriersRelationMapper.deleteBlockCarriersRelation(blockGroup.getId(), hostType, null);
+            // 删除区块分组与区块关系
+            blockGroupBlockMapper.deleteBlockGroupBlockByGroupId(blockGroup.getId());
+            return blockGroupMapper.updateBlockGroupById(blockGroup);
+        }
+        // 处理参数分组区块
+        List<Integer> blockIds = blockList.stream().map(Block::getId).collect(Collectors.toList());
+        int result = getBlockGroupIds(groupBlockIds, blockIds, blockGroup.getId());
+        // 更新区块分组和区块历史关系表
+        List<BlockCarriersRelation> blockCarriersRelations = new ArrayList<>();
+        for (Block block : blockList) {
+            BlockCarriersRelation blockCarriersRelation = new BlockCarriersRelation();
+            blockCarriersRelation.setHostId(blockGroup.getId());
+            blockCarriersRelation.setHostType(hostType);
+            blockCarriersRelation.setBlockId(block.getId());
+            blockCarriersRelation.setVersion(block.getLatestVersion());
+            blockCarriersRelations.add(blockCarriersRelation);
+        }
+        blockCarriersRelationMapper.createOrUpdateBatch(blockCarriersRelations);
+        if (result > 0) {
+            blockCarriersRelationMapper.deleteBlockCarriersRelation(blockGroup.getId(), hostType, result);
         }
         return blockGroupMapper.updateBlockGroupById(blockGroup);
     }
@@ -118,7 +162,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return insert number
      */
     @Override
-    public Result<List<BlockGroupDto>> createBlockGroup(BlockGroup blockGroup) {
+    public Result<List<BlockGroup>> createBlockGroup(BlockGroup blockGroup) {
         List<BlockGroupDto> blockGroupsList = blockGroupMapper.queryBlockGroupByCondition(blockGroup);
         if (blockGroupsList.isEmpty()) {
             blockGroupMapper.createBlockGroup(blockGroup);
@@ -126,8 +170,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             return Result.failed(ExceptionEnum.CM003);
         }
         // 页面返回数据显示
-        List<BlockGroupDto> blockGroupsListResult = blockGroupMapper.getBlockGroupsById(blockGroup.getId());
-        return Result.success(blockGroupsListResult);
+        BlockGroup blockGroupResult = findBlockGroupById(blockGroup.getId());
+        return Result.success(Collections.singletonList(blockGroupResult));
     }
 
     /**
@@ -140,39 +184,84 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public List<BlockGroup> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId, String from) {
-        String createdBy = "1"; // 获取登录用户信息
         // 此接收到的两个参数不一定同时存在
         List<BlockGroup> blockGroupsListResult = new ArrayList<>();
-        createdBy = ("block").equals(from) ? createdBy : null; // from值为block在区块管理处增加createdBy条件
+        String groupCreatedBy = "1"; // 获取登录用户id
+        String blockCreatedBy = "1";
+        blockCreatedBy = (Enums.BlockGroup.BLOCK.getValue()).equals(from) ? blockCreatedBy : null; // from值为block在区块管理处增加createdBy条件
         BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {
             for (int blockgroupId : ids) {
-                blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, createdBy);
+                blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, blockCreatedBy, groupCreatedBy);
                 blockGroupsListResult.add(blockGroup);
             }
         }
         if (appId != null) {
-            blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, createdBy);
+            blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, blockCreatedBy, groupCreatedBy);
         }
         if (ids == null && appId == null) {
-            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock(createdBy);
+            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock( blockCreatedBy, groupCreatedBy);
         }
 
-        // 对查询结果做相关处理和判断
-        if (blockGroupsListResult.isEmpty()) {
+        if (blockGroupsListResult.isEmpty() || blockGroupsListResult.get(0).getId() == null) {
             return blockGroupsListResult;
         }
-        List<BlockGroup> blockGroupsListTemp = new ArrayList<>();
-        // 对查询的结果过滤blocks中id为null的情况
+        // 对查询的结果的区块赋值current_version
         for (BlockGroup blockGroupTemp : blockGroupsListResult) {
-            if (blockGroupTemp != null && blockGroupTemp.getBlocks() != null) {
-                List<Block> blocks = blockGroupTemp.getBlocks().stream()
-                        .filter(block -> block.getId() != null)
-                        .collect(Collectors.toList());
-                blockGroupTemp.setBlocks(blocks);
-                blockGroupsListTemp.add(blockGroupTemp);
+            for (Block block : blockGroupTemp.getBlocks()) {
+                BlockCarriersRelation queryParam = new BlockCarriersRelation();
+                queryParam.setBlockId(block.getId());
+                queryParam.setHostId(blockGroup.getId());
+                queryParam.setHostType(Enums.BlockGroup.BLOCK_GROUP.getValue());
+                List<BlockCarriersRelation> blockCarriersRelations = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
+                if (blockCarriersRelations.isEmpty()) {
+                    continue;
+                }
+                String version = blockCarriersRelations.get(0).getVersion();
+                block.setCurrentVersion(version);
+            }
+
+        }
+        return blockGroupsListResult;
+    }
+
+    /**
+     * 根据参数处理区块分组与区块关系
+     *
+     * @param groupBlockIds the groupBlockIds
+     * @param paramIds      the paramIds
+     * @param groupId       the groupId
+     * @return the result
+     */
+    private Integer getBlockGroupIds(List<Integer> groupBlockIds, List<Integer> paramIds, Integer groupId) {
+        int result = 0;
+        if (groupBlockIds.size() > paramIds.size()) {
+            Block block = new Block();
+            for (Integer blockId : groupBlockIds) {
+                if (!paramIds.contains(blockId)) {
+                    result = blockId;
+                    block.setId(blockId);  // 找到多出的元素
+                    break;
+                }
+            }
+            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+            blockGroupBlock.setBlockId(block.getId());
+            blockGroupBlock.setBlockGroupId(groupId);
+            List<BlockGroupBlock> blockGroupBlocks = blockGroupBlockMapper.queryBlockGroupBlockByCondition(blockGroupBlock);
+            if (blockGroupBlocks.isEmpty()) {
+                return result;
+            }
+            int blockGroupBlockId = blockGroupBlocks.get(0).getId();
+            blockGroupBlockMapper.deleteBlockGroupBlockById(blockGroupBlockId);
+            return result;
+        } else {
+            for (int block : paramIds) {
+                BlockGroupBlock blockGroupBlockParam = new BlockGroupBlock();
+                blockGroupBlockParam.setBlockId(block);
+                blockGroupBlockParam.setBlockGroupId(groupId);
+                blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlockParam);
             }
         }
-        return blockGroupsListTemp;
+        return result;
     }
 }

@@ -14,11 +14,12 @@ package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
-import com.tinyengine.it.model.dto.OpenAiBodyDto;
 import com.tinyengine.it.service.app.AiChatService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +44,6 @@ public class AiChatServiceImpl implements AiChatService {
     private static final Pattern PATTERN_TAG_START = Pattern.compile("```javascript|<template>");
     private static final Pattern PATTERN_TAG_END = Pattern.compile("```|</template>|</script>|</style>");
     private static final Pattern PATTERN_MESSAGE = Pattern.compile(".*编码时遵从以下几条要求.*");
-
-    private AiChatClient aiChatClient = new AiChatClient();
 
     /**
      * Get start and end int [ ].
@@ -76,48 +75,113 @@ public class AiChatServiceImpl implements AiChatService {
     @SystemServiceLog(description = "getAnswerFromAi 获取ai回答")
     @Override
     public Result<Map<String, Object>> getAnswerFromAi(AiParam aiParam) {
+        String token = aiParam.getFoundationModel().get("token");
+        if (token == null || token.isEmpty()) {
+            return Result.failed("The token cannot be empty");
+        }
+        if (!Pattern.matches("^[A-Za-z0-9_.-]+$", token)) {
+            return Result.failed("Invalid token format");
+        }
+
         if (aiParam.getMessages().isEmpty()) {
             return Result.failed("Not passing the correct message parameter");
         }
+        Map<String, String> foundationModel = aiParam.getFoundationModel();
         String model = aiParam.getFoundationModel().get("model");
         if (aiParam.getFoundationModel().get("model").isEmpty()) {
             model = Enums.FoundationModel.GPT_35_TURBO.getValue();
         }
-        Map<String, Object> data = requestAnswerFromAi(aiParam.getMessages(), model).getData();
+        foundationModel.put("model",model);
+        aiParam.setFoundationModel(foundationModel);
+        Result<Map<String, Object>> resultData = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel());
+        // 调用接口失败时且data为null
+        if(!resultData.isSuccess() && resultData.getData() == null){
+            return Result.failed(resultData.getCode(),resultData.getMessage());
+        }
+        Map<String, Object> data = resultData.getData();
         if (data.isEmpty()) {
             return Result.failed("调用AI大模型接口未返回正确数据");
         }
         List<Map<String, Object>> choices = (List<Map<String, Object>>) data.get("choices");
         Map<String, String> message = (Map<String, String>) choices.get(0).get("message");
-        String answerContent = message.get("content");
+
+        String answerContent = "";
+        String isFinish = "";
+        Object finishReason = choices.get(0).get("finish_reason");
+        if (finishReason instanceof String) {
+            isFinish = (String) finishReason;
+        }
+        if (!"length".equals(isFinish)) {
+            answerContent = message.get("content");
+        }
+
+        // 若内容被截断，继续请求AI
+        while ("length".equals(isFinish)) {
+            String prefix = message.get("content");
+            answerContent = answerContent + prefix;
+
+            // 将此部分内容加入消息列表
+            Map<String, Object> partialMessage = new HashMap<>();
+            AiMessages aiMessages = new AiMessages();
+            List<AiMessages> messagesList = aiParam.getMessages();
+            aiMessages.setRole("assistant");
+            aiMessages.setName("AI");
+            aiMessages.setContent(prefix);
+            messagesList.add(aiMessages);
+            aiParam.setMessages(messagesList);
+
+            // 再次请求AI
+            try {
+                data = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel()).getData();
+            } catch (Exception e) {
+               throw  new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
+            }
+            choices = (List<Map<String, Object>>) data.get("choices");
+            message = (Map<String, String>) choices.get(0).get("message");
+            StringBuilder sb = new StringBuilder();
+            answerContent = String.valueOf(sb.append(message.get("content")));
+            finishReason = choices.get(0).get("finish_reason");
+            if (finishReason instanceof String) {
+                isFinish = (String) finishReason;
+            }
+        }
+
+
         String replyWithoutCode = removeCode(answerContent);
         // 通过二方包将页面转成schema
         String codes = extractCode(answerContent);
 
         Map<String, Object> schema = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
-        result.put("originalResponse", data);
+        AiMessages aiMessagesresult = new AiMessages();
+        aiMessagesresult.setContent(answerContent);
+        aiMessagesresult.setRole(message.get("role"));
+        aiMessagesresult.setName(message.get("name"));
+        result.put("originalResponse", aiMessagesresult);
         result.put("replyWithoutCode", replyWithoutCode);
         result.put("schema", schema);
 
         return Result.success(result);
     }
 
-    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, String model) {
+    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, Map<String, String> foundationModel) {
         List<AiMessages> aiMessages = formatMessage(messages);
 
-        OpenAiBodyDto openAiBodyDto = new OpenAiBodyDto(model, aiMessages);
-        Map<String, Object> response = aiChatClient.executeChatRequest(openAiBodyDto);
+        AiParam aiParam = new AiParam(foundationModel,aiMessages);
+        AiChatClient aiChatClient = new AiChatClient(foundationModel.get("model"), foundationModel.get("token"));
+        Map<String, Object> response = aiChatClient.executeChatRequest(aiParam);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
         if (response.get("error_code") != null) {
-            return Result.failed(response.get("error_msg").toString());
+            String code =  response.get("error_code").toString();
+            String message = response.get("error_msg").toString();
+            return Result.failed(code,message);
         }
         if (response.get("error") != null) {
             String code = (response.get("code") != null) ? response.get("code").toString() : "";
             String message = (response.get("message") != null) ? response.get("message").toString() : "";
             return Result.failed(code, message);
         }
-        if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model)) {
+        if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(foundationModel.get("model"))) {
             return modelResultConvet(response);
         }
         return Result.success(response);
@@ -132,41 +196,25 @@ public class AiChatServiceImpl implements AiChatService {
      * @return result 返回结果
      */
     private Result<Map<String, Object>> modelResultConvet(Map<String, Object> response) {
-        // 进行转换
-        Object data = response.get("data");
-        if (data instanceof Map) {  // 确保数据是 Map 类型
-            Map<String, Object> responseData = (Map<String, Object>) data;
 
-            Map<String, Object> openAiResponse = new HashMap<>();
-            openAiResponse.put("id", responseData.get("id"));
-            openAiResponse.put("object", "text_completion");
-            openAiResponse.put("created", System.currentTimeMillis() / 1000);  // 设置创建时间戳
-            openAiResponse.put("model", responseData.get("model"));
+        // 构建返回的 Map 结构
+        Map<String, Object> resData = new HashMap<>(response); // Copy original data
 
-            List<Map<String, Object>> chatgptChoices = new ArrayList<>();
-            Object choices = responseData.get("choices");
-            if (choices instanceof List) {  // 确保 choices 是 List 类型
-                List<Map<String, Object>> originalChoices = (List<Map<String, Object>>) choices;
-                if (!originalChoices.isEmpty()) {
-                    Map<String, Object> originalChoice = originalChoices.get(0);
-                    Map<String, Object> chatgptChoice = new HashMap<>();
-                    chatgptChoice.put("text", originalChoice.get("text"));
-                    chatgptChoice.put("index", originalChoice.get("index"));
-                    chatgptChoice.put("message", originalChoice.get("message"));
-                    chatgptChoices.add(chatgptChoice);
-                }
-            }
-            openAiResponse.put("choices", chatgptChoices);
+        // 构建 choices 数组
+        List<Map<String, Object>> choices = new ArrayList<>();
+        Map<String, Object> choice = new HashMap<>();
+        Map<String, String> message = new HashMap<>();
+        message.put("role", "assistant");
+        message.put("content", (String) response.get("result"));
+        message.put("name", "AI");
+        choice.put("message", message);
+        choices.add(choice);
 
-            Map<String, Object> chatgptUsage = new HashMap<>();
-            chatgptUsage.put("prompt_tokens", responseData.get("input_tokens"));
-            chatgptUsage.put("completion_tokens", responseData.get("output_tokens"));
-            chatgptUsage.put("total_tokens", responseData.get("total_tokens"));
-            openAiResponse.put("usage", chatgptUsage);
-            return Result.success(openAiResponse);
-        } else {
-            return Result.failed("Invalid response format: 'data' is not a Map.");
-        }
+        // 将 choices 添加到响应中
+        resData.put("choices", choices);
+
+        return Result.success(resData);
+
     }
 
     /**
@@ -219,20 +267,20 @@ public class AiChatServiceImpl implements AiChatService {
                 + "5. 不要加任何注释\n"
                 + "6. el-table标签内不得出现el-table-column\n"
                 + "###");
-
+        defaultWords.setName(messages.get(0).getName());
         String role = messages.get(0).getRole();
         String content = messages.get(0).getContent();
 
         List<AiMessages> aiMessages = new ArrayList<>();
 
+        if (!PATTERN_MESSAGE.matcher(content).matches()) {
+            AiMessages aiMessagesResult = messages.get(0);
+            aiMessagesResult.setContent(defaultWords.getContent() + "\n" + content);
+        }
         if (!"user".equals(role)) {
             aiMessages.add(0, defaultWords);
         }
-        if (!PATTERN_MESSAGE.matcher(content).matches()) {
-            AiMessages aiMessagesResult = new AiMessages();
-            aiMessagesResult.setContent(defaultWords.getContent() + "\n" + content);
-            aiMessages.add(aiMessagesResult);
-        }
-        return aiMessages;
+
+        return messages;
     }
 }
