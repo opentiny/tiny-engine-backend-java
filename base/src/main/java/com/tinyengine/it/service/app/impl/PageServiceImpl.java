@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.app.impl;
@@ -15,6 +14,7 @@ package com.tinyengine.it.service.app.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
@@ -126,6 +126,9 @@ public class PageServiceImpl implements PageService {
     @Autowired
     private PageHistoryService pageHistoryService;
 
+    @Autowired
+    private LoginUserContext loginUserContext;
+
     /**
      * 通过appId查询page所有数据实现方法
      *
@@ -217,8 +220,8 @@ public class PageServiceImpl implements PageService {
         if (!page.getGroup().isEmpty() && Arrays.asList("static", "public").contains(page.getGroup())) {
             page.setGroup(page.getGroup() + "Pages");
         }
-        String userId = "1";
-        page.setOccupierBy(userId);
+
+        page.setOccupierBy(loginUserContext.getLoginUserId());
         page.setIsDefault(false);
         page.setDepth(0);
 
@@ -284,9 +287,8 @@ public class PageServiceImpl implements PageService {
         page.setGroup("staticPages");
         page.setIsDefault(false);
         page.setIsBody(true);
-        // needTODO 获取user的ID
-        String userId = "1";
-        page.setOccupierBy(userId);
+        // 获取user的ID
+        page.setOccupierBy(loginUserContext.getLoginUserId());
         List<Page> pageResult = queryPages(page);
         if (!pageResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
@@ -531,12 +533,13 @@ public class PageServiceImpl implements PageService {
 
     /**
      * 保护默认页面
+     *
      * @param page the pages
      * @return boolean
      */
     public boolean protectDefaultPage(Page page) {
         String id = page.getParentId();
-        if("0".equals(id)){
+        if ("0".equals(id)) {
             return true;
         }
         String parentId = this.getParentPage(id);
@@ -558,6 +561,7 @@ public class PageServiceImpl implements PageService {
 
     /**
      * 查询父页面
+     *
      * @param parentId the parentId
      * @return parentId the parentId
      */
@@ -572,6 +576,7 @@ public class PageServiceImpl implements PageService {
 
     /**
      * 查询默认子页面
+     *
      * @param parentId the parentId
      * @return subPageId the subPageId
      */

@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
@@ -89,6 +90,9 @@ class PageServiceImplTest {
     @InjectMocks
     private PageServiceImpl pageServiceImpl;
 
+    @Mock
+    private LoginUserContext loginUserContext;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -150,6 +154,7 @@ class PageServiceImplTest {
         // not home page
         when(appMapper.queryAppById(333)).thenReturn(app);
         when(pageHistoryService.createPageHistory(any(PageHistory.class))).thenReturn(1);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
 
         Result<Page> result = pageServiceImpl.createPage(param);
         assertEquals(returnPage, result.getData());
@@ -189,6 +194,7 @@ class PageServiceImplTest {
             }
         };
         when(blockServiceImpl.getBlockAssets(any(Map.class), anyString())).thenReturn(blockAsset);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
 
         Result<Page> result = pageServiceImpl.createFolder(param);
         assertEquals(returnPage, result.getData());

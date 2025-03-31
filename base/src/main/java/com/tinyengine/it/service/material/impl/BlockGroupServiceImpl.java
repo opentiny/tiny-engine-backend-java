@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.BlockCarriersRelationMapper;
@@ -51,7 +52,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     @Autowired
     private BlockGroupBlockMapper blockGroupBlockMapper;
 
-    private static final String DEFAULT_USER_ID = "1";
+    @Autowired
+    private LoginUserContext loginUserContext;
 
     /**
      * 查询表t_block_group所有数据
@@ -71,7 +73,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public BlockGroup findBlockGroupById(@Param("id") Integer id) {
-        BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null, DEFAULT_USER_ID);
+        BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null, loginUserContext.getLoginUserId());
         // 对查询的结果的区块赋值current_version
         if (blockGroupResult == null || blockGroupResult.getBlocks().isEmpty()) {
             return blockGroupResult;
@@ -186,8 +188,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     public List<BlockGroup> getBlockGroupByIdsOrAppId(List<Integer> ids, Integer appId, String from) {
         // 此接收到的两个参数不一定同时存在
         List<BlockGroup> blockGroupsListResult = new ArrayList<>();
-        String groupCreatedBy = "1"; // 获取登录用户id
-        String blockCreatedBy = "1";
+        String groupCreatedBy = loginUserContext.getLoginUserId(); // 获取登录用户id
+        String blockCreatedBy = loginUserContext.getLoginUserId();
         blockCreatedBy = (Enums.BlockGroup.BLOCK.getValue()).equals(from) ? blockCreatedBy : null; // from值为block在区块管理处增加createdBy条件
         BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {

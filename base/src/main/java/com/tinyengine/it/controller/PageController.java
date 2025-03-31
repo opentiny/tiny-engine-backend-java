@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.controller;
@@ -71,8 +70,8 @@ public class PageController {
      * @return allpage
      */
     @Operation(summary = "获取页面列表", description = "获取页面列表", parameters = {
-        @Parameter(name = "aid", description = "appId")}, responses = {
-                @ApiResponse(responseCode = "200", description = "返回信息",
+            @Parameter(name = "aid", description = "appId")}, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Page.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
@@ -207,8 +206,8 @@ public class PageController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "页面发布")
     @PostMapping("/pages/deploy")
-    public Result<Integer> pageDeploy(@RequestBody PageHistory pageHistory) {
-        Integer result = pageHistoryService.createPageHistory(pageHistory);
-        return Result.success(result);
+    public Result<PageHistory> pageDeploy(@RequestBody PageHistory pageHistory) {
+        pageHistoryService.createPageHistory(pageHistory);
+        return Result.success(pageHistory);
     }
 }
