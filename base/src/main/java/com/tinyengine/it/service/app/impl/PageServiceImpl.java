@@ -138,7 +138,17 @@ public class PageServiceImpl implements PageService {
     @Override
     @SystemServiceLog(description = "通过appId查询page所有数据实现方法")
     public List<Page> queryAllPage(Integer aid) {
-        return pageMapper.queryPageByApp(aid);
+        List<Page> pageList = pageMapper.queryPageByApp(aid);
+        if(pageList == null){
+            return null;
+        }
+        // 遍历数据给页面的ishome字段赋值
+        for (Page page:pageList) {
+            if(page.getIsPage()){
+                addIsHome(page);
+            }
+        }
+        return pageList;
     }
 
     /**
@@ -372,15 +382,11 @@ public class PageServiceImpl implements PageService {
         // getFolder 获取父类信息
         Page parentInfo = pageMapper.queryPageById(page.getId());
         // 当更新参数中没有depth 或 depth没有发生改变时
-        if (page.getDepth().equals(parentInfo.getDepth())) {
-            int result = pageMapper.updatePageById(page);
-            if (result < 1) {
-                return Result.failed(ExceptionEnum.CM001);
-            }
-            Page pagesResult = queryPageById(page.getId());
-            return Result.success(pagesResult);
+        if (shouldUpdateDepth(page, parentInfo)) {
+            return performUpdate(page);
         }
-        return Result.failed(ExceptionEnum.CM002);
+        // 如果深度发生改变，执行更新
+        return performUpdate(page);
     }
 
     /**
@@ -417,6 +423,22 @@ public class PageServiceImpl implements PageService {
 
         int result = appMapper.updateAppById(app);
         return result >= 1;
+    }
+
+    // 执行页面更新操作
+    private Result<Page> performUpdate(Page page) {
+        int result = pageMapper.updatePageById(page);
+        if (result < 1) {
+            return Result.failed(ExceptionEnum.CM001);
+        }
+
+        Page updatedPage = queryPageById(page.getId());
+        return Result.success(updatedPage);
+    }
+
+    // 判断是否需要更新深度
+    private boolean shouldUpdateDepth(Page page, Page parentInfo) {
+        return page.getDepth() == 0 || page.getDepth().equals(parentInfo.getDepth());
     }
 
     /**
