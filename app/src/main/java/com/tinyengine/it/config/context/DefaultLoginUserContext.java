@@ -12,10 +12,12 @@
 package com.tinyengine.it.config.context;
 
 import com.tinyengine.it.common.context.LoginUserContext;
+import org.springframework.stereotype.Service;
 
 /**
  * 默认的登录用户Context实现
  */
+@Service
 public class DefaultLoginUserContext implements LoginUserContext {
     @Override
     public String getTenantId() {
