@@ -81,4 +81,22 @@ public interface ComponentService {
      * @return result the result
      */
     Result<FileResult> readFileAndBulkCreate(MultipartFile file);
+
+    /**
+     * 拆分bundle.json为component集合
+     *
+     * @param file the file
+     * @return result the result
+     */
+    Result<List<Component>> bundleSplit(MultipartFile file);
+
+    /**
+     * 批量创建component
+     *
+     * @param componentList the componentList
+     * @return result the result
+     */
+    Result<FileResult> custComponentBulkCreate(List<Component> componentList);
+
+
 }

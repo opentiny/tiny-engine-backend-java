@@ -87,6 +87,7 @@ public class Component extends BaseEntity {
     @Schema(name = "snippets", description = "schema片段")
     private List<Map<String, Object>> snippets;
 
+    @JsonProperty("schema")
     @Schema(name = "schemaFragment", description = "schema片段")
     private String schemaFragment;
 

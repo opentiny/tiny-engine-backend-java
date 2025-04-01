@@ -14,6 +14,7 @@ package com.tinyengine.it.service.material.impl;
 
 import static org.mockito.Mockito.when;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
 import com.tinyengine.it.model.entity.MaterialHistory;
 
@@ -57,8 +58,8 @@ class MaterialHistoryServiceImplTest {
         MaterialHistory mockData = new MaterialHistory();
         when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(mockData);
 
-        MaterialHistory result = materialHistoryServiceImpl.findMaterialHistoryById(1);
-        Assertions.assertEquals(mockData, result);
+        Result<MaterialHistory> result = materialHistoryServiceImpl.findMaterialHistoryById(1);
+        Assertions.assertEquals(mockData, result.getData());
     }
 
     @Test
@@ -73,27 +74,30 @@ class MaterialHistoryServiceImplTest {
 
     @Test
     void testDeleteMaterialHistoryById() {
-        when(materialHistoryMapper.deleteMaterialHistoryById(1)).thenReturn(123);
-
-        Integer result = materialHistoryServiceImpl.deleteMaterialHistoryById(1);
-        Assertions.assertEquals(123, result);
+        MaterialHistory param = new MaterialHistory();
+        Result.success(param);
+        when(materialHistoryMapper.deleteMaterialHistoryById(1)).thenReturn(1);
+        when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(param);
+        Result<MaterialHistory> result = materialHistoryServiceImpl.deleteMaterialHistoryById(1);
+        Assertions.assertEquals( Result.success(param), result);
     }
 
     @Test
     void testUpdateMaterialHistoryById() {
         MaterialHistory param = new MaterialHistory();
-        when(materialHistoryMapper.updateMaterialHistoryById(param)).thenReturn(123);
-
-        Integer result = materialHistoryServiceImpl.updateMaterialHistoryById(param);
-        Assertions.assertEquals(123, result);
+        when(materialHistoryMapper.updateMaterialHistoryById(param)).thenReturn(1);
+        when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(param);
+        Result<MaterialHistory> result = materialHistoryServiceImpl.updateMaterialHistoryById(param);
+        Assertions.assertEquals(Result.success(param), result);
     }
 
     @Test
     void testCreateMaterialHistory() {
         MaterialHistory param = new MaterialHistory();
-        when(materialHistoryMapper.createMaterialHistory(param)).thenReturn(123);
-
-        Integer result = materialHistoryServiceImpl.createMaterialHistory(param);
-        Assertions.assertEquals(123, result);
+        Result.success(param);
+        when(materialHistoryMapper.createMaterialHistory(param)).thenReturn(1);
+        when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(param);
+        Result<MaterialHistory> result = materialHistoryServiceImpl.createMaterialHistory(param);
+        Assertions.assertEquals(result, Result.success(param));
     }
 }

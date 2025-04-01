@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.material.impl;
@@ -16,6 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.BlockCarriersRelationMapper;
 import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
@@ -47,6 +47,8 @@ class BlockGroupServiceImplTest {
     private BlockCarriersRelationMapper blockCarriersRelationMapper;
     @Mock
     private BlockGroupBlockMapper blockGroupBlockMapper;
+    @Mock
+    private LoginUserContext loginUserContext;
 
     @BeforeEach
     void setUp() {
@@ -65,7 +67,8 @@ class BlockGroupServiceImplTest {
     @Test
     void testFindBlockGroupById() {
         BlockGroup mockData = new BlockGroup();
-        when(blockGroupMapper.queryBlockGroupAndBlockById(any(),any(),any())).thenReturn(mockData);
+        when(blockGroupMapper.queryBlockGroupAndBlockById(any(), any(), any())).thenReturn(mockData);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
 
         BlockGroup result = blockGroupServiceImpl.findBlockGroupById(1);
         Assertions.assertEquals(mockData, result);
@@ -105,6 +108,7 @@ class BlockGroupServiceImplTest {
     void testCreateBlockGroup() {
         BlockGroup param = new BlockGroup();
         when(blockGroupMapper.createBlockGroup(param)).thenReturn(1);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
         BlockGroup blockGroupParam = new BlockGroup();
         blockGroupParam.setId(1);
         Result<List<BlockGroup>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
@@ -119,6 +123,7 @@ class BlockGroupServiceImplTest {
         List<BlockGroup> mockData = new ArrayList<>();
         when(blockGroupMapper.queryBlockGroupAndBlockById(any(), any(), any())).thenReturn(new BlockGroup());
         when(blockGroupMapper.queryBlockGroupByAppId(any(), any(), any())).thenReturn(mockData);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
 
         // not empty param
         List<BlockGroup> result = blockGroupServiceImpl.getBlockGroupByIdsOrAppId(paramIdList, appId, from);

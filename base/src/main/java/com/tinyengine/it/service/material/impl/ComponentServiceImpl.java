@@ -124,6 +124,12 @@ public class ComponentServiceImpl implements ComponentService {
      */
     @Override
     public Result<FileResult> readFileAndBulkCreate(MultipartFile file) {
+        List<Component> componentList = this.bundleSplit(file).getData();
+        return bulkCreate(componentList);
+    }
+
+    @Override
+    public Result<List<Component>> bundleSplit(MultipartFile file) {
         // 获取bundle.json数据
         Result<JsonFile> result = Utils.parseJsonFileStream(file);
         if (!result.isSuccess()) {
@@ -177,10 +183,38 @@ public class ComponentServiceImpl implements ComponentService {
             componentList.add(component);
         }
 
-        return bulkCreate(componentList);
+        return Result.success(componentList);
     }
 
-    private Result<FileResult> bulkCreate(List<Component> componentList) {
+    @Override
+    public Result<FileResult> custComponentBulkCreate(List<Component> componentList) {
+        int addNum = 0;
+        int updateNum = 0;
+        for (Component component : componentList) {
+
+                // 插入新记录
+                Integer result = createComponent(component);
+                if (result == 1) {
+                    MaterialComponent materialComponent = new MaterialComponent();
+                    materialComponent.setMaterialId(1);
+                    materialComponent.setComponentId(component.getId());
+                    componentMapper.createMaterialComponent(materialComponent);
+                    MaterialHistoryComponent materialHistoryComponent = new MaterialHistoryComponent();
+                    materialHistoryComponent.setComponentId(component.getId());
+                    materialHistoryComponent.setMaterialHistoryId(1);
+                    componentMapper.createMaterialHistoryComponent(materialHistoryComponent);
+                }
+                addNum = addNum + 1;
+
+        }
+        // 构造返回插入和更新的条数
+        FileResult fileResult = new FileResult();
+        fileResult.setInsertNum(addNum);
+        fileResult.setUpdateNum(updateNum);
+        return Result.success(fileResult);
+    }
+
+    public Result<FileResult> bulkCreate(List<Component> componentList) {
         int addNum = 0;
         int updateNum = 0;
         for (Component component : componentList) {
