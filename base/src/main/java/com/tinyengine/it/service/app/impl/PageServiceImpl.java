@@ -379,12 +379,6 @@ public class PageServiceImpl implements PageService {
             }
             page.setDepth(depthInfo.getData() + 1);
         }
-        // getFolder 获取父类信息
-        Page parentInfo = pageMapper.queryPageById(page.getId());
-        // 当更新参数中没有depth 或 depth没有发生改变时
-        if (shouldUpdateDepth(page, parentInfo)) {
-            return performUpdate(page);
-        }
         // 如果深度发生改变，执行更新
         return performUpdate(page);
     }
@@ -434,11 +428,6 @@ public class PageServiceImpl implements PageService {
 
         Page updatedPage = queryPageById(page.getId());
         return Result.success(updatedPage);
-    }
-
-    // 判断是否需要更新深度
-    private boolean shouldUpdateDepth(Page page, Page parentInfo) {
-        return page.getDepth() == 0 || page.getDepth().equals(parentInfo.getDepth());
     }
 
     /**
