@@ -43,4 +43,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
     public int getPlatformId() {
         return 1;
     }
+
+    @Override
+    public String getSiteId() { return "1"; }
 }

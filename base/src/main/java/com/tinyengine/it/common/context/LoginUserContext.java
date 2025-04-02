@@ -45,4 +45,6 @@ public interface LoginUserContext {
      * @return 设计器ID
      */
     public int getPlatformId();
+
+    public String getSiteId();
 }

@@ -42,6 +42,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("lastUpdatedBy", loginUserContext.getLoginUserId(), metaObject);
         this.setFieldValByName("tenantId", loginUserContext.getTenantId(), metaObject);
         this.setFieldValByName("renterId", loginUserContext.getRenterId(), metaObject);
+        this.setFieldValByName("siteId", loginUserContext.getSiteId(), metaObject);
+        this.setFieldValByName("platformId", loginUserContext.getPlatformId(), metaObject);
     }
 
     @Override
