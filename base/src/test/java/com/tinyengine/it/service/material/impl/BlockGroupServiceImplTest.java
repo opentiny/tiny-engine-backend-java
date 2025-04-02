@@ -111,7 +111,7 @@ class BlockGroupServiceImplTest {
         when(loginUserContext.getLoginUserId()).thenReturn("1");
         BlockGroup blockGroupParam = new BlockGroup();
         blockGroupParam.setId(1);
-        Result<List<BlockGroup>> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
+        Result<BlockGroup> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
         Assertions.assertNotNull(result.getData());
     }
 
