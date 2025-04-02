@@ -1,12 +1,13 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- * <p>
+ *
  * Use of this source code is governed by an MIT-style license.
- * <p>
+ *
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
  */
 
 package com.tinyengine.it.service.app.impl;
@@ -338,7 +339,7 @@ public class PageServiceImpl implements PageService {
         // 保存成功，异步生成页面历史记录快照,不保证生成成功
         PageHistory pageHistory = new PageHistory();
 
-        // 把Pages中的属性值赋值到PagesHistories中en
+        // 把Pages中的属性值赋值到PagesHistories中
         BeanUtils.copyProperties(page, pageHistory);
         pageHistory.setPage(pageTemp.getId());
         pageHistory.setId(null);
@@ -533,20 +534,14 @@ public class PageServiceImpl implements PageService {
 
     /**
      * 保护默认页面
-<<<<<<< HEAD
-=======
      *
->>>>>>> 342bb06d8974b37e0637fb5d3512f713dccf595b
      * @param page the pages
      * @return boolean
      */
     public boolean protectDefaultPage(Page page) {
         String id = page.getParentId();
-<<<<<<< HEAD
-        if("0".equals(id)){
-=======
+
         if ("0".equals(id)) {
->>>>>>> 342bb06d8974b37e0637fb5d3512f713dccf595b
             return true;
         }
         String parentId = this.getParentPage(id);

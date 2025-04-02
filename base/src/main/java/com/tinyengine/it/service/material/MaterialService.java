@@ -12,8 +12,10 @@
 
 package com.tinyengine.it.service.material;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Material;
 
+import com.tinyengine.it.model.entity.MaterialHistory;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,7 +39,7 @@ public interface MaterialService {
      * @param id the id
      * @return the material
      */
-    Material queryMaterialById(@Param("id") Integer id);
+    Result<Material> queryMaterialById(@Param("id") Integer id);
 
     /**
      * 根据条件查询表t_material信息
@@ -53,7 +55,7 @@ public interface MaterialService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteMaterialById(@Param("id") Integer id);
+    Result<Material> deleteMaterialById(@Param("id") Integer id);
 
     /**
      * 根据主键id更新表t_material信息
@@ -61,7 +63,7 @@ public interface MaterialService {
      * @param material the material
      * @return the integer
      */
-    Integer updateMaterialById(Material material);
+    Result<Material> updateMaterialById(Material material);
 
     /**
      * 新增表t_material数据
@@ -69,5 +71,5 @@ public interface MaterialService {
      * @param material the material
      * @return the integer
      */
-    Integer createMaterial(Material material);
+    Result<Material> createMaterial(Material material);
 }

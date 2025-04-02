@@ -619,7 +619,7 @@ create table `t_block_carriers_relation`
 (
     `id`                int         not null auto_increment comment '主键id',
     `block_id`          int         not null comment '区块id',
-    `host_id`              int         not null comment '类型id',
+    `host_id`           int         not null comment '类型id',
     `host_type`         varchar(60) comment '类型：blockGroup,materialHistory',
     `version`           varchar(60) not null comment '区块当前使用版本',
     `tenant_id`         varchar(60) not null comment '租户id',
@@ -643,3 +643,35 @@ create table `r_block_group_block`
     primary key (`id`) using btree,
     unique index `u_idx_block_group_block` (block_id, block_group_id) using btree
 ) engine = innodb comment = '区块分组和区块关系表';
+
+drop table if exists `t_component_library`;
+
+create table `t_component_library`
+(
+    `id`                int          not null auto_increment comment '主键id',
+    `version`           varchar(255) not null comment '版本',
+    `name`              varchar(255) not null comment '名称',
+    `package`           varchar(255) not null comment '包名',
+    `registry`          varchar(255) comment '注册',
+    `framework`         varchar(255) not null comment '技术栈',
+    `description`       varchar(2000) comment '描述',
+    `script`            varchar(255) comment '脚本地址',
+    `css`               varchar(255) comment '样式地址',
+    `bundle`            varchar(255) comment 'bundle.json地址',
+    `dependencies`      longtext comment '依赖',
+    `others`            longtext comment '其他',
+    `thumbnail`         varchar(255) comment '略图',
+    `public`            int comment '公开状态：0，1，2',
+    `is_started`        tinyint(1) comment '是否启用',
+    `is_official`       tinyint(1) comment '是否是官方',
+    `is_default`        tinyint(1) comment '是否是默认',
+    `tenant_id`         varchar(60)  not null comment '租户id',
+    `renter_id`         varchar(60) comment '业务租户id',
+    `site_id`           varchar(60) comment '站点id，设计预留字段',
+    `created_by`        varchar(60)  not null comment '创建人',
+    `created_time`      timestamp    not null default current_timestamp comment '创建时间',
+    `last_updated_by`   varchar(60)  not null comment '最后修改人',
+    `last_updated_time` timestamp    not null default current_timestamp comment '更新时间',
+    primary key (`id`) using btree,
+    unique index `u_idx_component_library` (`tenant_id`, `name`, `version`) using btree
+) engine = innodb comment = '组件库表';

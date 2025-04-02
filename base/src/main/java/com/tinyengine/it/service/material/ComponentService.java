@@ -94,9 +94,10 @@ public interface ComponentService {
      * 批量创建component
      *
      * @param componentList the componentList
+     * @param materialId the materialId
      * @return result the result
      */
-    Result<FileResult> custComponentBulkCreate(List<Component> componentList);
+    Result<FileResult> custComponentBulkCreate(List<Component> componentList, Integer materialId);
 
 
 }

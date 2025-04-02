@@ -1,13 +1,12 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- *
+ * <p>
  * Use of this source code is governed by an MIT-style license.
- *
+ * <p>
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
  */
 
 package com.tinyengine.it.service.material.impl;
@@ -16,13 +15,17 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ComponentMapper;
+import com.tinyengine.it.mapper.MaterialHistoryMapper;
+import com.tinyengine.it.mapper.MaterialMapper;
 import com.tinyengine.it.model.dto.BundleDto;
 import com.tinyengine.it.model.dto.Child;
 import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.dto.JsonFile;
 import com.tinyengine.it.model.dto.Snippet;
 import com.tinyengine.it.model.entity.Component;
+import com.tinyengine.it.model.entity.Material;
 import com.tinyengine.it.model.entity.MaterialComponent;
+import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.model.entity.MaterialHistoryComponent;
 import com.tinyengine.it.service.material.ComponentService;
 
@@ -30,6 +33,7 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +54,8 @@ import java.util.Map;
 public class ComponentServiceImpl implements ComponentService {
     @Autowired
     private ComponentMapper componentMapper;
+    private MaterialMapper materialMapper;
+    private MaterialHistoryMapper materialHistoryMapper;
 
     /**
      * 查询表t_component所有数据
@@ -128,6 +134,12 @@ public class ComponentServiceImpl implements ComponentService {
         return bulkCreate(componentList);
     }
 
+    /**
+     * 拆分bundle.json
+     *
+     * @param file the file
+     * @return result the result
+     */
     @Override
     public Result<List<Component>> bundleSplit(MultipartFile file) {
         // 获取bundle.json数据
@@ -186,27 +198,35 @@ public class ComponentServiceImpl implements ComponentService {
         return Result.success(componentList);
     }
 
+    /**
+     * 批量创建component
+     *
+     * @param componentList the componentList
+     * @param materialHistoryId the materialHistoryId
+     * @return result the result
+     */
     @Override
-    public Result<FileResult> custComponentBulkCreate(List<Component> componentList) {
+    public Result<FileResult> custComponentBulkCreate(List<Component> componentList, Integer materialId) {
         int addNum = 0;
         int updateNum = 0;
         for (Component component : componentList) {
 
-                // 插入新记录
-                Integer result = createComponent(component);
-                if (result == 1) {
-                    MaterialComponent materialComponent = new MaterialComponent();
-                    materialComponent.setMaterialId(1);
-                    materialComponent.setComponentId(component.getId());
-                    componentMapper.createMaterialComponent(materialComponent);
-                    MaterialHistoryComponent materialHistoryComponent = new MaterialHistoryComponent();
-                    materialHistoryComponent.setComponentId(component.getId());
-                    materialHistoryComponent.setMaterialHistoryId(1);
-                    componentMapper.createMaterialHistoryComponent(materialHistoryComponent);
-                }
-                addNum = addNum + 1;
-
+            // 插入新记录
+            Integer result = createComponent(component);
+            if (result != 1) {
+                continue;
+            }
+            int materialHistoryId = this.createMaterialHistory(materialId);
+            if (materialHistoryId == 0) {
+                continue;
+            }
+            MaterialHistoryComponent materialHistoryComponent = new MaterialHistoryComponent();
+            materialHistoryComponent.setComponentId(component.getId());
+            materialHistoryComponent.setMaterialHistoryId(materialHistoryId);
+            componentMapper.createMaterialHistoryComponent(materialHistoryComponent);
         }
+        addNum = addNum + 1;
+
         // 构造返回插入和更新的条数
         FileResult fileResult = new FileResult();
         fileResult.setInsertNum(addNum);
@@ -214,6 +234,30 @@ public class ComponentServiceImpl implements ComponentService {
         return Result.success(fileResult);
     }
 
+    public int createMaterialHistory(Integer materialId) {
+        int materialHistoryId = 0;
+        Material material = materialMapper.queryMaterialById(materialId);
+        MaterialHistory materialHistory = new MaterialHistory();
+        // 把material中的属性值赋值到materialHistories中
+        BeanUtils.copyProperties(material, materialHistory);
+        materialHistory.setId(null);
+        materialHistory.setRefId(materialId);
+        materialHistory.setVersion(material.getLatestVersion());
+        materialHistory.setContent(new HashMap<>());
+        int result = materialHistoryMapper.createMaterialHistory(materialHistory);
+        if (result != 1) {
+            return materialHistoryId;
+        }
+        materialHistoryId = materialHistory.getId();
+        return materialHistoryId;
+    }
+
+    /**
+     * 批量创建组件
+     *
+     * @param componentList the componentList
+     * @return result the result
+     */
     public Result<FileResult> bulkCreate(List<Component> componentList) {
         int addNum = 0;
         int updateNum = 0;

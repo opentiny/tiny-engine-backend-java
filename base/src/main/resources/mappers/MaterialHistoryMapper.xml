@@ -8,7 +8,7 @@
     <sql id="Base_Column_List">
         id
         , ref_id, version, content, name, npm_name, framework, assets_url, image_url, build_info, description,
-        material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, created_by, last_updated_by, created_time,
+        material_size, tgz_url, unzip_tgz_root_path_url, unzip_tgz_files, is_started, created_by, last_updated_by, created_time,
         last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
@@ -55,6 +55,9 @@
         </if>
         <if test="unzipTgzFiles!=null and unzipTgzFiles!=''">
             AND unzip_tgz_files = #{unzipTgzFiles}
+        </if>
+        <if test="isStarted!=null and isStarted!=''">
+            AND is_started = #{isStarted}
         </if>
         <if test="createdBy!=null and createdBy!=''">
             AND created_by = #{createdBy}
@@ -123,6 +126,9 @@
         <if test="unzipTgzFiles!=null and unzipTgzFiles!=''">
             unzip_tgz_files = #{unzipTgzFiles},
         </if>
+        <if test="isStarted!=null and isStarted!=''">
+            is_started = #{isStarted},
+        </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
         </if>
@@ -164,6 +170,7 @@
         <result column="tgz_url" property="tgzUrl"/>
         <result column="unzip_tgz_root_path_url" property="unzipTgzRootPathUrl"/>
         <result column="unzip_tgz_files" property="unzipTgzFiles"/>
+        <result column="is_started" property="isStarted"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
@@ -210,47 +217,49 @@
     <insert id="createMaterialHistory" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.MaterialHistory">
         INSERT INTO t_material_history ( id
-        , ref_id
-        , version
-        , content
-        , name
-        , npm_name
-        , framework
-        , assets_url
-        , image_url
-        , build_info
-        , description
-        , material_size
-        , tgz_url
-        , unzip_tgz_root_path_url
-        , unzip_tgz_files
-        , created_by
-        , last_updated_by
-        , created_time
-        , last_updated_time
-        , tenant_id, renter_id
-        , site_id)
+                                       , ref_id
+                                       , version
+                                       , content
+                                       , name
+                                       , npm_name
+                                       , framework
+                                       , assets_url
+                                       , image_url
+                                       , build_info
+                                       , description
+                                       , material_size
+                                       , tgz_url
+                                       , unzip_tgz_root_path_url
+                                       , unzip_tgz_files
+                                       , is_started
+                                       , created_by
+                                       , last_updated_by
+                                       , created_time
+                                       , last_updated_time
+                                       , tenant_id, renter_id
+                                       , site_id)
         VALUES ( #{id}
-        , #{refId}
-        , #{version}
-        , #{content}
-        , #{name}
-        , #{npmName}
-        , #{framework}
-        , #{assetsUrl}
-        , #{imageUrl}
-        , #{buildInfo}
-        , #{description}
-        , #{materialSize}
-        , #{tgzUrl}
-        , #{unzipTgzRootPathUrl}
-        , #{unzipTgzFiles}
-        , #{createdBy}
-        , #{lastUpdatedBy}
-        , #{createdTime}
-        , #{lastUpdatedTime}
-        , #{tenantId}
-        , #{renterId}
-        , #{siteId})
+               , #{refId}
+               , #{version}
+               , #{content}
+               , #{name}
+               , #{npmName}
+               , #{framework}
+               , #{assetsUrl}
+               , #{imageUrl}
+               , #{buildInfo}
+               , #{description}
+               , #{materialSize}
+               , #{tgzUrl}
+               , #{unzipTgzRootPathUrl}
+               , #{unzipTgzFiles}
+               , #{isStarted}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{renterId}
+               , #{siteId})
     </insert>
 </mapper>
