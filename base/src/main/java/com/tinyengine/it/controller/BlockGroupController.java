@@ -13,6 +13,7 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
@@ -59,6 +60,8 @@ public class BlockGroupController {
     private BlockGroupService blockGroupService;
     @Autowired
     private BlockGroupMapper blockGroupMapper;
+    @Autowired
+    private LoginUserContext loginUserContext;
 
     /**
      * 获取区块分组
@@ -111,8 +114,7 @@ public class BlockGroupController {
     )
     @SystemControllerLog(description = "创建区块分组")
     @PostMapping("/block-groups/create")
-    public Result<List<BlockGroup>> createBlockGroups(@Valid @RequestBody BlockGroup blockGroup) {
-        blockGroup.setPlatformId(1);
+    public Result<BlockGroup> createBlockGroups(@Valid @RequestBody BlockGroup blockGroup) {
         return blockGroupService.createBlockGroup(blockGroup);
     }
 

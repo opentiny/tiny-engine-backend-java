@@ -63,10 +63,10 @@ class BlockGroupControllerTest {
 
     @Test
     void testCreateBlockGroups() {
-        when(blockGroupService.createBlockGroup(any(BlockGroup.class))).thenReturn(new Result<List<BlockGroup>>());
+        when(blockGroupService.createBlockGroup(any(BlockGroup.class))).thenReturn(new Result<BlockGroup>());
 
-        Result<List<BlockGroup>> result = blockGroupController.createBlockGroups(new BlockGroup());
-        Assertions.assertEquals(new Result<List<BlockGroup>>(), result);
+        Result<BlockGroup> result = blockGroupController.createBlockGroups(new BlockGroup());
+        Assertions.assertEquals(new Result<BlockGroup>(), result);
     }
 
     @Test

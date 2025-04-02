@@ -71,7 +71,7 @@ public interface BlockGroupService {
      * @param blockGroup the block group
      * @return the result
      */
-    Result<List<BlockGroup>> createBlockGroup(BlockGroup blockGroup);
+    Result<BlockGroup> createBlockGroup(BlockGroup blockGroup);
 
     /**
      * 根据ids或者appId获取区块信息
