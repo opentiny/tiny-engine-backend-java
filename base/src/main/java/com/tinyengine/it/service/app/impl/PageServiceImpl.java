@@ -139,12 +139,12 @@ public class PageServiceImpl implements PageService {
     @SystemServiceLog(description = "通过appId查询page所有数据实现方法")
     public List<Page> queryAllPage(Integer aid) {
         List<Page> pageList = pageMapper.queryPageByApp(aid);
-        if(pageList == null){
+        if (pageList == null) {
             return null;
         }
         // 遍历数据给页面的ishome字段赋值
-        for (Page page:pageList) {
-            if(page.getIsPage()){
+        for (Page page : pageList) {
+            if (page.getIsPage()) {
                 addIsHome(page);
             }
         }
