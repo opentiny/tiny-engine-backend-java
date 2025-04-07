@@ -50,7 +50,7 @@
             AND `public` = #{publicStatus}
         </if>
         <if test="isStarted!=null and isStarted!=''">
-            AND is_started = #{publicStatus}
+            AND is_started = #{isStarted}
         </if>
         <if test="isOfficial!=null and isOfficial!=''">
             AND is_official = #{isOfficial}
