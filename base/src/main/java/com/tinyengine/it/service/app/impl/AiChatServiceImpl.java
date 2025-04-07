@@ -91,12 +91,12 @@ public class AiChatServiceImpl implements AiChatService {
         if (aiParam.getFoundationModel().get("model").isEmpty()) {
             model = Enums.FoundationModel.GPT_35_TURBO.getValue();
         }
-        foundationModel.put("model",model);
+        foundationModel.put("model", model);
         aiParam.setFoundationModel(foundationModel);
         Result<Map<String, Object>> resultData = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel());
         // 调用接口失败时且data为null
-        if(!resultData.isSuccess() && resultData.getData() == null){
-            return Result.failed(resultData.getCode(),resultData.getMessage());
+        if (!resultData.isSuccess() && resultData.getData() == null) {
+            return Result.failed(resultData.getCode(), resultData.getMessage());
         }
         Map<String, Object> data = resultData.getData();
         if (data.isEmpty()) {
@@ -134,7 +134,7 @@ public class AiChatServiceImpl implements AiChatService {
             try {
                 data = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel()).getData();
             } catch (Exception e) {
-               throw  new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
+                throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
             }
             choices = (List<Map<String, Object>>) data.get("choices");
             message = (Map<String, String>) choices.get(0).get("message");
@@ -167,14 +167,14 @@ public class AiChatServiceImpl implements AiChatService {
     private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, Map<String, String> foundationModel) {
         List<AiMessages> aiMessages = formatMessage(messages);
 
-        AiParam aiParam = new AiParam(foundationModel,aiMessages);
+        AiParam aiParam = new AiParam(foundationModel, aiMessages);
         AiChatClient aiChatClient = new AiChatClient(foundationModel.get("model"), foundationModel.get("token"));
         Map<String, Object> response = aiChatClient.executeChatRequest(aiParam);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
         if (response.get("error_code") != null) {
-            String code =  response.get("error_code").toString();
+            String code = response.get("error_code").toString();
             String message = response.get("error_msg").toString();
-            return Result.failed(code,message);
+            return Result.failed(code, message);
         }
         if (response.get("error") != null) {
             String code = (response.get("code") != null) ? response.get("code").toString() : "";

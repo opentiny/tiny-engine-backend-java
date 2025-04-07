@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -202,7 +201,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, blockCreatedBy, groupCreatedBy);
         }
         if (ids == null && appId == null) {
-            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock( blockCreatedBy, groupCreatedBy);
+            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock(blockCreatedBy, groupCreatedBy);
         }
 
         if (blockGroupsListResult.isEmpty() || blockGroupsListResult.get(0).getId() == null) {

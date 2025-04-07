@@ -43,5 +43,7 @@ public class MockUserContext implements LoginUserContext {
     }
 
     @Override
-    public String getSiteId() { return "1"; }
+    public String getSiteId() {
+        return "1";
+    }
 }
