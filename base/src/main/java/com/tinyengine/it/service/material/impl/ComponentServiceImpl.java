@@ -142,6 +142,9 @@ public class ComponentServiceImpl implements ComponentService {
     public Result<FileResult> readFileAndBulkCreate(MultipartFile file) {
         List<Component> componentList = this.bundleSplit(file).getData().getComponentList();
         List<ComponentLibrary> packageList = this.bundleSplit(file).getData().getPackageList();
+        if (null == packageList || packageList.isEmpty()) {
+            return bulkCreate(componentList);
+        }
         for (ComponentLibrary componentLibrary : packageList) {
             componentLibrary.setIsDefault(true);
             componentLibrary.setIsStarted(true);
@@ -233,6 +236,12 @@ public class ComponentServiceImpl implements ComponentService {
             componentList.add(component);
         }
         List<Map<String, Object>> packages = bundleDto.getMaterials().getPackages();
+
+        BundleResultDto bundleList = new BundleResultDto();
+        bundleList.setComponentList(componentList);
+        if (null == packages || packages.isEmpty()) {
+            return Result.success(bundleList);
+        }
         List<ComponentLibrary> packageList = new ArrayList<>();
         for (Map<String, Object> library : packages) {
             ComponentLibrary componentLibrary = BeanUtil.mapToBean(library, ComponentLibrary.class, true);
@@ -240,8 +249,6 @@ public class ComponentServiceImpl implements ComponentService {
             componentLibrary.setFramework("Vue");
             packageList.add(componentLibrary);
         }
-        BundleResultDto bundleList = new BundleResultDto();
-        bundleList.setComponentList(componentList);
         bundleList.setPackageList(packageList);
         return Result.success(bundleList);
     }
@@ -298,15 +305,22 @@ public class ComponentServiceImpl implements ComponentService {
             componentParam.setVersion(component.getVersion());
             List<Component> queryComponent = findComponentByCondition(componentParam);
             // 查询组件库id
-            ComponentLibrary componentLibrary = new ComponentLibrary();
-            componentLibrary.setPackageName(String.valueOf(component.getNpm().get("package")));
-            componentLibrary.setVersion(component.getVersion());
-            List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary);
-            Integer componentLibraryId = null;
-            if (!componentLibraryList.isEmpty()) {
-                componentLibraryId = componentLibraryList.get(0).getId();
+            String packageName = null;
+            if(null!= component.getNpm() && null != component.getNpm().get("package")){
+                packageName = String.valueOf(component.getNpm().get("package"));
             }
-            component.setLibraryId(componentLibraryId);
+            if(null != packageName && !packageName.isEmpty()){
+                ComponentLibrary componentLibrary = new ComponentLibrary();
+                componentLibrary.setPackageName(String.valueOf(component.getNpm().get("package")));
+                componentLibrary.setVersion(component.getVersion());
+                List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary);
+                Integer componentLibraryId = null;
+                if (!componentLibraryList.isEmpty()) {
+                    componentLibraryId = componentLibraryList.get(0).getId();
+                }
+                component.setLibraryId(componentLibraryId);
+            }
+
             if (queryComponent.isEmpty()) {
 
                 // 插入新记录

@@ -19,6 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.mapper.UserMapper;
@@ -46,6 +47,8 @@ class CanvasServiceImplTest {
     private BlockMapper blockMapper;
     @Mock
     private UserMapper userMapper;
+    @Mock
+    private LoginUserContext loginUserContext;
     @InjectMocks
     private CanvasServiceImpl canvasServiceImpl;
 
@@ -67,7 +70,7 @@ class CanvasServiceImplTest {
         User user = new User();
         user.setId(userId);
         when(userMapper.queryUserById(1)).thenReturn(user);
-
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
         Result<CanvasDto> result = canvasServiceImpl.lockCanvas(pageId, "occupy", "page");
 
         verify(pageMapper, times(1)).updatePageById(any());
@@ -86,6 +89,7 @@ class CanvasServiceImplTest {
         User user = new User();
         user.setId(userId);
         when(userMapper.queryUserById(1)).thenReturn(user);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
 
         Result<CanvasDto> result = canvasServiceImpl.lockCanvas(pageId, "occupy", "other");
 

@@ -65,12 +65,12 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
     /**
      * 根据条件查询表t_component_library数据
      *
-     * @param material material
+     * @param componentLibrary componentLibrary
      * @return query result
      */
     @Override
-    public List<ComponentLibrary> queryComponentLibraryByCondition(ComponentLibrary material) {
-        return componentLibraryMapper.queryComponentLibraryByCondition(material);
+    public List<ComponentLibrary> queryComponentLibraryByCondition(ComponentLibrary componentLibrary) {
+        return componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary);
     }
 
     /**
@@ -93,32 +93,32 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
     /**
      * 根据主键id更新表t_component_library数据
      *
-     * @param material material
+     * @param componentLibrary componentLibrary
      * @return execute success data number
      */
     @Override
-    public  Result<ComponentLibrary> updateComponentLibraryById(ComponentLibrary material) {
-        int updateResult = componentLibraryMapper.updateComponentLibraryById(material);
+    public  Result<ComponentLibrary> updateComponentLibraryById(ComponentLibrary componentLibrary) {
+        int updateResult = componentLibraryMapper.updateComponentLibraryById(componentLibrary);
         if(updateResult != 1){
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<ComponentLibrary> result = this.queryComponentLibraryById(material.getId());
+        Result<ComponentLibrary> result = this.queryComponentLibraryById(componentLibrary.getId());
         return result;
     }
 
     /**
      * 新增表t_component_library数据
      *
-     * @param material material
+     * @param componentLibrary componentLibrary
      * @return execute success data number
      */
     @Override
-    public  Result<ComponentLibrary> createComponentLibrary(ComponentLibrary material) {
-        int createResult = componentLibraryMapper.createComponentLibrary(material);
+    public  Result<ComponentLibrary> createComponentLibrary(ComponentLibrary componentLibrary) {
+        int createResult = componentLibraryMapper.createComponentLibrary(componentLibrary);
         if(createResult != 1){
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<ComponentLibrary> result = this.queryComponentLibraryById(material.getId());
+        Result<ComponentLibrary> result = this.queryComponentLibraryById(componentLibrary.getId());
         return result;
     }
 }

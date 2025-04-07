@@ -55,6 +55,7 @@ class MaterialHistoryServiceImplTest {
     @Test
     void testFindMaterialHistoryById() {
         MaterialHistory mockData = new MaterialHistory();
+        mockData.setId(1);
         when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(mockData);
 
         Result<MaterialHistory> result = materialHistoryServiceImpl.findMaterialHistoryById(1);
@@ -74,6 +75,7 @@ class MaterialHistoryServiceImplTest {
     @Test
     void testDeleteMaterialHistoryById() {
         MaterialHistory param = new MaterialHistory();
+        param.setId(1);
         when(materialHistoryMapper.deleteMaterialHistoryById(1)).thenReturn(1);
         when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(param);
 
@@ -84,6 +86,7 @@ class MaterialHistoryServiceImplTest {
     @Test
     void testUpdateMaterialHistoryById() {
         MaterialHistory param = new MaterialHistory();
+        param.setId(1);
         when(materialHistoryMapper.updateMaterialHistoryById(param)).thenReturn(1);
         when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(param);
 
@@ -94,6 +97,7 @@ class MaterialHistoryServiceImplTest {
     @Test
     void testCreateMaterialHistory() {
         MaterialHistory param = new MaterialHistory();
+        param.setId(1);
         when(materialHistoryMapper.createMaterialHistory(param)).thenReturn(1);
         when(materialHistoryMapper.queryMaterialHistoryById(1)).thenReturn(param);
 

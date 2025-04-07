@@ -43,10 +43,10 @@ public interface ComponentLibraryService {
     /**
      * 根据条件查询表t_component_library信息
      *
-     * @param material the material
+     * @param componentLibrary the componentLibrary
      * @return the list
      */
-    List<ComponentLibrary> queryComponentLibraryByCondition(ComponentLibrary material);
+    List<ComponentLibrary> queryComponentLibraryByCondition(ComponentLibrary componentLibrary);
 
     /**
      * 根据主键id删除t_component_library数据
@@ -59,16 +59,16 @@ public interface ComponentLibraryService {
     /**
      * 根据主键id更新表t_component_library信息
      *
-     * @param material the material
+     * @param componentLibrary the componentLibrary
      * @return the integer
      */
-    Result<ComponentLibrary> updateComponentLibraryById(ComponentLibrary material);
+    Result<ComponentLibrary> updateComponentLibraryById(ComponentLibrary componentLibrary);
 
     /**
      * 新增表t_component_library数据
      *
-     * @param material the material
+     * @param componentLibrary the componentLibrary
      * @return the integer
      */
-    Result<ComponentLibrary> createComponentLibrary(ComponentLibrary material);
+    Result<ComponentLibrary> createComponentLibrary(ComponentLibrary componentLibrary);
 }

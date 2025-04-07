@@ -56,6 +56,7 @@ class MaterialServiceImplTest {
     @Test
     void testQueryMaterialById() {
         Material mockData = new Material();
+        mockData.setId(1);
         when(materialMapper.queryMaterialById(1)).thenReturn(mockData);
 
         Result<Material> result = materialServiceImpl.queryMaterialById(1);
@@ -74,8 +75,9 @@ class MaterialServiceImplTest {
 
     @Test
     void testDeleteMaterialById() {
-        when(materialMapper.deleteMaterialById(1)).thenReturn(2);
+        when(materialMapper.deleteMaterialById(1)).thenReturn(1);
         Material mockData = new Material();
+        mockData.setId(1);
         when(materialMapper.queryMaterialById(1)).thenReturn(mockData);
 
         Result<Material> result = materialServiceImpl.deleteMaterialById(1);
@@ -85,6 +87,7 @@ class MaterialServiceImplTest {
     @Test
     void testUpdateMaterialById() {
         Material param = new Material();
+        param.setId(1);
         when(materialMapper.updateMaterialById(param)).thenReturn(1);
         when(materialMapper.queryMaterialById(1)).thenReturn(param);
 
@@ -95,6 +98,7 @@ class MaterialServiceImplTest {
     @Test
     void testCreateMaterial() {
         Material param = new Material();
+        param.setId(1);
         when(materialMapper.createMaterial(param)).thenReturn(1);
         when(materialMapper.queryMaterialById(1)).thenReturn(param);
 

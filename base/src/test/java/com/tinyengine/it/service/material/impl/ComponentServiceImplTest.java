@@ -18,11 +18,13 @@ import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.utils.Utils;
+import com.tinyengine.it.mapper.ComponentLibraryMapper;
 import com.tinyengine.it.mapper.ComponentMapper;
 import com.tinyengine.it.model.dto.BundleMaterial;
 import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.dto.JsonFile;
 import com.tinyengine.it.model.entity.Component;
+import com.tinyengine.it.model.entity.ComponentLibrary;
 import com.tinyengine.it.model.entity.MaterialComponent;
 import com.tinyengine.it.model.entity.MaterialHistoryComponent;
 
@@ -50,6 +52,8 @@ import java.util.Map;
 class ComponentServiceImplTest {
     @Mock
     private ComponentMapper componentMapper;
+    @Mock
+    private ComponentLibraryMapper componentLibraryMapper;
     @InjectMocks
     private ComponentServiceImpl componentServiceImpl;
 
@@ -124,7 +128,11 @@ class ComponentServiceImplTest {
         when(componentMapper.createMaterialComponent(any(MaterialComponent.class))).thenReturn(Integer.valueOf(0));
         when(componentMapper.createMaterialHistoryComponent(any(MaterialHistoryComponent.class)))
                 .thenReturn(Integer.valueOf(0));
-
+        ComponentLibrary componentLibrary = new ComponentLibrary();
+        componentLibrary.setId(1);
+        List<ComponentLibrary> componentLibraryList = new ArrayList<>();
+        componentLibraryList.add(componentLibrary);
+        when(componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary)).thenReturn(componentLibraryList);
         MultipartFile file = mock(MultipartFile.class);
         HashMap<String, Object> fileContent = new HashMap<>();
         BundleMaterial bundleMaterial = new BundleMaterial();
@@ -134,6 +142,7 @@ class ComponentServiceImplTest {
         components.add(componentdata);
         bundleMaterial.setComponents(components);
         bundleMaterial.setSnippets(new ArrayList<>());
+        bundleMaterial.setPackages(new ArrayList<>());
         HashMap<Object, Object> material = new HashMap<>();
         material.put("framework", "Vue");
         material.put("materials", bundleMaterial);

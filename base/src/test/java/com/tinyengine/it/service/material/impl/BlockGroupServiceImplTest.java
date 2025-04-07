@@ -20,6 +20,7 @@ import com.tinyengine.it.mapper.BlockCarriersRelationMapper;
 import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.model.dto.BlockGroupDto;
+import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.BlockGroup;
 
 import org.junit.jupiter.api.Assertions;
@@ -107,8 +108,13 @@ class BlockGroupServiceImplTest {
     @Test
     void testCreateBlockGroup() {
         BlockGroup param = new BlockGroup();
+        Block block = new Block();
+        block.setId(1);
+        List<Block> blockList = new ArrayList<>();
+        blockList.add(block);
         when(blockGroupMapper.createBlockGroup(param)).thenReturn(1);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
+        when(blockGroupMapper.queryBlockGroupAndBlockById(1, null, loginUserContext.getLoginUserId())).thenReturn(param);
         BlockGroup blockGroupParam = new BlockGroup();
         blockGroupParam.setId(1);
         Result<BlockGroup> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);
