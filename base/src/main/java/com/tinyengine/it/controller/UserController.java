@@ -13,6 +13,7 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
 
@@ -43,13 +44,19 @@ public class UserController {
     private UserService userService;
 
     /**
+     * The loginUserContext service.
+     */
+    @Autowired
+    private LoginUserContext loginUserContext;
+
+    /**
      * Me result.
      *
      * @return the result
      */
     @GetMapping("/user/me")
     public Result<User> me() {
-        User user = userService.queryUserById(1);
+        User user = userService.queryUserById(Integer.parseInt(loginUserContext.getLoginUserId()));
         return Result.success(user);
     }
 }

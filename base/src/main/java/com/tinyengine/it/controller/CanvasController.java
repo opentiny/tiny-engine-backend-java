@@ -41,6 +41,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/app-center/api")
 @Tag(name = "区块")
 public class CanvasController {
+    /**
+     * The canvas service.
+     */
     @Autowired
     private CanvasService canvasService;
 
