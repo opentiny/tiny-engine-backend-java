@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.mapper.UserMapper;
@@ -38,12 +39,14 @@ public class CanvasServiceImpl implements CanvasService {
     private BlockMapper blockMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private LoginUserContext loginUserContext;
 
     @Override
     public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
         int occupier;
         // needTODO 先试用mock数据，后续添加登录及权限后从session获取,
-        User user = userMapper.queryUserById(1);
+        User user = userMapper.queryUserById(Integer.parseInt(loginUserContext.getLoginUserId()));
         CanvasDto canvasDto = new CanvasDto();
         if ("page".equals(type)) {
             Page page = pageMapper.queryPageById(id);

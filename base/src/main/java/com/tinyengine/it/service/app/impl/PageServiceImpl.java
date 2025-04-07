@@ -1,12 +1,13 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- * <p>
+ *
  * Use of this source code is governed by an MIT-style license.
- * <p>
+ *
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
  */
 
 package com.tinyengine.it.service.app.impl;
@@ -348,7 +349,7 @@ public class PageServiceImpl implements PageService {
         // 保存成功，异步生成页面历史记录快照,不保证生成成功
         PageHistory pageHistory = new PageHistory();
 
-        // 把Pages中的属性值赋值到PagesHistories中en
+        // 把Pages中的属性值赋值到PagesHistories中
         BeanUtils.copyProperties(page, pageHistory);
         pageHistory.setPage(pageTemp.getId());
         pageHistory.setId(null);
@@ -550,6 +551,7 @@ public class PageServiceImpl implements PageService {
      */
     public boolean protectDefaultPage(Page page) {
         String id = page.getParentId();
+
         if ("0".equals(id)) {
             return true;
         }

@@ -37,4 +37,5 @@ public class SchemaDto {
     private SchemaMeta meta;
     private List<SchemaUtils> utils;
     private String version;
+    private List<PackagesDto> packages;
 }

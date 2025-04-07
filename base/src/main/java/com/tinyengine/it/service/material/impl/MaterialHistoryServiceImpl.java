@@ -12,6 +12,8 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
 import com.tinyengine.it.model.entity.MaterialHistory;
@@ -33,6 +35,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class MaterialHistoryServiceImpl implements MaterialHistoryService {
+    /**
+     * The material history mapper.
+     */
     @Autowired
     private MaterialHistoryMapper materialHistoryMapper;
 
@@ -53,8 +58,9 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      * @return query result
      */
     @Override
-    public MaterialHistory findMaterialHistoryById(@Param("id") Integer id) {
-        return materialHistoryMapper.queryMaterialHistoryById(id);
+    public Result<MaterialHistory> findMaterialHistoryById(@Param("id") Integer id) {
+        MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(id);
+        return Result.success(materialHistory);
     }
 
     /**
@@ -77,8 +83,13 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteMaterialHistoryById(@Param("id") Integer id) {
-        return materialHistoryMapper.deleteMaterialHistoryById(id);
+    public Result<MaterialHistory> deleteMaterialHistoryById(@Param("id") Integer id) {
+        Result<MaterialHistory> result = this.findMaterialHistoryById(id);
+        int deleteResult = materialHistoryMapper.deleteMaterialHistoryById(id);
+        if (deleteResult != 1) {
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        return result;
     }
 
     /**
@@ -88,8 +99,13 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      * @return execute success data number
      */
     @Override
-    public Integer updateMaterialHistoryById(MaterialHistory materialHistory) {
-        return materialHistoryMapper.updateMaterialHistoryById(materialHistory);
+    public Result<MaterialHistory> updateMaterialHistoryById(MaterialHistory materialHistory) {
+        int updateResult = materialHistoryMapper.updateMaterialHistoryById(materialHistory);
+        if (updateResult != 1) {
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        Result<MaterialHistory> result = this.findMaterialHistoryById(materialHistory.getId());
+        return result;
     }
 
     /**
@@ -99,7 +115,12 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      * @return execute success data number
      */
     @Override
-    public Integer createMaterialHistory(MaterialHistory materialHistory) {
-        return materialHistoryMapper.createMaterialHistory(materialHistory);
+    public Result<MaterialHistory> createMaterialHistory(MaterialHistory materialHistory) {
+        int createResult = materialHistoryMapper.createMaterialHistory(materialHistory);
+        if (createResult != 1) {
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        Result<MaterialHistory> result = this.findMaterialHistoryById(materialHistory.getId());
+        return result;
     }
 }

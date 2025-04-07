@@ -23,6 +23,7 @@ import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
+import com.tinyengine.it.mapper.ComponentLibraryMapper;
 import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
@@ -39,6 +40,7 @@ import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
+import com.tinyengine.it.model.entity.ComponentLibrary;
 import com.tinyengine.it.model.entity.Datasource;
 import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.model.entity.Page;
@@ -53,6 +55,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -94,7 +97,8 @@ class AppV1ServiceImplTest {
 
     @Mock
     private PlatformService platformService;
-
+    @Mock
+    private ComponentLibraryMapper componentLibraryMapper;
     @InjectMocks
     private AppV1ServiceImpl appV1ServiceImpl;
 
@@ -136,7 +140,8 @@ class AppV1ServiceImplTest {
         platform.setMaterialHistoryId(3);
 
         when(platformService.queryPlatformById(any())).thenReturn(platform);
-
+        List<ComponentLibrary> componentLibraryList = new ArrayList<>();
+        when(componentLibraryMapper.queryAllComponentLibrary()).thenReturn(componentLibraryList);
         SchemaDto result = appV1ServiceImpl.appSchema(appId);
         Assertions.assertEquals("2", result.getMeta().getAppId());
     }
@@ -200,6 +205,8 @@ class AppV1ServiceImplTest {
         MaterialHistory materialHistory = new MaterialHistory();
         materialHistory.setComponents(new ArrayList<>());
         metaDto.setMaterialHistory(materialHistory);
+        List<ComponentLibrary> componentLibraryList = new ArrayList<>();
+        when(componentLibraryMapper.queryAllComponentLibrary()).thenReturn(componentLibraryList);
         List<Map<String, Object>> result = appV1ServiceImpl.getSchemaComponentsMap(metaDto);
         Assertions.assertEquals("v1", result.get(0).get("version"));
     }

@@ -12,6 +12,8 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.MaterialMapper;
 import com.tinyengine.it.model.entity.Material;
 import com.tinyengine.it.service.material.MaterialService;
@@ -52,8 +54,9 @@ public class MaterialServiceImpl implements MaterialService {
      * @return query result
      */
     @Override
-    public Material queryMaterialById(@Param("id") Integer id) {
-        return materialMapper.queryMaterialById(id);
+    public Result<Material> queryMaterialById(@Param("id") Integer id) {
+        Material material = materialMapper.queryMaterialById(id);
+        return Result.success(material);
     }
 
     /**
@@ -74,8 +77,14 @@ public class MaterialServiceImpl implements MaterialService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteMaterialById(@Param("id") Integer id) {
-        return materialMapper.deleteMaterialById(id);
+    public  Result<Material> deleteMaterialById(@Param("id") Integer id) {
+       int deleteResult =  materialMapper.deleteMaterialById(id);
+        if(deleteResult != 1){
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        Result<Material> result = this.queryMaterialById(id);
+        return result;
+
     }
 
     /**
@@ -85,8 +94,13 @@ public class MaterialServiceImpl implements MaterialService {
      * @return execute success data number
      */
     @Override
-    public Integer updateMaterialById(Material material) {
-        return materialMapper.updateMaterialById(material);
+    public  Result<Material> updateMaterialById(Material material) {
+        int updateResult = materialMapper.updateMaterialById(material);
+        if(updateResult != 1){
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        Result<Material> result = this.queryMaterialById(material.getId());
+        return result;
     }
 
     /**
@@ -96,7 +110,12 @@ public class MaterialServiceImpl implements MaterialService {
      * @return execute success data number
      */
     @Override
-    public Integer createMaterial(Material material) {
-        return materialMapper.createMaterial(material);
+    public  Result<Material> createMaterial(Material material) {
+        int createResult = materialMapper.createMaterial(material);
+        if(createResult != 1){
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        Result<Material> result = this.queryMaterialById(material.getId());
+        return result;
     }
 }

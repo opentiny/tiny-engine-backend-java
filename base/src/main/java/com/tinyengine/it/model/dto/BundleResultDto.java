@@ -12,20 +12,19 @@
 
 package com.tinyengine.it.model.dto;
 
+import com.tinyengine.it.model.entity.Component;
+import com.tinyengine.it.model.entity.ComponentLibrary;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * BundleMaterial
+ * BundleResultDto
  *
  * @since 2025-04-02
  */
 @Data
-public class BundleMaterial {
-    private List<Map<String, Object>> components;
-    private List<Child> snippets;
-    private List<Map<String, Object>> blocks;
-    private List<Map<String, Object>> packages;
+public class BundleResultDto {
+    private List<ComponentLibrary> packageList;
+    private List<Component> componentList;
 }

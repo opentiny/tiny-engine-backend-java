@@ -22,6 +22,7 @@ import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
+import com.tinyengine.it.mapper.ComponentLibraryMapper;
 import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.MaterialHistoryMapper;
@@ -32,6 +33,7 @@ import com.tinyengine.it.model.dto.ComponentTree;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.MaterialHistoryMsg;
 import com.tinyengine.it.model.dto.MetaDto;
+import com.tinyengine.it.model.dto.PackagesDto;
 import com.tinyengine.it.model.dto.SchemaDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.dto.SchemaMeta;
@@ -41,6 +43,7 @@ import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.model.entity.Component;
+import com.tinyengine.it.model.entity.ComponentLibrary;
 import com.tinyengine.it.model.entity.Datasource;
 import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.model.entity.Page;
@@ -52,6 +55,7 @@ import com.tinyengine.it.service.platform.PlatformService;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -133,6 +137,9 @@ public class AppV1ServiceImpl implements AppV1Service {
     @Autowired
     private PlatformService platformService;
 
+    @Autowired
+    private ComponentLibraryMapper componentLibraryMapper;
+
     /**
      * 获取应用schema
      *
@@ -162,6 +169,9 @@ public class AppV1ServiceImpl implements AppV1Service {
 
         List<Map<String, Object>> componentsMap = getSchemaComponentsMap(metaDto);
         schema.setComponentsMap(componentsMap);
+
+        List<PackagesDto> packages = getPackages();
+        schema.setPackages(packages);
 
         // 单独处理混合了bridge和utils的extensions
         Map<String, List<SchemaUtils>> extensions = getSchemaExtensions(metaDto.getExtension());
@@ -237,6 +247,24 @@ public class AppV1ServiceImpl implements AppV1Service {
         return BeanUtil.mapToBean(meta, SchemaMeta.class, true);
     }
 
+    /**
+     * 获取组件库信息
+     *
+     * @return List<ComponentLibrary> the List<ComponentLibrary>
+     */
+    private List<PackagesDto> getPackages(){
+        List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryAllComponentLibrary();
+        List<PackagesDto> packagesDtoList = new ArrayList<>();
+        if(componentLibraryList.isEmpty()){
+            return packagesDtoList;
+        }
+        for (ComponentLibrary componentLibrary: componentLibraryList){
+            PackagesDto pakagesDto = new PackagesDto();
+            BeanUtils.copyProperties(componentLibrary, pakagesDto);
+            packagesDtoList.add(pakagesDto);
+        }
+        return packagesDtoList;
+    }
     /**
      * 获取应用信息
      *
@@ -468,6 +496,13 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Map<String, Object>> blocksSchema = getBlockSchema(blockHistories);
         // 转换组件数据为schema
         List<Component> components = materialHistory.getComponents();
+        List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryAllComponentLibrary();
+        if(!componentLibraryList.isEmpty()){
+        List<Component> componentList = componentLibraryList.stream()
+                .flatMap(componentLibrary -> componentLibrary.getComponents().stream())  // 扁平化每个 List<Component>
+                .collect(Collectors.toList());  // 收集到一个新的 List<Component>
+        components.addAll(componentList);
+        }
         List<Map<String, Object>> componentsSchema = getComponentSchema(components);
         // 合并两个 List
         List<Map<String, Object>> componentsMap = new ArrayList<>(componentsSchema);

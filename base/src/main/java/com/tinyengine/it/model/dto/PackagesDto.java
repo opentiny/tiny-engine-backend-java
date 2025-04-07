@@ -12,20 +12,25 @@
 
 package com.tinyengine.it.model.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
 import java.util.Map;
 
 /**
- * BundleMaterial
+ * PackagesDto
  *
- * @since 2025-04-02
+ * @since 2025-04-03
  */
-@Data
-public class BundleMaterial {
-    private List<Map<String, Object>> components;
-    private List<Child> snippets;
-    private List<Map<String, Object>> blocks;
-    private List<Map<String, Object>> packages;
+@Setter
+@Getter
+public class PackagesDto {
+    private String name;
+    @JsonProperty("package")
+    private String packageName;
+    private String version;
+    private String script;
+    private String css;
+    private Map<String,Object> others;
 }

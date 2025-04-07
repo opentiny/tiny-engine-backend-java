@@ -12,20 +12,18 @@
 
 package com.tinyengine.it.model.dto;
 
+import com.tinyengine.it.model.entity.Component;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * BundleMaterial
+ * CustComponentDto
  *
- * @since 2025-04-02
+ * @since 2025-04-03
  */
 @Data
-public class BundleMaterial {
-    private List<Map<String, Object>> components;
-    private List<Child> snippets;
-    private List<Map<String, Object>> blocks;
-    private List<Map<String, Object>> packages;
+public class CustComponentDto {
+    private List<Component> components;
+    private Integer componentLibraryId;
 }
