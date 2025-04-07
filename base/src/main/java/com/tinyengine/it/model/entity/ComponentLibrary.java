@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
-import com.tinyengine.it.common.handler.ListTypeHandler;
 import com.tinyengine.it.common.handler.MapTypeHandler;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,9 +41,8 @@ public class ComponentLibrary extends BaseEntity {
     @Schema(name = "version", description = "版本")
     private String version;
 
-    @TableField(typeHandler = MapTypeHandler.class)
     @Schema(name = "name", description = "名称")
-    private Map<String, String> name;
+    private String name;
 
     @JsonProperty("package")
     @Schema(name = "package", description = "包名")
@@ -84,11 +82,14 @@ public class ComponentLibrary extends BaseEntity {
     private Integer publicStatus;
 
     @Schema(name = "isStarted", description = "标识启用")
-    private Integer isStarted;
+    private Boolean isStarted;
 
     @Schema(name = "isOfficial", description = "标识官方组件")
     private Boolean isOfficial;
 
     @Schema(name = "isDefault", description = "标识默认组件")
     private Boolean isDefault;
+
+    @Schema(name = "components", description = "组件库组件")
+    private List<Component> components;
 }

@@ -79,9 +79,6 @@ public class MaterialHistory extends HistoryEntity {
     @Schema(name = "unzipTgzFiles", description = "物料压缩包解压后文件地址")
     private String unzipTgzFiles;
 
-    @Schema(name = "isStarted", description = "是否启动")
-    private String isStarted;
-
     @Schema(name = "components", description = "组件")
     private List<Component> components;
 }

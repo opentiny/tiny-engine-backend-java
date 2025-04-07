@@ -1,31 +1,33 @@
 /**
  * Copyright (c) 2023 - present TinyEngine Authors.
  * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
- * <p>
+ *
  * Use of this source code is governed by an MIT-style license.
- * <p>
+ *
  * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
  * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
  * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
  */
 
 package com.tinyengine.it.service.material.impl;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.Utils;
+import com.tinyengine.it.mapper.ComponentLibraryMapper;
 import com.tinyengine.it.mapper.ComponentMapper;
-import com.tinyengine.it.mapper.MaterialHistoryMapper;
-import com.tinyengine.it.mapper.MaterialMapper;
 import com.tinyengine.it.model.dto.BundleDto;
+import com.tinyengine.it.model.dto.BundleResultDto;
 import com.tinyengine.it.model.dto.Child;
+import com.tinyengine.it.model.dto.CustComponentDto;
 import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.dto.JsonFile;
 import com.tinyengine.it.model.dto.Snippet;
 import com.tinyengine.it.model.entity.Component;
-import com.tinyengine.it.model.entity.Material;
+import com.tinyengine.it.model.entity.ComponentLibrary;
 import com.tinyengine.it.model.entity.MaterialComponent;
-import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.model.entity.MaterialHistoryComponent;
 import com.tinyengine.it.service.material.ComponentService;
 
@@ -33,7 +35,6 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,10 +53,18 @@ import java.util.Map;
 @Service
 @Slf4j
 public class ComponentServiceImpl implements ComponentService {
+    /**
+     * The component mapper.
+     */
     @Autowired
     private ComponentMapper componentMapper;
-    private MaterialMapper materialMapper;
-    private MaterialHistoryMapper materialHistoryMapper;
+
+    /**
+     * The component library mapper.
+     */
+    @Autowired
+    private ComponentLibraryMapper componentLibraryMapper;
+
 
     /**
      * 查询表t_component所有数据
@@ -128,9 +137,33 @@ public class ComponentServiceImpl implements ComponentService {
      * @param file the file
      * @return result the result
      */
+    @SystemServiceLog(description = "readFileAndBulkCreate 创建组件库及组件实现方法")
     @Override
     public Result<FileResult> readFileAndBulkCreate(MultipartFile file) {
-        List<Component> componentList = this.bundleSplit(file).getData();
+        List<Component> componentList = this.bundleSplit(file).getData().getComponentList();
+        List<ComponentLibrary> packageList = this.bundleSplit(file).getData().getPackageList();
+        for (ComponentLibrary componentLibrary : packageList) {
+            componentLibrary.setIsDefault(true);
+            componentLibrary.setIsStarted(true);
+            ComponentLibrary library = new ComponentLibrary();
+            library.setName(componentLibrary.getName());
+            library.setVersion(componentLibrary.getVersion());
+            // 查询是否存在组件库
+            List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(library);
+            int result = 0;
+            if (!componentLibraryList.isEmpty()) {
+                componentLibrary.setId(componentLibraryList.get(0).getId());
+                result = componentLibraryMapper.updateComponentLibraryById(componentLibrary);
+                if (result != 1) {
+                    return Result.failed(ExceptionEnum.CM008);
+                }
+                continue;
+            }
+            result = componentLibraryMapper.createComponentLibrary(componentLibrary);
+            if (result != 1) {
+                return Result.failed(ExceptionEnum.CM008);
+            }
+        }
         return bulkCreate(componentList);
     }
 
@@ -141,7 +174,8 @@ public class ComponentServiceImpl implements ComponentService {
      * @return result the result
      */
     @Override
-    public Result<List<Component>> bundleSplit(MultipartFile file) {
+    @SystemServiceLog(description = "bundleSplit 拆分bundle.json实现方法")
+    public Result<BundleResultDto> bundleSplit(MultipartFile file) {
         // 获取bundle.json数据
         Result<JsonFile> result = Utils.parseJsonFileStream(file);
         if (!result.isSuccess()) {
@@ -174,6 +208,10 @@ public class ComponentServiceImpl implements ComponentService {
             component.setFramework(bundleDto.getFramework());
             component.setPublicStatus(1);
             component.setIsTinyReserved(false);
+            Object schemaObject = comp.get("schema");
+            if (schemaObject instanceof Map) {
+                component.setSchemaFragment((Map<String, Object>) schemaObject);
+            }
             if (snippets == null || snippets.isEmpty()) {
                 componentList.add(component);
                 continue;
@@ -194,36 +232,43 @@ public class ComponentServiceImpl implements ComponentService {
             }
             componentList.add(component);
         }
-
-        return Result.success(componentList);
+        List<Map<String, Object>> packages = bundleDto.getMaterials().getPackages();
+        List<ComponentLibrary> packageList = new ArrayList<>();
+        for (Map<String, Object> library : packages) {
+            ComponentLibrary componentLibrary = BeanUtil.mapToBean(library, ComponentLibrary.class, true);
+            componentLibrary.setPackageName(String.valueOf(library.get("package")));
+            componentLibrary.setFramework("Vue");
+            packageList.add(componentLibrary);
+        }
+        BundleResultDto bundleList = new BundleResultDto();
+        bundleList.setComponentList(componentList);
+        bundleList.setPackageList(packageList);
+        return Result.success(bundleList);
     }
 
     /**
      * 批量创建component
      *
-     * @param componentList the componentList
-     * @param materialHistoryId the materialHistoryId
+     * @param custComponentDto the custComponentDto
      * @return result the result
      */
     @Override
-    public Result<FileResult> custComponentBulkCreate(List<Component> componentList, Integer materialId) {
+    @SystemServiceLog(description = "custComponentBatchCreate 批量新增自定义组件实现方法")
+    public Result<FileResult> custComponentBatchCreate(CustComponentDto custComponentDto) {
         int addNum = 0;
         int updateNum = 0;
+        List<Component> componentList = custComponentDto.getComponents();
+        if (componentList.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        Integer id = custComponentDto.getComponentLibraryId();
+        if (null == id) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         for (Component component : componentList) {
-
+            component.setLibraryId(id);
             // 插入新记录
-            Integer result = createComponent(component);
-            if (result != 1) {
-                continue;
-            }
-            int materialHistoryId = this.createMaterialHistory(materialId);
-            if (materialHistoryId == 0) {
-                continue;
-            }
-            MaterialHistoryComponent materialHistoryComponent = new MaterialHistoryComponent();
-            materialHistoryComponent.setComponentId(component.getId());
-            materialHistoryComponent.setMaterialHistoryId(materialHistoryId);
-            componentMapper.createMaterialHistoryComponent(materialHistoryComponent);
+            createComponent(component);
         }
         addNum = addNum + 1;
 
@@ -234,30 +279,13 @@ public class ComponentServiceImpl implements ComponentService {
         return Result.success(fileResult);
     }
 
-    public int createMaterialHistory(Integer materialId) {
-        int materialHistoryId = 0;
-        Material material = materialMapper.queryMaterialById(materialId);
-        MaterialHistory materialHistory = new MaterialHistory();
-        // 把material中的属性值赋值到materialHistories中
-        BeanUtils.copyProperties(material, materialHistory);
-        materialHistory.setId(null);
-        materialHistory.setRefId(materialId);
-        materialHistory.setVersion(material.getLatestVersion());
-        materialHistory.setContent(new HashMap<>());
-        int result = materialHistoryMapper.createMaterialHistory(materialHistory);
-        if (result != 1) {
-            return materialHistoryId;
-        }
-        materialHistoryId = materialHistory.getId();
-        return materialHistoryId;
-    }
-
     /**
      * 批量创建组件
      *
      * @param componentList the componentList
      * @return result the result
      */
+    @SystemServiceLog(description = "bulkCreate 批量创建组件实现方法")
     public Result<FileResult> bulkCreate(List<Component> componentList) {
         int addNum = 0;
         int updateNum = 0;
@@ -267,9 +295,20 @@ public class ComponentServiceImpl implements ComponentService {
             Component componentParam = new Component();
             componentParam.setComponent(component.getComponent());
             componentParam.setName(component.getName());
+            componentParam.setVersion(component.getVersion());
             List<Component> queryComponent = findComponentByCondition(componentParam);
-
+            // 查询组件库id
+            ComponentLibrary componentLibrary = new ComponentLibrary();
+            componentLibrary.setPackageName(String.valueOf(component.getNpm().get("package")));
+            componentLibrary.setVersion(component.getVersion());
+            List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary);
+            Integer componentLibraryId = null;
+            if (!componentLibraryList.isEmpty()) {
+                componentLibraryId = componentLibraryList.get(0).getId();
+            }
+            component.setLibraryId(componentLibraryId);
             if (queryComponent.isEmpty()) {
+
                 // 插入新记录
                 Integer result = createComponent(component);
                 if (result == 1) {

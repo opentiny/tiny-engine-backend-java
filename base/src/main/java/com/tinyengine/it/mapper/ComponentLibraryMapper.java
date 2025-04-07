@@ -15,7 +15,6 @@ package com.tinyengine.it.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.ComponentLibrary;
 
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -44,10 +43,10 @@ public interface ComponentLibraryMapper extends BaseMapper<ComponentLibrary> {
     /**
      * 根据条件查询表t_component_library数据
      *
-     * @param component the component
+     * @param componentLibrary the componentLibrary
      * @return the list
      */
-    List<ComponentLibrary> queryComponentLibraryByCondition(ComponentLibrary component);
+    List<ComponentLibrary> queryComponentLibraryByCondition(ComponentLibrary componentLibrary);
 
     /**
      * 根据主键id删除表t_component_library数据
@@ -60,45 +59,16 @@ public interface ComponentLibraryMapper extends BaseMapper<ComponentLibrary> {
     /**
      * 根据主键id更新表t_component_library数据
      *
-     * @param component the component
+     * @param componentLibrary the componentLibrary
      * @return the integer
      */
-    Integer updateComponentLibraryById(ComponentLibrary component);
+    Integer updateComponentLibraryById(ComponentLibrary componentLibrary);
 
     /**
      * 新增表t_component_library数据
      *
-     * @param component the component
+     * @param componentLibrary the componentLibrary
      * @return the integer
      */
-    Integer createComponentLibrary(ComponentLibrary component);
-
-    /**
-     * Find user components by material history id list.
-     *
-     * @param id the id
-     * @return the list
-     */
-    List<ComponentLibrary> findUserComponentLibrarysByMaterialHistoryId(@Param("id") Integer id);
-
-    /**
-     * 新增表r_material_component数据
-     *
-     * @param materialComponentLibrary the materialComponentLibrary
-     * @return the integer
-     */
-    @Insert("INSERT INTO r_material_component (id,material_id,component_id )"
-            + "values (#{id},#{materialId},#{componentId})")
-    Integer createMaterialComponentLibrary(MaterialComponentLibrary materialComponentLibrary);
-
-
-    /**
-     * 新增表r_material_component数据
-     *
-     * @param materialHistoryComponentLibrary the materialHistoryComponentLibrary
-     * @return the integer
-     */
-    @Insert("INSERT INTO r_material_history_component (id,material_history_id,component_id )"
-            + "values (#{id},#{materialHistoryId},#{componentId})")
-    Integer createMaterialHistoryComponentLibrary(MaterialHistoryComponentLibrary materialHistoryComponentLibrary);
+    Integer createComponentLibrary(ComponentLibrary componentLibrary);
 }

@@ -384,9 +384,11 @@ public class Utils {
             // 使用 try-with-resources 自动管理输入流
             byte[] fileBytes = Utils.readAllBytes(file.getInputStream());
             String jsonContent = new String(fileBytes, StandardCharsets.UTF_8);
+
+            String jsonString = removeBOM(jsonContent);
             ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Object> jsonData =
-                    objectMapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {
+                    objectMapper.readValue(jsonString, new TypeReference<Map<String, Object>>() {
                     });
 
             jsonFile.setFileName(fileName);
@@ -398,7 +400,18 @@ public class Utils {
         log.info("Successfully parsed JSON file: {}", fileName);
         return Result.success(jsonFile);
     }
-
+    /**
+     * 去除文件BOM字符
+     *
+     * @param input the inpu
+     * @return  input the input
+     */
+    public static String removeBOM(String input) {
+        if (input != null && input.startsWith("\uFEFF")) {
+            return input.substring(1);
+        }
+        return input;
+    }
     /**
      * 校验文件流合法性
      *

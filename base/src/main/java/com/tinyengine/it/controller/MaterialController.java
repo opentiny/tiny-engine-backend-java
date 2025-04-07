@@ -55,14 +55,14 @@ public class MaterialController {
      *
      * @return Material信息 all material
      */
-    @Operation(summary = "查询表Material信息",
-            description = "查询表Material信息",
+    @Operation(summary = "查询表Material信息列表",
+            description = "查询表Material信息列表",
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = Material.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "查询表Material信息")
+    @SystemControllerLog(description = "查询表Material信息列表")
     @GetMapping("/material/list")
     public Result<List<Material>> getAllMaterial() {
         List<Material> materialHistoryList = materialService.queryAllMaterial();
@@ -119,8 +119,8 @@ public class MaterialController {
      * @param id the id
      * @return app信息 result
      */
-    @Operation(summary = "删除app信息",
-            description = "删除app信息",
+    @Operation(summary = "删除Material信息",
+            description = "删除Material信息",
             parameters = {
                     @Parameter(name = "id", description = "Material主键id")
             },
@@ -130,25 +130,25 @@ public class MaterialController {
                                     schema = @Schema(implementation = Material.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
-    @SystemControllerLog(description = "删除app信息")
+    @SystemControllerLog(description = "删除Material信息")
     @GetMapping("/material/delete/{id}")
     public Result<Material> deleteMaterial(@PathVariable Integer id) {
         return materialService.deleteMaterialById(id);
     }
 
     /**
-     * 获取应用信息详情
+     * 获取Material信息详情
      *
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取应用信息详情", description = "获取应用信息详情", parameters = {
+    @Operation(summary = "获取Material信息详情", description = "获取Material信息详情", parameters = {
             @Parameter(name = "id", description = "appId")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Material.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "获取应用信息详情")
+    @SystemControllerLog(description = "获取Material信息详情")
     @GetMapping("/material/detail/{id}")
     public Result<Material> detail(@PathVariable Integer id) {
         return materialService.queryMaterialById(id);

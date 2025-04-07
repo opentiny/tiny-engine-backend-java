@@ -35,6 +35,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class MaterialHistoryServiceImpl implements MaterialHistoryService {
+    /**
+     * The material history mapper.
+     */
     @Autowired
     private MaterialHistoryMapper materialHistoryMapper;
 
@@ -57,7 +60,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     @Override
     public Result<MaterialHistory> findMaterialHistoryById(@Param("id") Integer id) {
         MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(id);
-        if(null == materialHistory.getId()){
+        if (null == materialHistory.getId()) {
             return Result.failed(ExceptionEnum.CM009);
         }
         return Result.success(materialHistory);
@@ -86,7 +89,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     public Result<MaterialHistory> deleteMaterialHistoryById(@Param("id") Integer id) {
         Result<MaterialHistory> result = this.findMaterialHistoryById(id);
         int deleteResult = materialHistoryMapper.deleteMaterialHistoryById(id);
-        if(deleteResult != 1){
+        if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         return result;
@@ -101,7 +104,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     @Override
     public Result<MaterialHistory> updateMaterialHistoryById(MaterialHistory materialHistory) {
         int updateResult = materialHistoryMapper.updateMaterialHistoryById(materialHistory);
-        if(updateResult != 1){
+        if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         Result<MaterialHistory> result = this.findMaterialHistoryById(materialHistory.getId());
@@ -117,7 +120,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     @Override
     public Result<MaterialHistory> createMaterialHistory(MaterialHistory materialHistory) {
         int createResult = materialHistoryMapper.createMaterialHistory(materialHistory);
-        if(createResult != 1){
+        if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         Result<MaterialHistory> result = this.findMaterialHistoryById(materialHistory.getId());

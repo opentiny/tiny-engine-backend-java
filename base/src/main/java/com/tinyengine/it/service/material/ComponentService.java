@@ -13,6 +13,8 @@
 package com.tinyengine.it.service.material;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.BundleResultDto;
+import com.tinyengine.it.model.dto.CustComponentDto;
 import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.entity.Component;
 
@@ -88,16 +90,15 @@ public interface ComponentService {
      * @param file the file
      * @return result the result
      */
-    Result<List<Component>> bundleSplit(MultipartFile file);
+    Result<BundleResultDto> bundleSplit(MultipartFile file);
 
     /**
      * 批量创建component
      *
-     * @param componentList the componentList
-     * @param materialId the materialId
+     * @param custComponentDto the custComponentDto
      * @return result the result
      */
-    Result<FileResult> custComponentBulkCreate(List<Component> componentList, Integer materialId);
+    Result<FileResult> custComponentBatchCreate(CustComponentDto custComponentDto);
 
 
 }

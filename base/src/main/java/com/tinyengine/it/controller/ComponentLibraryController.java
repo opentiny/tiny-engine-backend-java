@@ -41,7 +41,7 @@ import java.util.List;
  */
 @Validated
 @RestController
-@RequestMapping("/componentLibrary-center/api")
+@RequestMapping("/material-center/api")
 @Tag(name = "组件库")
 public class ComponentLibraryController {
     /**
@@ -51,19 +51,19 @@ public class ComponentLibraryController {
     private ComponentLibraryService componentLibraryService;
 
     /**
-     * 查询表ComponentLibrary信息
+     * 查询表ComponentLibrary信息列表
      *
      * @return ComponentLibrary信息 all componentLibrary
      */
-    @Operation(summary = "查询表ComponentLibrary信息",
-            description = "查询表ComponentLibrary信息",
+    @Operation(summary = "查询表ComponentLibrary信息列表",
+            description = "查询表ComponentLibrary信息列表",
             responses = {
                     @ApiResponse(responseCode = "200", description = "返回信息",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ComponentLibrary.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "查询表ComponentLibrary信息")
-    @GetMapping("/componentLibrary/list")
+    @SystemControllerLog(description = "查询表ComponentLibrary信息列表")
+    @GetMapping("/component-library/list")
     public Result<List<ComponentLibrary>> getAllComponentLibrary() {
         List<ComponentLibrary> componentLibraryHistoryList = componentLibraryService.queryAllComponentLibrary();
         return Result.success(componentLibraryHistoryList);
@@ -117,10 +117,10 @@ public class ComponentLibraryController {
      * 删除ComponentLibrary信息
      *
      * @param id the id
-     * @return app信息 result
+     * @return ComponentLibrary信息 result
      */
-    @Operation(summary = "删除app信息",
-            description = "删除app信息",
+    @Operation(summary = "删除ComponentLibrary信息",
+            description = "删除ComponentLibrary信息",
             parameters = {
                     @Parameter(name = "id", description = "ComponentLibrary主键id")
             },
@@ -130,25 +130,25 @@ public class ComponentLibraryController {
                                     schema = @Schema(implementation = ComponentLibrary.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
-    @SystemControllerLog(description = "删除app信息")
+    @SystemControllerLog(description = "删除ComponentLibrary信息")
     @GetMapping("/component-library/delete/{id}")
     public Result<ComponentLibrary> deleteComponentLibrary(@PathVariable Integer id) {
         return componentLibraryService.deleteComponentLibraryById(id);
     }
 
     /**
-     * 获取应用信息详情
+     * 获取ComponentLibrary信息详情
      *
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取应用信息详情", description = "获取应用信息详情", parameters = {
+    @Operation(summary = "获取ComponentLibrary信息详情", description = "获取ComponentLibrary信息详情", parameters = {
             @Parameter(name = "id", description = "appId")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ComponentLibrary.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "获取应用信息详情")
+    @SystemControllerLog(description = "获取ComponentLibrary信息详情")
     @GetMapping("/component-library/detail/{id}")
     public Result<ComponentLibrary> detail(@PathVariable Integer id) {
         return componentLibraryService.queryComponentLibraryById(id);
