@@ -104,7 +104,7 @@ public class ComponentController {
      * @return result
      */
     @Operation(summary = "批量创建自定义组件", description = "批量创建自定义组件", parameters = {
-            @Parameter(name = "file", description = "文件参数对象")}, responses = {
+            @Parameter(name = "custComponentDto", description = "自定义组件对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json", schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "请求失败")})

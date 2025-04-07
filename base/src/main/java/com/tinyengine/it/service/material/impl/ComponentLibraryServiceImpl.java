@@ -78,11 +78,14 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      */
     @Override
     public  Result<ComponentLibrary> deleteComponentLibraryById(@Param("id") Integer id) {
+        Result<ComponentLibrary> result = this.queryComponentLibraryById(id);
+        if(result.getData() == null || result.getData().getId() == null){
+            return Result.success();
+        }
         int deleteResult =  componentLibraryMapper.deleteComponentLibraryById(id);
         if(deleteResult != 1){
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<ComponentLibrary> result = this.queryComponentLibraryById(id);
         return result;
 
     }
