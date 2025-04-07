@@ -574,10 +574,7 @@ public class PageServiceImpl implements PageService {
 
     /**
      * 查询父页面
-<<<<<<< HEAD
-=======
      *
->>>>>>> 342bb06d8974b37e0637fb5d3512f713dccf595b
      * @param parentId the parentId
      * @return parentId the parentId
      */
@@ -592,10 +589,7 @@ public class PageServiceImpl implements PageService {
 
     /**
      * 查询默认子页面
-<<<<<<< HEAD
-=======
      *
->>>>>>> 342bb06d8974b37e0637fb5d3512f713dccf595b
      * @param parentId the parentId
      * @return subPageId the subPageId
      */

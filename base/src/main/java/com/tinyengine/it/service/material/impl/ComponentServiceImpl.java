@@ -313,7 +313,8 @@ public class ComponentServiceImpl implements ComponentService {
                 ComponentLibrary componentLibrary = new ComponentLibrary();
                 componentLibrary.setPackageName(String.valueOf(component.getNpm().get("package")));
                 componentLibrary.setVersion(component.getVersion());
-                List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary);
+                List<ComponentLibrary> componentLibraryList = componentLibraryMapper
+                        .queryComponentLibraryByCondition(componentLibrary);
                 Integer componentLibraryId = null;
                 if (!componentLibraryList.isEmpty()) {
                     componentLibraryId = componentLibraryList.get(0).getId();
