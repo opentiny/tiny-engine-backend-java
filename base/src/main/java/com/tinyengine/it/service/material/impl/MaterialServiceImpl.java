@@ -16,7 +16,6 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.MaterialMapper;
 import com.tinyengine.it.model.entity.Material;
-import com.tinyengine.it.model.entity.MaterialHistory;
 import com.tinyengine.it.service.material.MaterialService;
 
 import lombok.extern.slf4j.Slf4j;
