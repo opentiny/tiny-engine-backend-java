@@ -66,7 +66,7 @@ public class ComponentController {
                     content = @Content(mediaType = "application/json", schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "上传bunled.json文件创建组件")
-    @PostMapping("/component/bundle/createComponent")
+    @PostMapping("/component/bundle/create")
     public Result<FileResult> bundleCreateComponent(@RequestParam MultipartFile file) {
         if (file.isEmpty()) {
             return Result.failed(ExceptionEnum.CM307);
