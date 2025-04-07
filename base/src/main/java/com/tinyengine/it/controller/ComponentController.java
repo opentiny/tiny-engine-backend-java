@@ -31,11 +31,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -108,7 +110,7 @@ public class ComponentController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "批量创建自定义组件")
     @PostMapping("/component/batch/create")
-    public Result<FileResult> createCustComponent(@RequestParam CustComponentDto custComponentDto) {
+    public Result<FileResult> createCustComponent(@Valid @RequestBody CustComponentDto custComponentDto) {
         // 返回插入和更新的条数
         return componentService.custComponentBatchCreate(custComponentDto);
     }

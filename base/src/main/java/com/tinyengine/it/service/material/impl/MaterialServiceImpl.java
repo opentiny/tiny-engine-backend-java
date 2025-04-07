@@ -57,9 +57,6 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public Result<Material> queryMaterialById(@Param("id") Integer id) {
         Material material = materialMapper.queryMaterialById(id);
-        if(null == material.getId()){
-            return Result.failed(ExceptionEnum.CM009);
-        }
         return Result.success(material);
     }
 

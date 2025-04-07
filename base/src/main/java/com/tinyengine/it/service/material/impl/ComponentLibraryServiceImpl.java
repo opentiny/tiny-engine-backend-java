@@ -56,9 +56,6 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
     @Override
     public Result<ComponentLibrary> queryComponentLibraryById(@Param("id") Integer id) {
         ComponentLibrary material = componentLibraryMapper.queryComponentLibraryById(id);
-        if(null == material.getId()){
-            return Result.failed(ExceptionEnum.CM009);
-        }
         return Result.success(material);
     }
 

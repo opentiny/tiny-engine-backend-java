@@ -60,9 +60,6 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     @Override
     public Result<MaterialHistory> findMaterialHistoryById(@Param("id") Integer id) {
         MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(id);
-        if (null == materialHistory.getId()) {
-            return Result.failed(ExceptionEnum.CM009);
-        }
         return Result.success(materialHistory);
     }
 

@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -131,7 +132,7 @@ public class ComponentLibraryController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "删除ComponentLibrary信息")
-    @GetMapping("/component-library/delete/{id}")
+    @DeleteMapping("/component-library/delete/{id}")
     public Result<ComponentLibrary> deleteComponentLibrary(@PathVariable Integer id) {
         return componentLibraryService.deleteComponentLibraryById(id);
     }
