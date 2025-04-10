@@ -302,7 +302,7 @@
         CL.last_updated_time,
         CL.tenant_id,
         CL.renter_id,
-        CL.site_id
+        CL.site_id,
         C.id AS componentId,
         C.version AS componentVersion,
         C.name AS componentName,
