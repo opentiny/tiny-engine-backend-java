@@ -16,6 +16,7 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
 
@@ -34,6 +35,8 @@ import org.mockito.MockitoAnnotations;
 class UserControllerTest {
     @Mock
     private UserService userService;
+    @Mock
+    private LoginUserContext loginUserContext;
     @InjectMocks
     private UserController userController;
 
@@ -46,7 +49,7 @@ class UserControllerTest {
     void testMe() {
         User mockData = new User();
         when(userService.queryUserById(anyInt())).thenReturn(mockData);
-
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
         Result<User> result = userController.me();
         Assertions.assertEquals(mockData, result.getData());
     }
