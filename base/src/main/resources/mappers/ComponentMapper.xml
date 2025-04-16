@@ -267,7 +267,7 @@
    <select id="findUserComponentsByMaterialHistoryId" resultMap="ComponentMap">
        SELECT C.*
        FROM t_component C
-       JOIN r_material_history_component MHC ON C.id = MHC.`component_id`
+       JOIN r_material_history_component MHC ON C.id = MHC.`component_id` AND C.is_official = true
        WHERE MHC.`material_history_id` = #{id}
    </select>
 

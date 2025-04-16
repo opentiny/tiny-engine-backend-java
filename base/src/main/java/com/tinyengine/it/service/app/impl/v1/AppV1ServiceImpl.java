@@ -507,7 +507,11 @@ public class AppV1ServiceImpl implements AppV1Service {
         // 合并两个 List
         List<Map<String, Object>> componentsMap = new ArrayList<>(componentsSchema);
         componentsMap.addAll(blocksSchema);
-        return componentsMap;
+        // 使用 Stream API 去重
+        List<Map<String, Object>> uniqueComponents = componentsMap.stream()
+                .distinct()
+                .collect(Collectors.toList());
+        return uniqueComponents;
     }
 
     // 将区块组装成schema数据

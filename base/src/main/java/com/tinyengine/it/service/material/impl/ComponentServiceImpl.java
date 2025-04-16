@@ -148,6 +148,7 @@ public class ComponentServiceImpl implements ComponentService {
         for (ComponentLibrary componentLibrary : packageList) {
             componentLibrary.setIsDefault(true);
             componentLibrary.setIsStarted(true);
+            componentLibrary.setIsOfficial(true);
             ComponentLibrary library = new ComponentLibrary();
             library.setName(componentLibrary.getName());
             library.setVersion(componentLibrary.getVersion());
