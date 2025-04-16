@@ -273,7 +273,6 @@
             C.site_id AS componentSiteId
         FROM t_component_library CL
         LEFT JOIN t_component C ON CL.id = C.library_id
-        WHERE CL.is_default = false
 
     </select>
 
