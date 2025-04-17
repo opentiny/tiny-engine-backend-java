@@ -17,7 +17,6 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.MaterialMapper;
 import com.tinyengine.it.model.entity.Material;
 
-import com.tinyengine.it.model.entity.MaterialHistory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

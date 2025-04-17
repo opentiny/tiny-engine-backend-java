@@ -18,7 +18,6 @@ import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.dto.BundleResultDto;
 import com.tinyengine.it.model.dto.CustComponentDto;
 import com.tinyengine.it.model.dto.FileResult;
-import com.tinyengine.it.model.entity.Component;
 import com.tinyengine.it.service.material.ComponentService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,7 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 组件api

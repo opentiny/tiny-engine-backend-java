@@ -24,13 +24,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-public  class WebConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
     @Value("${cors.allowed-origins}")
     private String allowedOrigins;
 
     @Bean
-    public CorsFilter corsFilter()
-    {
+    public CorsFilter corsFilter() {
         // 跨域配置地址
         List<String> crosDomainList = Arrays.asList(allowedOrigins.split(","));
 
@@ -46,6 +45,6 @@ public  class WebConfig implements WebMvcConfigurer {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
-         return new CorsFilter(source);
-         }
+        return new CorsFilter(source);
+    }
 }
