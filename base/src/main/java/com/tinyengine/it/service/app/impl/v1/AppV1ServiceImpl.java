@@ -252,19 +252,20 @@ public class AppV1ServiceImpl implements AppV1Service {
      *
      * @return List<ComponentLibrary> the List<ComponentLibrary>
      */
-    private List<PackagesDto> getPackages(){
+    private List<PackagesDto> getPackages() {
         List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryAllComponentLibrary();
         List<PackagesDto> packagesDtoList = new ArrayList<>();
-        if(componentLibraryList.isEmpty()){
+        if (componentLibraryList.isEmpty()) {
             return packagesDtoList;
         }
-        for (ComponentLibrary componentLibrary: componentLibraryList){
+        for (ComponentLibrary componentLibrary : componentLibraryList) {
             PackagesDto pakagesDto = new PackagesDto();
             BeanUtils.copyProperties(componentLibrary, pakagesDto);
             packagesDtoList.add(pakagesDto);
         }
         return packagesDtoList;
     }
+
     /**
      * 获取应用信息
      *
@@ -497,11 +498,11 @@ public class AppV1ServiceImpl implements AppV1Service {
         // 转换组件数据为schema
         List<Component> components = materialHistory.getComponents();
         List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryAllComponentLibrary();
-        if(!componentLibraryList.isEmpty()){
-        List<Component> componentList = componentLibraryList.stream()
-                .flatMap(componentLibrary -> componentLibrary.getComponents().stream())  // 扁平化每个 List<Component>
-                .collect(Collectors.toList());  // 收集到一个新的 List<Component>
-        components.addAll(componentList);
+        if (!componentLibraryList.isEmpty()) {
+            List<Component> componentList = componentLibraryList.stream()
+                    .flatMap(componentLibrary -> componentLibrary.getComponents().stream())  // 扁平化每个 List<Component>
+                    .collect(Collectors.toList());  // 收集到一个新的 List<Component>
+            components.addAll(componentList);
         }
         List<Map<String, Object>> componentsSchema = getComponentSchema(components);
         // 合并两个 List

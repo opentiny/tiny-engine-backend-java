@@ -77,13 +77,13 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      * @return execute success data number
      */
     @Override
-    public  Result<ComponentLibrary> deleteComponentLibraryById(@Param("id") Integer id) {
+    public Result<ComponentLibrary> deleteComponentLibraryById(@Param("id") Integer id) {
         Result<ComponentLibrary> result = this.queryComponentLibraryById(id);
-        if(result.getData() == null || result.getData().getId() == null){
+        if (result.getData() == null || result.getData().getId() == null) {
             return Result.success();
         }
-        int deleteResult =  componentLibraryMapper.deleteComponentLibraryById(id);
-        if(deleteResult != 1){
+        int deleteResult = componentLibraryMapper.deleteComponentLibraryById(id);
+        if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         return result;
@@ -97,9 +97,9 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      * @return execute success data number
      */
     @Override
-    public  Result<ComponentLibrary> updateComponentLibraryById(ComponentLibrary componentLibrary) {
+    public Result<ComponentLibrary> updateComponentLibraryById(ComponentLibrary componentLibrary) {
         int updateResult = componentLibraryMapper.updateComponentLibraryById(componentLibrary);
-        if(updateResult != 1){
+        if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         Result<ComponentLibrary> result = this.queryComponentLibraryById(componentLibrary.getId());
@@ -113,9 +113,9 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      * @return execute success data number
      */
     @Override
-    public  Result<ComponentLibrary> createComponentLibrary(ComponentLibrary componentLibrary) {
+    public Result<ComponentLibrary> createComponentLibrary(ComponentLibrary componentLibrary) {
         int createResult = componentLibraryMapper.createComponentLibrary(componentLibrary);
-        if(createResult != 1){
+        if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         Result<ComponentLibrary> result = this.queryComponentLibraryById(componentLibrary.getId());

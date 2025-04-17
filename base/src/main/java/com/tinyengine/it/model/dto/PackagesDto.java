@@ -32,5 +32,5 @@ public class PackagesDto {
     private String version;
     private String script;
     private String css;
-    private Map<String,Object> others;
+    private Map<String, Object> others;
 }

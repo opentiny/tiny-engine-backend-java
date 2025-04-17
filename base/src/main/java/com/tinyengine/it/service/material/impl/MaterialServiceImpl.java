@@ -77,9 +77,9 @@ public class MaterialServiceImpl implements MaterialService {
      * @return execute success data number
      */
     @Override
-    public  Result<Material> deleteMaterialById(@Param("id") Integer id) {
-       int deleteResult =  materialMapper.deleteMaterialById(id);
-        if(deleteResult != 1){
+    public Result<Material> deleteMaterialById(@Param("id") Integer id) {
+        int deleteResult = materialMapper.deleteMaterialById(id);
+        if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         Result<Material> result = this.queryMaterialById(id);
@@ -94,9 +94,9 @@ public class MaterialServiceImpl implements MaterialService {
      * @return execute success data number
      */
     @Override
-    public  Result<Material> updateMaterialById(Material material) {
+    public Result<Material> updateMaterialById(Material material) {
         int updateResult = materialMapper.updateMaterialById(material);
-        if(updateResult != 1){
+        if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         Result<Material> result = this.queryMaterialById(material.getId());
@@ -110,9 +110,9 @@ public class MaterialServiceImpl implements MaterialService {
      * @return execute success data number
      */
     @Override
-    public  Result<Material> createMaterial(Material material) {
+    public Result<Material> createMaterial(Material material) {
         int createResult = materialMapper.createMaterial(material);
-        if(createResult != 1){
+        if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
         Result<Material> result = this.queryMaterialById(material.getId());
