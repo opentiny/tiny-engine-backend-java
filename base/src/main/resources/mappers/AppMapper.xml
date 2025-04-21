@@ -82,7 +82,7 @@
         <if test="isDemo!=null and isDemo!=''">
             AND is_demo = #{isDemo}
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             AND is_default = #{isDefault}
         </if>
         <if test="templateType!=null and templateType!=''">
@@ -112,7 +112,7 @@
         <if test="dataHash!=null and dataHash!=''">
             AND data_hash = #{dataHash}
         </if>
-        <if test="canAssociate!=null and canAssociate!=''">
+        <if test="canAssociate!=null">
             AND can_associate = #{canAssociate}
         </if>
         <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">
@@ -173,7 +173,7 @@
         <if test="state!=null and state!=''">
             state = #{state},
         </if>
-        <if test="isPublish!=null and isPublish!=''">
+        <if test="isPublish!=null">
             published = #{isPublish},
         </if>
         <if test="homePage!=null and homePage!=''">
@@ -206,10 +206,10 @@
         <if test="branch!=null and branch!=''">
             branch = #{branch},
         </if>
-        <if test="isDemo!=null and isDemo!=''">
+        <if test="isDemo!=null">
             is_demo = #{isDemo},
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             is_default = #{isDefault},
         </if>
         <if test="templateType!=null and templateType!=''">
@@ -239,7 +239,7 @@
         <if test="dataHash!=null and dataHash!=''">
             data_hash = #{dataHash},
         </if>
-        <if test="canAssociate!=null and canAssociate!=''">
+        <if test="canAssociate!=null">
             can_associate = #{canAssociate},
         </if>
         <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">

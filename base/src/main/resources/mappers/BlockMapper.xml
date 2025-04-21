@@ -54,16 +54,16 @@
         <if test="occupierBy!=null and occupierBy!=''">
             AND occupier_by = #{occupierBy}
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             AND is_official = #{isOfficial}
         </if>
         <if test="publicStatus!=null and publicStatus!=''">
             AND `public` = #{publicStatus}
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             AND is_default = #{isDefault}
         </if>
-        <if test="isTinyReserved!=null and isTinyReserved!=''">
+        <if test="isTinyReserved!=null">
             AND tiny_reserved = #{isTinyReserved}
         </if>
         <if test="npmName!=null and npmName!=''">
@@ -145,16 +145,16 @@
         <if test="occupierBy!=null and occupierBy!=''">
             occupier_by = #{occupierBy},
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             is_official = #{isOfficial},
         </if>
         <if test="publicStatus!=null and publicStatus!=''">
             `public` = #{publicStatus},
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             is_default = #{isDefault},
         </if>
-        <if test="isTinyReserved!=null and isTinyReserved!=''">
+        <if test="isTinyReserved!=null">
             tiny_reserved = #{isTinyReserved},
         </if>
         <if test="npmName!=null and npmName!=''">

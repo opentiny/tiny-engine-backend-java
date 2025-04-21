@@ -22,10 +22,10 @@
         <if test="framework!=null and framework!=''">
             AND framework = #{framework}
         </if>
-        <if test="published!=null and published!=''">
+        <if test="published!=null">
             AND published = #{published}
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             AND `public` = #{publicStatus}
         </if>
         <if test="type!=null and type!=''">
@@ -34,7 +34,7 @@
         <if test="status!=null and status!=''">
             AND status = #{status}
         </if>
-        <if test="isPreset!=null and isPreset!=''">
+        <if test="isPreset!=null">
             AND is_preset = #{isPreset}
         </if>
         <if test="imageUrl!=null and imageUrl!=''">
@@ -80,10 +80,10 @@
         <if test="framework!=null and framework!=''">
             framework = #{framework},
         </if>
-        <if test="published!=null and published!=''">
+        <if test="published!=null">
             published = #{published},
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             `public` = #{publicStatus},
         </if>
         <if test="type!=null and type!=''">
@@ -92,7 +92,7 @@
         <if test="status!=null and status!=''">
             status = #{status},
         </if>
-        <if test="isPreset!=null and isPreset!=''">
+        <if test="isPreset!=null">
             is_preset = #{isPreset},
         </if>
         <if test="imageUrl!=null and imageUrl!=''">

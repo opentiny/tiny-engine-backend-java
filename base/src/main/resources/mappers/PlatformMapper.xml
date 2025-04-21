@@ -18,7 +18,7 @@
         <if test="name!=null and name!=''">
             AND name = #{name}
         </if>
-        <if test="isPublish!=null and isPublish!=''">
+        <if test="isPublish!=null">
             AND published = #{isPublish}
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
@@ -45,7 +45,7 @@
         <if test="sortToolbar!=null and sortToolbar!=''">
             AND sort_toolbar = #{sortToolbar}
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             AND is_default = #{isDefault}
         </if>
         <if test="prettierOpts!=null and prettierOpts!=''">
@@ -100,7 +100,7 @@
         <if test="name!=null and name!=''">
             name = #{name},
         </if>
-        <if test="isPublish!=null and isPublish!=''">
+        <if test="isPublish!=null">
             published = #{isPublish},
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
@@ -127,7 +127,7 @@
         <if test="sortToolbar!=null and sortToolbar!=''">
             sort_toolbar = #{sortToolbar},
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             is_default = #{isDefault},
         </if>
         <if test="prettierOpts!=null and prettierOpts!=''">

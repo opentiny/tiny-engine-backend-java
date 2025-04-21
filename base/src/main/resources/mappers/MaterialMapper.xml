@@ -30,7 +30,7 @@
         <if test="imageUrl!=null and imageUrl!=''">
             AND image_url = #{imageUrl}
         </if>
-        <if test="isPublish!=null and isPublish!=''">
+        <if test="isPublish!=null">
             AND published = #{isPublish}
         </if>
         <if test="latestVersion!=null and latestVersion!=''">
@@ -48,13 +48,13 @@
         <if test="description!=null and description!=''">
             AND description = #{description}
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             AND is_official = #{isOfficial}
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             AND is_default = #{isDefault}
         </if>
-        <if test="isTinyReserved!=null and isTinyReserved!=''">
+        <if test="isTinyReserved!=null">
             AND tiny_reserved = #{isTinyReserved}
         </if>
         <if test="componentLibraryId!=null and componentLibraryId!=''">
@@ -115,7 +115,7 @@
         <if test="imageUrl!=null and imageUrl!=''">
             image_url = #{imageUrl},
         </if>
-        <if test="isPublish!=null and isPublish!=''">
+        <if test="isPublish!=null">
             published = #{isPublish},
         </if>
         <if test="latestVersion!=null and latestVersion!=''">
@@ -133,13 +133,13 @@
         <if test="description!=null and description!=''">
             description = #{description},
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             is_official = #{isOfficial},
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             is_default = #{isDefault},
         </if>
-        <if test="isTinyReserved!=null and isTinyReserved!=''">
+        <if test="isTinyReserved!=null">
             tiny_reserved = #{isTinyReserved},
         </if>
         <if test="componentLibraryId!=null and componentLibraryId!=''">

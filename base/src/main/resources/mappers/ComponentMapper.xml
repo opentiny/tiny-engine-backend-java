@@ -169,13 +169,13 @@
         <if test="framework!=null and framework!=''">
             framework = #{framework},
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             is_official = #{isOfficial},
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             is_default = #{isDefault},
         </if>
-        <if test="isTinyReserved!=null and isTinyReserved!=''">
+        <if test="isTinyReserved!=null">
             tiny_reserved = #{isTinyReserved},
         </if>
         <if test="componentMetadata!=null and componentMetadata!=''">
