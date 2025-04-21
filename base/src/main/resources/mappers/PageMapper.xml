@@ -26,7 +26,7 @@
         <if test="pageContent!=null and pageContent!=''">
             AND page_content = #{pageContent}
         </if>
-        <if test="isBody!=null and isBody!=''">
+        <if test="isBody!=null">
             AND is_body = #{isBody}
         </if>
         <if test="parentId!=null and parentId!=''">
@@ -38,13 +38,13 @@
         <if test="depth!=null and depth!=''">
             AND `depth` = #{depth}
         </if>
-        <if test="isPage!=null and isPage!=''">
+        <if test="isPage!=null">
             AND is_page = #{isPage}
         </if>
         <if test="occupierBy!=null and occupierBy!=''">
             AND occupier_by = #{occupierBy}
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             AND is_default = #{isDefault}
         </if>
         <if test="contentBlocks!=null and contentBlocks!=''">
@@ -93,7 +93,7 @@
         <if test="pageContent!=null and pageContent!=''">
             page_content = #{pageContent},
         </if>
-        <if test="isBody!=null and isBody!=''">
+        <if test="isBody!=null">
             is_body = #{isBody},
         </if>
         <if test="parentId!=null and parentId!=''">
@@ -105,13 +105,13 @@
         <if test="depth!=null and depth!=''">
             `depth` = #{depth},
         </if>
-        <if test="isPage!=null and isPage!=''">
+        <if test="isPage!=null">
             is_page = #{isPage},
         </if>
         <if test="occupierBy!=null and occupierBy!=''">
             occupier_by = #{occupierBy},
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             is_default = #{isDefault},
         </if>
         <if test="contentBlocks!=null and contentBlocks!=''">

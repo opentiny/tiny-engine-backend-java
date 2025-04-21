@@ -49,13 +49,13 @@
         <if test="publicStatus!=null and publicStatus!=''">
             AND `public` = #{publicStatus}
         </if>
-        <if test="isStarted!=null and isStarted!=''">
+        <if test="isStarted!=null">
             AND is_started = #{isStarted}
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             AND is_official = #{isOfficial}
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             AND is_default = #{isDefault}
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -119,13 +119,13 @@
         <if test="publicStatus!=null and publicStatus!=''">
             `public` = #{publicStatus},
         </if>
-        <if test="isStarted!=null and isStarted!=''">
+        <if test="isStarted!=null">
             is_started = #{isStarted},
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             is_official = #{isOfficial},
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             is_default = #{isDefault},
         </if>
         <if test="createdBy!=null and createdBy!=''">

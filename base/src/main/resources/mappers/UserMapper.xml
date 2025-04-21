@@ -19,7 +19,7 @@
         <if test="email!=null and email!=''">
             AND email = #{email}
         </if>
-        <if test="isEnable!=null and isEnable!=''">
+        <if test="isEnable!=null">
             AND enable = #{isEnable}
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -43,10 +43,10 @@
         <if test="siteId!=null and siteId!=''">
             AND site_id = #{siteId}
         </if>
-        <if test="isAdmin!=null and isAdmin!=''">
+        <if test="isAdmin!=null">
             AND is_admin = #{isAdmin}
         </if>
-        <if test="isPublic!=null and isPublic!=''">
+        <if test="isPublic!=null">
             AND is_public = #{isPublic}
         </if>
     </sql>
@@ -59,7 +59,7 @@
         <if test="email!=null and email!=''">
             email = #{email},
         </if>
-        <if test="isEnable!=null and isEnable!=''">
+        <if test="isEnable!=null">
             enable = #{isEnable},
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -84,10 +84,10 @@
             site_id = #{siteId},
         </if>
 
-        <if test="isAdmin!=null and isAdmin!=''">
+        <if test="isAdmin!=null">
             is_admin = #{isAdmin},
         </if>
-        <if test="isPublic!=null and isPublic!=''">
+        <if test="isPublic!=null">
             is_public = #{isPublic},
         </if>
     </sql>
