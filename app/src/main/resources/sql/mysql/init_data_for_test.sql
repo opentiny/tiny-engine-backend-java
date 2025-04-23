@@ -53,6 +53,8 @@ INSERT INTO `t_block_history` (`id`, `ref_id`, `message`, `version`, `label`, `n
 
 INSERT INTO `t_block_group` (`id`, `name`, `app_id`, `platform_id`, `description`, `created_by`, `last_updated_by`, `created_time`, `last_updated_time`, `tenant_id`, `site_id`) VALUES (1, '我的分组', 1, 1, '区块分组', '1', '1', '2024-10-16 19:15:53', '2024-10-16 19:15:53', '1', '1');
 
+INSERT INTO `r_block_group_block` VALUES (1, 1, 1);
+
 INSERT INTO `t_material_history` (`id`, `ref_id`, `version`, `content`, `name`, `npm_name`, `framework`, `assets_url`, `image_url`, `description`, `material_size`, `tgz_url`, `unzip_tgz_root_path_url`, `unzip_tgz_files`, `created_by`, `last_updated_by`, `created_time`, `last_updated_time`, `tenant_id`, `site_id`) VALUES (1, 1, '1.0.8', '{}', 'materialstwo', '@opentiny/lowcode-alpha-material-materialstwo-1505', 'Vue', '{\"material\":[\"\"],\"scripts\":[\"\",\"\"],\"styles\":[]}', NULL, '1.0.8', NULL, NULL, NULL, NULL, '1', '1', '2024-10-16 19:28:53', '2024-10-16 19:28:53', '1', '1');
 
 INSERT INTO `t_tenant` (`id`, `name_cn`, `name_en`, `description`, `created_by`, `last_updated_by`, `created_time`, `last_updated_time`) VALUES (1, 'public', '公共租户', 'Default tenant for new user to explore.', '1', '1', '2024-10-16 19:31:28', '2024-10-16 19:31:28');
