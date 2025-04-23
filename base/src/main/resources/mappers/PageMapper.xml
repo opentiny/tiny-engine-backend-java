@@ -242,9 +242,7 @@
         FROM t_page P
         LEFT JOIN t_user U ON P.occupier_by = U.id
         <where>
-            <if test="id != null">
-                AND P.id = #{id}
-            </if>
+            P.id = #{id}
         </where>
     </select>
     <!-- 根据appId查询表t_page数据 -->

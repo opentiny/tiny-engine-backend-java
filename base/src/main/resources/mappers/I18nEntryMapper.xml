@@ -154,9 +154,7 @@
         FROM t_i18n_entry E
         LEFT JOIN t_i18n_lang L ON E.lang_id = L.id
         <where>
-            <if test="id != null">
-                AND E.id = #{id}
-            </if>
+            E.id = #{id}
         </where>
     </select>
 

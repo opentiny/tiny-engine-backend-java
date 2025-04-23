@@ -129,9 +129,7 @@
         <include refid="Base_Column_List"/>
         FROM t_datasource
         <where>
-            <if test="id != null">
-                AND id = #{id}
-            </if>
+            id = #{id}
         </where>
     </select>
 

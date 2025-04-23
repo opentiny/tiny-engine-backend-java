@@ -324,9 +324,7 @@
             </otherwise>
         </choose>
         <where>
-            <if test="id != null">
-                AND bg.id = #{id}
-            </if>
+            bg.id = #{id}
             <if test="groupCreatedBy != null">
                 AND bg.created_by = #{groupCreatedBy}
             </if>
