@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tinyengine.it.common.base.BaseEntity;
 
@@ -38,6 +39,7 @@ public class User extends BaseEntity {
     @Schema(name = "email", description = "邮箱")
     private String email;
 
+    @TableField("enable")
     @Schema(name = "enable", description = "账号是否可用")
     private Boolean isEnable;
 
