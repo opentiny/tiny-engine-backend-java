@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.material;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.BundleDto;
 import com.tinyengine.it.model.dto.BundleResultDto;
 import com.tinyengine.it.model.dto.CustComponentDto;
 import com.tinyengine.it.model.dto.FileResult;
@@ -91,6 +92,22 @@ public interface ComponentService {
      * @return result the result
      */
     Result<BundleResultDto> bundleSplit(MultipartFile file);
+
+    /**
+     * 解析bundleDto为component集合
+     *
+     * @param bundleDto bundleDto
+     * @return BundleResultDto BundleResultDto
+     */
+    Result<BundleResultDto> parseBundle(BundleDto bundleDto);
+
+    /**
+     * 批量创建/更新组件
+     *
+     * @param componentList componentList
+     * @return FileResult FileResult
+     */
+    Result<FileResult> bulkCreate(List<Component> componentList);
 
     /**
      * 批量创建component
