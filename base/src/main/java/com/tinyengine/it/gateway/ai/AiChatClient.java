@@ -43,8 +43,8 @@ public class AiChatClient {
     /**
      * Instantiates a new Ai chat client.
      */
-    public AiChatClient(String model,String token) {
-        this.config = AiChatConfig.getAiChatConfig(model,token);
+    public AiChatClient(String model, String token) {
+        this.config = AiChatConfig.getAiChatConfig(model, token);
         // Optional: Default base URL
         this.webClient = WebClient.builder().baseUrl("https://default.api.url").build();
     }
