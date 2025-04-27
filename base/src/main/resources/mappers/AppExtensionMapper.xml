@@ -147,9 +147,7 @@
             <include refid="AppExtensionSetColumns"/>
         </set>
         <where>
-            <if test="id != null">
-                AND id = #{id}
-            </if>
+            id = #{id}
             <if test="tenantId != null">
                 AND tenant_id = #{tenantId}
             </if>

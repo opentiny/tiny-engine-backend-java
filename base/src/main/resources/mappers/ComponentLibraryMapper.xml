@@ -337,9 +337,7 @@
         FROM t_component_library CL
         LEFT JOIN t_component C ON CL.id = C.library_id
         <where>
-            <if test="id != null">
-                AND CL.id = #{id}
-            </if>
+            CL.id = #{id}
         </where>
     </select>
 

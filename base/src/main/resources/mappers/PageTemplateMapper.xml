@@ -171,10 +171,7 @@
         <include refid="Base_Column_List"/>
         FROM t_page_template
         <where>
-            <if test="id != null">
-                AND id = #{id}
-            </if>
-
+            id = #{id}
         </where>
     </select>
 

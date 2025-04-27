@@ -229,9 +229,7 @@
         <include refid="Base_Column_List"/>
         FROM t_material
         <where>
-            <if test="id != null">
-                AND id = #{id}
-            </if>
+            id = #{id}
         </where>
     </select>
 
