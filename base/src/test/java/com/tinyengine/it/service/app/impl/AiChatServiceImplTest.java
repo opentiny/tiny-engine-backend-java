@@ -68,7 +68,7 @@ class AiChatServiceImplTest {
         aiParam.setMessages(messages);
         HashMap<String, String> foundationModel = new HashMap<>();
         foundationModel.put("model", "ERNIE-4.0-8K");
-        foundationModel.put("token","asdf");
+        foundationModel.put("token", "asdf");
         aiParam.setFoundationModel(foundationModel);
 
         Map<String, Object> dataMap = new HashMap<>();

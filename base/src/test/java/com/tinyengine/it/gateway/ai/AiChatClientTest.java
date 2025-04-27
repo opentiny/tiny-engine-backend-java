@@ -87,16 +87,15 @@ class AiChatClientTest {
         when(bodyUriSpec.uri(anyString())).thenReturn(bodyUriSpec);
         HashMap<String, String> foundationModel = new HashMap<>();
         foundationModel.put("model", "ERNIE-4.0-8K");
-        foundationModel.put("token","asdf");
+        foundationModel.put("token", "asdf");
         ArrayList<AiMessages> messages = new ArrayList<>();
         AiMessages aiMessages = new AiMessages();
         aiMessages.setContent("dddd编码时遵从以下几条要求aaa");
         aiMessages.setName("John");
         aiMessages.setRole("user");
         messages.add(aiMessages);
-        AiParam param = new AiParam(foundationModel,Arrays.asList(aiMessages));
+        AiParam param = new AiParam(foundationModel, Arrays.asList(aiMessages));
         Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
         Assertions.assertNull(returnData.get("data"));
     }
 }
-

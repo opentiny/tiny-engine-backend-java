@@ -93,7 +93,6 @@ public class BlockServiceImpl implements BlockService {
     private BlockGroupMapper blockGroupMapper;
     @Autowired
     private BlockGroupBlockMapper blockGroupBlockMapper;
-
     @Autowired
     private LoginUserContext loginUserContext;
 
@@ -190,7 +189,7 @@ public class BlockServiceImpl implements BlockService {
         // 根据区块id获取区块所在分组
         List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(), loginUserContext.getLoginUserId());
         // 删除区块与分组关系
-        if(blockGroups != null && !blockGroups.isEmpty()){
+        if (blockGroups != null && !blockGroups.isEmpty()) {
             List<Integer> blockGroupIds = blockGroups.stream().map(BlockGroup::getId).collect(Collectors.toList());
             for (Integer id : blockGroupIds) {
                 blockGroupBlockMapper.deleteByGroupIdAndBlockId(id, blocks.getId());
@@ -287,21 +286,18 @@ public class BlockServiceImpl implements BlockService {
         mergedAssets.put("styles", new ArrayList<>());
 
         // Merge the assets using streams
-        return blocksList.stream().map(Block::getAssets).map(assetsMap ->
-        {
+        return blocksList.stream().map(Block::getAssets).map(assetsMap -> {
             Map<String, List<String>> tempMap = new HashMap<>();
             tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
             tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
             tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
             return tempMap;
-        }).reduce(mergedAssets, (acc, curr) ->
-        {
+        }).reduce(mergedAssets, (acc, curr) -> {
             acc.get("material").addAll(curr.get("material"));
             acc.get("scripts").addAll(curr.get("scripts"));
             acc.get("styles").addAll(curr.get("styles"));
             return acc;
-        }, (map1, map2) ->
-        {
+        }, (map1, map2) -> {
             map1.get("material").addAll(map2.get("material"));
             map1.get("scripts").addAll(map2.get("scripts"));
             map1.get("styles").addAll(map2.get("styles"));

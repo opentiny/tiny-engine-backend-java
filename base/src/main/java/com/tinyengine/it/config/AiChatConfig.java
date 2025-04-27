@@ -23,8 +23,8 @@ import java.util.Map;
  * @since 2024-10-20
  */
 public class AiChatConfig {
-    private static final String OPENAI_API_URL =  "https://api.openai.com";
-    private static final String LOCAL_GPT_API_URL =  "https://dashscope.aliyuncs.com/compatible-mode";
+    private static final String OPENAI_API_URL = "https://api.openai.com";
+    private static final String LOCAL_GPT_API_URL = "https://dashscope.aliyuncs.com/compatible-mode";
 
 
     /**
@@ -32,7 +32,7 @@ public class AiChatConfig {
      *
      * @return the AI chat config
      */
-    public static Map<String, AiChatConfigData> getAiChatConfig(String model,String token) {
+    public static Map<String, AiChatConfigData> getAiChatConfig(String model, String token) {
         Map<String, AiChatConfigData> config = new HashMap<>();
 
         Map<String, String> openaiHeaders = new HashMap<>();
