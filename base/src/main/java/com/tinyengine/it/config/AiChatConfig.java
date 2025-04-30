@@ -26,6 +26,8 @@ public class AiChatConfig {
     private static final String OPENAI_API_URL = "https://api.openai.com";
     private static final String LOCAL_GPT_API_URL = "https://dashscope.aliyuncs.com/compatible-mode";
 
+    private static final String DEEPSEEK_V3_URL = "https://api.deepseek.com";
+
 
     /**
      * Gets AI chat config.
