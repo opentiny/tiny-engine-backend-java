@@ -467,7 +467,9 @@ public class AppV1ServiceImpl implements AppV1Service {
             Map<String, Object> data = Utils.convert(pageInfo);
             boolean isToLine = false;
             Map<String, Object> page = formatDataFields(data, resKeys, isToLine);
-            page.put("isHome", String.valueOf(page.get("id")).equals(app.getHomePage().toString()));
+            if (null != app.getHomePage()) {
+                page.put("isHome", String.valueOf(page.get("id")).equals(app.getHomePage().toString()));
+            }
             Map<String, Object> schema;
             Schema schemaUtil = new Schema();
             if (!pageInfo.getIsPage()) {

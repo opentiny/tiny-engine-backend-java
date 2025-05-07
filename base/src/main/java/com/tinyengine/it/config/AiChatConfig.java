@@ -25,6 +25,7 @@ import java.util.Map;
 public class AiChatConfig {
     private static final String OPENAI_API_URL = "https://api.openai.com";
     private static final String LOCAL_GPT_API_URL = "https://dashscope.aliyuncs.com/compatible-mode";
+    private static final String DEEPSEEK_V3_URL = "https://api.deepseek.com";
 
 
     /**
@@ -44,13 +45,21 @@ public class AiChatConfig {
         String localGptApiKey = Enums.FoundationModel.LOCAL_GPT.getValue().equals(model) ? token : null;
         localGptHeaders.put("Authorization", "Bearer " + localGptApiKey);
 
+        Map<String, String> deepSeekHeaders = new HashMap<>();
+        String deepSeekApiKey = Enums.FoundationModel.DEEPSEEK_V3.getValue().equals(model) ? token : null;
+        deepSeekHeaders.put("Authorization", "Bearer " + deepSeekApiKey);
+
         Map<String, String> ernieBotHeaders = new HashMap<>();
+
 
         config.put(Enums.FoundationModel.GPT_35_TURBO.getValue(), new AiChatConfigData(
                 OPENAI_API_URL + "/v1/chat/completions", createCommonRequestOption(), openaiHeaders, "openai"));
 
         config.put(Enums.FoundationModel.LOCAL_GPT.getValue(), new AiChatConfigData(
                 LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(), localGptHeaders, "!openai"));
+
+        config.put(Enums.FoundationModel.DEEPSEEK_V3.getValue(), new AiChatConfigData(
+                DEEPSEEK_V3_URL + "/chat/completions", createCommonRequestOption(), deepSeekHeaders, "DeepSeek"));
 
         String ernieBotAccessToken = Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model) ? token : null;
         config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(),
