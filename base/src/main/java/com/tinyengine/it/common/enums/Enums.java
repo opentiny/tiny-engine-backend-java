@@ -793,7 +793,12 @@ public class Enums {
          * Moonshot v1 8k e foundation model.
          */
         // kimi
-        MOONSHOT_V1_8K("moonshot-v1-8k");
+        MOONSHOT_V1_8K("moonshot-v1-8k"),
+        /**
+         * Moonshot v3 e foundation model.
+         */
+        // deepseek
+        DEEPSEEK_V3("deepseek-chat");
         private final String value;
 
         FoundationModel(String value) {

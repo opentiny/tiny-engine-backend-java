@@ -445,10 +445,7 @@ public class PageServiceImpl implements PageService {
         // getFolder 获取父类信息
         Page parentInfo = pageMapper.queryPageById(parent);
         int depth = parentInfo.getDepth();
-        if (depth < 5) {
-            return Result.success(depth);
-        }
-        return Result.failed("Exceeded depth");
+        return Result.success(depth);
     }
 
     /**
