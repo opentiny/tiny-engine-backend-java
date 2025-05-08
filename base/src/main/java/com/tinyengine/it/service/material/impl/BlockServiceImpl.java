@@ -228,6 +228,7 @@ public class BlockServiceImpl implements BlockService {
         }
         // 对接收到的参数occupier为对应的一个对象，进行特殊处理并重新赋值
         Block blocks = new Block();
+        blocks.setOccupierBy(loginUserContext.getLoginUserId());
         if (blockParam.getOccupier() != null) {
             blocks.setOccupierBy(String.valueOf(blockParam.getOccupier().getId()));
         }
