@@ -14,6 +14,7 @@ package com.tinyengine.it.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tinyengine.it.common.base.BaseEntity;
 import com.tinyengine.it.common.handler.ListTypeHandler;
 import com.tinyengine.it.common.handler.MapTypeHandler;
@@ -42,6 +43,7 @@ public class Platform extends BaseEntity {
     private String name;
 
     @Schema(name = "published", description = "是否发布：1是，0否")
+    @JsonProperty("published")
     private Boolean isPublish;
 
     @Schema(name = "lastBuildInfo", description = "最后构建信息")

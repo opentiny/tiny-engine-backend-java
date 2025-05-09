@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.platform;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Platform;
 
 import org.apache.ibatis.annotations.Param;
@@ -51,23 +52,23 @@ public interface PlatformService {
      * 根据主键id删除t_platform数据
      *
      * @param id the id
-     * @return the integer
+     * @return the Result
      */
-    Integer deletePlatformById(@Param("id") Integer id);
+    Result<Platform> deletePlatformById(@Param("id") Integer id);
 
     /**
      * 根据主键id更新表t_platform信息
      *
      * @param platform the platform
-     * @return the integer
+     * @return the Result
      */
-    Integer updatePlatformById(Platform platform);
+    Result<Platform> updatePlatformById(Platform platform);
 
     /**
      * 新增表t_platform数据
      *
      * @param platform the platform
-     * @return the integer
+     * @return the Result
      */
-    Integer createPlatform(Platform platform);
+    Result<Platform> createPlatform(Platform platform);
 }
