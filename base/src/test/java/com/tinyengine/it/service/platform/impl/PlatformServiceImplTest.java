@@ -14,6 +14,7 @@ package com.tinyengine.it.service.platform.impl;
 
 import static org.mockito.Mockito.when;
 
+import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.PlatformMapper;
 import com.tinyengine.it.model.entity.Platform;
 
@@ -73,19 +74,22 @@ class PlatformServiceImplTest {
 
     @Test
     void testDeletePlatformById() {
+        Platform mockData = new Platform();
+        when(platformMapper.queryPlatformById(1)).thenReturn(mockData);
         when(platformMapper.deletePlatformById(1)).thenReturn(2);
 
-        Integer result = platformServiceImpl.deletePlatformById(1);
-        Assertions.assertEquals(2, result);
+        Result<Platform> result = platformServiceImpl.deletePlatformById(1);
+        Assertions.assertEquals(mockData, result.getData());
     }
 
     @Test
     void testUpdatePlatformById() {
         Platform param = new Platform();
         when(platformMapper.updatePlatformById(param)).thenReturn(1);
-
-        Integer result = platformServiceImpl.updatePlatformById(param);
-        Assertions.assertEquals(1, result);
+        Platform mockData = new Platform();
+        when(platformMapper.queryPlatformById(1)).thenReturn(mockData);
+        Result<Platform> result = platformServiceImpl.updatePlatformById(param);
+        Assertions.assertEquals(mockData, result.getData());
     }
 
     @Test
@@ -93,7 +97,7 @@ class PlatformServiceImplTest {
         Platform param = new Platform();
         when(platformMapper.createPlatform(param)).thenReturn(1);
 
-        Integer result = platformServiceImpl.createPlatform(param);
-        Assertions.assertEquals(1, result);
+        Result<Platform> result = platformServiceImpl.createPlatform(param);
+        Assertions.assertEquals(param, result.getData());
     }
 }
