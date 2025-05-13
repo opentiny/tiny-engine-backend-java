@@ -235,7 +235,22 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 322 exception enum.
      */
-    CM322("CM322", "调用接口失败");
+    CM322("CM322", "调用接口失败"),
+
+    /**
+     * Cm 323 exception enum.
+     */
+    CM323("CM323", "文件名长度范围为1-100，以数字或字母开头"),
+
+    /**
+     * Cm 324 exception enum.
+     */
+    CM324("CM324","文件名或路径无效"),
+
+    /**
+     * Cm 325 exception enum.
+     */
+    CM325("CM325","文件校验失败");
 
     /**
      * 错误码

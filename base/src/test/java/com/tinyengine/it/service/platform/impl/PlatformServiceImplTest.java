@@ -75,8 +75,9 @@ class PlatformServiceImplTest {
     @Test
     void testDeletePlatformById() {
         Platform mockData = new Platform();
+        mockData.setId(1);
         when(platformMapper.queryPlatformById(1)).thenReturn(mockData);
-        when(platformMapper.deletePlatformById(1)).thenReturn(2);
+        when(platformMapper.deletePlatformById(1)).thenReturn(1);
 
         Result<Platform> result = platformServiceImpl.deletePlatformById(1);
         Assertions.assertEquals(mockData, result.getData());
@@ -85,6 +86,7 @@ class PlatformServiceImplTest {
     @Test
     void testUpdatePlatformById() {
         Platform param = new Platform();
+        param.setId(1);
         when(platformMapper.updatePlatformById(param)).thenReturn(1);
         Platform mockData = new Platform();
         when(platformMapper.queryPlatformById(1)).thenReturn(mockData);
