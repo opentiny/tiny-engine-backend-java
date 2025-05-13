@@ -389,8 +389,6 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     public boolean checkFile(MultipartFile file) {
-        SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
-
         Map<String, String> fileTypeMap = new HashMap<>();
         fileTypeMap.put(".json", "application/json");
         boolean isCheckFileType = SecurityFileCheckUtil.checkFileType(file, fileTypeMap);
