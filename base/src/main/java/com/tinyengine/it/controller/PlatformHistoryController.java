@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -155,7 +156,7 @@ public class PlatformHistoryController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "删除platformHistory信息")
-    @GetMapping("/platform-history/delete/{id}")
+    @DeleteMapping("/platform-history/delete/{id}")
     public Result<PlatformHistory> deletePlatformHistory(@PathVariable Integer id) {
         return platformHistoryService.deletePlatformHistoryById(id);
     }

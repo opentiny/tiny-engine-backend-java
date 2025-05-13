@@ -97,6 +97,7 @@ class PlatformServiceImplTest {
     @Test
     void testCreatePlatform() {
         Platform param = new Platform();
+        param.setName("testPlatform");
         when(platformMapper.createPlatform(param)).thenReturn(1);
 
         Result<Platform> result = platformServiceImpl.createPlatform(param);

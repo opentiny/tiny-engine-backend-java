@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -143,6 +144,23 @@ public class PlatformController {
      * @param id the id
      * @return platform信息 result
      */
+    @Operation(summary = "删除platform信息，与js同路由",
+            description = "删除platform信息，与js同路由",
+            parameters = {
+                    @Parameter(name = "id", description = "Platform主键id")
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "返回信息",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Platform.class))),
+                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    )
+    @SystemControllerLog(description = "删除platform信息，与js同路由")
+    @GetMapping("/platform/delete/{id}")
+    public Result<Platform> delete(@PathVariable Integer id) {
+        return platformService.deletePlatformById(id);
+    }
+
     @Operation(summary = "删除platform信息",
             description = "删除platform信息",
             parameters = {
@@ -155,7 +173,7 @@ public class PlatformController {
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "删除platform信息")
-    @GetMapping("/platform/delete/{id}")
+    @DeleteMapping("/platform/delete/{id}")
     public Result<Platform> deletePlatform(@PathVariable Integer id) {
         return platformService.deletePlatformById(id);
     }

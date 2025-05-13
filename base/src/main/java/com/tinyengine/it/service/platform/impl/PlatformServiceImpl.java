@@ -96,6 +96,9 @@ public class PlatformServiceImpl implements PlatformService {
      */
     @Override
     public Result<Platform> updatePlatformById(Platform platform) {
+        if (platform == null || platform.getId() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         int updateResult = platformMapper.updatePlatformById(platform);
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
@@ -112,6 +115,12 @@ public class PlatformServiceImpl implements PlatformService {
      */
     @Override
     public Result<Platform> createPlatform(Platform platform) {
+        if (platform == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        if (platform.getName() == null || platform.getName().isEmpty()) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         int createResult = platformMapper.createPlatform(platform);
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);

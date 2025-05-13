@@ -155,7 +155,7 @@
     <select id="queryAllPlatformHistory" resultMap="PlatformHistoryMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_platform_history_history
+        FROM t_platform_history
     </select>
 
     <!-- 根据主键id查询表t_platform_history信息 -->

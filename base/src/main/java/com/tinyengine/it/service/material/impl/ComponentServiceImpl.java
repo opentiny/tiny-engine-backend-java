@@ -141,8 +141,10 @@ public class ComponentServiceImpl implements ComponentService {
     @SystemServiceLog(description = "readFileAndBulkCreate 创建组件库及组件实现方法")
     @Override
     public Result<FileResult> readFileAndBulkCreate(MultipartFile file) {
-        List<Component> componentList = this.bundleSplit(file).getData().getComponentList();
-        List<ComponentLibrary> packageList = this.bundleSplit(file).getData().getPackageList();
+        Result<BundleResultDto> bundleResultDtoResult = this.bundleSplit(file);
+        BundleResultDto data = bundleResultDtoResult.getData();
+        List<Component> componentList = data.getComponentList();
+        List<ComponentLibrary> packageList = data.getPackageList();
         if (null == packageList || packageList.isEmpty()) {
             return bulkCreate(componentList);
         }
@@ -181,6 +183,7 @@ public class ComponentServiceImpl implements ComponentService {
     @Override
     @SystemServiceLog(description = "bundleSplit 拆分bundle.json实现方法")
     public Result<BundleResultDto> bundleSplit(MultipartFile file) {
+        // 检验文件
         boolean isFileCheck = this.checkFile(file);
         if (!isFileCheck){
             return Result.failed(ExceptionEnum.CM325);

@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PlatformHistorySrviceImpl implements PlatformHistoryService {
+public class PlatformHistoryServiceImpl implements PlatformHistoryService {
     @Autowired
     private PlatformHistoryMapper platformHistoryMapper;
 
@@ -93,6 +93,9 @@ public class PlatformHistorySrviceImpl implements PlatformHistoryService {
      */
     @Override
     public Result<PlatformHistory> updatePlatformHistoryById(PlatformHistory platformHistory) {
+        if (platformHistory == null || platformHistory.getId() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         int updateResult = platformHistoryMapper.updatePlatformHistoryById(platformHistory);
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
@@ -109,6 +112,21 @@ public class PlatformHistorySrviceImpl implements PlatformHistoryService {
      */
     @Override
     public Result<PlatformHistory> createPlatformHistory(PlatformHistory platformHistory) {
+        if (platformHistory == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        if (platformHistory.getRefId() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        if (platformHistory.getName() == null || platformHistory.getName().isEmpty()) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        if (platformHistory.getVersion() == null || platformHistory.getVersion().isEmpty()) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        if (platformHistory.getMaterialHistoryId() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         int createResult = platformHistoryMapper.createPlatformHistory(platformHistory);
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
