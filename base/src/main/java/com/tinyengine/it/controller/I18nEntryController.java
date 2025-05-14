@@ -16,6 +16,7 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.common.utils.SecurityFileCheckUtil;
 import com.tinyengine.it.model.dto.DeleteI18nEntry;
 import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.dto.I18nEntryDto;
@@ -234,10 +235,10 @@ public class I18nEntryController {
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
             // 获取对应的文件
             MultipartFile file = entry.getValue();
-
             if (file.isEmpty()) {
                 return Result.failed(ExceptionEnum.CM307);
             }
+            SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
             // 返回插入和更新的条数
             result = i18nEntryService.readSingleFileAndBulkCreate(file, id);
         }
@@ -274,10 +275,10 @@ public class I18nEntryController {
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
             String key = entry.getKey(); // 获取动态的参数名
             MultipartFile file = entry.getValue(); // 获取对应的文件
-
             if (file.isEmpty()) {
                 return Result.failed(ExceptionEnum.CM307);
             }
+            SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
             // 返回插入和更新的条数
             result = i18nEntryService.readFilesAndbulkCreate(key, file, id);
         }

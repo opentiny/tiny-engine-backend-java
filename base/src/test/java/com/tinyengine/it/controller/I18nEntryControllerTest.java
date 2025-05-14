@@ -131,6 +131,7 @@ class I18nEntryControllerTest {
         when(i18nEntryService.readSingleFileAndBulkCreate(any(MultipartFile.class), anyInt()))
                 .thenReturn(mockData);
         MultipartFile file = Mockito.mock(MultipartFile.class);
+        when(file.getOriginalFilename()).thenReturn("example.json");
         when(file.isEmpty()).thenReturn(false);
         HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
             put("filesMap", file);
@@ -145,6 +146,7 @@ class I18nEntryControllerTest {
         when(i18nEntryService.readFilesAndbulkCreate(anyString(), any(MultipartFile.class), anyInt()))
                 .thenReturn(new Result<FileResult>());
         MultipartFile file = Mockito.mock(MultipartFile.class);
+        when(file.getOriginalFilename()).thenReturn("example.json");
         when(file.isEmpty()).thenReturn(false);
         HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
             put("filesMap", file);

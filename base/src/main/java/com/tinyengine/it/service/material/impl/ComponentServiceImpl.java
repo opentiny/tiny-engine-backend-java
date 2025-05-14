@@ -15,6 +15,7 @@ package com.tinyengine.it.service.material.impl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
+import com.tinyengine.it.common.utils.SecurityFileCheckUtil;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ComponentLibraryMapper;
 import com.tinyengine.it.mapper.ComponentMapper;
@@ -140,8 +141,10 @@ public class ComponentServiceImpl implements ComponentService {
     @SystemServiceLog(description = "readFileAndBulkCreate 创建组件库及组件实现方法")
     @Override
     public Result<FileResult> readFileAndBulkCreate(MultipartFile file) {
-        List<Component> componentList = this.bundleSplit(file).getData().getComponentList();
-        List<ComponentLibrary> packageList = this.bundleSplit(file).getData().getPackageList();
+        Result<BundleResultDto> bundleResultDtoResult = this.bundleSplit(file);
+        BundleResultDto data = bundleResultDtoResult.getData();
+        List<Component> componentList = data.getComponentList();
+        List<ComponentLibrary> packageList = data.getPackageList();
         if (null == packageList || packageList.isEmpty()) {
             return bulkCreate(componentList);
         }
@@ -180,6 +183,11 @@ public class ComponentServiceImpl implements ComponentService {
     @Override
     @SystemServiceLog(description = "bundleSplit 拆分bundle.json实现方法")
     public Result<BundleResultDto> bundleSplit(MultipartFile file) {
+        // 检验文件
+        boolean isFileCheck = this.checkFile(file);
+        if (!isFileCheck){
+            return Result.failed(ExceptionEnum.CM325);
+        }
         // 获取bundle.json数据
         Result<JsonFile> result = Utils.parseJsonFileStream(file);
         if (!result.isSuccess()) {
@@ -317,10 +325,10 @@ public class ComponentServiceImpl implements ComponentService {
             List<Component> queryComponent = findComponentByCondition(componentParam);
             // 查询组件库id
             String packageName = null;
-            if(null!= component.getNpm() && null != component.getNpm().get("package")){
+            if (null != component.getNpm() && null != component.getNpm().get("package")) {
                 packageName = String.valueOf(component.getNpm().get("package"));
             }
-            if(null != packageName && !packageName.isEmpty()){
+            if (null != packageName && !packageName.isEmpty()) {
                 ComponentLibrary componentLibrary = new ComponentLibrary();
                 componentLibrary.setPackageName(String.valueOf(component.getNpm().get("package")));
                 componentLibrary.setVersion(component.getVersion());
@@ -378,5 +386,15 @@ public class ComponentServiceImpl implements ComponentService {
             }
         }
         return result.toString();
+    }
+
+    public boolean checkFile(MultipartFile file) {
+        Map<String, String> fileTypeMap = new HashMap<>();
+        fileTypeMap.put(".json", "application/json");
+        boolean isCheckFileType = SecurityFileCheckUtil.checkFileType(file, fileTypeMap);
+        if (!isCheckFileType) {
+            return false;
+        }
+        return true;
     }
 }

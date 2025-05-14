@@ -12,6 +12,8 @@
 
 package com.tinyengine.it.service.platform.impl;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.PlatformMapper;
 import com.tinyengine.it.model.entity.Platform;
 import com.tinyengine.it.service.platform.PlatformService;
@@ -71,32 +73,58 @@ public class PlatformServiceImpl implements PlatformService {
      * 根据主键id删除表t_platform数据
      *
      * @param id id
-     * @return execute success data number
+     * @return Result
      */
     @Override
-    public Integer deletePlatformById(@Param("id") Integer id) {
-        return platformMapper.deletePlatformById(id);
+    public Result<Platform> deletePlatformById(@Param("id") Integer id) {
+        Platform platform = this.queryPlatformById(id);
+        if (platform == null || platform.getId() == null) {
+            return Result.success();
+        }
+        int deleteResult = platformMapper.deletePlatformById(id);
+        if (deleteResult != 1) {
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        return Result.success(platform);
     }
 
     /**
      * 根据主键id更新表t_platform数据
      *
      * @param platform platform
-     * @return execute success data number
+     * @return Result
      */
     @Override
-    public Integer updatePlatformById(Platform platform) {
-        return platformMapper.updatePlatformById(platform);
+    public Result<Platform> updatePlatformById(Platform platform) {
+        if (platform == null || platform.getId() == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        int updateResult = platformMapper.updatePlatformById(platform);
+        if (updateResult != 1) {
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        Platform platformResult = platformMapper.queryPlatformById(platform.getId());
+        return Result.success(platformResult);
     }
 
     /**
      * 新增表t_platform数据
      *
      * @param platform platform
-     * @return execute success data number
+     * @return Result
      */
     @Override
-    public Integer createPlatform(Platform platform) {
-        return platformMapper.createPlatform(platform);
+    public Result<Platform> createPlatform(Platform platform) {
+        if (platform == null) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        if (platform.getName() == null || platform.getName().isEmpty()) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
+        int createResult = platformMapper.createPlatform(platform);
+        if (createResult != 1) {
+            return Result.failed(ExceptionEnum.CM008);
+        }
+        return Result.success(platform);
     }
 }

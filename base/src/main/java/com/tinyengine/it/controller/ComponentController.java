@@ -15,6 +15,7 @@ package com.tinyengine.it.controller;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.common.utils.SecurityFileCheckUtil;
 import com.tinyengine.it.model.dto.BundleResultDto;
 import com.tinyengine.it.model.dto.CustComponentDto;
 import com.tinyengine.it.model.dto.FileResult;
@@ -71,6 +72,7 @@ public class ComponentController {
         if (file.isEmpty()) {
             return Result.failed(ExceptionEnum.CM307);
         }
+        SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
         // 返回插入和更新的条数
         return componentService.readFileAndBulkCreate(file);
     }
@@ -92,6 +94,7 @@ public class ComponentController {
         if (file.isEmpty()) {
             return Result.failed(ExceptionEnum.CM307);
         }
+        SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
         return componentService.bundleSplit(file);
     }
 

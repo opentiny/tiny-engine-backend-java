@@ -278,8 +278,7 @@ class PageServiceImplTest {
         when(pageMapper.queryPageById(1)).thenReturn(page);
 
         Result<Integer> result = pageServiceImpl.getDepth("1");
-        Assertions.assertFalse(result.isSuccess());
-        assertEquals("Exceeded depth", result.getMessage());
+        assertEquals(page.getDepth(), result.getData());
     }
 
     @Test

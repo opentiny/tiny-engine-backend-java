@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.PlatformHistoryMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id, ref_id, name, version, publish_url, vscode_url, description, material_history_id, sub_count, material_pkg_name,
+        material_version, image_url, tenant_id, renter_id, site_id, created_by, last_updated_by,
+        created_time, last_updated_time
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="PlatformHistoryByCondition">
+        <if test="refId!=null">
+            AND ref_id = #{refId}
+        </if>
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="publishUrl!=null and publishUrl!=''">
+            AND publish_url = #{publishUrl}
+        </if>
+        <if test="version!=null and version!=''">
+            AND version = #{version}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="vscodeUrl!=null and vscodeUrl!=''">
+            AND vscode_url = #{vscodeUrl}
+        </if>
+        <if test="materialHistoryId!=null and materialHistoryId!=''">
+            AND material_history_id = #{materialHistoryId}
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            AND image_url = #{imageUrl}
+        </if>
+        <if test="subCount!=null and subCount!=''">
+            AND sub_count = #{subCount}
+        </if>
+        <if test="materialPkgName!=null and materialPkgName!=''">
+            AND material_pkg_name = #{materialPkgName}
+        </if>
+        <if test="materialVersion!=null and materialVersion!=''">
+            AND material_version = #{materialVersion}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="PlatformHistorySetColumns">
+        <if test="refId!=null">
+            ref_id = #{refId},
+        </if>
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="publishUrl!=null and publishUrl!=''">
+            publish_url = #{publishUrl},
+        </if>
+        <if test="version!=null and version!=''">
+            version = #{version},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="vscodeUrl!=null and vscodeUrl!=''">
+            vscode_url = #{vscodeUrl},
+        </if>
+        <if test="materialHistoryId!=null and materialHistoryId!=''">
+            material_history_id = #{materialHistoryId},
+        </if>
+        <if test="imageUrl!=null and imageUrl!=''">
+            image_url = #{imageUrl},
+        </if>
+        <if test="subCount!=null and subCount!=''">
+            sub_count = #{subCount},
+        </if>
+        <if test="materialPkgName!=null and materialPkgName!=''">
+            material_pkg_name = #{materialPkgName},
+        </if>
+        <if test="materialVersion!=null and materialVersion!=''">
+            material_version = #{materialVersion},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null and createdTime!=''">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="PlatformHistoryMap" type="com.tinyengine.it.model.entity.PlatformHistory">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="ref_id" property="refId"/>
+        <result column="description" property="description"/>
+        <result column="version" property="version"/>
+        <result column="sub_count" property="subCount"/>
+        <result column="material_history_id" property="materialHistoryId"/>
+        <result column="material_pkg_name" property="materialPkgName"/>
+        <result column="material_version" property="materialVersion"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="publish_url" property="publishUrl"/>
+        <result column="vscode_url" property="vscodeUrl"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="renter_id" property="renterId"/>
+        <result column="site_id" property="siteId"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+    </resultMap>
+
+    <!-- 查询表t_platform_history所有数据 -->
+    <select id="queryAllPlatformHistory" resultMap="PlatformHistoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_platform_history
+    </select>
+
+    <!-- 根据主键id查询表t_platform_history信息 -->
+    <select id="queryPlatformHistoryById" resultMap="PlatformHistoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_platform_history
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!-- 根据条件查询表t_platform_history数据 -->
+    <select id="queryPlatformHistoryByCondition" resultMap="PlatformHistoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_platform_history
+        WHERE 1=1
+        <include refid="PlatformHistoryByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_platform_history数据 -->
+    <delete id="deletePlatformHistoryById">
+        DELETE
+        FROM t_platform_history
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_platform_history数据 -->
+    <update id="updatePlatformHistoryById" parameterType="com.tinyengine.it.model.entity.PlatformHistory">
+        UPDATE t_platform_history
+        <set>
+            <include refid="PlatformHistorySetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表t_platform_history数据 -->
+    <insert id="createPlatformHistory" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.PlatformHistory">
+        INSERT INTO t_platform_history ( id
+                                       , ref_id
+                                       , name
+                                       , version
+                                       , publish_url
+                                       , description
+                                       , sub_count
+                                       , material_history_id
+                                       , image_url
+                                       , material_pkg_name
+                                       , material_version
+                                       , vscode_url
+                                       , tenant_id
+                                       , renter_id
+                                       , site_id
+                                       , created_by
+                                       , last_updated_by
+                                       , created_time
+                                       , last_updated_time)
+        VALUES ( #{id}
+               , #{refId}
+               , #{name}
+               , #{version}
+               , #{publishUrl}
+               , #{description}
+               , #{subCount}
+               , #{materialHistoryId}
+               , #{imageUrl}
+               , #{materialPkgName}
+               , #{materialVersion}
+               , #{vscodeUrl}
+               , #{tenantId}
+               , #{renterId}
+               , #{siteId}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime})
+    </insert>
+</mapper>
