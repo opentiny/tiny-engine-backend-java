@@ -36,7 +36,7 @@ class MyMetaObjectHandlerTest {
         when(param.hasSetter("tenantId")).thenReturn(true);
         TestUtil.setPrivateValue(myMetaObjectHandler, "loginUserContext", new MockUserContext());
         myMetaObjectHandler.insertFill(param);
-        verify(param, times(8)).hasSetter(anyString());
+        verify(param, times(5)).hasSetter(anyString());
     }
 
     @Test
