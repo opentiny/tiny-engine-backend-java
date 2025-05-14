@@ -44,6 +44,7 @@ import com.tinyengine.it.service.app.PageHistoryService;
 import com.tinyengine.it.service.app.PageService;
 import com.tinyengine.it.service.app.UserService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
+import com.tinyengine.it.service.extend.PostSaveHook;
 import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -124,11 +125,23 @@ public class PageServiceImpl implements PageService {
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
 
+    /**
+     * The page history service.
+     */
     @Autowired
     private PageHistoryService pageHistoryService;
 
+    /**
+     * The login user context.
+     */
     @Autowired
     private LoginUserContext loginUserContext;
+
+    /**
+     * The post save hook.
+     */
+    @Autowired(required = false)
+    private PostSaveHook postSaveHook;
 
     /**
      * 通过appId查询page所有数据实现方法
@@ -268,6 +281,9 @@ public class PageServiceImpl implements PageService {
         if (resultPageHistory < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
+        if (postSaveHook != null) {
+            postSaveHook.afterSave(pageInfo);
+        }
         return Result.success(pageInfo);
     }
 
@@ -358,6 +374,9 @@ public class PageServiceImpl implements PageService {
         int resultPageHistory = pageHistoryService.createPageHistory(pageHistory);
         if (resultPageHistory < 1) {
             return Result.failed(ExceptionEnum.CM001);
+        }
+        if (postSaveHook != null) {
+            postSaveHook.afterSave(page);
         }
         return checkUpdate(page);
     }
