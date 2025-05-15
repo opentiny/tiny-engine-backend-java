@@ -93,7 +93,7 @@
             `name` = #{name},
         </if>
         <if test="appId!=null">
-            appId = #{appId},
+            app_id = #{appId},
         </if>
         <if test="packageName!=null and packageName!=''">
             `package` = #{packageName},
