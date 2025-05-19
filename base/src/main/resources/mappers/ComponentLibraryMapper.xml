@@ -290,7 +290,7 @@
         CL.id,
         CL.version,
         CL.`name`,
-        Cl.app_id,
+        CL.app_id,
         CL.package,
         CL.registry,
         CL.framework,
