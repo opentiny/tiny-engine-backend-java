@@ -530,7 +530,7 @@ public class PageServiceImpl implements PageService {
      */
     public Result<Page> checkDelete(Integer id) {
         // needTODO 从缓存中获取的user信息
-        User user = userService.queryUserById(1);
+        User user = userService.queryUserById(Integer.parseInt(loginUserContext.getLoginUserId()));
         Page page = pageMapper.queryPageById(id);
         User occupier = page.getOccupier();
 
