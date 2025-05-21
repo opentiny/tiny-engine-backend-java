@@ -44,6 +44,9 @@ public class ComponentLibrary extends BaseEntity {
     @Schema(name = "name", description = "名称")
     private String name;
 
+    @Schema(name = "appId", description = "关联应用id")
+    private Integer appId;
+
     @JsonProperty("package")
     @Schema(name = "package", description = "包名")
     private String packageName;

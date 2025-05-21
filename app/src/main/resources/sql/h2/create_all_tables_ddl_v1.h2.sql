@@ -651,6 +651,7 @@ create table `t_component_library`
     `id`                int          not null auto_increment comment '主键id',
     `version`           varchar(255) not null comment '版本',
     `name`              varchar(255) not null comment '名称',
+    `app_id`            int          comment '关联应用id',
     `package`           varchar(255) not null comment '包名',
     `registry`          varchar(255) comment '注册',
     `framework`         varchar(255) not null comment '技术栈',

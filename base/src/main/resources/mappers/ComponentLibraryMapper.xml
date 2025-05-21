@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , version, `name`, package, registry, framework, description, script, css, bundle, dependencies, `others`, thumbnail, `public`, is_started, is_official, is_default, created_by, last_updated_by, created_time, last_updated_time,
+        , version, `name`, app_id, package, registry, framework, description, script, css, bundle, dependencies, `others`, thumbnail, `public`, is_started, is_official, is_default, created_by, last_updated_by, created_time, last_updated_time,
         tenant_id, renter_id, site_id
     </sql>
 
@@ -18,6 +18,9 @@
         </if>
         <if test="name!=null and name!=''">
             AND `name` = #{name}
+        </if>
+        <if test="appId!=null">
+            AND app_id = #{appId}
         </if>
         <if test="packageName!=null and packageName!=''">
             AND package = #{packageName}
@@ -89,6 +92,9 @@
         <if test="name!=null and name!=''">
             `name` = #{name},
         </if>
+        <if test="appId!=null">
+            app_id = #{appId},
+        </if>
         <if test="packageName!=null and packageName!=''">
             `package` = #{packageName},
         </if>
@@ -156,6 +162,7 @@
         <id column="id" property="id"/>
         <result column="version" property="version"/>
         <result column="name" property="name"/>
+        <result column="app_id" property="appId"/>
         <result column="package" property="packageName"/>
         <result column="registry" property="registry"/>
         <result column="description" property="description"/>
@@ -218,6 +225,7 @@
             CL.id,
             CL.version,
             CL.`name`,
+            CL.app_id,
             CL.package,
             CL.registry,
             CL.framework,
@@ -282,6 +290,7 @@
         CL.id,
         CL.version,
         CL.`name`,
+        CL.app_id,
         CL.package,
         CL.registry,
         CL.framework,
@@ -372,6 +381,7 @@
         INSERT INTO t_component_library ( id
                                         , version
                                         , `name`
+                                        , app_id
                                         , package
                                         , registry
                                         , framework
@@ -396,6 +406,7 @@
         VALUES ( #{id}
                , #{version}
                , #{name}
+               , #{appId}
                , #{packageName}
                , #{registry}
                , #{framework}
