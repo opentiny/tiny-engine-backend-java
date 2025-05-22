@@ -208,7 +208,7 @@
                , #{hostId}
                , #{blockId}
                , #{hostType}
-               , #{version},
+               , #{version}
                , #{createdBy}
                , #{lastUpdatedBy}
                , #{createdTime}

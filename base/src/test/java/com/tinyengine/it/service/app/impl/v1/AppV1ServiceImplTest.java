@@ -55,7 +55,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -115,7 +114,8 @@ class AppV1ServiceImplTest {
         app.setHomePage(1);
         app.setPlatformId(1);
 
-        String json = "{\"dataHandler\":{\"type\":\"JSFunction\",\"value\":\"function dataHanlder(res){\\n return res;\\n}\"}}";
+        String json
+            = "{\"dataHandler\":{\"type\":\"JSFunction\",\"value\":\"function dataHanlder(res){\\n return res;\\n}\"}}";
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> dataSourceGlobal = objectMapper.readValue(json, Map.class);
         app.setDataSourceGlobal(dataSourceGlobal);
@@ -133,8 +133,8 @@ class AppV1ServiceImplTest {
         MaterialHistory materialHistory = new MaterialHistory();
         materialHistory.setComponents(new ArrayList<>());
         when(materialHistoryMapper.queryMaterialHistoryById(anyInt())).thenReturn(materialHistory);
-        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt()))
-                .thenReturn(Arrays.<Integer>asList(Integer.valueOf(0)));
+        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt())).thenReturn(
+            Arrays.<Integer>asList(Integer.valueOf(0)));
 
         Platform platform = new Platform();
         platform.setMaterialHistoryId(3);
@@ -157,17 +157,17 @@ class AppV1ServiceImplTest {
         App app = new App();
         app.setPlatformId(1);
         when(appMapper.queryAppById(anyInt())).thenReturn(app);
-        when(i18nEntryMapper.findI18nEntriesByHostandHostType(anyInt(), anyString()))
-                .thenReturn(Arrays.asList(new I18nEntryDto()));
-        when(appExtensionMapper.queryAppExtensionByCondition(any(AppExtension.class)))
-                .thenReturn(Arrays.asList(new AppExtension()));
-        when(datasourceMapper.queryDatasourceByCondition(any(Datasource.class)))
-                .thenReturn(Arrays.<Datasource>asList(new Datasource()));
+        when(i18nEntryMapper.findI18nEntriesByHostandHostType(anyInt(), anyString())).thenReturn(
+            Arrays.asList(new I18nEntryDto()));
+        when(appExtensionMapper.queryAppExtensionByCondition(any(AppExtension.class))).thenReturn(
+            Arrays.asList(new AppExtension()));
+        when(datasourceMapper.queryDatasourceByCondition(any(Datasource.class))).thenReturn(
+            Arrays.<Datasource>asList(new Datasource()));
         when(pageMapper.queryPageByApp(anyInt())).thenReturn(Arrays.<Page>asList(new Page()));
         when(blockGroupMapper.queryBlockGroupByApp(anyInt())).thenReturn(Arrays.asList(new BlockGroup()));
         when(materialHistoryMapper.queryMaterialHistoryById(anyInt())).thenReturn(new MaterialHistory());
-        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt()))
-                .thenReturn(Arrays.<Integer>asList(Integer.valueOf(0)));
+        when(materialHistoryMapper.queryBlockHistoryBymaterialHistoryId(anyInt())).thenReturn(
+            Arrays.<Integer>asList(Integer.valueOf(0)));
         when(platformService.queryPlatformById(any())).thenReturn(new Platform());
 
         MetaDto result = appV1ServiceImpl.getMetaDto(Integer.valueOf(0));

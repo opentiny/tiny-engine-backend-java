@@ -15,6 +15,7 @@ package com.tinyengine.it.service.material.impl;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -253,8 +254,9 @@ class BlockServiceImplTest {
         NotGroupDto notGroupDto = new NotGroupDto();
         List<BlockGroup> blockGroups = new ArrayList<>();
         when(blockMapper.findBlocksReturn(notGroupDto)).thenReturn(mockData);
-        when(userMapper.queryUserById(anyInt())).thenReturn(new User());
-        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), blockDto.getCreatedBy())).thenReturn(blockGroups);
+        when(userMapper.queryUserById(anyString())).thenReturn(new User());
+        when(blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), blockDto.getCreatedBy()))
+            .thenReturn(blockGroups);
 
         List<BlockDto> result = blockServiceImpl.getNotInGroupBlocks(notGroupDto);
         Assertions.assertEquals(new ArrayList<>(), result);

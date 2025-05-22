@@ -44,9 +44,13 @@ public class CanvasServiceImpl implements CanvasService {
 
     @Override
     public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
-        int occupier;
+        String occupier;
         // needTODO 先试用mock数据，后续添加登录及权限后从session获取,
-        User user = userMapper.queryUserById(Integer.parseInt(loginUserContext.getLoginUserId()));
+        User user = userMapper.queryUserById(loginUserContext.getLoginUserId());
+        if(user == null) {
+            user = new User();
+            user.setId(loginUserContext.getLoginUserId());
+        }
         CanvasDto canvasDto = new CanvasDto();
         if ("page".equals(type)) {
             Page page = pageMapper.queryPageById(id);
@@ -55,7 +59,7 @@ public class CanvasServiceImpl implements CanvasService {
             if (isCaDoIt) {
                 Page updatePage = new Page();
                 updatePage.setId(id);
-                updatePage.setOccupierBy(String.valueOf(user.getId()));
+                updatePage.setOccupierBy(user.getId());
                 pageMapper.updatePageById(updatePage);
                 canvasDto.setOperate("success");
                 canvasDto.setOccupier(user);
@@ -63,12 +67,12 @@ public class CanvasServiceImpl implements CanvasService {
             }
         } else {
             Block block = blockMapper.queryBlockById(id);
-            occupier = Integer.parseInt(block.getOccupierBy());
+            occupier = block.getOccupierBy();
             Boolean isCaDoIt = isCanDoIt(occupier, user);
             if (isCaDoIt) {
                 Block updateBlock = new Block();
                 updateBlock.setId(id);
-                updateBlock.setOccupierBy(String.valueOf(user.getId()));
+                updateBlock.setOccupierBy(user.getId());
                 blockMapper.updateBlockById(updateBlock);
                 canvasDto.setOperate("success");
                 canvasDto.setOccupier(user);
@@ -80,7 +84,7 @@ public class CanvasServiceImpl implements CanvasService {
         return Result.success(canvasDto);
     }
 
-    private Boolean isCanDoIt(int occupier, User user) {
-        return occupier == user.getId();
+    private Boolean isCanDoIt(String occupier, User user) {
+        return occupier == null || occupier.equals(user.getId());
     }
 }

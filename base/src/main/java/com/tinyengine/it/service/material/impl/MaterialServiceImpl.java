@@ -82,8 +82,7 @@ public class MaterialServiceImpl implements MaterialService {
         if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<Material> result = this.queryMaterialById(id);
-        return result;
+        return this.queryMaterialById(id);
 
     }
 
@@ -99,8 +98,7 @@ public class MaterialServiceImpl implements MaterialService {
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<Material> result = this.queryMaterialById(material.getId());
-        return result;
+        return this.queryMaterialById(material.getId());
     }
 
     /**
@@ -115,7 +113,6 @@ public class MaterialServiceImpl implements MaterialService {
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<Material> result = this.queryMaterialById(material.getId());
-        return result;
+        return this.queryMaterialById(material.getId());
     }
 }

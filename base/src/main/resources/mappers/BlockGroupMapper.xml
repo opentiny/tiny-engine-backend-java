@@ -331,7 +331,6 @@
         </where>
     </select>
 
-
     <!-- 根据条件查询表t_block_group数据 -->
     <select id="queryBlockGroupByCondition" resultMap="BlockGroupMap">
         SELECT

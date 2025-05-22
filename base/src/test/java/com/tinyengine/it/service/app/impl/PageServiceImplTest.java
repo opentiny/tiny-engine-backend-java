@@ -44,7 +44,6 @@ import com.tinyengine.it.service.app.UserService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
 import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -225,12 +224,12 @@ class PageServiceImplTest {
         // not home page
         when(appMapper.queryAppById(222)).thenReturn(app);
         User occupier = new User();
-        occupier.setId(111);
-        when(userService.queryUserById(555)).thenReturn(occupier);
+        occupier.setId("111");
+        when(userService.queryUserById("555")).thenReturn(occupier);
         User currentUser = new User();
-        currentUser.setId(111);
-        when(userService.queryUserById(1)).thenReturn(currentUser);
-
+        currentUser.setId("111");
+        when(userService.queryUserById("1")).thenReturn(currentUser);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
         Result<Page> result = pageServiceImpl.updatePage(param);
         assertEquals(queryPage, result.getData());
     }
@@ -290,8 +289,8 @@ class PageServiceImplTest {
 
         User user = new User();
         user.setUsername("public");
-        when(userService.queryUserById(1)).thenReturn(user);
-
+        when(userService.queryUserById("1")).thenReturn(user);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
         Result<Page> result = pageServiceImpl.del(1);
         assertEquals(mockData, result.getData());
     }
@@ -303,8 +302,8 @@ class PageServiceImplTest {
 
         User user = new User();
         user.setUsername("public");
-        when(userService.queryUserById(1)).thenReturn(user);
-
+        when(userService.queryUserById("1")).thenReturn(user);
+        when(loginUserContext.getLoginUserId()).thenReturn("1");
         Result<Page> result = pageServiceImpl.checkDelete(1);
         assertEquals(mockData, result.getData());
     }

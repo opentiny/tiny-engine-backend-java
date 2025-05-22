@@ -10,22 +10,21 @@
  *
  */
 
-package com.tinyengine.it.model.dto;
+package com.tinyengine.it.common.utils;
 
-import com.tinyengine.it.model.entity.Component;
-import com.tinyengine.it.model.entity.ComponentLibrary;
-
-import lombok.Data;
-
-import java.util.List;
+import java.lang.reflect.Field;
 
 /**
- * BundleResultDto
+ * test util
  *
- * @since 2025-04-02
+ * @since 2024-10-29
  */
-@Data
-public class BundleResultDto {
-    private List<ComponentLibrary> packageList;
-    private List<Component> componentList;
+public class TestUtil {
+    public static void setPrivateValue(Object obj, String field, Object value)
+        throws NoSuchFieldException, IllegalAccessException {
+        Field declaredField = obj.getClass().getDeclaredField(field);
+        declaredField.setAccessible(true);
+        declaredField.set(obj, value);
+    }
+
 }

@@ -15,6 +15,8 @@ import com.tinyengine.it.common.context.LoginUserContext;
 
 /**
  * Mock user context
+ *
+ * @since 2025-04-14
  */
 public class MockUserContext implements LoginUserContext {
     @Override

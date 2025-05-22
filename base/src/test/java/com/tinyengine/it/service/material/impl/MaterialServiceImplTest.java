@@ -35,6 +35,7 @@ import java.util.List;
 class MaterialServiceImplTest {
     @Mock
     private MaterialMapper materialMapper;
+
     @InjectMocks
     private MaterialServiceImpl materialServiceImpl;
 

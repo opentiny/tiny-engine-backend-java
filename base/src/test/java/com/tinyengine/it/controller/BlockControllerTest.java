@@ -55,12 +55,16 @@ import java.util.Map;
 class BlockControllerTest {
     @Mock
     private BlockService blockService;
+
     @Mock
     private TenantMapper tenantMapper;
+
     @Mock
     private BlockMapper blockMapper;
+
     @Mock
     private TaskRecordService taskRecordService;
+
     @InjectMocks
     private BlockController blockController;
 
@@ -111,8 +115,8 @@ class BlockControllerTest {
 
         Result<BlockDto> result = blockController.createBlocks(mockParam);
         Assertions.assertEquals(mockData, result.getData());
-        verify(blockService).createBlock(argThat(param ->
-                param.getName().equals("Test Block") && param.getLabel().equals("test-block")
+        verify(blockService).createBlock(
+            argThat(param -> param.getName().equals("Test Block") && param.getLabel().equals("test-block")
         ));
     }
 
@@ -189,7 +193,6 @@ class BlockControllerTest {
         Assertions.assertEquals(mockData, result.getData());
     }
 
-
     @Test
     void testUpdateBlocks() {
         BlockParam blockParam = new BlockParam();
@@ -201,9 +204,7 @@ class BlockControllerTest {
 
         Result<BlockDto> result = blockController.updateBlocks(blockParam, Integer.valueOf(0), Integer.valueOf(1));
         Assertions.assertEquals(returnData, result.getData());
-        verify(blockService).updateBlockById(argThat(param ->
-                param.getName().equals("Updated Block") &&
-                        param.getId().equals(0)
-        ), eq(1));
+        verify(blockService).updateBlockById(
+           argThat(param -> param.getName().equals("Updated Block") && param.getId().equals(0)), eq(1));
     }
 }

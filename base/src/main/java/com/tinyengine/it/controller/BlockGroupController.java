@@ -13,11 +13,9 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
-import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.model.entity.BlockGroup;
 import com.tinyengine.it.service.material.BlockGroupService;
 
@@ -56,12 +54,11 @@ import javax.validation.Valid;
 @RequestMapping("/material-center/api")
 @Tag(name = "区块")
 public class BlockGroupController {
+    /**
+     * The Block group service.
+     */
     @Autowired
     private BlockGroupService blockGroupService;
-    @Autowired
-    private BlockGroupMapper blockGroupMapper;
-    @Autowired
-    private LoginUserContext loginUserContext;
 
     /**
      * 获取区块分组
@@ -71,25 +68,21 @@ public class BlockGroupController {
      * @param from  from
      * @return the list
      */
-    @Operation(summary = "获取区块分组",
-            description = "获取区块分组",
-            parameters = {
-                    @Parameter(name = "ids", description = "分组ids"),
-                    @Parameter(name = "appId", description = "appId"),
-                    @Parameter(name = "from", description = "区分是在物料管理还是区块管理(block：在区块管理)")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "获取区块分组", description = "获取区块分组", parameters = {
+        @Parameter(name = "ids", description = "分组ids"),
+        @Parameter(name = "appId", description = "appId"),
+        @Parameter(name = "from", description = "区分是在物料管理还是区块管理(block：在区块管理)")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取区块分组")
     @GetMapping("/block-groups")
     public Result<List<BlockGroup>> getAllBlockGroups(
-            @RequestParam(value = "id", required = false) List<Integer> ids,
-            @RequestParam(value = "app", required = false) Integer appId,
-            @RequestParam(value = "from", required = false) String from) {
+        @RequestParam(value = "id", required = false) List<Integer> ids,
+        @RequestParam(value = "app", required = false) Integer appId,
+        @RequestParam(value = "from", required = false) String from) {
         List<BlockGroup> blockGroupsListResult = blockGroupService.getBlockGroupByIdsOrAppId(ids, appId, from);
         return Result.success(blockGroupsListResult);
     }
@@ -101,17 +94,13 @@ public class BlockGroupController {
      * @param blockGroup blockGroup
      * @return the list
      */
-    @Operation(summary = "创建区块分组",
-            description = "创建区块分组",
-            parameters = {
-                    @Parameter(name = "blockGroups", description = "入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = BlockGroup.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "创建区块分组", description = "创建区块分组", parameters = {
+        @Parameter(name = "blockGroups", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = BlockGroup.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "创建区块分组")
     @PostMapping("/block-groups/create")
     public Result<BlockGroup> createBlockGroups(@Valid @RequestBody BlockGroup blockGroup) {
@@ -125,22 +114,18 @@ public class BlockGroupController {
      * @param blockGroup blockGroup
      * @return the list
      */
-    @Operation(summary = "修改区块分组",
-            description = "修改区块分组",
-            parameters = {
-                    @Parameter(name = "id", description = "分组id"),
-                    @Parameter(name = "blockGroups", description = "入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = BlockGroup.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "修改区块分组", description = "修改区块分组", parameters = {
+        @Parameter(name = "id", description = "分组id"),
+        @Parameter(name = "blockGroups", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = BlockGroup.class))),
+         @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改区块分组")
     @PostMapping("/block-groups/update/{id}")
     public Result<List<BlockGroup>> updateBlockGroups(@Valid @PathVariable Integer id,
-                                                      @RequestBody BlockGroup blockGroup) {
+        @RequestBody BlockGroup blockGroup) {
         blockGroup.setId(id);
         blockGroupService.updateBlockGroupById(blockGroup);
         // 页面返回数据显示
@@ -155,16 +140,12 @@ public class BlockGroupController {
      * @return the list
      * @throws ServiceException serviceException
      */
-    @Operation(summary = "根据id删除区块分组",
-            description = "根据id删除区块分组",
-            parameters = {
-                    @Parameter(name = "id", description = "分组id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = BlockGroup.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    @Operation(summary = "根据id删除区块分组", description = "根据id删除区块分组", parameters = {
+        @Parameter(name = "id", description = "分组id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = BlockGroup.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "根据id删除区块分组")
     @GetMapping("/block-groups/delete/{id}")

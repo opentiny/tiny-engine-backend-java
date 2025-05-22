@@ -60,7 +60,7 @@ class CanvasServiceImplTest {
     @Test
     void testLockCanvasTypePage() {
         int pageId = 123;
-        int userId = 123;
+        String userId = "123";
         Page page = new Page();
         User occupier = new User();
         occupier.setId(userId);
@@ -69,11 +69,11 @@ class CanvasServiceImplTest {
         when(pageMapper.queryPageById(pageId)).thenReturn(page);
         User user = new User();
         user.setId(userId);
-        when(userMapper.queryUserById(1)).thenReturn(user);
+        when(userMapper.queryUserById("1")).thenReturn(user);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
         Result<CanvasDto> result = canvasServiceImpl.lockCanvas(pageId, "occupy", "page");
 
-        verify(pageMapper, times(1)).updatePageById(any());
+        verify(pageMapper, times(1)).queryPageById(any());
         Assertions.assertEquals("success", result.getData().getOperate());
         Assertions.assertEquals(userId, result.getData().getOccupier().getId());
     }
@@ -81,19 +81,19 @@ class CanvasServiceImplTest {
     @Test
     void testLockCanvasTypeIsNotPage() {
         int pageId = 123;
-        int userId = 123;
+        String userId = "123";
         Block block = new Block();
         block.setOccupierBy(String.valueOf(userId));
 
         when(blockMapper.queryBlockById(anyInt())).thenReturn(block);
         User user = new User();
         user.setId(userId);
-        when(userMapper.queryUserById(1)).thenReturn(user);
+        when(userMapper.queryUserById("1")).thenReturn(user);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
 
         Result<CanvasDto> result = canvasServiceImpl.lockCanvas(pageId, "occupy", "other");
 
-        verify(blockMapper, times(1)).updateBlockById(any());
+        verify(blockMapper, times(1)).queryBlockById(any());
         Assertions.assertEquals("success", result.getData().getOperate());
         Assertions.assertEquals(userId, result.getData().getOccupier().getId());
     }

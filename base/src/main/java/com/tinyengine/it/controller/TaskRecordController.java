@@ -44,6 +44,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/app-center/api")
 @Tag(name = "任务")
 public class TaskRecordController {
+    /**
+     * The Task record service.
+     */
     @Autowired
     private TaskRecordService taskRecordService;
 
@@ -53,17 +56,13 @@ public class TaskRecordController {
      * @param id id
      * @return task信息
      */
-    @Operation(summary = "根据id查询task信息",
-            description = "根据id查询task信息",
-            parameters = {
-                    @Parameter(name = "id", description = "task任务主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = TaskRecord.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "根据id查询task信息", description = "根据id查询task信息", parameters = {
+        @Parameter(name = "id", description = "task任务主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TaskRecord.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "根据id查询task信息")
     @GetMapping("/tasks/status/{id}")
     public Result<TaskRecord> getTaskRecordById(@PathVariable Integer id) {

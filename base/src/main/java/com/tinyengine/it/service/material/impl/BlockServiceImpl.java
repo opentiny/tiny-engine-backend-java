@@ -79,20 +79,28 @@ import java.util.stream.Stream;
 public class BlockServiceImpl implements BlockService {
     @Autowired
     private BlockMapper blockMapper;
+
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private AppMapper appMapper;
+
     @Autowired
     private BlockHistoryMapper blockHistoryMapper;
+
     @Autowired
     private I18nEntryService i18nEntryService;
+
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+
     @Autowired
     private BlockGroupMapper blockGroupMapper;
+
     @Autowired
     private BlockGroupBlockMapper blockGroupBlockMapper;
+
     @Autowired
     private LoginUserContext loginUserContext;
 
@@ -118,11 +126,13 @@ public class BlockServiceImpl implements BlockService {
         if (blockDto == null) {
             return blockDto;
         }
-        boolean isPublished = blockDto.getLastBuildInfo() != null
-                && blockDto.getLastBuildInfo().get("result") instanceof Boolean
-                ? (Boolean) blockDto.getLastBuildInfo().get("result") : Boolean.FALSE;
+        boolean isPublished =
+            blockDto.getLastBuildInfo() != null && blockDto.getLastBuildInfo().get("result") instanceof Boolean
+                ? (Boolean) blockDto.getLastBuildInfo().get("result")
+                : Boolean.FALSE;
         blockDto.setIsPublished(isPublished);
-        List<BlockGroup> groups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), loginUserContext.getLoginUserId());
+        List<BlockGroup> groups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(),
+            loginUserContext.getLoginUserId());
         blockDto.setGroups(groups);
         return blockDto;
     }
@@ -153,6 +163,7 @@ public class BlockServiceImpl implements BlockService {
      * 根据主键id更新表t_block数据
      *
      * @param blockParam blockParam
+     * @param appId
      * @return blockDto
      */
     @Override
@@ -187,7 +198,8 @@ public class BlockServiceImpl implements BlockService {
         }
 
         // 根据区块id获取区块所在分组
-        List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(), loginUserContext.getLoginUserId());
+        List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(),
+            loginUserContext.getLoginUserId());
         // 删除区块与分组关系
         if (blockGroups != null && !blockGroups.isEmpty()) {
             List<Integer> blockGroupIds = blockGroups.stream().map(BlockGroup::getId).collect(Collectors.toList());
@@ -263,7 +275,7 @@ public class BlockServiceImpl implements BlockService {
      * Gets block assets.
      *
      * @param pageContent the page content
-     * @param framework   the framework
+     * @param framework the framework
      * @return the block assets
      */
     public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
@@ -309,7 +321,7 @@ public class BlockServiceImpl implements BlockService {
     /**
      * Gets block info.
      *
-     * @param block     the block
+     * @param block the block
      * @param framework the framework
      * @return the block info
      */
@@ -319,8 +331,8 @@ public class BlockServiceImpl implements BlockService {
         if (block != null && !block.isEmpty()) {
             // 处理 blockLabelName 为数组的情况
             String labelsCondition = block.stream()
-                    .map(name -> "label = '" + name + "'")
-                    .collect(Collectors.joining(" OR "));
+                .map(name -> "label = '" + name + "'")
+                .collect(Collectors.joining(" OR "));
 
             // 添加标签条件
             queryWrapper.and(wrapper -> wrapper.apply(labelsCondition));
@@ -337,7 +349,7 @@ public class BlockServiceImpl implements BlockService {
      * Traverse blocks.
      *
      * @param content the content
-     * @param block   the block
+     * @param block the block
      * @throws JsonProcessingException the json processing exception
      */
     public void traverseBlocks(String content, List<String> block) throws JsonProcessingException {
@@ -451,19 +463,20 @@ public class BlockServiceImpl implements BlockService {
         }
 
         for (BlockDto blockDto : blocksList) {
-            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(), loginUserContext.getLoginUserId());
+            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(),
+                loginUserContext.getLoginUserId());
             blockDto.setGroups(blockGroups);
         }
         return blocksList.stream()
-                .filter(item ->
-                {
+                .filter(item -> {
                     // 过滤掉未发布的
                     if (item.getLastBuildInfo() == null || item.getContent() == null || item.getAssets() == null) {
                         return false;
                     }
                     // 组过滤
-                    if (item.getGroups() != null && item.getGroups().stream()
-                            .anyMatch(group -> group != null
+                    if (item.getGroups() != null && item.getGroups()
+                        .stream()
+                        .anyMatch(group -> group != null
                                     && group.getId().equals(notGroupDto.getGroupId()))) {
                         return false;
                     }
@@ -472,8 +485,7 @@ public class BlockServiceImpl implements BlockService {
                         return true;
                     }
                     return item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
-                })
-                .collect(Collectors.toList());
+                }).collect(Collectors.toList());
     }
 
     /**
@@ -579,10 +591,9 @@ public class BlockServiceImpl implements BlockService {
         String description = request.get("description");
 
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
-        queryWrapper.and(wrapper ->
-                wrapper.like(StringUtils.isNotEmpty(nameCn), "name", nameCn)
-                        .or()
-                        .like(StringUtils.isNotEmpty(description), "description", description)
+        queryWrapper.and(wrapper -> wrapper.like(StringUtils.isNotEmpty(nameCn), "name", nameCn)
+            .or()
+            .like(StringUtils.isNotEmpty(description), "description", description)
         );
         List<Block> blocksList = blockMapper.selectList(queryWrapper);
         Page<Block> page = new Page<>(1, blocksList.size());
@@ -600,8 +611,7 @@ public class BlockServiceImpl implements BlockService {
         Set<String> userSet = new HashSet<>();
 
         // 提取 createdBy 列表中的唯一值
-        blocksList.forEach(item ->
-        {
+        blocksList.forEach(item -> {
             if (item.getCreatedBy() != null && !userSet.contains(item.getCreatedBy())) {
                 userSet.add(String.valueOf(item.getCreatedBy()));
             }
@@ -656,27 +666,22 @@ public class BlockServiceImpl implements BlockService {
         List<Block> retBlocks = new ArrayList<>();
         // 合并 personalBlocks 和 appBlocks 数组
         List<Block> combinedBlocks = Stream.concat(personalBlocks.stream(), appBlocks.stream())
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
         // 遍历合并后的数组，检查是否存在具有相同 id 的元素
-        combinedBlocks.forEach(block ->
-        {
-            boolean isFind = retBlocks.stream()
-                    .anyMatch(retBlock -> Objects.equals(retBlock.getId(), block.getId()));
+        combinedBlocks.forEach(block -> {
+            boolean isFind = retBlocks.stream().anyMatch(retBlock -> Objects.equals(retBlock.getId(), block.getId()));
             if (!isFind) {
                 retBlocks.add(block);
             }
         });
         // 给is_published赋值
-        List<Block> result = retBlocks.stream()
-                .map(b ->
-                {
-                    boolean isPublished = b.getLastBuildInfo() != null
-                            && b.getLastBuildInfo().get("result") instanceof Boolean
-                            ? (Boolean) b.getLastBuildInfo().get("result") : Boolean.FALSE;
-                    b.setIsPublished(isPublished);
-                    return b;
-                })
-                .collect(Collectors.toList());
+        List<Block> result = retBlocks.stream().map(b -> {
+            boolean isPublished = b.getLastBuildInfo() != null && b.getLastBuildInfo().get("result") instanceof Boolean
+                ? (Boolean) b.getLastBuildInfo().get("result")
+                : Boolean.FALSE;
+            b.setIsPublished(isPublished);
+            return b;
+        }).collect(Collectors.toList());
         return Result.success(result);
     }
 
@@ -715,7 +720,7 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 判断区块版本是否存在
      *
-     * @param id      the id
+     * @param id the id
      * @param version the version
      * @return the id
      */
@@ -733,7 +738,7 @@ public class BlockServiceImpl implements BlockService {
     /**
      * 创建构建信息
      *
-     * @param version     the id
+     * @param version the id
      * @param buildTime the buildTime
      * @return buildInfo the buildInfo
      */

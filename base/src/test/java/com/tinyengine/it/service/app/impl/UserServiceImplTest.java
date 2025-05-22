@@ -55,9 +55,9 @@ class UserServiceImplTest {
     @Test
     void testQueryUserById() {
         User mockData = new User();
-        when(userMapper.queryUserById(1)).thenReturn(mockData);
+        when(userMapper.queryUserById("1")).thenReturn(mockData);
 
-        User result = userServiceImpl.queryUserById(1);
+        User result = userServiceImpl.queryUserById("1");
         Assertions.assertEquals(mockData, result);
     }
 
@@ -73,9 +73,9 @@ class UserServiceImplTest {
 
     @Test
     void testDeleteUserById() {
-        when(userMapper.deleteUserById(1)).thenReturn(2);
+        when(userMapper.deleteUserById("1")).thenReturn(2);
 
-        Integer result = userServiceImpl.deleteUserById(1);
+        Integer result = userServiceImpl.deleteUserById("1");
         Assertions.assertEquals(2, result);
     }
 
