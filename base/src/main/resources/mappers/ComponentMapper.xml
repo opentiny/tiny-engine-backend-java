@@ -182,7 +182,7 @@
             component_metadata = #{componentMetadata},
         </if>
         <if test="libraryId!=null and libraryId!=''">
-            library_id = #{libraryId}
+            library_id = #{libraryId},
         </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
