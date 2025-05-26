@@ -28,7 +28,7 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null'">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
         <if test="lastUpdatedTime!=null">
