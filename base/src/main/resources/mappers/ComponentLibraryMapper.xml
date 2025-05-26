@@ -49,7 +49,7 @@
         <if test="thumbnail!=null and thumbnail!=''">
             AND thumbnail = #{thumbnail}
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             AND `public` = #{publicStatus}
         </if>
         <if test="isStarted!=null">
@@ -67,10 +67,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -122,7 +122,7 @@
         <if test="thumbnail!=null and thumbnail!=''">
             thumbnail = #{thumbnail},
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             `public` = #{publicStatus},
         </if>
         <if test="isStarted!=null">
@@ -140,10 +140,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

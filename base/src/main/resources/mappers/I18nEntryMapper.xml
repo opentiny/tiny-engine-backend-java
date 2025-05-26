@@ -40,13 +40,13 @@
         <if test="content!=null and content!=''">
             AND content = #{content}
         </if>
-        <if test="host!=null and host!=''">
+        <if test="host!=null">
             AND host_id = #{host}
         </if>
         <if test="hostType!=null and hostType!=''">
             AND host_type = #{hostType}
         </if>
-        <if test="lang!=null and lang!=''">
+        <if test="lang!=null">
             AND lang_id = #{lang}
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -55,10 +55,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -80,13 +80,13 @@
         <if test="content!=null and content!=''">
             content = #{content},
         </if>
-        <if test="host!=null and host!=''">
+        <if test="host!=null">
             host_id = #{host},
         </if>
         <if test="hostType!=null and hostType!=''">
             host_type = #{hostType},
         </if>
-        <if test="lang!=null and lang!=''">
+        <if test="lang!=null">
             lang_id = #{lang},
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -95,10 +95,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

@@ -13,7 +13,7 @@
 
     <!-- 通用条件列 -->
     <sql id="PageHistoryByCondition">
-        <if test="page!=null and page!=''">
+        <if test="page!=null">
             AND ref_id = #{page}
         </if>
         <if test="version!=null and version!=''">
@@ -22,7 +22,7 @@
         <if test="name!=null and name!=''">
             AND name = #{name}
         </if>
-        <if test="app!=null and app!=''">
+        <if test="app!=null">
             AND app_id = #{app}
         </if>
         <if test="route!=null and route!=''">
@@ -34,13 +34,13 @@
         <if test="isBody!=null">
             AND is_body = #{isBody}
         </if>
-        <if test="parentId!=null and parentId!=''">
+        <if test="parentId!=null">
             AND parent_id = #{parentId}
         </if>
         <if test="group!=null and group!=''">
             AND `group` = #{group}
         </if>
-        <if test="depth!=null and depth!=''">
+        <if test="depth!=null">
             AND `depth` = #{depth}
         </if>
         <if test="isPage!=null">
@@ -52,7 +52,7 @@
         <if test="message!=null and message!=''">
             AND message = #{message}
         </if>
-        <if test="isHome!=null and isHome!=''">
+        <if test="isHome!=null">
             AND is_home = #{isHome}
         </if>
         <if test="contentBlocks!=null and contentBlocks!=''">
@@ -64,10 +64,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -79,14 +79,14 @@
         <if test="siteId!=null and siteId!=''">
             AND site_id = #{siteId}
         </if>
-        <if test="isPublished!=null and isPublished!=''">
+        <if test="isPublished!=null">
             AND is_published = #{isPublished}
         </if>
     </sql>
 
     <!-- 通用设置列 -->
     <sql id="PageHistorySetColumns">
-        <if test="page!=null and page!=''">
+        <if test="page!=null">
             ref_id = #{page},
         </if>
         <if test="version!=null and version!=''">
@@ -95,7 +95,7 @@
         <if test="name!=null and name!=''">
             name = #{name},
         </if>
-        <if test="app!=null and app!=''">
+        <if test="app!=null">
             app_id = #{app},
         </if>
         <if test="route!=null and route!=''">
@@ -107,13 +107,13 @@
         <if test="isBody!=null">
             is_body = #{isBody},
         </if>
-        <if test="parentId!=null and parentId!=''">
+        <if test="parentId!=null">
             parent_id = #{parentId},
         </if>
         <if test="group!=null and group!=''">
             `group`= #{group},
         </if>
-        <if test="depth!=null and depth!=''">
+        <if test="depth!=null">
             `depth` = #{depth},
         </if>
         <if test="isPage!=null">
@@ -125,7 +125,7 @@
         <if test="message!=null and message!=''">
             message = #{message},
         </if>
-        <if test="isHome!=null and isHome!=''">
+        <if test="isHome!=null">
             is_home = #{isHome},
         </if>
         <if test="contentBlocks!=null and contentBlocks!=''">
@@ -137,10 +137,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -152,7 +152,7 @@
         <if test="siteId!=null and siteId!=''">
             site_id = #{siteId},
         </if>
-        <if test="isPublished!=null and isPublished!=''">
+        <if test="isPublished!=null">
             is_published = #{isPublished}
         </if>
     </sql>

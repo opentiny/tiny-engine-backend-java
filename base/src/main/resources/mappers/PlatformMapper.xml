@@ -30,10 +30,10 @@
         <if test="latestVersion!=null and latestVersion!=''">
             AND latest_version = #{latestVersion}
         </if>
-        <if test="latestHistoryId!=null and latestHistoryId!=''">
+        <if test="latestHistoryId!=null">
             AND latest_history_id = #{latestHistoryId}
         </if>
-        <if test="materialHistoryId!=null and materialHistoryId!=''">
+        <if test="materialHistoryId!=null">
             AND material_history_id = #{materialHistoryId}
         </if>
         <if test="imageUrl!=null and imageUrl!=''">
@@ -60,10 +60,10 @@
         <if test="dataHash!=null and dataHash!=''">
             AND data_hash = #{dataHash}
         </if>
-        <if test="businessCategoryId!=null and businessCategoryId!=''">
+        <if test="businessCategoryId!=null">
             AND business_category_id = #{businessCategoryId}
         </if>
-        <if test="themeId!=null and themeId!=''">
+        <if test="themeId!=null">
             AND theme_id = #{themeId}
         </if>
         <if test="platformUrl!=null and platformUrl!=''">
@@ -87,10 +87,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
     </sql>
@@ -112,10 +112,10 @@
         <if test="latestVersion!=null and latestVersion!=''">
             latest_version = #{latestVersion},
         </if>
-        <if test="latestHistoryId!=null and latestHistoryId!=''">
+        <if test="latestHistoryId!=null">
             latest_history_id = #{latestHistoryId},
         </if>
-        <if test="materialHistoryId!=null and materialHistoryId!=''">
+        <if test="materialHistoryId!=null">
             material_history_id = #{materialHistoryId},
         </if>
         <if test="imageUrl!=null and imageUrl!=''">
@@ -142,10 +142,10 @@
         <if test="dataHash!=null and dataHash!=''">
             data_hash = #{dataHash},
         </if>
-        <if test="businessCategoryId!=null and businessCategoryId!=''">
+        <if test="businessCategoryId!=null">
             business_category_id = #{businessCategoryId},
         </if>
-        <if test="themeId!=null and themeId!=''">
+        <if test="themeId!=null">
             theme_id = #{themeId},
         </if>
         <if test="platformUrl!=null and platformUrl!=''">
@@ -169,10 +169,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
     </sql>

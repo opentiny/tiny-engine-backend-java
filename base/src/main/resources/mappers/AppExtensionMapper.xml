@@ -22,7 +22,7 @@
         <if test="content!=null and content!=''">
             AND content = #{content}
         </if>
-        <if test="app!=null and app!=''">
+        <if test="app!=null">
             AND app_id = #{app}
         </if>
         <if test="category!=null and category!=''">
@@ -34,10 +34,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -62,7 +62,7 @@
         <if test="content!=null and content!=''">
             content = #{content},
         </if>
-        <if test="app!=null and app!=''">
+        <if test="app!=null">
             app_id = #{app},
         </if>
         <if test="category!=null and category!=''">
@@ -74,10 +74,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

@@ -13,19 +13,19 @@
 
     <!-- 通用条件列 -->
     <sql id="TaskRecordByCondition">
-        <if test="teamId!=null and teamId!=''">
+        <if test="teamId!=null">
             AND team_id = #{teamId}
         </if>
-        <if test="taskTypeId!=null and taskTypeId!=''">
+        <if test="taskTypeId!=null">
             AND task_type_id = #{taskTypeId}
         </if>
-        <if test="uniqueId!=null and uniqueId!=''">
+        <if test="uniqueId!=null">
             AND unique_id = #{uniqueId}
         </if>
         <if test="taskName!=null and taskName!=''">
             AND task_name = #{taskName}
         </if>
-        <if test="taskStatus!=null and taskStatus!=''">
+        <if test="taskStatus!=null">
             AND task_status = #{taskStatus}
         </if>
         <if test="taskResult!=null and taskResult!=''">
@@ -34,7 +34,7 @@
         <if test="progress!=null and progress!=''">
             AND progress = #{progress}
         </if>
-        <if test="ratio!=null and ratio!=''">
+        <if test="ratio!=null">
             AND ratio = #{ratio}
         </if>
         <if test="progressPercent!=null and progressPercent!=''">
@@ -49,10 +49,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -68,19 +68,19 @@
 
     <!-- 通用设置列 -->
     <sql id="TaskRecordSetColumns">
-        <if test="teamId!=null and teamId!=''">
+        <if test="teamId!=null">
             team_id = #{teamId},
         </if>
-        <if test="taskTypeId!=null and taskTypeId!=''">
+        <if test="taskTypeId!=null">
             task_type_id = #{taskTypeId},
         </if>
-        <if test="uniqueId!=null and uniqueId!=''">
+        <if test="uniqueId!=null">
             unique_id = #{uniqueId},
         </if>
         <if test="taskName!=null and taskName!=''">
             task_name = #{taskName},
         </if>
-        <if test="taskStatus!=null and taskStatus!=''">
+        <if test="taskStatus!=null">
             task_status = #{taskStatus},
         </if>
         <if test="taskResult!=null and taskResult!=''">
@@ -89,7 +89,7 @@
         <if test="progress!=null and progress!=''">
             progress = #{progress},
         </if>
-        <if test="ratio!=null and ratio!=''">
+        <if test="ratio!=null">
             ratio = #{ratio},
         </if>
         <if test="progressPercent!=null and progressPercent!=''">
@@ -104,10 +104,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

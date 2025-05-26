@@ -36,10 +36,10 @@
         <if test="latestVersion!=null and latestVersion!=''">
             AND latest_version = #{latestVersion}
         </if>
-        <if test="latestHistoryId!=null and latestHistoryId!=''">
+        <if test="latestHistoryId!=null">
             AND latest_history_id = #{latestHistoryId}
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             AND `public` = #{publicStatus}
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
@@ -57,10 +57,10 @@
         <if test="isTinyReserved!=null">
             AND tiny_reserved = #{isTinyReserved}
         </if>
-        <if test="componentLibraryId!=null and componentLibraryId!=''">
+        <if test="componentLibraryId!=null">
             AND component_library_id = #{componentLibraryId}
         </if>
-        <if test="materialCategoryId!=null and materialCategoryId!=''">
+        <if test="materialCategoryId!=null">
             AND material_category_id = #{materialCategoryId}
         </if>
         <if test="materialSize!=null and materialSize!=''">
@@ -81,10 +81,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -121,10 +121,10 @@
         <if test="latestVersion!=null and latestVersion!=''">
             latest_version = #{latestVersion},
         </if>
-        <if test="latestHistoryId!=null and latestHistoryId!=''">
+        <if test="latestHistoryId!=null">
             latest_history_id = #{latestHistoryId},
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             `public` = #{publicStatus},
         </if>
         <if test="lastBuildInfo!=null and lastBuildInfo!=''">
@@ -142,10 +142,10 @@
         <if test="isTinyReserved!=null">
             tiny_reserved = #{isTinyReserved},
         </if>
-        <if test="componentLibraryId!=null and componentLibraryId!=''">
+        <if test="componentLibraryId!=null">
             component_library_id = #{componentLibraryId},
         </if>
-        <if test="materialCategoryId!=null and materialCategoryId!=''">
+        <if test="materialCategoryId!=null">
             material_category_id = #{materialCategoryId},
         </if>
         <if test="materialSize!=null and materialSize!=''">
@@ -166,10 +166,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">
