@@ -13,7 +13,6 @@
 package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tinyengine.it.model.entity.Platform;
 
 import com.tinyengine.it.model.entity.PlatformHistory;
 import org.apache.ibatis.annotations.Param;

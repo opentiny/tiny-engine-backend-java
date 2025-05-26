@@ -102,8 +102,7 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<ComponentLibrary> result = this.queryComponentLibraryById(componentLibrary.getId());
-        return result;
+        return this.queryComponentLibraryById(componentLibrary.getId());
     }
 
     /**
@@ -118,7 +117,6 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<ComponentLibrary> result = this.queryComponentLibraryById(componentLibrary.getId());
-        return result;
+        return this.queryComponentLibraryById(componentLibrary.getId());
     }
 }

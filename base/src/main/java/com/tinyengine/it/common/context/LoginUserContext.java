@@ -20,31 +20,35 @@ public interface LoginUserContext {
      * 返回当前用户所诉的业务租户信息
      * @return 租户ID
      */
-    public String getTenantId();
+    String getTenantId();
 
     /**
      * 返回当前用户信息
      * @return 用户ID
      */
-    public String getLoginUserId();
+    String getLoginUserId();
 
     /**
      * 返回当前用户所属业务租户信息
      * @return 业务租户ID
      */
-    public String getRenterId();
+    String getRenterId();
 
     /**
      * 返回当前应用信息
      * @return 应用ID
      */
-    public int getAppId();
+    int getAppId();
 
     /**
      * 返回当前设计器信息
      * @return 设计器ID
      */
-    public int getPlatformId();
+    int getPlatformId();
 
-    public String getSiteId();
+    /**
+     * getSiteId
+     * @return Strinig
+     */
+    String getSiteId();
 }

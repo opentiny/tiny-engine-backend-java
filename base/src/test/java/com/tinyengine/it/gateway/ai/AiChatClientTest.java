@@ -17,6 +17,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
+import com.tinyengine.it.common.utils.TestUtil;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
@@ -45,12 +46,6 @@ import java.util.Map;
  * @since 2024-10-29
  */
 class AiChatClientTest {
-    @Mock
-    private Map<String, AiChatConfig.AiChatConfigData> config;
-
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private WebClient webClient;
-
     @InjectMocks
     private AiChatClient aiChatClient;
 
@@ -60,34 +55,33 @@ class AiChatClientTest {
     }
 
     @Test
-    void testExecuteChatRequest() {
+    void testExecuteChatRequest() throws NoSuchFieldException, IllegalAccessException {
         HashMap<String, String> headers = new HashMap<String, String>() {
             {
                 put("headers", "headers");
             }
         };
         String modelName = "ERNIE-4.0-8K";
-        AiChatConfig.HttpRequestOption option =
-                new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
-        AiChatConfig.AiChatConfigData configData =
-                new AiChatConfig.AiChatConfigData("httpRequestUrl", option, headers, null);
-
-        when(config.get(modelName)).thenReturn(configData);
-
-        WebClient.RequestBodyUriSpec bodyUriSpec =
-                Mockito.mock(WebClient.RequestBodyUriSpec.class, RETURNS_DEEP_STUBS);
+        AiChatConfig.HttpRequestOption option = new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
+        AiChatConfig.AiChatConfigData configData = new AiChatConfig.AiChatConfigData("httpRequestUrl", option, headers,
+                null);
+        Map<String, AiChatConfig.AiChatConfigData> config = new HashMap<>();
+        config.put(modelName, configData);
+        WebClient mockClient = Mockito.mock(WebClient.class, Answers.RETURNS_DEEP_STUBS);
+        WebClient.RequestBodyUriSpec bodyUriSpec = Mockito.mock(WebClient.RequestBodyUriSpec.class, RETURNS_DEEP_STUBS);
         Mono<String> mono = Mockito.mock(Mono.class, RETURNS_DEEP_STUBS);
         Map<String, Object> result = new HashMap<>();
+        result.put("data", "data");
         when(mono.map(any()).block()).thenReturn(result);
-        when(bodyUriSpec.retrieve().bodyToMono(String.class)).thenReturn(mono);
-        when(webClient.method(any(HttpMethod.class))).thenReturn(bodyUriSpec);
-        WebClient.RequestHeadersSpec<?> requestSpec =
-                Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
+        when(mockClient.method(any(HttpMethod.class)).uri(anyString())).thenReturn(bodyUriSpec);
+        WebClient.RequestHeadersSpec headersSpec = Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
+        when(bodyUriSpec.bodyValue(any())).thenReturn(headersSpec);
+        when(headersSpec.retrieve().bodyToMono(String.class)).thenReturn(mono);
 
-        when(bodyUriSpec.uri(anyString())).thenReturn(bodyUriSpec);
         HashMap<String, String> foundationModel = new HashMap<>();
         foundationModel.put("model", "ERNIE-4.0-8K");
         foundationModel.put("token", "asdf");
+
         ArrayList<AiMessages> messages = new ArrayList<>();
         AiMessages aiMessages = new AiMessages();
         aiMessages.setContent("dddd编码时遵从以下几条要求aaa");
@@ -95,7 +89,9 @@ class AiChatClientTest {
         aiMessages.setRole("user");
         messages.add(aiMessages);
         AiParam param = new AiParam(foundationModel, Arrays.asList(aiMessages));
+        TestUtil.setPrivateValue(aiChatClient, "config", config);
+        TestUtil.setPrivateValue(aiChatClient, "webClient", mockClient);
         Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
-        Assertions.assertNull(returnData.get("data"));
+        Assertions.assertEquals("data", returnData.get("data"));
     }
 }

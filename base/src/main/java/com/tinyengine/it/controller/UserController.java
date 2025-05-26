@@ -14,9 +14,14 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +59,21 @@ public class UserController {
      *
      * @return the result
      */
+    @Operation(summary = "获取用户信息", description = "获取用户信息", responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "获取用户信息")
     @GetMapping("/user/me")
     public Result<User> me() {
-        User user = userService.queryUserById(Integer.parseInt(loginUserContext.getLoginUserId()));
+        String loginUserId = loginUserContext.getLoginUserId();
+        User user = userService.queryUserById(loginUserId);
+        if (user == null) {
+            user = new User();
+            user.setId(loginUserContext.getLoginUserId());
+            user.setUsername(loginUserContext.getLoginUserId());
+        }
         return Result.success(user);
     }
 }

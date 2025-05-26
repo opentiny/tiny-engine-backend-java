@@ -36,6 +36,7 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,7 +66,6 @@ public class ComponentServiceImpl implements ComponentService {
      */
     @Autowired
     private ComponentLibraryMapper componentLibraryMapper;
-
 
     /**
      * 查询表t_component所有数据
@@ -145,7 +145,7 @@ public class ComponentServiceImpl implements ComponentService {
         BundleResultDto data = bundleResultDtoResult.getData();
         List<Component> componentList = data.getComponentList();
         List<ComponentLibrary> packageList = data.getPackageList();
-        if (null == packageList || packageList.isEmpty()) {
+        if (packageList == null || packageList.isEmpty()) {
             return bulkCreate(componentList);
         }
         for (ComponentLibrary componentLibrary : packageList) {
@@ -156,7 +156,8 @@ public class ComponentServiceImpl implements ComponentService {
             library.setName(componentLibrary.getName());
             library.setVersion(componentLibrary.getVersion());
             // 查询是否存在组件库
-            List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(library);
+            List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(
+                library);
             int result = 0;
             if (!componentLibraryList.isEmpty()) {
                 componentLibrary.setId(componentLibraryList.get(0).getId());
@@ -185,7 +186,7 @@ public class ComponentServiceImpl implements ComponentService {
     public Result<BundleResultDto> bundleSplit(MultipartFile file) {
         // 检验文件
         boolean isFileCheck = this.checkFile(file);
-        if (!isFileCheck){
+        if (!isFileCheck) {
             return Result.failed(ExceptionEnum.CM325);
         }
         // 获取bundle.json数据
@@ -220,40 +221,7 @@ public class ComponentServiceImpl implements ComponentService {
         if (components == null || components.isEmpty()) {
             return Result.failed(ExceptionEnum.CM009);
         }
-        List<Component> componentList = new ArrayList<>();
-        for (Map<String, Object> comp : components) {
-            Component component = BeanUtil.mapToBean(comp, Component.class, true);
-            component.setId(null);
-            component.setIsDefault(true);
-            component.setIsOfficial(true);
-            component.setDevMode("proCode");
-            component.setFramework(bundleDto.getFramework());
-            component.setPublicStatus(1);
-            component.setIsTinyReserved(false);
-            Object schemaObject = comp.get("schema");
-            if (schemaObject instanceof Map) {
-                component.setSchemaFragment((Map<String, Object>) schemaObject);
-            }
-            if (snippets == null || snippets.isEmpty()) {
-                componentList.add(component);
-                continue;
-            }
-            for (Child child : snippets) {
-                Snippet snippet = child.getChildren().stream()
-                        .filter(item -> toPascalCase(comp.get("component").toString())
-                                .equals(toPascalCase(item.getSnippetName())))
-                        .findFirst()
-                        .orElse(null);
-
-                if (snippet != null) {
-                    Map<String, Object> snippetMap = BeanUtil.beanToMap(snippet);
-                    component.setSnippets(Arrays.asList(snippetMap));
-
-                    component.setCategory(child.getGroup());
-                }
-            }
-            componentList.add(component);
-        }
+        List<Component> componentList = buildComponentList(bundleDto,components,snippets);
         List<Map<String, Object>> packages = bundleDto.getMaterials().getPackages();
 
         BundleResultDto bundleList = new BundleResultDto();
@@ -288,7 +256,7 @@ public class ComponentServiceImpl implements ComponentService {
             return Result.failed(ExceptionEnum.CM002);
         }
         Integer id = custComponentDto.getComponentLibraryId();
-        if (null == id) {
+        if (id == null) {
             return Result.failed(ExceptionEnum.CM002);
         }
         for (Component component : componentList) {
@@ -325,15 +293,15 @@ public class ComponentServiceImpl implements ComponentService {
             List<Component> queryComponent = findComponentByCondition(componentParam);
             // 查询组件库id
             String packageName = null;
-            if (null != component.getNpm() && null != component.getNpm().get("package")) {
+            if (component.getNpm() != null &&component.getNpm().get("package") != null) {
                 packageName = String.valueOf(component.getNpm().get("package"));
             }
-            if (null != packageName && !packageName.isEmpty()) {
+            if (packageName != null && !packageName.isEmpty()) {
                 ComponentLibrary componentLibrary = new ComponentLibrary();
                 componentLibrary.setPackageName(String.valueOf(component.getNpm().get("package")));
                 componentLibrary.setVersion(component.getVersion());
-                List<ComponentLibrary> componentLibraryList = componentLibraryMapper
-                        .queryComponentLibraryByCondition(componentLibrary);
+                List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(
+                    componentLibrary);
                 Integer componentLibraryId = null;
                 if (!componentLibraryList.isEmpty()) {
                     componentLibraryId = componentLibraryList.get(0).getId();
@@ -342,7 +310,6 @@ public class ComponentServiceImpl implements ComponentService {
             }
 
             if (queryComponent.isEmpty()) {
-
                 // 插入新记录
                 Integer result = createComponent(component);
                 if (result == 1) {
@@ -388,6 +355,44 @@ public class ComponentServiceImpl implements ComponentService {
         return result.toString();
     }
 
+    private List<Component> buildComponentList(BundleDto bundleDto, List<Map<String,Object>> components,
+        List<Child> snippets) {
+        List<Component> componentList = new ArrayList<>();
+        for (Map<String, Object> comp : components) {
+            Component component = BeanUtil.mapToBean(comp, Component.class, true);
+            component.setId(null);
+            component.setIsDefault(true);
+            component.setIsOfficial(true);
+            component.setDevMode("proCode");
+            component.setFramework(bundleDto.getFramework());
+            component.setPublicStatus(1);
+            component.setIsTinyReserved(false);
+            Object schemaObject = comp.get("schema");
+            if (schemaObject instanceof Map) {
+                component.setSchemaFragment((Map<String, Object>) schemaObject);
+            }
+            if (snippets == null || snippets.isEmpty()) {
+                componentList.add(component);
+                continue;
+            }
+            for (Child child : snippets) {
+                Snippet snippet = child.getChildren().stream()
+                        .filter(item -> toPascalCase(comp.get("component").toString())
+                                .equals(toPascalCase(item.getSnippetName())))
+                        .findFirst()
+                        .orElse(null);
+
+                if (snippet != null) {
+                    Map<String, Object> snippetMap = BeanUtil.beanToMap(snippet);
+                    component.setSnippets(Arrays.asList(snippetMap));
+
+                    component.setCategory(child.getGroup());
+                }
+            }
+            componentList.add(component);
+        }
+        return componentList;
+    }
     public boolean checkFile(MultipartFile file) {
         Map<String, String> fileTypeMap = new HashMap<>();
         fileTypeMap.put(".json", "application/json");

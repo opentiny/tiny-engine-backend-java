@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -41,7 +42,8 @@ public class SecurityFileCheckUtil {
     public static boolean checkPathHasCrossDir(String dirOrFileName) {
         if (!dirOrFileName.contains("../") && !dirOrFileName.contains("/..")) {
             if (!dirOrFileName.contains("..\\") && !dirOrFileName.contains("\\..")) {
-                return dirOrFileName.contains("./") || dirOrFileName.contains(".\\.\\") || dirOrFileName.contains("%00");
+                return dirOrFileName.contains("./") || dirOrFileName.contains(".\\.\\") 
+                    || dirOrFileName.contains("%00");
             } else {
                 return true;
             }
@@ -142,7 +144,7 @@ public class SecurityFileCheckUtil {
         }
 
         // 获取当前操作系统的名称
-        String os = System.getProperty("os.name").toLowerCase();
+        String os = System.getProperty("os.name").toLowerCase(Locale.ROOT);
 
         // 定义通用的非法字符
         String illegalChars = "";
@@ -150,7 +152,8 @@ public class SecurityFileCheckUtil {
         if (os.contains("win")) {
             // 针对Windows的非法字符
             illegalChars = "[<>:\"/\\|?*]";
-        } else if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
+        }
+        if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
             // 针对Linux和macOS的非法字符（一般来说，Linux和macOS对文件名的限制较少，但有一些常见的非法字符）
             illegalChars = "[/]"; // Linux和macOS的路径不能包含斜杠 '/'
         }

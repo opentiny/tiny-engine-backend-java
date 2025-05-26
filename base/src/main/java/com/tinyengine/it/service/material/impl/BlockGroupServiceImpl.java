@@ -46,8 +46,10 @@ import java.util.stream.Collectors;
 public class BlockGroupServiceImpl implements BlockGroupService {
     @Autowired
     private BlockGroupMapper blockGroupMapper;
+
     @Autowired
     private BlockCarriersRelationMapper blockCarriersRelationMapper;
+
     @Autowired
     private BlockGroupBlockMapper blockGroupBlockMapper;
 
@@ -72,7 +74,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public BlockGroup findBlockGroupById(@Param("id") Integer id) {
-        BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null, loginUserContext.getLoginUserId());
+        BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null,
+            loginUserContext.getLoginUserId());
         // 对查询的结果的区块赋值current_version
         if (blockGroupResult == null || blockGroupResult.getBlocks().isEmpty()) {
             return blockGroupResult;
@@ -82,7 +85,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             queryParam.setBlockId(block.getId());
             queryParam.setHostId(id);
             queryParam.setHostType(Enums.BlockGroup.BLOCK_GROUP.getValue());
-            List<BlockCarriersRelation> blockCarriersRelations = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
+            List<BlockCarriersRelation> blockCarriersRelations
+                = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
             if (blockCarriersRelations.isEmpty()) {
                 continue;
             }
@@ -124,8 +128,11 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     public Integer updateBlockGroupById(BlockGroup blockGroup) {
         // 判断是对正常的分组修改，还是在分组下添加区块操作的修改
         List<Block> blockList = blockGroup.getBlocks();
-        List<BlockGroupBlock> blockGroupBlocks = blockGroupBlockMapper.findBlockGroupBlockByBlockGroupId(blockGroup.getId());
-        List<Integer> groupBlockIds = blockGroupBlocks.stream().map(BlockGroupBlock::getBlockId).collect(Collectors.toList());
+        List<BlockGroupBlock> blockGroupBlocks = blockGroupBlockMapper.findBlockGroupBlockByBlockGroupId(
+            blockGroup.getId());
+        List<Integer> groupBlockIds = blockGroupBlocks.stream()
+            .map(BlockGroupBlock::getBlockId)
+            .collect(Collectors.toList());
 
         String hostType = Enums.BlockGroup.BLOCK_GROUP.getValue();
         // 区块列表为空，分组下无区块
@@ -178,9 +185,9 @@ public class BlockGroupServiceImpl implements BlockGroupService {
     /**
      * 根据ids或者appId获取区块信息
      *
-     * @param ids   ids
+     * @param ids ids
      * @param appId the app id
-     * @param from  the from
+     * @param from the from
      * @return the list
      */
     @Override
@@ -189,7 +196,9 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         List<BlockGroup> blockGroupsListResult = new ArrayList<>();
         String groupCreatedBy = loginUserContext.getLoginUserId(); // 获取登录用户id
         String blockCreatedBy = loginUserContext.getLoginUserId();
-        blockCreatedBy = (Enums.BlockGroup.BLOCK.getValue()).equals(from) ? blockCreatedBy : null; // from值为block在区块管理处增加createdBy条件
+        blockCreatedBy = (Enums.BlockGroup.BLOCK.getValue()).equals(from)
+            ? blockCreatedBy
+            : null; // from值为block在区块管理处增加createdBy条件
         BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {
             for (int blockgroupId : ids) {
@@ -214,7 +223,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
                 queryParam.setBlockId(block.getId());
                 queryParam.setHostId(blockGroupTemp.getId());
                 queryParam.setHostType(Enums.BlockGroup.BLOCK_GROUP.getValue());
-                List<BlockCarriersRelation> blockCarriersRelations = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
+                List<BlockCarriersRelation> blockCarriersRelations
+                    = blockCarriersRelationMapper.queryBlockCarriersRelationByCondition(queryParam);
                 if (blockCarriersRelations.isEmpty()) {
                     continue;
                 }
@@ -230,8 +240,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * 根据参数处理区块分组与区块关系
      *
      * @param groupBlockIds the groupBlockIds
-     * @param paramIds      the paramIds
-     * @param groupId       the groupId
+     * @param paramIds the paramIds
+     * @param groupId the groupId
      * @return the result
      */
     private Integer getBlockGroupIds(List<Integer> groupBlockIds, List<Integer> paramIds, Integer groupId) {
@@ -248,7 +258,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
             blockGroupBlock.setBlockId(block.getId());
             blockGroupBlock.setBlockGroupId(groupId);
-            List<BlockGroupBlock> blockGroupBlocks = blockGroupBlockMapper.queryBlockGroupBlockByCondition(blockGroupBlock);
+            List<BlockGroupBlock> blockGroupBlocks = blockGroupBlockMapper.queryBlockGroupBlockByCondition(
+                blockGroupBlock);
             if (blockGroupBlocks.isEmpty()) {
                 return result;
             }

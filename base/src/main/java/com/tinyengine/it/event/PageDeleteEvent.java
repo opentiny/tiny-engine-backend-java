@@ -10,22 +10,18 @@
  *
  */
 
-package com.tinyengine.it.model.dto;
+package com.tinyengine.it.event;
 
-import com.tinyengine.it.model.entity.Component;
-import com.tinyengine.it.model.entity.ComponentLibrary;
-
-import lombok.Data;
-
-import java.util.List;
+import com.tinyengine.it.model.entity.Page;
+import org.springframework.context.ApplicationEvent;
 
 /**
- * BundleResultDto
+ * The Page delete event.
  *
- * @since 2025-04-02
+ * @since 2025-05-20
  */
-@Data
-public class BundleResultDto {
-    private List<ComponentLibrary> packageList;
-    private List<Component> componentList;
+public class PageDeleteEvent extends ApplicationEvent {
+    public PageDeleteEvent(Page page) {
+        super(page);
+    }
 }

@@ -55,22 +55,19 @@ public class CanvasController {
      * @param type  the type
      * @return CanvasDto
      */
-    @Operation(summary = "区块及页面锁",
-            description = "区块及页面锁",
-            parameters = {
-                    @Parameter(name = "id", description = "页面id"),
-                    @Parameter(name = "state", description = "状态"),
-                    @Parameter(name = "type", description = "区分是页面还是区块")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
+    @Operation(summary = "区块及页面锁", description = "区块及页面锁", parameters = {
+         @Parameter(name = "id", description = "页面id"),
+         @Parameter(name = "state", description = "状态"),
+         @Parameter(name = "type", description = "区分是页面还是区块")
+    }, responses = {
+         @ApiResponse(responseCode = "200", description = "返回信息",
+             content = @Content(mediaType = "application/json", schema = @Schema())),
+         @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "区块及页面锁")
     @GetMapping("apps/canvas/lock")
-    public Result<CanvasDto> lock(@RequestParam Integer id, @RequestParam String state, @RequestParam String type) {
+    public Result<CanvasDto> lock(@RequestParam Integer id, @RequestParam String state,
+        @RequestParam String type) {
         return canvasService.lockCanvas(id, state, type);
     }
 }

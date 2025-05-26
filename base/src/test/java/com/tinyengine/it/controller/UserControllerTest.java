@@ -12,11 +12,13 @@
 
 package com.tinyengine.it.controller;
 
-import static org.mockito.Mockito.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.handler.MockUserContext;
+import com.tinyengine.it.common.utils.TestUtil;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
 
@@ -35,21 +37,23 @@ import org.mockito.MockitoAnnotations;
 class UserControllerTest {
     @Mock
     private UserService userService;
-    @Mock
-    private LoginUserContext loginUserContext;
+
     @InjectMocks
     private UserController userController;
 
+    @Mock
+    private LoginUserContext loginUserContext = new MockUserContext();
+
     @BeforeEach
-    void setUp() {
+    void setUp() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testMe() {
+    void testMe() throws NoSuchFieldException, IllegalAccessException {
+        TestUtil.setPrivateValue(userController, "loginUserContext", new MockUserContext());
         User mockData = new User();
-        when(userService.queryUserById(anyInt())).thenReturn(mockData);
-        when(loginUserContext.getLoginUserId()).thenReturn("1");
+        when(userService.queryUserById(anyString())).thenReturn(mockData);
         Result<User> result = userController.me();
         Assertions.assertEquals(mockData, result.getData());
     }

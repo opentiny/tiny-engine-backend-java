@@ -154,21 +154,13 @@ public interface BlockMapper extends BaseMapper<Block> {
             @Result(column = "occupier_by", property = "occupier",
                     one = @One(select = "com.tinyengine.it.mapper.UserMapper.queryUserById"))
     })
-    @Select("<script>" +
-            "SELECT b.* " +
-            "FROM t_block b " +
-            "<where>" +
-            "  <if test='notGroupDto.label != null and notGroupDto.label != \"\"'> " +
-            "    AND b.label LIKE CONCAT('%', #{notGroupDto.label}, '%') " +
-            "  </if>" +
-            "  <if test='notGroupDto.createdBy != null and notGroupDto.createdBy != \"\"'> " +
-            "    AND b.created_by LIKE CONCAT('%', #{notGroupDto.createdBy}, '%') " +
-            "  </if>" +
-            "  <if test='notGroupDto.tags != null and notGroupDto.tags.length > 0'> " +
-            "    AND JSON_CONTAINS(b.tags, #{notGroupDto.tags})" +
-            "  </if>" +
-            "</where>" +
-            "</script>")
+    @Select("<script>" + "SELECT b.* " + "FROM t_block b " + "<where>"
+            + "  <if test='notGroupDto.label != null and notGroupDto.label != \"\"'> "
+            + "    AND b.label LIKE CONCAT('%', #{notGroupDto.label}, '%') " + "  </if>"
+            + "  <if test='notGroupDto.createdBy != null and notGroupDto.createdBy != \"\"'> "
+            + "    AND b.created_by LIKE CONCAT('%', #{notGroupDto.createdBy}, '%') " + "  </if>"
+            + "  <if test='notGroupDto.tags != null and notGroupDto.tags.length > 0'> "
+            + "    AND JSON_CONTAINS(b.tags, #{notGroupDto.tags})" + "  </if>" + "</where>" + "</script>")
     List<BlockDto> findBlocksReturn(@Param("notGroupDto") NotGroupDto notGroupDto);
 
     /**

@@ -66,25 +66,25 @@
         <if test="configure!=null and configure!=''">
             AND configure = #{configure}
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             AND `public` = #{publicStatus}
         </if>
         <if test="framework!=null and framework!=''">
             AND framework = #{framework}
         </if>
-        <if test="isOfficial!=null and isOfficial!=''">
+        <if test="isOfficial!=null">
             AND is_official = #{isOfficial}
         </if>
-        <if test="isDefault!=null and isDefault!=''">
+        <if test="isDefault!=null">
             AND is_default = #{isDefault}
         </if>
-        <if test="isTinyReserved!=null and isTinyReserved!=''">
+        <if test="isTinyReserved!=null">
             AND tiny_reserved = #{isTinyReserved}
         </if>
         <if test="componentMetadata!=null and componentMetadata!=''">
             AND component_metadata = #{componentMetadata}
         </if>
-        <if test="libraryId!=null and libraryId!=''">
+        <if test="libraryId!=null">
             AND library_id = #{libraryId}
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -93,10 +93,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -163,7 +163,7 @@
         <if test="configure!=null and configure!=''">
             configure = #{configure},
         </if>
-        <if test="publicStatus!=null and publicStatus!=''">
+        <if test="publicStatus!=null">
             `public` = #{publicStatus},
         </if>
         <if test="framework!=null and framework!=''">
@@ -181,8 +181,8 @@
         <if test="componentMetadata!=null and componentMetadata!=''">
             component_metadata = #{componentMetadata},
         </if>
-        <if test="libraryId!=null and libraryId!=''">
-            library_id = #{libraryId}
+        <if test="libraryId!=null">
+            library_id = #{libraryId},
         </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
@@ -190,10 +190,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

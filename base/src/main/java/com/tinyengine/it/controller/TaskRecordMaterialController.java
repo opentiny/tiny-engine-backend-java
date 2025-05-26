@@ -49,6 +49,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/material-center/api")
 @Tag(name = "任务")
 public class TaskRecordMaterialController {
+    /**
+     * The Task record service.
+     */
     @Autowired
     private TaskRecordService taskRecordService;
 
@@ -58,17 +61,13 @@ public class TaskRecordMaterialController {
      * @param id id
      * @return task信息
      */
-    @Operation(summary = "根据id查询task信息",
-            description = "根据id查询task信息",
-            parameters = {
-                    @Parameter(name = "id", description = "任务id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = TaskRecord.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "根据id查询task信息", description = "根据id查询task信息", parameters = {
+        @Parameter(name = "id", description = "任务id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TaskRecord.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "根据id查询task信息api")
     @GetMapping("/tasks/{id}")
     public Result<TaskRecord> getTaskRecordById(@PathVariable Integer id) {
@@ -83,21 +82,18 @@ public class TaskRecordMaterialController {
      * @param uniqueIds  the unique ids
      * @return the result
      */
-    @Operation(summary = "获取任务状态",
-            description = "获取任务状态",
-            parameters = {
-                    @Parameter(name = "taskTypeId", description = "任务类型id"),
-                    @Parameter(name = "uniqueIds", description = "uniqueIds")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = TaskRecord.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "获取任务状态", description = "获取任务状态", parameters = {
+        @Parameter(name = "taskTypeId", description = "任务类型id"),
+        @Parameter(name = "uniqueIds", description = "uniqueIds")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TaskRecord.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取任务状态api")
     @GetMapping("/tasks/status")
-    public Result<List<TaskRecord>> getTasksStatus(@RequestParam String taskTypeId, @RequestParam String uniqueIds) {
+    public Result<List<TaskRecord>> getTasksStatus(@RequestParam String taskTypeId,
+        @RequestParam String uniqueIds) {
         // 使用 queries 上下文支持批量查询。若未指定 taskTypeId，则默认查询物料打包任务状态
         int taskTpyeIdTemp = Integer.parseInt(taskTypeId);
         if (taskTpyeIdTemp == 0) {

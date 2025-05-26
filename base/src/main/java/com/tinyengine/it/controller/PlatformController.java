@@ -32,8 +32,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
+
+import javax.validation.Valid;
+
 
 /**
  * 设计器api
@@ -56,13 +58,11 @@ public class PlatformController {
      *
      * @return Platform信息 all app
      */
-    @Operation(summary = "查询表Platform信息",
-            description = "查询表Platform信息",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Platform.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+    @Operation(summary = "查询表Platform信息", description = "查询表Platform信息", responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "查询表Platform信息")
     @GetMapping("/platform/list")
     public Result<List<Platform>> getAllPlatform() {
@@ -76,17 +76,13 @@ public class PlatformController {
      * @param id the id
      * @return Platform信息 app by id
      */
-    @Operation(summary = "根据id查询表Platform信息",
-            description = "根据id查询表Platform信息",
-            parameters = {
-                    @Parameter(name = "id", description = "Platform主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Platform.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "根据id查询表Platform信息", description = "根据id查询表Platform信息", parameters = {
+        @Parameter(name = "id", description = "Platform主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "根据id查询表Platform信息")
     @GetMapping("/platform/{id}")
     public Result<Platform> getPlatformById(@PathVariable Integer id) {
@@ -100,17 +96,13 @@ public class PlatformController {
      * @param platform the platform
      * @return Platform信息 result
      */
-    @Operation(summary = "创建platform",
-            description = "创建platform",
-            parameters = {
-                    @Parameter(name = "platform", description = "Platform入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Platform.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "创建platform", description = "创建platform", parameters = {
+        @Parameter(name = "platform", description = "Platform入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "创建platform")
     @PostMapping("/platform/create")
     public Result<Platform> createPlatform(@Valid @RequestBody Platform platform) {
@@ -125,12 +117,13 @@ public class PlatformController {
      * @return Platform信息 result
      */
     @Operation(summary = "修改单个Platform信息", description = "修改单个Platform信息", parameters = {
-            @Parameter(name = "id", description = "appId"),
-            @Parameter(name = "Platform", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Platform.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "appId"),
+        @Parameter(name = "Platform", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改单个Platform信息")
     @PostMapping("/platform/update/{id}")
     public Result<Platform> updatePlatform(@PathVariable Integer id, @RequestBody Platform platform) {
@@ -144,34 +137,33 @@ public class PlatformController {
      * @param id the id
      * @return platform信息 result
      */
-    @Operation(summary = "删除platform信息，与js同路由",
-            description = "删除platform信息，与js同路由",
-            parameters = {
-                    @Parameter(name = "id", description = "Platform主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Platform.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "删除platform信息，与js同路由", description = "删除platform信息，与js同路由", parameters = {
+        @Parameter(name = "id", description = "Platform主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Platform.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "删除platform信息，与js同路由")
     @GetMapping("/platform/delete/{id}")
     public Result<Platform> delete(@PathVariable Integer id) {
         return platformService.deletePlatformById(id);
     }
 
-    @Operation(summary = "删除platform信息",
-            description = "删除platform信息",
-            parameters = {
-                    @Parameter(name = "id", description = "Platform主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Platform.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    /**
+     * 删除Platform信息
+     *
+     * @param id the id
+     * @return platform信息 result
+     */
+    @Operation(summary = "删除platform信息", description = "删除platform信息", parameters = {
+        @Parameter(name = "id", description = "Platform主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Platform.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "删除platform信息")
     @DeleteMapping("/platform/delete/{id}")
     public Result<Platform> deletePlatform(@PathVariable Integer id) {

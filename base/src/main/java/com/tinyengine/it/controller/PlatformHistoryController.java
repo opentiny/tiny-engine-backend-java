@@ -33,8 +33,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
+
+import javax.validation.Valid;
 
 /**
  * 设计器api
@@ -45,9 +46,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/platform-center/api")
 @Tag(name = "设计器历史")
-public class PlatformHistoryController {
+public class
+PlatformHistoryController {
     /**
-     * The PlatformHistory service.
+     * The Platform history service.
      */
     @Autowired
     private PlatformHistoryService platformHistoryService;
@@ -57,13 +59,11 @@ public class PlatformHistoryController {
      *
      * @return PlatformHistory信息 all app
      */
-    @Operation(summary = "查询表PlatformHistory信息",
-            description = "查询表PlatformHistory信息",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = PlatformHistory.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+    @Operation(summary = "查询表PlatformHistory信息", description = "查询表PlatformHistory信息", responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PlatformHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "查询表PlatformHistory信息")
     @GetMapping("/platform-history/list")
     public Result<List<PlatformHistory>> getAllPlatformHistory() {
@@ -77,17 +77,13 @@ public class PlatformHistoryController {
      * @param id the id
      * @return PlatformHistory信息 app by id
      */
-    @Operation(summary = "根据id查询表PlatformHistory信息",
-            description = "根据id查询表PlatformHistory信息",
-            parameters = {
-                    @Parameter(name = "id", description = "PlatformHistory主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = PlatformHistory.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "根据id查询表PlatformHistory信息", description = "根据id查询表PlatformHistory信息", parameters = {
+        @Parameter(name = "id", description = "PlatformHistory主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PlatformHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "根据id查询表PlatformHistory信息")
     @GetMapping("/platform-history/{id}")
     public Result<PlatformHistory> getPlatformHistoryById(@PathVariable Integer id) {
@@ -101,17 +97,13 @@ public class PlatformHistoryController {
      * @param platformHistory the platformHistory
      * @return PlatformHistory信息 result
      */
-    @Operation(summary = "创建platformHistory",
-            description = "创建platformHistory",
-            parameters = {
-                    @Parameter(name = "platformHistory", description = "PlatformHistory入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = PlatformHistory.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "创建platformHistory", description = "创建platformHistory", parameters = {
+        @Parameter(name = "platformHistory", description = "PlatformHistory入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PlatformHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "创建platformHistory")
     @PostMapping("/platform-history/create")
     public Result<PlatformHistory> createPlatformHistory(@Valid @RequestBody PlatformHistory platformHistory) {
@@ -126,15 +118,17 @@ public class PlatformHistoryController {
      * @return PlatformHistory信息 result
      */
     @Operation(summary = "修改单个PlatformHistory信息", description = "修改单个PlatformHistory信息", parameters = {
-            @Parameter(name = "id", description = "appId"),
-            @Parameter(name = "PlatformHistory", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PlatformHistory.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "appId"),
+        @Parameter(name = "PlatformHistory", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PlatformHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改单个PlatformHistory信息")
     @PutMapping("/platform-history/update/{id}")
-    public Result<PlatformHistory> updatePlatformHistory(@PathVariable Integer id, @RequestBody PlatformHistory platformHistory) {
+    public Result<PlatformHistory> updatePlatformHistory(@PathVariable Integer id,
+        @RequestBody PlatformHistory platformHistory) {
         platformHistory.setId(id);
         return platformHistoryService.updatePlatformHistoryById(platformHistory);
     }
@@ -145,17 +139,13 @@ public class PlatformHistoryController {
      * @param id the id
      * @return platformHistory信息 result
      */
-    @Operation(summary = "删除platformHistory信息",
-            description = "删除platformHistory信息",
-            parameters = {
-                    @Parameter(name = "id", description = "PlatformHistory主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = PlatformHistory.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "删除platformHistory信息", description = "删除platformHistory信息", parameters = {
+        @Parameter(name = "id", description = "PlatformHistory主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PlatformHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "删除platformHistory信息")
     @DeleteMapping("/platform-history/delete/{id}")
     public Result<PlatformHistory> deletePlatformHistory(@PathVariable Integer id) {

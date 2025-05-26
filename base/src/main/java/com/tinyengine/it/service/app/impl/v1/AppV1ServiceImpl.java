@@ -303,8 +303,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<AppExtension> appExtensionList = appExtensionMapper.queryAppExtensionByCondition(appExtension);
         metaDto.setExtension(appExtensionList);
 
-        MaterialHistory materialHistory =
-                materialHistoryMapper.queryMaterialHistoryById(materialhistoryMsg.getMaterialHistoryId());
+        MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(
+            materialhistoryMsg.getMaterialHistoryId());
         metaDto.setMaterialHistory(materialHistory);
 
         List<BlockHistory> blockHistory = getBlockHistory(app, materialhistoryMsg);
@@ -316,7 +316,7 @@ public class AppV1ServiceImpl implements AppV1Service {
     /**
      * 查询区块历史信息
      *
-     * @param app                应用信息 materialhistoryMsg 物料历史信息
+     * @param app 应用信息 materialhistoryMsg 物料历史信息
      * @param materialhistoryMsg materialhistoryMsg
      * @return 区块历史信息
      */
@@ -352,7 +352,7 @@ public class AppV1ServiceImpl implements AppV1Service {
     /**
      * 获取应用关联的区块及版本信息
      *
-     * @param app               appInfo 应用信息
+     * @param app appInfo 应用信息
      * @param materialHistoryId materialHistoryId
      * @return {Promise<any>} 应用关联的区块版本控制信息
      */
@@ -467,7 +467,7 @@ public class AppV1ServiceImpl implements AppV1Service {
             Map<String, Object> data = Utils.convert(pageInfo);
             boolean isToLine = false;
             Map<String, Object> page = formatDataFields(data, resKeys, isToLine);
-            if (null != app.getHomePage()) {
+            if (app.getHomePage() != null) {
                 page.put("isHome", String.valueOf(page.get("id")).equals(app.getHomePage().toString()));
             }
             Map<String, Object> schema;
@@ -502,8 +502,8 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryAllComponentLibrary();
         if (!componentLibraryList.isEmpty()) {
             List<Component> componentList = componentLibraryList.stream()
-                    .flatMap(componentLibrary -> componentLibrary.getComponents().stream())  // 扁平化每个 List<Component>
-                    .collect(Collectors.toList());  // 收集到一个新的 List<Component>
+                .flatMap(componentLibrary -> componentLibrary.getComponents().stream())  // 扁平化每个 List<Component>
+                .collect(Collectors.toList());  // 收集到一个新的 List<Component>
             components.addAll(componentList);
         }
         List<Map<String, Object>> componentsSchema = getComponentSchema(components);
@@ -511,10 +511,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         List<Map<String, Object>> componentsMap = new ArrayList<>(componentsSchema);
         componentsMap.addAll(blocksSchema);
         // 使用 Stream API 去重
-        List<Map<String, Object>> uniqueComponents = componentsMap.stream()
-                .distinct()
-                .collect(Collectors.toList());
-        return uniqueComponents;
+        return componentsMap.stream().distinct().collect(Collectors.toList());
     }
 
     // 将区块组装成schema数据
@@ -603,7 +600,7 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @throws ServiceException the service exception
      */
     public Map<String, Object> formatDataFields(Map<String, Object> data, List<String> fields, boolean isToLine)
-            throws ServiceException {
+        throws ServiceException {
         // 将 fields 转换为 HashMap
         Map<String, Object> fieldsMap = new HashMap<>();
         for (Object field : fields) {

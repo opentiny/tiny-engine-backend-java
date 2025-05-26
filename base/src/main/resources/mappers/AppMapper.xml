@@ -22,10 +22,10 @@
         <if test="appWebsite!=null and appWebsite!=''">
             AND app_website = #{appWebsite}
         </if>
-        <if test="platformId!=null and platformId!=''">
+        <if test="platformId!=null">
             AND platform_id = #{platformId}
         </if>
-        <if test="platformHistoryId!=null and platformHistoryId!=''">
+        <if test="platformHistoryId!=null">
             AND platform_history_id = #{platformHistoryId}
         </if>
         <if test="publishUrl!=null and publishUrl!=''">
@@ -46,10 +46,10 @@
         <if test="state!=null and state!=''">
             AND state = #{state}
         </if>
-        <if test="isPublish!=null and isPublish!=''">
+        <if test="isPublish!=null">
             AND published = #{isPublish}
         </if>
-        <if test="homePage!=null and homePage!=''">
+        <if test="homePage!=null">
             AND home_page_id = #{homePage}
         </if>
         <if test="css!=null and css!=''">
@@ -79,7 +79,7 @@
         <if test="branch!=null and branch!=''">
             AND branch = #{branch}
         </if>
-        <if test="isDemo!=null and isDemo!=''">
+        <if test="isDemo!=null">
             AND is_demo = #{isDemo}
         </if>
         <if test="isDefault!=null">
@@ -88,7 +88,7 @@
         <if test="templateType!=null and templateType!=''">
             AND template_type = #{templateType}
         </if>
-        <if test="setTemplateTime!=null and setTemplateTime!=''">
+        <if test="setTemplateTime!=null">
             AND set_template_time = #{setTemplateTime}
         </if>
         <if test="setTemplateBy!=null and setTemplateBy!=''">
@@ -124,10 +124,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -149,10 +149,10 @@
         <if test="appWebsite!=null and appWebsite!=''">
             app_website = #{appWebsite},
         </if>
-        <if test="platformId!=null and platformId!=''">
+        <if test="platformId!=null">
             platform_id = #{platformId},
         </if>
-        <if test="platformHistoryId!=null and platformHistoryId!=''">
+        <if test="platformHistoryId!=null">
             platform_history_id = #{platformHistoryId},
         </if>
         <if test="publishUrl!=null and publishUrl!=''">
@@ -176,7 +176,7 @@
         <if test="isPublish!=null">
             published = #{isPublish},
         </if>
-        <if test="homePage!=null and homePage!=''">
+        <if test="homePage!=null">
             home_page_id = #{homePage},
         </if>
         <if test="css!=null and css!=''">
@@ -215,7 +215,7 @@
         <if test="templateType!=null and templateType!=''">
             template_type = #{templateType},
         </if>
-        <if test="setTemplateTime!=null and setTemplateTime!=''">
+        <if test="setTemplateTime!=null">
             set_template_time = #{setTemplateTime},
         </if>
         <if test="setTemplateBy!=null and setTemplateBy!=''">
@@ -251,10 +251,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

@@ -66,8 +66,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class I18nEntryServiceImpl implements I18nEntryService {
     private static final Logger logger = LoggerFactory.getLogger(I18nEntryServiceImpl.class);
+
     @Autowired
     private I18nEntryMapper i18nEntryMapper;
+
     @Autowired
     private I18nLangMapper i18nLangMapper;
 
@@ -92,8 +94,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 格式化词条列表
         SchemaI18n messages = formatEntriesList(i18nEntriesList);
         List<I18nLang> i18nLangsListTemp = i18nLangsList.stream()
-                .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
-                .collect(Collectors.toList());
+            .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
+            .collect(Collectors.toList());
 
         i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);
         i18nEntriesListResult.setMessages(messages);
@@ -168,8 +170,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
 
         Map<String, String> contents = operateI18nEntries.getContents();
 
-        contents.keySet().forEach(item ->
-            {
+        contents.keySet().forEach(item -> {
             int lang = langsDic.get(item);
             if (lang != 0) {
                 I18nEntry i18nEntries = new I18nEntry();
@@ -180,7 +181,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 i18nEntries.setContent(contents.get(item));
                 i18nEntriesList.add(i18nEntries);
             }
-            });
+        });
         return i18nEntriesList;
     }
 
@@ -220,12 +221,12 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * 格式化词条参数
      *
      * @param operateI18nBatchEntries the operate i 18 n batch entries
-     * @param i18nLangsList           the 18 n langs list
+     * @param i18nLangsList the 18 n langs list
      * @return list
      */
     @SystemServiceLog(description = "formatEntriesParam 格式化词条参数")
     public List<I18nEntry> formatEntriesParam(OperateI18nBatchEntries operateI18nBatchEntries,
-                                              List<I18nLang> i18nLangsList) {
+        List<I18nLang> i18nLangsList) {
         Map<String, Integer> langsDic = new HashMap<>();
         List<I18nEntry> i18nEntriesListResult = new ArrayList<>();
         for (I18nLang i18nLangs : i18nLangsList) {
@@ -283,8 +284,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<I18nEntry> i18nEntriesList = fillParam(operateI18nEntries, langsDic);
         // bulkCreateEntries
         for (I18nEntry i18Entries : i18nEntriesList) {
-            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(),
-                    i18Entries.getHostType(), i18Entries.getKey(), i18Entries.getLang());
+            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(), i18Entries.getHostType(),
+                i18Entries.getKey(), i18Entries.getLang());
         }
         return i18nEntriesList;
     }
@@ -321,8 +322,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @SystemServiceLog(description = "readSingleFileAndBulkCreate 上传单个国际化文件")
     @Override
-    public Result<FileResult> readSingleFileAndBulkCreate(MultipartFile file, int host)
-            throws Exception {
+    public Result<FileResult> readSingleFileAndBulkCreate(MultipartFile file, int host) throws Exception {
         List<EntriesItem> entriesArr = new ArrayList<>();
         String contentType = file.getContentType();
 
@@ -385,11 +385,9 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "bulkCreateOrUpdate 批量创建或修改")
     public Result<FileResult> bulkCreateOrUpdate(List<EntriesItem> entriesArr, int host) {
         List<I18nEntry> entries = new ArrayList<>();
-        entriesArr.forEach(entriesItem ->
-            {
+        entriesArr.forEach(entriesItem -> {
             Map<String, Object> langEntries = entriesItem.getEntries();
-            langEntries.forEach((key, value) ->
-                {
+            langEntries.forEach((key, value) -> {
                 I18nEntry i18nEntry = new I18nEntry();
                 i18nEntry.setKey(key);
                 i18nEntry.setLang(entriesItem.getLang());
@@ -397,13 +395,12 @@ public class I18nEntryServiceImpl implements I18nEntryService {
                 i18nEntry.setHostType("app");
                 i18nEntry.setContent(value.toString());
                 entries.add(i18nEntry);
-                });
             });
+        });
         // 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
         FileResult result = bulkInsertOrUpdate(entries);
         return Result.success(result);
     }
-
 
     /**
      * 超大量数据更新，如上传国际化文件，不返回插入或更新的词条
@@ -447,7 +444,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     public List<EntriesItem> parseZipFileStream(MultipartFile file) throws Exception {
         // 校验文件流合法性
         Utils.validateFileStream(file, ExceptionEnum.CM314.getResultCode(),
-                Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
+            Arrays.asList(Enums.MimeType.ZIP.getValue(), Enums.MimeType.XZIP.getValue()));
         List<EntriesItem> entriesItems = new ArrayList<>();
         // 解压ZIP文件并处理
         List<FileInfo> fileInfos = Utils.unzip(file);
@@ -471,9 +468,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             EntriesItem entriesItem = setLang(fileInfo.getName());
             // 处理 JSON 内容
             try {
-                Map<String, Object> jsonData =
-                        objectMapper.readValue(fileInfo.getContent(), new TypeReference<Map<String, Object>>() {
-                        });
+                Map<String, Object> jsonData = objectMapper.readValue(fileInfo.getContent(),
+                    new TypeReference<Map<String, Object>>() {});
                 entriesItem.setEntries(Utils.flat(jsonData));
             } catch (JsonProcessingException e) {
                 log.error("JSON processing error for file: " + fileInfo.getName(), e);

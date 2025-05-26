@@ -32,8 +32,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
+
+import javax.validation.Valid;
+
 
 /**
  * 物料历史api
@@ -56,13 +58,11 @@ public class MaterialController {
      *
      * @return Material信息 all material
      */
-    @Operation(summary = "查询表Material信息列表",
-            description = "查询表Material信息列表",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Material.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+    @Operation(summary = "查询表Material信息列表", description = "查询表Material信息列表", responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "查询表Material信息列表")
     @GetMapping("/material/list")
     public Result<List<Material>> getAllMaterial() {
@@ -76,17 +76,13 @@ public class MaterialController {
      * @param material the material
      * @return Material信息 result
      */
-    @Operation(summary = "创建Material",
-            description = "创建Material",
-            parameters = {
-                    @Parameter(name = "Material", description = "Material入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Material.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "创建Material", description = "创建Material", parameters = {
+        @Parameter(name = "Material", description = "Material入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "创建Material")
     @PostMapping("/material/create")
     public Result<Material> createMaterial(@Valid @RequestBody Material material) {
@@ -101,12 +97,13 @@ public class MaterialController {
      * @return Material信息 result
      */
     @Operation(summary = "修改单个Material信息", description = "修改单个Material信息", parameters = {
-            @Parameter(name = "id", description = "appId"),
-            @Parameter(name = "Material", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Material.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "appId"),
+        @Parameter(name = "Material", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改单个Material信息")
     @PostMapping("/material/update/{id}")
     public Result<Material> updateMaterial(@PathVariable Integer id, @RequestBody Material material) {
@@ -120,17 +117,13 @@ public class MaterialController {
      * @param id the id
      * @return app信息 result
      */
-    @Operation(summary = "删除Material信息",
-            description = "删除Material信息",
-            parameters = {
-                    @Parameter(name = "id", description = "Material主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Material.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "删除Material信息", description = "删除Material信息", parameters = {
+        @Parameter(name = "id", description = "Material主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "删除Material信息")
     @DeleteMapping("/material/delete/{id}")
     public Result<Material> deleteMaterial(@PathVariable Integer id) {
@@ -144,11 +137,11 @@ public class MaterialController {
      * @return the result
      */
     @Operation(summary = "获取Material信息详情", description = "获取Material信息详情", parameters = {
-            @Parameter(name = "id", description = "appId")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Material.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "appId")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取Material信息详情")
     @GetMapping("/material/detail/{id}")
     public Result<Material> detail(@PathVariable Integer id) {

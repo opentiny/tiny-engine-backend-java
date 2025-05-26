@@ -116,6 +116,4 @@ public interface ComponentService {
      * @return result the result
      */
     Result<FileResult> custComponentBatchCreate(CustComponentDto custComponentDto);
-
-
 }

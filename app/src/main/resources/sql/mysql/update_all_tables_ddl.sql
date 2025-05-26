@@ -29,3 +29,4 @@ ALTER TABLE t_task_record MODIFY tenant_id varchar(60) NULL;
 ALTER TABLE t_user MODIFY tenant_id varchar(60) NULL;
 
 ALTER TABLE t_component_library ADD app_id int  NULL;
+

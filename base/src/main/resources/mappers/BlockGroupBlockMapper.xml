@@ -12,20 +12,20 @@
 
     <!-- 通用条件列 -->
     <sql id="BlockGroupBlockByCondition">
-        <if test="blockId!=null and blockId!=''">
+        <if test="blockId!=null">
             AND block_id = #{blockId}
         </if>
-        <if test="blockGroupId!=null and blockGroupId!=''">
+        <if test="blockGroupId!=null">
             AND block_group_id = #{blockGroupId}
         </if>
     </sql>
 
     <!-- 通用设置列 -->
     <sql id="BlockGroupBlockSetColumns">
-        <if test="blockId!=null and blockId!=''">
+        <if test="blockId!=null">
             block_id = #{blockId},
         </if>
-        <if test="blockGroupId!=null and blockGroupId!=''">
+        <if test="blockGroupId!=null">
             block_group_id = #{blockGroupId},
         </if>
     </sql>

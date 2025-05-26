@@ -52,21 +52,25 @@ public class AiChatConfig {
         Map<String, String> ernieBotHeaders = new HashMap<>();
 
 
-        config.put(Enums.FoundationModel.GPT_35_TURBO.getValue(), new AiChatConfigData(
-                OPENAI_API_URL + "/v1/chat/completions", createCommonRequestOption(), openaiHeaders, "openai"));
+        config.put(Enums.FoundationModel.GPT_35_TURBO.getValue(),
+            new AiChatConfigData(
+                OPENAI_API_URL + "/v1/chat/completions", createCommonRequestOption(), openaiHeaders,
+    "openai"));
 
-        config.put(Enums.FoundationModel.LOCAL_GPT.getValue(), new AiChatConfigData(
-                LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(), localGptHeaders, "!openai"));
+        config.put(Enums.FoundationModel.LOCAL_GPT.getValue(),
+            new AiChatConfigData(
+                LOCAL_GPT_API_URL + "/v1/chat/completions", createCommonRequestOption(), localGptHeaders,
+    "!openai"));
 
-        config.put(Enums.FoundationModel.DEEPSEEK_V3.getValue(), new AiChatConfigData(
-                DEEPSEEK_V3_URL + "/chat/completions", createCommonRequestOption(), deepSeekHeaders, "DeepSeek"));
+        config.put(Enums.FoundationModel.DEEPSEEK_V3.getValue(),
+            new AiChatConfigData(
+                DEEPSEEK_V3_URL + "/chat/completions", createCommonRequestOption(), deepSeekHeaders,
+    "DeepSeek"));
 
         String ernieBotAccessToken = Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model) ? token : null;
-        config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(),
-                new AiChatConfigData(
-                        "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token="
-                                + ernieBotAccessToken,
-                        createCommonRequestOption(), ernieBotHeaders, "baidu"));
+        config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(), new AiChatConfigData(
+"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token="
+                 + ernieBotAccessToken, createCommonRequestOption(), ernieBotHeaders, "baidu"));
         return config;
     }
 

@@ -73,7 +73,7 @@ public class PlatformServiceImpl implements PlatformService {
      * 根据主键id删除表t_platform数据
      *
      * @param id id
-     * @return Result
+     * @return execute success data number
      */
     @Override
     public Result<Platform> deletePlatformById(@Param("id") Integer id) {
@@ -92,7 +92,7 @@ public class PlatformServiceImpl implements PlatformService {
      * 根据主键id更新表t_platform数据
      *
      * @param platform platform
-     * @return Result
+     * @return execute success data number
      */
     @Override
     public Result<Platform> updatePlatformById(Platform platform) {
@@ -111,7 +111,7 @@ public class PlatformServiceImpl implements PlatformService {
      * 新增表t_platform数据
      *
      * @param platform platform
-     * @return Result
+     * @return execute success data number
      */
     @Override
     public Result<Platform> createPlatform(Platform platform) {

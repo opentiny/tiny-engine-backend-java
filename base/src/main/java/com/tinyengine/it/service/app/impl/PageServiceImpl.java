@@ -20,6 +20,7 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
+import com.tinyengine.it.event.PageDeleteEvent;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockMapper;
@@ -52,6 +53,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -112,7 +115,6 @@ public class PageServiceImpl implements PageService {
     @Autowired
     private AppV1ServiceImpl appV1ServiceImpl;
 
-
     /**
      * The App extension mapper.
      */
@@ -142,6 +144,12 @@ public class PageServiceImpl implements PageService {
      */
     @Autowired(required = false)
     private PostSaveHook postSaveHook;
+
+    /**
+     * The event publisher.
+     */
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     /**
      * 通过appId查询page所有数据实现方法
@@ -183,7 +191,7 @@ public class PageServiceImpl implements PageService {
         if (pageInfo.getIsPage()) {
             // 这里不保证能成功获取区块的列表，没有区块或获取区块列表不成功返回 {}
             Map<String, List<String>> blockAssets = blockServiceImpl.getBlockAssets(pageInfo.getPageContent(),
-                    framework);
+                framework);
             pageInfo.setAssets(blockAssets);
             return addIsHome(pageInfo);
         }
@@ -224,6 +232,7 @@ public class PageServiceImpl implements PageService {
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
+        eventPublisher.publishEvent(new PageDeleteEvent(pageResult));
         return Result.success(pageResult);
     }
 
@@ -425,7 +434,7 @@ public class PageServiceImpl implements PageService {
     /**
      * Sets app home page.
      *
-     * @param appId  the app id
+     * @param appId the app id
      * @param pageId the page id
      * @return the app home page
      */
@@ -530,7 +539,13 @@ public class PageServiceImpl implements PageService {
      */
     public Result<Page> checkDelete(Integer id) {
         // needTODO 从缓存中获取的user信息
-        User user = userService.queryUserById(Integer.parseInt(loginUserContext.getLoginUserId()));
+        User user = userService.queryUserById(loginUserContext.getLoginUserId());
+        // 逻辑不对，如果没有同步用户数据，就用登录用户的
+        if(user == null) {
+            user = new User();
+            user.setId(loginUserContext.getLoginUserId());
+            user.setUsername(loginUserContext.getLoginUserId());
+        }
         Page page = pageMapper.queryPageById(id);
         User occupier = page.getOccupier();
 
@@ -548,7 +563,7 @@ public class PageServiceImpl implements PageService {
      * 判断是否能删除
      *
      * @param occupier the occupier
-     * @param user     the user
+     * @param user the user
      * @return boolean
      */
     public boolean iCanDoIt(User occupier, User user) {
@@ -578,8 +593,7 @@ public class PageServiceImpl implements PageService {
         }
 
         UpdateWrapper<Page> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id", subPageId)
-                .set("is_default", false);
+        updateWrapper.eq("id", subPageId).set("is_default", false);
         int result = pageMapper.update(null, updateWrapper);
 
         if (result < 1) {
@@ -595,7 +609,6 @@ public class PageServiceImpl implements PageService {
      * @return parentId the parentId
      */
     private String getParentPage(String parentId) {
-
         Page page = pageMapper.queryPageById(Integer.parseInt(parentId));
         if (page.getIsPage() || "0".equals(page.getParentId())) {
             return parentId;
@@ -623,7 +636,8 @@ public class PageServiceImpl implements PageService {
         for (Page page : pageList) {
             if (page.getIsPage() && page.getIsDefault()) {
                 return page.getId(); // 找到默认子页面，返回其ID
-            } else if (!page.getIsPage()) {
+            }
+            if (!page.getIsPage()) {
                 // 如果不是页面，递归查找子页面
                 int subPageId = getSubPage(String.valueOf(page.getId()));
                 if (subPageId > 0) {
@@ -638,7 +652,7 @@ public class PageServiceImpl implements PageService {
     /**
      * Validate is home boolean.
      *
-     * @param param    the param
+     * @param param the param
      * @param pageInfo the page info
      * @return the boolean
      */
@@ -667,16 +681,16 @@ public class PageServiceImpl implements PageService {
      */
     public Result<Page> checkUpdate(Page page) {
         // 获取占用着occupier
-        User occupier = userService.queryUserById(Integer.parseInt(page.getOccupierBy()));
+        // 逻辑修改 User occupier = userService.queryUserById(Integer.parseInt(page.getOccupierBy()));
         // 当前页面没有被锁定就请求更新页面接口，提示无权限
-        if (occupier == null) {
-            Result.failed("Please unlock the page before editing the page");
-        }
+        // 逻辑修改 if (occupier == null) {
+        // 逻辑修改  Result.failed("Please unlock the page before editing the page");
+        // 逻辑修改 }
         // 当页面被人锁定时，如果提交update请求的人不是当前用户，提示无权限
         // needTODO 从缓存中获取登录用户信息
-        User user = userService.queryUserById(1);
-        if (!user.getId().equals(occupier.getId())) {
-            Result.failed("The current page is being edited by" + occupier.getUsername());
+        // 逻辑修改 User user = userService.queryUserById(1);
+        if (!loginUserContext.getLoginUserId().equals(page.getOccupierBy())) {
+            Result.failed("The current page is being edited by" + page.getOccupierBy());
         }
         pageMapper.updatePageById(page);
         // 修改完返回页面还是返回dto，为了下次修改每次参数属性一致
@@ -701,7 +715,7 @@ public class PageServiceImpl implements PageService {
     /**
      * 主函数
      *
-     * @param pid    the pid
+     * @param pid the pid
      * @param target the target
      * @return update tree
      */
@@ -741,8 +755,7 @@ public class PageServiceImpl implements PageService {
         // 获取子节点的id
         List<Integer> childrenId = getChildrenId(pids);
         // 收集 id depth 信息
-        List<NodeData> dps =
-                childrenId.stream().map(id -> new NodeData(id, level)).collect(Collectors.toList());
+        List<NodeData> dps = childrenId.stream().map(id -> new NodeData(id, level)).collect(Collectors.toList());
         // 使用 addAll 方法将 childrenId 追加到 range
         collection.getRange().addAll(childrenId);
         collection.getData().addAll(dps);
@@ -797,8 +810,7 @@ public class PageServiceImpl implements PageService {
 
         // 拼装国际化词条
         List<I18nEntryDto> i18ns = i18nEntryMapper.findI18nEntriesByHostandHostType(previewParam.getId(), "block");
-        SchemaI18n i18n =
-                appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
+        SchemaI18n i18n = appService.formatI18nEntrites(i18ns, Enums.I18Belongs.BLOCK.getValue(), previewParam.getId());
         List<SchemaUtils> utils = extensions.get("utils");
         PreviewDto previewDto = new PreviewDto();
         previewDto.setDataSource(dataSource);

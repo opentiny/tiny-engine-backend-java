@@ -42,6 +42,8 @@ public class AiChatClient {
 
     /**
      * Instantiates a new Ai chat client.
+     * @param model
+     * @param token
      */
     public AiChatClient(String model, String token) {
         this.config = AiChatConfig.getAiChatConfig(model, token);
