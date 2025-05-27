@@ -124,4 +124,11 @@ public interface I18nEntryService {
      * @throws Exception the exception
      */
     Result<FileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception;
+
+    /**
+     * 通过app查询表t_i18n_entry所有信息
+     *
+     * @return the 18 n entry list result
+     */
+    I18nEntryListResult findI18nEntryByApp(Integer host, String hostType);
 }

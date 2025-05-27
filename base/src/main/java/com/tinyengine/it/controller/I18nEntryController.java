@@ -70,19 +70,20 @@ public class I18nEntryController {
     private I18nEntryService i18nEntryService;
 
     /**
-     * Gets all i 18 n entries.
+     * Gets all i 18 n entries by app.
      *
-     * @return 获取国际化词条列表 all i 18 n entries
+     * @return 获取国际化词条列表 i 18 n entries
      */
-    @Operation(summary = "获取国际化词条列表", description = "获取国际化词条列表", responses = {
+    @Operation(summary = "通过app获取国际化词条列表", description = "通过app获取国际化词条列表", responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
             content = @Content(mediaType = "application/json", schema = @Schema())),
         @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取国际化词条列表")
     @GetMapping("/i18n/entries")
-    public Result<I18nEntryListResult> getAllI18nEntries() {
-        I18nEntryListResult i18nEntriesList = i18nEntryService.findAllI18nEntry();
+    public Result<I18nEntryListResult> getI18nEntriesByApp( @RequestParam(value = "host", required = false) Integer host,
+        @RequestParam(value = "host_type", required = false) String hostType) {
+        I18nEntryListResult i18nEntriesList = i18nEntryService.findI18nEntryByApp(host, hostType);
         return Result.success(i18nEntriesList);
     }
 
