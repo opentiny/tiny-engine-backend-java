@@ -376,6 +376,35 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     }
 
     /**
+     * 通过app查询表t_i18n_entry所有信息
+     *
+     * @return the 18 n entry list result
+     */
+    @Override
+    public I18nEntryListResult findI18nEntryByApp(Integer host, String hostType) {
+        I18nEntryListResult i18nEntriesListResult = new I18nEntryListResult();
+        // 获取所属应用/区块的 语言列表 getHostLangs
+        List<I18nLang> i18nLangsList = getHostLangs();
+        if (i18nLangsList == null || i18nLangsList.isEmpty()) {
+            return i18nEntriesListResult;
+        }
+        // 获取词条列表
+        List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.findI18nEntriesByHostandHostType(host, hostType);
+        if (i18nEntriesList == null) {
+            return i18nEntriesListResult;
+        }
+        // 格式化词条列表
+        SchemaI18n messages = formatEntriesList(i18nEntriesList);
+        List<I18nLang> i18nLangsListTemp = i18nLangsList.stream()
+                .map(i18nLang -> new I18nLang(i18nLang.getLang(), i18nLang.getLabel()))
+                .collect(Collectors.toList());
+
+        i18nEntriesListResult.setI18nLangsList(i18nLangsListTemp);
+        i18nEntriesListResult.setMessages(messages);
+        return i18nEntriesListResult;
+    }
+
+    /**
      * 批量创建或修改
      *
      * @param entriesArr the entries arr
@@ -449,7 +478,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         // 解压ZIP文件并处理
         List<FileInfo> fileInfos = Utils.unzip(file);
         for (FileInfo fileInfo : fileInfos) {
-            entriesItems = parseZip(fileInfo);
+            entriesItems.addAll(parseZip(fileInfo));
         }
         return entriesItems;
     }
@@ -530,7 +559,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         } else {
             name = fileName.substring(0, lastDotIndex); // 返回不带扩展名的文件名
         }
-        if (Enums.I18nFileName.EN_US.getValue().equals(name)) {
+        if (name.contains(Enums.I18nFileName.EN_US.getValue())) {
             entriesItem.setLang(2);
         } else {
             entriesItem.setLang(1);
