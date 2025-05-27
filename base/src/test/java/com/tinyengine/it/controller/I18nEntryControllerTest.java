@@ -58,7 +58,7 @@ class I18nEntryControllerTest {
     }
 
     @Test
-    void testGetAllI18nEntries() {
+    void testGetI18nEntriesByApp() {
         I18nEntryListResult mockData = new I18nEntryListResult();
         when(i18nEntryService.findI18nEntryByApp(anyInt(), anyString())).thenReturn(mockData);
         Integer host = 1;

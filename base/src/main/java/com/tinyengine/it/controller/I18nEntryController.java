@@ -70,7 +70,7 @@ public class I18nEntryController {
     private I18nEntryService i18nEntryService;
 
     /**
-     * Gets all i 18 n entries by app.
+     * Gets i 18 n entries by app.
      *
      * @return 获取国际化词条列表 i 18 n entries
      */
@@ -79,7 +79,7 @@ public class I18nEntryController {
             content = @Content(mediaType = "application/json", schema = @Schema())),
         @ApiResponse(responseCode = "400", description = "请求失败")
     })
-    @SystemControllerLog(description = "获取国际化词条列表")
+    @SystemControllerLog(description = "通过app获取国际化词条列表")
     @GetMapping("/i18n/entries")
     public Result<I18nEntryListResult> getI18nEntriesByApp( @RequestParam(value = "host", required = false) Integer host,
         @RequestParam(value = "host_type", required = false) String hostType) {
