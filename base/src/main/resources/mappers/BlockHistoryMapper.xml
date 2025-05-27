@@ -14,7 +14,7 @@
 
     <!-- 通用条件列 -->
     <sql id="BlockHistoryByCondition">
-        <if test="refId!=null and refId!=''">
+        <if test="refId!=null">
             AND ref_id = #{refId}
         </if>
         <if test="message!=null and message!=''">
@@ -56,7 +56,7 @@
         <if test="isOfficial!=null">
             AND is_official = #{isOfficial}
         </if>
-        <if test="isPublic!=null and isPublic!=''">
+        <if test="isPublic!=null">
             AND public = #{isPublic}
         </if>
         <if test="isDefault!=null">
@@ -68,10 +68,10 @@
         <if test="mode!=null and mode!=''">
             AND mode = #{mode}
         </if>
-        <if test="platformId!=null and platformId!=''">
+        <if test="platformId!=null">
             AND platform_id = #{platformId}
         </if>
-        <if test="appId!=null and appId!=''">
+        <if test="appId!=null">
             AND app_id = #{appId}
         </if>
         <if test="npmName!=null and npmName!=''">
@@ -89,10 +89,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -108,7 +108,7 @@
 
     <!-- 通用设置列 -->
     <sql id="BlockHistorySetColumns">
-        <if test="refId!=null and refId!=''">
+        <if test="refId!=null">
             ref_id = #{refId},
         </if>
         <if test="message!=null and message!=''">
@@ -150,7 +150,7 @@
         <if test="isOfficial!=null">
             is_official = #{isOfficial},
         </if>
-        <if test="isPublic!=null and isPublic!=''">
+        <if test="isPublic!=null">
             public = #{isPublic},
         </if>
         <if test="isDefault!=null">
@@ -162,10 +162,10 @@
         <if test="mode!=null and mode!=''">
             mode = #{mode},
         </if>
-        <if test="platformId!=null and platformId!=''">
+        <if test="platformId!=null">
             platform_id = #{platformId},
         </if>
-        <if test="appId!=null and appId!=''">
+        <if test="appId!=null">
             app_id = #{appId},
         </if>
         <if test="npmName!=null and npmName!=''">
@@ -183,10 +183,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

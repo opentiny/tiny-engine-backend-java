@@ -8,8 +8,8 @@ spring:
     password:
   sql:
     init:
-      schema-locations: classpath:sql/h2/create_all_tables_ddl_v1.h2.sql
-      data-locations: classpath:sql/h2/init_data_for_test.sql
+      schema-locations: classpath:sql/h2/create_all_tables_ddl_v1.0.0.h2.sql
+      data-locations: classpath:sql/h2/init_data_for_test_v1.0.0.sql
 
 springdoc:
   api-docs:

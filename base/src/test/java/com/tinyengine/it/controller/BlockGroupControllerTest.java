@@ -39,8 +39,10 @@ import java.util.List;
 class BlockGroupControllerTest {
     @Mock
     private BlockGroupService blockGroupService;
+
     @Mock
     private BlockGroupMapper blockGroupMapper;
+
     @InjectMocks
     private BlockGroupController blockGroupController;
 
@@ -52,12 +54,11 @@ class BlockGroupControllerTest {
     @Test
     void testGetAllBlockGroups() {
         BlockGroup mockData = new BlockGroup();
-        when(blockGroupService.getBlockGroupByIdsOrAppId(any(List.class), anyInt(), any()))
-                .thenReturn(Arrays.asList(mockData));
+        when(blockGroupService.getBlockGroupByIdsOrAppId(any(List.class), anyInt(), any())).thenReturn(
+            Arrays.asList(mockData));
 
-        Result<List<BlockGroup>> result =
-                blockGroupController.getAllBlockGroups(
-                        Arrays.<Integer>asList(Integer.valueOf(0)), Integer.valueOf(0), "block");
+        Result<List<BlockGroup>> result = blockGroupController.getAllBlockGroups(
+              Arrays.<Integer>asList(Integer.valueOf(0)), Integer.valueOf(0), "block");
         Assertions.assertEquals(mockData, result.getData().get(0));
     }
 
@@ -75,8 +76,7 @@ class BlockGroupControllerTest {
         BlockGroup blockGroup = new BlockGroup();
         when(blockGroupService.findBlockGroupById(1)).thenReturn(blockGroup);
 
-        Result<List<BlockGroup>> result =
-                blockGroupController.updateBlockGroups(1, new BlockGroup());
+        Result<List<BlockGroup>> result = blockGroupController.updateBlockGroups(1, new BlockGroup());
         Assertions.assertEquals("200", result.getCode());
     }
 

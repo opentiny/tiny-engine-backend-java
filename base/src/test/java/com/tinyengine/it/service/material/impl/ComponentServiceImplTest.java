@@ -132,7 +132,8 @@ class ComponentServiceImplTest {
         componentLibrary.setId(1);
         List<ComponentLibrary> componentLibraryList = new ArrayList<>();
         componentLibraryList.add(componentLibrary);
-        when(componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary)).thenReturn(componentLibraryList);
+        when(componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary))
+            .thenReturn(componentLibraryList);
         MultipartFile file = mock(MultipartFile.class);
         when(file.getOriginalFilename()).thenReturn("example.json");
         when(file.getContentType()).thenReturn("application/json");

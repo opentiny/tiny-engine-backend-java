@@ -75,9 +75,10 @@ public class I18nEntryController {
      * @return 获取国际化词条列表 all i 18 n entries
      */
     @Operation(summary = "获取国际化词条列表", description = "获取国际化词条列表", responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取国际化词条列表")
     @GetMapping("/i18n/entries")
     public Result<I18nEntryListResult> getAllI18nEntries() {
@@ -92,11 +93,12 @@ public class I18nEntryController {
      * @return 国际化语言详情 i 18 n entries by id
      */
     @Operation(summary = "获取国际化语言的详情", description = "获取国际化语言的详情", parameters = {
-            @Parameter(name = "id", description = "I18nEntries主键id")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = I18nEntry.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "I18nEntries主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = I18nEntry.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取国际化语言的详情")
     @GetMapping("/i18n/entries/{id}")
     public Result<I18nEntryDto> getI18nEntriesById(@Valid @PathVariable Integer id) {
@@ -111,11 +113,12 @@ public class I18nEntryController {
      * @return result
      */
     @Operation(summary = "创建国际化多语言词条", description = "创建国际化多语言词条", parameters = {
-            @Parameter(name = "OperateI18nEntries", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = I18nEntry.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "OperateI18nEntries", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = I18nEntry.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "创建国际化多语言词条")
     @PostMapping("/i18n/entries/create")
     public Result<List<I18nEntry>> createI18nEntries(@Valid @RequestBody OperateI18nEntries operateI18nEntries) {
@@ -131,11 +134,12 @@ public class I18nEntryController {
      * @return the result
      */
     @Operation(summary = "批量创建国际化多语言词条", description = "批量创建国际化多语言词条", parameters = {
-            @Parameter(name = "operateI18nBatchEntries", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = I18nEntry.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "operateI18nBatchEntries", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = I18nEntry.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "批量创建国际化多语言词条")
     @PostMapping("/i18n/entries/batch/create")
     public Result<List<I18nEntry>> batchCreateEntries(
@@ -153,15 +157,17 @@ public class I18nEntryController {
      * @return the result
      */
     @Operation(summary = "修改国际化单语言词条", description = "修改国际化单语言词条", parameters = {
-            @Parameter(name = "id", description = "I18nEntries主键id"),
-            @Parameter(name = "i18nEntries", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = I18nEntry.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "I18nEntries主键id"),
+        @Parameter(name = "i18nEntries", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = I18nEntry.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改国际化单语言词条")
     @PostMapping("/i18n/entries/update/{id}")
-    public Result<I18nEntryDto> updateI18nEntries(@PathVariable Integer id, @RequestBody I18nEntry i18nEntries) {
+    public Result<I18nEntryDto> updateI18nEntries(@PathVariable Integer id,
+        @RequestBody I18nEntry i18nEntries) {
         i18nEntries.setId(id);
         i18nEntryService.updateI18nEntryById(i18nEntries);
         I18nEntryDto i18nEntryDto = i18nEntryService.findI18nEntryById(id);
@@ -175,11 +181,12 @@ public class I18nEntryController {
      * @return 修改成功信息 result
      */
     @Operation(summary = "修改国际化多语言词条", description = "修改国际化多语言词条", parameters = {
-            @Parameter(name = "operateI18nEntries", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = I18nEntry.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "operateI18nEntries", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = I18nEntry.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改国际化多语言词条")
     @PostMapping("/i18n/entries/update")
     public Result<List<I18nEntry>> updateEntry(@Valid @RequestBody OperateI18nEntries operateI18nEntries) {
@@ -197,11 +204,12 @@ public class I18nEntryController {
      * @throws ServiceException the service exception
      */
     @Operation(summary = "删除多语言词条", description = "删除多语言词条", parameters = {
-            @Parameter(name = "iDeleteI18nEntry", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = I18nEntry.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "iDeleteI18nEntry", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = I18nEntry.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "删除多语言词条")
     @PostMapping("/i18n/entries/bulk/delete")
     public Result<List<I18nEntryDto>> deleteI18nEntries(@RequestBody DeleteI18nEntry deleteI18nEntry)
@@ -220,16 +228,18 @@ public class I18nEntryController {
      * @throws Exception the exception
      */
     @Operation(summary = "应用下上传单文件处理国际化词条", description = "应用下上传单文件处理国际化词条", parameters = {
-            @Parameter(name = "id", description = "appId"),
-            @Parameter(name = "filesMap", description = "文件参数对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "appId"),
+        @Parameter(name = "filesMap", description = "文件参数对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "应用下上传单文件处理国际化词条")
     @PostMapping("/apps/{id}/i18n/entries/update")
     public Result<FileResult> updateI18nSingleFile(
-            @PathVariable Integer id,
-            @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
+        @PathVariable Integer id,
+        @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
         Result<FileResult> result = new Result<>();
 
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {
@@ -253,23 +263,19 @@ public class I18nEntryController {
      * @return the result
      * @throws Exception exception
      */
-    @Operation(summary = "应用下批量上传国际化词条文件",
-            description = "应用下批量上传国际化词条文件",
-            parameters = {
-                    @Parameter(name = "id", description = "appId"),
-                    @Parameter(name = "filesMap", description = "文件参数对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema())),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "应用下批量上传国际化词条文件", description = "应用下批量上传国际化词条文件", parameters = {
+        @Parameter(name = "id", description = "appId"),
+        @Parameter(name = "filesMap", description = "文件参数对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "应用下批量上传国际化词条文件")
     @PostMapping("/apps/{id}/i18n/entries/multiUpdate")
     public Result<FileResult> updateI18nMultiFile(
-            @PathVariable Integer id,
-            @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
+        @PathVariable Integer id,
+        @RequestParam Map<String, MultipartFile> filesMap) throws Exception {
         Result<FileResult> result = new Result<>();
         // 处理上传的文件
         for (Map.Entry<String, MultipartFile> entry : filesMap.entrySet()) {

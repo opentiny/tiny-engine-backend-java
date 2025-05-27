@@ -68,11 +68,12 @@ public class PageHistoryController {
      * @return all page history
      */
     @Operation(summary = "获取页面历史记录列表", description = "获取页面历史记录列表", parameters = {
-            @Parameter(name = "page", description = "page页面主键id")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PageHistory.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "page", description = "page页面主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取页面历史记录列表")
     @GetMapping("/pages/histories")
     public Result<List<PageHistory>> getAllPageHistory(@RequestParam Integer page) {
@@ -88,11 +89,12 @@ public class PageHistoryController {
      * @return  page history
      */
     @Operation(summary = "获取页面历史记录列表", description = "获取页面历史记录列表", parameters = {
-            @Parameter(name = "page", description = "page页面主键id")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PageHistory.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "page", description = "page页面主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取页面历史记录列表")
     @PostMapping("/pages/history/published")
     public Result<IPage<PublishedPageVo>> getLatestPublishPage(@RequestBody PageQueryVo<PublishedPageVo> pageQueryVo) {
@@ -107,11 +109,12 @@ public class PageHistoryController {
      * @return page history by id
      */
     @Operation(summary = "获取页面历史记录明细", description = "获取页面历史记录明细", parameters = {
-            @Parameter(name = "id", description = "页面历史主键id")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PageHistory.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "页面历史主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+             content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取页面历史记录明细")
     @GetMapping("/pages/histories/detail/{historyId}")
     public Result<PageHistory> getPageHistoryById(@PathVariable Integer historyId) {
@@ -126,11 +129,12 @@ public class PageHistoryController {
      * @return result
      */
     @Operation(summary = "创建页面历史记录", description = "创建页面历史记录", parameters = {
-            @Parameter(name = "pageHistory", description = "入参对象")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PageHistory.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "pageHistory", description = "入参对象")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "创建页面历史记录")
     @PostMapping("/pages/history/create")
     public Result<PageHistory> createPageHistory(@Valid @RequestBody PageHistory pageHistory) {
@@ -153,11 +157,12 @@ public class PageHistoryController {
      * @return result
      */
     @Operation(summary = "删除页面历史记录", description = "删除页面历史记录", parameters = {
-            @Parameter(name = "id", description = "页面历史主键id")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PageHistory.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+        @Parameter(name = "id", description = "页面历史主键id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "删除页面历史记录")
     @GetMapping("/pages/histories/delete/{historyId}")
     public Result<PageHistory> deletePageHistory(@PathVariable Integer historyId) {
@@ -173,19 +178,19 @@ public class PageHistoryController {
      * @param name the name
      * @return result
      */
-    @Operation(summary = "根据名称查询页面历史记录", description = "根据名称查询页面历史记录",
-            parameters = {
-                    @Parameter(name = "name", description = "页面名称"),
-                    @Parameter(name = "app", description = "appId")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
+    @Operation(summary = "根据名称查询页面历史记录", description = "根据名称查询页面历史记录", parameters = {
+        @Parameter(name = "name", description = "页面名称"),
+        @Parameter(name = "app", description = "appId")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = PageHistory.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+       @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "根据名称查询页面历史记录")
     @GetMapping("/pages/histories/find")
-    public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name, @RequestParam Integer app) {
+    public Result<List<PageHistory>> findPageHistory(@RequestParam("name") String name,
+        @RequestParam Integer app) {
         List<PageHistory> pageHistoryList = pageHistoryService.findPageHistoryByName(name, app);
         return Result.success(pageHistoryList);
     }

@@ -75,29 +75,11 @@ public class AiChatServiceImpl implements AiChatService {
     @SystemServiceLog(description = "getAnswerFromAi 获取ai回答")
     @Override
     public Result<Map<String, Object>> getAnswerFromAi(AiParam aiParam) {
-        String token = aiParam.getFoundationModel().get("token");
-        if (token == null || token.isEmpty()) {
-            return Result.failed("The token cannot be empty");
-        }
-        if (!Pattern.matches("^[A-Za-z0-9_.-]+$", token)) {
-            return Result.failed("Invalid token format");
+        Result<Map<String, Object>> resultData = checkParam(aiParam);
+        if (resultData.getData() == null) {
+            return resultData;
         }
 
-        if (aiParam.getMessages().isEmpty()) {
-            return Result.failed("Not passing the correct message parameter");
-        }
-        Map<String, String> foundationModel = aiParam.getFoundationModel();
-        String model = aiParam.getFoundationModel().get("model");
-        if (aiParam.getFoundationModel().get("model").isEmpty()) {
-            model = Enums.FoundationModel.GPT_35_TURBO.getValue();
-        }
-        foundationModel.put("model", model);
-        aiParam.setFoundationModel(foundationModel);
-        Result<Map<String, Object>> resultData = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel());
-        // 调用接口失败时且data为null
-        if (!resultData.isSuccess() && resultData.getData() == null) {
-            return Result.failed(resultData.getCode(), resultData.getMessage());
-        }
         Map<String, Object> data = resultData.getData();
         if (data.isEmpty()) {
             return Result.failed("调用AI大模型接口未返回正确数据");
@@ -134,7 +116,7 @@ public class AiChatServiceImpl implements AiChatService {
             try {
                 data = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel()).getData();
             } catch (Exception e) {
-                throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
+                throw new ServiceException(ExceptionEnum.CM001.getResultCode(), e.getMessage());
             }
             choices = (List<Map<String, Object>>) data.get("choices");
             message = (Map<String, String>) choices.get(0).get("message");
@@ -145,12 +127,41 @@ public class AiChatServiceImpl implements AiChatService {
                 isFinish = (String) finishReason;
             }
         }
-
-
-        String replyWithoutCode = removeCode(answerContent);
         // 通过二方包将页面转成schema
         String codes = extractCode(answerContent);
+        Map<String, Object> result = buildResult(answerContent, message);
+        return Result.success(result);
+    }
 
+    private Result<Map<String, Object>> checkParam(AiParam aiParam) {
+        String token = aiParam.getFoundationModel().get("token");
+        if (token == null || token.isEmpty()) {
+            return Result.failed("The token cannot be empty");
+        }
+        if (!Pattern.matches("^[A-Za-z0-9_.-]+$", token)) {
+            return Result.failed("Invalid token format");
+        }
+
+        if (aiParam.getMessages().isEmpty()) {
+            return Result.failed("Not passing the correct message parameter");
+        }
+        Map<String, String> foundationModel = aiParam.getFoundationModel();
+        String model = aiParam.getFoundationModel().get("model");
+        if (aiParam.getFoundationModel().get("model").isEmpty()) {
+            model = Enums.FoundationModel.GPT_35_TURBO.getValue();
+        }
+        foundationModel.put("model", model);
+        aiParam.setFoundationModel(foundationModel);
+        Result<Map<String, Object>> resultData = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel());
+        // 调用接口失败时且data为null
+        if (!resultData.isSuccess() && resultData.getData() == null) {
+            return Result.failed(resultData.getCode(), resultData.getMessage());
+        }
+        return resultData;
+    }
+
+    private Map<String, Object> buildResult(String answerContent, Map<String, String> message) {
+        String replyWithoutCode = removeCode(answerContent);
         Map<String, Object> schema = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
         AiMessages aiMessagesresult = new AiMessages();
@@ -160,11 +171,11 @@ public class AiChatServiceImpl implements AiChatService {
         result.put("originalResponse", aiMessagesresult);
         result.put("replyWithoutCode", replyWithoutCode);
         result.put("schema", schema);
-
-        return Result.success(result);
+        return result;
     }
 
-    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages, Map<String, String> foundationModel) {
+    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages,
+        Map<String, String> foundationModel) {
         List<AiMessages> aiMessages = formatMessage(messages);
 
         AiParam aiParam = new AiParam(foundationModel, aiMessages);
@@ -196,7 +207,6 @@ public class AiChatServiceImpl implements AiChatService {
      * @return result 返回结果
      */
     private Result<Map<String, Object>> modelResultConvet(Map<String, Object> response) {
-
         // 构建返回的 Map 结构
         Map<String, Object> resData = new HashMap<>(response); // Copy original data
 
@@ -214,7 +224,6 @@ public class AiChatServiceImpl implements AiChatService {
         resData.put("choices", choices);
 
         return Result.success(resData);
-
     }
 
     /**
@@ -256,17 +265,12 @@ public class AiChatServiceImpl implements AiChatService {
     private List<AiMessages> formatMessage(List<AiMessages> messages) {
         AiMessages defaultWords = new AiMessages();
         defaultWords.setRole("user");
-        defaultWords.setContent("你是一名前端开发专家，编码时遵从以下几条要求:\n"
-                + "###\n"
-                + "1. 只使用 element-ui组件库的el-button 和 el-table组件\n"
+        defaultWords.setContent(
+            "你是一名前端开发专家，编码时遵从以下几条要求:\n" + "###\n" + "1. 只使用 element-ui组件库的el-button 和 el-table组件\n"
                 + "2. el-table表格组件的使用方式为 <el-table :columns=\"columnData\" :data=\"tableData\"></el-table> "
                 + "columns的columnData表示列数据，其中用title表示列名，field表示表格数据字段； data的tableData表示表格展示的数据。 "
-                + "el-table标签内不得出现子元素\n"
-                + "3. 使用vue2技术栈\n"
-                + "4. 回复中只能有一个代码块\n"
-                + "5. 不要加任何注释\n"
-                + "6. el-table标签内不得出现el-table-column\n"
-                + "###");
+                + "el-table标签内不得出现子元素\n" + "3. 使用vue2技术栈\n" + "4. 回复中只能有一个代码块\n"
+                + "5. 不要加任何注释\n" + "6. el-table标签内不得出现el-table-column\n" + "###");
         defaultWords.setName(messages.get(0).getName());
         String role = messages.get(0).getRole();
         String content = messages.get(0).getContent();

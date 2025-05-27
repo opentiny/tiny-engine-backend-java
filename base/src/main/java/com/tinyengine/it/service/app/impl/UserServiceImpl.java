@@ -18,7 +18,6 @@ import com.tinyengine.it.service.app.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +51,7 @@ public class UserServiceImpl implements UserService {
      * @return query result
      */
     @Override
-    public User queryUserById(@Param("id") Integer id) {
+    public User queryUserById(String id) {
         return userMapper.queryUserById(id);
     }
 
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteUserById(@Param("id") Integer id) {
+    public Integer deleteUserById(String id) {
         return userMapper.deleteUserById(id);
     }
 

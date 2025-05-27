@@ -66,7 +66,7 @@ public interface BlockService {
 
     /**
      * 根据主键id更新表t_block信息
-     *
+     * @param appId  appId
      * @param blockParam the block param
      * @return the BlockDto
      */

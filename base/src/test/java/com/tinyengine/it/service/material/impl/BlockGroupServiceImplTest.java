@@ -42,12 +42,16 @@ import java.util.List;
 class BlockGroupServiceImplTest {
     @Mock
     private BlockGroupMapper blockGroupMapper;
+
     @InjectMocks
     private BlockGroupServiceImpl blockGroupServiceImpl;
+
     @Mock
     private BlockCarriersRelationMapper blockCarriersRelationMapper;
+
     @Mock
     private BlockGroupBlockMapper blockGroupBlockMapper;
+
     @Mock
     private LoginUserContext loginUserContext;
 
@@ -114,7 +118,8 @@ class BlockGroupServiceImplTest {
         blockList.add(block);
         when(blockGroupMapper.createBlockGroup(param)).thenReturn(1);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
-        when(blockGroupMapper.queryBlockGroupAndBlockById(1, null, loginUserContext.getLoginUserId())).thenReturn(param);
+        when(blockGroupMapper.queryBlockGroupAndBlockById(1, null, loginUserContext.getLoginUserId())).thenReturn(
+            param);
         BlockGroup blockGroupParam = new BlockGroup();
         blockGroupParam.setId(1);
         Result<BlockGroup> result = blockGroupServiceImpl.createBlockGroup(blockGroupParam);

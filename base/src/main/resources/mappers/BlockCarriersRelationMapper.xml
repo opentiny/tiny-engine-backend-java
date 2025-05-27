@@ -12,10 +12,10 @@
 
     <!-- 通用条件列 -->
     <sql id="BlockCarriersRelationByCondition">
-        <if test="hostId!=null and hostId!=''">
+        <if test="hostId!=null">
             AND host_id = #{hostId}
         </if>
-        <if test="blockId!=null and blockId!=''">
+        <if test="blockId!=null">
             AND block_id = #{blockId}
         </if>
         <if test="hostType!=null and hostType!=''">
@@ -39,20 +39,20 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
     </sql>
 
     <!-- 通用设置列 -->
     <sql id="BlockCarriersRelationSetColumns">
-        <if test="hostId!=null and hostId!=''">
+        <if test="hostId!=null">
             host_id = #{hostId},
         </if>
-        <if test="blockId!=null and blockId!=''">
+        <if test="blockId!=null">
             block_id = #{blockId},
         </if>
         <if test="hostType!=null and hostType!=''">
@@ -208,7 +208,7 @@
                , #{hostId}
                , #{blockId}
                , #{hostType}
-               , #{version},
+               , #{version}
                , #{createdBy}
                , #{lastUpdatedBy}
                , #{createdTime}

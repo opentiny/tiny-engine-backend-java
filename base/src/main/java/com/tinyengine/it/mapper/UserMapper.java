@@ -38,7 +38,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param id the id
      * @return the user
      */
-    User queryUserById(@Param("id") Integer id);
+    User queryUserById(@Param("id") String id);
 
     /**
      * 根据条件查询表t_user数据
@@ -54,7 +54,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param id the id
      * @return the integer
      */
-    Integer deleteUserById(@Param("id") Integer id);
+    Integer deleteUserById(@Param("id") String id);
 
     /**
      * 根据主键id更新表t_user数据

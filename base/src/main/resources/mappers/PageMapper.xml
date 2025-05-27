@@ -17,7 +17,7 @@
         <if test="name!=null and name!=''">
             AND name = #{name}
         </if>
-        <if test="app!=null and app!=''">
+        <if test="app!=null">
             AND app_id = #{app}
         </if>
         <if test="route!=null and route!=''">
@@ -29,13 +29,13 @@
         <if test="isBody!=null">
             AND is_body = #{isBody}
         </if>
-        <if test="parentId!=null and parentId!=''">
+        <if test="parentId!=null">
             AND parent_id = #{parentId}
         </if>
         <if test="group!=null and group!=''">
             AND `group` = #{group}
         </if>
-        <if test="depth!=null and depth!=''">
+        <if test="depth!=null">
             AND `depth` = #{depth}
         </if>
         <if test="isPage!=null">
@@ -53,7 +53,7 @@
         <if test="latestVersion!=null and latestVersion!=''">
             AND latest_version = #{latestVersion}
         </if>
-        <if test="latestHistoryId!=null and latestHistoryId!=''">
+        <if test="latestHistoryId!=null">
             AND latest_history_id = #{latestHistoryId}
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -62,10 +62,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             AND last_updated_by = #{lastUpdatedBy}
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
@@ -84,7 +84,7 @@
         <if test="name!=null and name!=''">
             name = #{name},
         </if>
-        <if test="app!=null and app!=''">
+        <if test="app!=null">
             app_id = #{app},
         </if>
         <if test="route!=null and route!=''">
@@ -96,13 +96,13 @@
         <if test="isBody!=null">
             is_body = #{isBody},
         </if>
-        <if test="parentId!=null and parentId!=''">
+        <if test="parentId!=null">
             parent_id = #{parentId},
         </if>
         <if test="group!=null and group!=''">
             `group` = #{group},
         </if>
-        <if test="depth!=null and depth!=''">
+        <if test="depth!=null">
             `depth` = #{depth},
         </if>
         <if test="isPage!=null">
@@ -120,7 +120,7 @@
         <if test="latestVersion!=null and latestVersion!=''">
             latest_version = #{latestVersion},
         </if>
-        <if test="latestHistoryId!=null and latestHistoryId!=''">
+        <if test="latestHistoryId!=null">
             latest_history_id = #{latestHistoryId},
         </if>
         <if test="createdBy!=null and createdBy!=''">
@@ -129,10 +129,10 @@
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
             last_updated_by = #{lastUpdatedBy},
         </if>
-        <if test="createdTime!=null and createdTime!=''">
+        <if test="createdTime!=null">
             created_time = #{createdTime},
         </if>
-        <if test="lastUpdatedTime!=null and lastUpdatedTime!=''">
+        <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">

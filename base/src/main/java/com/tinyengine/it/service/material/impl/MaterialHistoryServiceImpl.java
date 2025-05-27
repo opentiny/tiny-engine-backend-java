@@ -104,8 +104,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<MaterialHistory> result = this.findMaterialHistoryById(materialHistory.getId());
-        return result;
+        return this.findMaterialHistoryById(materialHistory.getId());
     }
 
     /**
@@ -120,7 +119,6 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Result<MaterialHistory> result = this.findMaterialHistoryById(materialHistory.getId());
-        return result;
+        return this.findMaterialHistoryById(materialHistory.getId());
     }
 }
