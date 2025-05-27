@@ -60,9 +60,10 @@ class I18nEntryControllerTest {
     @Test
     void testGetAllI18nEntries() {
         I18nEntryListResult mockData = new I18nEntryListResult();
-        when(i18nEntryService.findAllI18nEntry()).thenReturn(mockData);
-
-        Result<I18nEntryListResult> result = i18nEntryController.getAllI18nEntries();
+        when(i18nEntryService.findI18nEntryByApp(anyInt(), anyString())).thenReturn(mockData);
+        Integer host = 1;
+        String hostType = "app";
+        Result<I18nEntryListResult> result = i18nEntryController.getI18nEntriesByApp(host, hostType);
         Assertions.assertEquals(mockData, result.getData());
     }
 
