@@ -75,9 +75,9 @@ public class I18nEntryController {
      * @return 获取国际化词条列表 i 18 n entries
      */
     @Operation(summary = "通过app获取国际化词条列表", description = "通过app获取国际化词条列表", responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "请求失败")
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+        @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取国际化词条列表")
     @GetMapping("/i18n/entries")
