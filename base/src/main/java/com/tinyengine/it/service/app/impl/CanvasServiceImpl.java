@@ -47,7 +47,7 @@ public class CanvasServiceImpl implements CanvasService {
         String occupier;
         // needTODO 先试用mock数据，后续添加登录及权限后从session获取,
         User user = userMapper.queryUserById(loginUserContext.getLoginUserId());
-        if(user == null) {
+        if (user == null) {
             user = new User();
             user.setId(loginUserContext.getLoginUserId());
         }

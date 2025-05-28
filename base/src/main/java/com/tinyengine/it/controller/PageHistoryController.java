@@ -111,7 +111,7 @@ public class PageHistoryController {
         @Parameter(name = "id", description = "页面历史主键id")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
-             content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
         @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取页面历史记录明细")
@@ -182,9 +182,8 @@ public class PageHistoryController {
         @Parameter(name = "app", description = "appId")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = PageHistory.class))),
-       @ApiResponse(responseCode = "400", description = "请求失败")
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "根据名称查询页面历史记录")
     @GetMapping("/pages/histories/find")

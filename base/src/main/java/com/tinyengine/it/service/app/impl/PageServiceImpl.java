@@ -53,7 +53,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -285,7 +284,7 @@ public class PageServiceImpl implements PageService {
         pageHistory.setId(null);
         pageHistory.setMessage(page.getMessage());
         pageHistory.setIsPublished(false);
-        pageHistory.setVersion("draft");
+        pageHistory.setVersion("0");
         int resultPageHistory = pageHistoryService.createPageHistory(pageHistory);
         if (resultPageHistory < 1) {
             return Result.failed(ExceptionEnum.CM001);
@@ -379,7 +378,9 @@ public class PageServiceImpl implements PageService {
         pageHistory.setPage(pageTemp.getId());
         pageHistory.setId(null);
         pageHistory.setIsPublished(false);
-        pageHistory.setVersion("draft");
+        String maxVersion =
+            pageHistoryService.selectMaxVersionOfPageHistory(pageHistory.getName(), pageHistory.getApp());
+        pageHistory.setVersion(maxVersion);
         int resultPageHistory = pageHistoryService.createPageHistory(pageHistory);
         if (resultPageHistory < 1) {
             return Result.failed(ExceptionEnum.CM001);
@@ -541,7 +542,7 @@ public class PageServiceImpl implements PageService {
         // needTODO 从缓存中获取的user信息
         User user = userService.queryUserById(loginUserContext.getLoginUserId());
         // 逻辑不对，如果没有同步用户数据，就用登录用户的
-        if(user == null) {
+        if (user == null) {
             user = new User();
             user.setId(loginUserContext.getLoginUserId());
             user.setUsername(loginUserContext.getLoginUserId());

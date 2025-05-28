@@ -80,7 +80,7 @@ public class I18nEntryController {
     })
     @SystemControllerLog(description = "通过app获取国际化词条列表")
     @GetMapping("/i18n/entries")
-    public Result<I18nEntryListResult> getI18nEntriesByApp( @RequestParam(value = "host", required = false) Integer host,
+    public Result<I18nEntryListResult> getI18nEntriesByApp(@RequestParam(value = "host", required = false) Integer host,
         @RequestParam(value = "host_type", required = false) String hostType) {
         I18nEntryListResult i18nEntriesList = i18nEntryService.findI18nEntryByApp(host, hostType);
         return Result.success(i18nEntriesList);

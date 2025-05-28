@@ -119,7 +119,7 @@ public class BlockGroupController {
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = BlockGroup.class))),
-         @ApiResponse(responseCode = "400", description = "请求失败")
+        @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "修改区块分组")
     @PostMapping("/block-groups/update/{id}")
