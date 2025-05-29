@@ -173,31 +173,6 @@
                     <target>17</target>   <!-- 生成字节码的 Java 版本 -->
                 </configuration>
             </plugin>
-
-            <!-- Maven Checkstyle Plugin 配置 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.6.0</version>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>   <!-- 在 validate 阶段执行 -->
-                        <goals>
-                            <goal>check</goal>   <!-- 运行 check 目标 -->
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!-- 配置 checkstyle.xml 文件的路径 -->
-                    <configLocation>app/src/main/resources/checkstyle.xml</configLocation>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
-                    <linkXRef>false</linkXRef>
-                    <outputFile>target/checkstyle-result.xml</outputFile>
-                    <outputFileFormat>xml</outputFileFormat>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
