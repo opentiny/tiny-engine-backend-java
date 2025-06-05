@@ -14,6 +14,7 @@ package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.mapper.UserMapper;
@@ -44,7 +45,7 @@ public class CanvasServiceImpl implements CanvasService {
 
     @Override
     public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
-        String occupier;
+        String occupier = null;
         // needTODO 先试用mock数据，后续添加登录及权限后从session获取,
         User user = userMapper.queryUserById(loginUserContext.getLoginUserId());
         if (user == null) {
@@ -52,17 +53,21 @@ public class CanvasServiceImpl implements CanvasService {
             user.setId(loginUserContext.getLoginUserId());
         }
         CanvasDto canvasDto = new CanvasDto();
+        String value = state.equals(Enums.CanvasEditorState.OCCUPY.getValue()) ? user.getId() : null;
+        User occupierValue = state.equals(Enums.CanvasEditorState.OCCUPY.getValue()) ? user : null;
         if ("page".equals(type)) {
             Page page = pageMapper.queryPageById(id);
-            occupier = page.getOccupier().getId();
+            if (page.getOccupier() != null) {
+                occupier = page.getOccupier().getId();
+            }
             Boolean isCaDoIt = isCanDoIt(occupier, user);
             if (isCaDoIt) {
                 Page updatePage = new Page();
                 updatePage.setId(id);
-                updatePage.setOccupierBy(user.getId());
+                updatePage.setOccupierBy(value);
                 pageMapper.updatePageById(updatePage);
                 canvasDto.setOperate("success");
-                canvasDto.setOccupier(user);
+                canvasDto.setOccupier(occupierValue);
                 return Result.success(canvasDto);
             }
         } else {
@@ -72,15 +77,15 @@ public class CanvasServiceImpl implements CanvasService {
             if (isCaDoIt) {
                 Block updateBlock = new Block();
                 updateBlock.setId(id);
-                updateBlock.setOccupierBy(user.getId());
+                updateBlock.setOccupierBy(value);
                 blockMapper.updateBlockById(updateBlock);
                 canvasDto.setOperate("success");
-                canvasDto.setOccupier(user);
+                canvasDto.setOccupier(occupierValue);
                 return Result.success(canvasDto);
             }
         }
         canvasDto.setOperate("failed");
-        canvasDto.setOccupier(user);
+        canvasDto.setOccupier(occupierValue);
         return Result.success(canvasDto);
     }
 
