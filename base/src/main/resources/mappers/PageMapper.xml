@@ -108,7 +108,7 @@
         <if test="isPage!=null">
             is_page = #{isPage},
         </if>
-        <if test="occupierBy!=null and occupierBy!=''">
+        <if test="occupierBy!=''">
             occupier_by = #{occupierBy},
         </if>
         <if test="isDefault!=null">

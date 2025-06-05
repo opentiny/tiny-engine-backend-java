@@ -142,7 +142,7 @@
         <if test="path!=null and path!=''">
             path = #{path},
         </if>
-        <if test="occupierBy!=null and occupierBy!=''">
+        <if test="occupierBy!=''">
             occupier_by = #{occupierBy},
         </if>
         <if test="isOfficial!=null">
