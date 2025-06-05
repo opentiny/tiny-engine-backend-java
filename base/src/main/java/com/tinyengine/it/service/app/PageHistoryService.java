@@ -90,4 +90,13 @@ public interface PageHistoryService {
      * @return page history
      */
     IPage<PublishedPageVo> findLatestPublishPage(PageQueryVo<PublishedPageVo> pageQueryVo);
+
+    /**
+     * 查询页面历史的最大版本号
+     *
+     * @param app the app
+     * @param name the name
+     * @return 页面历史的最大版本号
+     */
+    String selectMaxVersionOfPageHistory(String name, Integer app);
 }

@@ -56,13 +56,13 @@ public class CanvasController {
      * @return CanvasDto
      */
     @Operation(summary = "区块及页面锁", description = "区块及页面锁", parameters = {
-         @Parameter(name = "id", description = "页面id"),
-         @Parameter(name = "state", description = "状态"),
-         @Parameter(name = "type", description = "区分是页面还是区块")
+        @Parameter(name = "id", description = "页面id"),
+        @Parameter(name = "state", description = "状态"),
+        @Parameter(name = "type", description = "区分是页面还是区块")
     }, responses = {
-         @ApiResponse(responseCode = "200", description = "返回信息",
-             content = @Content(mediaType = "application/json", schema = @Schema())),
-         @ApiResponse(responseCode = "400", description = "请求失败")}
+        @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+        @ApiResponse(responseCode = "400", description = "请求失败")}
     )
     @SystemControllerLog(description = "区块及页面锁")
     @GetMapping("apps/canvas/lock")

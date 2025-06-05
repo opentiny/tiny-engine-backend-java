@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class PageHistoryServiceImpl implements PageHistoryService {
+    private static final String DEFAULT_PAGE_HISTORY_VERSION = "0";
+
     @Autowired
     private PageHistoryMapper pageHistoryMapper;
 
@@ -122,5 +125,22 @@ public class PageHistoryServiceImpl implements PageHistoryService {
     public IPage<PublishedPageVo> findLatestPublishPage(PageQueryVo<PublishedPageVo> pageQueryVo) {
         PublishedPageVo queryData = pageQueryVo.getData();
         return pageHistoryMapper.findLatestPublishPage(pageQueryVo.getPage(), queryData);
+    }
+
+    /**
+     * 查询页面历史的最大版本号
+     *
+     * @param app the app
+     * @param name the name
+     * @return 页面历史的最大版本号
+     */
+    @Override
+    public String selectMaxVersionOfPageHistory(String name, Integer app) {
+        List<PageHistory> pageHistories = pageHistoryMapper.queryPageHistoryByName(name, app);
+        if (CollectionUtils.isEmpty(pageHistories)) {
+            return DEFAULT_PAGE_HISTORY_VERSION;
+        }
+        PageHistory lastPageHistory = pageHistories.get(pageHistories.size() - 1);
+        return lastPageHistory.getVersion();
     }
 }

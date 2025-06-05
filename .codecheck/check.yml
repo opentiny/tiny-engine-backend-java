@@ -3,16 +3,13 @@ version: 2.0
 steps:
   pre_codecheck:
     - checkout
-    - sh:
-        command: |
-          cd ${WORKSPACE}/code && export PATH=/opt/buildtools/maven/apache-maven-3.6.3/bin:$PATH && mvn -version && mvn clean compile -Dmaven.test.skip=true -gs /usr1/maven/settings/cbu-maven-user-settings.xml -s /usr1/maven/settings/cbu-maven-user-settings.xml
-        effect_tool: spotbugs
 tool_params:
   secsolar:
-    compile_script: export PATH=/opt/buildtools/maven/apache-maven-3.6.3/bin:$PATH && mvn -version && mvn clean compile -Dmaven.test.skip=true -gs /usr1/maven/settings/cbu-maven-user-settings.xml -s /usr1/maven/settings/cbu-maven-user-settings.xml
+    compile_script: export PATH=/opt/buildtools/maven/apache-maven-3.9.0/bin:$PATH && mvn -version && mvn clean compile -Dmaven.test.skip=true -gs /usr1/maven/settings/huawei-maven-settings.xml -s /usr1/maven/settings/huawei-maven-settings.xml
+    java_version: jdk17
   spotbugs:
-    compileScriptCmd:
+    compileScriptCmd: mvn clean compile -Dmaven.test.skip=true -gs /usr1/maven/settings/huawei-maven-settings.xml -s /usr1/maven/settings/huawei-maven-settings.xml
     workingPath: ./
     compileScriptNote:
-    compileScriptType:
-    jdkVersion:
+    compileScriptType: maven-3.9.0
+    jdkVersion: jdk17

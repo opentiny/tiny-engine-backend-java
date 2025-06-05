@@ -400,6 +400,7 @@ public class Utils {
         log.info("Successfully parsed JSON file: {}", fileName);
         return Result.success(jsonFile);
     }
+
     /**
      * 去除文件BOM字符
      *
@@ -412,6 +413,7 @@ public class Utils {
         }
         return input;
     }
+
     /**
      * 校验文件流合法性
      *

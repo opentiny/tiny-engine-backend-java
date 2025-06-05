@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -47,8 +48,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.Valid;
 
 /**
  * <p>
@@ -81,7 +80,7 @@ public class I18nEntryController {
     })
     @SystemControllerLog(description = "通过app获取国际化词条列表")
     @GetMapping("/i18n/entries")
-    public Result<I18nEntryListResult> getI18nEntriesByApp( @RequestParam(value = "host", required = false) Integer host,
+    public Result<I18nEntryListResult> getI18nEntriesByApp(@RequestParam(value = "host", required = false) Integer host,
         @RequestParam(value = "host_type", required = false) String hostType) {
         I18nEntryListResult i18nEntriesList = i18nEntryService.findI18nEntryByApp(host, hostType);
         return Result.success(i18nEntriesList);

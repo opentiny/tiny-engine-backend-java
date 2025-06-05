@@ -36,7 +36,6 @@ import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.annotations.Param;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -221,7 +220,7 @@ public class ComponentServiceImpl implements ComponentService {
         if (components == null || components.isEmpty()) {
             return Result.failed(ExceptionEnum.CM009);
         }
-        List<Component> componentList = buildComponentList(bundleDto,components,snippets);
+        List<Component> componentList = buildComponentList(bundleDto, components, snippets);
         List<Map<String, Object>> packages = bundleDto.getMaterials().getPackages();
 
         BundleResultDto bundleList = new BundleResultDto();
@@ -293,7 +292,7 @@ public class ComponentServiceImpl implements ComponentService {
             List<Component> queryComponent = findComponentByCondition(componentParam);
             // 查询组件库id
             String packageName = null;
-            if (component.getNpm() != null &&component.getNpm().get("package") != null) {
+            if (component.getNpm() != null && component.getNpm().get("package") != null) {
                 packageName = String.valueOf(component.getNpm().get("package"));
             }
             if (packageName != null && !packageName.isEmpty()) {
@@ -355,7 +354,7 @@ public class ComponentServiceImpl implements ComponentService {
         return result.toString();
     }
 
-    private List<Component> buildComponentList(BundleDto bundleDto, List<Map<String,Object>> components,
+    private List<Component> buildComponentList(BundleDto bundleDto, List<Map<String, Object>> components,
         List<Child> snippets) {
         List<Component> componentList = new ArrayList<>();
         for (Map<String, Object> comp : components) {
