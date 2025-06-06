@@ -47,6 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -250,9 +251,9 @@ public class I18nEntryController {
             if (file.isEmpty()) {
                 return Result.failed(ExceptionEnum.CM307);
             }
-            Map<String, String> fileTypeMap = new HashMap<>();
-            fileTypeMap.put(Enums.FileNameEnd.ZIP.getValue(), Enums.FileType.ZIP.getValue());
-            fileTypeMap.put(Enums.FileNameEnd.JSON.getValue(), Enums.FileType.JSON.getValue());
+            Map<String, List<String>> fileTypeMap = new HashMap<>();
+            fileTypeMap.put(Enums.FileNameEnd.ZIP.getValue(), Arrays.asList(Enums.FileType.ZIP.getValue(), Enums.FileType.XZIP.getValue()));
+            fileTypeMap.put(Enums.FileNameEnd.JSON.getValue(), Arrays.asList(Enums.FileType.JSON.getValue()));
             SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
             boolean checkFileType = SecurityFileCheckUtil.checkFileType(file, fileTypeMap);
             if (!checkFileType) {

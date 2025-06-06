@@ -17,6 +17,7 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.io.IoUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.DeleteI18nEntry;
 import com.tinyengine.it.model.dto.FileResult;
@@ -36,6 +37,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -130,10 +132,13 @@ class I18nEntryControllerTest {
         Result<FileResult> mockData = new Result<>();
         mockData.setSuccess(true);
         when(i18nEntryService.readSingleFileAndBulkCreate(any(MultipartFile.class), anyInt()))
-                .thenReturn(mockData);
+            .thenReturn(mockData);
         MultipartFile file = Mockito.mock(MultipartFile.class);
-        when(file.getOriginalFilename()).thenReturn("example.json");
-        when(file.isEmpty()).thenReturn(false);
+        when(file.getContentType()).thenReturn("application/json");
+        when(file.getOriginalFilename()).thenReturn("originalName.json");
+        when(file.getName()).thenReturn("123");
+        when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
+        when(file.getInputStream()).thenReturn(IoUtil.toStream("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8)));
         HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
             put("filesMap", file);
         }};
@@ -145,10 +150,13 @@ class I18nEntryControllerTest {
     @Test
     void testUpdateI18nMultiFile() throws Exception {
         when(i18nEntryService.readFilesAndbulkCreate(anyString(), any(MultipartFile.class), anyInt()))
-                .thenReturn(new Result<FileResult>());
+            .thenReturn(new Result<FileResult>());
         MultipartFile file = Mockito.mock(MultipartFile.class);
-        when(file.getOriginalFilename()).thenReturn("example.json");
-        when(file.isEmpty()).thenReturn(false);
+        when(file.getContentType()).thenReturn("application/json");
+        when(file.getOriginalFilename()).thenReturn("originalName.json");
+        when(file.getName()).thenReturn("123");
+        when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
+        when(file.getInputStream()).thenReturn(IoUtil.toStream("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8)));
         HashMap<String, MultipartFile> filesMap = new HashMap<String, MultipartFile>() {{
             put("filesMap", file);
         }};

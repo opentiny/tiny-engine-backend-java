@@ -183,11 +183,6 @@ public class ComponentServiceImpl implements ComponentService {
     @Override
     @SystemServiceLog(description = "bundleSplit 拆分bundle.json实现方法")
     public Result<BundleResultDto> bundleSplit(MultipartFile file) {
-        // 检验文件
-        boolean isFileCheck = this.checkFile(file);
-        if (!isFileCheck) {
-            return Result.failed(ExceptionEnum.CM325);
-        }
         // 获取bundle.json数据
         Result<JsonFile> result = Utils.parseJsonFileStream(file);
         if (!result.isSuccess()) {
@@ -391,14 +386,5 @@ public class ComponentServiceImpl implements ComponentService {
             componentList.add(component);
         }
         return componentList;
-    }
-    public boolean checkFile(MultipartFile file) {
-        Map<String, String> fileTypeMap = new HashMap<>();
-        fileTypeMap.put(".json", "application/json");
-        boolean isCheckFileType = SecurityFileCheckUtil.checkFileType(file, fileTypeMap);
-        if (!isCheckFileType) {
-            return false;
-        }
-        return true;
     }
 }

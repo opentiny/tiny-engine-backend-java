@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -61,14 +62,18 @@ public class SecurityFileCheckUtil {
      * @param fileTypeMap the fileTypeMap
      * @return true or false
      */
-    public static boolean checkFileType(MultipartFile file, Map<String, String> fileTypeMap) {
+    public static boolean checkFileType(MultipartFile file, Map<String, List<String>> fileTypeMap) {
         if (Objects.isNull(file) || fileTypeMap.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM307.getResultCode(), ExceptionEnum.CM307.getResultMsg());
         }
         String originalFileName = file.getOriginalFilename();
-        for (Map.Entry<String, String> entry : fileTypeMap.entrySet()) {
+        String contentType = file.getContentType();
+
+        for (Map.Entry<String, List<String>> entry : fileTypeMap.entrySet()) {
             if (originalFileName.endsWith(entry.getKey())) {
-                return checkFileType(file, entry.getKey(), entry.getValue());
+                if (entry.getValue().contains(contentType)) {
+                    return true;
+                }
             }
         }
         return false;

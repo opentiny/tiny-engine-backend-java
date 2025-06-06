@@ -916,6 +916,11 @@ public class Enums {
         ZIP("application/zip"),
 
         /**
+         * File type x-zip.
+         */
+        XZIP("application/x-zip-compressed"),
+
+        /**
          * File type json.
          */
         JSON("application/json"),
