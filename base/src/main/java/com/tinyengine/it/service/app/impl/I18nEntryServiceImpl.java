@@ -21,6 +21,7 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
+import com.tinyengine.it.common.utils.SecurityFileCheckUtil;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.I18nLangMapper;
@@ -326,7 +327,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<EntriesItem> entriesArr = new ArrayList<>();
         String contentType = file.getContentType();
 
-        if (Objects.equals(contentType, Enums.MimeType.JSON.getValue())) {
+        if (Objects.equals(contentType, Enums.FileType.JSON.getValue())) {
+            SecurityFileCheckUtil.isValidJson(file);
             Result<JsonFile> parseJsonFileStreamResult = Utils.parseJsonFileStream(file);
             if (!parseJsonFileStreamResult.isSuccess()) {
                 return Result.failed(ExceptionEnum.CM001);
@@ -357,6 +359,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
     @SystemServiceLog(description = "readFilesAndbulkCreate 批量上传词条数据")
     @Override
     public Result<FileResult> readFilesAndbulkCreate(String lang, MultipartFile file, int host) throws Exception {
+        SecurityFileCheckUtil.isValidJson(file);
         Result<JsonFile> parseJsonFileStreamResult = Utils.parseJsonFileStream(file);
         // 解析 JSON 数据
         if (!parseJsonFileStreamResult.isSuccess()) {

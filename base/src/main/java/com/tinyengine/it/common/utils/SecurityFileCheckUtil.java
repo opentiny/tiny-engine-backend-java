@@ -12,12 +12,14 @@
 package com.tinyengine.it.common.utils;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -177,5 +179,14 @@ public class SecurityFileCheckUtil {
         return file.getName();
     }
 
+    public static void isValidJson(MultipartFile file) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            // 将 MultipartFile 转换为 InputStream 并解析 JSON
+            objectMapper.readTree(file.getInputStream());
+        } catch (IOException e) {
+            throw new ServiceException(ExceptionEnum.CM308.getResultCode(), ExceptionEnum.CM308.getResultMsg());
+        }
+    }
 
 }

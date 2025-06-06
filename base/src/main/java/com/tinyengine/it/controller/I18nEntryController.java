@@ -13,6 +13,7 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
@@ -45,6 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -249,7 +251,11 @@ public class I18nEntryController {
             if (file.isEmpty()) {
                 return Result.failed(ExceptionEnum.CM307);
             }
+            Map<String, String> fileTypeMap = new HashMap<>();
+            fileTypeMap.put(Enums.FileNameEnd.ZIP.getValue(), Enums.FileType.ZIP.getValue());
+            fileTypeMap.put(Enums.FileNameEnd.JSON.getValue(), Enums.FileType.JSON.getValue());
             SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
+            SecurityFileCheckUtil.checkFileType(file, fileTypeMap);
             // 返回插入和更新的条数
             result = i18nEntryService.readSingleFileAndBulkCreate(file, id);
         }
@@ -286,6 +292,7 @@ public class I18nEntryController {
                 return Result.failed(ExceptionEnum.CM307);
             }
             SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
+            SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(), Enums.FileType.JSON.getValue());
             // 返回插入和更新的条数
             result = i18nEntryService.readFilesAndbulkCreate(key, file, id);
         }
