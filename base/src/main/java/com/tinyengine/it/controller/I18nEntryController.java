@@ -254,7 +254,10 @@ public class I18nEntryController {
             fileTypeMap.put(Enums.FileNameEnd.ZIP.getValue(), Enums.FileType.ZIP.getValue());
             fileTypeMap.put(Enums.FileNameEnd.JSON.getValue(), Enums.FileType.JSON.getValue());
             SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
-            SecurityFileCheckUtil.checkFileType(file, fileTypeMap);
+            boolean checkFileType = SecurityFileCheckUtil.checkFileType(file, fileTypeMap);
+            if (!checkFileType) {
+                return Result.failed(ExceptionEnum.CM325);
+            }
             // 返回插入和更新的条数
             result = i18nEntryService.readSingleFileAndBulkCreate(file, id);
         }
@@ -291,7 +294,11 @@ public class I18nEntryController {
                 return Result.failed(ExceptionEnum.CM307);
             }
             SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
-            SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(), Enums.FileType.JSON.getValue());
+            boolean checkFileType = SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(),
+                Enums.FileType.JSON.getValue());
+            if (!checkFileType) {
+                return Result.failed(ExceptionEnum.CM308);
+            }
             // 返回插入和更新的条数
             result = i18nEntryService.readFilesAndbulkCreate(key, file, id);
         }

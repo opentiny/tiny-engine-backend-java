@@ -75,7 +75,11 @@ public class ComponentController {
             return Result.failed(ExceptionEnum.CM307);
         }
         SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
-        SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(), Enums.FileType.JSON.getValue());
+        boolean checkFileType = SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(),
+            Enums.FileType.JSON.getValue());
+        if (!checkFileType) {
+            return Result.failed(ExceptionEnum.CM308);
+        }
         SecurityFileCheckUtil.isValidJson(file);
         // 返回插入和更新的条数
         return componentService.readFileAndBulkCreate(file);
@@ -101,7 +105,11 @@ public class ComponentController {
             return Result.failed(ExceptionEnum.CM307);
         }
         SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
-        SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(), Enums.FileType.JSON.getValue());
+        boolean checkFileType = SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(),
+            Enums.FileType.JSON.getValue());
+        if (!checkFileType) {
+            return Result.failed(ExceptionEnum.CM308);
+        }
         SecurityFileCheckUtil.isValidJson(file);
         return componentService.bundleSplit(file);
     }

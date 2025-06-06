@@ -179,6 +179,11 @@ public class SecurityFileCheckUtil {
         return file.getName();
     }
 
+    /**
+     * Verify json file.
+     *
+     * @param file the file
+     */
     public static void isValidJson(MultipartFile file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
