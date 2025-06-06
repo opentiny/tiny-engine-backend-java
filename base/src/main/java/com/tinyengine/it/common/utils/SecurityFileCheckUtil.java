@@ -44,7 +44,7 @@ public class SecurityFileCheckUtil {
     public static boolean checkPathHasCrossDir(String dirOrFileName) {
         if (!dirOrFileName.contains("../") && !dirOrFileName.contains("/..")) {
             if (!dirOrFileName.contains("..\\") && !dirOrFileName.contains("\\..")) {
-                return dirOrFileName.contains("./") || dirOrFileName.contains(".\\.\\") 
+                return dirOrFileName.contains("./") || dirOrFileName.contains(".\\.\\")
                     || dirOrFileName.contains("%00");
             } else {
                 return true;

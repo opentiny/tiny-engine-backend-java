@@ -245,12 +245,12 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 324 exception enum.
      */
-    CM324("CM324","文件名或路径无效"),
+    CM324("CM324", "文件名或路径无效"),
 
     /**
      * Cm 325 exception enum.
      */
-    CM325("CM325","文件校验失败");
+    CM325("CM325", "文件校验失败");
 
     /**
      * 错误码

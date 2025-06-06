@@ -239,6 +239,7 @@
         WHERE name like concat('%',#{name},'%')
         and app_id = #{app}
         and is_published = 1
+        ORDER BY last_updated_time ASC
     </select>
 
     <!-- 根据主键id删除表t_page_history数据 -->

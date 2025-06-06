@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,8 +39,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
-
-import javax.validation.Valid;
 
 /**
  * <p>
@@ -120,7 +119,7 @@ public class BlockGroupController {
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = BlockGroup.class))),
-         @ApiResponse(responseCode = "400", description = "请求失败")
+        @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "修改区块分组")
     @PostMapping("/block-groups/update/{id}")

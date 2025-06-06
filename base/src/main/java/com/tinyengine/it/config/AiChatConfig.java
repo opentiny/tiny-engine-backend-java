@@ -70,7 +70,7 @@ public class AiChatConfig {
         String ernieBotAccessToken = Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model) ? token : null;
         config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(), new AiChatConfigData(
 "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token="
-                 + ernieBotAccessToken, createCommonRequestOption(), ernieBotHeaders, "baidu"));
+                + ernieBotAccessToken, createCommonRequestOption(), ernieBotHeaders, "baidu"));
         return config;
     }
 

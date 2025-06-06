@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -39,8 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.regex.Pattern;
-
-import javax.validation.Valid;
 
 /**
  * <p>
@@ -112,7 +111,7 @@ public class PageHistoryController {
         @Parameter(name = "id", description = "页面历史主键id")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
-             content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
         @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取页面历史记录明细")
@@ -183,9 +182,8 @@ public class PageHistoryController {
         @Parameter(name = "app", description = "appId")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = PageHistory.class))),
-       @ApiResponse(responseCode = "400", description = "请求失败")
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageHistory.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "根据名称查询页面历史记录")
     @GetMapping("/pages/histories/find")

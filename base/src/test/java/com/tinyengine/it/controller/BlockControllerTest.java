@@ -205,6 +205,6 @@ class BlockControllerTest {
         Result<BlockDto> result = blockController.updateBlocks(blockParam, Integer.valueOf(0), Integer.valueOf(1));
         Assertions.assertEquals(returnData, result.getData());
         verify(blockService).updateBlockById(
-           argThat(param -> param.getName().equals("Updated Block") && param.getId().equals(0)), eq(1));
+            argThat(param -> param.getName().equals("Updated Block") && param.getId().equals(0)), eq(1));
     }
 }
