@@ -13,6 +13,7 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.SecurityFileCheckUtil;
@@ -74,6 +75,12 @@ public class ComponentController {
             return Result.failed(ExceptionEnum.CM307);
         }
         SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
+        boolean checkFileType = SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(),
+            Enums.FileType.JSON.getValue());
+        if (!checkFileType) {
+            return Result.failed(ExceptionEnum.CM308);
+        }
+        SecurityFileCheckUtil.isValidJson(file);
         // 返回插入和更新的条数
         return componentService.readFileAndBulkCreate(file);
     }
@@ -98,6 +105,12 @@ public class ComponentController {
             return Result.failed(ExceptionEnum.CM307);
         }
         SecurityFileCheckUtil.validFileName(file.getOriginalFilename());
+        boolean checkFileType = SecurityFileCheckUtil.checkFileType(file, Enums.FileNameEnd.JSON.getValue(),
+            Enums.FileType.JSON.getValue());
+        if (!checkFileType) {
+            return Result.failed(ExceptionEnum.CM308);
+        }
+        SecurityFileCheckUtil.isValidJson(file);
         return componentService.bundleSplit(file);
     }
 

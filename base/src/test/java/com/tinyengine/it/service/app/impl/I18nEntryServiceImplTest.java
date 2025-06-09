@@ -284,7 +284,7 @@ class I18nEntryServiceImplTest {
         when(file.getOriginalFilename()).thenReturn("originalName");
         when(file.getName()).thenReturn("123");
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
-        when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
+        when(file.getInputStream()).thenReturn(IoUtil.toStream("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8)));
 
         Result<FileResult> result = i18nEntryServiceImpl.readSingleFileAndBulkCreate(file, 0);
 
@@ -299,7 +299,7 @@ class I18nEntryServiceImplTest {
         when(file.getOriginalFilename()).thenReturn("originalName");
         when(file.getName()).thenReturn("123");
         when(file.getBytes()).thenReturn("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8));
-        when(file.getInputStream()).thenReturn(IoUtil.toStream("test".getBytes(StandardCharsets.UTF_8)));
+        when(file.getInputStream()).thenReturn(IoUtil.toStream("{\"name\":\"value\"}".getBytes(StandardCharsets.UTF_8)));
         // file not existed
         Result<FileResult> result = i18nEntryServiceImpl.readFilesAndbulkCreate("1", file, 0);
         Assertions.assertNull(result.getData());

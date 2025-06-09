@@ -908,4 +908,99 @@ public class Enums {
             return value;
         }
     }
+
+    public enum FileType {
+        /**
+         * File type zip.
+         */
+        ZIP("application/zip"),
+
+        /**
+         * File type x-zip.
+         */
+        XZIP("application/x-zip-compressed"),
+
+        /**
+         * File type json.
+         */
+        JSON("application/json"),
+
+        /**
+         * File type text.
+         */
+        TXT("text/plain"),
+
+        /**
+         * File type html.
+         */
+        HTML("text/html"),
+        /**
+         * File type png.
+         */
+        PNG("image/png"),
+
+        /**
+         * File type jpg.
+         */
+        JPG("image/jpeg");
+        private final String value;
+
+        FileType(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum FileNameEnd {
+        /**
+         * File name end .zip.
+         */
+        ZIP(".zip"),
+
+        /**
+         * File name end .json.
+         */
+        JSON(".json"),
+
+        /**
+         * File name end .text.
+         */
+        TXT(".txt"),
+
+        /**
+         * File name end .html.
+         */
+        HTML(".html"),
+        /**
+         * File name end .png.
+         */
+        PNG(".png"),
+
+        /**
+         * File name end .jpg.
+         */
+        JPG(".jpeg");
+        private final String value;
+
+        FileNameEnd(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
 }
