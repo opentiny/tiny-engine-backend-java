@@ -15,7 +15,6 @@ package com.tinyengine.it.service.material.impl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
-import com.tinyengine.it.common.utils.SecurityFileCheckUtil;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ComponentLibraryMapper;
 import com.tinyengine.it.mapper.ComponentMapper;
