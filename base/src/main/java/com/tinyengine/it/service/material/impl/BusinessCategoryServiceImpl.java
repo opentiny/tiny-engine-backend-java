@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.BusinessCategoryMapper;
 import com.tinyengine.it.model.entity.BusinessCategory;
@@ -32,7 +33,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class BusinessCategoryServiceImpl implements BusinessCategoryService {
+public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMapper, BusinessCategory> implements BusinessCategoryService {
     @Autowired
     private BusinessCategoryMapper businessCategoryMapper;
 

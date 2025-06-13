@@ -14,6 +14,7 @@ package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
@@ -71,7 +72,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class PageServiceImpl implements PageService {
+public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements PageService {
     /**
      * The Page mapper.
      */

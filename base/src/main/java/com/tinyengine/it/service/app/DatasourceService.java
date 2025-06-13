@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Datasource;
 
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface DatasourceService {
+public interface DatasourceService extends IService<Datasource> {
     /**
      * 根据主键id查询表t_datasource信息
      *

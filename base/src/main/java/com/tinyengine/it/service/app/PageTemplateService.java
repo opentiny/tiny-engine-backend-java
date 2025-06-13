@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.PageTemplate;
 
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface PageTemplateService {
+public interface PageTemplateService extends IService<PageTemplate> {
     /**
      * 查询表page_template所有信息
      *

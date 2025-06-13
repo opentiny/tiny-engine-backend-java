@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.service.material.BlockHistoryService;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class BlockHistoryServiceImpl implements BlockHistoryService {
+public class BlockHistoryServiceImpl extends ServiceImpl<BlockHistoryMapper, BlockHistory> implements BlockHistoryService {
     @Autowired
     private BlockHistoryMapper blockHistoryMapper;
 

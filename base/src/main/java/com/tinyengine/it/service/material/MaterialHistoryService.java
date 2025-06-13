@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.MaterialHistory;
 
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface MaterialHistoryService {
+public interface MaterialHistoryService extends IService<MaterialHistory> {
     /**
      * 查询表t_material_history所有信息
      *

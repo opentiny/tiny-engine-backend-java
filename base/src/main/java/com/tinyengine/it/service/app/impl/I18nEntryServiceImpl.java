@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,7 +66,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class I18nEntryServiceImpl implements I18nEntryService {
+public class I18nEntryServiceImpl extends ServiceImpl<I18nEntryMapper, I18nEntry> implements I18nEntryService {
     private static final Logger logger = LoggerFactory.getLogger(I18nEntryServiceImpl.class);
 
     @Autowired

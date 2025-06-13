@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.I18nLang;
 
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +24,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface I18nLangService {
+public interface I18nLangService extends IService<I18nLang> {
     /**
      * 查询表t_i18n_lang所有信息
      *

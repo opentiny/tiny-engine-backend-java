@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.DeleteI18nEntry;
 import com.tinyengine.it.model.dto.FileResult;
@@ -32,7 +33,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface I18nEntryService {
+public interface I18nEntryService extends IService<I18nEntry> {
     /**
      * 查询表t_i18n_entry所有信息
      *

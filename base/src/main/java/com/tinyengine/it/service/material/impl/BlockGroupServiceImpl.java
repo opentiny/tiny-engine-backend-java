@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class BlockGroupServiceImpl implements BlockGroupService {
+public class BlockGroupServiceImpl extends ServiceImpl<BlockGroupMapper, BlockGroup> implements BlockGroupService {
     @Autowired
     private BlockGroupMapper blockGroupMapper;
 

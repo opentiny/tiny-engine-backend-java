@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.platform;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.PlatformHistory;
 
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @since 2025-05-09
  */
-public interface PlatformHistoryService {
+public interface PlatformHistoryService extends IService<PlatformHistory> {
     /**
      * 查询表t_platform_history所有信息
      *

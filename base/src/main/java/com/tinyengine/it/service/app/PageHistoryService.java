@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
@@ -26,7 +27,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface PageHistoryService {
+public interface PageHistoryService extends IService<PageHistory> {
     /**
      * 查询表t_page_history所有信息
      *

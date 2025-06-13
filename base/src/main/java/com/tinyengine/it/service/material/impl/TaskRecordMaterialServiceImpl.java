@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.TaskRecordMapper;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
  * @since 2024-10-17
  */
 @Service
-public class TaskRecordMaterialServiceImpl implements TaskRecordService {
+public class TaskRecordMaterialServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRecord> implements TaskRecordService {
     @Autowired
     TaskRecordMapper taskRecordMapper;
 

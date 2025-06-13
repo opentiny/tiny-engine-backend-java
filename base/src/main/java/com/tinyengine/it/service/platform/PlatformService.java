@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.platform;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Platform;
 
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface PlatformService {
+public interface PlatformService extends IService<Platform> {
     /**
      * 查询表t_platform所有信息
      *

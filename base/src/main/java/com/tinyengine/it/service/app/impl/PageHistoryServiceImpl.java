@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageHistoryMapper;
@@ -36,7 +37,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PageHistoryServiceImpl implements PageHistoryService {
+public class PageHistoryServiceImpl extends ServiceImpl<PageHistoryMapper, PageHistory> implements PageHistoryService {
     private static final String DEFAULT_PAGE_HISTORY_VERSION = "0";
 
     @Autowired

@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
@@ -25,7 +26,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface BlockGroupService {
+public interface BlockGroupService extends IService<BlockGroup> {
     /**
      * 查询表t_block_group所有信息
      *

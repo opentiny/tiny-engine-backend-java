@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.platform.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.service.platform.TenantService;
@@ -32,7 +33,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class TenantServiceImpl implements TenantService {
+public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> implements TenantService {
     @Autowired
     private TenantMapper tenantMapper;
 

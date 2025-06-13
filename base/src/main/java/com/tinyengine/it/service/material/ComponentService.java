@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BundleDto;
 import com.tinyengine.it.model.dto.BundleResultDto;
@@ -29,7 +30,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface ComponentService {
+public interface ComponentService extends IService<Component> {
     /**
      * 查询表t_component所有信息
      *

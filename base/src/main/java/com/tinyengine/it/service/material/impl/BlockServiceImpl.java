@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,7 +77,7 @@ import java.util.stream.Stream;
  */
 @Service
 @Slf4j
-public class BlockServiceImpl implements BlockService {
+public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements BlockService {
     @Autowired
     private BlockMapper blockMapper;
 

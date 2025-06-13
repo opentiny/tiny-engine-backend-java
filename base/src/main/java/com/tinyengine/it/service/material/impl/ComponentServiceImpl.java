@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
@@ -52,7 +53,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class ComponentServiceImpl implements ComponentService {
+public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component> implements ComponentService {
     /**
      * The component mapper.
      */

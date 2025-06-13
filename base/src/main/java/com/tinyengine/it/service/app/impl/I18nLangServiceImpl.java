@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.I18nLangMapper;
 import com.tinyengine.it.model.entity.I18nLang;
 import com.tinyengine.it.service.app.I18nLangService;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class I18nLangServiceImpl implements I18nLangService {
+public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> implements I18nLangService {
     @Autowired
     private I18nLangMapper i18nLangMapper;
 

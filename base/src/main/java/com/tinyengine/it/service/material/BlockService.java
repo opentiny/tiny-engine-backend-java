@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.material;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
@@ -32,7 +33,7 @@ import java.util.Map;
  *
  * @since 2024-10-20
  */
-public interface BlockService {
+public interface BlockService extends IService<Block> {
     /**
      * 查询表t_block所有信息
      *

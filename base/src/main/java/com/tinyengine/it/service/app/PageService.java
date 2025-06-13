@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
@@ -26,7 +27,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface PageService {
+public interface PageService extends IService<Page> {
     /**
      * 查询表t_page所有信息
      *

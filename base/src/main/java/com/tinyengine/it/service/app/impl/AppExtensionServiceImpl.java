@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
@@ -34,7 +35,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class AppExtensionServiceImpl implements AppExtensionService {
+public class AppExtensionServiceImpl extends ServiceImpl<AppExtensionMapper, AppExtension> implements AppExtensionService {
     @Autowired
     private AppExtensionMapper appExtensionMapper;
 

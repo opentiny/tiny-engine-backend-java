@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.TaskRecordMapper;
 import com.tinyengine.it.model.entity.TaskRecord;
 import com.tinyengine.it.service.app.TaskRecordService;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class TaskRecordServiceImpl implements TaskRecordService {
+public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRecord> implements TaskRecordService {
     @Autowired
     private TaskRecordMapper taskRecordMapper;
 

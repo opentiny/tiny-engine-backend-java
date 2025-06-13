@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
@@ -50,7 +51,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class AppServiceImpl implements AppService {
+public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppService {
     /**
      * The App mapper.
      */

@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.platform.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.PlatformMapper;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PlatformServiceImpl implements PlatformService {
+public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> implements PlatformService {
     @Autowired
     private PlatformMapper platformMapper;
 

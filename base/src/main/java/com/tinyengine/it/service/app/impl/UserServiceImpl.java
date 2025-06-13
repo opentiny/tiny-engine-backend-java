@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
     private UserMapper userMapper;
 

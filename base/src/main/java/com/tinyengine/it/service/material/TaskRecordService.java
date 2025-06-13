@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.TaskRecord;
 
 import org.apache.ibatis.annotations.Param;
@@ -26,7 +27,7 @@ import java.util.List;
  * @author zhangjuncao
  * @since 2024-10-17
  */
-public interface TaskRecordService {
+public interface TaskRecordService extends IService<TaskRecord> {
     /**
      * 根据主键id查询表task_record信息
      *

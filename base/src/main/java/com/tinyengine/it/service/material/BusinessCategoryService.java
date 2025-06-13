@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.BusinessCategory;
 
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +24,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface BusinessCategoryService {
+public interface BusinessCategoryService extends IService<BusinessCategory> {
     /**
      * 查询表t_business_category所有信息
      *

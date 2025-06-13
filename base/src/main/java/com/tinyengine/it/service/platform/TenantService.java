@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.platform;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.Tenant;
 
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +24,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface TenantService {
+public interface TenantService extends IService<Tenant> {
     /**
      * 查询表t_tenant所有信息
      *

@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.AppExtension;
 
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface AppExtensionService {
+public interface AppExtensionService extends IService<AppExtension> {
     /**
      * 查询表t_app_extension所有信息
      *

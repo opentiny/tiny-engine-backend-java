@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.MaterialMapper;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class MaterialServiceImpl implements MaterialService {
+public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> implements MaterialService {
     @Autowired
     private MaterialMapper materialMapper;
 

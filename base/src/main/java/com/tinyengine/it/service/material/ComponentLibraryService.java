@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.ComponentLibrary;
 
@@ -24,7 +25,7 @@ import java.util.List;
  *
  * @since 2025-4-02
  */
-public interface ComponentLibraryService {
+public interface ComponentLibraryService extends IService<ComponentLibrary> {
     /**
      * 查询表t_component_library所有信息
      *

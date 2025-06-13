@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.ComponentLibraryMapper;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ComponentLibraryServiceImpl implements ComponentLibraryService {
+public class ComponentLibraryServiceImpl extends ServiceImpl<ComponentLibraryMapper, ComponentLibrary> implements ComponentLibraryService {
     @Autowired
     private ComponentLibraryMapper componentLibraryMapper;
 
