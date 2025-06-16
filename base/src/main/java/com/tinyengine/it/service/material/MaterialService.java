@@ -16,8 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Material;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -39,7 +37,7 @@ public interface MaterialService extends IService<Material> {
      * @param id the id
      * @return the material
      */
-    Result<Material> queryMaterialById(@Param("id") Integer id);
+    Result<Material> queryMaterialById(Integer id);
 
     /**
      * 根据条件查询表t_material信息
@@ -55,7 +53,7 @@ public interface MaterialService extends IService<Material> {
      * @param id the id
      * @return the integer
      */
-    Result<Material> deleteMaterialById(@Param("id") Integer id);
+    Result<Material> deleteMaterialById(Integer id);
 
     /**
      * 根据主键id更新表t_material信息

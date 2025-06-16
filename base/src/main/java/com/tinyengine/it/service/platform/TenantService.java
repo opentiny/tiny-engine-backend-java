@@ -15,8 +15,6 @@ package com.tinyengine.it.service.platform;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.Tenant;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -38,7 +36,7 @@ public interface TenantService extends IService<Tenant> {
      * @param id the id
      * @return the tenant
      */
-    Tenant findTenantById(@Param("id") Integer id);
+    Tenant findTenantById(Integer id);
 
     /**
      * 根据条件查询表t_tenant信息
@@ -54,7 +52,7 @@ public interface TenantService extends IService<Tenant> {
      * @param id the id
      * @return the integer
      */
-    Integer deleteTenantById(@Param("id") Integer id);
+    Integer deleteTenantById(Integer id);
 
     /**
      * 根据主键id更新表t_tenant信息

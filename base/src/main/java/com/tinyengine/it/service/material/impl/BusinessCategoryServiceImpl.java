@@ -20,8 +20,6 @@ import com.tinyengine.it.service.material.BusinessCategoryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,9 +32,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMapper, BusinessCategory> implements BusinessCategoryService {
-    @Autowired
-    private BusinessCategoryMapper businessCategoryMapper;
-
     /**
      * 查询表t_business_category所有数据
      *
@@ -44,7 +39,7 @@ public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMap
      */
     @Override
     public List<BusinessCategory> queryAllBusinessCategory() {
-        return businessCategoryMapper.queryAllBusinessCategory();
+        return baseMapper.queryAllBusinessCategory();
     }
 
     /**
@@ -54,8 +49,8 @@ public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMap
      * @return BusinessCategory
      */
     @Override
-    public BusinessCategory queryBusinessCategoryById(@Param("id") Integer id) {
-        return businessCategoryMapper.queryBusinessCategoryById(id);
+    public BusinessCategory queryBusinessCategoryById(Integer id) {
+        return baseMapper.queryBusinessCategoryById(id);
     }
 
     /**
@@ -68,7 +63,7 @@ public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMap
     @Override
     public List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory)
             throws ServiceException {
-        return businessCategoryMapper.queryBusinessCategoryByCondition(businessCategory);
+        return baseMapper.queryBusinessCategoryByCondition(businessCategory);
     }
 
     /**
@@ -78,8 +73,8 @@ public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMap
      * @return execute success data number
      */
     @Override
-    public Integer deleteBusinessCategoryById(@Param("id") Integer id) {
-        return businessCategoryMapper.deleteBusinessCategoryById(id);
+    public Integer deleteBusinessCategoryById(Integer id) {
+        return baseMapper.deleteBusinessCategoryById(id);
     }
 
     /**
@@ -90,7 +85,7 @@ public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMap
      */
     @Override
     public Integer updateBusinessCategoryById(BusinessCategory businessCategory) {
-        return businessCategoryMapper.updateBusinessCategoryById(businessCategory);
+        return baseMapper.updateBusinessCategoryById(businessCategory);
     }
 
     /**
@@ -101,6 +96,6 @@ public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMap
      */
     @Override
     public Integer createBusinessCategory(BusinessCategory businessCategory) {
-        return businessCategoryMapper.createBusinessCategory(businessCategory);
+        return baseMapper.createBusinessCategory(businessCategory);
     }
 }

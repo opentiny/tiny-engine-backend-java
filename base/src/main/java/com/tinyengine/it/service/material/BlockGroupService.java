@@ -17,8 +17,6 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockGroupDto;
 import com.tinyengine.it.model.entity.BlockGroup;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -40,7 +38,7 @@ public interface BlockGroupService extends IService<BlockGroup> {
      * @param id the id
      * @return the block group dto
      */
-    BlockGroup findBlockGroupById(@Param("id") Integer id);
+    BlockGroup findBlockGroupById(Integer id);
 
     /**
      * 根据条件查询表t_block_group信息
@@ -56,7 +54,7 @@ public interface BlockGroupService extends IService<BlockGroup> {
      * @param id the id
      * @return the integer
      */
-    Integer deleteBlockGroupById(@Param("id") Integer id);
+    Integer deleteBlockGroupById(Integer id);
 
     /**
      * 根据主键id更新表t_block_group信息

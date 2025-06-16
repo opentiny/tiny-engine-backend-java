@@ -20,7 +20,6 @@ import com.tinyengine.it.model.dto.CustComponentDto;
 import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.entity.Component;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public interface ComponentService extends IService<Component> {
      * @param id the id
      * @return the component
      */
-    Component findComponentById(@Param("id") Integer id);
+    Component findComponentById(Integer id);
 
     /**
      * 根据条件查询表t_component信息
@@ -60,7 +59,7 @@ public interface ComponentService extends IService<Component> {
      * @param id the id
      * @return the integer
      */
-    Integer deleteComponentById(@Param("id") Integer id);
+    Integer deleteComponentById(Integer id);
 
     /**
      * 根据主键id更新表t_component信息

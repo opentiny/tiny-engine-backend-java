@@ -19,8 +19,6 @@ import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.App;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -42,7 +40,7 @@ public interface AppService extends IService<App> {
      * @param id the id
      * @return the result
      */
-    Result<App> queryAppById(@Param("id") Integer id);
+    Result<App> queryAppById(Integer id);
 
     /**
      * 根据条件查询表t_app信息
@@ -58,7 +56,7 @@ public interface AppService extends IService<App> {
      * @param id the id
      * @return the result
      */
-    Result<App> deleteAppById(@Param("id") Integer id);
+    Result<App> deleteAppById(Integer id);
 
     /**
      * 根据主键id更新表t_app信息

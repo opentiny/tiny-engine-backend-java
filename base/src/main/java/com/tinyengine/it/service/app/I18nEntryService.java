@@ -23,7 +23,6 @@ import com.tinyengine.it.model.dto.OperateI18nEntries;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.I18nEntry;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public interface I18nEntryService extends IService<I18nEntry> {
      * @param id the id
      * @return the 18 n entry
      */
-    I18nEntryDto findI18nEntryById(@Param("id") Integer id);
+    I18nEntryDto findI18nEntryById(Integer id);
 
     /**
      * 根据条件查询表t_i18n_entry信息

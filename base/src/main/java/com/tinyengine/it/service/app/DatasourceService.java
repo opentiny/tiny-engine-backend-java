@@ -16,8 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Datasource;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -32,7 +30,7 @@ public interface DatasourceService extends IService<Datasource> {
      * @param id the id
      * @return the datasource
      */
-    Datasource queryDatasourceById(@Param("id") Integer id);
+    Datasource queryDatasourceById(Integer id);
 
     /**
      * 根据条件查询表t_datasource信息
@@ -48,7 +46,7 @@ public interface DatasourceService extends IService<Datasource> {
      * @param id the id
      * @return the result
      */
-    Result<Datasource> deleteDatasourceById(@Param("id") Integer id);
+    Result<Datasource> deleteDatasourceById(Integer id);
 
     /**
      * 根据主键id更新表t_datasource信息

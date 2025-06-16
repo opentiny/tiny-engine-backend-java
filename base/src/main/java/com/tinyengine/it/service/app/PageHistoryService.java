@@ -18,8 +18,6 @@ import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -57,7 +55,7 @@ public interface PageHistoryService extends IService<PageHistory> {
      * @param id the id
      * @return the integer
      */
-    Integer deletePageHistoryById(@Param("id") Integer id);
+    Integer deletePageHistoryById(Integer id);
 
     /**
      * 根据主键id更新表t_page_history信息

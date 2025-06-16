@@ -23,8 +23,6 @@ import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.User;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +45,7 @@ public interface BlockService extends IService<Block> {
      * @param id the id
      * @return the BlockDto
      */
-    BlockDto queryBlockById(@Param("id") Integer id);
+    BlockDto queryBlockById(Integer id);
 
     /**
      * 根据条件查询表t_block信息
@@ -63,7 +61,7 @@ public interface BlockService extends IService<Block> {
      * @param id the id
      * @return the integer
      */
-    Integer deleteBlockById(@Param("id") Integer id);
+    Integer deleteBlockById(Integer id);
 
     /**
      * 根据主键id更新表t_block信息

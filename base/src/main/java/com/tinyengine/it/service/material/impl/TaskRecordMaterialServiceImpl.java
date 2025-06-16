@@ -19,8 +19,6 @@ import com.tinyengine.it.mapper.TaskRecordMapper;
 import com.tinyengine.it.model.entity.TaskRecord;
 import com.tinyengine.it.service.material.TaskRecordService;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -38,9 +36,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class TaskRecordMaterialServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRecord> implements TaskRecordService {
-    @Autowired
-    TaskRecordMapper taskRecordMapper;
-
     /**
      * 根据主键id查询表task_record信息
      *
@@ -49,8 +44,8 @@ public class TaskRecordMaterialServiceImpl extends ServiceImpl<TaskRecordMapper,
      * @throws ServiceException serviceException
      */
     @Override
-    public TaskRecord queryTaskRecordById(@Param("id") Integer id) throws ServiceException {
-        return taskRecordMapper.queryTaskRecordById(id);
+    public TaskRecord queryTaskRecordById(Integer id) throws ServiceException {
+        return baseMapper.queryTaskRecordById(id);
     }
 
     /**
@@ -69,7 +64,7 @@ public class TaskRecordMaterialServiceImpl extends ServiceImpl<TaskRecordMapper,
         List<CompletableFuture<List<TaskRecord>>> queryPromises = uniqueIdsList.stream()
                 .map(uniqueId -> CompletableFuture.supplyAsync(() -> {
                     // 根据taskTypeId、uniqueId、created_at按照条件查询
-                    return taskRecordMapper.findTaskRecordByTaskIdAndUniqueid(taskTypeId, uniqueId);
+                    return baseMapper.findTaskRecordByTaskIdAndUniqueid(taskTypeId, uniqueId);
                 }))
                 .collect(Collectors.toList());
         return queryPromises.stream()

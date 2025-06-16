@@ -35,7 +35,6 @@ import com.tinyengine.it.service.material.ComponentService;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,12 +54,6 @@ import java.util.Map;
 @Slf4j
 public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component> implements ComponentService {
     /**
-     * The component mapper.
-     */
-    @Autowired
-    private ComponentMapper componentMapper;
-
-    /**
      * The component library mapper.
      */
     @Autowired
@@ -73,7 +66,7 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
      */
     @Override
     public List<Component> findAllComponent() {
-        return componentMapper.queryAllComponent();
+        return baseMapper.queryAllComponent();
     }
 
     /**
@@ -83,8 +76,8 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
      * @return query result
      */
     @Override
-    public Component findComponentById(@Param("id") Integer id) {
-        return componentMapper.queryComponentById(id);
+    public Component findComponentById(Integer id) {
+        return baseMapper.queryComponentById(id);
     }
 
     /**
@@ -95,7 +88,7 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
      */
     @Override
     public List<Component> findComponentByCondition(Component component) {
-        return componentMapper.queryComponentByCondition(component);
+        return baseMapper.queryComponentByCondition(component);
     }
 
     /**
@@ -105,8 +98,8 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
      * @return execute success data number
      */
     @Override
-    public Integer deleteComponentById(@Param("id") Integer id) {
-        return componentMapper.deleteComponentById(id);
+    public Integer deleteComponentById(Integer id) {
+        return baseMapper.deleteComponentById(id);
     }
 
     /**
@@ -117,7 +110,7 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
      */
     @Override
     public Integer updateComponentById(Component component) {
-        return componentMapper.updateComponentById(component);
+        return baseMapper.updateComponentById(component);
     }
 
     /**
@@ -128,7 +121,7 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
      */
     @Override
     public Integer createComponent(Component component) {
-        return componentMapper.createComponent(component);
+        return baseMapper.createComponent(component);
     }
 
     /**
@@ -310,11 +303,11 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
                     MaterialComponent materialComponent = new MaterialComponent();
                     materialComponent.setMaterialId(1);
                     materialComponent.setComponentId(component.getId());
-                    componentMapper.createMaterialComponent(materialComponent);
+                    baseMapper.createMaterialComponent(materialComponent);
                     MaterialHistoryComponent materialHistoryComponent = new MaterialHistoryComponent();
                     materialHistoryComponent.setComponentId(component.getId());
                     materialHistoryComponent.setMaterialHistoryId(1);
-                    componentMapper.createMaterialHistoryComponent(materialHistoryComponent);
+                    baseMapper.createMaterialHistoryComponent(materialHistoryComponent);
                 }
                 addNum = addNum + 1;
             } else {

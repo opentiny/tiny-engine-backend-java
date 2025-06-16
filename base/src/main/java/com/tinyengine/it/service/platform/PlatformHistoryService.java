@@ -16,8 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.PlatformHistory;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -39,7 +37,7 @@ public interface PlatformHistoryService extends IService<PlatformHistory> {
      * @param id the id
      * @return the platformHistory
      */
-    PlatformHistory queryPlatformHistoryById(@Param("id") Integer id);
+    PlatformHistory queryPlatformHistoryById(Integer id);
 
     /**
      * 根据条件查询表t_platform_history信息
@@ -55,7 +53,7 @@ public interface PlatformHistoryService extends IService<PlatformHistory> {
      * @param id the id
      * @return the Result
      */
-    Result<PlatformHistory> deletePlatformHistoryById(@Param("id") Integer id);
+    Result<PlatformHistory> deletePlatformHistoryById(Integer id);
 
     /**
      * 根据主键id更新表t_platform_history信息

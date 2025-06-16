@@ -30,13 +30,10 @@ import com.tinyengine.it.model.entity.Platform;
 import com.tinyengine.it.service.app.AppService;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
-import com.tinyengine.it.service.material.impl.BlockGroupServiceImpl;
-import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 import com.tinyengine.it.service.platform.PlatformService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,12 +49,6 @@ import java.util.Map;
 @Service
 @Slf4j
 public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppService {
-    /**
-     * The App mapper.
-     */
-    @Autowired
-    private AppMapper appMapper;
-
     /**
      * The Platform service.
      */
@@ -83,25 +74,13 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     private AppV1ServiceImpl appV1ServiceImpl;
 
     /**
-     * The Block service.
-     */
-    @Autowired
-    private BlockServiceImpl blockServiceImpl;
-
-    /**
-     * The Block group service.
-     */
-    @Autowired
-    private BlockGroupServiceImpl blockGroupServiceImpl;
-
-    /**
      * 查询表t_app所有数据
      *
      * @return App
      */
     @Override
     public List<App> queryAllApp() {
-        return appMapper.queryAllApp();
+        return baseMapper.queryAllApp();
     }
 
     /**
@@ -112,8 +91,8 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
      */
     @Override
     @SystemServiceLog(description = "通过id查询应用实现方法")
-    public Result<App> queryAppById(@Param("id") Integer id) {
-        App app = appMapper.queryAppById(id);
+    public Result<App> queryAppById(Integer id) {
+        App app = baseMapper.queryAppById(id);
         if (app == null) {
             return Result.failed(ExceptionEnum.CM009);
         }
@@ -128,7 +107,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
      */
     @Override
     public List<App> queryAppByCondition(App app) {
-        return appMapper.queryAppByCondition(app);
+        return baseMapper.queryAppByCondition(app);
     }
 
     /**
@@ -139,9 +118,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
      */
     @Override
     @SystemServiceLog(description = "应用删除实现方法")
-    public Result<App> deleteAppById(@Param("id") Integer id) {
-        App app = appMapper.queryAppById(id);
-        int result = appMapper.deleteAppById(id);
+    public Result<App> deleteAppById(Integer id) {
+        App app = baseMapper.queryAppById(id);
+        int result = baseMapper.deleteAppById(id);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM009);
         }
@@ -159,17 +138,17 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     public Result<App> updateAppById(App app) {
         // 如果更新extend_config字段，从platform获取数据，继承非route部分
         if (app.getExtendConfig() != null && !app.getExtendConfig().isEmpty()) {
-            App appResult = appMapper.queryAppById(app.getId());
+            App appResult = baseMapper.queryAppById(app.getId());
             Platform platform = platformService.queryPlatformById(appResult.getPlatformId());
             Map<String, Object> appExtendConfig = platform.getAppExtendConfig();
             appExtendConfig.remove("route");
             app.getExtendConfig().putAll(appExtendConfig);
         }
-        int result = appMapper.updateAppById(app);
+        int result = baseMapper.updateAppById(app);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        App selectedApp = appMapper.queryAppById(app.getId());
+        App selectedApp = baseMapper.queryAppById(app.getId());
         return Result.success(selectedApp);
     }
 
@@ -182,12 +161,12 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Override
     @SystemServiceLog(description = "应用创建实现方法")
     public Result<App> createApp(App app) {
-        List<App> appResult = appMapper.queryAppByCondition(app);
+        List<App> appResult = baseMapper.queryAppByCondition(app);
         if (!appResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
         app.setIsPublish(false);
-        int result = appMapper.createApp(app);
+        int result = baseMapper.createApp(app);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }

@@ -19,8 +19,6 @@ import com.tinyengine.it.service.app.I18nLangService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +31,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> implements I18nLangService {
-    @Autowired
-    private I18nLangMapper i18nLangMapper;
-
     /**
      * 查询表t_i18n_lang所有数据
      *
@@ -43,7 +38,7 @@ public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> i
      */
     @Override
     public List<I18nLang> queryAllI18nLang() {
-        return i18nLangMapper.queryAllI18nLang();
+        return baseMapper.queryAllI18nLang();
     }
 
     /**
@@ -53,8 +48,8 @@ public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> i
      * @return query result
      */
     @Override
-    public I18nLang queryI18nLangById(@Param("id") Integer id) {
-        return i18nLangMapper.queryI18nLangById(id);
+    public I18nLang queryI18nLangById(Integer id) {
+        return baseMapper.queryI18nLangById(id);
     }
 
     /**
@@ -65,7 +60,7 @@ public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> i
      */
     @Override
     public List<I18nLang> queryI18nLangByCondition(I18nLang i18nLang) {
-        return i18nLangMapper.queryI18nLangByCondition(i18nLang);
+        return baseMapper.queryI18nLangByCondition(i18nLang);
     }
 
     /**
@@ -75,8 +70,8 @@ public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> i
      * @return execute success data number
      */
     @Override
-    public Integer deleteI18nLangById(@Param("id") Integer id) {
-        return i18nLangMapper.deleteI18nLangById(id);
+    public Integer deleteI18nLangById(Integer id) {
+        return baseMapper.deleteI18nLangById(id);
     }
 
     /**
@@ -87,7 +82,7 @@ public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> i
      */
     @Override
     public Integer updateI18nLangById(I18nLang i18nLang) {
-        return i18nLangMapper.updateI18nLangById(i18nLang);
+        return baseMapper.updateI18nLangById(i18nLang);
     }
 
     /**
@@ -98,6 +93,6 @@ public class I18nLangServiceImpl extends ServiceImpl<I18nLangMapper, I18nLang> i
      */
     @Override
     public Integer createI18nLang(I18nLang i18nLang) {
-        return i18nLangMapper.createI18nLang(i18nLang);
+        return baseMapper.createI18nLang(i18nLang);
     }
 }

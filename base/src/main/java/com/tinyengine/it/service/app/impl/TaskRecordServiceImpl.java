@@ -19,8 +19,6 @@ import com.tinyengine.it.service.app.TaskRecordService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,9 +31,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRecord> implements TaskRecordService {
-    @Autowired
-    private TaskRecordMapper taskRecordMapper;
-
     /**
      * 查询表t_task_record所有数据
      *
@@ -43,7 +38,7 @@ public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRec
      */
     @Override
     public List<TaskRecord> queryAllTaskRecord() {
-        return taskRecordMapper.queryAllTaskRecord();
+        return baseMapper.queryAllTaskRecord();
     }
 
     /**
@@ -53,8 +48,8 @@ public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRec
      * @return query result
      */
     @Override
-    public TaskRecord queryTaskRecordById(@Param("id") Integer id) {
-        return taskRecordMapper.queryTaskRecordById(id);
+    public TaskRecord queryTaskRecordById(Integer id) {
+        return baseMapper.queryTaskRecordById(id);
     }
 
     /**
@@ -65,7 +60,7 @@ public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRec
      */
     @Override
     public List<TaskRecord> queryTaskRecordByCondition(TaskRecord taskRecord) {
-        return taskRecordMapper.queryTaskRecordByCondition(taskRecord);
+        return baseMapper.queryTaskRecordByCondition(taskRecord);
     }
 
     /**
@@ -75,8 +70,8 @@ public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRec
      * @return execute success data number
      */
     @Override
-    public Integer deleteTaskRecordById(@Param("id") Integer id) {
-        return taskRecordMapper.deleteTaskRecordById(id);
+    public Integer deleteTaskRecordById(Integer id) {
+        return baseMapper.deleteTaskRecordById(id);
     }
 
     /**
@@ -87,7 +82,7 @@ public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRec
      */
     @Override
     public Integer updateTaskRecordById(TaskRecord taskRecord) {
-        return taskRecordMapper.updateTaskRecordById(taskRecord);
+        return baseMapper.updateTaskRecordById(taskRecord);
     }
 
     /**
@@ -98,6 +93,6 @@ public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRec
      */
     @Override
     public Integer createTaskRecord(TaskRecord taskRecord) {
-        return taskRecordMapper.createTaskRecord(taskRecord);
+        return baseMapper.createTaskRecord(taskRecord);
     }
 }

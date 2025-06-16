@@ -21,8 +21,6 @@ import com.tinyengine.it.service.platform.PlatformService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,9 +33,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> implements PlatformService {
-    @Autowired
-    private PlatformMapper platformMapper;
-
     /**
      * 查询表t_platform所有数据
      *
@@ -45,7 +40,7 @@ public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> i
      */
     @Override
     public List<Platform> queryAllPlatform() {
-        return platformMapper.queryAllPlatform();
+        return baseMapper.queryAllPlatform();
     }
 
     /**
@@ -55,8 +50,8 @@ public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> i
      * @return query result
      */
     @Override
-    public Platform queryPlatformById(@Param("id") Integer id) {
-        return platformMapper.queryPlatformById(id);
+    public Platform queryPlatformById(Integer id) {
+        return baseMapper.queryPlatformById(id);
     }
 
     /**
@@ -67,7 +62,7 @@ public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> i
      */
     @Override
     public List<Platform> queryPlatformByCondition(Platform platform) {
-        return platformMapper.queryPlatformByCondition(platform);
+        return baseMapper.queryPlatformByCondition(platform);
     }
 
     /**
@@ -77,12 +72,12 @@ public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> i
      * @return execute success data number
      */
     @Override
-    public Result<Platform> deletePlatformById(@Param("id") Integer id) {
+    public Result<Platform> deletePlatformById(Integer id) {
         Platform platform = this.queryPlatformById(id);
         if (platform == null || platform.getId() == null) {
             return Result.success();
         }
-        int deleteResult = platformMapper.deletePlatformById(id);
+        int deleteResult = baseMapper.deletePlatformById(id);
         if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -100,11 +95,11 @@ public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> i
         if (platform == null || platform.getId() == null) {
             return Result.failed(ExceptionEnum.CM002);
         }
-        int updateResult = platformMapper.updatePlatformById(platform);
+        int updateResult = baseMapper.updatePlatformById(platform);
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
-        Platform platformResult = platformMapper.queryPlatformById(platform.getId());
+        Platform platformResult = baseMapper.queryPlatformById(platform.getId());
         return Result.success(platformResult);
     }
 
@@ -122,7 +117,7 @@ public class PlatformServiceImpl extends ServiceImpl<PlatformMapper, Platform> i
         if (platform.getName() == null || platform.getName().isEmpty()) {
             return Result.failed(ExceptionEnum.CM002);
         }
-        int createResult = platformMapper.createPlatform(platform);
+        int createResult = baseMapper.createPlatform(platform);
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }

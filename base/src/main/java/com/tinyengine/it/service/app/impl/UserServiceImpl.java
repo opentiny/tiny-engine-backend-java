@@ -19,7 +19,6 @@ import com.tinyengine.it.service.app.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +31,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    @Autowired
-    private UserMapper userMapper;
-
     /**
      * 查询表t_user所有数据
      *
@@ -42,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public List<User> queryAllUser() {
-        return userMapper.queryAllUser();
+        return baseMapper.queryAllUser();
     }
 
     /**
@@ -53,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public User queryUserById(String id) {
-        return userMapper.queryUserById(id);
+        return baseMapper.queryUserById(id);
     }
 
     /**
@@ -64,7 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public List<User> queryUserByCondition(User user) {
-        return userMapper.queryUserByCondition(user);
+        return baseMapper.queryUserByCondition(user);
     }
 
     /**
@@ -75,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Integer deleteUserById(String id) {
-        return userMapper.deleteUserById(id);
+        return baseMapper.deleteUserById(id);
     }
 
     /**
@@ -86,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Integer updateUserById(User user) {
-        return userMapper.updateUserById(user);
+        return baseMapper.updateUserById(user);
     }
 
     /**
@@ -97,6 +93,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Integer createUser(User user) {
-        return userMapper.createUser(user);
+        return baseMapper.createUser(user);
     }
 }

@@ -18,8 +18,6 @@ import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
 import com.tinyengine.it.model.entity.Page;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -42,7 +40,7 @@ public interface PageService extends IService<Page> {
      * @param id the id
      * @return the page
      */
-    Page queryPageById(@Param("id") Integer id);
+    Page queryPageById(Integer id);
 
     /**
      * 根据条件查询表t_page信息
@@ -58,7 +56,7 @@ public interface PageService extends IService<Page> {
      * @param id the id
      * @return the result
      */
-    Result<Page> delPage(@Param("id") Integer id);
+    Result<Page> delPage(Integer id);
 
     /**
      * 创建页面

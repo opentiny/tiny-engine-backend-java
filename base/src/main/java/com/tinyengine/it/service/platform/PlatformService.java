@@ -16,8 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.Platform;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
@@ -39,7 +37,7 @@ public interface PlatformService extends IService<Platform> {
      * @param id the id
      * @return the platform
      */
-    Platform queryPlatformById(@Param("id") Integer id);
+    Platform queryPlatformById(Integer id);
 
     /**
      * 根据条件查询表t_platform信息
@@ -55,7 +53,7 @@ public interface PlatformService extends IService<Platform> {
      * @param id the id
      * @return the Result
      */
-    Result<Platform> deletePlatformById(@Param("id") Integer id);
+    Result<Platform> deletePlatformById(Integer id);
 
     /**
      * 根据主键id更新表t_platform信息
