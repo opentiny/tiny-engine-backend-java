@@ -14,6 +14,7 @@ package com.tinyengine.it.service.material.impl;
 
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.model.entity.BlockHistory;
 
@@ -35,12 +36,14 @@ import java.util.List;
 class BlockHistoryServiceImplTest {
     @Mock
     private BlockHistoryMapper blockHistoryMapper;
+
     @InjectMocks
     private BlockHistoryServiceImpl blockHistoryServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(blockHistoryServiceImpl, "baseMapper", blockHistoryMapper);
     }
 
     @Test

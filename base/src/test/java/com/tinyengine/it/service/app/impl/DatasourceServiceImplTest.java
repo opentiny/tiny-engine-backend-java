@@ -16,6 +16,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.model.entity.Datasource;
@@ -38,12 +39,14 @@ import java.util.List;
 class DatasourceServiceImplTest {
     @Mock
     private DatasourceMapper datasourceMapper;
+
     @InjectMocks
     private DatasourceServiceImpl datasourceServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(datasourceServiceImpl, "baseMapper", datasourceMapper);
     }
 
     @Test

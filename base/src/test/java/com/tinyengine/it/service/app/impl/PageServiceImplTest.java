@@ -19,21 +19,23 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
-import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
-import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.mapper.PageMapper;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
+import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.dto.TreeNodeCollection;
 import com.tinyengine.it.model.dto.TreeNodeDto;
 import com.tinyengine.it.model.entity.App;
+import com.tinyengine.it.model.entity.AppExtension;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.Page;
 import com.tinyengine.it.model.entity.PageHistory;
@@ -77,15 +79,12 @@ class PageServiceImplTest {
     @Mock
     private PageHistoryService pageHistoryService;
     @Mock
-    private PageHistoryMapper pageHistoryMapper;
-    @Mock
     private AppV1ServiceImpl appV1ServiceImpl;
-    @Mock
-    private BlockHistoryMapper blockHistoryMapper;
     @Mock
     private AppExtensionMapper appExtensionMapper;
     @Mock
     private I18nEntryMapper i18nEntryMapper;
+
     @InjectMocks
     private PageServiceImpl pageServiceImpl;
 
@@ -95,6 +94,7 @@ class PageServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(pageServiceImpl, "baseMapper", pageMapper);
     }
 
     @Test
@@ -365,7 +365,13 @@ class PageServiceImplTest {
         block.setContent(content);
         when(blockMapper.queryBlockById(1)).thenReturn(block);
         when(appV1ServiceImpl.getSchemaExtensions(any(List.class))).thenReturn(new HashMap());
-
+        AppExtension appExtension = new AppExtension();
+        when(appExtensionMapper.queryAppExtensionByCondition(appExtension)).thenReturn(new ArrayList<>());
+        when(i18nEntryMapper.findI18nEntriesByHostandHostType(param.getId(), "block"))
+            .thenReturn(new ArrayList<>());
+        SchemaI18n schemaI18n = new SchemaI18n();
+        when(appService.formatI18nEntrites(new ArrayList<>(), Enums.I18Belongs.BLOCK.getValue(), param.getId()))
+            .thenReturn(schemaI18n);
         PreviewDto result = pageServiceImpl.getBlockPreviewMetaData(param);
         assertEquals(datasource, result.getDataSource());
     }

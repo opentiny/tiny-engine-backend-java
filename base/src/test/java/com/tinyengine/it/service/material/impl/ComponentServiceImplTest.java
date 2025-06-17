@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ComponentLibraryMapper;
@@ -54,12 +55,14 @@ class ComponentServiceImplTest {
     private ComponentMapper componentMapper;
     @Mock
     private ComponentLibraryMapper componentLibraryMapper;
+
     @InjectMocks
     private ComponentServiceImpl componentServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(componentServiceImpl, "baseMapper", componentMapper);
     }
 
     @Test

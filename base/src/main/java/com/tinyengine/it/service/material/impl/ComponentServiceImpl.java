@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * The type Component service.
@@ -369,10 +370,12 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
                         .findFirst()
                         .orElse(null);
 
-                if (snippet != null) {
-                    Map<String, Object> snippetMap = BeanUtil.beanToMap(snippet);
-                    component.setSnippets(Arrays.asList(snippetMap));
-
+                if (snippet == null) {
+                    continue;
+                }
+                Map<String, Object> snippetMap = BeanUtil.beanToMap(snippet);
+                component.setSnippets(Arrays.asList(snippetMap));
+                if(Objects.isNull(component.getCategory())) {
                     component.setCategory(child.getGroup());
                 }
             }

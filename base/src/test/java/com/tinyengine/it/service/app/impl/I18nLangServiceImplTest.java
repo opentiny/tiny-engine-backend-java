@@ -14,6 +14,7 @@ package com.tinyengine.it.service.app.impl;
 
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.mapper.I18nLangMapper;
 import com.tinyengine.it.model.entity.I18nLang;
 
@@ -35,12 +36,14 @@ import java.util.List;
 class I18nLangServiceImplTest {
     @Mock
     private I18nLangMapper i18nLangMapper;
+
     @InjectMocks
     private I18nLangServiceImpl i18nLangServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(i18nLangServiceImpl, "baseMapper", i18nLangMapper);
     }
 
     @Test

@@ -14,6 +14,7 @@ package com.tinyengine.it.service.app.impl;
 
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.User;
 
@@ -35,12 +36,14 @@ import java.util.List;
 class UserServiceImplTest {
     @Mock
     private UserMapper userMapper;
+
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(userServiceImpl, "baseMapper", userMapper);
     }
 
     @Test

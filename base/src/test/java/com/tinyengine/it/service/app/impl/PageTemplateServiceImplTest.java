@@ -15,6 +15,7 @@ package com.tinyengine.it.service.app.impl;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.PageTemplateMapper;
 import com.tinyengine.it.model.entity.PageTemplate;
@@ -38,12 +39,14 @@ import java.util.List;
 class PageTemplateServiceImplTest {
     @Mock
     private PageTemplateMapper pageTemplateMapper;
+
     @InjectMocks
     private PageTemplateServiceImpl pageTemplateServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(pageTemplateServiceImpl, "baseMapper", pageTemplateMapper);
     }
 
     @Test
