@@ -12,9 +12,8 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.BusinessCategory;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface BusinessCategoryService {
+public interface BusinessCategoryService extends IService<BusinessCategory> {
     /**
      * 查询表t_business_category所有信息
      *
@@ -37,7 +36,7 @@ public interface BusinessCategoryService {
      * @param id the id
      * @return the business category
      */
-    BusinessCategory queryBusinessCategoryById(@Param("id") Integer id);
+    BusinessCategory queryBusinessCategoryById(Integer id);
 
     /**
      * 根据条件查询表t_business_category信息
@@ -53,7 +52,7 @@ public interface BusinessCategoryService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteBusinessCategoryById(@Param("id") Integer id);
+    Integer deleteBusinessCategoryById(Integer id);
 
     /**
      * 根据主键id更新表t_business_category信息

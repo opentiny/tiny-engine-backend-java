@@ -30,16 +30,12 @@
         <mariadb-java-client.version>3.3.3</mariadb-java-client.version>
         <freemarker.version>2.3.32</freemarker.version>
         <spring-data-commons.version>2.5.4</spring-data-commons.version>
-        <springdoc-openapi-ui.version>1.6.14</springdoc-openapi-ui.version>
+        <springdoc-openapi-starter-webflux-ui.version>2.5.0</springdoc-openapi-starter-webflux-ui.version>
         <mockito-inline.version>4.11.0</mockito-inline.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -106,8 +102,8 @@
 
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>${springdoc-openapi-ui.version}</version>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>${springdoc-openapi-starter-webflux-ui.version}</version>
         </dependency>
 
         <dependency>

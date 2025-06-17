@@ -12,9 +12,8 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.BlockHistory;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface BlockHistoryService {
+public interface BlockHistoryService extends IService<BlockHistory> {
     /**
      * 查询表t_block_history所有信息
      *
@@ -37,7 +36,7 @@ public interface BlockHistoryService {
      * @param id the id
      * @return the block history
      */
-    BlockHistory findBlockHistoryById(@Param("id") Integer id);
+    BlockHistory findBlockHistoryById(Integer id);
 
     /**
      * 根据条件查询表t_block_history信息
@@ -53,7 +52,7 @@ public interface BlockHistoryService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteBlockHistoryById(@Param("id") Integer id);
+    Integer deleteBlockHistoryById(Integer id);
 
     /**
      * 根据主键id更新表t_block_history信息

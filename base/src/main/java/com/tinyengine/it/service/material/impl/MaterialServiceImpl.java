@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.MaterialMapper;
@@ -20,8 +21,6 @@ import com.tinyengine.it.service.material.MaterialService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,10 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class MaterialServiceImpl implements MaterialService {
-    @Autowired
-    private MaterialMapper materialMapper;
-
+public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> implements MaterialService {
     /**
      * 查询表t_material所有数据
      *
@@ -44,7 +40,7 @@ public class MaterialServiceImpl implements MaterialService {
      */
     @Override
     public List<Material> queryAllMaterial() {
-        return materialMapper.queryAllMaterial();
+        return baseMapper.queryAllMaterial();
     }
 
     /**
@@ -54,8 +50,8 @@ public class MaterialServiceImpl implements MaterialService {
      * @return query result
      */
     @Override
-    public Result<Material> queryMaterialById(@Param("id") Integer id) {
-        Material material = materialMapper.queryMaterialById(id);
+    public Result<Material> queryMaterialById(Integer id) {
+        Material material = baseMapper.queryMaterialById(id);
         return Result.success(material);
     }
 
@@ -67,7 +63,7 @@ public class MaterialServiceImpl implements MaterialService {
      */
     @Override
     public List<Material> queryMaterialByCondition(Material material) {
-        return materialMapper.queryMaterialByCondition(material);
+        return baseMapper.queryMaterialByCondition(material);
     }
 
     /**
@@ -77,8 +73,8 @@ public class MaterialServiceImpl implements MaterialService {
      * @return execute success data number
      */
     @Override
-    public Result<Material> deleteMaterialById(@Param("id") Integer id) {
-        int deleteResult = materialMapper.deleteMaterialById(id);
+    public Result<Material> deleteMaterialById(Integer id) {
+        int deleteResult = baseMapper.deleteMaterialById(id);
         if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -94,7 +90,7 @@ public class MaterialServiceImpl implements MaterialService {
      */
     @Override
     public Result<Material> updateMaterialById(Material material) {
-        int updateResult = materialMapper.updateMaterialById(material);
+        int updateResult = baseMapper.updateMaterialById(material);
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -109,7 +105,7 @@ public class MaterialServiceImpl implements MaterialService {
      */
     @Override
     public Result<Material> createMaterial(Material material) {
-        int createResult = materialMapper.createMaterial(material);
+        int createResult = baseMapper.createMaterial(material);
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }

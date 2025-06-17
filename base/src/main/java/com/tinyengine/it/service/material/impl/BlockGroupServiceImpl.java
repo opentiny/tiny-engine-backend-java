@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
@@ -28,7 +29,6 @@ import com.tinyengine.it.service.material.BlockGroupService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,10 +43,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class BlockGroupServiceImpl implements BlockGroupService {
-    @Autowired
-    private BlockGroupMapper blockGroupMapper;
-
+public class BlockGroupServiceImpl extends ServiceImpl<BlockGroupMapper, BlockGroup> implements BlockGroupService {
     @Autowired
     private BlockCarriersRelationMapper blockCarriersRelationMapper;
 
@@ -63,7 +60,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public List<BlockGroup> findAllBlockGroup() {
-        return blockGroupMapper.queryAllBlockGroup();
+        return baseMapper.queryAllBlockGroup();
     }
 
     /**
@@ -73,8 +70,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return block group
      */
     @Override
-    public BlockGroup findBlockGroupById(@Param("id") Integer id) {
-        BlockGroup blockGroupResult = blockGroupMapper.queryBlockGroupAndBlockById(id, null,
+    public BlockGroup findBlockGroupById(Integer id) {
+        BlockGroup blockGroupResult = baseMapper.queryBlockGroupAndBlockById(id, null,
             loginUserContext.getLoginUserId());
         // 对查询的结果的区块赋值current_version
         if (blockGroupResult == null || blockGroupResult.getBlocks().isEmpty()) {
@@ -104,7 +101,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public List<BlockGroupDto> findBlockGroupByCondition(BlockGroup blockGroup) {
-        return blockGroupMapper.queryBlockGroupByCondition(blockGroup);
+        return baseMapper.queryBlockGroupByCondition(blockGroup);
     }
 
     /**
@@ -114,8 +111,8 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      * @return delete number
      */
     @Override
-    public Integer deleteBlockGroupById(@Param("id") Integer id) {
-        return blockGroupMapper.deleteBlockGroupById(id);
+    public Integer deleteBlockGroupById(Integer id) {
+        return baseMapper.deleteBlockGroupById(id);
     }
 
     /**
@@ -141,7 +138,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
             blockCarriersRelationMapper.deleteBlockCarriersRelation(blockGroup.getId(), hostType, null);
             // 删除区块分组与区块关系
             blockGroupBlockMapper.deleteBlockGroupBlockByGroupId(blockGroup.getId());
-            return blockGroupMapper.updateBlockGroupById(blockGroup);
+            return baseMapper.updateBlockGroupById(blockGroup);
         }
         // 处理参数分组区块
         List<Integer> blockIds = blockList.stream().map(Block::getId).collect(Collectors.toList());
@@ -160,7 +157,7 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         if (result > 0) {
             blockCarriersRelationMapper.deleteBlockCarriersRelation(blockGroup.getId(), hostType, result);
         }
-        return blockGroupMapper.updateBlockGroupById(blockGroup);
+        return baseMapper.updateBlockGroupById(blockGroup);
     }
 
     /**
@@ -171,9 +168,9 @@ public class BlockGroupServiceImpl implements BlockGroupService {
      */
     @Override
     public Result<BlockGroup> createBlockGroup(BlockGroup blockGroup) {
-        List<BlockGroupDto> blockGroupsList = blockGroupMapper.queryBlockGroupByCondition(blockGroup);
+        List<BlockGroupDto> blockGroupsList = baseMapper.queryBlockGroupByCondition(blockGroup);
         if (blockGroupsList.isEmpty()) {
-            blockGroupMapper.createBlockGroup(blockGroup);
+            baseMapper.createBlockGroup(blockGroup);
         } else {
             return Result.failed(ExceptionEnum.CM003);
         }
@@ -202,15 +199,15 @@ public class BlockGroupServiceImpl implements BlockGroupService {
         BlockGroup blockGroup = new BlockGroup();
         if (ids != null) {
             for (int blockgroupId : ids) {
-                blockGroup = blockGroupMapper.queryBlockGroupAndBlockById(blockgroupId, blockCreatedBy, groupCreatedBy);
+                blockGroup = baseMapper.queryBlockGroupAndBlockById(blockgroupId, blockCreatedBy, groupCreatedBy);
                 blockGroupsListResult.add(blockGroup);
             }
         }
         if (appId != null) {
-            blockGroupsListResult = blockGroupMapper.queryBlockGroupByAppId(appId, blockCreatedBy, groupCreatedBy);
+            blockGroupsListResult = baseMapper.queryBlockGroupByAppId(appId, blockCreatedBy, groupCreatedBy);
         }
         if (ids == null && appId == null) {
-            blockGroupsListResult = blockGroupMapper.queryAllBlockGroupAndBlock(blockCreatedBy, groupCreatedBy);
+            blockGroupsListResult = baseMapper.queryAllBlockGroupAndBlock(blockCreatedBy, groupCreatedBy);
         }
 
         if (blockGroupsListResult.isEmpty() || blockGroupsListResult.get(0).getId() == null) {

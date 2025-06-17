@@ -15,6 +15,7 @@ package com.tinyengine.it.service.material.impl;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.mapper.TaskRecordMapper;
 import com.tinyengine.it.model.entity.TaskRecord;
 
@@ -36,12 +37,14 @@ import java.util.List;
 class TaskRecordMaterialServiceImplTest {
     @Mock
     TaskRecordMapper taskRecordMapper;
+
     @InjectMocks
     TaskRecordMaterialServiceImpl taskRecordMaterialServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(taskRecordMaterialServiceImpl, "baseMapper", taskRecordMapper);
     }
 
     @Test

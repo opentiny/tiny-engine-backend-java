@@ -12,9 +12,8 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.User;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface UserService {
+public interface UserService extends IService<User> {
     /**
      * 查询表t_user所有信息
      *
@@ -37,7 +36,7 @@ public interface UserService {
      * @param id the id
      * @return the user
      */
-    User queryUserById(@Param("id") String id);
+    User queryUserById(String id);
 
     /**
      * 根据条件查询表t_user信息
@@ -53,7 +52,7 @@ public interface UserService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteUserById(@Param("id") String id);
+    Integer deleteUserById(String id);
 
     /**
      * 根据主键id更新表t_user信息

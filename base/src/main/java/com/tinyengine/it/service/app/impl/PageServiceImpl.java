@@ -14,6 +14,7 @@ package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
@@ -50,7 +51,6 @@ import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -71,13 +71,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class PageServiceImpl implements PageService {
-    /**
-     * The Page mapper.
-     */
-    @Autowired
-    private PageMapper pageMapper;
-
+public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements PageService {
     /**
      * The App service.
      */
@@ -159,7 +153,7 @@ public class PageServiceImpl implements PageService {
     @Override
     @SystemServiceLog(description = "通过appId查询page所有数据实现方法")
     public List<Page> queryAllPage(Integer aid) {
-        List<Page> pageList = pageMapper.queryPageByApp(aid);
+        List<Page> pageList = baseMapper.queryPageByApp(aid);
         if (pageList == null) {
             return null;
         }
@@ -180,8 +174,8 @@ public class PageServiceImpl implements PageService {
      */
     @Override
     @SystemServiceLog(description = "通过Id查询page数据实现方法")
-    public Page queryPageById(@Param("id") Integer id) {
-        Page pageInfo = pageMapper.queryPageById(id);
+    public Page queryPageById(Integer id) {
+        Page pageInfo = baseMapper.queryPageById(id);
         // 获取schemaMeta进行获取materialHistory中的framework进行判断
         String framework = appMapper.queryAppById(pageInfo.getApp()).getFramework();
         if (framework.isEmpty()) {
@@ -206,7 +200,7 @@ public class PageServiceImpl implements PageService {
     @Override
     @SystemServiceLog(description = "通过条件查询page数据实现方法")
     public List<Page> queryPageByCondition(Page page) {
-        return pageMapper.queryPageByCondition(page);
+        return baseMapper.queryPageByCondition(page);
     }
 
     /**
@@ -226,8 +220,8 @@ public class PageServiceImpl implements PageService {
             return del(id);
         }
         // 删除
-        Page pageResult = pageMapper.queryPageById(id);
-        int result = pageMapper.deletePageById(id);
+        Page pageResult = baseMapper.queryPageById(id);
+        int result = baseMapper.deletePageById(id);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
@@ -261,7 +255,7 @@ public class PageServiceImpl implements PageService {
         if (!pageResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
-        int result = pageMapper.createPage(page);
+        int result = baseMapper.createPage(page);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
@@ -299,7 +293,7 @@ public class PageServiceImpl implements PageService {
         Page pageParam = new Page();
         pageParam.setName(page.getName());
         pageParam.setApp(page.getApp());
-        return pageMapper.queryPageByCondition(pageParam);
+        return baseMapper.queryPageByCondition(pageParam);
     }
 
     /**
@@ -328,7 +322,7 @@ public class PageServiceImpl implements PageService {
         if (!pageResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
-        int result = pageMapper.createPage(page);
+        int result = baseMapper.createPage(page);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
@@ -451,7 +445,7 @@ public class PageServiceImpl implements PageService {
 
     // 执行页面更新操作
     private Result<Page> performUpdate(Page page) {
-        int result = pageMapper.updatePageById(page);
+        int result = baseMapper.updatePageById(page);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
@@ -472,7 +466,7 @@ public class PageServiceImpl implements PageService {
             return Result.success(0);
         }
         // getFolder 获取父类信息
-        Page parentInfo = pageMapper.queryPageById(parent);
+        Page parentInfo = baseMapper.queryPageById(parent);
         int depth = parentInfo.getDepth();
         return Result.success(depth);
     }
@@ -525,7 +519,7 @@ public class PageServiceImpl implements PageService {
         // 这里只需要判断page表中是否存在子节点即可
         Page page = new Page();
         page.setParentId(id.toString());
-        List<Page> subFolders = pageMapper.queryPageByCondition(page);
+        List<Page> subFolders = baseMapper.queryPageByCondition(page);
         if (!subFolders.isEmpty()) {
             return Result.failed("此文件夹不是空文件夹，不能删除！");
         }
@@ -547,12 +541,12 @@ public class PageServiceImpl implements PageService {
             user.setId(loginUserContext.getLoginUserId());
             user.setUsername(loginUserContext.getLoginUserId());
         }
-        Page page = pageMapper.queryPageById(id);
+        Page page = baseMapper.queryPageById(id);
         User occupier = page.getOccupier();
 
         // 如果当前页面没人占用 或者是自己占用 可以删除该页面
         if (iCanDoIt(occupier, user)) {
-            pageMapper.deletePageById(id);
+            baseMapper.deletePageById(id);
 
             return Result.success(page);
         }
@@ -595,7 +589,7 @@ public class PageServiceImpl implements PageService {
 
         UpdateWrapper<Page> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", subPageId).set("is_default", false);
-        int result = pageMapper.update(null, updateWrapper);
+        int result = baseMapper.update(null, updateWrapper);
 
         if (result < 1) {
             return false;
@@ -610,7 +604,7 @@ public class PageServiceImpl implements PageService {
      * @return parentId the parentId
      */
     private String getParentPage(String parentId) {
-        Page page = pageMapper.queryPageById(Integer.parseInt(parentId));
+        Page page = baseMapper.queryPageById(Integer.parseInt(parentId));
         if (page.getIsPage() || "0".equals(page.getParentId())) {
             return parentId;
         }
@@ -631,7 +625,7 @@ public class PageServiceImpl implements PageService {
         // 查找子页面列表
         Page pageParam = new Page();
         pageParam.setParentId(parentId);
-        List<Page> pageList = pageMapper.queryPageByCondition(pageParam);
+        List<Page> pageList = baseMapper.queryPageByCondition(pageParam);
 
         // 遍历页面列表，查找默认的子页面
         for (Page page : pageList) {
@@ -693,7 +687,7 @@ public class PageServiceImpl implements PageService {
         if (!loginUserContext.getLoginUserId().equals(page.getOccupierBy())) {
             Result.failed("The current page is being edited by" + page.getOccupierBy());
         }
-        pageMapper.updatePageById(page);
+        baseMapper.updatePageById(page);
         // 修改完返回页面还是返回dto，为了下次修改每次参数属性一致
         Page pagesResult = queryPageById(page.getId());
         return Result.success(pagesResult);
@@ -779,7 +773,7 @@ public class PageServiceImpl implements PageService {
         // 构建查询条件
         QueryWrapper<Page> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("parent_id", pids);
-        List<Page> children = pageMapper.selectList(queryWrapper);
+        List<Page> children = baseMapper.selectList(queryWrapper);
         if (children.isEmpty()) {
             return new ArrayList<>();
         }

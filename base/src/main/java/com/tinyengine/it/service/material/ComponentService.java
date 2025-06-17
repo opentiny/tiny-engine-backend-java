@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BundleDto;
 import com.tinyengine.it.model.dto.BundleResultDto;
@@ -19,7 +20,6 @@ import com.tinyengine.it.model.dto.CustComponentDto;
 import com.tinyengine.it.model.dto.FileResult;
 import com.tinyengine.it.model.entity.Component;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface ComponentService {
+public interface ComponentService extends IService<Component> {
     /**
      * 查询表t_component所有信息
      *
@@ -43,7 +43,7 @@ public interface ComponentService {
      * @param id the id
      * @return the component
      */
-    Component findComponentById(@Param("id") Integer id);
+    Component findComponentById(Integer id);
 
     /**
      * 根据条件查询表t_component信息
@@ -59,7 +59,7 @@ public interface ComponentService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteComponentById(@Param("id") Integer id);
+    Integer deleteComponentById(Integer id);
 
     /**
      * 根据主键id更新表t_component信息

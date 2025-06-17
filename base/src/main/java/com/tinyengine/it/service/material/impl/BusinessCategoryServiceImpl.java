@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.BusinessCategoryMapper;
 import com.tinyengine.it.model.entity.BusinessCategory;
@@ -19,8 +20,6 @@ import com.tinyengine.it.service.material.BusinessCategoryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,10 +31,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class BusinessCategoryServiceImpl implements BusinessCategoryService {
-    @Autowired
-    private BusinessCategoryMapper businessCategoryMapper;
-
+public class BusinessCategoryServiceImpl extends ServiceImpl<BusinessCategoryMapper, BusinessCategory> implements BusinessCategoryService {
     /**
      * 查询表t_business_category所有数据
      *
@@ -43,7 +39,7 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      */
     @Override
     public List<BusinessCategory> queryAllBusinessCategory() {
-        return businessCategoryMapper.queryAllBusinessCategory();
+        return baseMapper.queryAllBusinessCategory();
     }
 
     /**
@@ -53,8 +49,8 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      * @return BusinessCategory
      */
     @Override
-    public BusinessCategory queryBusinessCategoryById(@Param("id") Integer id) {
-        return businessCategoryMapper.queryBusinessCategoryById(id);
+    public BusinessCategory queryBusinessCategoryById(Integer id) {
+        return baseMapper.queryBusinessCategoryById(id);
     }
 
     /**
@@ -67,7 +63,7 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
     @Override
     public List<BusinessCategory> queryBusinessCategoryByCondition(BusinessCategory businessCategory)
             throws ServiceException {
-        return businessCategoryMapper.queryBusinessCategoryByCondition(businessCategory);
+        return baseMapper.queryBusinessCategoryByCondition(businessCategory);
     }
 
     /**
@@ -77,8 +73,8 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteBusinessCategoryById(@Param("id") Integer id) {
-        return businessCategoryMapper.deleteBusinessCategoryById(id);
+    public Integer deleteBusinessCategoryById(Integer id) {
+        return baseMapper.deleteBusinessCategoryById(id);
     }
 
     /**
@@ -89,7 +85,7 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      */
     @Override
     public Integer updateBusinessCategoryById(BusinessCategory businessCategory) {
-        return businessCategoryMapper.updateBusinessCategoryById(businessCategory);
+        return baseMapper.updateBusinessCategoryById(businessCategory);
     }
 
     /**
@@ -100,6 +96,6 @@ public class BusinessCategoryServiceImpl implements BusinessCategoryService {
      */
     @Override
     public Integer createBusinessCategory(BusinessCategory businessCategory) {
-        return businessCategoryMapper.createBusinessCategory(businessCategory);
+        return baseMapper.createBusinessCategory(businessCategory);
     }
 }

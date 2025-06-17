@@ -12,14 +12,13 @@
 
 package com.tinyengine.it.service.platform.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.service.platform.TenantService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,10 +31,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class TenantServiceImpl implements TenantService {
-    @Autowired
-    private TenantMapper tenantMapper;
-
+public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> implements TenantService {
     /**
      * 查询表t_tenant所有数据
      *
@@ -43,7 +39,7 @@ public class TenantServiceImpl implements TenantService {
      */
     @Override
     public List<Tenant> findAllTenant() {
-        return tenantMapper.queryAllTenant();
+        return baseMapper.queryAllTenant();
     }
 
     /**
@@ -53,8 +49,8 @@ public class TenantServiceImpl implements TenantService {
      * @return query result
      */
     @Override
-    public Tenant findTenantById(@Param("id") Integer id) {
-        return tenantMapper.queryTenantById(id);
+    public Tenant findTenantById(Integer id) {
+        return baseMapper.queryTenantById(id);
     }
 
     /**
@@ -65,7 +61,7 @@ public class TenantServiceImpl implements TenantService {
      */
     @Override
     public List<Tenant> findTenantByCondition(Tenant tenant) {
-        return tenantMapper.queryTenantByCondition(tenant);
+        return baseMapper.queryTenantByCondition(tenant);
     }
 
     /**
@@ -75,8 +71,8 @@ public class TenantServiceImpl implements TenantService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteTenantById(@Param("id") Integer id) {
-        return tenantMapper.deleteTenantById(id);
+    public Integer deleteTenantById(Integer id) {
+        return baseMapper.deleteTenantById(id);
     }
 
     /**
@@ -87,7 +83,7 @@ public class TenantServiceImpl implements TenantService {
      */
     @Override
     public Integer updateTenantById(Tenant tenant) {
-        return tenantMapper.updateTenantById(tenant);
+        return baseMapper.updateTenantById(tenant);
     }
 
     /**
@@ -98,6 +94,6 @@ public class TenantServiceImpl implements TenantService {
      */
     @Override
     public Integer createTenant(Tenant tenant) {
-        return tenantMapper.createTenant(tenant);
+        return baseMapper.createTenant(tenant);
     }
 }

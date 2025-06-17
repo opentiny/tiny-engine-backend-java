@@ -16,35 +16,31 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig implements WebFluxConfigurer {
     @Value("${cors.allowed-origins}")
     private String allowedOrigins;
 
     @Bean
-    public CorsFilter corsFilter() {
-        // 跨域配置地址
+    public CorsWebFilter corsFilter() {
         List<String> crosDomainList = Arrays.asList(allowedOrigins.split(","));
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        // 1、允许来源
         corsConfiguration.setAllowedOriginPatterns(crosDomainList);
-        // 2、允许任何请求头
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
-        // 3、允许任何方法
         corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
-        // 4、允许凭证
         corsConfiguration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource source =
+                new org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
-        return new CorsFilter(source);
+
+        return new CorsWebFilter(source);
     }
 }

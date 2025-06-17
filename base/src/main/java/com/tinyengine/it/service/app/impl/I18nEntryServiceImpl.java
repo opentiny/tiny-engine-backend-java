@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +44,6 @@ import com.tinyengine.it.service.app.I18nEntryService;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +65,8 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class I18nEntryServiceImpl implements I18nEntryService {
+public class I18nEntryServiceImpl extends ServiceImpl<I18nEntryMapper, I18nEntry> implements I18nEntryService {
     private static final Logger logger = LoggerFactory.getLogger(I18nEntryServiceImpl.class);
-
-    @Autowired
-    private I18nEntryMapper i18nEntryMapper;
 
     @Autowired
     private I18nLangMapper i18nLangMapper;
@@ -88,7 +85,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             return i18nEntriesListResult;
         }
         // 获取词条列表
-        List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.queryAllI18nEntry();
+        List<I18nEntryDto> i18nEntriesList = baseMapper.queryAllI18nEntry();
         if (i18nEntriesList == null) {
             return i18nEntriesListResult;
         }
@@ -154,7 +151,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         }
 
         List<I18nEntry> i18nEntriesList = fillParam(operateI18nEntries, langsDic);
-        i18nEntriesList.stream().map(entry -> i18nEntryMapper.createI18nEntry(entry)).collect(Collectors.toList());
+        i18nEntriesList.stream().map(entry -> baseMapper.createI18nEntry(entry)).collect(Collectors.toList());
         return i18nEntriesList;
     }
 
@@ -199,7 +196,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<I18nEntry> i18nEntriesList = getEntriesParam(operateI18nBatchEntries);
 
         // bulkCreateEntries
-        i18nEntriesList.stream().map(entry -> i18nEntryMapper.createI18nEntry(entry)).collect(Collectors.toList());
+        i18nEntriesList.stream().map(entry -> baseMapper.createI18nEntry(entry)).collect(Collectors.toList());
         return i18nEntriesList;
     }
 
@@ -260,7 +257,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             i18nEntries.setHostType(operateI18nEntries.getHostType());
             i18nEntries.setHost(Integer.valueOf(operateI18nEntries.getHost()));
             i18nEntries.setKey(operateI18nEntries.getKey());
-            List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.queryI18nEntryByCondition(i18nEntries);
+            List<I18nEntryDto> i18nEntriesList = baseMapper.queryI18nEntryByCondition(i18nEntries);
             if (i18nEntriesList.isEmpty()) {
                 return create(operateI18nEntries);
             }
@@ -285,7 +282,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         List<I18nEntry> i18nEntriesList = fillParam(operateI18nEntries, langsDic);
         // bulkCreateEntries
         for (I18nEntry i18Entries : i18nEntriesList) {
-            i18nEntryMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(), i18Entries.getHostType(),
+            baseMapper.updateByEntry(i18Entries.getContent(), i18Entries.getHost(), i18Entries.getHostType(),
                 i18Entries.getKey(), i18Entries.getLang());
         }
         return i18nEntriesList;
@@ -306,8 +303,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             i18nEntry.setHostType(deleteI18nEntry.getHostType());
             i18nEntry.setHost(Integer.valueOf(deleteI18nEntry.getHost()));
             i18nEntry.setKey(key);
-            List<I18nEntryDto> i18nEntries = i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
-            i18nEntries.stream().forEach(i18nEntriesDto -> i18nEntryMapper.deleteI18nEntryById(i18nEntriesDto.getId()));
+            List<I18nEntryDto> i18nEntries = baseMapper.queryI18nEntryByCondition(i18nEntry);
+            i18nEntries.stream().forEach(i18nEntriesDto -> baseMapper.deleteI18nEntryById(i18nEntriesDto.getId()));
             i18nEntriesList.addAll(i18nEntries);
         }
         return i18nEntriesList;
@@ -392,7 +389,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
             return i18nEntriesListResult;
         }
         // 获取词条列表
-        List<I18nEntryDto> i18nEntriesList = i18nEntryMapper.findI18nEntriesByHostandHostType(host, hostType);
+        List<I18nEntryDto> i18nEntriesList = baseMapper.findI18nEntriesByHostandHostType(host, hostType);
         if (i18nEntriesList == null) {
             return i18nEntriesListResult;
         }
@@ -446,15 +443,15 @@ public class I18nEntryServiceImpl implements I18nEntryService {
         int updateNum = 0;
         for (I18nEntry entry : entries) {
             // 查询数据库中是否存在该记录
-            List<I18nEntryDto> i18nEntryList = i18nEntryMapper.queryI18nEntryByCondition(entry);
+            List<I18nEntryDto> i18nEntryList = baseMapper.queryI18nEntryByCondition(entry);
             if (i18nEntryList.isEmpty()) {
                 // 插入新记录
-                i18nEntryMapper.createI18nEntry(entry);
+                baseMapper.createI18nEntry(entry);
                 addNum = addNum + 1;
             } else {
                 // 更新记录
                 entry.setId(i18nEntryList.get(0).getId());
-                i18nEntryMapper.updateI18nEntryById(entry);
+                baseMapper.updateI18nEntryById(entry);
                 updateNum = updateNum + 1;
             }
         }
@@ -520,8 +517,8 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      * @throws ServiceException ServiceException
      */
     @Override
-    public I18nEntryDto findI18nEntryById(@Param("id") Integer id) throws ServiceException {
-        return i18nEntryMapper.queryI18nEntryById(id);
+    public I18nEntryDto findI18nEntryById(Integer id) throws ServiceException {
+        return baseMapper.queryI18nEntryById(id);
     }
 
     /**
@@ -533,7 +530,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @Override
     public List<I18nEntryDto> findI18nEntryByCondition(I18nEntry i18nEntry) throws ServiceException {
-        return i18nEntryMapper.queryI18nEntryByCondition(i18nEntry);
+        return baseMapper.queryI18nEntryByCondition(i18nEntry);
     }
 
     /**
@@ -544,7 +541,7 @@ public class I18nEntryServiceImpl implements I18nEntryService {
      */
     @Override
     public Integer updateI18nEntryById(I18nEntry i18nEntry) {
-        return i18nEntryMapper.updateI18nEntryById(i18nEntry);
+        return baseMapper.updateI18nEntryById(i18nEntry);
     }
 
     /**

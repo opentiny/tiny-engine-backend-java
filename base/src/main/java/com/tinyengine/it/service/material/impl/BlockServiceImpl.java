@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +51,6 @@ import com.tinyengine.it.service.material.BlockService;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,10 +76,7 @@ import java.util.stream.Stream;
  */
 @Service
 @Slf4j
-public class BlockServiceImpl implements BlockService {
-    @Autowired
-    private BlockMapper blockMapper;
-
+public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements BlockService {
     @Autowired
     private UserMapper userMapper;
 
@@ -111,7 +108,7 @@ public class BlockServiceImpl implements BlockService {
      */
     @Override
     public List<Block> queryAllBlock() {
-        return blockMapper.queryAllBlock();
+        return baseMapper.queryAllBlock();
     }
 
     /**
@@ -121,8 +118,8 @@ public class BlockServiceImpl implements BlockService {
      * @return block
      */
     @Override
-    public BlockDto queryBlockById(@Param("id") Integer id) {
-        BlockDto blockDto = blockMapper.findBlockAndGroupAndHistoByBlockId(id);
+    public BlockDto queryBlockById(Integer id) {
+        BlockDto blockDto = baseMapper.findBlockAndGroupAndHistoByBlockId(id);
         if (blockDto == null) {
             return blockDto;
         }
@@ -145,7 +142,7 @@ public class BlockServiceImpl implements BlockService {
      */
     @Override
     public List<Block> queryBlockByCondition(Block block) {
-        return blockMapper.queryBlockByCondition(block);
+        return baseMapper.queryBlockByCondition(block);
     }
 
     /**
@@ -155,8 +152,8 @@ public class BlockServiceImpl implements BlockService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteBlockById(@Param("id") Integer id) {
-        return blockMapper.deleteBlockById(id);
+    public Integer deleteBlockById(Integer id) {
+        return baseMapper.deleteBlockById(id);
     }
 
     /**
@@ -171,7 +168,7 @@ public class BlockServiceImpl implements BlockService {
         if (blockParam == null || blockParam.getId() == null) {
             return Result.failed(ExceptionEnum.CM002);
         }
-        Block blockResult = blockMapper.queryBlockById(blockParam.getId());
+        Block blockResult = baseMapper.queryBlockById(blockParam.getId());
         if (blockResult == null) {
             return Result.failed(ExceptionEnum.CM001);
         }
@@ -192,7 +189,7 @@ public class BlockServiceImpl implements BlockService {
         }
 
         if (blockParam.getGroups() == null) {
-            blockMapper.updateBlockById(blocks);
+            baseMapper.updateBlockById(blocks);
             BlockDto blockDtoResult = queryBlockById(blocks.getId());
             return Result.success(blockDtoResult);
         }
@@ -208,7 +205,7 @@ public class BlockServiceImpl implements BlockService {
             }
         }
         // 更新区块
-        blockMapper.updateBlockById(blocks);
+        baseMapper.updateBlockById(blocks);
         BlockDto blockDtoResult = new BlockDto();
         // 参数存在区块分组且无值
         if (blockParam.getGroups().isEmpty()) {
@@ -249,7 +246,7 @@ public class BlockServiceImpl implements BlockService {
         blocks.setIsOfficial(false);
         blocks.setPlatformId(loginUserContext.getPlatformId()); // 新建区块给默认值
 
-        int result = blockMapper.createBlock(blocks);
+        int result = baseMapper.createBlock(blocks);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
@@ -342,7 +339,7 @@ public class BlockServiceImpl implements BlockService {
         }
 
         // 执行查询并返回结果
-        return blockMapper.selectList(queryWrapper);
+        return baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -429,7 +426,7 @@ public class BlockServiceImpl implements BlockService {
         int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
         int pageSize = limit == 0 ? 10 : limit;
         Page<Block> page = new Page<>(pageNum, pageSize);
-        return blockMapper.selectPage(page, queryWrapper);
+        return baseMapper.selectPage(page, queryWrapper);
     }
 
     /**
@@ -442,7 +439,7 @@ public class BlockServiceImpl implements BlockService {
     public List<String> allTags() {
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("tags").isNotNull("tags");
-        List<Block> allBlocksList = blockMapper.selectList(queryWrapper);
+        List<Block> allBlocksList = baseMapper.selectList(queryWrapper);
         return allBlocksList.stream()
                 .flatMap(blocks -> blocks.getTags().stream())
                 .collect(Collectors.toList());
@@ -457,7 +454,7 @@ public class BlockServiceImpl implements BlockService {
     @SystemServiceLog(description = "getNotInGroupBlocks 获取不在分组内的区块 实现类")
     @Override
     public List<BlockDto> getNotInGroupBlocks(NotGroupDto notGroupDto) {
-        List<BlockDto> blocksList = blockMapper.findBlocksReturn(notGroupDto);
+        List<BlockDto> blocksList = baseMapper.findBlocksReturn(notGroupDto);
         if (blocksList == null || blocksList.isEmpty()) {
             return blocksList;
         }
@@ -500,7 +497,7 @@ public class BlockServiceImpl implements BlockService {
         Block block = new Block();
         block.setLabel(label);
         block.setAppId(appId);
-        List<Block> blockList = blockMapper.queryBlockByCondition(block);
+        List<Block> blockList = baseMapper.queryBlockByCondition(block);
         if (blockList.isEmpty()) {
             return Result.success();
         }
@@ -595,9 +592,9 @@ public class BlockServiceImpl implements BlockService {
             .or()
             .like(StringUtils.isNotEmpty(description), "description", description)
         );
-        List<Block> blocksList = blockMapper.selectList(queryWrapper);
+        List<Block> blocksList = baseMapper.selectList(queryWrapper);
         Page<Block> page = new Page<>(1, blocksList.size());
-        return blockMapper.selectPage(page, queryWrapper);
+        return baseMapper.selectPage(page, queryWrapper);
     }
 
     /**
@@ -649,7 +646,7 @@ public class BlockServiceImpl implements BlockService {
         List<Block> blocksList = new ArrayList<>();
         // 如果有 groupId, 只查group下的block,以及自己创建的区块
         if (groupIdTemp != 0) {
-            blocksList = blockMapper.findBlockByBlockGroupId(groupIdTemp, loginUserContext.getLoginUserId());
+            blocksList = baseMapper.findBlockByBlockGroupId(groupIdTemp, loginUserContext.getLoginUserId());
             return Result.success(blocksList);
         }
         // 如果没有 groupId
@@ -657,7 +654,7 @@ public class BlockServiceImpl implements BlockService {
         // 2. 组合 groups 下的所有 block
         // 3. 查询个人创建的 blocks
         // 4. 将个人的和 groups 下的 blocks 合并去重
-        blocksList = blockMapper.findBlocksByBlockGroupIdAppId(appIdTemp);
+        blocksList = baseMapper.findBlocksByBlockGroupIdAppId(appIdTemp);
         List<Block> appBlocks = blocksList;
         // 通过createBy查询区块表数据
         Block blocks = new Block();
@@ -702,7 +699,7 @@ public class BlockServiceImpl implements BlockService {
         queryBlock.setLabel(blockDto.getLabel());
         queryBlock.setFramework(blockDto.getFramework());
         queryBlock.setCreatedBy(loginUserContext.getLoginUserId());
-        List<Block> blockList = blockMapper.queryBlockByCondition(queryBlock);
+        List<Block> blockList = baseMapper.queryBlockByCondition(queryBlock);
         List<Integer> groups = blockDto.getGroups().stream().map(BlockGroup::getId).collect(Collectors.toList());
         ;
         blockDto.setGroups(null);

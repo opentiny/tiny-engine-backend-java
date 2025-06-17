@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.ComponentLibraryMapper;
@@ -20,8 +21,6 @@ import com.tinyengine.it.service.material.ComponentLibraryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,10 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class ComponentLibraryServiceImpl implements ComponentLibraryService {
-    @Autowired
-    private ComponentLibraryMapper componentLibraryMapper;
-
+public class ComponentLibraryServiceImpl extends ServiceImpl<ComponentLibraryMapper, ComponentLibrary> implements ComponentLibraryService {
     /**
      * 查询表t_component_library所有数据
      *
@@ -44,7 +40,7 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      */
     @Override
     public List<ComponentLibrary> queryAllComponentLibrary() {
-        return componentLibraryMapper.queryAllComponentLibrary();
+        return baseMapper.queryAllComponentLibrary();
     }
 
     /**
@@ -54,8 +50,8 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      * @return query result
      */
     @Override
-    public Result<ComponentLibrary> queryComponentLibraryById(@Param("id") Integer id) {
-        ComponentLibrary material = componentLibraryMapper.queryComponentLibraryById(id);
+    public Result<ComponentLibrary> queryComponentLibraryById(Integer id) {
+        ComponentLibrary material = baseMapper.queryComponentLibraryById(id);
         return Result.success(material);
     }
 
@@ -67,7 +63,7 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      */
     @Override
     public List<ComponentLibrary> queryComponentLibraryByCondition(ComponentLibrary componentLibrary) {
-        return componentLibraryMapper.queryComponentLibraryByCondition(componentLibrary);
+        return baseMapper.queryComponentLibraryByCondition(componentLibrary);
     }
 
     /**
@@ -77,12 +73,12 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      * @return execute success data number
      */
     @Override
-    public Result<ComponentLibrary> deleteComponentLibraryById(@Param("id") Integer id) {
+    public Result<ComponentLibrary> deleteComponentLibraryById(Integer id) {
         Result<ComponentLibrary> result = this.queryComponentLibraryById(id);
         if (result.getData() == null || result.getData().getId() == null) {
             return Result.success();
         }
-        int deleteResult = componentLibraryMapper.deleteComponentLibraryById(id);
+        int deleteResult = baseMapper.deleteComponentLibraryById(id);
         if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -98,7 +94,7 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      */
     @Override
     public Result<ComponentLibrary> updateComponentLibraryById(ComponentLibrary componentLibrary) {
-        int updateResult = componentLibraryMapper.updateComponentLibraryById(componentLibrary);
+        int updateResult = baseMapper.updateComponentLibraryById(componentLibrary);
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -113,7 +109,7 @@ public class ComponentLibraryServiceImpl implements ComponentLibraryService {
      */
     @Override
     public Result<ComponentLibrary> createComponentLibrary(ComponentLibrary componentLibrary) {
-        int createResult = componentLibraryMapper.createComponentLibrary(componentLibrary);
+        int createResult = baseMapper.createComponentLibrary(componentLibrary);
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }

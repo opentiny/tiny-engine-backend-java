@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.DatasourceMapper;
@@ -20,8 +21,6 @@ import com.tinyengine.it.service.app.DatasourceService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,10 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class DatasourceServiceImpl implements DatasourceService {
-    @Autowired
-    private DatasourceMapper datasourceMapper;
-
+public class DatasourceServiceImpl extends ServiceImpl<DatasourceMapper, Datasource> implements DatasourceService {
     /**
      * 根据主键id查询表t_datasource信息
      *
@@ -44,8 +40,8 @@ public class DatasourceServiceImpl implements DatasourceService {
      * @return query result
      */
     @Override
-    public Datasource queryDatasourceById(@Param("id") Integer id) {
-        return datasourceMapper.queryDatasourceById(id);
+    public Datasource queryDatasourceById(Integer id) {
+        return baseMapper.queryDatasourceById(id);
     }
 
     /**
@@ -56,7 +52,7 @@ public class DatasourceServiceImpl implements DatasourceService {
      */
     @Override
     public List<Datasource> queryDatasourceByCondition(Datasource datasource) {
-        return datasourceMapper.queryDatasourceByCondition(datasource);
+        return baseMapper.queryDatasourceByCondition(datasource);
     }
 
     /**
@@ -66,10 +62,10 @@ public class DatasourceServiceImpl implements DatasourceService {
      * @return Datasource
      */
     @Override
-    public Result<Datasource> deleteDatasourceById(@Param("id") Integer id) {
+    public Result<Datasource> deleteDatasourceById(Integer id) {
         Datasource sources = queryDatasourceById(id);
         if (sources != null) {
-            datasourceMapper.deleteDatasourceById(id);
+            baseMapper.deleteDatasourceById(id);
             return Result.success(sources);
         }
         return Result.failed(ExceptionEnum.CM009);
@@ -83,7 +79,7 @@ public class DatasourceServiceImpl implements DatasourceService {
      */
     @Override
     public Result<Datasource> updateDatasourceById(Datasource datasource) {
-        int res = datasourceMapper.updateDatasourceById(datasource);
+        int res = baseMapper.updateDatasourceById(datasource);
         if (res == 1) {
             return Result.success(queryDatasourceById(datasource.getId()));
         }
@@ -101,7 +97,7 @@ public class DatasourceServiceImpl implements DatasourceService {
         Integer appId = datasource.getApp();
         String name = datasource.getName();
         if (appId != 0 && String.valueOf(appId).matches("^[0-9]+$") && !name.isEmpty()) {
-            int res = datasourceMapper.createDatasource(datasource);
+            int res = baseMapper.createDatasource(datasource);
             if (res == 1) {
                 int id = datasource.getId();
                 return Result.success(queryDatasourceById(id));

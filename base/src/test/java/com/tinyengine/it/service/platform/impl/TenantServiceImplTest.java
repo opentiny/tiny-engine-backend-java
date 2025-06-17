@@ -15,6 +15,7 @@ package com.tinyengine.it.service.platform.impl;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.entity.Tenant;
 
@@ -36,12 +37,14 @@ import java.util.List;
 class TenantServiceImplTest {
     @Mock
     private TenantMapper tenantMapper;
+
     @InjectMocks
     private TenantServiceImpl tenantServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(tenantServiceImpl, "baseMapper", tenantMapper);
     }
 
     @Test

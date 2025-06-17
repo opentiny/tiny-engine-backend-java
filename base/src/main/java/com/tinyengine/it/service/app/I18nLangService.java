@@ -12,9 +12,8 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.I18nLang;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface I18nLangService {
+public interface I18nLangService extends IService<I18nLang> {
     /**
      * 查询表t_i18n_lang所有信息
      *
@@ -37,7 +36,7 @@ public interface I18nLangService {
      * @param id the id
      * @return the 18 n lang
      */
-    I18nLang queryI18nLangById(@Param("id") Integer id);
+    I18nLang queryI18nLangById(Integer id);
 
     /**
      * 根据条件查询表t_i18n_lang信息
@@ -53,7 +52,7 @@ public interface I18nLangService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteI18nLangById(@Param("id") Integer id);
+    Integer deleteI18nLangById(Integer id);
 
     /**
      * 根据主键id更新表t_i18n_lang信息

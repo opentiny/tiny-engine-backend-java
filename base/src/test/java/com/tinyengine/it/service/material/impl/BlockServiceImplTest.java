@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -59,24 +60,23 @@ import java.util.Map;
 class BlockServiceImplTest {
     @Mock
     private BlockMapper blockMapper;
-
-    @InjectMocks
-    private BlockServiceImpl blockServiceImpl;
-
     @Mock
     private UserMapper userMapper;
     @Mock
     private AppMapper appMapper;
     @Mock
     private BlockGroupMapper blockGroupMapper;
-
     @Mock
     private LoginUserContext loginUserContext;
+
+    @InjectMocks
+    private BlockServiceImpl blockServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
+        ReflectUtil.setFieldValue(blockServiceImpl, "baseMapper", blockMapper);
     }
 
     @Test

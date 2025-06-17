@@ -12,14 +12,13 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.TaskRecordMapper;
 import com.tinyengine.it.model.entity.TaskRecord;
 import com.tinyengine.it.service.app.TaskRecordService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +30,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class TaskRecordServiceImpl implements TaskRecordService {
-    @Autowired
-    private TaskRecordMapper taskRecordMapper;
-
+public class TaskRecordServiceImpl extends ServiceImpl<TaskRecordMapper, TaskRecord> implements TaskRecordService {
     /**
      * 查询表t_task_record所有数据
      *
@@ -42,7 +38,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      */
     @Override
     public List<TaskRecord> queryAllTaskRecord() {
-        return taskRecordMapper.queryAllTaskRecord();
+        return baseMapper.queryAllTaskRecord();
     }
 
     /**
@@ -52,8 +48,8 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      * @return query result
      */
     @Override
-    public TaskRecord queryTaskRecordById(@Param("id") Integer id) {
-        return taskRecordMapper.queryTaskRecordById(id);
+    public TaskRecord queryTaskRecordById(Integer id) {
+        return baseMapper.queryTaskRecordById(id);
     }
 
     /**
@@ -64,7 +60,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      */
     @Override
     public List<TaskRecord> queryTaskRecordByCondition(TaskRecord taskRecord) {
-        return taskRecordMapper.queryTaskRecordByCondition(taskRecord);
+        return baseMapper.queryTaskRecordByCondition(taskRecord);
     }
 
     /**
@@ -74,8 +70,8 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteTaskRecordById(@Param("id") Integer id) {
-        return taskRecordMapper.deleteTaskRecordById(id);
+    public Integer deleteTaskRecordById(Integer id) {
+        return baseMapper.deleteTaskRecordById(id);
     }
 
     /**
@@ -86,7 +82,7 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      */
     @Override
     public Integer updateTaskRecordById(TaskRecord taskRecord) {
-        return taskRecordMapper.updateTaskRecordById(taskRecord);
+        return baseMapper.updateTaskRecordById(taskRecord);
     }
 
     /**
@@ -97,6 +93,6 @@ public class TaskRecordServiceImpl implements TaskRecordService {
      */
     @Override
     public Integer createTaskRecord(TaskRecord taskRecord) {
-        return taskRecordMapper.createTaskRecord(taskRecord);
+        return baseMapper.createTaskRecord(taskRecord);
     }
 }

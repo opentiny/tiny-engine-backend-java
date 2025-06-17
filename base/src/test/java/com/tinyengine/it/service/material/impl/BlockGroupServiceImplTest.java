@@ -14,6 +14,7 @@ package com.tinyengine.it.service.material.impl;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.BlockCarriersRelationMapper;
@@ -58,6 +59,7 @@ class BlockGroupServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(blockGroupServiceImpl, "baseMapper", blockGroupMapper);
     }
 
     @Test

@@ -12,10 +12,9 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.ComponentLibrary;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
  *
  * @since 2025-4-02
  */
-public interface ComponentLibraryService {
+public interface ComponentLibraryService extends IService<ComponentLibrary> {
     /**
      * 查询表t_component_library所有信息
      *
@@ -38,7 +37,7 @@ public interface ComponentLibraryService {
      * @param id the id
      * @return the material
      */
-    Result<ComponentLibrary> queryComponentLibraryById(@Param("id") Integer id);
+    Result<ComponentLibrary> queryComponentLibraryById(Integer id);
 
     /**
      * 根据条件查询表t_component_library信息
@@ -54,7 +53,7 @@ public interface ComponentLibraryService {
      * @param id the id
      * @return the integer
      */
-    Result<ComponentLibrary> deleteComponentLibraryById(@Param("id") Integer id);
+    Result<ComponentLibrary> deleteComponentLibraryById(Integer id);
 
     /**
      * 根据主键id更新表t_component_library信息

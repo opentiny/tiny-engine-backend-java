@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.DeleteI18nEntry;
 import com.tinyengine.it.model.dto.FileResult;
@@ -22,7 +23,6 @@ import com.tinyengine.it.model.dto.OperateI18nEntries;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.I18nEntry;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface I18nEntryService {
+public interface I18nEntryService extends IService<I18nEntry> {
     /**
      * 查询表t_i18n_entry所有信息
      *
@@ -46,7 +46,7 @@ public interface I18nEntryService {
      * @param id the id
      * @return the 18 n entry
      */
-    I18nEntryDto findI18nEntryById(@Param("id") Integer id);
+    I18nEntryDto findI18nEntryById(Integer id);
 
     /**
      * 根据条件查询表t_i18n_entry信息

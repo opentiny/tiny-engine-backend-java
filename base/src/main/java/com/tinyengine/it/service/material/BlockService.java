@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.material;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.BlockBuildDto;
 import com.tinyengine.it.model.dto.BlockDto;
@@ -22,8 +23,6 @@ import com.tinyengine.it.model.dto.NotGroupDto;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.User;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ import java.util.Map;
  *
  * @since 2024-10-20
  */
-public interface BlockService {
+public interface BlockService extends IService<Block> {
     /**
      * 查询表t_block所有信息
      *
@@ -46,7 +45,7 @@ public interface BlockService {
      * @param id the id
      * @return the BlockDto
      */
-    BlockDto queryBlockById(@Param("id") Integer id);
+    BlockDto queryBlockById(Integer id);
 
     /**
      * 根据条件查询表t_block信息
@@ -62,7 +61,7 @@ public interface BlockService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteBlockById(@Param("id") Integer id);
+    Integer deleteBlockById(Integer id);
 
     /**
      * 根据主键id更新表t_block信息

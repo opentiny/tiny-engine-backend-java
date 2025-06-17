@@ -12,14 +12,13 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.mapper.BlockHistoryMapper;
 import com.tinyengine.it.model.entity.BlockHistory;
 import com.tinyengine.it.service.material.BlockHistoryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +30,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class BlockHistoryServiceImpl implements BlockHistoryService {
-    @Autowired
-    private BlockHistoryMapper blockHistoryMapper;
-
+public class BlockHistoryServiceImpl extends ServiceImpl<BlockHistoryMapper, BlockHistory> implements BlockHistoryService {
     /**
      * 查询表t_block_history所有数据
      *
@@ -42,7 +38,7 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
      */
     @Override
     public List<BlockHistory> findAllBlockHistory() {
-        return blockHistoryMapper.queryAllBlockHistory();
+        return baseMapper.queryAllBlockHistory();
     }
 
     /**
@@ -52,8 +48,8 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
      * @return block history
      */
     @Override
-    public BlockHistory findBlockHistoryById(@Param("id") Integer id) {
-        return blockHistoryMapper.queryBlockHistoryById(id);
+    public BlockHistory findBlockHistoryById(Integer id) {
+        return baseMapper.queryBlockHistoryById(id);
     }
 
     /**
@@ -64,7 +60,7 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
      */
     @Override
     public List<BlockHistory> findBlockHistoryByCondition(BlockHistory blockHistory) {
-        return blockHistoryMapper.queryBlockHistoryByCondition(blockHistory);
+        return baseMapper.queryBlockHistoryByCondition(blockHistory);
     }
 
     /**
@@ -74,8 +70,8 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
      * @return execute success data number
      */
     @Override
-    public Integer deleteBlockHistoryById(@Param("id") Integer id) {
-        return blockHistoryMapper.deleteBlockHistoryById(id);
+    public Integer deleteBlockHistoryById(Integer id) {
+        return baseMapper.deleteBlockHistoryById(id);
     }
 
     /**
@@ -86,7 +82,7 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
      */
     @Override
     public Integer updateBlockHistoryById(BlockHistory blockHistory) {
-        return blockHistoryMapper.updateBlockHistoryById(blockHistory);
+        return baseMapper.updateBlockHistoryById(blockHistory);
     }
 
     /**
@@ -97,6 +93,6 @@ public class BlockHistoryServiceImpl implements BlockHistoryService {
      */
     @Override
     public Integer createBlockHistory(BlockHistory blockHistory) {
-        return blockHistoryMapper.createBlockHistory(blockHistory);
+        return baseMapper.createBlockHistory(blockHistory);
     }
 }

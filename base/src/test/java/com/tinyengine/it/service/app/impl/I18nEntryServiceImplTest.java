@@ -21,6 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tinyengine.it.common.base.Result;
@@ -72,12 +73,14 @@ class I18nEntryServiceImplTest {
     private I18nEntryMapper i18nEntryMapper;
     @Mock
     private I18nLangMapper i18nLangMapper;
+
     @InjectMocks
     private I18nEntryServiceImpl i18nEntryServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(i18nEntryServiceImpl, "baseMapper", i18nEntryMapper);
     }
 
 

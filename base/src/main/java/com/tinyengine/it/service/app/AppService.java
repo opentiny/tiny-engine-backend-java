@@ -12,13 +12,12 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
 import com.tinyengine.it.model.entity.App;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface AppService {
+public interface AppService extends IService<App> {
     /**
      * 查询表t_app所有信息
      *
@@ -41,7 +40,7 @@ public interface AppService {
      * @param id the id
      * @return the result
      */
-    Result<App> queryAppById(@Param("id") Integer id);
+    Result<App> queryAppById(Integer id);
 
     /**
      * 根据条件查询表t_app信息
@@ -57,7 +56,7 @@ public interface AppService {
      * @param id the id
      * @return the result
      */
-    Result<App> deleteAppById(@Param("id") Integer id);
+    Result<App> deleteAppById(Integer id);
 
     /**
      * 根据主键id更新表t_app信息

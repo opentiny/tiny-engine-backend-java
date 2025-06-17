@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.platform.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.mapper.PlatformHistoryMapper;
@@ -20,7 +21,6 @@ import com.tinyengine.it.service.platform.PlatformHistoryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,10 +32,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PlatformHistoryServiceImpl implements PlatformHistoryService {
-    @Autowired
-    private PlatformHistoryMapper platformHistoryMapper;
-
+public class PlatformHistoryServiceImpl extends ServiceImpl<PlatformHistoryMapper, PlatformHistory> implements PlatformHistoryService {
     /**
      * 查询表t_platform_history所有信息
      *
@@ -43,7 +40,7 @@ public class PlatformHistoryServiceImpl implements PlatformHistoryService {
      */
     @Override
     public List<PlatformHistory> queryAllPlatformHistory() {
-        return platformHistoryMapper.queryAllPlatformHistory();
+        return baseMapper.queryAllPlatformHistory();
     }
 
     /**
@@ -54,7 +51,7 @@ public class PlatformHistoryServiceImpl implements PlatformHistoryService {
      */
     @Override
     public PlatformHistory queryPlatformHistoryById(Integer id) {
-        return platformHistoryMapper.queryPlatformHistoryById(id);
+        return baseMapper.queryPlatformHistoryById(id);
     }
 
     /**
@@ -65,7 +62,7 @@ public class PlatformHistoryServiceImpl implements PlatformHistoryService {
      */
     @Override
     public List<PlatformHistory> queryPlatformHistoryByCondition(PlatformHistory platformHistory) {
-        return platformHistoryMapper.queryPlatformHistoryByCondition(platformHistory);
+        return baseMapper.queryPlatformHistoryByCondition(platformHistory);
     }
 
     /**
@@ -80,7 +77,7 @@ public class PlatformHistoryServiceImpl implements PlatformHistoryService {
         if (platformHistory == null || platformHistory.getId() == null) {
             return Result.success();
         }
-        int deleteResult = platformHistoryMapper.deletePlatformHistoryById(id);
+        int deleteResult = baseMapper.deletePlatformHistoryById(id);
         if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -98,7 +95,7 @@ public class PlatformHistoryServiceImpl implements PlatformHistoryService {
         if (platformHistory == null || platformHistory.getId() == null) {
             return Result.failed(ExceptionEnum.CM002);
         }
-        int updateResult = platformHistoryMapper.updatePlatformHistoryById(platformHistory);
+        int updateResult = baseMapper.updatePlatformHistoryById(platformHistory);
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -129,7 +126,7 @@ public class PlatformHistoryServiceImpl implements PlatformHistoryService {
         if (platformHistory.getMaterialHistoryId() == null) {
             return Result.failed(ExceptionEnum.CM002);
         }
-        int createResult = platformHistoryMapper.createPlatformHistory(platformHistory);
+        int createResult = baseMapper.createPlatformHistory(platformHistory);
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }

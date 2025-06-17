@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
@@ -21,8 +22,6 @@ import com.tinyengine.it.service.app.AppExtensionService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,10 +33,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class AppExtensionServiceImpl implements AppExtensionService {
-    @Autowired
-    private AppExtensionMapper appExtensionMapper;
-
+public class AppExtensionServiceImpl extends ServiceImpl<AppExtensionMapper, AppExtension> implements AppExtensionService {
     /**
      * 查询表t_app_extension所有数据
      *
@@ -46,7 +42,7 @@ public class AppExtensionServiceImpl implements AppExtensionService {
     @Override
     @SystemServiceLog(description = "应用扩展列表查询实现方法")
     public Result<List<AppExtension>> findAllAppExtension() {
-        List<AppExtension> appExtensionList = appExtensionMapper.queryAllAppExtension();
+        List<AppExtension> appExtensionList = baseMapper.queryAllAppExtension();
         return Result.success(appExtensionList);
     }
 
@@ -58,8 +54,8 @@ public class AppExtensionServiceImpl implements AppExtensionService {
      */
     @Override
     @SystemServiceLog(description = "应用扩展id查询实现方法")
-    public AppExtension findAppExtensionById(@Param("id") Integer id) {
-        return appExtensionMapper.queryAppExtensionById(id);
+    public AppExtension findAppExtensionById(Integer id) {
+        return baseMapper.queryAppExtensionById(id);
     }
 
     /**
@@ -71,7 +67,7 @@ public class AppExtensionServiceImpl implements AppExtensionService {
     @Override
     @SystemServiceLog(description = "应用扩展条件查询实现方法")
     public List<AppExtension> findAppExtensionByCondition(AppExtension appExtension) {
-        return appExtensionMapper.queryAppExtensionByCondition(appExtension);
+        return baseMapper.queryAppExtensionByCondition(appExtension);
     }
 
     /**
@@ -82,10 +78,10 @@ public class AppExtensionServiceImpl implements AppExtensionService {
      */
     @Override
     @SystemServiceLog(description = "应用扩展删除实现方法")
-    public Result<AppExtension> deleteAppExtensionById(@Param("id") Integer id) {
-        AppExtension appExtension = appExtensionMapper.queryAppExtensionById(id);
+    public Result<AppExtension> deleteAppExtensionById(Integer id) {
+        AppExtension appExtension = baseMapper.queryAppExtensionById(id);
         if (appExtension != null) {
-            appExtensionMapper.deleteAppExtensionById(id);
+            baseMapper.deleteAppExtensionById(id);
             return Result.success(appExtension);
         }
         return Result.failed(ExceptionEnum.CM009);
@@ -100,9 +96,9 @@ public class AppExtensionServiceImpl implements AppExtensionService {
     @Override
     @SystemServiceLog(description = "应用扩展修改实现方法")
     public Result<AppExtension> updateAppExtensionById(AppExtension appExtension) {
-        int result = appExtensionMapper.updateAppExtensionById(appExtension);
+        int result = baseMapper.updateAppExtensionById(appExtension);
         if (result == 1) {
-            AppExtension data = appExtensionMapper.queryAppExtensionById(appExtension.getId());
+            AppExtension data = baseMapper.queryAppExtensionById(appExtension.getId());
             return Result.success(data);
         }
         return Result.failed(ExceptionEnum.CM001);
@@ -117,11 +113,11 @@ public class AppExtensionServiceImpl implements AppExtensionService {
     @Override
     @SystemServiceLog(description = "应用扩展创建实现方法")
     public Result<AppExtension> createAppExtension(AppExtension appExtension) {
-        List<AppExtension> appExtensionResult = appExtensionMapper.queryAppExtensionByCondition(appExtension);
+        List<AppExtension> appExtensionResult = baseMapper.queryAppExtensionByCondition(appExtension);
         if (!appExtensionResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
-        int result = appExtensionMapper.createAppExtension(appExtension);
+        int result = baseMapper.createAppExtension(appExtension);
         if (result == 1) {
             return Result.success(appExtension);
         }

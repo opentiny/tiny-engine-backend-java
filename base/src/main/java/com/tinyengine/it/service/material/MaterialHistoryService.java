@@ -12,10 +12,9 @@
 
 package com.tinyengine.it.service.material;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.MaterialHistory;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface MaterialHistoryService {
+public interface MaterialHistoryService extends IService<MaterialHistory> {
     /**
      * 查询表t_material_history所有信息
      *
@@ -38,7 +37,7 @@ public interface MaterialHistoryService {
      * @param id the id
      * @return the material history
      */
-    Result<MaterialHistory> findMaterialHistoryById(@Param("id") Integer id);
+    Result<MaterialHistory> findMaterialHistoryById(Integer id);
 
     /**
      * 根据条件查询表t_material_history信息
@@ -54,7 +53,7 @@ public interface MaterialHistoryService {
      * @param id the id
      * @return the integer
      */
-    Result<MaterialHistory> deleteMaterialHistoryById(@Param("id") Integer id);
+    Result<MaterialHistory> deleteMaterialHistoryById(Integer id);
 
     /**
      * 根据主键id更新表t_material_history信息

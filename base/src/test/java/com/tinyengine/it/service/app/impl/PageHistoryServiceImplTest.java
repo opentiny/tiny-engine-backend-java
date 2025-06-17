@@ -15,6 +15,7 @@ package com.tinyengine.it.service.app.impl;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.mapper.PageHistoryMapper;
 import com.tinyengine.it.model.entity.PageHistory;
 
@@ -36,12 +37,14 @@ import java.util.List;
 class PageHistoryServiceImplTest {
     @Mock
     private PageHistoryMapper pageHistoryMapper;
+
     @InjectMocks
     private PageHistoryServiceImpl pageHistoryServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(pageHistoryServiceImpl, "baseMapper", pageHistoryMapper);
     }
 
     @Test

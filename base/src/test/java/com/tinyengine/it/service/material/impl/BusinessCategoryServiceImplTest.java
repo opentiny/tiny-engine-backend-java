@@ -14,6 +14,7 @@ package com.tinyengine.it.service.material.impl;
 
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.mapper.BusinessCategoryMapper;
 import com.tinyengine.it.model.entity.BusinessCategory;
 
@@ -35,12 +36,14 @@ import java.util.List;
 class BusinessCategoryServiceImplTest {
     @Mock
     private BusinessCategoryMapper businessCategoryMapper;
+
     @InjectMocks
     private BusinessCategoryServiceImpl businessCategoryServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(businessCategoryServiceImpl, "baseMapper", businessCategoryMapper);
     }
 
     @Test

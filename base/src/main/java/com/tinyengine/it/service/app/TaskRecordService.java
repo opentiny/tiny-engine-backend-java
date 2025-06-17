@@ -12,9 +12,8 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.TaskRecord;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface TaskRecordService {
+public interface TaskRecordService extends IService<TaskRecord> {
     /**
      * 查询表t_task_record所有信息
      *
@@ -37,7 +36,7 @@ public interface TaskRecordService {
      * @param id the id
      * @return the task record
      */
-    TaskRecord queryTaskRecordById(@Param("id") Integer id);
+    TaskRecord queryTaskRecordById(Integer id);
 
     /**
      * 根据条件查询表t_task_record信息
@@ -53,7 +52,7 @@ public interface TaskRecordService {
      * @param id the id
      * @return the integer
      */
-    Integer deleteTaskRecordById(@Param("id") Integer id);
+    Integer deleteTaskRecordById(Integer id);
 
     /**
      * 根据主键id更新表t_task_record信息

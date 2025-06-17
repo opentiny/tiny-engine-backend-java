@@ -12,10 +12,9 @@
 
 package com.tinyengine.it.service.app;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.AppExtension;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface AppExtensionService {
+public interface AppExtensionService extends IService<AppExtension> {
     /**
      * 查询表t_app_extension所有信息
      *
@@ -38,7 +37,7 @@ public interface AppExtensionService {
      * @param id the id
      * @return the app extension
      */
-    AppExtension findAppExtensionById(@Param("id") Integer id);
+    AppExtension findAppExtensionById(Integer id);
 
     /**
      * 根据条件查询表t_app_extension信息
@@ -54,7 +53,7 @@ public interface AppExtensionService {
      * @param id the id
      * @return the result
      */
-    Result<AppExtension> deleteAppExtensionById(@Param("id") Integer id);
+    Result<AppExtension> deleteAppExtensionById(Integer id);
 
     /**
      * 根据主键id更新表t_app_extension信息

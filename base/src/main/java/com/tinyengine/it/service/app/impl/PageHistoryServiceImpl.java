@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.PageHistoryMapper;
@@ -22,8 +23,6 @@ import com.tinyengine.it.service.app.PageHistoryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -36,11 +35,8 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PageHistoryServiceImpl implements PageHistoryService {
+public class PageHistoryServiceImpl extends ServiceImpl<PageHistoryMapper, PageHistory> implements PageHistoryService {
     private static final String DEFAULT_PAGE_HISTORY_VERSION = "0";
-
-    @Autowired
-    private PageHistoryMapper pageHistoryMapper;
 
     /**
      * 查询表t_page_history所有数据
@@ -49,7 +45,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      */
     @Override
     public List<PageHistory> findAllPageHistory() {
-        return pageHistoryMapper.queryAllPageHistory();
+        return baseMapper.queryAllPageHistory();
     }
 
     /**
@@ -60,7 +56,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      */
     @Override
     public PageHistory findPageHistoryById(Integer historyId) {
-        return pageHistoryMapper.queryPageHistoryById(historyId);
+        return baseMapper.queryPageHistoryById(historyId);
     }
 
     /**
@@ -71,7 +67,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      */
     @Override
     public List<PageHistory> findPageHistoryByCondition(PageHistory pageHistory) {
-        return pageHistoryMapper.queryPageHistoryByCondition(pageHistory);
+        return baseMapper.queryPageHistoryByCondition(pageHistory);
     }
 
     /**
@@ -81,8 +77,8 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      * @return execute success data number
      */
     @Override
-    public Integer deletePageHistoryById(@Param("id") Integer id) {
-        return pageHistoryMapper.deletePageHistoryById(id);
+    public Integer deletePageHistoryById(Integer id) {
+        return baseMapper.deletePageHistoryById(id);
     }
 
     /**
@@ -93,7 +89,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      */
     @Override
     public Integer updatePageHistoryById(PageHistory pageHistory) {
-        return pageHistoryMapper.updatePageHistoryById(pageHistory);
+        return baseMapper.updatePageHistoryById(pageHistory);
     }
 
     /**
@@ -106,7 +102,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
     @SystemServiceLog(description = "创建页面历史记录")
     public Integer createPageHistory(PageHistory pageHistory) {
         pageHistory.setIsPublished(true);
-        return pageHistoryMapper.createPageHistory(pageHistory);
+        return baseMapper.createPageHistory(pageHistory);
     }
 
     /**
@@ -118,13 +114,13 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      */
     @Override
     public List<PageHistory> findPageHistoryByName(String name, Integer app) {
-        return pageHistoryMapper.queryPageHistoryByName(name, app);
+        return baseMapper.queryPageHistoryByName(name, app);
     }
 
     @Override
     public IPage<PublishedPageVo> findLatestPublishPage(PageQueryVo<PublishedPageVo> pageQueryVo) {
         PublishedPageVo queryData = pageQueryVo.getData();
-        return pageHistoryMapper.findLatestPublishPage(pageQueryVo.getPage(), queryData);
+        return baseMapper.findLatestPublishPage(pageQueryVo.getPage(), queryData);
     }
 
     /**
@@ -136,7 +132,7 @@ public class PageHistoryServiceImpl implements PageHistoryService {
      */
     @Override
     public String selectMaxVersionOfPageHistory(String name, Integer app) {
-        List<PageHistory> pageHistories = pageHistoryMapper.queryPageHistoryByName(name, app);
+        List<PageHistory> pageHistories = baseMapper.queryPageHistoryByName(name, app);
         if (CollectionUtils.isEmpty(pageHistories)) {
             return DEFAULT_PAGE_HISTORY_VERSION;
         }

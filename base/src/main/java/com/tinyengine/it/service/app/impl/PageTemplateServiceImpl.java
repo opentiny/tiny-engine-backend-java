@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
@@ -22,8 +23,6 @@ import com.tinyengine.it.service.app.PageTemplateService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,10 +35,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PageTemplateServiceImpl implements PageTemplateService {
-    @Autowired
-    private PageTemplateMapper pageTemplateMapper;
-
+public class PageTemplateServiceImpl extends ServiceImpl<PageTemplateMapper, PageTemplate> implements PageTemplateService {
     /**
      * 查询表page_template所有数据
      *
@@ -53,10 +49,10 @@ public class PageTemplateServiceImpl implements PageTemplateService {
     public Result<List<PageTemplate>> queryAllPageTemplate(String name, String type) throws ServiceException {
         List<PageTemplate> pageTemplates = new ArrayList<>();
         if (name == null || name.isEmpty()) {
-            pageTemplates = pageTemplateMapper.queryAllPageTemplate(type);
+            pageTemplates = baseMapper.queryAllPageTemplate(type);
             return Result.success(pageTemplates);
         }
-        pageTemplates = pageTemplateMapper.queryPageTemplateByName(name, type);
+        pageTemplates = baseMapper.queryPageTemplateByName(name, type);
         return Result.success(pageTemplates);
     }
 
@@ -69,8 +65,8 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      */
     @Override
     @SystemServiceLog(description = "根据id获取页面模版详情实现方法")
-    public Result<PageTemplate> queryPageTemplateById(@Param("id") Integer id) throws ServiceException {
-        PageTemplate pageTemplate = pageTemplateMapper.queryPageTemplateById(id);
+    public Result<PageTemplate> queryPageTemplateById(Integer id) throws ServiceException {
+        PageTemplate pageTemplate = baseMapper.queryPageTemplateById(id);
         return Result.success(pageTemplate);
     }
 
@@ -84,7 +80,7 @@ public class PageTemplateServiceImpl implements PageTemplateService {
     @Override
     @SystemServiceLog(description = "获取页面模版条件查询实现方法")
     public List<PageTemplate> queryPageTemplateByCondition(PageTemplate pageTemplate) throws ServiceException {
-        return pageTemplateMapper.queryPageTemplateByCondition(pageTemplate);
+        return baseMapper.queryPageTemplateByCondition(pageTemplate);
     }
 
     /**
@@ -96,11 +92,11 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      */
     @Override
     @SystemServiceLog(description = "批量删除页面模版实现方法")
-    public Result<Integer> deletePageTemplateByIds(@Param("ids") List<Integer> ids) throws ServiceException {
+    public Result<Integer> deletePageTemplateByIds(List<Integer> ids) throws ServiceException {
         if (ids.isEmpty()) {
             return Result.failed(ExceptionEnum.CM002);
         }
-        Integer result = pageTemplateMapper.deletePageTemplateByIds(ids);
+        Integer result = baseMapper.deletePageTemplateByIds(ids);
         if (result != ids.size()) {
             return Result.failed(ExceptionEnum.CM001);
         }
@@ -115,7 +111,7 @@ public class PageTemplateServiceImpl implements PageTemplateService {
      */
     @Override
     public Integer updatePageTemplateById(PageTemplate pageTemplate) {
-        return pageTemplateMapper.updatePageTemplateById(pageTemplate);
+        return baseMapper.updatePageTemplateById(pageTemplate);
     }
 
     /**
@@ -130,15 +126,15 @@ public class PageTemplateServiceImpl implements PageTemplateService {
     public Result<PageTemplate> createPageTemplate(PageTemplate pageTemplate) throws ServiceException {
         PageTemplate queryPageTemplate = new PageTemplate();
         queryPageTemplate.setName(pageTemplate.getName());
-        List<PageTemplate> pageTemplateResult = pageTemplateMapper.queryPageTemplateByCondition(queryPageTemplate);
+        List<PageTemplate> pageTemplateResult = baseMapper.queryPageTemplateByCondition(queryPageTemplate);
         if (!pageTemplateResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
-        int result = pageTemplateMapper.createPageTemplate(pageTemplate);
+        int result = baseMapper.createPageTemplate(pageTemplate);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        PageTemplate templateResult = pageTemplateMapper.queryPageTemplateById(pageTemplate.getId());
+        PageTemplate templateResult = baseMapper.queryPageTemplateById(pageTemplate.getId());
         return Result.success(templateResult);
     }
 }

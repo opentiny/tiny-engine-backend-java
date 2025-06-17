@@ -13,11 +13,10 @@
 package com.tinyengine.it.service.app;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.model.dto.PublishedPageVo;
 import com.tinyengine.it.model.entity.PageHistory;
-
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ import java.util.List;
  *
  * @since 2024-10-20
  */
-public interface PageHistoryService {
+public interface PageHistoryService extends IService<PageHistory> {
     /**
      * 查询表t_page_history所有信息
      *
@@ -56,7 +55,7 @@ public interface PageHistoryService {
      * @param id the id
      * @return the integer
      */
-    Integer deletePageHistoryById(@Param("id") Integer id);
+    Integer deletePageHistoryById(Integer id);
 
     /**
      * 根据主键id更新表t_page_history信息

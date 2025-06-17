@@ -17,6 +17,7 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
@@ -29,8 +30,6 @@ import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Platform;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;
-import com.tinyengine.it.service.material.impl.BlockGroupServiceImpl;
-import com.tinyengine.it.service.material.impl.BlockServiceImpl;
 import com.tinyengine.it.service.platform.PlatformService;
 
 import org.junit.jupiter.api.Assertions;
@@ -53,24 +52,14 @@ import java.util.List;
 class AppServiceImplTest {
     @Mock
     private AppMapper appMapper;
-
     @Mock
     private PlatformService platformService;
-
     @Mock
     private I18nEntryService i18nEntryService;
-
     @Mock
     private I18nEntryMapper i18nEntryMapper;
-
     @Mock
     private AppV1ServiceImpl appV1ServiceImpl;
-
-    @Mock
-    private BlockServiceImpl blockServiceImpl;
-
-    @Mock
-    private BlockGroupServiceImpl blockGroupServiceImpl;
 
     @InjectMocks
     private AppServiceImpl appServiceImpl;
@@ -78,6 +67,7 @@ class AppServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(appServiceImpl, "baseMapper", appMapper);
     }
 
     @Test

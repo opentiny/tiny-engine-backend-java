@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
@@ -21,8 +22,6 @@ import com.tinyengine.it.service.material.MaterialHistoryService;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,13 +33,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class MaterialHistoryServiceImpl implements MaterialHistoryService {
-    /**
-     * The material history mapper.
-     */
-    @Autowired
-    private MaterialHistoryMapper materialHistoryMapper;
-
+public class MaterialHistoryServiceImpl extends ServiceImpl<MaterialHistoryMapper, MaterialHistory> implements MaterialHistoryService {
     /**
      * 查询表t_material_history所有数据
      *
@@ -48,7 +41,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      */
     @Override
     public List<MaterialHistory> findAllMaterialHistory() {
-        return materialHistoryMapper.queryAllMaterialHistory();
+        return baseMapper.queryAllMaterialHistory();
     }
 
     /**
@@ -58,8 +51,8 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      * @return query result
      */
     @Override
-    public Result<MaterialHistory> findMaterialHistoryById(@Param("id") Integer id) {
-        MaterialHistory materialHistory = materialHistoryMapper.queryMaterialHistoryById(id);
+    public Result<MaterialHistory> findMaterialHistoryById(Integer id) {
+        MaterialHistory materialHistory = baseMapper.queryMaterialHistoryById(id);
         return Result.success(materialHistory);
     }
 
@@ -73,7 +66,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
     @Override
     public List<MaterialHistory> findMaterialHistoryByCondition(MaterialHistory materialHistory)
             throws ServiceException {
-        return materialHistoryMapper.queryMaterialHistoryByCondition(materialHistory);
+        return baseMapper.queryMaterialHistoryByCondition(materialHistory);
     }
 
     /**
@@ -83,9 +76,9 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      * @return execute success data number
      */
     @Override
-    public Result<MaterialHistory> deleteMaterialHistoryById(@Param("id") Integer id) {
+    public Result<MaterialHistory> deleteMaterialHistoryById(Integer id) {
         Result<MaterialHistory> result = this.findMaterialHistoryById(id);
-        int deleteResult = materialHistoryMapper.deleteMaterialHistoryById(id);
+        int deleteResult = baseMapper.deleteMaterialHistoryById(id);
         if (deleteResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -100,7 +93,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      */
     @Override
     public Result<MaterialHistory> updateMaterialHistoryById(MaterialHistory materialHistory) {
-        int updateResult = materialHistoryMapper.updateMaterialHistoryById(materialHistory);
+        int updateResult = baseMapper.updateMaterialHistoryById(materialHistory);
         if (updateResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }
@@ -115,7 +108,7 @@ public class MaterialHistoryServiceImpl implements MaterialHistoryService {
      */
     @Override
     public Result<MaterialHistory> createMaterialHistory(MaterialHistory materialHistory) {
-        int createResult = materialHistoryMapper.createMaterialHistory(materialHistory);
+        int createResult = baseMapper.createMaterialHistory(materialHistory);
         if (createResult != 1) {
             return Result.failed(ExceptionEnum.CM008);
         }

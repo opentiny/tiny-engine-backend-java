@@ -15,6 +15,7 @@ package com.tinyengine.it.service.app.impl;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.model.entity.AppExtension;
@@ -38,12 +39,14 @@ import java.util.List;
 class AppExtensionServiceImplTest {
     @Mock
     private AppExtensionMapper appExtensionMapper;
+
     @InjectMocks
-    private AppExtensionServiceImpl appExtensionServiceImpl;
+    AppExtensionServiceImpl appExtensionServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(appExtensionServiceImpl, "baseMapper", appExtensionMapper);
     }
 
     @Test
