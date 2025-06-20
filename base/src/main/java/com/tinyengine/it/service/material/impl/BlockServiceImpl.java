@@ -19,12 +19,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
@@ -160,11 +160,10 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
      * 根据主键id更新表t_block数据
      *
      * @param blockParam blockParam
-     * @param appId
      * @return blockDto
      */
     @Override
-    public Result<BlockDto> updateBlockById(BlockParam blockParam, Integer appId) {
+    public Result<BlockDto> updateBlockById(BlockParam blockParam) {
         if (blockParam == null || blockParam.getId() == null) {
             return Result.failed(ExceptionEnum.CM002);
         }
@@ -172,7 +171,7 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         if (blockResult == null) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        if (!Objects.equals(blockResult.getAppId(), appId)) {
+        if (!Objects.equals(blockResult.getAppId(), blockParam.getAppId())) {
             return Result.failed(ExceptionEnum.CM007);
         }
         // 把前端传参赋值给实体
@@ -277,10 +276,9 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
      */
     public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
         List<String> block = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            traverseBlocks(objectMapper.writeValueAsString(pageContent), block);
+            traverseBlocks(JsonUtils.MAPPER.writeValueAsString(pageContent), block);
         } catch (JsonProcessingException e) {
             log.error(e.getMessage());
         }
@@ -350,23 +348,22 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
      * @throws JsonProcessingException the json processing exception
      */
     public void traverseBlocks(String content, List<String> block) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(content);
+        JsonNode jsonNode = JsonUtils.MAPPER.readTree(content);
         // 判断传过来的参数是JSON数组还是JSON对象
         if (content != null && jsonNode.isArray()) {
-            List<String> schema = objectMapper.readValue(content, List.class);
+            List schema = JsonUtils.MAPPER.readValue(content, List.class);
             for (Object prop : schema) {
-                traverseBlocks(objectMapper.writeValueAsString(prop), block);
+                traverseBlocks(JsonUtils.MAPPER.writeValueAsString(prop), block);
             }
         } else {
-            Map<?, ?> schemaMap = objectMapper.readValue(content, Map.class);
+            Map<?, ?> schemaMap = JsonUtils.MAPPER.readValue(content, Map.class);
             if (isBlock(schemaMap) && !block.contains(schemaMap.get("componentName"))) {
                 if (schemaMap.get("componentName") instanceof String) {
                     block.add((String) schemaMap.get("componentName"));
                 }
             }
             if (schemaMap.containsKey("children") && schemaMap.get("children") instanceof List) {
-                traverseBlocks(objectMapper.writeValueAsString(schemaMap.get("children")), block);
+                traverseBlocks(JsonUtils.MAPPER.writeValueAsString(schemaMap.get("children")), block);
             }
         }
     }
@@ -563,8 +560,9 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
             blockParam.setLatestHistoryId(blockHistory);
             blockParam.setLatestVersion(blockHistory.getVersion());
             blockParam.setId(blockDto.getId());
+            blockParam.setAppId(blockDto.getAppId());
             blockParam.setGroups(null);
-            return updateBlockById(blockParam, blockDto.getAppId());
+            return updateBlockById(blockParam);
         } catch (Exception e) {
             return Result.failed(ExceptionEnum.CM001);
         }

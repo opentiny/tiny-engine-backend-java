@@ -13,9 +13,6 @@
 package com.tinyengine.it.common.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
@@ -159,22 +156,6 @@ public class Utils {
         result.append(name.substring(lastEnd).toLowerCase(Locale.ROOT));
 
         return result.toString();
-    }
-
-    /**
-     * Convert map.
-     *
-     * @param obj the obj
-     * @return the map
-     */
-    // 对象转map
-    public static Map<String, Object> convert(Object obj) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // 将对象转换为 JSON 字符串，然后再解析为 Map
-        return objectMapper.convertValue(obj, Map.class);
     }
 
     /**
@@ -386,9 +367,8 @@ public class Utils {
             String jsonContent = new String(fileBytes, StandardCharsets.UTF_8);
 
             String jsonString = removeBOM(jsonContent);
-            ObjectMapper objectMapper = new ObjectMapper();
             Map<String, Object> jsonData =
-                    objectMapper.readValue(jsonString, new TypeReference<Map<String, Object>>() {
+                    JsonUtils.MAPPER.readValue(jsonString, new TypeReference<Map<String, Object>>() {
                     });
 
             jsonFile.setFileName(fileName);

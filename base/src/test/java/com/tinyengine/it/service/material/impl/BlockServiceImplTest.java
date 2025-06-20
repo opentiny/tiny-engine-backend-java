@@ -138,13 +138,14 @@ class BlockServiceImplTest {
     @Test
     void testUpdateBlockById() {
         BlockParam blockParam = new BlockParam();
+        blockParam.setAppId(1);
         when(blockMapper.updateBlockById(any())).thenReturn(1);
         when(blockMapper.findBlockAndGroupAndHistoByBlockId(anyInt())).thenReturn(new BlockDto());
         Block block = new Block();
         block.setAppId(1);
         when(blockMapper.queryBlockById(blockParam.getId())).thenReturn(block);
 
-        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockParam, 1);
+        Result<BlockDto> result = blockServiceImpl.updateBlockById(blockParam);
         Assertions.assertEquals(null, result.getData());
     }
 

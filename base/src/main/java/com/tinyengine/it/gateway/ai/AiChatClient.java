@@ -12,20 +12,21 @@
 
 package com.tinyengine.it.gateway.ai;
 
-import static com.tinyengine.it.common.exception.ExceptionEnum.CM322;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiParam;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.Map;
@@ -38,7 +39,9 @@ import java.util.Map;
 @Slf4j
 public class AiChatClient {
     private final Map<String, AiChatConfig.AiChatConfigData> config;
-    private WebClient webClient;
+    // 新增 Setter 方法，便于测试时注入 Mock 对象
+    @Setter
+    private RestTemplate restTemplate;
 
     /**
      * Instantiates a new Ai chat client.
@@ -47,8 +50,8 @@ public class AiChatClient {
      */
     public AiChatClient(String model, String token) {
         this.config = AiChatConfig.getAiChatConfig(model, token);
-        // Optional: Default base URL
-        this.webClient = WebClient.builder().baseUrl("https://default.api.url").build();
+        // Use RestTemplate for WebMVC
+        this.restTemplate = new RestTemplate();
     }
 
     /**
@@ -72,26 +75,12 @@ public class AiChatClient {
         log.info("Headers: " + configData.headers);
 
         HttpMethod method = "POST".equalsIgnoreCase(httpRequestOption.method) ? HttpMethod.POST : HttpMethod.GET;
-        WebClient.RequestHeadersSpec<?> requestSpec = webClient.method(method).uri(httpRequestUrl);
+        HttpHeaders headers = new HttpHeaders();
+        configData.headers.forEach(headers::set);
 
-        for (Map.Entry<String, String> header : configData.headers.entrySet()) {
-            requestSpec.header(header.getKey(), header.getValue());
-        }
-
-        if ("POST".equalsIgnoreCase(httpRequestOption.method) && !openAiBodyDto.getMessages().isEmpty()) {
-            if (requestSpec instanceof WebClient.RequestBodySpec) {
-                requestSpec = ((WebClient.RequestBodySpec) requestSpec).bodyValue(openAiBodyDto);
-                // Add request body
-            }
-        }
-
-        Mono<String> stringMono = requestSpec.retrieve().bodyToMono(String.class);
-        return stringMono.map(response -> {
-            try {
-                return new ObjectMapper().readValue(response, new TypeReference<Map<String, Object>>() {});
-            } catch (JsonProcessingException e) {
-                throw new ServiceException(CM322.getResultCode(), e.getMessage());
-            }
-            }).block(); // 等待结果
+        HttpEntity<AiParam> entity = new HttpEntity<>(openAiBodyDto, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(httpRequestUrl, method, entity, String.class);
+        return JsonUtils.decode(responseEntity.getBody(), new TypeReference<Map<String, Object>>() {});
     }
+
 }

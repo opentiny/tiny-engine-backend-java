@@ -15,8 +15,8 @@ package com.tinyengine.it.common.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.tinyengine.it.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -37,13 +37,11 @@ import java.util.Map;
  */
 @Slf4j
 public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Map<String, Object> parameter, JdbcType jdbcType)
             throws SQLException {
         try {
-            String json = objectMapper.writeValueAsString(parameter);
+            String json = JsonUtils.MAPPER.writeValueAsString(parameter);
             ps.setString(i, json);
         } catch (JsonProcessingException e) {
             throw new SQLException("Error converting Map to JSON", e);
@@ -71,9 +69,9 @@ public class MapTypeHandler extends BaseTypeHandler<Map<String, Object>> {
             return new HashMap<>();
         }
         try {
-            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode jsonNode = JsonUtils.MAPPER.readTree(json);
             if (jsonNode.isObject()) {
-                return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+                return JsonUtils.MAPPER.readValue(json, new TypeReference<Map<String, Object>>() {});
             } else {
                 // 非对象类型也返回空的 Map
                 return new HashMap<>();

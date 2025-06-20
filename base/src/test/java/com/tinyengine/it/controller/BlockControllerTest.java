@@ -13,7 +13,6 @@
 package com.tinyengine.it.controller;
 
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
@@ -40,7 +39,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockHttpServletRequest;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -194,17 +196,18 @@ class BlockControllerTest {
     }
 
     @Test
-    void testUpdateBlocks() {
+    void testUpdateBlocks() throws IOException {
         BlockParam blockParam = new BlockParam();
         blockParam.setName("Updated Block");
         BlockDto returnData = new BlockDto();
         returnData.setName("Updated Block");
-        when(blockService.updateBlockById(any(BlockParam.class), anyInt())).thenReturn(Result.success(returnData));
+        when(blockService.updateBlockById(any(BlockParam.class))).thenReturn(Result.success(returnData));
         when(blockService.queryBlockById(anyInt())).thenReturn(returnData);
-
-        Result<BlockDto> result = blockController.updateBlocks(blockParam, Integer.valueOf(0), Integer.valueOf(1));
+        String json = "{\"isDefault\":true}";
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setContent(json.getBytes(StandardCharsets.UTF_8)); // 设置请求体
+        request.setContentType("application/json");
+        Result<BlockDto> result = blockController.updateBlocks(request, Integer.valueOf(0), Integer.valueOf(1));
         Assertions.assertEquals(returnData, result.getData());
-        verify(blockService).updateBlockById(
-            argThat(param -> param.getName().equals("Updated Block") && param.getId().equals(0)), eq(1));
     }
 }

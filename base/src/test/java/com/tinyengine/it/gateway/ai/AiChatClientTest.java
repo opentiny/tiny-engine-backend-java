@@ -12,17 +12,19 @@
 
 package com.tinyengine.it.gateway.ai;
 
+import static javax.management.Query.eq;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.utils.TestUtil;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiMessages;
 import com.tinyengine.it.model.dto.AiParam;
-
-import reactor.core.publisher.Mono;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,11 +33,13 @@ import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,52 +49,51 @@ import java.util.Map;
  * @since 2024-10-29
  */
 class AiChatClientTest {
-    @InjectMocks
-    private AiChatClient aiChatClient;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testExecuteChatRequest() throws NoSuchFieldException, IllegalAccessException {
-        HashMap<String, String> headers = new HashMap<String, String>() {
-            {
-                put("headers", "headers");
-            }
-        };
+    void testExecuteChatRequest() {
+        // 1. 构造测试数据
         String modelName = "ERNIE-4.0-8K";
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
         AiChatConfig.HttpRequestOption option = new AiChatConfig.HttpRequestOption("POST", "json", "json", 100);
-        AiChatConfig.AiChatConfigData configData = new AiChatConfig.AiChatConfigData("httpRequestUrl", option, headers,
-                null);
-        Map<String, AiChatConfig.AiChatConfigData> config = new HashMap<>();
-        config.put(modelName, configData);
-        WebClient mockClient = Mockito.mock(WebClient.class, Answers.RETURNS_DEEP_STUBS);
-        WebClient.RequestBodyUriSpec bodyUriSpec = Mockito.mock(WebClient.RequestBodyUriSpec.class, RETURNS_DEEP_STUBS);
-        Mono<String> mono = Mockito.mock(Mono.class, RETURNS_DEEP_STUBS);
-        Map<String, Object> result = new HashMap<>();
-        result.put("data", "data");
-        when(mono.map(any()).block()).thenReturn(result);
-        when(mockClient.method(any(HttpMethod.class)).uri(anyString())).thenReturn(bodyUriSpec);
-        WebClient.RequestHeadersSpec headersSpec = Mockito.mock(WebClient.RequestHeadersSpec.class, RETURNS_DEEP_STUBS);
-        when(bodyUriSpec.bodyValue(any())).thenReturn(headersSpec);
-        when(headersSpec.retrieve().bodyToMono(String.class)).thenReturn(mono);
+        AiChatConfig.AiChatConfigData configData = new AiChatConfig.AiChatConfigData(
+            "http://mock-api-url", option, headers, null);
 
-        HashMap<String, String> foundationModel = new HashMap<>();
-        foundationModel.put("model", "ERNIE-4.0-8K");
-        foundationModel.put("token", "asdf");
+        // 2. 构造 AiParam 请求参数
+        Map<String, String> foundationModel = new HashMap<>();
+        foundationModel.put("model", modelName);
+        foundationModel.put("token", "mock-token");
 
-        ArrayList<AiMessages> messages = new ArrayList<>();
-        AiMessages aiMessages = new AiMessages();
-        aiMessages.setContent("dddd编码时遵从以下几条要求aaa");
-        aiMessages.setName("John");
-        aiMessages.setRole("user");
-        messages.add(aiMessages);
-        AiParam param = new AiParam(foundationModel, Arrays.asList(aiMessages));
-        TestUtil.setPrivateValue(aiChatClient, "config", config);
-        TestUtil.setPrivateValue(aiChatClient, "webClient", mockClient);
-        Map<String, Object> returnData = aiChatClient.executeChatRequest(param);
-        Assertions.assertEquals("data", returnData.get("data"));
+        AiMessages message = new AiMessages();
+        message.setRole("user");
+        message.setContent("Hello, AI!");
+        AiParam param = new AiParam(foundationModel, Collections.singletonList(message));
+
+        // 3. Mock RestTemplate 的行为
+        RestTemplate mockRestTemplate = Mockito.mock(RestTemplate.class);
+        ResponseEntity<String> mockResponse = new ResponseEntity<>(
+            "{\"data\":\"mock-response\"}", HttpStatus.OK);
+
+        // 关键点：设置 Mock 行为，匹配任意参数
+        when(mockRestTemplate.exchange(
+            anyString(),        // 任意 URL
+            any(HttpMethod.class), // 任意 HTTP 方法
+            any(HttpEntity.class), // 任意请求体
+            any(Class.class)    // 任意返回类型（如 String.class）
+        )).thenReturn(mockResponse);
+
+        // 4. 创建 AiChatClient 并注入 Mock 的 RestTemplate
+        AiChatClient aiChatClient = new AiChatClient("ERNIE-4.0-8K", "mock-token");
+        aiChatClient.setRestTemplate(mockRestTemplate);
+
+        // 5. 调用方法并验证结果
+        Map<String, Object> result = aiChatClient.executeChatRequest(param);
+        assertEquals("mock-response", result.get("data"));  // 验证返回的数据
     }
 }

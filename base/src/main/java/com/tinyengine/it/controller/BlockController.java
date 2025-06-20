@@ -14,7 +14,9 @@ package com.tinyengine.it.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.model.dto.BlockBuildDto;
@@ -33,6 +35,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -344,7 +350,7 @@ public class BlockController {
     /**
      * 修改block
      *
-     * @param blockParam blockParam
+     * @param request request
      * @param id       id
      * @return block dto
      */
@@ -358,10 +364,24 @@ public class BlockController {
     })
     @SystemControllerLog(description = "区块修改api")
     @PostMapping("/block/update/{id}")
-    public Result<BlockDto> updateBlocks(@Valid @RequestBody BlockParam blockParam, @PathVariable Integer id,
-        @RequestParam(value = "appId", required = false) Integer appId) {
+    public Result<BlockDto> updateBlocks(HttpServletRequest request, @PathVariable Integer id,
+        @RequestParam(value = "appId", required = false) Integer appId) throws IOException {
+        // Validate content type
+        String contentType = request.getContentType();
+        if (contentType == null || !contentType.contains(Enums.FileType.JSON.getValue())) {
+            return Result.failed("Content-Type must be application/json");
+        }
+        InputStream inputStream = request.getInputStream();
+        String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        BlockParam blockParam = null;
+        try {
+            blockParam = JsonUtils.decode(json, BlockParam.class);
+        } catch (Exception e) {
+            return Result.failed("Invalid JSON format: " + e.getMessage());
+        }
         blockParam.setId(id);
-        return blockService.updateBlockById(blockParam, appId);
+        blockParam.setAppId(appId);
+        return blockService.updateBlockById(blockParam);
     }
 
     /**

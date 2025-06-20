@@ -12,8 +12,10 @@
 
 package com.tinyengine.it.service.app.impl.v1;
 
+import static com.tinyengine.it.common.utils.JsonUtils.convertValue;
 import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.Schema;
@@ -235,7 +237,7 @@ public class AppV1ServiceImpl implements AppV1Service {
 
     private SchemaMeta getSchemaMeta(MetaDto metaDto) {
         App metaDtoApp = metaDto.getApp();
-        Map<String, Object> appData = Utils.convert(metaDtoApp);
+        Map<String, Object> appData = convertValue(metaDtoApp, new TypeReference<Map<String, Object>>() {});
         Map<String, Object> config = new HashMap<>();
         config.put("sdkVersion", "1.0.3");
         config.put("historyMode", "hash");
@@ -464,7 +466,7 @@ public class AppV1ServiceImpl implements AppV1Service {
         resKeys.add("is_page");
         resKeys.add("is_default");
         for (Page pageInfo : pageList) {
-            Map<String, Object> data = Utils.convert(pageInfo);
+            Map<String, Object> data = convertValue(pageInfo, new TypeReference<Map<String, Object>>() {});
             boolean isToLine = false;
             Map<String, Object> page = formatDataFields(data, resKeys, isToLine);
             if (app.getHomePage() != null) {

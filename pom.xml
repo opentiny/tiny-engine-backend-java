@@ -30,9 +30,10 @@
         <mariadb-java-client.version>3.3.3</mariadb-java-client.version>
         <freemarker.version>2.3.32</freemarker.version>
         <spring-data-commons.version>2.5.4</spring-data-commons.version>
-        <springdoc-openapi-starter-webflux-ui.version>2.5.0</springdoc-openapi-starter-webflux-ui.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
         <mockito-inline.version>4.11.0</mockito-inline.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
+        <netty-buffer-version>4.1.118.Final</netty-buffer-version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
     </properties>
     <dependencies>
@@ -42,7 +43,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,8 +103,8 @@
 
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-            <version>${springdoc-openapi-starter-webflux-ui.version}</version>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
         </dependency>
 
         <dependency>
@@ -129,6 +130,11 @@
             <scope>test</scope>
             <version>${mockito-inline.version}</version>
         </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
+                <version>${netty-buffer-version}</version>
+            </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
