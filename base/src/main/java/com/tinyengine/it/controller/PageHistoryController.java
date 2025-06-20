@@ -15,6 +15,7 @@ package com.tinyengine.it.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.PageQueryVo;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.model.dto.PublishedPageVo;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -139,10 +141,20 @@ public class PageHistoryController {
     })
     @SystemControllerLog(description = "创建页面历史记录")
     @PostMapping("/pages/history/create")
-    public Result<PageHistory> createPageHistory(HttpServletRequest request) throws Exception {
+    public Result<PageHistory> createPageHistory(HttpServletRequest request) throws IOException {
+        // Validate content type
+        String contentType = request.getContentType();
+        if (contentType == null || !contentType.contains(Enums.FileType.JSON.getValue())) {
+            return Result.failed("Content-Type must be application/json");
+        }
         InputStream inputStream = request.getInputStream();
         String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        PageHistory pageHistory = JsonUtils.decode(json, PageHistory.class);
+        PageHistory pageHistory = null;
+        try {
+            pageHistory = JsonUtils.decode(json, PageHistory.class);
+        } catch (Exception e) {
+            return Result.failed("Invalid JSON format: " + e.getMessage());
+        }
         if (pageHistory.getPage() != null && Pattern.matches("^[0-9]+$", pageHistory.getPage().toString())
                 && pageHistory.getPageContent() != null) {
             pageHistoryService.createPageHistory(pageHistory);

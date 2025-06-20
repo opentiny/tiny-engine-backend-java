@@ -14,6 +14,7 @@ package com.tinyengine.it.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.mapper.BlockMapper;
@@ -365,9 +366,19 @@ public class BlockController {
     @PostMapping("/block/update/{id}")
     public Result<BlockDto> updateBlocks(HttpServletRequest request, @PathVariable Integer id,
         @RequestParam(value = "appId", required = false) Integer appId) throws IOException {
+        // Validate content type
+        String contentType = request.getContentType();
+        if (contentType == null || !contentType.contains(Enums.FileType.JSON.getValue())) {
+            return Result.failed("Content-Type must be application/json");
+        }
         InputStream inputStream = request.getInputStream();
         String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        BlockParam blockParam = JsonUtils.decode(json, BlockParam.class);
+        BlockParam blockParam = null;
+        try {
+            blockParam = JsonUtils.decode(json, BlockParam.class);
+        } catch (Exception e) {
+            return Result.failed("Invalid JSON format: " + e.getMessage());
+        }
         blockParam.setId(id);
         blockParam.setAppId(appId);
         return blockService.updateBlockById(blockParam);

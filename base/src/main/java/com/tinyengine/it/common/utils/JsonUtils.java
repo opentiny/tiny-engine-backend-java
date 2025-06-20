@@ -69,7 +69,7 @@ public class JsonUtils {
             return callable.call();
         } catch (Exception var2) {
             Exception e = var2;
-            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
+            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg() + e.getMessage());
         }
     }
 
@@ -304,29 +304,34 @@ public class JsonUtils {
     }
 
     /**
-     * To get List.
+     * Converts various input types (String, Array, List) to a trimmed List of Strings.
      *
      * @param inputs the inputs
-     * @return the List
+     * @return List of trimmed strings, empty list if input is null or unsupported type
      */
     public static List<String> getList(Object inputs) {
         if (inputs == null) {
             return Collections.emptyList();
         }
 
-        // 处理 Array → List
+        // Handle Array → List
         if (inputs.getClass().isArray()) {
-            inputs = Arrays.asList((Object[]) inputs);
+            if (inputs instanceof Object[]) {
+                inputs = Arrays.asList((Object[]) inputs);
+            } else {
+                // Handle primitive arrays by converting to string representation
+                inputs = Collections.singletonList(inputs.toString());
+            }
         }
 
-        // 处理 String → List
+        // Handle String → List
         if (inputs instanceof String) {
             return Arrays.stream(((String) inputs).split(","))
                     .map(String::trim)
                     .collect(Collectors.toList());
         }
 
-        // 处理 List → List<String>
+        // Handle List → List<String>
         if (inputs instanceof List) {
             return ((List<?>) inputs).stream()
                     .map(Object::toString)

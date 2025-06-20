@@ -13,6 +13,7 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.model.entity.PageTemplate;
@@ -75,9 +76,19 @@ public class PageTemplateController {
     @SystemControllerLog(description = "创建页面模版")
     @PostMapping("/page-template/create")
     public Result<PageTemplate> createPageTemplate(HttpServletRequest request) throws Exception {
+        // Validate content type
+        String contentType = request.getContentType();
+        if (contentType == null || !contentType.contains(Enums.FileType.JSON.getValue())) {
+            return Result.failed("Content-Type must be application/json");
+        }
         InputStream inputStream = request.getInputStream();
         String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        PageTemplate pageTemplate = JsonUtils.decode(json, PageTemplate.class);
+        PageTemplate pageTemplate = null;
+        try {
+            pageTemplate = JsonUtils.decode(json, PageTemplate.class);
+        } catch (Exception e) {
+            return Result.failed("Invalid JSON format: " + e.getMessage());
+        }
         return pageTemplateService.createPageTemplate(pageTemplate);
     }
 
