@@ -13,6 +13,7 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.PreviewParam;
 import com.tinyengine.it.model.entity.Page;
@@ -26,6 +27,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -135,7 +139,7 @@ public class PageController {
     /**
      * 修改页面
      *
-     * @param page the page
+     * @param request the request
      * @return result
      * @throws Exception the exception
      */
@@ -148,7 +152,10 @@ public class PageController {
     })
     @SystemControllerLog(description = "修改页面")
     @PostMapping("/pages/update/{id}")
-    public Result<Page> updatePage(@RequestBody Page page) throws Exception {
+    public Result<Page> updatePage(HttpServletRequest request) throws Exception {
+        InputStream inputStream = request.getInputStream();
+        String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        Page page = JsonUtils.decode(json, Page.class);
         page.setLastUpdatedTime(null);
         page.setCreatedTime(null);
         page.setLastUpdatedBy(null);

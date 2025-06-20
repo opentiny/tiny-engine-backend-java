@@ -16,12 +16,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.common.utils.SecurityFileCheckUtil;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.I18nEntryMapper;
@@ -492,12 +492,11 @@ public class I18nEntryServiceImpl extends ServiceImpl<I18nEntryMapper, I18nEntry
      */
     public List<EntriesItem> parseZip(FileInfo fileInfo) throws ServiceException {
         List<EntriesItem> entriesItems = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
         if (!fileInfo.getIsDirectory()) {
             EntriesItem entriesItem = setLang(fileInfo.getName());
             // 处理 JSON 内容
             try {
-                Map<String, Object> jsonData = objectMapper.readValue(fileInfo.getContent(),
+                Map<String, Object> jsonData = JsonUtils.MAPPER.readValue(fileInfo.getContent(),
                     new TypeReference<Map<String, Object>>() {});
                 entriesItem.setEntries(Utils.flat(jsonData));
             } catch (JsonProcessingException e) {

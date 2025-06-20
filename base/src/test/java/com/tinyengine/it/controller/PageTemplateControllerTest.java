@@ -27,7 +27,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockHttpServletRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -47,11 +49,14 @@ class PageTemplateControllerTest {
     }
 
     @Test
-    void testCreatePageTemplate() {
+    void testCreatePageTemplate() throws Exception {
         when(pageTemplateService.createPageTemplate(any(PageTemplate.class)))
                 .thenReturn(new Result<PageTemplate>());
-
-        Result<PageTemplate> result = pageTemplateController.createPageTemplate(new PageTemplate());
+        String json = "{\"isPage\":true}";
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setContent(json.getBytes(StandardCharsets.UTF_8)); // 设置请求体
+        request.setContentType("application/json");
+        Result<PageTemplate> result = pageTemplateController.createPageTemplate(request);
         Assertions.assertEquals(new Result<PageTemplate>(), result);
     }
 

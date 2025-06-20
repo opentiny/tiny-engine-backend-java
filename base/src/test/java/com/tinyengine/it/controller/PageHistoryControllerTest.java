@@ -26,7 +26,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockHttpServletRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -67,15 +69,18 @@ class PageHistoryControllerTest {
     }
 
     @Test
-    void testCreatePageHistory() {
+    void testCreatePageHistory() throws Exception {
         PageHistory mockData = new PageHistory();
         mockData.setPage(1);
         mockData.setId(1);
         mockData.setPageContent(new HashMap<>());
         when(pageHistoryService.findPageHistoryById(anyInt())).thenReturn(mockData);
-        when(pageHistoryService.createPageHistory(any(PageHistory.class))).thenReturn(Integer.valueOf(0));
-
-        Result<PageHistory> result = pageHistoryController.createPageHistory(mockData);
+        when(pageHistoryService.createPageHistory(any(PageHistory.class))).thenReturn(1);
+        String json = "{\"id\": 1, \"page\": 1, \"isPage\": true, \"page_content\": {\"id\": 1}}";
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setContent(json.getBytes(StandardCharsets.UTF_8)); // 设置请求体
+        request.setContentType("application/json");
+        Result<PageHistory> result = pageHistoryController.createPageHistory(request);
         Assertions.assertEquals(mockData, result.getData());
     }
 

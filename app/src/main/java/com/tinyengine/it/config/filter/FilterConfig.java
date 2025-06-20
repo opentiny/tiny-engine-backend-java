@@ -15,8 +15,6 @@ package com.tinyengine.it.config.filter;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -55,17 +53,5 @@ public class FilterConfig {
         registrationBean.addUrlPatterns("/*");
         registrationBean.setFilter(new RequestIdFilter());
         return registrationBean;
-    }
-
-    /**
-     * Object mapper object mapper.
-     *
-     * @return the object mapper
-     */
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
     }
 }

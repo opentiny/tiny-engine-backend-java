@@ -18,7 +18,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
@@ -116,8 +116,7 @@ class AppV1ServiceImplTest {
 
         String json
             = "{\"dataHandler\":{\"type\":\"JSFunction\",\"value\":\"function dataHanlder(res){\\n return res;\\n}\"}}";
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> dataSourceGlobal = objectMapper.readValue(json, Map.class);
+        Map<String, Object> dataSourceGlobal = JsonUtils.MAPPER.readValue(json, Map.class);
         app.setDataSourceGlobal(dataSourceGlobal);
 
         when(appMapper.queryAppById(anyInt())).thenReturn(app);

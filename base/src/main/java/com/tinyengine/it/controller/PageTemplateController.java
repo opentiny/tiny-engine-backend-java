@@ -14,6 +14,7 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.model.entity.PageTemplate;
 import com.tinyengine.it.service.app.PageTemplateService;
 
@@ -23,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -59,7 +62,7 @@ public class PageTemplateController {
     /**
      * 创建pageTemplate
      *
-     * @param pageTemplate pageTemplate
+     * @param request request
      * @return pageTemplate信息
      */
     @Operation(summary = "创建页面模版", description = "创建页面模版", parameters = {
@@ -71,7 +74,10 @@ public class PageTemplateController {
     })
     @SystemControllerLog(description = "创建页面模版")
     @PostMapping("/page-template/create")
-    public Result<PageTemplate> createPageTemplate(@Valid @RequestBody PageTemplate pageTemplate) {
+    public Result<PageTemplate> createPageTemplate(HttpServletRequest request) throws Exception {
+        InputStream inputStream = request.getInputStream();
+        String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        PageTemplate pageTemplate = JsonUtils.decode(json, PageTemplate.class);
         return pageTemplateService.createPageTemplate(pageTemplate);
     }
 

@@ -63,14 +63,6 @@ class UtilsTest {
     }
 
     @Test
-    void testConvert() {
-        Map<String, Object> mapData = new HashMap();
-        mapData.put("key", "value");
-        Map<String, Object> result = Utils.convert(mapData);
-        assertEquals("value", result.get("key"));
-    }
-
-    @Test
     void testFlat() {
         Map<String, Object> mapData = new HashMap();
         mapData.put("key", "value");

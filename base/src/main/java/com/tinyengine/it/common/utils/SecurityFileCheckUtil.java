@@ -12,7 +12,6 @@
 package com.tinyengine.it.common.utils;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import org.springframework.util.StringUtils;
@@ -190,10 +189,9 @@ public class SecurityFileCheckUtil {
      * @param file the file
      */
     public static void isValidJson(MultipartFile file) {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             // 将 MultipartFile 转换为 InputStream 并解析 JSON
-            objectMapper.readTree(file.getInputStream());
+            JsonUtils.MAPPER.readTree(file.getInputStream());
         } catch (IOException e) {
             throw new ServiceException(ExceptionEnum.CM308.getResultCode(), ExceptionEnum.CM308.getResultMsg());
         }

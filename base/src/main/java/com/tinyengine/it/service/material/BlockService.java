@@ -65,11 +65,11 @@ public interface BlockService extends IService<Block> {
 
     /**
      * 根据主键id更新表t_block信息
-     * @param appId  appId
+     *
      * @param blockParam the block param
      * @return the BlockDto
      */
-    Result<BlockDto> updateBlockById(BlockParam blockParam, Integer appId);
+    Result<BlockDto> updateBlockById(BlockParam blockParam);
 
     /**
      * 新增表t_block数据

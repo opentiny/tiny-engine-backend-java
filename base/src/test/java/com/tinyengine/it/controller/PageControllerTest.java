@@ -27,7 +27,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockHttpServletRequest;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,10 +81,13 @@ class PageControllerTest {
     @Test
     void testUpdatePage() throws Exception {
         when(pageService.updatePage(any(Page.class))).thenReturn(new Result<Page>());
-
+        String json = "{\"isPage\":true}";
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setContent(json.getBytes(StandardCharsets.UTF_8)); // 设置请求体
+        request.setContentType("application/json");
         Page page = new Page();
         page.setIsPage(true);
-        Result<Page> result = pageController.updatePage(page);
+        Result<Page> result = pageController.updatePage(request);
         Assertions.assertNull(result.getData());
     }
 

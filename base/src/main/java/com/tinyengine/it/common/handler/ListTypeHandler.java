@@ -14,8 +14,8 @@ package com.tinyengine.it.common.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.tinyengine.it.common.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -38,14 +38,12 @@ import java.util.Map;
  */
 @Slf4j
 public class ListTypeHandler extends BaseTypeHandler<List<?>> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, List<?> parameter, JdbcType jdbcType)
             throws SQLException {
         // 将 List<?> 转换为字符串，并设置到 PreparedStatement 中的相应参数
         try {
-            String json = objectMapper.writeValueAsString(parameter);
+            String json = JsonUtils.MAPPER.writeValueAsString(parameter);
             ps.setString(i, json);
         } catch (IOException e) {
             throw new SQLException("Error converting List<?> to JSON", e);
@@ -90,10 +88,10 @@ public class ListTypeHandler extends BaseTypeHandler<List<?>> {
             return Collections.emptyList();
         } else if (jsonString.startsWith("[{") && jsonString.endsWith("}]")) {
             // 尝试将 JSON 字符串转换为 List<Map<String, Object>>
-            return objectMapper.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {});
+            return JsonUtils.MAPPER.readValue(jsonString, new TypeReference<List<Map<String, Object>>>() {});
         } else {
             // 尝试将 JSON 字符串转换为 List<String>
-            return objectMapper.readValue(jsonString, new TypeReference<List<String>>() {});
+            return JsonUtils.MAPPER.readValue(jsonString, new TypeReference<List<String>>() {});
         }
     }
 }
