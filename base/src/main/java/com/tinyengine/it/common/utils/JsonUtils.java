@@ -244,7 +244,7 @@ public class JsonUtils {
                 } catch (Throwable var5) {
                     var6.addSuppressed(var5);
                 }
-                throw var6;
+                throw new ServiceException(ExceptionEnum.CM001.getResultCode(),var6.getMessage());
             }
             inputStream.close();
             return var3;
