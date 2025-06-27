@@ -147,8 +147,7 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
             componentLibrary.setIsOfficial(true);
             ComponentLibrary library = new ComponentLibrary();
             library.setName(componentLibrary.getName());
-            // 默认覆盖更新 其他业务需求多版本组件可放开
-            // library.setVersion(componentLibrary.getVersion());
+            // 默认覆盖更新 其他业务需求多版本组件可放开  library.setVersion(componentLibrary.getVersion());
             // 查询是否存在组件库
             List<ComponentLibrary> componentLibraryList = componentLibraryMapper.queryComponentLibraryByCondition(
                 library);
@@ -376,7 +375,7 @@ public class ComponentServiceImpl extends ServiceImpl<ComponentMapper, Component
                 }
                 Map<String, Object> snippetMap = BeanUtil.beanToMap(snippet);
                 component.setSnippets(Arrays.asList(snippetMap));
-                if(Objects.isNull(component.getCategory())) {
+                if (Objects.isNull(component.getCategory())) {
                     component.setCategory(child.getGroup());
                 }
             }

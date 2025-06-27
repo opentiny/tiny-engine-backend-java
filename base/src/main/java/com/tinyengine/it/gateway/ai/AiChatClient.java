@@ -13,8 +13,6 @@
 package com.tinyengine.it.gateway.ai;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.tinyengine.it.common.exception.ExceptionEnum;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.config.AiChatConfig;
 import com.tinyengine.it.model.dto.AiParam;
@@ -39,7 +37,7 @@ import java.util.Map;
 @Slf4j
 public class AiChatClient {
     private final Map<String, AiChatConfig.AiChatConfigData> config;
-    // 新增 Setter 方法，便于测试时注入 Mock 对象
+
     @Setter
     private RestTemplate restTemplate;
 
