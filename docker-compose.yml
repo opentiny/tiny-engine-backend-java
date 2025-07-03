@@ -1,0 +1,48 @@
+name: te_java_services_mysql
+
+services:
+  mysql:
+    env_file:
+      - .env
+    container_name: te_java_mysql
+    image: mysql:8
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tiny_engine_data_java}
+    volumes:
+      - te-java-mysql-volumes:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - te-java-mysql
+
+  # database explorer
+  phpmyadmin:
+    env_file:
+      - .env
+    image: phpmyadmin
+    # for arm64 macos
+    # image: arm64v8/phpmyadmin
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tiny_engine_data_java}
+      PMA_HOST: "mysql"
+    ports:
+      - 8080:80
+    networks:
+      - te-java-mysql
+    depends_on:
+      - mysql
+
+volumes:
+  te-java-mysql-volumes:
+
+networks:
+  te-java-mysql:
+    name: te-java-mysql
+    driver: bridge
