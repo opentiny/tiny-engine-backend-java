@@ -31,9 +31,13 @@ public class NotGroupDto {
     @Schema(name = "label", description = "区块编码")
     private String label;
 
+    @Schema(name = "name", description = "区块名称")
+    private String name;
+
+
     @Schema(name = "createdBY", description = "创建人id")
     private String createdBy;
 
     @Schema(name = "tags", description = "区块标签")
-    private String [] tags;
+    private String tags;
 }

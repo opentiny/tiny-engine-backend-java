@@ -156,11 +156,13 @@ public interface BlockMapper extends BaseMapper<Block> {
     })
     @Select("<script>" + "SELECT b.* " + "FROM t_block b " + "<where>"
             + "  <if test='notGroupDto.label != null and notGroupDto.label != \"\"'> "
-            + "    AND b.label LIKE CONCAT('%', #{notGroupDto.label}, '%') " + "  </if>"
+            + "    OR b.label LIKE CONCAT('%', #{notGroupDto.label}, '%') " + "  </if>"
+            + "  <if test='notGroupDto.name != null and notGroupDto.name != \"\"'> "
+            + "    OR b.name LIKE CONCAT('%', #{notGroupDto.name}, '%') " + "  </if>"
             + "  <if test='notGroupDto.createdBy != null and notGroupDto.createdBy != \"\"'> "
-            + "    AND b.created_by LIKE CONCAT('%', #{notGroupDto.createdBy}, '%') " + "  </if>"
-            + "  <if test='notGroupDto.tags != null and notGroupDto.tags.length > 0'> "
-            + "    AND JSON_CONTAINS(b.tags, #{notGroupDto.tags})" + "  </if>" + "</where>" + "</script>")
+            + "    OR b.created_by LIKE CONCAT('%', #{notGroupDto.createdBy}, '%') " + "  </if>"
+            + "  <if test='notGroupDto.tags != null and notGroupDto.tags != \"\"'> "
+            + "    OR JSON_CONTAINS(b.tags, #{notGroupDto.tags})" + "  </if>" + "</where>" + "</script>")
     List<BlockDto> findBlocksReturn(@Param("notGroupDto") NotGroupDto notGroupDto);
 
     /**

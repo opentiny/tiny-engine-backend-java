@@ -53,8 +53,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 区块
@@ -255,13 +257,19 @@ public class BlockController {
     @GetMapping("/block/notgroup/{groupId}")
     public Result<List<BlockDto>> findBlocksNotInGroup(@PathVariable Integer groupId,
         @RequestParam(value = "label_contains", required = false) String label,
+        @RequestParam(value = "name_cn_contains", required = false) String name,
         @RequestParam(value = "tags_contains", required = false) String[] tags,
         @RequestParam(value = "createdBy", required = false) String createdBy) {
         NotGroupDto notGroupDto = new NotGroupDto();
         notGroupDto.setGroupId(groupId);
         notGroupDto.setLabel(label);
+        notGroupDto.setName(name);
         notGroupDto.setCreatedBy(createdBy);
         notGroupDto.setTags(null);
+        if (tags != null && tags.length > 0) {
+            notGroupDto.setTags(JsonUtils.encode(tags)); // 将数组转换为有效的 JSON 字符串
+        }
+
 
         List<BlockDto> blocksList = blockService.getNotInGroupBlocks(notGroupDto);
         return Result.success(blocksList);
