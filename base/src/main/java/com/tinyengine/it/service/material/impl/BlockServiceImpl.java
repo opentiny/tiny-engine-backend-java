@@ -153,7 +153,8 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
      */
     @Override
     public Integer deleteBlockById(Integer id) {
-        return baseMapper.deleteBlockById(id);
+        baseMapper.deleteBlockById(id);
+        return blockGroupBlockMapper.deleteByBlockId(id);
     }
 
     /**
@@ -171,7 +172,7 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         if (blockResult == null) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        if (!Objects.equals(blockResult.getAppId(), blockParam.getAppId())) {
+        if (!Objects.equals(blockResult.getOccupierBy(), loginUserContext.getLoginUserId())) {
             return Result.failed(ExceptionEnum.CM007);
         }
         // 把前端传参赋值给实体
