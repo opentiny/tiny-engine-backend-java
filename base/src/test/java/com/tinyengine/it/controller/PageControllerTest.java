@@ -71,10 +71,13 @@ class PageControllerTest {
     @Test
     void testCreatePage() throws Exception {
         when(pageService.createPage(any(Page.class))).thenReturn(new Result<Page>());
-
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        String json = "{\"isPage\":true}";
+        request.setContent(json.getBytes(StandardCharsets.UTF_8)); // 设置请求体
+        request.setContentType("application/json");
         Page page = new Page();
         page.setIsPage(true);
-        Result<Page> result = pageController.createPage(page);
+        Result<Page> result = pageController.createPage(request);
         Assertions.assertNull(result.getData());
     }
 
