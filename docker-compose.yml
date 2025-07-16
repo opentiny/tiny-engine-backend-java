@@ -20,7 +20,7 @@ services:
     container_name: tiny-engine-back
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "9090:9090"     
     depends_on:
@@ -31,7 +31,7 @@ services:
     container_name: tiny-engine
     build:
       context: ../tiny-engine/
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "80:80" 
     volumes:
