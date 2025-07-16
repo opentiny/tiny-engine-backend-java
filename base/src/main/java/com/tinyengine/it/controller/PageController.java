@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -115,7 +114,7 @@ public class PageController {
     /**
      * 创建页面
      *
-     * @param page the page
+     * @param request the request
      * @return result
      * @throws Exception the exception
      */
@@ -128,7 +127,8 @@ public class PageController {
     })
     @SystemControllerLog(description = "创建页面")
     @PostMapping("/pages/create")
-    public Result<Page> createPage(@Valid @RequestBody Page page) throws Exception {
+    public Result<Page> createPage(HttpServletRequest request) throws IOException {
+        Page page = JsonUtils.decode(request.getInputStream(), Page.class);
         if (page.getIsPage()) {
             // 创建页面
             return pageService.createPage(page);

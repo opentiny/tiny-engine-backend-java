@@ -45,10 +45,12 @@ public class ComponentLibrary extends BaseEntity {
     private String name;
 
     @Schema(name = "appId", description = "关联应用id")
+    @TableField(value = "app_id")
     private Integer appId;
 
     @JsonProperty("package")
     @Schema(name = "package", description = "包名")
+    @TableField(value = "package")
     private String packageName;
 
     @Schema(name = "registry", description = "注册")
@@ -82,17 +84,22 @@ public class ComponentLibrary extends BaseEntity {
 
     @JsonProperty("public")
     @Schema(name = "public", description = "公开状态：0，1，2")
+    @TableField(value = "public")
     private Integer publicStatus;
 
     @Schema(name = "isStarted", description = "标识启用")
+    @TableField(value = "is_started")
     private Boolean isStarted;
 
     @Schema(name = "isOfficial", description = "标识官方组件")
+    @TableField(value = "is_official")
     private Boolean isOfficial;
 
     @Schema(name = "isDefault", description = "标识默认组件")
+    @TableField(value = "is_default")
     private Boolean isDefault;
 
     @Schema(name = "components", description = "组件库组件")
+    @TableField(exist = false)
     private List<Component> components;
 }

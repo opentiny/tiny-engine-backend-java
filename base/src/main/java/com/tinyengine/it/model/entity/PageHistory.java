@@ -52,12 +52,14 @@ public class PageHistory {
     private String name;
 
     @Schema(name = "page", description = "关联page表Id")
+    @TableField(value = "ref_id")
     private Integer page;
 
     @Schema(name = "version", description = "版本")
     private String version;
 
     @Schema(name = "app", description = "关联app表Id")
+    @TableField(value = "app_id")
     private Integer app;
 
     @Schema(name = "route", description = "页面路由")
@@ -74,6 +76,7 @@ public class PageHistory {
     @Schema(name = "parentId", description = "父文件夹id")
     private String parentId;
 
+    @TableField(value = "`group`")
     private String group;
 
     @Schema(name = "depth", description = "*页面/文件夹深度，更改层级时服务端校验用（校验可有可无）*")

@@ -40,7 +40,7 @@ import java.time.LocalDateTime;
 public class Tenant {
     @Schema(name = "id", description = "主键id")
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private String id;
 
     @Schema(name = "nameCn", description = "组织唯一代码")
     private String orgCode;
