@@ -15,6 +15,6 @@ WORKDIR /app
 COPY --from=build /app/app/target/tiny-engine-app-*.jar /app/tiny-engine-app.jar
 COPY --from=build /app/base/target/tiny-engine-base-*.jar /app/tiny-engine-base.jar
 
-ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=dev"]
+ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=alpha"]
 EXPOSE 9090
 
