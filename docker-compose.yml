@@ -1,0 +1,40 @@
+version: '3'
+services:
+  tiny-engine-data:
+    image: mysql:5.7
+    container_name: tiny-engine-data
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 111111
+      MYSQL_DATABASE: tiny_engine_data_java
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker-deploy-data/mysql/data/:/var/lib/mysql/
+      - ./docker-deploy-data/mysql/conf/:/etc/mysql/conf.d/
+      - ./docker-deploy-data/mysql/init/:/docker-entrypoint-initdb.d/
+      - ./docker-deploy-data/mysql/logs/:/logs/
+ 
+  tiny-engine-back:
+    image: tiny-engine-back
+    container_name: tiny-engine-back
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"     
+    depends_on:
+      - tiny-engine-data
+
+  tiny-engine:
+    image: tiny-engine
+    container_name: tiny-engine
+    build:
+      context: ../tiny-engine/
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" 
+    volumes:
+      - ./docker-deploy-data/nginx.conf:/etc/nginx/nginx.conf 
+    depends_on:
+      - tiny-engine-back

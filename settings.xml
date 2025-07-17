@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+
+    <pluginGroups>
+
+    </pluginGroups>
+
+
+    <proxies>
+
+    </proxies>
+
+    <servers>
+        <server>
+          <id>deploymentRepo</id>
+          <username>repouser</username>
+          <password>repopwd</password>
+        </server>
+    </servers>
+
+    <!--<mirrors>标签中可以包含多个<mirror>标签，每个<mirror>用于设置一个镜像仓库-->
+    <mirrors>
+        <!--  这里设置的是阿里公共代理仓库  -->
+        <mirror>
+            <!-- 镜像的唯一标识符，用来区分不同的镜像  -->
+            <id>aliyunmaven</id>
+            <!-- 镜像名称  -->
+            <name>阿里云公共仓库</name>
+            <!-- 镜像的URL地址 -->
+            <url>https://maven.aliyun.com/repository/public</url>
+
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+
+    <profiles>
+
+    </profiles>
+
+</settings>
