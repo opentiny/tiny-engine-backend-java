@@ -60,7 +60,8 @@ public class ModelController {
      */
     @Operation(summary = "查询表Model信息列表", description = "查询表Model信息列表", parameters = {
         @Parameter(name = "currentPage", description = "当前页"),
-        @Parameter(name = "pageSize", description = "页数")
+        @Parameter(name = "pageSize", description = "页数"),
+        @Parameter(name = "name", description = "模型名称")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
@@ -69,8 +70,9 @@ public class ModelController {
     @SystemControllerLog(description = "查询表Model信息列表")
     @GetMapping("/model/list")
     public Result<Page<Model>> getAllModel(@RequestParam(value = "currentPage", required = false) Integer currentPage,
-        @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        Page<Model> modelPage = modelService.pageQuery(currentPage, pageSize);
+        @RequestParam(value = "pageSize", required = false) Integer pageSize,
+        @RequestParam(value = "name", required = false) String name) {
+        Page<Model> modelPage = modelService.pageQuery(currentPage, pageSize, name);
         return Result.success(modelPage);
     }
 
@@ -80,8 +82,7 @@ public class ModelController {
      * @return Model信息
      */
     @Operation(summary = "根据name查询表Model信息", description = "根据name查询表Model信息", parameters = {
-        @Parameter(name = "currentPage", description = "当前页"),
-        @Parameter(name = "pageSize", description = "页数")
+        @Parameter(name = "name", description = "名称"),
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),

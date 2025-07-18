@@ -68,9 +68,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
      */
     @Override
     @SystemServiceLog(description = "分页查询model实现方法")
-    public Page<Model> pageQuery(int currentPage, int pageSize) {
+    public Page<Model> pageQuery(int currentPage, int pageSize, String name) {
         Page<Model> page = new Page<>(currentPage, pageSize);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("name", name);
         page(page, queryWrapper);
         return page;
     }
