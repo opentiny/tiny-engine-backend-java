@@ -35,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 模型
  *
@@ -69,6 +71,26 @@ public class ModelController {
     public Result<Page<Model>> getAllModel(@RequestParam(value = "currentPage", required = false) Integer currentPage,
         @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         Page<Model> modelPage = modelService.pageQuery(currentPage, pageSize);
+        return Result.success(modelPage);
+    }
+
+    /**
+     * 根据name查询表Model信息
+     *
+     * @return Model信息
+     */
+    @Operation(summary = "根据name查询表Model信息", description = "根据name查询表Model信息", parameters = {
+        @Parameter(name = "currentPage", description = "当前页"),
+        @Parameter(name = "pageSize", description = "页数")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "根据name查询表Model信息")
+    @GetMapping("/model/find")
+    public Result<List<Model>> getModelByName(@RequestParam(value = "name", required = false) String name) {
+        List<Model> modelPage = modelService.getModelByName(name);
         return Result.success(modelPage);
     }
 

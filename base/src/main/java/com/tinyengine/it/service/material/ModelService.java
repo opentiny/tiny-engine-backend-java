@@ -16,6 +16,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.Model;
 
+import java.util.List;
+
 public interface ModelService extends IService<Model>{
     /**
      * 查询表t_model信息
@@ -23,6 +25,13 @@ public interface ModelService extends IService<Model>{
      * @return the Model
      */
     Model queryModelById(Integer id);
+
+    /**
+     * 根据name查询表t_model信息
+     *
+     * @return the model list
+     */
+    List<Model> getModelByName(String name);
 
     /**
      * 分页查询表t_model

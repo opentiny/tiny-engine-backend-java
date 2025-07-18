@@ -48,6 +48,20 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     }
 
     /**
+     * 根据name查询表t_model信息
+     *
+     * @param name
+     * @return the model list
+     */
+    @Override
+    @SystemServiceLog(description = "根据名称查询model实现方法")
+    public List<Model> getModelByName(String name) {
+        QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("name", name);
+        return  this.baseMapper.selectList(queryWrapper);
+    }
+
+    /**
      * 分页查询表t_model信息
      *
      * @return the list
