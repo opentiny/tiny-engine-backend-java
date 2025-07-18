@@ -12,11 +12,13 @@
 
 package com.tinyengine.it.common.utils;
 
+import cn.hutool.core.exceptions.UtilException;
+import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.model.dto.SchemaConfig;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -148,12 +150,15 @@ public class Schema {
             String key = entry.getKey();
             String funcName = entry.getValue();
             try {
-                // 使用反射调用相应的格式化方法
-                java.lang.reflect.Method method = this.getClass().getMethod(funcName, Object.class);
-                Object value = data.get(key);
-                formattedData.put(key, method.invoke(this, value));
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                log.error(e.getMessage());
+                Method method = ReflectUtil.getMethod(Schema.class, funcName, Object.class);
+                if (method == null) {
+                    log.error("not found {} funcName from schema", funcName);
+                    continue;
+                }
+
+                formattedData.put(key, ReflectUtil.invoke(this, method, data.get(key)));
+            } catch (SecurityException | UtilException err) {
+                log.error(err.getMessage());
             }
         }
         return formattedData;
@@ -248,11 +253,14 @@ public class Schema {
      * @return the string
      */
     // group名称转换
-    public String toGroupName(String group) {
+    public String toGroupName(Object group) {
+        if (group == null) {
+            return "";
+        }
         // 调整一下group命名
-        if (GROUPS.contains(group)) {
+        if (GROUPS.contains(group.toString())) {
             return group + "Pages";
         }
-        return group;
+        return group.toString();
     }
 }
