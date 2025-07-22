@@ -22,5 +22,6 @@ import lombok.Data;
 @Data
 public class ParametersDto {
     private String prop;
+    private String label;
     private String type;
 }
