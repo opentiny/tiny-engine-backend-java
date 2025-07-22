@@ -150,20 +150,20 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         MethodDto methodDto = new MethodDto();
         methodDto.setName(name);
         RequestParameter requestParameter = new RequestParameter();
-        requestParameter.setName("id");
+        requestParameter.setProp("id");
         requestParameter.setType("Number");
 
         if (name != Enums.methodName.DELETE.getValue()) {
-            requestParameter.setName(Enums.methodName.NAME.getValue());
+            requestParameter.setProp(Enums.methodName.NAME.getValue());
             requestParameter.setType(Enums.methodName.TYPE.getValue());
             requestParameter.setChildren(model.getParameters());
         }
 
         ResponseParameter code = new ResponseParameter();
-        code.setName("code");
+        code.setProp("code");
         code.setType("Number");
         ResponseParameter message = new ResponseParameter();
-        message.setName("message");
+        message.setProp("message");
         message.setType("String");
         List<ResponseParameter> responseParameterList = new ArrayList<>();
         responseParameterList.add(code);

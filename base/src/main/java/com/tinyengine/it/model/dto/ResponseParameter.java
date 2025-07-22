@@ -21,6 +21,6 @@ import lombok.Data;
  */
 @Data
 public class ResponseParameter {
-    private String name;
+    private String prop;
     private String type;
 }

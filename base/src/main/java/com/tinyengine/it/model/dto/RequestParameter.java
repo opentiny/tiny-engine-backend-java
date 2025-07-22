@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Data
 public class RequestParameter {
-    private String name;
+    private String prop;
     private String type;
     private List<ParametersDto> children;
 }
