@@ -159,18 +159,27 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
             requestParameter.setChildren(model.getParameters());
         }
 
+        List<ResponseParameter> responseParameterList = getResponseParameters();
+        methodDto.setRequestParameters(Arrays.asList(requestParameter));
+        methodDto.setResponseParameters(responseParameterList);
+        return methodDto;
+    }
+
+    private static List<ResponseParameter> getResponseParameters() {
         ResponseParameter code = new ResponseParameter();
         code.setProp("code");
         code.setType("Number");
         ResponseParameter message = new ResponseParameter();
         message.setProp("message");
         message.setType("String");
+        ResponseParameter data = new ResponseParameter();
+        data.setProp("data");
+        data.setType("Array");
         List<ResponseParameter> responseParameterList = new ArrayList<>();
         responseParameterList.add(code);
         responseParameterList.add(message);
-        methodDto.setRequestParameters(Arrays.asList(requestParameter));
-        methodDto.setResponseParameters(responseParameterList);
-        return methodDto;
+        responseParameterList.add(data);
+        return responseParameterList;
     }
 
 
