@@ -71,7 +71,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     public Page<Model> pageQuery(int currentPage, int pageSize, String name) {
         Page<Model> page = new Page<>(currentPage, pageSize);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("name", name);
+        if(name != null && !name.isEmpty()){
+            queryWrapper.like("name", name);
+        }
         page(page, queryWrapper);
         return page;
     }
