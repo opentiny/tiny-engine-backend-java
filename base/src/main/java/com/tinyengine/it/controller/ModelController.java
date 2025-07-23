@@ -61,7 +61,8 @@ public class ModelController {
     @Operation(summary = "查询表Model信息列表", description = "查询表Model信息列表", parameters = {
         @Parameter(name = "currentPage", description = "当前页"),
         @Parameter(name = "pageSize", description = "页数"),
-        @Parameter(name = "name", description = "模型名称")
+        @Parameter(name = "nameCn", description = "模型中文名称"),
+        @Parameter(name = "nameEn", description = "模型英文名称")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),

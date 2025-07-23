@@ -17,5 +17,5 @@ create table `t_model`
     `renter_id`          varchar(60) comment '业务租户id',
     `site_id`            varchar(60) comment '站点id，设计预留字段',
     primary key (`id`) using btree,
-    unique index `u_idx_model` (`name`,`version`) using btree
+    unique index `u_idx_model` (`name_cn`,`version`) using btree
 ) engine = innodb comment = '模型表';
