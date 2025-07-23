@@ -184,7 +184,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
             parameterList.add(nameEn);
 
         }
-        if (name != Enums.methodName.DELETE.getValue()) {
+        if (!name.equals(Enums.methodName.DELETE.getValue())) {
             requestParameter.setProp(Enums.methodParam.PARAMS.getValue());
             requestParameter.setType(Enums.paramType.OBJECT.getValue());
             requestParameter.setChildren(model.getParameters());
