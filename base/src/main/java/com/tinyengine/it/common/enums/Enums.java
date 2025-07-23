@@ -1024,20 +1024,117 @@ public class Enums {
         /**
          * QUERY name.
          */
-        QUERY("查询方法"),
-
-        /**
-         * NAME name.
-         */
-        NAME("params"),
-        /**
-         * TYPE name.
-         */
-        TYPE("Object");
+        QUERY("查询方法");
 
         private final String value;
 
         methodName(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum paramType {
+
+        /**
+         * TYPE name.
+         */
+        OBJECT("Object"),
+
+        /**
+         * CREATED name.
+         */
+        NUMBER("Number"),
+
+        /**
+         * UPDATE name.
+         */
+        STRING("String"),
+
+        /**
+         * DELETE name.
+         */
+        ARRAY("Array");
+
+        private final String value;
+
+        paramType(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum methodParam {
+
+        /**
+         * ID
+         */
+        ID("id"),
+        /**
+         * CURRENTPAGE
+         */
+        CURRENTPAGE("currentPage"),
+
+        /**
+         * PAGESIZE
+         */
+        PAGESIZE("pageSize"),
+
+        /**
+         * NAMECN
+         */
+        NAMECN("nameCn"),
+
+        /**
+         * NAMEEN
+         */
+        NAMEEN("nameEn"),
+
+        /**
+         * PARAMS
+         */
+        PARAMS("params"),
+
+        /**
+         * CODE
+         */
+        CODE("code"),
+
+        /**
+         * MESSAGE
+         */
+        MESSAGE("message"),
+
+        /**
+         * DATA
+         */
+        DATA("data"),
+
+        /**
+         * TOTAL
+         */
+        TOTAL("total");
+
+
+        private final String value;
+
+        methodParam(String value) {
             this.value = value;
         }
 

@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -58,7 +57,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     public List<Model> getModelByName(String name) {
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
         queryWrapper.like("name", name);
-        return  this.baseMapper.selectList(queryWrapper);
+        return this.baseMapper.selectList(queryWrapper);
     }
 
     /**
@@ -161,33 +160,66 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     private MethodDto getMethodDto(String name, Model model) {
         MethodDto methodDto = new MethodDto();
         methodDto.setName(name);
+        List<ResponseParameter> responseParameterList = getResponseParameters(name);
         RequestParameter requestParameter = new RequestParameter();
-        requestParameter.setProp("id");
-        requestParameter.setType("Number");
+        requestParameter.setProp(Enums.methodParam.ID.getValue());
+        requestParameter.setType(Enums.paramType.NUMBER.getValue());
+        List<RequestParameter> parameterList = new ArrayList<>();
+        if (name.equals(Enums.methodName.QUERY.getValue())) {
+            RequestParameter currentPage = new RequestParameter();
+            currentPage.setProp(Enums.methodParam.CURRENTPAGE.getValue());
+            currentPage.setType(Enums.paramType.NUMBER.getValue());
+            RequestParameter pageSize = new RequestParameter();
+            pageSize.setProp(Enums.methodParam.PAGESIZE.getValue());
+            pageSize.setType(Enums.paramType.NUMBER.getValue());
+            RequestParameter nameCn = new RequestParameter();
+            nameCn.setProp(Enums.methodParam.NAMECN.getValue());
+            nameCn.setType(Enums.paramType.STRING.getValue());
+            RequestParameter nameEn = new RequestParameter();
+            nameEn.setProp(Enums.methodParam.NAMEEN.getValue());
+            nameEn.setType(Enums.paramType.STRING.getValue());
+            parameterList.add(currentPage);
+            parameterList.add(pageSize);
+            parameterList.add(nameCn);
+            parameterList.add(nameEn);
 
+        }
         if (name != Enums.methodName.DELETE.getValue()) {
-            requestParameter.setProp(Enums.methodName.NAME.getValue());
-            requestParameter.setType(Enums.methodName.TYPE.getValue());
+            requestParameter.setProp(Enums.methodParam.PARAMS.getValue());
+            requestParameter.setType(Enums.paramType.OBJECT.getValue());
             requestParameter.setChildren(model.getParameters());
+            parameterList.add(requestParameter);
+
+            methodDto.setRequestParameters(parameterList);
+            methodDto.setResponseParameters(responseParameterList);
+            return methodDto;
         }
 
-        List<ResponseParameter> responseParameterList = getResponseParameters();
-        methodDto.setRequestParameters(Arrays.asList(requestParameter));
+        parameterList.add(requestParameter);
+        methodDto.setRequestParameters(parameterList);
         methodDto.setResponseParameters(responseParameterList);
         return methodDto;
     }
 
-    private static List<ResponseParameter> getResponseParameters() {
+    private static List<ResponseParameter> getResponseParameters(String name) {
         ResponseParameter code = new ResponseParameter();
-        code.setProp("code");
-        code.setType("Number");
+        code.setProp(Enums.methodParam.CODE.getValue());
+        code.setType(Enums.paramType.NUMBER.getValue());
         ResponseParameter message = new ResponseParameter();
-        message.setProp("message");
-        message.setType("String");
+        message.setProp(Enums.methodParam.MESSAGE.getValue());
+        message.setType(Enums.paramType.STRING.getValue());
         ResponseParameter data = new ResponseParameter();
-        data.setProp("data");
-        data.setType("Array");
+        data.setProp(Enums.methodParam.DATA.getValue());
+        data.setType(Enums.paramType.ARRAY.getValue());
+
         List<ResponseParameter> responseParameterList = new ArrayList<>();
+        if (name.equals(Enums.methodName.QUERY.getValue())) {
+            ResponseParameter total = new ResponseParameter();
+            total.setProp(Enums.methodParam.TOTAL.getValue());
+            total.setType(Enums.paramType.NUMBER.getValue());
+            responseParameterList.add(total);
+        }
+
         responseParameterList.add(code);
         responseParameterList.add(message);
         responseParameterList.add(data);
