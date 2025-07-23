@@ -93,8 +93,8 @@ public class ModelController {
     })
     @SystemControllerLog(description = "根据name查询表Model信息")
     @GetMapping("/model/find")
-    public Result<List<Model>> getModelByName(@RequestParam(value = "name", required = false) String name) {
-        List<Model> modelPage = modelService.getModelByName(name);
+    public Result<List<Model>> getModelByName(@RequestParam(value = "nameCn", required = false) String nameCn) {
+        List<Model> modelPage = modelService.getModelByName(nameCn);
         return Result.success(modelPage);
     }
 

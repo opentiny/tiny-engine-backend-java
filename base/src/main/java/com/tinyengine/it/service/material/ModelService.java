@@ -31,7 +31,7 @@ public interface ModelService extends IService<Model>{
      *
      * @return the model list
      */
-    List<Model> getModelByName(String name);
+    List<Model> getModelByName(String nameCn);
 
     /**
      * 分页查询表t_model
