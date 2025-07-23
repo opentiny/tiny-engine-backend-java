@@ -35,8 +35,11 @@ import java.util.List;
 @TableName("t_model")
 @Schema(name = "Model", description = "模型表")
 public class Model extends BaseEntity {
-    @Schema(name = "name", description = "名称")
-    private String name;
+    @Schema(name = "name_cn", description = "中文名称")
+    private String nameCn;
+
+    @Schema(name = "name_En", description = "英文名称")
+    private String nameEn;
 
     @Schema(name = "version", description = "版本")
     private String version;

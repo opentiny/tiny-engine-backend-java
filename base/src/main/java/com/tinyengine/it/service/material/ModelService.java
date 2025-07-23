@@ -38,7 +38,7 @@ public interface ModelService extends IService<Model>{
      *
      * @return the Page
      */
-    Page<Model> pageQuery(int currentPage, int pageSize, String name);
+    Page<Model> pageQuery(int currentPage, int pageSize, String nameCn, String nameEn);
 
     /**
      * 创建t_model

@@ -71,8 +71,9 @@ public class ModelController {
     @GetMapping("/model/list")
     public Result<Page<Model>> getAllModel(@RequestParam(value = "currentPage", required = false) Integer currentPage,
         @RequestParam(value = "pageSize", required = false) Integer pageSize,
-        @RequestParam(value = "name", required = false) String name) {
-        Page<Model> modelPage = modelService.pageQuery(currentPage, pageSize, name);
+        @RequestParam(value = "nameCn", required = false) String nameCn,
+        @RequestParam(value = "nameEn", required = false) String nameEn) {
+        Page<Model> modelPage = modelService.pageQuery(currentPage, pageSize, nameCn, nameEn);
         return Result.success(modelPage);
     }
 

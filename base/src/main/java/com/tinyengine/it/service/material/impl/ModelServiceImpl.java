@@ -68,12 +68,24 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
      */
     @Override
     @SystemServiceLog(description = "分页查询model实现方法")
-    public Page<Model> pageQuery(int currentPage, int pageSize, String name) {
+    public Page<Model> pageQuery(int currentPage, int pageSize, String nameCn, String nameEn) {
         Page<Model> page = new Page<>(currentPage, pageSize);
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
-        if(name != null && !name.isEmpty()){
-            queryWrapper.like("name", name);
+
+        // 判断 nameCn 是否存在
+        if (nameCn != null && !nameCn.isEmpty()) {
+            queryWrapper.like("name_cn", nameCn);
         }
+
+        // 判断 nameEn 是否存在
+        if (nameEn != null && !nameEn.isEmpty()) {
+            if (nameCn != null && !nameCn.isEmpty()) {
+                queryWrapper.or().like("name_en", nameEn);
+            } else {
+                queryWrapper.like("name_en", nameEn);
+            }
+        }
+
         page(page, queryWrapper);
         return page;
     }

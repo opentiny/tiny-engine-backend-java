@@ -7,13 +7,16 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , `name`, version, parameters, `method`, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
+        , name_cn, name_en, version, parameters, `method`, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
     <sql id="ModelByCondition">
-        <if test="name!=null and name!=''">
-            AND `name` = #{name}
+        <if test="nameCn!=null and nameCn!=''">
+            AND name_cn = #{nameCn}
+        </if>
+        <if test="nameEn!=null and nameEn!=''">
+            AND name_en = #{nameEn}
         </if>
         <if test="version!=null and version!=''">
             AND version = #{version}
@@ -53,8 +56,11 @@
 
     <!-- 通用设置列 -->
     <sql id="ModelSetColumns">
-        <if test="name!=null and name!=''">
-            `name` = #{name},
+        <if test="nameCn!=null and nameCn!=''">
+            name_cn = #{nameCn},
+        </if>
+        <if test="nameEn!=null and nameEn!=''">
+            name_en = #{nameEn},
         </if>
         <if test="version!=null and version!=''">
             version = #{version},
@@ -95,7 +101,8 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="ModelMap" type="com.tinyengine.it.model.entity.Model">
         <id column="id" property="id"/>
-        <result column="name" property="name"/>
+        <result column="name_cn" property="nameCn"/>
+        <result column="name_en" property="nameEn"/>
         <result column="version" property="version"/>
         <result column="parameters" property="parameters"/>
         <result column="method" property="method"/>
@@ -154,7 +161,8 @@
     <insert id="createModel" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.Model">
         INSERT INTO t_model ( id
-                            , `name`
+                            , name_cn
+                            , name_en
                             , version
                             , parameters
                             , `method`
@@ -167,7 +175,8 @@
                             , renter_id
                             , site_id)
         VALUES ( #{id}
-               , #{name}
+               , #{nameCn}
+               , #{nameEn}
                , #{version}
                , #{parameters}
                , #{method}
