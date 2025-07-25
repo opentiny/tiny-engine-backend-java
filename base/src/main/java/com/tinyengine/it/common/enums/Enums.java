@@ -1024,7 +1024,27 @@ public class Enums {
         /**
          * QUERY name.
          */
-        QUERY("查询方法");
+        QUERY("查询方法"),
+
+        /**
+         * INSERTAPI name.
+         */
+        INSERTAPI("insertApi"),
+
+        /**
+         * UPDATEAPI name.
+         */
+        UPDATEAPI("updateApi"),
+
+        /**
+         * QUERYAPI name.
+         */
+        QUERYAPI("queryApi"),
+
+        /**
+         * INSERTAPI name.
+         */
+        DELETEAPI("deleteApi");
 
         private final String value;
 

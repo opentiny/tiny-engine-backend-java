@@ -24,6 +24,7 @@ import java.util.List;
 @Data
 public class MethodDto {
     private String name;
+    private String nameEn;
     private List<RequestParameter> requestParameters;
     private List<ResponseParameter> responseParameters;
 }

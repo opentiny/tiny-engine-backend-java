@@ -100,10 +100,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     @SystemServiceLog(description = "创建model实现方法")
     public Model createModel(Model model) {
         List<MethodDto> methodDtos = new ArrayList<>();
-        methodDtos.add(getMethodDto(Enums.methodName.CREATED.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.UPDATE.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.CREATED.getValue(), Enums.methodName.INSERTAPI.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.UPDATE.getValue(), Enums.methodName.UPDATEAPI.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), Enums.methodName.QUERYAPI.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), Enums.methodName.DELETEAPI.getValue(), model));
         model.setMethod(methodDtos);
         int result = this.baseMapper.createModel(model);
         if (result != 1) {
@@ -141,10 +141,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     @SystemServiceLog(description = "根据id修改model实现方法")
     public Model updateModelById(Model model) {
         List<MethodDto> methodDtos = new ArrayList<>();
-        methodDtos.add(getMethodDto(Enums.methodName.CREATED.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.UPDATE.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.CREATED.getValue(), Enums.methodName.INSERTAPI.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.UPDATE.getValue(), Enums.methodName.UPDATEAPI.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), Enums.methodName.QUERYAPI.getValue(), model));
+        methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), Enums.methodName.DELETEAPI.getValue(), model));
         model.setMethod(methodDtos);
         if (model.getId() == null) {
             throw new ServiceException(ExceptionEnum.CM002.getResultCode(), ExceptionEnum.CM002.getResultCode());
@@ -157,9 +157,10 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         return modelResult;
     }
 
-    private MethodDto getMethodDto(String name, Model model) {
+    private MethodDto getMethodDto(String name, String nameEn, Model model) {
         MethodDto methodDto = new MethodDto();
         methodDto.setName(name);
+        methodDto.setNameEn(nameEn);
         List<ResponseParameter> responseParameterList = getResponseParameters(name);
         RequestParameter requestParameter = new RequestParameter();
         requestParameter.setProp(Enums.methodParam.ID.getValue());
@@ -175,13 +176,13 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
             RequestParameter nameCn = new RequestParameter();
             nameCn.setProp(Enums.methodParam.NAMECN.getValue());
             nameCn.setType(Enums.paramType.STRING.getValue());
-            RequestParameter nameEn = new RequestParameter();
-            nameEn.setProp(Enums.methodParam.NAMEEN.getValue());
-            nameEn.setType(Enums.paramType.STRING.getValue());
+            RequestParameter requestNameEn = new RequestParameter();
+            requestNameEn.setProp(Enums.methodParam.NAMEEN.getValue());
+            requestNameEn.setType(Enums.paramType.STRING.getValue());
             parameterList.add(currentPage);
             parameterList.add(pageSize);
             parameterList.add(nameCn);
-            parameterList.add(nameEn);
+            parameterList.add(requestNameEn);
 
         }
         if (!name.equals(Enums.methodName.DELETE.getValue())) {
