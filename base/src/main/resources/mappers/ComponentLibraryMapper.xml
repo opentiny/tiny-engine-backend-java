@@ -14,73 +14,73 @@
     <!-- 通用条件列 -->
     <sql id="ComponentLibraryByCondition">
         <if test="version!=null and version!=''">
-            AND version = #{version}
+            AND CL.version = #{version}
         </if>
         <if test="name!=null and name!=''">
-            AND `name` = #{name}
+            AND CL.`name` = #{name}
         </if>
         <if test="appId!=null">
-            AND app_id = #{appId}
+            AND CL.app_id = #{appId}
         </if>
         <if test="packageName!=null and packageName!=''">
-            AND package = #{packageName}
+            AND CL.package = #{packageName}
         </if>
         <if test="registry!=null and registry!=''">
-            AND registry = #{registry}
+            AND CL.registry = #{registry}
         </if>
         <if test="description!=null and description!=''">
-            AND description = #{description}
+            AND CL.description = #{description}
         </if>
         <if test="framework!=null and framework!=''">
-            AND framework = #{framework}
+            AND CL.framework = #{framework}
         </if>
         <if test="script!=null and script!=''">
-            AND script = #{script}
+            AND CL.script = #{script}
         </if>
         <if test="css!=null and css!=''">
-            AND css = #{css}
+            AND CL.css = #{css}
         </if>
         <if test="bundle!=null and bundle!=''">
-            AND bundle = #{bundle}
+            AND CL.bundle = #{bundle}
         </if>
         <if test="others!=null and others!=''">
-            AND `others` = #{others}
+            AND CL.`others` = #{others}
         </if>
         <if test="thumbnail!=null and thumbnail!=''">
-            AND thumbnail = #{thumbnail}
+            AND CL.thumbnail = #{thumbnail}
         </if>
         <if test="publicStatus!=null">
-            AND `public` = #{publicStatus}
+            AND CL.`public` = #{publicStatus}
         </if>
         <if test="isStarted!=null">
-            AND is_started = #{isStarted}
+            AND CL.is_started = #{isStarted}
         </if>
         <if test="isOfficial!=null">
-            AND is_official = #{isOfficial}
+            AND CL.is_official = #{isOfficial}
         </if>
         <if test="isDefault!=null">
-            AND is_default = #{isDefault}
+            AND CL.is_default = #{isDefault}
         </if>
         <if test="createdBy!=null and createdBy!=''">
-            AND created_by = #{createdBy}
+            AND CL.created_by = #{createdBy}
         </if>
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            AND last_updated_by = #{lastUpdatedBy}
+            AND CL.last_updated_by = #{lastUpdatedBy}
         </if>
         <if test="createdTime!=null">
-            AND created_time = #{createdTime}
+            AND CL.created_time = #{createdTime}
         </if>
         <if test="lastUpdatedTime!=null">
-            AND last_updated_time = #{lastUpdatedTime}
+            AND CL.last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
-            AND tenant_id = #{tenantId}
+            AND CL.tenant_id = #{tenantId}
         </if>
         <if test="renterId!=null and renterId!=''">
-            AND renter_id = #{renterId}
+            AND CL.renter_id = #{renterId}
         </if>
         <if test="siteId!=null and siteId!=''">
-            AND site_id = #{siteId}
+            AND CL.site_id = #{siteId}
         </if>
     </sql>
 
@@ -183,7 +183,7 @@
         <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
-        <collection  property="components" ofType="com.tinyengine.it.model.entity.Component">
+        <collection property="components" ofType="com.tinyengine.it.model.entity.Component">
             <id column="componentId" property="id"/>
             <result column="componentVersion" property="version"/>
             <result column="componentName" property="name"/>
@@ -218,145 +218,89 @@
             <result column="componentSiteId" property="siteId"/>
         </collection>
     </resultMap>
-
+    <sql id="componentLibrarySelectSql">
+        SELECT CL.id,
+               CL.version,
+               CL.`name`,
+               CL.app_id,
+               CL.package,
+               CL.registry,
+               CL.framework,
+               CL.description,
+               CL.script,
+               CL.css,
+               CL.bundle,
+               CL.dependencies,
+               CL.`others`,
+               CL.thumbnail,
+               CL.`public`,
+               CL.is_started,
+               CL.is_official,
+               CL.is_default,
+               CL.created_by,
+               CL.last_updated_by,
+               CL.created_time,
+               CL.last_updated_time,
+               CL.tenant_id,
+               CL.renter_id,
+               CL.site_id,
+               C.id AS componentId,
+               C.version AS componentVersion,
+               C.name AS componentName,
+               C.name_en,
+               C.icon,
+               C.description AS componentDescription,
+               C.doc_url,
+               C.screenshot,
+               C.tags,
+               C.keywords,
+               C.dev_mode,
+               C.npm,
+               C.`group`,
+               C.category,
+               C.priority,
+               C.snippets,
+               C.schema_fragment,
+               C.configure,
+               C.`public` AS componentPublic,
+               C.framework AS componentFramework,
+               C.is_official AS isOfficial,
+               C.is_default AS isDefault,
+               C.tiny_reserved,
+               C.component_metadata,
+               C.library_id,
+               C.created_by AS componentCreatedBy,
+               C.last_updated_by AS componentLastUpdatedBy,
+               C.created_time AS componentCreatedTime,
+               C.last_updated_time AS componentLastUpdatedTime,
+               C.tenant_id AS componentTenantId,
+               C.renter_id AS componentRenterId,
+               C.site_id AS componentSiteId
+        FROM t_component_library CL
+                 LEFT JOIN t_component C ON CL.id = C.library_id
+    </sql>
     <!-- 查询表t_component_library所有数据 -->
     <select id="queryAllComponentLibrary" resultMap="ComponentLibraryMap">
-        SELECT
-            CL.id,
-            CL.version,
-            CL.`name`,
-            CL.app_id,
-            CL.package,
-            CL.registry,
-            CL.framework,
-            CL.description,
-            CL.script,
-            CL.css,
-            CL.bundle,
-            CL.dependencies,
-            CL.`others`,
-            CL.thumbnail,
-            CL.`public`,
-            CL.is_started,
-            CL.is_official,
-            CL.is_default,
-            CL.created_by,
-            CL.last_updated_by,
-            CL.created_time,
-            CL.last_updated_time,
-            CL.tenant_id,
-            CL.renter_id,
-            CL.site_id,
-            C.id AS componentId,
-            C.version AS componentVersion,
-            C.name AS componentName,
-            C.name_en,
-            C.icon,
-            C.description AS componentDescription,
-            C.doc_url,
-            C.screenshot,
-            C.tags,
-            C.keywords,
-            C.dev_mode,
-            C.npm,
-            C.`group`,
-            C.category,
-            C.priority,
-            C.snippets,
-            C.schema_fragment,
-            C.configure,
-            C.`public` AS componentPublic,
-            C.framework AS componentFramework,
-            C.is_official AS isOfficial,
-            C.is_default AS isDefault,
-            C.tiny_reserved,
-            C.component_metadata,
-            C.library_id,
-            C.created_by AS componentCreatedBy,
-            C.last_updated_by AS componentLastUpdatedBy,
-            C.created_time AS componentCreatedTime,
-            C.last_updated_time AS componentLastUpdatedTime,
-            C.tenant_id AS componentTenantId,
-            C.renter_id AS componentRenterId,
-            C.site_id AS componentSiteId
-        FROM t_component_library CL
-        LEFT JOIN t_component C ON CL.id = C.library_id
-
+        <include refid="componentLibrarySelectSql"></include>
     </select>
 
     <!-- 根据主键id查询表t_component_library信息 -->
     <select id="queryComponentLibraryById" resultMap="ComponentLibraryMap">
-        SELECT
-        CL.id,
-        CL.version,
-        CL.`name`,
-        CL.app_id,
-        CL.package,
-        CL.registry,
-        CL.framework,
-        CL.description,
-        CL.script,
-        CL.css,
-        CL.bundle,
-        CL.dependencies,
-        CL.`others`,
-        CL.thumbnail,
-        CL.`public`,
-        CL.is_started,
-        CL.is_official,
-        CL.is_default,
-        CL.created_by,
-        CL.last_updated_by,
-        CL.created_time,
-        CL.last_updated_time,
-        CL.tenant_id,
-        CL.renter_id,
-        CL.site_id,
-        C.id AS componentId,
-        C.version AS componentVersion,
-        C.name AS componentName,
-        C.name_en,
-        C.icon,
-        C.description AS componentDescription,
-        C.doc_url,
-        C.screenshot,
-        C.tags,
-        C.keywords,
-        C.dev_mode,
-        C.npm,
-        C.`group`,
-        C.category,
-        C.priority,
-        C.snippets,
-        C.schema_fragment,
-        C.configure,
-        C.`public` AS componentPublic,
-        C.framework AS componentFramework,
-        C.is_official AS isOfficial,
-        C.is_default AS isDefault,
-        C.tiny_reserved,
-        C.component_metadata,
-        C.library_id,
-        C.created_by AS componentCreatedBy,
-        C.last_updated_by AS componentLastUpdatedBy,
-        C.created_time AS componentCreatedTime,
-        C.last_updated_time AS componentLastUpdatedTime,
-        C.tenant_id AS componentTenantId,
-        C.site_id AS componentSiteId
-        FROM t_component_library CL
-        LEFT JOIN t_component C ON CL.id = C.library_id
+        <include refid="componentLibrarySelectSql"></include>
         <where>
-            CL.id = #{id}
+            <if test="id != null">
+            AND CL.id = #{id}
+            </if>
         </where>
     </select>
 
     <!-- 根据条件查询表t_component_library数据 -->
     <select id="queryComponentLibraryByCondition" resultMap="ComponentLibraryMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_component_library
-        WHERE 1=1
-        <include refid="ComponentLibraryByCondition"/>
+        <include refid="componentLibrarySelectSql"></include>
+        <where>
+            <include refid="ComponentLibraryByCondition"/>
+        </where>
+
     </select>
 
     <!-- 根据主键id删除表t_component_library数据 -->

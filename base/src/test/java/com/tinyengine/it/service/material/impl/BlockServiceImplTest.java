@@ -27,6 +27,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.AppMapper;
+import com.tinyengine.it.mapper.BlockGroupBlockMapper;
 import com.tinyengine.it.mapper.BlockGroupMapper;
 import com.tinyengine.it.mapper.BlockMapper;
 import com.tinyengine.it.mapper.UserMapper;
@@ -69,6 +70,9 @@ class BlockServiceImplTest {
     @Mock
     private LoginUserContext loginUserContext;
 
+    @Mock
+    private BlockGroupBlockMapper blockGroupBlockMapper;
+
     @InjectMocks
     private BlockServiceImpl blockServiceImpl;
 
@@ -110,6 +114,7 @@ class BlockServiceImplTest {
     @Test
     void testDeleteBlockById() {
         when(blockMapper.deleteBlockById(123)).thenReturn(1);
+        when(blockGroupBlockMapper.deleteByBlockId(123)).thenReturn(1);
 
         Integer result = blockServiceImpl.deleteBlockById(123);
         Assertions.assertEquals(1, result);

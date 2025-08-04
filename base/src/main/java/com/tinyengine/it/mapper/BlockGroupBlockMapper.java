@@ -94,8 +94,16 @@ public interface BlockGroupBlockMapper extends BaseMapper<BlockGroupBlock> {
      * 通过区块分组id和区块删除区块与分组关联关系
      * @param blockId the block id
      * @param groupId the block group id
-     * @return the list
+     * @return the Integer
      */
     @Delete("delete from r_block_group_block where block_group_id = #{groupId} and block_id = #{blockId}")
     Integer deleteByGroupIdAndBlockId(Integer groupId, Integer blockId);
+
+    /**
+     * 通过区块id删除区块与分组关联关系
+     * @param blockId the block id
+     * @return the Integer
+     */
+    @Delete("delete from r_block_group_block where block_id = #{blockId}")
+    Integer deleteByBlockId(Integer blockId);
 }

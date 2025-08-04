@@ -47,6 +47,7 @@ public class Component extends BaseEntity {
     private Map<String, String> name;
 
     @Schema(name = "component", description = "组件")
+    @TableField(value = "name_en")
     private String component;
 
     @Schema(name = "icon", description = "组件图标")
@@ -75,6 +76,7 @@ public class Component extends BaseEntity {
     private Map<String, Object> npm;
 
     @Schema(name = "group", description = "分组")
+    @TableField(value = "`group`")
     private String group;
 
     @Schema(name = "category", description = "分类")
@@ -98,9 +100,11 @@ public class Component extends BaseEntity {
 
     @JsonProperty("public")
     @Schema(name = "public", description = "公开状态：0，1，2")
+    @TableField(value = "public")
     private Integer publicStatus;
 
     @Schema(name = "framework", description = "技术栈")
+    @TableField(value = "framework")
     private String framework;
 
     @Schema(name = "isOfficial", description = "标识官方组件")
@@ -110,6 +114,7 @@ public class Component extends BaseEntity {
     private Boolean isDefault;
 
     @Schema(name = "isTinyReserved", description = "是否tiny自有")
+    @TableField(value = "tiny_reserved")
     private Boolean isTinyReserved;
 
     @JsonProperty("component_metadata")
