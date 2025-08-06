@@ -26,5 +26,5 @@ public class OpenAIConfig {
     private String apiKey = "your-api-key";
     private String baseUrl = "https://api.deepseek.com/chat/completions";
     private String defaultModel = "deepseek-chat";
-    private int timeoutSeconds = 30;
+    private int timeoutSeconds = 300;
 }

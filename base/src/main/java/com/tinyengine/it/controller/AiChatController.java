@@ -85,7 +85,7 @@ public class AiChatController {
      * @return ai回答信息 result
      */
     @Operation(summary = "获取ai回答信息", description = "获取ai回答信息", parameters = {
-            @Parameter(name = "AiParam", description = "入参对象")}, responses = {
+            @Parameter(name = "ChatRequest", description = "入参对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json", schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "请求失败")})
