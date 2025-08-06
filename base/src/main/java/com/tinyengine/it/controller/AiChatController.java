@@ -15,8 +15,10 @@ package com.tinyengine.it.controller;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.dto.AiParam;
+import com.tinyengine.it.model.dto.ChatRequest;
 import com.tinyengine.it.service.app.AiChatService;
 
+import com.tinyengine.it.service.app.v1.AiChatV1Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,11 +27,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.util.Map;
 
@@ -50,6 +56,12 @@ public class AiChatController {
     private AiChatService aiChatService;
 
     /**
+     * The Ai chat v1 service.
+     */
+    @Autowired
+    private AiChatV1Service aiChatV1Service;
+
+    /**
      * AI api
      *
      * @param aiParam the AI param
@@ -64,5 +76,35 @@ public class AiChatController {
     @PostMapping("/ai/chat")
     public Result<Map<String, Object>> aiChat(@RequestBody AiParam aiParam) {
         return aiChatService.getAnswerFromAi(aiParam);
+    }
+
+    /**
+     * AI api v1
+     *
+     * @param request the AI param
+     * @return ai回答信息 result
+     */
+    @Operation(summary = "获取ai回答信息", description = "获取ai回答信息", parameters = {
+            @Parameter(name = "ChatRequest", description = "入参对象")}, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "AI api v1")
+    @PostMapping("/chat/completions")
+    public ResponseEntity<?> chat(@RequestBody ChatRequest request) {
+        try {
+            Object response = aiChatV1Service.chatCompletion(request);
+
+            if (request.isStream()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.TEXT_EVENT_STREAM)
+                        .body((StreamingResponseBody) response);
+            } else {
+                return ResponseEntity.ok(response);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
+        }
     }
 }
