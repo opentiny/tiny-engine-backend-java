@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAIConfig {
     private String apiKey = "your-api-key";
-    private String baseUrl = "https://api.deepseek.com/chat/completions";
+    private String baseUrl = "https://api.deepseek.com";
     private String defaultModel = "deepseek-chat";
     private int timeoutSeconds = 300;
 }
