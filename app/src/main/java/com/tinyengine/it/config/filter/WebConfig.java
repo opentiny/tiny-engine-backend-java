@@ -11,9 +11,11 @@
 
 package com.tinyengine.it.config.filter;
 
+import com.tinyengine.it.common.converter.StreamingResponseBodyConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -27,6 +29,17 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${cors.allowed-origins}")
     private String allowedOrigins;
 
+    private final StreamingResponseBodyConverter streamingResponseBodyConverter;
+
+    public WebConfig(StreamingResponseBodyConverter streamingResponseBodyConverter) {
+        this.streamingResponseBodyConverter = streamingResponseBodyConverter;
+    }
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // 添加自定义的 StreamingResponseBody 转换器
+        converters.add(streamingResponseBodyConverter);
+    }
     @Bean
     public CorsFilter corsFilter() {
         // 跨域配置地址

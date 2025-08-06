@@ -250,7 +250,12 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 325 exception enum.
      */
-    CM325("CM325", "文件校验失败");
+    CM325("CM325", "文件校验失败"),
+
+    /**
+     * Cm 326 exception enum.
+     */
+    CM326("CM326", "Failed to write stream data");
 
     /**
      * 错误码
