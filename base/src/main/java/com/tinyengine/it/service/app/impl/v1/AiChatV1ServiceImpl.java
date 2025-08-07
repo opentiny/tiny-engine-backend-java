@@ -79,6 +79,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         body.put("messages", request.getMessages());
         body.put("temperature", request.getTemperature());
         body.put("stream", request.isStream());
+        body.put("tools", request.getTools());
 
         return JsonUtils.encode(body);
     }

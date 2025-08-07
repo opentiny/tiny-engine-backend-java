@@ -15,6 +15,7 @@ package com.tinyengine.it.model.dto;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ChatRequest dto
@@ -27,6 +28,7 @@ public class ChatRequest {
     private String apiKey;
     private String baseUrl;
     private List<AiMessages> messages;
+    private List<Map<String, Object>> tools;
     private Double temperature = 0.7;
     private boolean stream = false; // 流式开关
 }
