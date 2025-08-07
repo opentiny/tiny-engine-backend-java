@@ -27,8 +27,8 @@ public class ChatRequest {
     private String model;
     private String apiKey;
     private String baseUrl;
-    private List<AiMessages> messages;
-    private List<Map<String, Object>> tools;
+    private Object messages;
+    private Object tools;
     private Double temperature = 0.7;
     private boolean stream = false; // 流式开关
 }
