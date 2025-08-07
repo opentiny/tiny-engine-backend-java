@@ -58,8 +58,9 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
     public Object chatCompletion(ChatRequest request) throws Exception {
         String requestBody = buildRequestBody(request);
         String apiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
+        String baseUrl = request.getBaseUrl() != null ? request.getBaseUrl() : config.getBaseUrl();
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-            .uri(URI.create(request.getBaseUrl() != null ? request.getBaseUrl() : config.getBaseUrl()))
+            .uri(URI.create(baseUrl))
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer " + apiKey)
             .POST(HttpRequest.BodyPublishers.ofString(requestBody));
@@ -78,6 +79,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         body.put("messages", request.getMessages());
         body.put("temperature", request.getTemperature());
         body.put("stream", request.isStream());
+        body.put("tools", request.getTools());
 
         return JsonUtils.encode(body);
     }
