@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name_cn, name_en, version, parameters, `method`, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
+        , name_cn, name_en, version, model_url, parameters, `method`, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -20,6 +20,9 @@
         </if>
         <if test="version!=null and version!=''">
             AND version = #{version}
+        </if>
+        <if test="modelUrl!=null and modelUrl!=''">
+            AND model_url = #{modelUrl}
         </if>
         <if test="parameters!=null and parameters!=''">
             AND parameters = #{parameters}
@@ -65,6 +68,9 @@
         <if test="version!=null and version!=''">
             version = #{version},
         </if>
+        <if test="modelUrl!=null and modelUrl!=''">
+            model_url = #{modelUrl},
+        </if>
         <if test="parameters!=null and parameters!=''">
             parameters = #{parameters},
         </if>
@@ -104,6 +110,7 @@
         <result column="name_cn" property="nameCn"/>
         <result column="name_en" property="nameEn"/>
         <result column="version" property="version"/>
+        <result column="model_url" property="modelUrl"/>
         <result column="parameters" property="parameters"/>
         <result column="method" property="method"/>
         <result column="description" property="description"/>
@@ -164,6 +171,7 @@
                             , name_cn
                             , name_en
                             , version
+                            , model_url
                             , parameters
                             , `method`
                             , description
@@ -178,6 +186,7 @@
                , #{nameCn}
                , #{nameEn}
                , #{version}
+               , #{modelUrl}
                , #{parameters}
                , #{method}
                , #{description}

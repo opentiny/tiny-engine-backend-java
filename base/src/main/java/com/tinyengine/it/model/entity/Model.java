@@ -44,6 +44,9 @@ public class Model extends BaseEntity {
     @Schema(name = "version", description = "版本")
     private String version;
 
+    @Schema(name = "model_url", description = "模型Url")
+    private String modelUrl;
+
     @Schema(name = "parameters", description = "字段参数")
     @TableField(typeHandler = ListTypeHandler.class)
     private List<ParametersDto> parameters;
