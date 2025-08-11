@@ -23,6 +23,7 @@ import lombok.Data;
 public class ParametersDto {
     private String prop;
     private String label;
+    private String defaultValue;
     private String type;
     private boolean required;
     private String description;
