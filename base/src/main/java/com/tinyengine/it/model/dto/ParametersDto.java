@@ -25,6 +25,7 @@ public class ParametersDto {
     private String label;
     private String defaultValue;
     private String type;
+    private String options;
     private boolean required;
     private String description;
 }

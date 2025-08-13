@@ -1070,19 +1070,19 @@ public class Enums {
         OBJECT("Object"),
 
         /**
-         * CREATED name.
+         * TYPE name.
          */
         NUMBER("Number"),
 
         /**
-         * UPDATE name.
+         * TYPE name.
          */
         STRING("String"),
 
         /**
-         * DELETE name.
+         * TYPE name.
          */
-        ARRAY("Array");
+        ENUM("Enum");
 
         private final String value;
 

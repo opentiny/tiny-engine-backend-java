@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -126,7 +127,7 @@ public class ModelController {
      * @return Model信息 result
      */
     @Operation(summary = "修改单个Model信息", description = "修改单个Model信息", parameters = {
-        @Parameter(name = "id", description = "appId"),
+        @Parameter(name = "id", description = "模型id"),
         @Parameter(name = "Model", description = "入参对象")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
@@ -168,7 +169,7 @@ public class ModelController {
      * @return the result
      */
     @Operation(summary = "获取Model信息详情", description = "获取Model信息详情", parameters = {
-        @Parameter(name = "id", description = "appId")
+        @Parameter(name = "id", description = "模型id")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
@@ -177,6 +178,43 @@ public class ModelController {
     @GetMapping("/model/detail/{id}")
     public Result<Model> detail(@PathVariable Integer id) {
         Model result = modelService.queryModelById(id);
+        return Result.success(result);
+    }
+
+    /**
+     * 获取Model建表sql
+     *
+     * @param id the id
+     * @return the result
+     */
+    @Operation(summary = "获取Model建表sql", description = "获取Model建表sql", parameters = {
+        @Parameter(name = "id", description = "模型id")
+    }, responses = {
+        @ApiResponse(responseCode = "200", description = "返回信息",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
+        @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "获取Model建表sql")
+    @GetMapping("/model/table/{id}")
+    public Result<String> getTable(@PathVariable Integer id) throws IOException {
+        String result = modelService.getTableById(id);
+        return Result.success(result);
+    }
+
+    /**
+     * 获取所有Model建表sql
+     *
+     * @param id the id
+     * @return the result
+     */
+    @Operation(summary = "获取所有Model建表sql", description = "获取所有Model建表sql", parameters = {
+    }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "获取所有Model建表sql")
+    @GetMapping("/model/table/list")
+    public Result<String> getAllTable() throws IOException {
+        String result = modelService.getAllTable();
         return Result.success(result);
     }
 }

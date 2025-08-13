@@ -19,17 +19,24 @@ import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
+import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.mapper.ModelMapper;
 import com.tinyengine.it.model.dto.MethodDto;
+import com.tinyengine.it.model.dto.ParametersDto;
 import com.tinyengine.it.model.dto.RequestParameter;
 import com.tinyengine.it.model.dto.ResponseParameter;
 import com.tinyengine.it.model.entity.Model;
 import com.tinyengine.it.service.material.ModelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -157,6 +164,99 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         return modelResult;
     }
 
+    /**
+     * 获取Model建表sql
+     *
+     * @param id
+     * @return the String
+     * @ param the id
+     */
+    @Override
+    public String getTableById(Integer id) throws IOException {
+        Model model = this.baseMapper.selectById(id);
+        List<?> rawList = model.getParameters();
+        List<ParametersDto> fields = rawList.stream()
+                .map(item -> JsonUtils.MAPPER.convertValue(item, ParametersDto.class))
+                .collect(Collectors.toList());
+
+        StringBuilder sql = new StringBuilder("CREATE TABLE " + model.getNameEn() + " (");
+
+        for (int i = 0; i < fields.size(); i++) {
+            ParametersDto field = fields.get(i);
+
+            String prop = field.getProp();
+            String type = field.getType();
+            String defaultValue = field.getDefaultValue();
+
+            // 根据字段类型映射为 SQL 数据类型
+            String sqlType = mapJavaTypeToSQL(type);
+
+            sql.append(prop).append(" ").append(sqlType);
+
+            if (defaultValue != null && !defaultValue.isEmpty()) {
+                sql.append(" DEFAULT ").append(defaultValue);
+            }
+
+            // 如果不是最后一个字段，添加逗号
+            if (i != fields.size() - 1) {
+                sql.append(", ");
+            }
+        }
+
+        sql.append(")");
+
+        return sql.toString();
+    }
+
+    /**
+     * 获取所有模型的建表SQL语句
+     * @return 拼接好的SQL语句字符串，每个表的SQL用分号分隔并换行
+     * @throws IOException 如果JSON解析失败
+     */
+    @Override
+    public String getAllTable() throws IOException {
+        // 查询所有模型
+        List<Model> modelList = this.baseMapper.selectList(null);
+        if (CollectionUtils.isEmpty(modelList)) {
+            return "";
+        }
+
+        StringJoiner sqlJoiner = new StringJoiner("; ");
+
+        modelList.stream()
+                .map(model -> {
+                    try {
+                        return this.getTableById(model.getId());
+                    } catch (IOException e) {
+                        log.error("生成表SQL失败，模型ID: {}", model.getId(), e);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .forEach(sqlJoiner::add);
+
+        return sqlJoiner.length() > 0 ? sqlJoiner.toString() + ";" : "";
+    }
+
+    private static String mapJavaTypeToSQL(String javaType) {
+        if (javaType == null) {
+            return "VARCHAR(255)"; // 默认处理
+        }
+        switch (javaType) {
+            case "String":
+                return "VARCHAR(500)";
+            case "Number":
+                return "INT";
+            case "Boolean":
+                return "BOOLEAN";
+            case "Date":
+                return "TIMESTAMP";
+            case "Enum":
+                return "LONGTEXT";
+            default:
+                return "LONGTEXT"; // 默认处理
+        }
+    }
     private MethodDto getMethodDto(String name, String nameEn, Model model) {
         MethodDto methodDto = new MethodDto();
         methodDto.setName(name);
@@ -211,7 +311,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         message.setType(Enums.paramType.STRING.getValue());
         ResponseParameter data = new ResponseParameter();
         data.setProp(Enums.methodParam.DATA.getValue());
-        data.setType(Enums.paramType.ARRAY.getValue());
+        data.setType(Enums.paramType.ENUM.getValue());
 
         List<ResponseParameter> responseParameterList = new ArrayList<>();
         if (name.equals(Enums.methodName.QUERY.getValue())) {

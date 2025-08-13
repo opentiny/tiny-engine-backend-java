@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.model.entity.Model;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ModelService extends IService<Model>{
@@ -63,4 +64,20 @@ public interface ModelService extends IService<Model>{
      * @ param the model
      */
     Model updateModelById(Model model);
+
+    /**
+     * 获取Model建表sql
+     *
+     * @ param the id
+     * @return the String
+     * @throws IOException
+     */
+    String getTableById(Integer id) throws IOException;
+
+    /**
+     * 获取所有模型的建表SQL语句
+     * @return 拼接好的SQL语句字符串，每个表的SQL用分号分隔并换行
+     * @throws IOException 如果JSON解析失败
+     */
+    String getAllTable() throws IOException;
 }
