@@ -3,6 +3,7 @@ drop table if exists `t_model`;
 create table `t_model`
 (
     `id`                int  not null auto_increment comment '主键id',
+    `model_id`          int   comment '关联模型id',
     `name_cn`           varchar(255) comment '中文名称',
     `name_en`           varchar(255) comment '英文名称',
     `version`           varchar(255) comment '版本',

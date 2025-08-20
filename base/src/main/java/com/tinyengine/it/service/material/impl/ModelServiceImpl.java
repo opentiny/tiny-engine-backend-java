@@ -34,7 +34,6 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
@@ -172,8 +171,39 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
      * @ param the id
      */
     @Override
-    public String getTableById(Integer id) throws IOException {
+    public String getTableById(Integer id) {
         Model model = this.baseMapper.selectById(id);
+        StringBuilder sql = new StringBuilder(getTableByModle(model));
+        if (model.getModelId() != null) {
+            Model result = this.baseMapper.selectById(model.getModelId());
+            sql.append(getTableByModle(result));
+        }
+        return sql.toString();
+    }
+
+    /**
+     * 获取所有模型的建表SQL语句
+     * @return 拼接好的SQL语句字符串，每个表的SQL用分号分隔并换行
+     * @throws IOException 如果JSON解析失败
+     */
+    @Override
+    public String getAllTable() {
+        // 查询所有模型
+        List<Model> modelList = this.baseMapper.selectList(null);
+        if (CollectionUtils.isEmpty(modelList)) {
+            return "";
+        }
+
+        StringJoiner sqlJoiner = new StringJoiner(" ");
+
+        modelList.stream()
+                .map(this::getTableByModle)
+                .forEach(sqlJoiner::add);
+
+        return sqlJoiner.toString();
+    }
+
+    private String getTableByModle(Model model) {
         List<?> rawList = model.getParameters();
         List<ParametersDto> fields = rawList.stream()
                 .map(item -> JsonUtils.MAPPER.convertValue(item, ParametersDto.class))
@@ -203,39 +233,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
             }
         }
 
-        sql.append(")");
-
+        sql.append(");");
         return sql.toString();
-    }
-
-    /**
-     * 获取所有模型的建表SQL语句
-     * @return 拼接好的SQL语句字符串，每个表的SQL用分号分隔并换行
-     * @throws IOException 如果JSON解析失败
-     */
-    @Override
-    public String getAllTable() throws IOException {
-        // 查询所有模型
-        List<Model> modelList = this.baseMapper.selectList(null);
-        if (CollectionUtils.isEmpty(modelList)) {
-            return "";
-        }
-
-        StringJoiner sqlJoiner = new StringJoiner("; ");
-
-        modelList.stream()
-                .map(model -> {
-                    try {
-                        return this.getTableById(model.getId());
-                    } catch (IOException e) {
-                        log.error("生成表SQL失败，模型ID: {}", model.getId(), e);
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .forEach(sqlJoiner::add);
-
-        return sqlJoiner.length() > 0 ? sqlJoiner.toString() + ";" : "";
     }
 
     private static String mapJavaTypeToSQL(String javaType) {
@@ -257,6 +256,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
                 return "LONGTEXT"; // 默认处理
         }
     }
+
     private MethodDto getMethodDto(String name, String nameEn, Model model) {
         MethodDto methodDto = new MethodDto();
         methodDto.setName(name);

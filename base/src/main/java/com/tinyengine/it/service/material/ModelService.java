@@ -72,12 +72,11 @@ public interface ModelService extends IService<Model>{
      * @return the String
      * @throws IOException
      */
-    String getTableById(Integer id) throws IOException;
+    String getTableById(Integer id);
 
     /**
      * 获取所有模型的建表SQL语句
      * @return 拼接好的SQL语句字符串，每个表的SQL用分号分隔并换行
-     * @throws IOException 如果JSON解析失败
      */
-    String getAllTable() throws IOException;
+    String getAllTable();
 }

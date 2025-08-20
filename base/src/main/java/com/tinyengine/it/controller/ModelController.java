@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -195,7 +194,7 @@ public class ModelController {
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取Model建表sql")
     @GetMapping("/model/table/{id}")
-    public Result<String> getTable(@PathVariable Integer id) throws IOException {
+    public Result<String> getTable(@PathVariable Integer id) {
         String result = modelService.getTableById(id);
         return Result.success(result);
     }
@@ -203,7 +202,6 @@ public class ModelController {
     /**
      * 获取所有Model建表sql
      *
-     * @param id the id
      * @return the result
      */
     @Operation(summary = "获取所有Model建表sql", description = "获取所有Model建表sql", parameters = {
@@ -213,7 +211,7 @@ public class ModelController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取所有Model建表sql")
     @GetMapping("/model/table/list")
-    public Result<String> getAllTable() throws IOException {
+    public Result<String> getAllTable() {
         String result = modelService.getAllTable();
         return Result.success(result);
     }
