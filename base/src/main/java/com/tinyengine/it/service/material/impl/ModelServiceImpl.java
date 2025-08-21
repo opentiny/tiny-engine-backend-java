@@ -174,10 +174,16 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     public String getTableById(Integer id) {
         Model model = this.baseMapper.selectById(id);
         StringBuilder sql = new StringBuilder(getTableByModle(model));
-        if (model.getModelId() != null) {
-            Model result = this.baseMapper.selectById(model.getModelId());
-            sql.append(getTableByModle(result));
-        }
+        List<?> rawList = model.getParameters();
+        List<ParametersDto> fields = rawList.stream()
+                .map(item -> JsonUtils.MAPPER.convertValue(item, ParametersDto.class))
+                .collect(Collectors.toList());
+        fields.forEach(item -> {
+            if(item.getIsModel()) {
+                Model result = this.baseMapper.selectById(item.getDefaultValue());
+                sql.append(getTableByModle(result));
+            }
+        });
         return sql.toString();
     }
 

@@ -24,8 +24,9 @@ public class ParametersDto {
     private String prop;
     private String label;
     private String defaultValue;
+    private Boolean isModel;
     private String type;
     private String options;
-    private boolean required;
+    private Boolean required;
     private String description;
 }
