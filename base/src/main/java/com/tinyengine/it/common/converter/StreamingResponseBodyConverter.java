@@ -12,7 +12,6 @@
 
 package com.tinyengine.it.common.converter;
 
-
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;

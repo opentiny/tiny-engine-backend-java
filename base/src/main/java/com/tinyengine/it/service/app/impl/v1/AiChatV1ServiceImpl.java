@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -95,41 +96,54 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         return outputStream -> {
             try {
                 HttpResponse<Stream<String>> response = httpClient.send(
-                    requestBuilder.build(), HttpResponse.BodyHandlers.ofLines());
-                try (Stream<String> lines = response.body()) {
-                    lines.filter(line -> !line.isEmpty())
-                        .forEach(line -> {
-                            try {
-                                 if (!line.startsWith("data:")) {
-                                     line = "data: " + line;
-                                 }
-                                 if (!line.endsWith("\n\n")) {
-                                     line = line + "\n\n";
-                                 }
-                                 outputStream.write(line.getBytes(StandardCharsets.UTF_8));
-                                 outputStream.flush();
-                                } catch (IOException e) {
-                                    throw new ServiceException(ExceptionEnum.CM326.getResultCode(),
-                                        ExceptionEnum.CM326.getResultMsg());
-                            }
-                        });
-                }
+                        requestBuilder.build(), HttpResponse.BodyHandlers.ofLines());
+                processLines(response.body(), outputStream);
             } catch (Exception e) {
-                try {
-                    String errorEvent = "data: " +
-                        JsonUtils.encode(Map.of("error", e.getMessage())) + "\n\n";
-                    outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
-                    outputStream.flush();
-                } catch (IOException ioException) {
-                    throw new ServiceException(ExceptionEnum.CM326.getResultCode(), ExceptionEnum.CM326.getResultMsg());
-                }
+                handleError(e, outputStream);
             } finally {
-                try {
-                    outputStream.close();
-                } catch (IOException e) {
-                    // 忽略关闭异常
-                }
+                closeStream(outputStream);
             }
         };
     }
+
+    private void processLines(Stream<String> lines, OutputStream outputStream) {
+        try (Stream<String> filteredLines = lines.filter(line -> !line.isEmpty())) {
+            filteredLines.forEach(line -> writeLine(line, outputStream));
+        }
+    }
+
+    private void writeLine(String line, OutputStream outputStream) {
+        try {
+            if (!line.startsWith("data:")) {
+                line = "data: " + line;
+            }
+            if (!line.endsWith("\n\n")) {
+                line = line + "\n\n";
+            }
+            outputStream.write(line.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+        } catch (IOException e) {
+            throw new ServiceException(ExceptionEnum.CM326.getResultCode(),
+                    ExceptionEnum.CM326.getResultMsg());
+        }
+    }
+
+    private void handleError(Exception e, OutputStream outputStream) {
+        try {
+            String errorEvent = "data: " + JsonUtils.encode(Map.of("error", e.getMessage())) + "\n\n";
+            outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+        } catch (IOException ioException) {
+            throw new ServiceException(ExceptionEnum.CM326.getResultCode(), ExceptionEnum.CM326.getResultMsg());
+        }
+    }
+
+    private void closeStream(OutputStream outputStream) {
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            // 忽略关闭异常
+        }
+    }
+
 }
