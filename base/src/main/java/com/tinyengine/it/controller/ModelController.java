@@ -84,14 +84,14 @@ public class ModelController {
      *
      * @return Model信息
      */
-    @Operation(summary = "根据name查询表Model信息", description = "根据name查询表Model信息", parameters = {
-        @Parameter(name = "name", description = "名称"),
+    @Operation(summary = "根据nameCn查询表Model信息", description = "根据nameCn查询表Model信息", parameters = {
+        @Parameter(name = "nameCn", description = "名称"),
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
         content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
         @ApiResponse(responseCode = "400", description = "请求失败")
     })
-    @SystemControllerLog(description = "根据name查询表Model信息")
+    @SystemControllerLog(description = "根据nameCn查询表Model信息")
     @GetMapping("/model/find")
     public Result<List<Model>> getModelByName(@RequestParam(value = "nameCn", required = false) String nameCn) {
         List<Model> modelPage = modelService.getModelByName(nameCn);
@@ -190,7 +190,7 @@ public class ModelController {
         @Parameter(name = "id", description = "模型id")
     }, responses = {
         @ApiResponse(responseCode = "200", description = "返回信息",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
         @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取Model建表sql")
     @GetMapping("/model/table/{id}")
@@ -207,7 +207,7 @@ public class ModelController {
     @Operation(summary = "获取所有Model建表sql", description = "获取所有Model建表sql", parameters = {
     }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取所有Model建表sql")
     @GetMapping("/model/table/list")
