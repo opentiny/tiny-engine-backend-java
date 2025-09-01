@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.ModelMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name_cn, name_en, version, model_url, parameters, `method`, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="ModelByCondition">
+        <if test="nameCn!=null and nameCn!=''">
+            AND name_cn = #{nameCn}
+        </if>
+        <if test="nameEn!=null and nameEn!=''">
+            AND name_en = #{nameEn}
+        </if>
+        <if test="version!=null and version!=''">
+            AND version = #{version}
+        </if>
+        <if test="modelUrl!=null and modelUrl!=''">
+            AND model_url = #{modelUrl}
+        </if>
+        <if test="parameters!=null and parameters!=''">
+            AND parameters = #{parameters}
+        </if>
+        <if test="method!=null and method!=''">
+            AND `method` = #{method}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="ModelSetColumns">
+        <if test="nameCn!=null and nameCn!=''">
+            name_cn = #{nameCn},
+        </if>
+        <if test="nameEn!=null and nameEn!=''">
+            name_en = #{nameEn},
+        </if>
+        <if test="version!=null and version!=''">
+            version = #{version},
+        </if>
+        <if test="modelUrl!=null and modelUrl!=''">
+            model_url = #{modelUrl},
+        </if>
+        <if test="parameters!=null and parameters!=''">
+            parameters = #{parameters},
+        </if>
+        <if test="method!=null and method!=''">
+            `method` = #{method},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ModelMap" type="com.tinyengine.it.model.entity.Model">
+        <id column="id" property="id"/>
+        <result column="name_cn" property="nameCn"/>
+        <result column="name_en" property="nameEn"/>
+        <result column="version" property="version"/>
+        <result column="model_url" property="modelUrl"/>
+        <result column="parameters" property="parameters"/>
+        <result column="method" property="method"/>
+        <result column="description" property="description"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="renter_id" property="renterId"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 查询表t_model所有数据 -->
+    <select id="queryAllModel" resultMap="ModelMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_model
+    </select>
+
+    <!-- 根据主键id查询表t_model信息 -->
+    <select id="queryModelById" resultMap="ModelMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_model
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表t_model数据 -->
+    <select id="queryModelByCondition" resultMap="ModelMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_model
+        WHERE 1=1
+        <include refid="ModelByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_model数据 -->
+    <delete id="deleteModelById">
+        DELETE
+        FROM t_model
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_model数据 -->
+    <update id="updateModelById" parameterType="com.tinyengine.it.model.entity.Model">
+        UPDATE t_model
+        <set>
+            <include refid="ModelSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表t_model数据 -->
+    <insert id="createModel" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.Model">
+        INSERT INTO t_model ( id
+                            , name_cn
+                            , name_en
+                            , version
+                            , model_url
+                            , parameters
+                            , `method`
+                            , description
+                            , created_by
+                            , last_updated_by
+                            , created_time
+                            , last_updated_time
+                            , tenant_id
+                            , renter_id
+                            , site_id)
+        VALUES ( #{id}
+               , #{nameCn}
+               , #{nameEn}
+               , #{version}
+               , #{modelUrl}
+               , #{parameters}
+               , #{method}
+               , #{description}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{renterId}
+               , #{siteId})
+    </insert>
+</mapper>

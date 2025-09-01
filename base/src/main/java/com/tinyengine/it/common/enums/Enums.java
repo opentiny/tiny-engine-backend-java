@@ -1003,4 +1003,168 @@ public class Enums {
             return value;
         }
     }
+
+    public enum methodName {
+
+        /**
+         * CREATED name.
+         */
+        CREATED("新增方法"),
+
+        /**
+         * UPDATE name.
+         */
+        UPDATE("修改方法"),
+
+        /**
+         * DELETE name.
+         */
+        DELETE("删除方法"),
+
+        /**
+         * QUERY name.
+         */
+        QUERY("查询方法"),
+
+        /**
+         * INSERTAPI name.
+         */
+        INSERTAPI("insertApi"),
+
+        /**
+         * UPDATEAPI name.
+         */
+        UPDATEAPI("updateApi"),
+
+        /**
+         * QUERYAPI name.
+         */
+        QUERYAPI("queryApi"),
+
+        /**
+         * INSERTAPI name.
+         */
+        DELETEAPI("deleteApi");
+
+        private final String value;
+
+        methodName(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum paramType {
+
+        /**
+         * TYPE name.
+         */
+        OBJECT("Object"),
+
+        /**
+         * TYPE name.
+         */
+        NUMBER("Number"),
+
+        /**
+         * TYPE name.
+         */
+        STRING("String"),
+
+        /**
+         * TYPE name.
+         */
+        ENUM("Enum");
+
+        private final String value;
+
+        paramType(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum methodParam {
+
+        /**
+         * ID
+         */
+        ID("id"),
+        /**
+         * CURRENTPAGE
+         */
+        CURRENTPAGE("currentPage"),
+
+        /**
+         * PAGESIZE
+         */
+        PAGESIZE("pageSize"),
+
+        /**
+         * NAMECN
+         */
+        NAMECN("nameCn"),
+
+        /**
+         * NAMEEN
+         */
+        NAMEEN("nameEn"),
+
+        /**
+         * PARAMS
+         */
+        PARAMS("params"),
+
+        /**
+         * CODE
+         */
+        CODE("code"),
+
+        /**
+         * MESSAGE
+         */
+        MESSAGE("message"),
+
+        /**
+         * DATA
+         */
+        DATA("data"),
+
+        /**
+         * TOTAL
+         */
+        TOTAL("total");
+
+
+        private final String value;
+
+        methodParam(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
 }
