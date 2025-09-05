@@ -104,8 +104,7 @@
             <id column="resource_id" property="id"/>
             <result column="resource_app_id" property="appId"/>
             <result column="resource_platform_id" property="platformId"/>
-            <result column="name_cn" property="nameCn"/>
-            <result column="name_en" property="nameEn"/>
+            <result column="name" property="name"/>
             <result column="resource_url" property="resourceUrl"/>
             <result column="thumbnail_url" property="thumbnailUrl"/>
             <result column="category" property="category"/>
@@ -142,8 +141,7 @@
         r.id as resource_id,
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
-        r.name_cn,
-        r.name_en,
+        r.name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
@@ -190,8 +188,7 @@
         r.id as resource_id,
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
-        r.name_cn,
-        r.name_en,
+        r.name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
@@ -240,8 +237,7 @@
         r.id as resource_id,
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
-        r.name_cn,
-        r.name_en,
+        r.name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
