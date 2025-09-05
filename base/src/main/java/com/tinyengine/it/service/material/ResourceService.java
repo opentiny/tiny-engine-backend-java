@@ -17,7 +17,6 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.ResourceRequestDto;
 import com.tinyengine.it.model.entity.Resource;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface ResourceService extends IService<Resource> {
@@ -31,12 +30,11 @@ public interface ResourceService extends IService<Resource> {
     /**
      * 模糊查询表Resource信息
      *
-     * @param nameCn the nameCn
-     * @param nameEn the nameEn
+     * @param name the name
      * @param des the des
      * @return Resource信息列表
      */
-    List<Resource> queryResourcesByNameAndDes(String nameCn, String nameEn, String des);
+    List<Resource> queryResourcesByNameAndDes(String name, String des);
 
     /**
      * 根据主键id查询表t_resource信息
@@ -84,5 +82,13 @@ public interface ResourceService extends IService<Resource> {
      * @param resource the resource
      * @return the integer
      */
-    Result<Resource> createResource(Resource resource) throws Exception;
+    Resource createResource(Resource resource) throws Exception;
+
+    /**
+     * 批量新增表t_resource数据
+     *
+     * @param resources the resources
+     * @return the integer
+     */
+    List<Resource> createBatchResource(List<Resource> resources) throws Exception;
 }

@@ -34,12 +34,11 @@ public interface ResourceMapper extends BaseMapper<Resource> {
     /**
      * 模糊查询表t_resource数据
      *
-     * @param nameCn the nameCn
-     * @param nameEn the nameEn
+     * @param name the name
      * @param des the des
      * @return the resource
      */
-    List<Resource> findResourcesByNameAndDes(String nameCn, String nameEn, String des);
+    List<Resource> findResourcesByNameAndDes(String name, String des);
 
     /**
      * 根据主键id查询表t_resource数据

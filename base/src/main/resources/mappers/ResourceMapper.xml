@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , app_id, platform_id, name_cn, name_en, resource_url, thumbnail_url, category, description, thumbnail_data, resource_data,
+        , app_id, platform_id, `name`, resource_url, thumbnail_url, category, description, thumbnail_data, resource_data,
         public_status, is_default, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
@@ -20,11 +20,8 @@
             AND platform_id = #{platformId}
         </if>
       
-        <if test="nameCn!=null and nameCn!=''">
-            AND name_cn = #{nameCn}
-        </if>
-        <if test="nameEn!=null and nameEn!=''">
-            AND name_en = #{nameEn}
+        <if test="name!=null and name!=''">
+            AND `name` = #{name}
         </if>
         <if test="resourceUrl!=null and resourceUrl!=''">
             AND resource_url = #{resourceUrl}
@@ -81,11 +78,8 @@
         <if test="platformId!=null">
             platform_id = #{platformId}
         </if>
-        <if test="nameCn!=null and nameCn!=''">
-            name_cn = #{nameCn}
-        </if>
-        <if test="nameEn!=null and nameEn!=''">
-            name_en = #{nameEn}
+        <if test="name!=null and name!=''">
+            `name` = #{name}
         </if>
         <if test="resourceUrl!=null and resourceUrl!=''">
             resource_url = #{resourceUrl}
@@ -140,8 +134,7 @@
         <id column="id" property="id"/>
         <result column="app_id" property="appId"/>
         <result column="platform_id" property="platformId"/>
-        <result column="name_cn" property="nameCn"/>
-        <result column="name_en" property="nameEn"/>
+        <result column="name" property="name"/>
         <result column="resource_url" property="resourceUrl"/>
         <result column="thumbnail_url" property="thumbnailUrl"/>
         <result column="category" property="category"/>
@@ -214,11 +207,8 @@
         <include refid="Base_Column_List"/>
         FROM t_resource
         <where>
-            <if test="nameCn != null and nameCn != ''">
-                name_cn like concat('%',#{nameCn},'%')
-            </if>
-            <if test="nameEn != null and nameEn != ''">
-                name_en like concat('%',#{nameEn},'%')
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
             </if>
             <if test="description != null and description != ''">
                 or description like concat('%',#{description},'%')
@@ -249,8 +239,7 @@
         INSERT INTO t_resource ( id
                             , app_id
                             , platform_id
-                            , name_cn
-                            , name_en
+                            , name
                             , resource_url
                             , thumbnail_url
                             , category
@@ -269,8 +258,7 @@
         VALUES ( #{id}
                , #{appId}
                , #{platformId}
-               , #{nameCn}
-               , #{nameEn}
+               , #{name}
                , #{resourceUrl}
                , #{thumbnailUrl}
                , #{category}

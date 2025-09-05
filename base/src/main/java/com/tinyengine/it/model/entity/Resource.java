@@ -35,11 +35,8 @@ public class Resource extends BaseEntity {
     @Schema(name = "platformId", description = "关联设计器id")
     private Integer platformId;
 
-    @Schema(name = "nameCn", description = "中文名称")
-    private String nameCn;
-
-    @Schema(name = "nameEn", description = "英文名称")
-    private String nameEn;
+    @Schema(name = "name", description = "名称")
+    private String name;
 
     @Schema(name = "resourceUrl", description = "资源url")
     private String resourceUrl;

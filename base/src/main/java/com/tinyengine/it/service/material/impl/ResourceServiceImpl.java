@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
 import com.tinyengine.it.common.utils.Utils;
@@ -28,7 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,14 +54,13 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     /**
      * 模糊查询表Resource信息
      *
-     * @param nameCn the nameCn
-     * @param nameEn the nameEn
+     * @param name the name
      * @param des the des
      * @return Resource信息列表
      */
     @Override
-    public List<Resource> queryResourcesByNameAndDes(String nameCn, String nameEn, String des) {
-        return this.baseMapper.findResourcesByNameAndDes(nameCn, nameEn, des);
+    public List<Resource> queryResourcesByNameAndDes(String name,  String des) {
+        return this.baseMapper.findResourcesByNameAndDes(name, des);
     }
 
     /**
@@ -84,11 +84,11 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      */
     @Override
     @SystemServiceLog(description = "根据data查询表t_resource信息")
-    public Resource queryResourceByData(ResourceRequestDto data) throws Exception {
+    public Resource queryResourceByData(ResourceRequestDto data) {
 
         QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name_cn", data.getNameCn());
-        queryWrapper.eq("name_en", data.getNameEn());
+        queryWrapper.eq("name", data.getName());
+        queryWrapper.eq("category", data.getCategory());
 
         return this.baseMapper.selectOne(queryWrapper);
     }
@@ -148,18 +148,18 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      */
     @Override
     @SystemServiceLog(description = "新增表t_resource数据")
-    public Result<Resource> createResource(Resource resource) throws Exception {
+    public Resource createResource(Resource resource) throws Exception {
 
         ResourceRequestDto resourceParam = new ResourceRequestDto();
-        resourceParam.setNameCn(resource.getNameCn());
-        resourceParam.setNameEn(resource.getNameEn());
+        resourceParam.setName(resource.getName());
+        resourceParam.setCategory(resource.getCategory());
         resourceParam.setResource(true);
 
         String encodedResourceParam = Utils.encodeObjectToBase64(resourceParam);
 
         ResourceRequestDto thumbnailParam = new ResourceRequestDto();
-        thumbnailParam.setNameCn(resource.getNameCn());
-        thumbnailParam.setNameEn(resource.getNameEn());
+        thumbnailParam.setName(resource.getName());
+        thumbnailParam.setCategory(resource.getCategory());
         thumbnailParam.setResource(false);
         String encodedThumbnailParam = Utils.encodeObjectToBase64(thumbnailParam);
 
@@ -174,24 +174,29 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
 
         int createResult = baseMapper.createResource(resource);
         if (createResult != 1) {
-            return Result.failed(ExceptionEnum.CM008);
+           throw new ServiceException(ExceptionEnum.CM008.getResultCode(), ExceptionEnum.CM008.getResultMsg());
         }
 
-        Resource result = baseMapper.queryResourceById(resource.getId());
-        return Result.success(result);
+        return baseMapper.queryResourceById(resource.getId());
     }
-
 
     /**
      * 批量新增表t_resource数据
-     * @param entityList
-     * @param batchSize
-     * @return
+     *
+     * @param resources the resources
+     * @return the integer
      */
     @Override
-    @SystemServiceLog(description = "批量新增表t_resource数据")
-    public boolean saveBatch(Collection<Resource> entityList, int batchSize) {
-        return false;
+    public List<Resource> createBatchResource(List<Resource> resources) throws Exception {
+        List<Resource> resourceList = new ArrayList<>();
+        if(resources.isEmpty()){
+            return resourceList;
+        }
+        for(Resource resource : resources) {
+             Resource result = this.createResource(resource);
+             resourceList.add(result);
+        }
+        return resourceList;
     }
 
 }

@@ -40,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
@@ -120,15 +122,13 @@ public class ResourceController {
     /**
      * 模糊查询表Resource信息
      *
-     * @param nameCn the nameCn
-     * @param nameEn the nameEn
+     * @param name the name
      * @param des the des
      * @return Resource信息列表
      */
     @Operation(summary = "模糊查询表Resource信息列表", description = "模糊查询表Resource信息列表",
         parameters = {
-            @Parameter(name = "nameCn", description = "中文名"),
-            @Parameter(name = "nameEn", description = "英文名"),
+            @Parameter(name = "name", description = "名称"),
             @Parameter(name = "des", description = "描述")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
@@ -137,10 +137,8 @@ public class ResourceController {
     })
     @SystemControllerLog(description = "模糊查询表Resource信息列表")
     @GetMapping("/resource/like")
-    public Result<List<Resource>> getResourceById(@PathVariable String nameCn,
-        @PathVariable String nameEn,
-        @PathVariable String des) {
-        List<Resource> resourceList = resourceService.queryResourcesByNameAndDes(nameCn, nameEn, des);
+    public Result<List<Resource>> getResourceById(@PathVariable String name, @PathVariable String des) {
+        List<Resource> resourceList = resourceService.queryResourcesByNameAndDes(name, des);
         return Result.success(resourceList);
     }
 
@@ -162,7 +160,29 @@ public class ResourceController {
     @SystemControllerLog(description = "创建resource")
     @PostMapping("/resource/create")
     public Result<Resource> createResource(@Valid @RequestBody Resource resource) throws Exception {
-        return resourceService.createResource(resource);
+        Resource result = resourceService.createResource(resource);
+        return Result.success(result);
+    }
+
+    /**
+     * 批量创建Resource
+     *
+     * @param resources the resources
+     * @return Resource信息 result
+     */
+    @Operation(summary = "批量创建Resource", description = "批量创建Resource",
+        parameters = {
+            @Parameter(name = "resources", description = "Resource入参对象")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "批量创建Resource")
+    @PostMapping("/resource/create/batch")
+    public Result<List<Resource>> createResource(@Valid @RequestBody List<Resource> resources) throws Exception {
+        List<Resource> resourceList = resourceService.createBatchResource(resources);
+        return Result.success(resourceList);
     }
 
     /**
@@ -254,16 +274,19 @@ public class ResourceController {
         String fileExtension = detectedType.equals("jpeg") ? "jpg" : detectedType;
 
         String fileName = useOriginal ?
-                resource.getNameEn() + "." + fileExtension :
-                resource.getNameEn() + "_thumbnail." + fileExtension;
-
-
+                resource.getName() + "." + fileExtension :
+                resource.getName() + "_thumbnail." + fileExtension;
+        // URL编码文件名
+        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.name())
+                .replace("+", "%20");
         response.setContentType("image/" + detectedType);
-        response.setHeader("Content-Disposition",
-                "inline; filename=\"" + fileName + "\"; filename*=UTF-8''" + fileName);
 
+        // 只使用 filename* 格式，避免中文字符直接出现在header中
+        response.setHeader("Content-Disposition",
+                "inline; filename*=UTF-8''" + encodedFileName);
         try (OutputStream out = response.getOutputStream()) {
             out.write(imageBytes);
         }
     }
+
 }

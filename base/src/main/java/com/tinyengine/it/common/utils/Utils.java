@@ -425,23 +425,18 @@ public class Utils {
      */
     public static String encodeObjectToBase64(Object object) throws Exception {
         String jsonString;
-
-        // 使用 Jackson ObjectMapper 替代 JsonUtils，确保正确序列化
         ObjectMapper objectMapper = new ObjectMapper();
-
-        // 配置ObjectMapper确保正确序列化
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
         if (object instanceof Map) {
-            // 如果是Map，保持原有逻辑
             jsonString = JsonUtils.encode(object);
         } else {
-            // 使用ObjectMapper序列化对象
             jsonString = objectMapper.writeValueAsString(object);
         }
+        byte[] jsonBytes = jsonString.getBytes(StandardCharsets.UTF_8);
+        String base64 = Base64.getEncoder().encodeToString(jsonBytes);
 
-        // 将 JSON 字符串进行 Base64 编码
-        return Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+        // 转换为URL安全的Base64
+        return makeUrlSafe(base64);
     }
 
     /**
@@ -451,21 +446,42 @@ public class Utils {
      * @param clazz 目标类类型
      * @return T 目标对象
      */
-    public static <T> T decodeBase64ToObject(String encodedString, Class<T> clazz) throws Exception {
-        // 解码 Base64 字符串
-        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
-        String jsonString = new String(decodedBytes, StandardCharsets.UTF_8);
-
-        return JsonUtils.decode(jsonString, clazz);
+    public static <T> T decodeBase64ToObject(String encodedString, Class<T> clazz) {
+        // 处理URL安全的Base64编码
+        String standardBase64 = fromUrlSafe(encodedString);
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(standardBase64);
+            String jsonString = new String(decodedBytes, StandardCharsets.UTF_8);
+            return JsonUtils.decode(jsonString, clazz);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid Base64 string: " + encodedString, e);
+        }
     }
 
     /**
-     * base64编码转map
-     *
-     * @param encodedString
-     * @return map
+     * 将标准Base64转换为URL安全格式
      */
-    public static Map<String, String> decodeBase64ToMap(String encodedString) throws Exception {
-        return decodeBase64ToObject(encodedString, Map.class);
+    private static String makeUrlSafe(String base64) {
+        return base64
+            .replace('+', '-')
+            .replace('/', '_')
+            .replace("=", "");
+    }
+    /**
+     * 将URL安全Base64转换回标准格式
+     */
+    private static String fromUrlSafe(String urlSafeBase64) {
+        // 先替换字符
+        String standard = urlSafeBase64
+            .replace('-', '+')
+            .replace('_', '/');
+
+        // 添加填充字符使长度成为4的倍数
+        int padding = standard.length() % 4;
+        if (padding > 0) {
+            standard += "=".repeat(4 - padding);
+        }
+
+        return standard;
     }
 }
