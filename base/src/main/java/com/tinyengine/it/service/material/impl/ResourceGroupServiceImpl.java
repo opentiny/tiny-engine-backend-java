@@ -46,15 +46,15 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
     }
 
     /**
-     * 根据主键id查询表t_resource_group信息
+     * 根据appId查询表t_resource_group信息
      *
      * @param appId the appId
      * @return the resourceGroup
      */
     @Override
-    @SystemServiceLog(description = "根据主键id查询表t_resource_group信息")
+    @SystemServiceLog(description = "根据主键appId查询表t_resource_group信息")
     public Result<ResourceGroup> queryResourceGroupByAppId(Integer appId) {
-        ResourceGroup resourceGroup = baseMapper.queryResourceGroupByAppId(appId);
+        ResourceGroup resourceGroup = baseMapper.queryResourceGroupByAppId(appId, loginUserContext.getLoginUserId());
         return Result.success(resourceGroup);
     }
 

@@ -104,7 +104,7 @@
             <id column="resource_id" property="id"/>
             <result column="resource_app_id" property="appId"/>
             <result column="resource_platform_id" property="platformId"/>
-            <result column="name" property="name"/>
+            <result column="resource_name" property="name"/>
             <result column="resource_url" property="resourceUrl"/>
             <result column="thumbnail_url" property="thumbnailUrl"/>
             <result column="category" property="category"/>
@@ -141,7 +141,7 @@
         r.id as resource_id,
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
-        r.name,
+        r.name as resource_name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
@@ -161,7 +161,7 @@
         LEFT JOIN
         r_resource_group_resource rgr ON rgr.resource_group_id = rg.id
         LEFT JOIN
-        t_resource r ON r.id = rgr.resource_id
+        t_resource r ON r.id = rgr.resource_id AND r.id IS NOT NULL
 
         <where>
             <if test="groupCreatedBy != null">
@@ -188,7 +188,7 @@
         r.id as resource_id,
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
-        r.name,
+        r.name as resource_name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
@@ -208,7 +208,7 @@
         LEFT JOIN
         r_resource_group_resource rgr ON rgr.resource_group_id = rg.id
         LEFT JOIN
-        t_resource r ON r.id = rgr.resource_id
+        t_resource r ON r.id = rgr.resource_id AND r.id IS NOT NULL
 
         <where>
             <if test="appId != null">
@@ -219,6 +219,7 @@
             </if>
         </where>
     </select>
+
     <!-- 根据主键id查询表t_resource_group信息 -->
     <select id="queryResourceGroupById" resultMap="ResourceGroupMap">
         SELECT
@@ -237,7 +238,7 @@
         r.id as resource_id,
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
-        r.name,
+        r.name as resource_name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
@@ -257,7 +258,7 @@
         LEFT JOIN
         r_resource_group_resource rgr ON rgr.resource_group_id = rg.id
         LEFT JOIN
-        t_resource r ON r.id = rgr.resource_id
+        t_resource r ON r.id = rgr.resource_id AND r.id IS NOT NULL
 
         <where>
             rg.id = #{id}
