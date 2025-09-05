@@ -237,16 +237,16 @@ public class BlockGroupServiceImpl extends ServiceImpl<BlockGroupMapper, BlockGr
      * 根据参数处理区块分组与区块关系
      *
      * @param groupBlockIds the groupBlockIds
-     * @param paramIds the paramIds
+     * @param blockIds the blockIds
      * @param groupId the groupId
      * @return the result
      */
-    private Integer getBlockGroupIds(List<Integer> groupBlockIds, List<Integer> paramIds, Integer groupId) {
+    private Integer getBlockGroupIds(List<Integer> groupBlockIds, List<Integer> blockIds, Integer groupId) {
         int result = 0;
-        if (groupBlockIds.size() > paramIds.size()) {
+        if (groupBlockIds.size() > blockIds.size()) {
             Block block = new Block();
             for (Integer blockId : groupBlockIds) {
-                if (!paramIds.contains(blockId)) {
+                if (!blockIds.contains(blockId)) {
                     result = blockId;
                     block.setId(blockId);  // 找到多出的元素
                     break;
@@ -264,7 +264,7 @@ public class BlockGroupServiceImpl extends ServiceImpl<BlockGroupMapper, BlockGr
             blockGroupBlockMapper.deleteBlockGroupBlockById(blockGroupBlockId);
             return result;
         } else {
-            for (int block : paramIds) {
+            for (int block : blockIds) {
                 BlockGroupBlock blockGroupBlockParam = new BlockGroupBlock();
                 blockGroupBlockParam.setBlockId(block);
                 blockGroupBlockParam.setBlockGroupId(groupId);

@@ -12,17 +12,17 @@
 
 package com.tinyengine.it.common.utils;
 
+import cn.hutool.core.io.FileUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.model.dto.FileInfo;
 import com.tinyengine.it.model.dto.JsonFile;
-
-import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -37,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -414,5 +415,57 @@ public class Utils {
             log.error("file close fail:{}", e.getMessage());
         }
         throw new ServiceException(code, "validate file fail");
+    }
+
+    /**
+     * 对象转base64编码（支持Map和JavaBean）
+     *
+     * @param object 可以是Map或任意Java对象
+     * @return String
+     */
+    public static String encodeObjectToBase64(Object object) throws Exception {
+        String jsonString;
+
+        // 使用 Jackson ObjectMapper 替代 JsonUtils，确保正确序列化
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // 配置ObjectMapper确保正确序列化
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        if (object instanceof Map) {
+            // 如果是Map，保持原有逻辑
+            jsonString = JsonUtils.encode(object);
+        } else {
+            // 使用ObjectMapper序列化对象
+            jsonString = objectMapper.writeValueAsString(object);
+        }
+
+        // 将 JSON 字符串进行 Base64 编码
+        return Base64.getEncoder().encodeToString(jsonString.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * base64编码转对象
+     *
+     * @param encodedString base64编码的字符串
+     * @param clazz 目标类类型
+     * @return T 目标对象
+     */
+    public static <T> T decodeBase64ToObject(String encodedString, Class<T> clazz) throws Exception {
+        // 解码 Base64 字符串
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+        String jsonString = new String(decodedBytes, StandardCharsets.UTF_8);
+
+        return JsonUtils.decode(jsonString, clazz);
+    }
+
+    /**
+     * base64编码转map
+     *
+     * @param encodedString
+     * @return map
+     */
+    public static Map<String, String> decodeBase64ToMap(String encodedString) throws Exception {
+        return decodeBase64ToObject(encodedString, Map.class);
     }
 }
