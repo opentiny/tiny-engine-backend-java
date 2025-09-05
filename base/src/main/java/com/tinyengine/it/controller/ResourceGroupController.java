@@ -75,7 +75,7 @@ public class ResourceGroupController {
      * @param appId the appId
      * @return ResourceGroup信息 app by id
      */
-    @Operation(summary = "根据id查询表ResourceGroup信息", description = "根据id查询表ResourceGroup信息",
+    @Operation(summary = "根据appId查询表ResourceGroup信息", description = "根据appId查询表ResourceGroup信息",
         parameters = {
             @Parameter(name = "appId", description = "ResourceGroup主键id")
         }, responses = {
@@ -83,7 +83,7 @@ public class ResourceGroupController {
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceGroup.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
-    @SystemControllerLog(description = "根据id查询表ResourceGroup信息")
+    @SystemControllerLog(description = "根据appId查询表ResourceGroup信息")
     @GetMapping("/resource-group/{appId}")
     public Result<ResourceGroup> queryResourceGroupByAppId(@PathVariable Integer appId) {
         return resourceGroupService.queryResourceGroupByAppId(appId);
