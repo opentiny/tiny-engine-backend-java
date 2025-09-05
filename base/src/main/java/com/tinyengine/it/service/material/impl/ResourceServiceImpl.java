@@ -21,9 +21,11 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
 import com.tinyengine.it.common.utils.Utils;
+import com.tinyengine.it.mapper.ResourceGroupResourceMapper;
 import com.tinyengine.it.mapper.ResourceMapper;
 import com.tinyengine.it.model.dto.ResourceRequestDto;
 import com.tinyengine.it.model.entity.Resource;
+import com.tinyengine.it.model.entity.ResourceGroupResource;
 import com.tinyengine.it.service.material.ResourceService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      */
     @Autowired
     private LoginUserContext loginUserContext;
+
+    @Autowired
+    private ResourceGroupResourceMapper resourceGroupResourceMapper;
 
     /**
      * 查询表t_resource所有信息
@@ -171,13 +176,24 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             resource.setThumbnailUrl(String.format("%s?data=%s", tinyEngineUrl, encodedThumbnailParam));
             resource.setThumbnailData(ImageThumbnailGenerator.createThumbnail(resource.getResourceData(), 200, 200));
         }
-
-        int createResult = baseMapper.createResource(resource);
-        if (createResult != 1) {
-           throw new ServiceException(ExceptionEnum.CM008.getResultCode(), ExceptionEnum.CM008.getResultMsg());
+        QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name", resource.getName());
+        queryWrapper.eq("category", resource.getCategory());
+        // 接入组合系统需添加租户id查询
+        Resource resourceResult = this.baseMapper.selectOne(queryWrapper);
+        if(resourceResult != null) {
+            throw new ServiceException(ExceptionEnum.CM003.getResultCode(), ExceptionEnum.CM003.getResultMsg());
         }
+        int createResult = this.baseMapper.createResource(resource);
+        if (createResult != 1) {
+            throw new ServiceException(ExceptionEnum.CM002.getResultCode(), ExceptionEnum.CM002.getResultMsg());
+        }
+        ResourceGroupResource resourceGroupResource = new ResourceGroupResource();
+        resourceGroupResource.setResourceId(resource.getId());
+        resourceGroupResource.setResourceGroupId(resource.getResourceGroupId());
+        resourceGroupResourceMapper.createResourceGroupResource(resourceGroupResource);
 
-        return baseMapper.queryResourceById(resource.getId());
+        return this.baseMapper.queryResourceById(resource.getId());
     }
 
     /**

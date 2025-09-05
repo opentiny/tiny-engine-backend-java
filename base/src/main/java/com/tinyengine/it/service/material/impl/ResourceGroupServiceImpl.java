@@ -1,5 +1,6 @@
 package com.tinyengine.it.service.material.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
@@ -9,6 +10,7 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.ResourceGroupMapper;
 import com.tinyengine.it.mapper.ResourceGroupResourceMapper;
+import com.tinyengine.it.mapper.ResourceMapper;
 import com.tinyengine.it.model.entity.Block;
 import com.tinyengine.it.model.entity.BlockCarriersRelation;
 import com.tinyengine.it.model.entity.BlockGroupBlock;
@@ -34,6 +36,9 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
 
     @Autowired
     private ResourceGroupResourceMapper resourceGroupResourceMapper;
+
+    @Autowired
+    private ResourceMapper resourceMapper;
     /**
      * 查询表t_resource_group所有信息
      *
@@ -139,9 +144,20 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
     @Override
     @SystemServiceLog(description = "新增表t_resource_group数据")
     public Result<ResourceGroup> createResourceGroup(ResourceGroup resourceGroup) {
+
+        QueryWrapper<ResourceGroup> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name", resourceGroup.getName());
+        queryWrapper.eq("app_id", resourceGroup.getAppId());
+        // 接入组合系统需添加租户id查询
+        ResourceGroup groupResult = this.baseMapper.selectOne(queryWrapper);
+        if(groupResult != null) {
+            return Result.failed(ExceptionEnum.CM003);
+        }
+
         int createResult = baseMapper.createResourceGroup(resourceGroup);
+
         if (createResult != 1) {
-            return Result.failed(ExceptionEnum.CM008);
+            return Result.failed(ExceptionEnum.CM003);
         }
         ResourceGroup result = baseMapper.selectById(resourceGroup.getId());
         return Result.success(result);
@@ -158,11 +174,11 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
     private void getResourceGroupIds(List<Integer> groupResourceIds, List<Integer> resourceIds, Integer groupId) {
         int result = 0;
         if (groupResourceIds.size() > resourceIds.size()) {
-            Resource resource = new Resource();
             for (Integer resourceId : groupResourceIds) {
                 if (!resourceIds.contains(resourceId)) {
                     ResourceGroupResource queryResult = resourceGroupResourceMapper.findResourceGroupResourceByResourceGroupIdAndResourceId(groupId, resourceId);
                     resourceGroupResourceMapper.deleteById(queryResult.getId());
+                    resourceMapper.deleteResourceById(resourceId);
                 }
             }
 
