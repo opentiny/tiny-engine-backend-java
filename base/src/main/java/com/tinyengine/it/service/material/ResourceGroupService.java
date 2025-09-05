@@ -20,7 +20,7 @@ public interface ResourceGroupService extends IService<ResourceGroup> {
      * @param appId the appId
      * @return the resourceGroup
      */
-    Result<ResourceGroup> queryResourceGroupByAppId(Integer appId);
+    Result<List<ResourceGroup>> queryResourceGroupByAppId(Integer appId);
 
     /**
      * 根据Id查询表t_resource_group信息

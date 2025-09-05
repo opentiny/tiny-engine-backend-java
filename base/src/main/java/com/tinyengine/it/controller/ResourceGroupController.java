@@ -85,7 +85,7 @@ public class ResourceGroupController {
     })
     @SystemControllerLog(description = "根据appId查询表ResourceGroup信息")
     @GetMapping("/resource-group/{appId}")
-    public Result<ResourceGroup> queryResourceGroupByAppId(@PathVariable Integer appId) {
+    public Result<List<ResourceGroup>> queryResourceGroupByAppId(@PathVariable Integer appId) {
         return resourceGroupService.queryResourceGroupByAppId(appId);
     }
 

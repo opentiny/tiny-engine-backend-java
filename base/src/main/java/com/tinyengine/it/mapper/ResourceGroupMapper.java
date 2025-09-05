@@ -33,7 +33,7 @@ public interface ResourceGroupMapper extends BaseMapper<ResourceGroup> {
      * @param groupCreatedBy the groupCreatedBy
      * @return the resourceGroup
      */
-    ResourceGroup queryResourceGroupByAppId(Integer appId, String groupCreatedBy);
+    List<ResourceGroup> queryResourceGroupByAppId(Integer appId, String groupCreatedBy);
 
     /**
      * 根据主键id查询表t_resource_group数据
