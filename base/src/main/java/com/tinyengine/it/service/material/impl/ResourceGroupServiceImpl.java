@@ -153,26 +153,20 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
      * @param groupResourceIds the groupResourceIds
      * @param resourceIds the resourceIds
      * @param groupId the groupId
-     * @return the result
+     *
      */
-    private Integer getResourceGroupIds(List<Integer> groupResourceIds, List<Integer> resourceIds, Integer groupId) {
+    private void getResourceGroupIds(List<Integer> groupResourceIds, List<Integer> resourceIds, Integer groupId) {
         int result = 0;
         if (groupResourceIds.size() > resourceIds.size()) {
             Resource resource = new Resource();
             for (Integer resourceId : groupResourceIds) {
                 if (!resourceIds.contains(resourceId)) {
-                    result = resourceId;
-                    resource.setId(resourceId);  // 找到多出的元素
-                    break;
+                    ResourceGroupResource queryResult = resourceGroupResourceMapper.findResourceGroupResourceByResourceGroupIdAndResourceId(groupId, resourceId);
+                    resourceGroupResourceMapper.deleteById(queryResult.getId());
                 }
             }
-            ResourceGroupResource queryResult = resourceGroupResourceMapper.findResourceGroupResourceByResourceGroupIdAndResourceId(groupId, resource.getId());
-            if (queryResult == null) {
-                return result;
-            }
 
-            resourceGroupResourceMapper.deleteById(queryResult.getId());
-            return result;
+
         } else {
             for (int resourceId : resourceIds) {
                 ResourceGroupResource resourceGroupResource = new ResourceGroupResource();
@@ -181,6 +175,5 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
                 resourceGroupResourceMapper.createResourceGroupResource(resourceGroupResource);
             }
         }
-        return result;
     }
 }
