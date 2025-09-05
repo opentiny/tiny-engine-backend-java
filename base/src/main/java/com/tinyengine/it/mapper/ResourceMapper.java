@@ -52,10 +52,10 @@ public interface ResourceMapper extends BaseMapper<Resource> {
      * 根据分组id和创建人查询表t_resource信息
      *
      * @param resourceGroupId the resourceGroupId
-     * @param createBy the createBy
+     * @param createdBy the createdBy
      * @return the list
      */
-    List<Resource> findResourceByResourceGroupId(Integer resourceGroupId, String createBy);
+    List<Resource> findResourceByResourceGroupId(Integer resourceGroupId, String createdBy);
 
     /**
      * 根据条件查询表t_resource数据

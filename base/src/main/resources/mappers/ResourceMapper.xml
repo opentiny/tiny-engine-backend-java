@@ -182,15 +182,15 @@
     <select id="findResourcesByAppId" resultMap="ResourceMap">
         SELECT r.*
         FROM t_resource r
-                 left JOIN r_resource_group_resource rrgr ON b.id = rrgr.resource_id
-                 left JOIN t_resource_group rg ON rrgr.resource_group_id = rg.id
+                 left JOIN r_resource_group_resource rgr ON b.id = rrgr.resource_id
+                 left JOIN t_resource_group rg ON rgr.resource_group_id = rg.id
         WHERE rg.app_id = #{appId}
         GROUP BY r.id
     </select>
     <select id="findResourceByResourceGroupId" resultMap="ResourceMap">
         SELECT r.* FROM t_resource r
-        LEFT JOIN r_resource_group_resource rrgr on rrgr.resource_id = r.id
-        LEFT JOIN r_resource_group rg ON rrgr.resource_group_id = rg.id
+        LEFT JOIN r_resource_group_resource rgr on rgr.resource_id = r.id
+        LEFT JOIN t_resource_group rg ON rgr.resource_group_id = rg.id
         <where>
             <if test="resourceGroupId != null and resourceGroupId != ''">
                 AND rg.id = #{resourceGroupId}
