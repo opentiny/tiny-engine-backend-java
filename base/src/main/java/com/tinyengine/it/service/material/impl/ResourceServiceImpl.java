@@ -164,7 +164,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         String encodedThumbnailParam = Utils.encodeObjectToBase64(thumbnailParam);
 
         String resourceData = resource.getResourceData();
-        String tinyEngineUrl = "http://127.0.0.1:9090/material-center/api/resource/download"; // System.getenv("TINY_ENGINE_URL");
+        String tinyEngineUrl = System.getenv("TINY_ENGINE_URL");
 
         if(!StringUtils.isEmpty(resourceData)) {
             resource.setResourceUrl(String.format("%s?data=%s", tinyEngineUrl, encodedResourceParam));
