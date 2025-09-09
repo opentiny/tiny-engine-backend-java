@@ -123,6 +123,7 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
 
         if (resourceList.isEmpty()) {
             resourceGroupResourceMapper.deleteResourceGroupResourceByGroupId(resourceGroup.getId());
+            resourceMapper.deleteAllResource(loginUserContext.getLoginUserId());
             this.baseMapper.updateResourceGroupById(resourceGroup);
             ResourceGroup result = this.baseMapper.queryResourceGroupById(resourceGroup.getId(), loginUserContext.getLoginUserId());
             return Result.success(result);

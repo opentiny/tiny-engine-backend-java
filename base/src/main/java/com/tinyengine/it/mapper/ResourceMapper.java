@@ -14,6 +14,7 @@ package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.Resource;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -88,4 +89,12 @@ public interface ResourceMapper extends BaseMapper<Resource> {
      * @return the integer
      */
     Integer createResource(Resource resource);
+
+    /**
+     * 删除表t_resource全部数据
+     * @param createdBy the createdBy
+     * @return the integer
+     */
+    @Delete("DELETE FROM t_resource WHERE created_by = #{createdBy}")
+    Integer deleteAllResource(String createdBy);
 }
