@@ -53,5 +53,5 @@ CREATE TABLE `r_resource_group_resource`
     `resource_id`       int NOT NULL COMMENT '资源id',
     `resource_group_id` int NOT NULL COMMENT '资源分组id',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `u_idx_block_group_block` (`resource_id`,`resource_group_id`) USING BTREE
+    UNIQUE KEY `u_idx_resource_group_resource` (`resource_id`,`resource_group_id`) USING BTREE
 ) engine = innodb comment = '资源及资源分组关系表';

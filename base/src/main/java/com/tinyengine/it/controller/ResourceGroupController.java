@@ -92,21 +92,21 @@ public class ResourceGroupController {
     /**
      * 创建ResourceGroup
      *
-     * @param resource the resource
+     * @param resourceGroup the resourceGroup
      * @return ResourceGroup信息 result
      */
-    @Operation(summary = "创建resource", description = "创建resource",
+    @Operation(summary = "创建ResourceGroup", description = "创建ResourceGroup",
         parameters = {
-            @Parameter(name = "resource", description = "ResourceGroup入参对象")
+            @Parameter(name = "resourceGroup", description = "ResourceGroup入参对象")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ResourceGroup.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
-    @SystemControllerLog(description = "创建resource")
+    @SystemControllerLog(description = "创建ResourceGroup")
     @PostMapping("/resource-group/create")
-    public Result<ResourceGroup> createResourceGroup(@Valid @RequestBody ResourceGroup resource) {
-        return resourceGroupService.createResourceGroup(resource);
+    public Result<ResourceGroup> createResourceGroup(@Valid @RequestBody ResourceGroup resourceGroup) {
+        return resourceGroupService.createResourceGroup(resourceGroup);
     }
 
     /**
@@ -138,8 +138,8 @@ public class ResourceGroupController {
      * @param id the id
      * @return resource信息 result
      */
-    @Operation(summary = "删除resource信息",
-            description = "删除resource信息",
+    @Operation(summary = "删除ResourceGroup信息",
+            description = "删除ResourceGroup信息",
             parameters = {
                     @Parameter(name = "id", description = "ResourceGroup主键id")
             },
@@ -149,25 +149,25 @@ public class ResourceGroupController {
                                     schema = @Schema(implementation = ResourceGroup.class))),
                     @ApiResponse(responseCode = "400", description = "请求失败")}
     )
-    @SystemControllerLog(description = "删除resource信息")
+    @SystemControllerLog(description = "删除ResourceGroup信息")
     @DeleteMapping("/resource-group/delete/{id}")
     public Result<ResourceGroup> deleteResourceGroup(@PathVariable Integer id) {
         return resourceGroupService.deleteResourceGroupById(id);
     }
 
     /**
-     * 获取resource信息详情
+     * 获取ResourceGroup信息详情
      *
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取resource信息详情", description = "获取resource信息详情", parameters = {
+    @Operation(summary = "获取ResourceGroup信息详情", description = "获取ResourceGroup信息详情", parameters = {
             @Parameter(name = "id", description = "appId")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ResourceGroup.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")})
-    @SystemControllerLog(description = "获取resource信息详情")
+    @SystemControllerLog(description = "获取ResourceGroup信息详情")
     @GetMapping("/resource-group/detail/{id}")
     public Result<ResourceGroup> detail(@PathVariable Integer id) {
         return resourceGroupService.queryResourceGroupById(id);

@@ -19,7 +19,7 @@
         <if test="platformId!=null">
             AND platform_id = #{platformId}
         </if>
-      
+
         <if test="name!=null and name!=''">
             AND `name` = #{name}
         </if>
@@ -73,58 +73,58 @@
     <!-- 通用设置列 -->
     <sql id="ResourceSetColumns">
         <if test="appId!=null">
-            app_id = #{appId}
+            app_id = #{appId},
         </if>
         <if test="platformId!=null">
-            platform_id = #{platformId}
+            platform_id = #{platformId},
         </if>
         <if test="name!=null and name!=''">
-            `name` = #{name}
+            `name` = #{name},
         </if>
         <if test="resourceUrl!=null and resourceUrl!=''">
-            resource_url = #{resourceUrl}
+            resource_url = #{resourceUrl},
         </if>
         <if test="thumbnailUrl!=null and thumbnailUrl!=''">
-            thumbnail_url = #{thumbnailUrl}
+            thumbnail_url = #{thumbnailUrl},
         </if>
         <if test="category!=null and category!=''">
-            category = #{category}
+            category = #{category},
         </if>
         <if test="description!=null and description!=''">
-            description = #{description}
+            description = #{description},
         </if>
         <if test="thumbnailData!=null and thumbnailData!=''">
-            thumbnail_data = #{thumbnailData}
+            thumbnail_data = #{thumbnailData},
         </if>
         <if test="resourceData!=null and resourceData!=''">
-            resource_data = #{resourceData}
+            resource_data = #{resourceData},
         </if>
         <if test="publicStatus!=null">
-            public_status = #{publicStatus}
+            public_status = #{publicStatus},
         </if>
         <if test="isDefault!=null">
-            is_default = #{isDefault}
+            is_default = #{isDefault},
         </if>
         <if test="createdBy!=null and createdBy!=''">
-            created_by = #{createdBy}
+            created_by = #{createdBy},
         </if>
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            last_updated_by = #{lastUpdatedBy}
+            last_updated_by = #{lastUpdatedBy},
         </if>
         <if test="createdTime!=null">
-            created_time = #{createdTime}
+            created_time = #{createdTime},
         </if>
         <if test="lastUpdatedTime!=null">
-            last_updated_time = #{lastUpdatedTime}
+            last_updated_time = #{lastUpdatedTime},
         </if>
         <if test="tenantId!=null and tenantId!=''">
-            tenant_id = #{tenantId}
+            tenant_id = #{tenantId},
         </if>
         <if test="renterId!=null and renterId!=''">
-            renter_id = #{renterId}
+            renter_id = #{renterId},
         </if>
         <if test="siteId!=null and siteId!=''">
-            site_id = #{siteId}
+            site_id = #{siteId},
         </if>
     </sql>
 
@@ -182,7 +182,7 @@
     <select id="findResourcesByAppId" resultMap="ResourceMap">
         SELECT r.*
         FROM t_resource r
-                 left JOIN r_resource_group_resource rgr ON b.id = rrgr.resource_id
+                 left JOIN r_resource_group_resource rgr ON r.id = rgr.resource_id
                  left JOIN t_resource_group rg ON rgr.resource_group_id = rg.id
         WHERE rg.app_id = #{appId}
         GROUP BY r.id
@@ -211,7 +211,13 @@
                 name like concat('%',#{name},'%')
             </if>
             <if test="description != null and description != ''">
-                or description like concat('%',#{description},'%')
+
+                <if test="name != null and name != ''">
+                    or description like concat('%',#{description},'%')
+                </if>
+                <if test="name == null or name == ''">
+                    description like concat('%',#{description},'%')
+                </if>
             </if>
         </where>
     </select>
@@ -237,24 +243,24 @@
     <insert id="createResource" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.Resource">
         INSERT INTO t_resource ( id
-                            , app_id
-                            , platform_id
-                            , name
-                            , resource_url
-                            , thumbnail_url
-                            , category
-                            , description
-                            , thumbnail_data
-                            , resource_data
-                            , public_status
-                            , is_default
-                            , created_by
-                            , last_updated_by
-                            , created_time
-                            , last_updated_time
-                            , tenant_id
-                            , renter_id
-                            , site_id)
+                               , app_id
+                               , platform_id
+                               , name
+                               , resource_url
+                               , thumbnail_url
+                               , category
+                               , description
+                               , thumbnail_data
+                               , resource_data
+                               , public_status
+                               , is_default
+                               , created_by
+                               , last_updated_by
+                               , created_time
+                               , last_updated_time
+                               , tenant_id
+                               , renter_id
+                               , site_id)
         VALUES ( #{id}
                , #{appId}
                , #{platformId}

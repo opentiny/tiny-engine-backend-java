@@ -3,8 +3,8 @@ drop table if exists `t_resource`;
 create table `t_resource`
 (
     `id`                int          not null auto_increment comment '主键id',
-    `app_id`            int comment '关联appId',
-    `platform_id`       int comment '关联设计器id',
+    `app_id`            int          not null comment '关联appId',
+    `platform_id`       int          not null comment '关联设计器id',
     `name`              varchar(255) not null comment '名称',
     `resource_url`      varchar(255) comment '资源url',
     `thumbnail_url`     varchar(255) comment '缩略图url',
@@ -31,8 +31,8 @@ create table `t_resource_group`
 (
     `id`                int          not null auto_increment comment '主键id',
     `name`              varchar(255) not null comment '中文名称',
-    `app_id`            int comment '关联appId',
-    `platform_id`       int comment '关联设计器id',
+    `app_id`            int          not null comment '关联appId',
+    `platform_id`       int          not null comment '关联设计器id',
     `description`       varchar(2000) comment '描述',
     `created_by`        varchar(60)  not null comment '创建人',
     `created_time`      timestamp    not null default current_timestamp comment '创建时间',
@@ -53,5 +53,5 @@ CREATE TABLE `r_resource_group_resource`
     `resource_id`       int NOT NULL COMMENT '资源id',
     `resource_group_id` int NOT NULL COMMENT '资源分组id',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `u_idx_block_group_block` (`resource_id`,`resource_group_id`) USING BTREE
+    UNIQUE KEY `u_idx_resource_group_resource` (`resource_id`,`resource_group_id`) USING BTREE
 ) engine = innodb comment = '资源及资源分组关系表';

@@ -194,7 +194,7 @@ public class ResourceController {
      */
     @Operation(summary = "修改单个Resource信息", description = "修改单个Resource信息",
         parameters = {
-            @Parameter(name = "id", description = "appId"),
+            @Parameter(name = "id", description = "id"),
             @Parameter(name = "Resource", description = "入参对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
@@ -202,7 +202,7 @@ public class ResourceController {
     })
     @SystemControllerLog(description = "修改单个Resource信息")
     @PutMapping("/resource/update/{id}")
-    public Result<Resource> updateResource(@PathVariable Integer id, @RequestBody Resource resource) {
+    public Result<Resource> updateResource(@PathVariable Integer id, @Valid @RequestBody Resource resource) {
         resource.setId(id);
         return resourceService.updateResourceById(resource);
     }
@@ -235,7 +235,7 @@ public class ResourceController {
      */
     @Operation(summary = "获取resource信息详情", description = "获取resource信息详情",
         parameters = {
-            @Parameter(name = "id", description = "appId")}, responses = {
+            @Parameter(name = "id", description = "id")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
@@ -254,8 +254,8 @@ public class ResourceController {
      */
     @Operation(summary = "获取资源", description = "获取资源",
         parameters = {
-            @Parameter(name = "id", description = "appId")}, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
+            @Parameter(name = "data", description = "base64编码数据")}, responses = {
+            @ApiResponse(responseCode = "200", description = "图片流数据",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
