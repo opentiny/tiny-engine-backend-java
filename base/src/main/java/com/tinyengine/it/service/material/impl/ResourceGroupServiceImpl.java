@@ -1,19 +1,26 @@
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 package com.tinyengine.it.service.material.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
-import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.ResourceGroupMapper;
 import com.tinyengine.it.mapper.ResourceGroupResourceMapper;
 import com.tinyengine.it.mapper.ResourceMapper;
-import com.tinyengine.it.model.entity.Block;
-import com.tinyengine.it.model.entity.BlockCarriersRelation;
-import com.tinyengine.it.model.entity.BlockGroupBlock;
 import com.tinyengine.it.model.entity.Resource;
 import com.tinyengine.it.model.entity.ResourceGroup;
 import com.tinyengine.it.model.entity.ResourceGroupResource;
@@ -21,13 +28,12 @@ import com.tinyengine.it.service.material.ResourceGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
-public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, ResourceGroup>  implements ResourceGroupService {
+public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, ResourceGroup> implements ResourceGroupService {
     /**
      * The loginUserContext service.
      */
@@ -39,6 +45,7 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
 
     @Autowired
     private ResourceMapper resourceMapper;
+
     /**
      * 查询表t_resource_group所有信息
      *
@@ -116,10 +123,10 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
     public Result<ResourceGroup> updateResourceGroupById(ResourceGroup resourceGroup) {
         List<Resource> resourceList = resourceGroup.getResources();
         List<ResourceGroupResource> resourceGroupBlocks = resourceGroupResourceMapper.findResourceGroupResourceByResourceGroupId(
-                resourceGroup.getId());
+            resourceGroup.getId());
         List<Integer> groupResourceIds = resourceGroupBlocks.stream()
-                .map(ResourceGroupResource::getResourceId)
-                .collect(Collectors.toList());
+            .map(ResourceGroupResource::getResourceId)
+            .collect(Collectors.toList());
 
         if (resourceList.isEmpty()) {
             resourceGroupResourceMapper.deleteResourceGroupResourceByGroupId(resourceGroup.getId());
@@ -130,7 +137,7 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
         }
 
         List<Integer> resourceIds = resourceList.stream().map(Resource::getId).collect(Collectors.toList());
-         getResourceGroupIds(groupResourceIds, resourceIds, resourceGroup.getId());
+        getResourceGroupIds(groupResourceIds, resourceIds, resourceGroup.getId());
         this.baseMapper.updateResourceGroupById(resourceGroup);
         ResourceGroup result = this.baseMapper.queryResourceGroupById(resourceGroup.getId(), loginUserContext.getLoginUserId());
         return Result.success(result);
@@ -151,7 +158,7 @@ public class ResourceGroupServiceImpl extends ServiceImpl<ResourceGroupMapper, R
         queryWrapper.eq("app_id", resourceGroup.getAppId());
         // 接入组合系统需添加租户id查询
         ResourceGroup groupResult = this.baseMapper.selectOne(queryWrapper);
-        if(groupResult != null) {
+        if (groupResult != null) {
             return Result.failed(ExceptionEnum.CM003);
         }
 

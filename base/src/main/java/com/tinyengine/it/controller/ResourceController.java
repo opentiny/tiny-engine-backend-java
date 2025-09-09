@@ -137,7 +137,7 @@ public class ResourceController {
     })
     @SystemControllerLog(description = "模糊查询表Resource信息列表")
     @GetMapping("/resource/like")
-    public Result<List<Resource>> getResourceById(@PathVariable String name, @PathVariable String des) {
+    public Result<List<Resource>> getResourceById(@RequestParam String name, @RequestParam String des) {
         List<Resource> resourceList = resourceService.queryResourcesByNameAndDes(name, des);
         return Result.success(resourceList);
     }

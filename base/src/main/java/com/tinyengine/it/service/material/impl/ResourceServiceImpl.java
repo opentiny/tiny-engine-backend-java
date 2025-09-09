@@ -64,7 +64,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      * @return Resource信息列表
      */
     @Override
-    public List<Resource> queryResourcesByNameAndDes(String name,  String des) {
+    public List<Resource> queryResourcesByNameAndDes(String name, String des) {
         return this.baseMapper.findResourcesByNameAndDes(name, des);
     }
 
@@ -171,7 +171,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         String resourceData = resource.getResourceData();
         String tinyEngineUrl = System.getenv("TINY_ENGINE_URL");
 
-        if(!StringUtils.isEmpty(resourceData)) {
+        if (!StringUtils.isEmpty(resourceData)) {
             resource.setResourceUrl(String.format("%s?data=%s", tinyEngineUrl, encodedResourceParam));
             resource.setThumbnailUrl(String.format("%s?data=%s", tinyEngineUrl, encodedThumbnailParam));
             resource.setThumbnailData(ImageThumbnailGenerator.createThumbnail(resource.getResourceData(), 200, 200));
@@ -181,7 +181,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         queryWrapper.eq("category", resource.getCategory());
         // 接入组合系统需添加租户id查询
         Resource resourceResult = this.baseMapper.selectOne(queryWrapper);
-        if(resourceResult != null) {
+        if (resourceResult != null) {
             throw new ServiceException(ExceptionEnum.CM003.getResultCode(), ExceptionEnum.CM003.getResultMsg());
         }
         int createResult = this.baseMapper.createResource(resource);
@@ -205,12 +205,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @Override
     public List<Resource> createBatchResource(List<Resource> resources) throws Exception {
         List<Resource> resourceList = new ArrayList<>();
-        if(resources.isEmpty()){
+        if (resources.isEmpty()) {
             return resourceList;
         }
-        for(Resource resource : resources) {
-             Resource result = this.createResource(resource);
-             resourceList.add(result);
+        for (Resource resource : resources) {
+            Resource result = this.createResource(resource);
+            resourceList.add(result);
         }
         return resourceList;
     }
