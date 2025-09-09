@@ -12,10 +12,10 @@
 
 package com.tinyengine.it.service.app.impl.v1;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
+import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.config.OpenAIConfig;
 import com.tinyengine.it.model.dto.ChatRequest;
@@ -56,6 +56,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
      * @return Object the Object
      */
     @Override
+    @SystemServiceLog(description = "chatCompletion")
     public Object chatCompletion(ChatRequest request) throws Exception {
         String requestBody = buildRequestBody(request);
         String apiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
@@ -74,7 +75,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         }
     }
 
-    private String buildRequestBody(ChatRequest request) throws JsonProcessingException {
+    private String buildRequestBody(ChatRequest request) {
         Map<String, Object> body = new HashMap<>();
         body.put("model", request.getModel() != null ? request.getModel() : config.getDefaultModel());
         body.put("messages", request.getMessages());

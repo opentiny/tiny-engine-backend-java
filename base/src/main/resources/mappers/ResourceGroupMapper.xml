@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.ResourceGroupMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , name, app_id, platform_id, description, created_by, last_updated_by, created_time, last_updated_time,
+        tenant_id, renter_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="ResourceGroupByCondition">
+        <if test="name!=null and name!=''">
+            AND name = #{name}
+        </if>
+        <if test="appId!=null">
+            AND app_id = #{appId}
+        </if>
+        <if test="platformId!=null">
+            AND platform_id = #{platformId}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="ResourceGroupSetColumns">
+        <if test="name!=null and name!=''">
+            name = #{name},
+        </if>
+        <if test="appId!=null">
+            app_id = #{appId},
+        </if>
+        <if test="platformId!=null">
+            platform_id = #{platformId},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ResourceGroupMap" type="com.tinyengine.it.model.entity.ResourceGroup">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="app_id" property="appId"/>
+        <result column="platform_id" property="platformId"/>
+        <result column="description" property="description"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="renter_id" property="renterId"/>
+        <result column="site_id" property="siteId"/>
+        <collection property="resources" ofType="com.tinyengine.it.model.entity.Resource" column="resource_id">
+            <id column="resource_id" property="id"/>
+            <result column="resource_app_id" property="appId"/>
+            <result column="resource_platform_id" property="platformId"/>
+            <result column="resource_name" property="name"/>
+            <result column="resource_url" property="resourceUrl"/>
+            <result column="thumbnail_url" property="thumbnailUrl"/>
+            <result column="category" property="category"/>
+            <result column="resource_description" property="description"/>
+            <result column="thumbnail_data" property="thumbnailData"/>
+            <result column="resource_data" property="resourceData"/>
+            <result column="public_status" property="publicStatus"/>
+            <result column="is_default" property="isDefault"/>
+            <result column="resource_created_by" property="createdBy"/>
+            <result column="resource_last_updated_by" property="lastUpdatedBy"/>
+            <result column="resource_created_time" property="createdTime"/>
+            <result column="resource_last_updated_time" property="lastUpdatedTime"/>
+            <result column="resource_tenant_id" property="tenantId"/>
+            <result column="resource_renter_id" property="renterId"/>
+            <result column="resource_site_id" property="siteId"/>
+        </collection>
+    </resultMap>
+
+    <!-- 查询表t_resource_group所有数据 -->
+    <select id="queryAllResourceGroupAndResource" resultMap="ResourceGroupMap">
+        SELECT
+        rg.id,
+        rg.app_id,
+        rg.platform_id,
+        rg.name,
+        rg.description,
+        rg.created_by,
+        rg.last_updated_by,
+        rg.created_time,
+        rg.last_updated_time,
+        rg.tenant_id,
+        rg.renter_id,
+        rg.site_id,
+        r.id as resource_id,
+        r.app_id as resource_app_id,
+        r.platform_id as resource_platform_id,
+        r.name as resource_name,
+        r.resource_url,
+        r.thumbnail_url,
+        r.category,
+        r.description as resource_description,
+        r.thumbnail_data,
+        r.resource_data,
+        r.public_status,
+        r.is_default,
+        r.created_by as resource_created_by,
+        r.last_updated_by as resource_last_updated_by,
+        r.created_time as resource_created_time,
+        r.last_updated_time as resource_last_updated_time,
+        r.tenant_id as resource_tenant_id,
+        r.renter_id as resource_renter_id,
+        r.site_id as resource_site_id
+        FROM t_resource_group rg
+        LEFT JOIN
+        r_resource_group_resource rgr ON rgr.resource_group_id = rg.id
+        LEFT JOIN
+        t_resource r ON r.id = rgr.resource_id AND r.id IS NOT NULL
+
+        <where>
+            <if test="groupCreatedBy != null">
+                AND rg.created_by = #{groupCreatedBy}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据app查询表resource_group -->
+    <select id="queryResourceGroupByAppId" resultMap="ResourceGroupMap">
+        SELECT
+        rg.id,
+        rg.app_id,
+        rg.platform_id,
+        rg.name,
+        rg.description,
+        rg.created_by,
+        rg.last_updated_by,
+        rg.created_time,
+        rg.last_updated_time,
+        rg.tenant_id,
+        rg.renter_id,
+        rg.site_id,
+        r.id as resource_id,
+        r.app_id as resource_app_id,
+        r.platform_id as resource_platform_id,
+        r.name as resource_name,
+        r.resource_url,
+        r.thumbnail_url,
+        r.category,
+        r.description as resource_description,
+        r.thumbnail_data,
+        r.resource_data,
+        r.public_status,
+        r.is_default,
+        r.created_by as resource_created_by,
+        r.last_updated_by as resource_last_updated_by,
+        r.created_time as resource_created_time,
+        r.last_updated_time as resource_last_updated_time,
+        r.tenant_id as resource_tenant_id,
+        r.renter_id as resource_renter_id,
+        r.site_id as resource_site_id
+        FROM t_resource_group rg
+        LEFT JOIN
+        r_resource_group_resource rgr ON rgr.resource_group_id = rg.id
+        LEFT JOIN
+        t_resource r ON r.id = rgr.resource_id AND r.id IS NOT NULL
+
+        <where>
+            <if test="appId != null">
+                AND rg.app_id = #{appId}
+            </if>
+            <if test="groupCreatedBy != null">
+                AND rg.created_by = #{groupCreatedBy}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键id查询表t_resource_group信息 -->
+    <select id="queryResourceGroupById" resultMap="ResourceGroupMap">
+        SELECT
+        rg.id,
+        rg.app_id,
+        rg.platform_id,
+        rg.name,
+        rg.description,
+        rg.created_by,
+        rg.last_updated_by,
+        rg.created_time,
+        rg.last_updated_time,
+        rg.tenant_id,
+        rg.renter_id,
+        rg.site_id,
+        r.id as resource_id,
+        r.app_id as resource_app_id,
+        r.platform_id as resource_platform_id,
+        r.name as resource_name,
+        r.resource_url,
+        r.thumbnail_url,
+        r.category,
+        r.description as resource_description,
+        r.thumbnail_data,
+        r.resource_data,
+        r.public_status,
+        r.is_default,
+        r.created_by as resource_created_by,
+        r.last_updated_by as resource_last_updated_by,
+        r.created_time as resource_created_time,
+        r.last_updated_time as resource_last_updated_time,
+        r.tenant_id as resource_tenant_id,
+        r.renter_id as resource_renter_id,
+        r.site_id as resource_site_id
+        FROM t_resource_group rg
+        LEFT JOIN
+        r_resource_group_resource rgr ON rgr.resource_group_id = rg.id
+        LEFT JOIN
+        t_resource r ON r.id = rgr.resource_id AND r.id IS NOT NULL
+
+        <where>
+            rg.id = #{id}
+            <if test="groupCreatedBy != null">
+                AND rg.created_by = #{groupCreatedBy}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据条件查询表t_resource_group数据 -->
+    <select id="queryResourceGroupByCondition" resultMap="ResourceGroupMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_resource_group
+        WHERE 1=1
+        <include refid="ResourceGroupByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表t_resource_group数据 -->
+    <delete id="deleteResourceGroupById">
+        DELETE
+        FROM t_resource_group
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_resource_group数据 -->
+    <update id="updateResourceGroupById" parameterType="com.tinyengine.it.model.entity.ResourceGroup">
+        UPDATE t_resource_group
+        <set>
+            <include refid="ResourceGroupSetColumns"/>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 新增表t_resource_group数据 -->
+    <insert id="createResourceGroup" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.ResourceGroup">
+        INSERT INTO t_resource_group ( id
+                                     , app_id
+                                     , platform_id
+                                     , name
+                                     , description
+                                     , created_by
+                                     , last_updated_by
+                                     , created_time
+                                     , last_updated_time
+                                     , tenant_id
+                                     , renter_id
+                                     , site_id)
+        VALUES ( #{id}
+               , #{appId}
+               , #{platformId}
+               , #{name}
+               , #{description}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{renterId}
+               , #{siteId})
+    </insert>
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.ResourceGroupResourceMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , resource_id, resource_group_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="ResourceGroupResourceByCondition">
+        <if test="resourceId!=null">
+            AND resource_id = #{resourceId}
+        </if>
+        <if test="resourceGroupId!=null">
+            AND resource_group_id = #{resourceGroupId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="ResourceGroupResourceSetColumns">
+        <if test="resourceId!=null">
+            resource_id = #{resourceId},
+        </if>
+        <if test="resourceGroupId!=null">
+            resource_group_id = #{resourceGroupId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ResourceGroupResourceMap" type="com.tinyengine.it.model.entity.ResourceGroupResource">
+        <id column="id" property="id"/>
+        <result column="resource_id" property="resourceId"/>
+        <result column="resource_group_id" property="resourceGroupId"/>
+    </resultMap>
+
+    <!-- 查询表r_resource_group_resource所有数据 -->
+    <select id="queryAllResourceGroupResource" resultMap="ResourceGroupResourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_resource_group_resource
+    </select>
+
+    <!-- 根据主键id查询表r_resource_group_resource信息 -->
+    <select id="queryResourceGroupResourceById" resultMap="ResourceGroupResourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_resource_group_resource
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表r_resource_group_resource数据 -->
+    <select id="queryResourceGroupResourceByCondition" resultMap="ResourceGroupResourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_resource_group_resource
+        WHERE 1=1
+        <include refid="ResourceGroupResourceByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表r_resource_group_resource数据 -->
+    <delete id="deleteResourceGroupResourceById">
+        DELETE
+        FROM r_resource_group_resource
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据区块分组id删除表r_resource_group_resource数据 -->
+    <delete id="deleteResourceGroupResourceByGroupId">
+        DELETE
+        FROM r_resource_group_resource
+        WHERE resource_group_id = #{resourceGroupId}
+    </delete>
+
+    <!-- 根据主键id更新表r_resource_group_resource数据 -->
+    <update id="updateResourceGroupResourceById" parameterType="com.tinyengine.it.model.entity.ResourceGroupResource">
+        UPDATE r_resource_group_resource
+        <set>
+            <include refid="ResourceGroupResourceSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表r_resource_group_resource数据 -->
+    <insert id="createResourceGroupResource" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.ResourceGroupResource">
+        INSERT INTO r_resource_group_resource ( id
+                                        , resource_id
+                                        , resource_group_id)
+        VALUES ( #{id}
+               , #{resourceId}
+               , #{resourceGroupId}) ON DUPLICATE KEY
+        UPDATE
+            resource_id =
+        VALUES (resource_id), resource_group_id =
+        VALUES (resource_group_id);
+    </insert>
+</mapper>

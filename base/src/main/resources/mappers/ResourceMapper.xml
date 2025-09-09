@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.ResourceMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , app_id, platform_id, `name`, resource_url, thumbnail_url, category, description, thumbnail_data, resource_data,
+        public_status, is_default, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="ResourceByCondition">
+        <if test="appId!=null">
+            AND app_id = #{appId}
+        </if>
+        <if test="platformId!=null">
+            AND platform_id = #{platformId}
+        </if>
+
+        <if test="name!=null and name!=''">
+            AND `name` = #{name}
+        </if>
+        <if test="resourceUrl!=null and resourceUrl!=''">
+            AND resource_url = #{resourceUrl}
+        </if>
+        <if test="thumbnailUrl!=null and thumbnailUrl!=''">
+            AND thumbnail_url = #{thumbnailUrl}
+        </if>
+        <if test="category!=null and category!=''">
+            AND category = #{category}
+        </if>
+        <if test="description!=null and description!=''">
+            AND description = #{description}
+        </if>
+        <if test="thumbnailData!=null and thumbnailData!=''">
+            AND thumbnail_data = #{thumbnailData}
+        </if>
+        <if test="resourceData!=null and resourceData!=''">
+            AND resource_data = #{resourceData}
+        </if>
+        <if test="publicStatus!=null">
+            AND public_status = #{publicStatus}
+        </if>
+        <if test="isDefault!=null">
+            AND is_default = #{isDefault}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            AND renter_id = #{renterId}
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            AND site_id = #{siteId}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="ResourceSetColumns">
+        <if test="appId!=null">
+            app_id = #{appId},
+        </if>
+        <if test="platformId!=null">
+            platform_id = #{platformId},
+        </if>
+        <if test="name!=null and name!=''">
+            `name` = #{name},
+        </if>
+        <if test="resourceUrl!=null and resourceUrl!=''">
+            resource_url = #{resourceUrl},
+        </if>
+        <if test="thumbnailUrl!=null and thumbnailUrl!=''">
+            thumbnail_url = #{thumbnailUrl},
+        </if>
+        <if test="category!=null and category!=''">
+            category = #{category},
+        </if>
+        <if test="description!=null and description!=''">
+            description = #{description},
+        </if>
+        <if test="thumbnailData!=null and thumbnailData!=''">
+            thumbnail_data = #{thumbnailData},
+        </if>
+        <if test="resourceData!=null and resourceData!=''">
+            resource_data = #{resourceData},
+        </if>
+        <if test="publicStatus!=null">
+            public_status = #{publicStatus},
+        </if>
+        <if test="isDefault!=null">
+            is_default = #{isDefault},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+        <if test="tenantId!=null and tenantId!=''">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="renterId!=null and renterId!=''">
+            renter_id = #{renterId},
+        </if>
+        <if test="siteId!=null and siteId!=''">
+            site_id = #{siteId},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ResourceMap" type="com.tinyengine.it.model.entity.Resource">
+        <id column="id" property="id"/>
+        <result column="app_id" property="appId"/>
+        <result column="platform_id" property="platformId"/>
+        <result column="name" property="name"/>
+        <result column="resource_url" property="resourceUrl"/>
+        <result column="thumbnail_url" property="thumbnailUrl"/>
+        <result column="category" property="category"/>
+        <result column="description" property="description"/>
+        <result column="thumbnail_data" property="thumbnailData"/>
+        <result column="resource_data" property="resourceData"/>
+        <result column="public_status" property="publicStatus"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="renter_id" property="renterId"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 查询表t_resource所有数据 -->
+    <select id="queryAllResource" resultMap="ResourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_resource
+    </select>
+
+    <!-- 根据主键id查询表t_resource信息 -->
+    <select id="queryResourceById" resultMap="ResourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_resource
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!-- 根据条件查询表t_resource数据 -->
+    <select id="queryResourceByCondition" resultMap="ResourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_resource
+        WHERE 1=1
+        <include refid="ResourceByCondition"/>
+    </select>
+
+    <!--    根据分组appId查询表t_resource信息-->
+    <select id="findResourcesByAppId" resultMap="ResourceMap">
+        SELECT r.*
+        FROM t_resource r
+                 left JOIN r_resource_group_resource rgr ON r.id = rgr.resource_id
+                 left JOIN t_resource_group rg ON rgr.resource_group_id = rg.id
+        WHERE rg.app_id = #{appId}
+        GROUP BY r.id
+    </select>
+    <select id="findResourceByResourceGroupId" resultMap="ResourceMap">
+        SELECT r.* FROM t_resource r
+        LEFT JOIN r_resource_group_resource rgr on rgr.resource_id = r.id
+        LEFT JOIN t_resource_group rg ON rgr.resource_group_id = rg.id
+        <where>
+            <if test="resourceGroupId != null and resourceGroupId != ''">
+                AND rg.id = #{resourceGroupId}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                AND r.created_by = #{createdBy}
+            </if>
+        </where>
+        GROUP BY r.id
+    </select>
+    <!-- 根据name或者description模糊查询表t_resource信息 -->
+    <select id="findResourcesByNameAndDes" resultMap="ResourceMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_resource
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="description != null and description != ''">
+
+                <if test="name != null and name != ''">
+                    or description like concat('%',#{description},'%')
+                </if>
+                <if test="name == null or name == ''">
+                    description like concat('%',#{description},'%')
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据主键id删除表t_resource数据 -->
+    <delete id="deleteResourceById">
+        DELETE
+        FROM t_resource
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表t_resource数据 -->
+    <update id="updateResourceById" parameterType="com.tinyengine.it.model.entity.Resource">
+        UPDATE t_resource
+        <set>
+            <include refid="ResourceSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表t_resource数据 -->
+    <insert id="createResource" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.Resource">
+        INSERT INTO t_resource ( id
+                               , app_id
+                               , platform_id
+                               , name
+                               , resource_url
+                               , thumbnail_url
+                               , category
+                               , description
+                               , thumbnail_data
+                               , resource_data
+                               , public_status
+                               , is_default
+                               , created_by
+                               , last_updated_by
+                               , created_time
+                               , last_updated_time
+                               , tenant_id
+                               , renter_id
+                               , site_id)
+        VALUES ( #{id}
+               , #{appId}
+               , #{platformId}
+               , #{name}
+               , #{resourceUrl}
+               , #{thumbnailUrl}
+               , #{category}
+               , #{description}
+               , #{thumbnailData}
+               , #{resourceData}
+               , #{publicStatus}
+               , #{isDefault}
+               , #{createdBy}
+               , #{lastUpdatedBy}
+               , #{createdTime}
+               , #{lastUpdatedTime}
+               , #{tenantId}
+               , #{renterId}
+               , #{siteId})
+    </insert>
+</mapper>

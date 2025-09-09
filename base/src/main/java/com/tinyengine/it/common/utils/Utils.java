@@ -12,17 +12,17 @@
 
 package com.tinyengine.it.common.utils;
 
+import cn.hutool.core.io.FileUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.model.dto.FileInfo;
 import com.tinyengine.it.model.dto.JsonFile;
-
-import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
@@ -37,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -414,5 +415,73 @@ public class Utils {
             log.error("file close fail:{}", e.getMessage());
         }
         throw new ServiceException(code, "validate file fail");
+    }
+
+    /**
+     * 对象转base64编码（支持Map和JavaBean）
+     *
+     * @param object 可以是Map或任意Java对象
+     * @return String
+     */
+    public static String encodeObjectToBase64(Object object) throws Exception {
+        String jsonString;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        if (object instanceof Map) {
+            jsonString = JsonUtils.encode(object);
+        } else {
+            jsonString = objectMapper.writeValueAsString(object);
+        }
+        byte[] jsonBytes = jsonString.getBytes(StandardCharsets.UTF_8);
+        String base64 = Base64.getEncoder().encodeToString(jsonBytes);
+
+        // 转换为URL安全的Base64
+        return makeUrlSafe(base64);
+    }
+
+    /**
+     * base64编码转对象
+     *
+     * @param encodedString base64编码的字符串
+     * @param clazz 目标类类型
+     * @return T 目标对象
+     */
+    public static <T> T decodeBase64ToObject(String encodedString, Class<T> clazz) {
+        // 处理URL安全的Base64编码
+        String standardBase64 = fromUrlSafe(encodedString);
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(standardBase64);
+            String jsonString = new String(decodedBytes, StandardCharsets.UTF_8);
+            return JsonUtils.decode(jsonString, clazz);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid Base64 string: " + encodedString, e);
+        }
+    }
+
+    /**
+     * 将标准Base64转换为URL安全格式
+     */
+    private static String makeUrlSafe(String base64) {
+        return base64
+            .replace('+', '-')
+            .replace('/', '_')
+            .replace("=", "");
+    }
+    /**
+     * 将URL安全Base64转换回标准格式
+     */
+    private static String fromUrlSafe(String urlSafeBase64) {
+        // 先替换字符
+        String standard = urlSafeBase64
+            .replace('-', '+')
+            .replace('_', '/');
+
+        // 添加填充字符使长度成为4的倍数
+        int padding = standard.length() % 4;
+        if (padding > 0) {
+            standard += "=".repeat(4 - padding);
+        }
+
+        return standard;
     }
 }

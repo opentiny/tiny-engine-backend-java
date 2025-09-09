@@ -34,6 +34,7 @@
         <mockito-inline.version>4.11.0</mockito-inline.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <netty-buffer-version>4.1.118.Final</netty-buffer-version>
+        <batik-version>1.18</batik-version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
     </properties>
     <dependencies>
@@ -76,6 +77,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-all</artifactId>
+            <version>${batik-version}</version>
         </dependency>
 
         <dependency>
@@ -130,6 +137,7 @@
             <scope>test</scope>
             <version>${mockito-inline.version}</version>
         </dependency>
+
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-buffer</artifactId>
