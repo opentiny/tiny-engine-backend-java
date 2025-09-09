@@ -273,7 +273,7 @@ public class ResourceController {
         String detectedType = ImageThumbnailGenerator.detectFormatFromBase64(base64Data);
         String fileExtension = detectedType.equals("jpeg") ? "jpg" : detectedType;
 
-        String fileName = useOriginal ? resource.getName() : resource.getName() + "_thumbnail.";
+        String fileName = useOriginal ? resource.getName() : "thumbnail_" + resource.getName();
         // URL编码文件名
         String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
                 .replace("+", "%20");
