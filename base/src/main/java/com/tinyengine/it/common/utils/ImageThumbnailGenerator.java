@@ -216,6 +216,26 @@ public class ImageThumbnailGenerator {
     }
 
     /**
+     * 从 Base64 数据中提取 MIME 类型
+     * @param base64Data 完整的 Base64 数据（包含 data:image/png;base64, 前缀）
+     * @return 提取到的 MIME 类型，如 "image/png", "image/svg+xml"
+     */
+    public static String extractContentType(String base64Data) {
+        if (base64Data == null || !base64Data.startsWith("data:")) {
+            throw new IllegalArgumentException("Invalid Base64 data format");
+        }
+
+        Pattern pattern = Pattern.compile("^data:([^;]+);");
+        Matcher matcher = pattern.matcher(base64Data);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        throw new IllegalArgumentException("Cannot extract content type from Base64 data");
+    }
+
+    /**
      * MIME类型转格式
      */
     private static String mimeTypeToFormat(String mimeType) {

@@ -270,14 +270,13 @@ public class ResourceController {
         String cleanBase64 = ImageThumbnailGenerator.extractCleanBase64(base64Data);
         byte[] imageBytes = Base64.getDecoder().decode(cleanBase64);
 
-        String detectedType = ImageThumbnailGenerator.detectFormatFromBase64(base64Data);
-        String fileExtension = detectedType.equals("jpeg") ? "jpg" : detectedType;
+        String detectedType = ImageThumbnailGenerator.extractContentType(base64Data);
 
         String fileName = useOriginal ? resource.getName() : "thumbnail_" + resource.getName();
         // URL编码文件名
         String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
                 .replace("+", "%20");
-        response.setContentType("image/" + detectedType);
+        response.setContentType(detectedType);
 
         // 只使用 filename* 格式，避免中文字符直接出现在header中
         response.setHeader("Content-Disposition",
