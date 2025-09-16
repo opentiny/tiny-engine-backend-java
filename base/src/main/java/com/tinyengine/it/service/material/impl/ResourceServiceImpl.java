@@ -171,6 +171,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      * @return the integer
      */
     @Override
+    @SystemServiceLog(description = "图片上传")
     public Resource resourceUpload(Resource resource) throws Exception {
         ResourceRequestDto resourceParam = new ResourceRequestDto();
         resourceParam.setName(resource.getName());

@@ -178,7 +178,7 @@ public class ResourceController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
-    @SystemControllerLog(description = "创建resource")
+    @SystemControllerLog(description = "上传图片")
     @PostMapping("/resource/uoload")
     public Result<Resource> resourceUoload(@Valid @RequestBody Resource resource) throws Exception {
         Resource result = resourceService.resourceUpload(resource);
