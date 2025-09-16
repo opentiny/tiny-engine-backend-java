@@ -319,7 +319,6 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                     }
                 }
             } catch (Exception e) {
-
                 try {
                     String errorEvent = "data: {\"error\": \"" + e.getMessage() + "\"}\n\n";
                     outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));

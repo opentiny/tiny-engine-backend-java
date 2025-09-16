@@ -19,7 +19,10 @@ ENV ACCESS_KEY_ID=" "
 ENV ACCESS_KEY_SECRET = " "
 ENV INDEX_ID = " "
 ENV WORK_SPACE_ID = ""
+<<<<<<< HEAD
 ENV TINY_ENGINE_URL=" "
+=======
+>>>>>>> 380d9549bd9d2f481bf65f78ebb4c77a1d82c7b4
 ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=alpha"]
 EXPOSE 9090
 
