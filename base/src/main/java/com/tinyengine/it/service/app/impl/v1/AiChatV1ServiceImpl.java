@@ -137,7 +137,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
      * 创建API信息
      */
     private Params createApiInfo(String WorkspaceId) throws Exception {
-        Params params = new Params()
+        return new Params()
             // 接口名称
             .setAction("Retrieve")
             // 接口版本
@@ -154,7 +154,6 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
             .setReqBodyType("json")
             // 接口响应体内容格式
             .setBodyType("json");
-        return params;
     }
 
     /**
@@ -190,7 +189,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
      * @param content the content
      * @return String the String
      */
-    public Result<List<NodeDto>> chatSearch(String content) {
+    public Result chatSearch(String content) {
         try {
             Client client = createClient();
             Params params = createApiInfo(WORK_SPACE_ID);
@@ -204,31 +203,31 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
             OpenApiRequest request = new OpenApiRequest()
                     .setQuery(com.aliyun.openapiutil.Client.query(queries));
 
-            Map<String, Map<String, Object>> response = (Map<String, Map<String, Object>>) client.callApi(params, request, runtime);
-            Map<String, Object> body = response.get("body");
+            Map<String, ?> response = client.callApi(params, request, runtime);
+            Map<String, Object> body = (Map<String, Object>) response.get("body");
 
             if (body == null) {
                 return Result.failed("响应体为空");
             }
 
-            Long status = safeCastToLong(body.get("Status"));
-            if (status != 200) {
+            long status = safeCastToLong(body.get("Status"));
+            if (status != 200L) {
                 String message = safeCastToString(body.get("Message"));
                 log.error("搜索失败: status={}, message={}", status, message);
                 return Result.failed("搜索失败: " + message);
             }
 
-            Map<String, Object> data = safeCast(body.get("Data"), Map.class, new HashMap<>());
+            Map data = safeCast(body.get("Data"), Map.class, new HashMap<>());
             if (data == null || data.isEmpty()) {
                 return Result.success(new ArrayList<>());
             }
 
-            List<Map<String, Object>> nodes = safeCast(data.get("Nodes"), List.class, new ArrayList<>());
+            List nodes = safeCast(data.get("Nodes"), List.class, new ArrayList<>());
             if (nodes.isEmpty()) {
                 return Result.success(new ArrayList<>());
             }
 
-            List<NodeDto> nodeDtos = convertToNodeDtos(nodes);
+            List nodeDtos = convertToNodeDtos(nodes);
             return Result.success(nodeDtos);
 
         } catch (TeaException e) {
@@ -262,7 +261,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                 }
 
                 // 安全获取元数据
-                Map<String, Object> metadata = safeCast(node.get("Metadata"), Map.class, new HashMap<>());
+                Map metadata = safeCast(node.get("Metadata"), Map.class, new HashMap<>());
                 if (metadata != null) {
                     nodeDto.setDocName(safeCastToString(metadata.get("doc_name")));
                 }
