@@ -14,7 +14,11 @@ FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY --from=build /app/app/target/tiny-engine-app-*.jar /app/tiny-engine-app.jar
 COPY --from=build /app/base/target/tiny-engine-base-*.jar /app/tiny-engine-base.jar
-
+# 设置环境变量
+ENV ACCESS_KEY_ID=" "
+ENV ACCESS_KEY_SECRET = " "
+ENV INDEX_ID = " "
+ENV WORK_SPACE_ID = ""
 ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=alpha"]
 EXPOSE 9090
 
