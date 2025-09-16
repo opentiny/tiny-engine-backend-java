@@ -165,6 +165,27 @@ public class ResourceController {
     }
 
     /**
+     * 上传图片
+     *
+     * @param resource the resource
+     * @return Resource信息 result
+     */
+    @Operation(summary = "创建resource", description = "创建resource",
+            parameters = {
+                    @Parameter(name = "resource", description = "Resource入参对象")
+            }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "创建resource")
+    @PostMapping("/resource/uoload")
+    public Result<Resource> resourceUoload(@Valid @RequestBody Resource resource) throws Exception {
+        Resource result = resourceService.resourceUpload(resource);
+        return Result.success(result);
+    }
+
+    /**
      * 批量创建Resource
      *
      * @param resources the resources

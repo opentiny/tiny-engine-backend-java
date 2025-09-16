@@ -85,6 +85,14 @@ public interface ResourceService extends IService<Resource> {
     Resource createResource(Resource resource) throws Exception;
 
     /**
+     * 图片上传
+     *
+     * @param resource the resource
+     * @return the integer
+     */
+    Resource resourceUpload(Resource resource) throws Exception;
+
+    /**
      * 批量新增表t_resource数据
      *
      * @param resources the resources
