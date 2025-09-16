@@ -170,7 +170,7 @@ public class ResourceController {
      * @param resource the resource
      * @return Resource信息 result
      */
-    @Operation(summary = "创建resource", description = "创建resource",
+    @Operation(summary = "上传图片", description = "上传图片",
             parameters = {
                     @Parameter(name = "resource", description = "Resource入参对象")
             }, responses = {
