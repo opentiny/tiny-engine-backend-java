@@ -14,9 +14,8 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
-import com.tinyengine.it.model.dto.AiParam;
 import com.tinyengine.it.model.dto.ChatRequest;
-import com.tinyengine.it.service.app.AiChatService;
+import com.tinyengine.it.model.dto.NodeDto;
 
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * The type Ai chat controller.
@@ -50,12 +49,6 @@ import java.util.Map;
 @Tag(name = "AIChat")
 public class AiChatController {
     /**
-     * The Ai chat service.
-     */
-    @Autowired
-    private AiChatService aiChatService;
-
-    /**
      * The Ai chat v1 service.
      */
     @Autowired
@@ -64,18 +57,34 @@ public class AiChatController {
     /**
      * AI api
      *
-     * @param aiParam the AI param
+     * @param request the AI param
      * @return ai回答信息 result
      */
-    @Operation(summary = "获取ai回答信息", description = "获取ai回答信息", parameters = {
-            @Parameter(name = "AiParam", description = "入参对象")}, responses = {
+    @Operation(summary = "获取ai回答信息", description = "获取ai回答信息",
+        parameters = {
+            @Parameter(name = "ChatRequest", description = "入参对象")
+        }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+            content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "AI api")
     @PostMapping("/ai/chat")
-    public Result<Map<String, Object>> aiChat(@RequestBody AiParam aiParam) {
-        return aiChatService.getAnswerFromAi(aiParam);
+    public ResponseEntity<?> aiChat(@RequestBody ChatRequest request) {
+        try {
+            Object response = aiChatV1Service.chatCompletion(request);
+
+            if (request.isStream()) {
+                return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_EVENT_STREAM)
+                    .body((StreamingResponseBody) response);
+            } else {
+                return ResponseEntity.ok(response);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
+        }
     }
 
     /**
@@ -84,11 +93,14 @@ public class AiChatController {
      * @param request the AI param
      * @return ai回答信息 result
      */
-    @Operation(summary = "获取ai回答信息", description = "获取ai回答信息", parameters = {
-            @Parameter(name = "ChatRequest", description = "入参对象")}, responses = {
+    @Operation(summary = "获取ai回答信息", description = "获取ai回答信息",
+        parameters = {
+            @Parameter(name = "ChatRequest", description = "入参对象")
+        }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                     content = @Content(mediaType = "application/json", schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "AI api v1")
     @PostMapping("/chat/completions")
     public ResponseEntity<?> chat(@RequestBody ChatRequest request) {
@@ -97,14 +109,34 @@ public class AiChatController {
 
             if (request.isStream()) {
                 return ResponseEntity.ok()
-                        .contentType(MediaType.TEXT_EVENT_STREAM)
-                        .body((StreamingResponseBody) response);
+                    .contentType(MediaType.TEXT_EVENT_STREAM)
+                    .body((StreamingResponseBody) response);
             } else {
                 return ResponseEntity.ok(response);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
+                .body(e.getMessage());
         }
+    }
+
+    /**
+     * AI search api
+     *
+     * @param content the AI search param
+     * @return ai回答信息 result
+     */
+    @Operation(summary = "搜索知识库", description = "搜索知识库",
+            parameters = {
+                    @Parameter(name = "content", description = "入参对象")
+            }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                    content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "AI serarch api")
+    @PostMapping("/ai/search")
+    public Result<List<NodeDto>> search(@RequestBody String content) throws Exception {
+         return aiChatV1Service.chatSearch(content);
     }
 }

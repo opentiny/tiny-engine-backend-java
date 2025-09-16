@@ -182,7 +182,7 @@
         LEFT JOIN
         r_block_group_block rbg ON rbg.block_group_id = bg.id
         LEFT JOIN
-        t_block b ON b.id = rbg.block_id
+        t_block b ON b.id = rbg.block_id AND b.id IS NOT NULL
         <choose>
             <when test="blockCreatedBy != null">
                 AND b.created_by = #{blockCreatedBy}
@@ -247,7 +247,7 @@
         LEFT JOIN
         r_block_group_block rbg ON rbg.block_group_id = bg.id
         LEFT JOIN
-        t_block b ON b.id = rbg.block_id
+        t_block b ON b.id = rbg.block_id AND b.id IS NOT NULL
         <choose>
             <when test="blockCreatedBy != null">
                 AND b.created_by = #{blockCreatedBy}
@@ -314,7 +314,7 @@
         LEFT JOIN
         r_block_group_block rbg ON rbg.block_group_id = bg.id
         LEFT JOIN
-        t_block b ON b.id = rbg.block_id
+        t_block b ON b.id = rbg.block_id AND b.id IS NOT NULL
         <choose>
             <when test="blockCreatedBy != null">
                 AND b.created_by = #{blockCreatedBy}

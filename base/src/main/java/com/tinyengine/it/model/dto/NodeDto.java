@@ -15,18 +15,13 @@ package com.tinyengine.it.model.dto;
 import lombok.Data;
 
 /**
- * ChatRequest dto
+ * Node dto
  *
- * @since 2025-08-06
+ * @since 2025-09-16
  */
 @Data
-public class ChatRequest {
-    private String model;
-    private String apiKey;
-    private String baseUrl;
-    private Object messages;
-    private Object tools;
-    private Double temperature = 0.7;
-    private boolean stream = false;
-    private Integer maxTokens;
+public class NodeDto {
+    private Double score;
+    private String docName;
+    private String content;
 }
