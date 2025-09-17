@@ -174,15 +174,19 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @Override
     @SystemServiceLog(description = "图片上传")
     public Resource resourceUpload(Resource resource) {
-        String imageName = Instant.now().toEpochMilli()+resource.getName();
+        String imageName = Instant.now().toEpochMilli() + resource.getName();
         resource.setName(imageName);
         String resourceData = resource.getResourceData();
         String tinyEngineUrl = System.getenv("TINY_ENGINE_URL");
-
+        String encodedName = URLEncoder.encode(imageName, StandardCharsets.UTF_8);
+        String resourceUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + true;
+        String thumbnailUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + false;
+        if (resource.getCategory() == null) {
+            resourceUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + true + "&isChat=" + true;
+            thumbnailUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + false + "&isChat=" + true;
+            resource.setCategory("image");
+        }
         if (!StringUtils.isEmpty(resourceData)) {
-            String encodedName = URLEncoder.encode(imageName, StandardCharsets.UTF_8);
-            String resourceUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + true;
-            String thumbnailUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + false;
             resource.setResourceUrl(resourceUrl);
             resource.setThumbnailUrl(thumbnailUrl);
             resource.setThumbnailData(ImageThumbnailGenerator.createThumbnail(resource.getResourceData(), 200, 200));

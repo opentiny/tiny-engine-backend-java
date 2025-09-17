@@ -202,7 +202,6 @@ public class ResourceController {
         resource.setName(fileName);
         resource.setResourceData(base64);
         resource.setAppId(loginUserContext.getAppId());
-        resource.setCategory("image");
         Resource result = resourceService.resourceUpload(resource);
         return Result.success(result);
     }
@@ -308,7 +307,7 @@ public class ResourceController {
     @SystemControllerLog(description = "获取资源")
     @GetMapping("/resource/download")
     public void getResource(@RequestParam String name, @RequestParam boolean isResource,
-        HttpServletResponse response) throws Exception {
+        @RequestParam(required = false) boolean isChat, HttpServletResponse response) throws Exception {
         Resource resource = resourceService.queryResourceByName(name);
         if(resource == null) {
             throw new ServiceException(ExceptionEnum.CM009.getResultCode(),ExceptionEnum.CM009.getResultMsg());
@@ -326,11 +325,12 @@ public class ResourceController {
         response.setContentType(detectedType);
 
         // 只使用 filename* 格式，避免中文字符直接出现在header中
-        response.setHeader("Content-Disposition",
-                "inline; filename*=UTF-8''" + encodedFileName);
+        response.setHeader("Content-Disposition", "inline; filename*=UTF-8''" + encodedFileName);
+        if(isChat){
+            response.setHeader("Content-Disposition", "attachment ; filename*=UTF-8''" + encodedFileName);
+        }
         try (OutputStream out = response.getOutputStream()) {
             out.write(imageBytes);
         }
     }
-
 }
