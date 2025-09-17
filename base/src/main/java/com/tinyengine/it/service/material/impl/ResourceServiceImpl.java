@@ -174,7 +174,6 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @Override
     @SystemServiceLog(description = "图片上传")
     public Resource resourceUpload(Resource resource) {
-
         String imageName = Instant.now().toEpochMilli() + resource.getName();
         resource.setName(imageName);
         String resourceData = resource.getResourceData();

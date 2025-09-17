@@ -333,5 +333,4 @@ public class ResourceController {
             out.write(imageBytes);
         }
     }
-
 }
