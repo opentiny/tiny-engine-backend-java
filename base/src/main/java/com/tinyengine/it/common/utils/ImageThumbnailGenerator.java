@@ -19,6 +19,7 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.util.XMLResourceDescriptor;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 
 import javax.imageio.ImageIO;
@@ -26,6 +27,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -233,6 +236,70 @@ public class ImageThumbnailGenerator {
         }
 
         throw new IllegalArgumentException("Cannot extract content type from Base64 data");
+    }
+
+    /**
+     * 图片验证
+     */
+    public static boolean validateByImageIO(MultipartFile file) {
+        try {
+            String filename = file.getOriginalFilename();
+            if (filename == null) {
+                return false;
+            }
+            // 获取文件扩展名
+            String extension = getFileExtension(filename).toLowerCase();
+
+            if ("svg".equals(extension)) {
+                return isSvgFile(file);
+            }
+
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+            return image != null;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * SVG文件验证
+     */
+    private static boolean isSvgFile(MultipartFile file) {
+        try {
+            byte[] bytes = file.getBytes();
+            String content = new String(bytes, StandardCharsets.UTF_8);
+
+            // 简单检查：包含<svg标签和SVG命名空间
+            return content.contains("<svg") &&
+                    (content.contains("xmlns=\"http://www.w3.org/2000/svg\"") ||
+                            content.contains("xmlns='http://www.w3.org/2000/svg'"));
+
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    /**
+     * 获取文件扩展名
+     */
+    private static String getFileExtension(String filename) {
+        if (filename == null || !filename.contains(".")) {
+            return "";
+        }
+        return filename.substring(filename.lastIndexOf(".") + 1);
+    }
+    /**
+     * 简化版Base64转换
+     */
+    public static String convertToBase64(MultipartFile file) throws IOException {
+        String mimeType = file.getContentType();
+        byte[] fileBytes = file.getBytes();
+        String base64 = Base64.getEncoder().encodeToString(fileBytes);
+        // 如果是SVG文件，修正MIME类型
+        String filename = file.getOriginalFilename();
+        if (filename != null && filename.toLowerCase().endsWith(".svg")) {
+            mimeType = "image/svg+xml";
+        }
+        return "data:" + mimeType + ";base64," + base64;
     }
 
     /**

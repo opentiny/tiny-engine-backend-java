@@ -66,10 +66,10 @@ public class AiChatController {
             @Parameter(name = "ChatRequest", description = "入参对象")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema())),
+                content = @Content(mediaType = "application/json", schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
-    @SystemControllerLog(description = "AI api")
+    @SystemControllerLog(description = "AI chat")
     @PostMapping("/ai/chat")
     public ResponseEntity<?> aiChat(@RequestBody ChatRequest request) {
         try {
@@ -99,12 +99,12 @@ public class AiChatController {
             @Parameter(name = "ChatRequest", description = "入参对象")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema())),
+                content = @Content(mediaType = "application/json", schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
-    @SystemControllerLog(description = "AI api v1")
+    @SystemControllerLog(description = "AI completions")
     @PostMapping("/chat/completions")
-    public ResponseEntity<?> chat(@RequestBody ChatRequest request,
+    public ResponseEntity<?> completions(@RequestBody ChatRequest request,
         @RequestHeader("Authorization") String authorization) {
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
@@ -133,11 +133,11 @@ public class AiChatController {
      * @return ai回答信息 result
      */
     @Operation(summary = "搜索知识库", description = "搜索知识库",
-            parameters = {
-                    @Parameter(name = "content", description = "入参对象")
-            }, responses = {
+        parameters = {
+            @Parameter(name = "content", description = "入参对象")
+        }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema())),
+                content = @Content(mediaType = "application/json", schema = @Schema())),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "AI serarch api")
