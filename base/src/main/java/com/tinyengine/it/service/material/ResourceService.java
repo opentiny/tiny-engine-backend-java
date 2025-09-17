@@ -14,7 +14,6 @@ package com.tinyengine.it.service.material;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.model.dto.ResourceRequestDto;
 import com.tinyengine.it.model.entity.Resource;
 
 import java.util.List;
@@ -45,12 +44,12 @@ public interface ResourceService extends IService<Resource> {
     Result<Resource> queryResourceById(Integer id);
 
     /**
-     * 根据data查询表t_resource信息
+     * 根据name查询表t_resource信息
      *
-     * @param data the data
+     * @param name the name
      * @return the resource
      */
-    Resource queryResourceByData(ResourceRequestDto data) throws Exception;
+    Resource queryResourceByName(String name) throws Exception;
 
     /**
      * 根据分组id和创建人查询表t_resource信息

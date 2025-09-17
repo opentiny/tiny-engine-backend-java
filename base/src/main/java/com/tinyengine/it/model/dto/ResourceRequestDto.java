@@ -22,6 +22,5 @@ import lombok.Data;
 @Data
 public class ResourceRequestDto {
     private String name;
-    private String category;
     private boolean isResource;
 }
