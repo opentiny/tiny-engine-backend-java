@@ -94,6 +94,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
 
         QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name", name);
+        queryWrapper.eq("app_id", loginUserContext.getAppId());
 
         return this.baseMapper.selectOne(queryWrapper);
     }

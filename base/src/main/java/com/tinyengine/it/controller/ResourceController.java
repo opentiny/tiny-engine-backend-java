@@ -310,8 +310,7 @@ public class ResourceController {
     @GetMapping("/resource/download")
     public void getResource(@RequestParam String name, @RequestParam boolean isResource,
         HttpServletResponse response) throws Exception {
-        String imageName = URLDecoder.decode(name);
-        Resource resource = resourceService.queryResourceByName(imageName);
+        Resource resource = resourceService.queryResourceByName(name);
         if(resource == null) {
             throw new ServiceException(ExceptionEnum.CM009.getResultCode(),ExceptionEnum.CM009.getResultMsg());
         }
