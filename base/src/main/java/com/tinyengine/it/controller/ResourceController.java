@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -188,11 +189,12 @@ public class ResourceController {
     @PostMapping("/resource/upload")
     public Result<Resource> resourceUpload(@RequestParam MultipartFile file) throws Exception {
         // 获取文件的原始名称
-        String fileName = file.getOriginalFilename();
-        if (file.isEmpty()) {
-            return Result.failed(ExceptionEnum.CM009);
-        }
+        String fileName = StringUtils.cleanPath(java.util.Optional.ofNullable(file.getOriginalFilename()).orElse("image"));
+
         if(!ImageThumbnailGenerator.validateByImageIO(file)){
+            return Result.failed(ExceptionEnum.CM325);
+        }
+        if(fileName.contains("..")) {
             return Result.failed(ExceptionEnum.CM325);
         }
         // 将文件转为 Base64
