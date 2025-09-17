@@ -319,13 +319,6 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                     }
                 }
             } catch (Exception e) {
-                // 简单的错误处理：如果是客户端断开连接，忽略错误
-                String errorMsg = e.getMessage();
-                if (errorMsg != null &&
-                    (errorMsg.contains("Broken pipe") || errorMsg.contains("Connection reset"))) {
-                    return;
-                }
-
                 try {
                     String errorEvent = "data: {\"error\": \"" + e.getMessage() + "\"}\n\n";
                     outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));

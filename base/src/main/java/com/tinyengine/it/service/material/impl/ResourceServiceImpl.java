@@ -155,6 +155,24 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @SystemServiceLog(description = "新增表t_resource数据")
     public Resource createResource(Resource resource) throws Exception {
 
+        Resource res = this.resourceUpload(resource);
+        ResourceGroupResource resourceGroupResource = new ResourceGroupResource();
+        resourceGroupResource.setResourceId(res.getId());
+        resourceGroupResource.setResourceGroupId(resource.getResourceGroupId());
+        resourceGroupResourceMapper.createResourceGroupResource(resourceGroupResource);
+
+        return res;
+    }
+
+    /**
+     * 图片上传
+     *
+     * @param resource the resource
+     * @return the integer
+     */
+    @Override
+    @SystemServiceLog(description = "图片上传")
+    public Resource resourceUpload(Resource resource) throws Exception {
         ResourceRequestDto resourceParam = new ResourceRequestDto();
         resourceParam.setName(resource.getName());
         resourceParam.setCategory(resource.getCategory());
@@ -179,7 +197,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name", resource.getName());
         queryWrapper.eq("category", resource.getCategory());
-        // 接入组合系统需添加租户id查询
+        // 接入租户系统需添加租户id查询
         Resource resourceResult = this.baseMapper.selectOne(queryWrapper);
         if (resourceResult != null) {
             throw new ServiceException(ExceptionEnum.CM003.getResultCode(), ExceptionEnum.CM003.getResultMsg());
@@ -188,10 +206,6 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         if (createResult != 1) {
             throw new ServiceException(ExceptionEnum.CM002.getResultCode(), ExceptionEnum.CM002.getResultMsg());
         }
-        ResourceGroupResource resourceGroupResource = new ResourceGroupResource();
-        resourceGroupResource.setResourceId(resource.getId());
-        resourceGroupResource.setResourceGroupId(resource.getResourceGroupId());
-        resourceGroupResourceMapper.createResourceGroupResource(resourceGroupResource);
 
         return this.baseMapper.queryResourceById(resource.getId());
     }
