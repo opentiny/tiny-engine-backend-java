@@ -15,10 +15,9 @@ package com.tinyengine.it.controller;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
-import com.tinyengine.it.common.utils.Utils;
-import com.tinyengine.it.model.dto.ResourceRequestDto;
 import com.tinyengine.it.model.entity.Resource;
 import com.tinyengine.it.service.material.ResourceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -293,30 +292,34 @@ public class ResourceController {
     /**
      * 获取资源
      *
-     * @param data the data
+     * @param name the name
+     * @param isResource the isResource
      * @return the result
      */
     @Operation(summary = "获取资源", description = "获取资源",
         parameters = {
-            @Parameter(name = "data", description = "base64编码数据")}, responses = {
+            @Parameter(name = "name", description = "名称"),
+            @Parameter(name = "isResource", description = "isResource"),
+        }, responses = {
             @ApiResponse(responseCode = "200", description = "图片流数据",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "image/*", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取资源")
     @GetMapping("/resource/download")
-    public void getResource(@RequestParam("data") String data, HttpServletResponse response) throws Exception {
-        ResourceRequestDto param = Utils.decodeBase64ToObject(data, ResourceRequestDto.class);
-        Resource resource = resourceService.queryResourceByData(param);
-
-        boolean useOriginal = param.isResource();
-        String base64Data = useOriginal ? resource.getResourceData() : resource.getThumbnailData();
+    public void getResource(@RequestParam String name, @RequestParam boolean isResource,
+        HttpServletResponse response) throws Exception {
+        Resource resource = resourceService.queryResourceByName(name);
+        if(resource == null) {
+            throw new ServiceException(ExceptionEnum.CM009.getResultCode(),ExceptionEnum.CM009.getResultMsg());
+        }
+        String base64Data = isResource ? resource.getResourceData() : resource.getThumbnailData();
         String cleanBase64 = ImageThumbnailGenerator.extractCleanBase64(base64Data);
         byte[] imageBytes = Base64.getDecoder().decode(cleanBase64);
 
         String detectedType = ImageThumbnailGenerator.extractContentType(base64Data);
 
-        String fileName = useOriginal ? resource.getName() : "thumbnail_" + resource.getName();
+        String fileName = isResource ? resource.getName() : "thumbnail_" + resource.getName();
         // URL编码文件名
         String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
                 .replace("+", "%20");

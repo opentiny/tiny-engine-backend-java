@@ -20,10 +20,8 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
-import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ResourceGroupResourceMapper;
 import com.tinyengine.it.mapper.ResourceMapper;
-import com.tinyengine.it.model.dto.ResourceRequestDto;
 import com.tinyengine.it.model.entity.Resource;
 import com.tinyengine.it.model.entity.ResourceGroupResource;
 import com.tinyengine.it.service.material.ResourceService;
@@ -31,6 +29,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,18 +83,18 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     }
 
     /**
-     * 根据data查询表t_resource信息
+     * 根据name查询表t_resource信息
      *
-     * @param data the data
+     * @param name the name
      * @return the resource
      */
     @Override
-    @SystemServiceLog(description = "根据data查询表t_resource信息")
-    public Resource queryResourceByData(ResourceRequestDto data) {
+    @SystemServiceLog(description = "根据name查询表t_resource信息")
+    public Resource queryResourceByName(String name) {
 
         QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name", data.getName());
-        queryWrapper.eq("category", data.getCategory());
+        queryWrapper.eq("name", name);
+        queryWrapper.eq("app_id", loginUserContext.getAppId());
 
         return this.baseMapper.selectOne(queryWrapper);
     }
@@ -172,26 +173,18 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      */
     @Override
     @SystemServiceLog(description = "图片上传")
-    public Resource resourceUpload(Resource resource) throws Exception {
-        ResourceRequestDto resourceParam = new ResourceRequestDto();
-        resourceParam.setName(resource.getName());
-        resourceParam.setCategory(resource.getCategory());
-        resourceParam.setResource(true);
-
-        String encodedResourceParam = Utils.encodeObjectToBase64(resourceParam);
-
-        ResourceRequestDto thumbnailParam = new ResourceRequestDto();
-        thumbnailParam.setName(resource.getName());
-        thumbnailParam.setCategory(resource.getCategory());
-        thumbnailParam.setResource(false);
-        String encodedThumbnailParam = Utils.encodeObjectToBase64(thumbnailParam);
-
+    public Resource resourceUpload(Resource resource) {
+        String imageName = Instant.now().toEpochMilli()+resource.getName();
+        resource.setName(imageName);
         String resourceData = resource.getResourceData();
         String tinyEngineUrl = System.getenv("TINY_ENGINE_URL");
 
         if (!StringUtils.isEmpty(resourceData)) {
-            resource.setResourceUrl(String.format("%s?data=%s", tinyEngineUrl, encodedResourceParam));
-            resource.setThumbnailUrl(String.format("%s?data=%s", tinyEngineUrl, encodedThumbnailParam));
+            String encodedName = URLEncoder.encode(imageName, StandardCharsets.UTF_8);
+            String resourceUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + true;
+            String thumbnailUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + false;
+            resource.setResourceUrl(resourceUrl);
+            resource.setThumbnailUrl(thumbnailUrl);
             resource.setThumbnailData(ImageThumbnailGenerator.createThumbnail(resource.getResourceData(), 200, 200));
         }
         QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
