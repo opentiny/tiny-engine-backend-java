@@ -19,6 +19,7 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.util.XMLResourceDescriptor;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 
 import javax.imageio.ImageIO;
@@ -26,6 +27,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -233,6 +235,29 @@ public class ImageThumbnailGenerator {
         }
 
         throw new IllegalArgumentException("Cannot extract content type from Base64 data");
+    }
+
+    /**
+     * 检查文件是否为图片类型
+     */
+    public static boolean validateByImageIO(MultipartFile file) {
+        try {
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+            return image != null; // 如果是图片，返回true
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * 将MultipartFile转换为Base64字符串
+     */
+    public static String convertToBase64(MultipartFile file) throws IOException {
+        String mimeType = file.getContentType();
+        byte[] fileBytes = file.getBytes();
+        String base64 = Base64.getEncoder().encodeToString(fileBytes);
+
+        return "data:" + mimeType + ";base64," + base64;
     }
 
     /**

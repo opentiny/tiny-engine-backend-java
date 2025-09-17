@@ -13,6 +13,8 @@
 package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
 import com.tinyengine.it.common.utils.Utils;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -61,6 +64,9 @@ public class ResourceController {
     @Autowired
     private ResourceService resourceService;
 
+    @Autowired
+    private LoginUserContext loginUserContext;
+
     /**
      * 查询表Resource信息
      *
@@ -69,7 +75,7 @@ public class ResourceController {
     @Operation(summary = "查询表Resource信息", description = "查询表Resource信息",
         responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "查询表Resource信息")
@@ -90,7 +96,7 @@ public class ResourceController {
             @Parameter(name = "id", description = "Resource主键id")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "根据id查询表Resource信息")
@@ -110,7 +116,7 @@ public class ResourceController {
             @Parameter(name = "resourceGroupId", description = "ResourceGroup主键id")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "根据分组id和创建人查询表t_resource信息")
@@ -132,7 +138,7 @@ public class ResourceController {
             @Parameter(name = "des", description = "描述")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "模糊查询表Resource信息列表")
@@ -154,7 +160,7 @@ public class ResourceController {
             @Parameter(name = "resource", description = "Resource入参对象")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "创建resource")
@@ -167,20 +173,35 @@ public class ResourceController {
     /**
      * 上传图片
      *
-     * @param resource the resource
+     * @param file the file
      * @return Resource信息 result
      */
     @Operation(summary = "上传图片", description = "上传图片",
-            parameters = {
-                    @Parameter(name = "resource", description = "Resource入参对象")
-            }, responses = {
+        parameters = {
+            @Parameter(name = "file", description = "图片")
+        }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "上传图片")
-    @PostMapping("/resource/uoload")
-    public Result<Resource> resourceUoload(@Valid @RequestBody Resource resource) throws Exception {
+    @PostMapping("/resource/upload")
+    public Result<Resource> resourceUpload(@RequestParam MultipartFile file) throws Exception {
+        // 获取文件的原始名称
+        String fileName = file.getOriginalFilename();
+        if (file.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM009);
+        }
+        if(!ImageThumbnailGenerator.validateByImageIO(file)){
+            return Result.failed(ExceptionEnum.CM325);
+        }
+        // 将文件转为 Base64
+        String base64 = ImageThumbnailGenerator.convertToBase64(file);
+        Resource resource = new Resource();
+        resource.setName(fileName);
+        resource.setResourceData(base64);
+        resource.setAppId(loginUserContext.getAppId());
+        resource.setCategory("image");
         Resource result = resourceService.resourceUpload(resource);
         return Result.success(result);
     }
@@ -196,7 +217,7 @@ public class ResourceController {
             @Parameter(name = "resources", description = "Resource入参对象")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "批量创建Resource")
@@ -218,7 +239,7 @@ public class ResourceController {
             @Parameter(name = "id", description = "id"),
             @Parameter(name = "Resource", description = "入参对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "修改单个Resource信息")
@@ -258,7 +279,7 @@ public class ResourceController {
         parameters = {
             @Parameter(name = "id", description = "id")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取resource信息详情")
@@ -277,7 +298,7 @@ public class ResourceController {
         parameters = {
             @Parameter(name = "data", description = "base64编码数据")}, responses = {
             @ApiResponse(responseCode = "200", description = "图片流数据",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取资源")
