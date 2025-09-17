@@ -43,7 +43,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.OutputStream;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -303,7 +302,7 @@ public class ResourceController {
             @Parameter(name = "isResource", description = "isResource"),
         }, responses = {
             @ApiResponse(responseCode = "200", description = "图片流数据",
-                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Resource.class))),
+                content = @Content(mediaType = "image/*", schema = @Schema(implementation = Resource.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取资源")
