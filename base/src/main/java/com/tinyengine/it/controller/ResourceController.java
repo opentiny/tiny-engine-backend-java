@@ -331,8 +331,6 @@ public class ResourceController {
         // 设置必要的HTTP头
         response.setContentType(detectedType);
         response.setContentLength(imageBytes.length);
-        response.setHeader("Cache-Control", "public, max-age=3600"); // 添加缓存控制
-        response.setHeader("Accept-Ranges", "bytes"); // 支持断点续传
 
         // 设置Content-Disposition
         String contentDisposition = Utils.isDownload(name)
