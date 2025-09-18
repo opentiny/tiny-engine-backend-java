@@ -306,34 +306,41 @@ public class ResourceController {
     })
     @SystemControllerLog(description = "获取资源")
     @GetMapping("/resource/download/{name}")
-    public void getResource(@PathVariable String name,
-        HttpServletResponse response) throws Exception {
-        if(name == null) {
-            throw new ServiceException(ExceptionEnum.CM009.getResultCode(),ExceptionEnum.CM009.getResultMsg());
-        }
-        Resource resource = resourceService.queryResourceByName(name);
-        if(resource == null) {
-            throw new ServiceException(ExceptionEnum.CM009.getResultCode(),ExceptionEnum.CM009.getResultMsg());
+    public void getResource(@PathVariable String name, HttpServletResponse response) throws Exception {
+        // 参数校验
+        if (name == null || name.trim().isEmpty()) {
+            throw new ServiceException(ExceptionEnum.CM009.getResultCode(), ExceptionEnum.CM009.getResultMsg());
         }
 
+        Resource resource = resourceService.queryResourceByName(name);
+        if (resource == null) {
+            throw new ServiceException(ExceptionEnum.CM009.getResultCode(), ExceptionEnum.CM009.getResultMsg());
+        }
+        // 获取图片数据
         String base64Data = Utils.isResource(name) ? resource.getResourceData() : resource.getThumbnailData();
+        if (base64Data == null || base64Data.trim().isEmpty()) {
+            throw new ServiceException(ExceptionEnum.CM009.getResultCode(), "资源数据为空");
+        }
+
         String cleanBase64 = ImageThumbnailGenerator.extractCleanBase64(base64Data);
         byte[] imageBytes = Base64.getDecoder().decode(cleanBase64);
-
+        // 设置响应头
         String detectedType = ImageThumbnailGenerator.extractContentType(base64Data);
+        String encodedFileName = URLEncoder.encode(name, StandardCharsets.UTF_8).replace("+", "%20");
 
-        // URL编码文件名
-        String encodedFileName = URLEncoder.encode(name, StandardCharsets.UTF_8)
-                .replace("+", "%20");
+        // 设置必要的HTTP头
         response.setContentType(detectedType);
+        response.setContentLength(imageBytes.length);
 
-        // 只使用 filename* 格式，避免中文字符直接出现在header中
-        response.setHeader("Content-Disposition", "inline; filename*=UTF-8''" + encodedFileName);
-        if(Utils.isDownload(name)){
-            response.setHeader("Content-Disposition", "attachment ; filename*=UTF-8''" + encodedFileName);
-        }
+        // 设置Content-Disposition
+        String contentDisposition = Utils.isDownload(name)
+                ? "attachment; filename*=UTF-8''" + encodedFileName
+                : "inline; filename*=UTF-8''" + encodedFileName;
+        response.setHeader("Content-Disposition", contentDisposition);
+        // 写入响应体
         try (OutputStream out = response.getOutputStream()) {
             out.write(imageBytes);
+            out.flush();
         }
     }
 }
