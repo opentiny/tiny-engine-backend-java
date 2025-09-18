@@ -6,6 +6,7 @@ create table `t_resource`
     `app_id`            int          not null comment '关联appId',
     `platform_id`       int          not null comment '关联设计器id',
     `name`              varchar(255) not null comment '名称',
+    `thumbnail_name`    varchar(255) not null comment '缩略图名称',
     `resource_url`      varchar(255) comment '资源url',
     `thumbnail_url`     varchar(255) comment '缩略图url',
     `category`          varchar(255) not null comment '分类',

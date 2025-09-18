@@ -459,6 +459,34 @@ public class Utils {
     }
 
     /**
+     * 判断是资源图还是缩略图
+     *
+     * @param name 名称
+     * @return boolean 是否是自愿图
+     */
+    public static boolean isResource(String name) {
+        if (name == null) {
+            return false;
+        }
+        int endIndex = Math.min(name.length(), 10);
+        return !name.substring(0, endIndex).equals("thumbnail_");
+    }
+
+    /**
+     * 判断是否返回下载
+     *
+     * @param name 名称
+     * @return boolean 是否下载
+     */
+    public static boolean isDownload(String name) {
+        if (name == null) {
+            return false;
+        }
+        int endIndex = Math.min(name.length(), 5);
+        return name.substring(0, endIndex).equals("image");
+    }
+
+    /**
      * 将标准Base64转换为URL安全格式
      */
     private static String makeUrlSafe(String base64) {
@@ -484,4 +512,5 @@ public class Utils {
 
         return standard;
     }
+
 }

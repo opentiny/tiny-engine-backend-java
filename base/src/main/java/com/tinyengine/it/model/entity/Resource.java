@@ -43,6 +43,9 @@ public class Resource extends BaseEntity {
     @Schema(name = "name", description = "名称")
     private String name;
 
+    @Schema(name = "thumbnailName", description = "缩略图名称")
+    private String thumbnailName;
+
     @Schema(name = "resourceUrl", description = "资源url")
     private String resourceUrl;
 
