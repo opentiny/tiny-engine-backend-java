@@ -105,6 +105,7 @@
             <result column="resource_app_id" property="appId"/>
             <result column="resource_platform_id" property="platformId"/>
             <result column="resource_name" property="name"/>
+            <result column=" thumbnail_name" property="thumbnailName"/>
             <result column="resource_url" property="resourceUrl"/>
             <result column="thumbnail_url" property="thumbnailUrl"/>
             <result column="category" property="category"/>
@@ -142,6 +143,7 @@
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
         r.name as resource_name,
+        r.thumbnail_name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
@@ -189,6 +191,7 @@
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
         r.name as resource_name,
+        r.thumbnail_name,
         r.resource_url,
         r.thumbnail_url,
         r.category,
@@ -239,6 +242,7 @@
         r.app_id as resource_app_id,
         r.platform_id as resource_platform_id,
         r.name as resource_name,
+        r.thumbnail_name,
         r.resource_url,
         r.thumbnail_url,
         r.category,

@@ -18,6 +18,7 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
+import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.model.entity.Resource;
 import com.tinyengine.it.service.material.ResourceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -292,7 +293,6 @@ public class ResourceController {
      * 获取资源
      *
      * @param name the name
-     * @param isResource the isResource
      * @return the result
      */
     @Operation(summary = "获取资源", description = "获取资源",
@@ -305,28 +305,31 @@ public class ResourceController {
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "获取资源")
-    @GetMapping("/resource/download")
-    public void getResource(@RequestParam String name, @RequestParam boolean isResource,
-        @RequestParam(required = false) boolean isChat, HttpServletResponse response) throws Exception {
+    @GetMapping("/resource/download/{name}")
+    public void getResource(@PathVariable String name,
+        HttpServletResponse response) throws Exception {
+        if(name == null) {
+            throw new ServiceException(ExceptionEnum.CM009.getResultCode(),ExceptionEnum.CM009.getResultMsg());
+        }
         Resource resource = resourceService.queryResourceByName(name);
         if(resource == null) {
             throw new ServiceException(ExceptionEnum.CM009.getResultCode(),ExceptionEnum.CM009.getResultMsg());
         }
-        String base64Data = isResource ? resource.getResourceData() : resource.getThumbnailData();
+
+        String base64Data = Utils.isResource(name) ? resource.getResourceData() : resource.getThumbnailData();
         String cleanBase64 = ImageThumbnailGenerator.extractCleanBase64(base64Data);
         byte[] imageBytes = Base64.getDecoder().decode(cleanBase64);
 
         String detectedType = ImageThumbnailGenerator.extractContentType(base64Data);
 
-        String fileName = isResource ? resource.getName() : "thumbnail_" + resource.getName();
         // URL编码文件名
-        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+        String encodedFileName = URLEncoder.encode(name, StandardCharsets.UTF_8)
                 .replace("+", "%20");
         response.setContentType(detectedType);
 
         // 只使用 filename* 格式，避免中文字符直接出现在header中
         response.setHeader("Content-Disposition", "inline; filename*=UTF-8''" + encodedFileName);
-        if(isChat){
+        if(Utils.isDownload(name)){
             response.setHeader("Content-Disposition", "attachment ; filename*=UTF-8''" + encodedFileName);
         }
         try (OutputStream out = response.getOutputStream()) {

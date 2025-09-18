@@ -20,6 +20,7 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
+import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ResourceGroupResourceMapper;
 import com.tinyengine.it.mapper.ResourceMapper;
 import com.tinyengine.it.model.entity.Resource;
@@ -61,7 +62,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
      * 模糊查询表Resource信息
      *
      * @param name the name
-     * @param des the des
+     * @param des  the des
      * @return Resource信息列表
      */
     @Override
@@ -93,7 +94,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     public Resource queryResourceByName(String name) {
 
         QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name", name);
+        if (Utils.isResource(name)) {
+            queryWrapper.eq("name", name);
+        } else {
+            queryWrapper.eq("thumbnail_name", name);
+        }
+
         queryWrapper.eq("app_id", loginUserContext.getAppId());
 
         return this.baseMapper.selectOne(queryWrapper);
@@ -175,17 +181,22 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @SystemServiceLog(description = "图片上传")
     public Resource resourceUpload(Resource resource) {
         String imageName = Instant.now().toEpochMilli() + resource.getName();
+        if (resource.getCategory() == null) {
+            resource.setCategory("image");
+            imageName = "image" + Instant.now().toEpochMilli() + resource.getName();
+        }
+
+        String thumbnailName = "thumbnail_" + imageName;
         resource.setName(imageName);
+        resource.setThumbnailName(thumbnailName);
         String resourceData = resource.getResourceData();
         String tinyEngineUrl = System.getenv("TINY_ENGINE_URL");
-        String encodedName = URLEncoder.encode(imageName, StandardCharsets.UTF_8);
-        String resourceUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + true;
-        String thumbnailUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + false;
-        if (resource.getCategory() == null) {
-            resourceUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + true + "&isChat=" + true;
-            thumbnailUrl = tinyEngineUrl + "?name=" + encodedName + "&isResource=" + false + "&isChat=" + true;
-            resource.setCategory("image");
-        }
+        String imageEncodedName = URLEncoder.encode(imageName, StandardCharsets.UTF_8);
+        String thumbnailEncodedName = URLEncoder.encode(thumbnailName, StandardCharsets.UTF_8);
+
+        String resourceUrl = tinyEngineUrl + "/" + imageEncodedName;
+        String thumbnailUrl = tinyEngineUrl + "/" + thumbnailEncodedName;
+
         if (!StringUtils.isEmpty(resourceData)) {
             resource.setResourceUrl(resourceUrl);
             resource.setThumbnailUrl(thumbnailUrl);
@@ -225,5 +236,4 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         }
         return resourceList;
     }
-
 }

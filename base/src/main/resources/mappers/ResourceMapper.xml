@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , app_id, platform_id, `name`, resource_url, thumbnail_url, category, description, thumbnail_data, resource_data,
+        , app_id, platform_id, `name`, thumbnail_name, resource_url, thumbnail_url, category, description, thumbnail_data, resource_data,
         public_status, is_default, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
@@ -19,9 +19,11 @@
         <if test="platformId!=null">
             AND platform_id = #{platformId}
         </if>
-
         <if test="name!=null and name!=''">
             AND `name` = #{name}
+        </if>
+        <if test="thumbnailName!=null and thumbnailName!=''">
+            AND thumbnail_name = #{thumbnailName}
         </if>
         <if test="resourceUrl!=null and resourceUrl!=''">
             AND resource_url = #{resourceUrl}
@@ -81,6 +83,9 @@
         <if test="name!=null and name!=''">
             `name` = #{name},
         </if>
+        <if test="thumbnailName!=null and thumbnailName!=''">
+            thumbnail_name = #{thumbnailName},
+        </if>
         <if test="resourceUrl!=null and resourceUrl!=''">
             resource_url = #{resourceUrl},
         </if>
@@ -135,6 +140,7 @@
         <result column="app_id" property="appId"/>
         <result column="platform_id" property="platformId"/>
         <result column="name" property="name"/>
+        <result column="thumbnail_name" property="thumbnailName"/>
         <result column="resource_url" property="resourceUrl"/>
         <result column="thumbnail_url" property="thumbnailUrl"/>
         <result column="category" property="category"/>
@@ -246,6 +252,7 @@
                                , app_id
                                , platform_id
                                , name
+                               , thumbnail_name
                                , resource_url
                                , thumbnail_url
                                , category
@@ -265,6 +272,7 @@
                , #{appId}
                , #{platformId}
                , #{name}
+               , #{thumbnailName}
                , #{resourceUrl}
                , #{thumbnailUrl}
                , #{category}
