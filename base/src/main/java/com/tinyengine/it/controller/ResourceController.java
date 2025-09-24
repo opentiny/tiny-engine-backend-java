@@ -334,8 +334,8 @@ public class ResourceController {
 
         // 设置Content-Disposition
         String contentDisposition = Utils.isDownload(name)
-                ? "attachment; filename*=UTF-8''" + encodedFileName
-                : "inline; filename*=UTF-8''" + encodedFileName;
+            ? "attachment; filename*=UTF-8''" + encodedFileName
+            : "inline; filename*=UTF-8''" + encodedFileName;
         response.setHeader("Content-Disposition", contentDisposition);
         // 写入响应体
         try (OutputStream out = response.getOutputStream()) {

@@ -57,10 +57,12 @@ public class MaterialController {
      *
      * @return Material信息 all material
      */
-    @Operation(summary = "查询表Material信息列表", description = "查询表Material信息列表", responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+    @Operation(summary = "查询表Material信息列表", description = "查询表Material信息列表",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Material.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "查询表Material信息列表")
     @GetMapping("/material/list")
@@ -75,12 +77,14 @@ public class MaterialController {
      * @param material the material
      * @return Material信息 result
      */
-    @Operation(summary = "创建Material", description = "创建Material", parameters = {
-        @Parameter(name = "Material", description = "Material入参对象")
+    @Operation(summary = "创建Material", description = "创建Material",
+        parameters = {
+            @Parameter(name = "Material", description = "Material入参对象")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Material.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "创建Material")
     @PostMapping("/material/create")
@@ -95,13 +99,15 @@ public class MaterialController {
      * @param material the material
      * @return Material信息 result
      */
-    @Operation(summary = "修改单个Material信息", description = "修改单个Material信息", parameters = {
-        @Parameter(name = "id", description = "appId"),
-        @Parameter(name = "Material", description = "入参对象")
+    @Operation(summary = "修改单个Material信息", description = "修改单个Material信息",
+        parameters = {
+            @Parameter(name = "id", description = "appId"),
+            @Parameter(name = "Material", description = "入参对象")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Material.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "修改单个Material信息")
     @PostMapping("/material/update/{id}")
@@ -116,12 +122,14 @@ public class MaterialController {
      * @param id the id
      * @return app信息 result
      */
-    @Operation(summary = "删除Material信息", description = "删除Material信息", parameters = {
-        @Parameter(name = "id", description = "Material主键id")
+    @Operation(summary = "删除Material信息", description = "删除Material信息",
+        parameters = {
+            @Parameter(name = "id", description = "Material主键id")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Material.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "删除Material信息")
     @DeleteMapping("/material/delete/{id}")
@@ -135,12 +143,14 @@ public class MaterialController {
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取Material信息详情", description = "获取Material信息详情", parameters = {
-        @Parameter(name = "id", description = "appId")
+    @Operation(summary = "获取Material信息详情", description = "获取Material信息详情",
+        parameters = {
+            @Parameter(name = "id", description = "appId")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Material.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Material.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取Material信息详情")
     @GetMapping("/material/detail/{id}")
     public Result<Material> detail(@PathVariable Integer id) {

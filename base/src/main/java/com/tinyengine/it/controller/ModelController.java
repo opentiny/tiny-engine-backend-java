@@ -59,15 +59,17 @@ public class ModelController {
      *
      * @return all Model信息
      */
-    @Operation(summary = "查询表Model信息列表", description = "查询表Model信息列表", parameters = {
-        @Parameter(name = "currentPage", description = "当前页"),
-        @Parameter(name = "pageSize", description = "页数"),
-        @Parameter(name = "nameCn", description = "模型中文名称"),
-        @Parameter(name = "nameEn", description = "模型英文名称")
+    @Operation(summary = "查询表Model信息列表", description = "查询表Model信息列表",
+        parameters = {
+            @Parameter(name = "currentPage", description = "当前页"),
+            @Parameter(name = "pageSize", description = "页数"),
+            @Parameter(name = "nameCn", description = "模型中文名称"),
+            @Parameter(name = "nameEn", description = "模型英文名称")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Model.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "查询表Model信息列表")
     @GetMapping("/model/list")
@@ -84,12 +86,14 @@ public class ModelController {
      *
      * @return Model信息
      */
-    @Operation(summary = "根据nameCn查询表Model信息", description = "根据nameCn查询表Model信息", parameters = {
-        @Parameter(name = "nameCn", description = "名称"),
+    @Operation(summary = "根据nameCn查询表Model信息", description = "根据nameCn查询表Model信息",
+        parameters = {
+            @Parameter(name = "nameCn", description = "名称"),
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Model.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "根据nameCn查询表Model信息")
     @GetMapping("/model/find")
@@ -104,12 +108,14 @@ public class ModelController {
      * @param model the model
      * @return Model信息 result
      */
-    @Operation(summary = "创建Model", description = "创建Model", parameters = {
-        @Parameter(name = "Model", description = "Model入参对象")
+    @Operation(summary = "创建Model", description = "创建Model",
+        parameters = {
+            @Parameter(name = "Model", description = "Model入参对象")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息", content = @Content(mediaType = "application/json",
-        schema = @Schema(implementation = Model.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Model.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "创建Model")
     @PostMapping("/model/create")
@@ -125,13 +131,15 @@ public class ModelController {
      * @param model the model
      * @return Model信息 result
      */
-    @Operation(summary = "修改单个Model信息", description = "修改单个Model信息", parameters = {
-        @Parameter(name = "id", description = "模型id"),
-        @Parameter(name = "Model", description = "入参对象")
+    @Operation(summary = "修改单个Model信息", description = "修改单个Model信息",
+        parameters = {
+            @Parameter(name = "id", description = "模型id"),
+            @Parameter(name = "Model", description = "入参对象")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Model.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "修改单个Model信息")
     @PutMapping("/model/update/{id}")
@@ -147,12 +155,14 @@ public class ModelController {
      * @param id the id
      * @return app信息 result
      */
-    @Operation(summary = "删除Model信息", description = "删除Model信息", parameters = {
-        @Parameter(name = "id", description = "Model主键id")
+    @Operation(summary = "删除Model信息", description = "删除Model信息",
+        parameters = {
+            @Parameter(name = "id", description = "Model主键id")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Model.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "删除Model信息")
     @DeleteMapping("/model/delete/{id}")
@@ -167,12 +177,14 @@ public class ModelController {
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取Model信息详情", description = "获取Model信息详情", parameters = {
-        @Parameter(name = "id", description = "模型id")
+    @Operation(summary = "获取Model信息详情", description = "获取Model信息详情",
+        parameters = {
+            @Parameter(name = "id", description = "模型id")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Model.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Model.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取Model信息详情")
     @GetMapping("/model/detail/{id}")
     public Result<Model> detail(@PathVariable Integer id) {
@@ -186,12 +198,14 @@ public class ModelController {
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取Model建表sql", description = "获取Model建表sql", parameters = {
-        @Parameter(name = "id", description = "模型id")
+    @Operation(summary = "获取Model建表sql", description = "获取Model建表sql",
+        parameters = {
+            @Parameter(name = "id", description = "模型id")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "400", description = "请求失败")})
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "获取Model建表sql")
     @GetMapping("/model/table/{id}")
     public Result<String> getTable(@PathVariable Integer id) {

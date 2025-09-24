@@ -61,12 +61,13 @@ public class ComponentController {
      * @param file the file
      * @return result
      */
-    @Operation(summary = "上传bunled.json文件创建组件", description = "上传bunled.json文件创建组件", parameters = {
-        @Parameter(name = "file", description = "文件参数对象")
+    @Operation(summary = "上传bunled.json文件创建组件", description = "上传bunled.json文件创建组件",
+        parameters = {
+            @Parameter(name = "file", description = "文件参数对象")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema())),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "上传bunled.json文件创建组件")
     @PostMapping("/component/bundle/create")
@@ -91,12 +92,13 @@ public class ComponentController {
      * @param file the file
      * @return result
      */
-    @Operation(summary = "上传bunled.json文件处理自定义组件", description = "上传bunled.json文件处理自定义组件", parameters = {
-        @Parameter(name = "file", description = "文件参数对象")
+    @Operation(summary = "上传bunled.json文件处理自定义组件", description = "上传bunled.json文件处理自定义组件",
+        parameters = {
+            @Parameter(name = "file", description = "文件参数对象")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema())),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "上传bunled.json文件处理自定义组件")
     @PostMapping("/component/bundle/split")
@@ -120,12 +122,13 @@ public class ComponentController {
      * @param custComponentDto the custComponentDto
      * @return result
      */
-    @Operation(summary = "批量创建自定义组件", description = "批量创建自定义组件", parameters = {
-        @Parameter(name = "custComponentDto", description = "自定义组件对象")
+    @Operation(summary = "批量创建自定义组件", description = "批量创建自定义组件",
+        parameters = {
+            @Parameter(name = "custComponentDto", description = "自定义组件对象")
     }, responses = {
-        @ApiResponse(responseCode = "200", description = "返回信息",
-            content = @Content(mediaType = "application/json", schema = @Schema())),
-        @ApiResponse(responseCode = "400", description = "请求失败")
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "批量创建自定义组件")
     @PostMapping("/component/batch/create")
