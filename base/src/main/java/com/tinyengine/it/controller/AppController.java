@@ -60,13 +60,12 @@ public class AppController {
      *
      * @return App信息 all app
      */
-    @Operation(summary = "查询表App信息",
-            description = "查询表App信息",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = App.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")})
+    @Operation(summary = "查询表App信息", description = "查询表App信息",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "查询表App信息")
     @GetMapping("/apps/list")
     public Result<List<App>> getAllApp() {
@@ -80,17 +79,14 @@ public class AppController {
      * @param id the id
      * @return App信息 app by id
      */
-    @Operation(summary = "根据id查询表App信息",
-            description = "根据id查询表App信息",
-            parameters = {
-                    @Parameter(name = "id", description = "App主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = App.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "根据id查询表App信息", description = "根据id查询表App信息",
+        parameters = {
+            @Parameter(name = "id", description = "App主键id")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "根据id查询表App信息")
     @GetMapping("/apps/{id}")
     public Result<App> getAppById(@PathVariable Integer id) {
@@ -103,17 +99,14 @@ public class AppController {
      * @param app the app
      * @return App信息 result
      */
-    @Operation(summary = "创建app",
-            description = "创建app",
-            parameters = {
-                    @Parameter(name = "app", description = "App入参对象")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = App.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "创建app", description = "创建app",
+        parameters = {
+            @Parameter(name = "app", description = "App入参对象")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "创建app")
     @PostMapping("/apps/create")
     public Result<App> createApp(@Valid @RequestBody App app) {
@@ -127,13 +120,14 @@ public class AppController {
      * @param app the app
      * @return App信息 result
      */
-    @Operation(summary = "修改单个App信息", description = "修改单个App信息", parameters = {
+    @Operation(summary = "修改单个App信息", description = "修改单个App信息",
+        parameters = {
             @Parameter(name = "id", description = "appId"),
             @Parameter(name = "App", description = "入参对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = App.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改单个App信息")
     @PostMapping("/apps/update/{id}")
     public Result<App> updateApp(@PathVariable Integer id, @RequestBody App app) {
@@ -147,20 +141,18 @@ public class AppController {
      * @param id the id
      * @return app信息 result
      */
-    @Operation(summary = "删除app信息",
-            description = "删除app信息",
-            parameters = {
-                    @Parameter(name = "id", description = "App主键id")
-            },
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "返回信息",
-                            content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = App.class))),
-                    @ApiResponse(responseCode = "400", description = "请求失败")}
-    )
+    @Operation(summary = "删除app信息", description = "删除app信息",
+        parameters = {
+            @Parameter(name = "id", description = "App主键id")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "删除app信息")
     @GetMapping("/apps/delete/{id}")
     public Result<App> deleteApp(@PathVariable Integer id) {
+
         return appService.deleteAppById(id);
     }
 
@@ -170,15 +162,17 @@ public class AppController {
      * @param id the id
      * @return the result
      */
-    @Operation(summary = "获取应用信息详情", description = "获取应用信息详情", parameters = {
+    @Operation(summary = "获取应用信息详情", description = "获取应用信息详情",
+        parameters = {
             @Parameter(name = "id", description = "appId")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = App.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "获取应用信息详情")
     @GetMapping("/apps/detail/{id}")
     public Result<App> detail(@PathVariable Integer id) {
+
         return appService.queryAppById(id);
     }
 
@@ -189,13 +183,14 @@ public class AppController {
      * @param param the param
      * @return the result
      */
-    @Operation(summary = "修改应用对应的国际化语种关联", description = "修改应用对应的国际化语种关联", parameters = {
+    @Operation(summary = "修改应用对应的国际化语种关联", description = "修改应用对应的国际化语种关联",
+        parameters = {
             @Parameter(name = "id", description = "appId"),
             @Parameter(name = "param", description = "入参对象")}, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = App.class))),
-            @ApiResponse(responseCode = "400", description = "请求失败")})
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
     @SystemControllerLog(description = "修改应用对应的国际化语种关联")
     @PostMapping("/apps/i18n/{id}")
     public Result<App> updateI18n(@PathVariable Integer id, @RequestBody Map<String, Object> param) {

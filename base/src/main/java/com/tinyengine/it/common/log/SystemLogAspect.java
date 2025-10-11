@@ -38,6 +38,7 @@ import java.lang.reflect.Method;
 @Component
 @Slf4j
 public class SystemLogAspect {
+
     // 本地异常日志记录对象
     private static final Logger logger = LoggerFactory.getLogger(SystemLogAspect.class);
 

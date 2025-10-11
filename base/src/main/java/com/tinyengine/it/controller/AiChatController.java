@@ -15,9 +15,12 @@ package com.tinyengine.it.controller;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.dto.ChatRequest;
-import com.tinyengine.it.model.dto.NodeDto;
 
+import com.tinyengine.it.rag.service.StorageService;
+import com.tinyengine.it.rag.entity.EmbeddingMatchDto;
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
+import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.store.embedding.EmbeddingMatch;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type Ai chat controller.
@@ -54,7 +58,6 @@ public class AiChatController {
      */
     @Autowired
     private AiChatV1Service aiChatV1Service;
-
     /**
      * AI api
      *
@@ -124,25 +127,5 @@ public class AiChatController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
         }
-    }
-
-    /**
-     * AI search api
-     *
-     * @param content the AI search param
-     * @return ai回答信息 result
-     */
-    @Operation(summary = "搜索知识库", description = "搜索知识库",
-        parameters = {
-            @Parameter(name = "content", description = "入参对象")
-        }, responses = {
-            @ApiResponse(responseCode = "200", description = "返回信息",
-                content = @Content(mediaType = "application/json", schema = @Schema())),
-            @ApiResponse(responseCode = "400", description = "请求失败")
-    })
-    @SystemControllerLog(description = "AI serarch api")
-    @PostMapping("/ai/search")
-    public Result<List<NodeDto>> search(@RequestBody String content) throws Exception {
-         return aiChatV1Service.chatSearch(content);
     }
 }

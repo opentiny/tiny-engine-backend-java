@@ -48,7 +48,6 @@ public interface ResourceGroupResourceMapper extends BaseMapper<ResourceGroupRes
      * @param resourceGroupId the resource group id
      * @return the int
      */
-    @Delete("DELETE FROM r_resource_group_resource WHERE resource_group_id = #{resourceGroupId}")
     int deleteResourceGroupResourceByGroupId(Integer resourceGroupId);
 
     /**

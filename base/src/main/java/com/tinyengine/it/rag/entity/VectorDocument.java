@@ -1,12 +1,23 @@
-package com.tinyengine.it.rag.entity;
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
 
+package com.tinyengine.it.rag.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 向量文档处理结果实体类 - 需要自己编写
+ * Vector document dto
  */
 @Data
 @NoArgsConstructor
@@ -34,6 +45,11 @@ public class VectorDocument {
     private String documentSetId;
 
     /**
+     * 文档集集合
+     */
+    private String collectionName;
+
+    /**
      * 处理状态
      */
     private String status;
@@ -51,7 +67,14 @@ public class VectorDocument {
         this.processingTime = processingTime;
         this.status = errorCount == 0 ? "SUCCESS" : "PARTIAL_SUCCESS";
     }
-
+    public VectorDocument(int successCount, int errorCount, String documentSetId, String collectionName) {
+        this.successCount = successCount;
+        this.errorCount = errorCount;
+        this.documentSetId = documentSetId;
+        this.collectionName = collectionName;
+        this.processingTime = 0L;
+        this.status = errorCount == 0 ? "SUCCESS" : "PARTIAL_SUCCESS";
+    }
     /**
      * 获取总处理数量
      */

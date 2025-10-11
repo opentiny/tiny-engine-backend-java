@@ -126,6 +126,7 @@ public class ResourceController {
         List<Resource> resourceList = resourceService.queryResourceByResourceGroupId(resourceGroupId);
         return Result.success(resourceList);
     }
+
     /**
      * 模糊查询表Resource信息
      *
