@@ -12,6 +12,7 @@ target/
 *.iml
 *.ipr
 /logs
+__pycache__/
 *.log
 ### Eclipse ###
 .apt_generated
