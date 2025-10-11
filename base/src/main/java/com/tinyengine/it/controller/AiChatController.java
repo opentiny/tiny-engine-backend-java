@@ -12,15 +12,10 @@
 
 package com.tinyengine.it.controller;
 
-import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.dto.ChatRequest;
 
-import com.tinyengine.it.rag.service.StorageService;
-import com.tinyengine.it.rag.entity.EmbeddingMatchDto;
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
-import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.store.embedding.EmbeddingMatch;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -39,9 +34,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The type Ai chat controller.

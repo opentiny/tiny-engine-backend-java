@@ -132,6 +132,9 @@ public class StorageService {
     public VectorDocument autoAddFolderToKnowledgeBase() {
         try {
             String folderPath = System.getenv("FOLDER_PATH");
+            if (folderPath == null || folderPath.isBlank()) {
+                throw new ServiceException(ExceptionEnum.CM329.getResultCode(), "FOLDER_PATH does not exist: " + folderPath);
+            }
             // 验证文件夹路径
             Path folder = Paths.get(folderPath);
             if (!Files.exists(folder) || !Files.isDirectory(folder)) {
@@ -585,26 +588,30 @@ public class StorageService {
      */
     private List<EmbeddingMatch<TextSegment>> searchBySource(String sourcePath, String collectionName) {
         try {
+            // 使用更合理的查询文本
+            String queryText = "document content analysis";
+
             EmbeddingSearchRequest searchRequest = EmbeddingSearchRequest.builder()
-                .queryEmbedding(embeddingModel.embed("test").content())
-                .maxResults(10000)
-                .minScore(0.0)
-                .build();
+                    .queryEmbedding(embeddingModel.embed(queryText).content())
+                    .maxResults(1000)
+                    .minScore(0.1)
+                    .build();
 
             List<EmbeddingMatch<TextSegment>> allMatches = embeddingStore.search(searchRequest).matches();
 
-            // 根据源文件路径和集合名称过滤
+            // 在应用层过滤
             return allMatches.stream()
-                .filter(match -> {
-                    String source = match.embedded().metadata().getString("source");
-                    String collection = match.embedded().metadata().getString("collection");
+                    .filter(match -> {
+                        String source = match.embedded().metadata().getString("source");
+                        String collection = match.embedded().metadata().getString("collection");
 
-                    boolean sourceMatch = source != null && source.equals(sourcePath);
-                    boolean collectionMatch = collectionName == null ||
-                        (collection != null && collection.equals(collectionName));
+                        boolean sourceMatch = source != null && source.equals(sourcePath);
+                        boolean collectionMatch = collectionName == null ||
+                                (collection != null && collection.equals(collectionName));
 
-                    return sourceMatch && collectionMatch;
-                }).collect(Collectors.toList());
+                        return sourceMatch && collectionMatch;
+                    })
+                    .collect(Collectors.toList());
 
         } catch (Exception e) {
             log.error("Failed to search vectors by source: {} in collection: {}", sourcePath, collectionName, e);

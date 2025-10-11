@@ -16,7 +16,7 @@ COPY --from=build /app/app/target/tiny-engine-app-*.jar /app/tiny-engine-app.jar
 COPY --from=build /app/base/target/tiny-engine-base-*.jar /app/tiny-engine-base.jar
 # 设置环境变量
 
-ENV FOLDER_PATH = "/app/documents"
+ENV FOLDER_PATH="/app/documents"
 # 替换为自己的域名接口路径
 ENV TINY_ENGINE_URL="https://agent.opentiny.design/material-center/api/resource/download"
 ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=alpha"]

@@ -34,7 +34,7 @@ public class RAGConfig {
     private String chromaBaseUrl = "http://localhost:8000";
     private String chromaCollectionName = "tinyengine_documents";
     private String modelPath = "./all-MiniLM-L6-v2/model.onnx";
-    private String tokenizerPath = ".//all-MiniLM-L6-v2/tokenizer.json";
+    private String tokenizerPath = "./all-MiniLM-L6-v2/tokenizer.json";
 
     // 连接配置
     private int timeoutSeconds = 30;

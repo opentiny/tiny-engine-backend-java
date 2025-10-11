@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -136,11 +137,11 @@ public class VectorStorageController {
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "跨集合搜索")
-    @GetMapping("/vector-storage/all-collections")
+    @PostMapping("/vector-storage/all-collections")
     public Result<Map<String, List<EmbeddingMatchDto>>> searchAllCollections(
         @RequestBody SearchRequest searchDto) {
         Map<String, List<EmbeddingMatchDto>> results =
-                vectorStorageService.searchAcrossCollections(searchDto);
+            vectorStorageService.searchAcrossCollections(searchDto);
         return Result.success(results);
     }
 
@@ -219,7 +220,7 @@ public class VectorStorageController {
     @SystemControllerLog(description = "通过路径和集合名称批量删除知识库文档")
     @DeleteMapping("/vector-storage/batch/{collection}")
     public Result<BatchDeleteResult> deleteMultipleFiles(@PathVariable String collection,
-        @RequestBody List<String> filePaths) {
+        @RequestBody @NotEmpty List<@NotEmpty String> filePaths) {
         BatchDeleteResult result = vectorStorageService.deleteMultipleFiles(filePaths,collection);
         return Result.success(result);
     }
