@@ -9,7 +9,7 @@
         id
         , name, app_website, platform_id, platform_history_id, publish_url, editor_url, visit_url, image_url,
         assets_url, state, published, home_page_id, css, config, constants, data_handler, description, latest,
-        git_group, project_name, branch, is_demo, is_default, template_type, set_template_time, set_template_by,
+        git_group, project_name, branch, is_demo, is_default, template_type, is_template, set_template_time, set_template_by,
         set_default_by, framework, global_state, default_lang, extend_config, data_hash, can_associate,
         data_source_global, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
@@ -87,6 +87,9 @@
         </if>
         <if test="templateType!=null and templateType!=''">
             AND template_type = #{templateType}
+        </if>
+        <if test="isTemplate!=null and isTemplate!=''">
+            AND is_template = #{isTemplate}
         </if>
         <if test="setTemplateTime!=null">
             AND set_template_time = #{setTemplateTime}
@@ -215,6 +218,9 @@
         <if test="templateType!=null and templateType!=''">
             template_type = #{templateType},
         </if>
+        <if test="isTemplate!=null and isTemplate!=''">
+            is_template = #{isTemplate},
+        </if>
         <if test="setTemplateTime!=null">
             set_template_time = #{setTemplateTime},
         </if>
@@ -296,6 +302,8 @@
         <result column="is_demo" property="isDemo"/>
         <result column="is_default" property="isDefault"/>
         <result column="template_type" property="templateType"/>
+        <result column="isTemplate" property="isTemplate"/>
+        <result column="business_id" property="businessId"/>
         <result column="set_template_time" property="setTemplateTime"/>
         <result column="set_template_by" property="setTemplateBy"/>
         <result column="set_default_by" property="setDefaultBy"/>
@@ -313,30 +321,132 @@
         <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
+        <collection property="business" ofType="com.tinyengine.it.model.entity.BusinessCategory" column="business_id">
+            <id column="business_id" property="id"/>
+            <result column="code" property="code"/>
+            <result column="business_name" property="name"/>
+            <result column="business_group" property="businessGroup"/>
+            <result column="business" property="createdBy"/>
+            <result column="business_last_updated_by" property="lastUpdatedBy"/>
+            <result column="business_created_time" property="createdTime"/>
+            <result column="business_last_updated_time" property="lastUpdatedTime"/>
+            <result column="business_tenant_id" property="tenantId"/>
+            <result column="business_renter_id" property="renterId"/>
+            <result column="business_site_id" property="siteId"/>
+        </collection>
     </resultMap>
+    <!-- 公共列定义 -->
+    <sql id="App_Base_Column_List">
+        A.id,
+    A.name,
+    A.app_website,
+    A.platform_id,
+    A.platform_history_id,
+    A.publish_url,
+    A.editor_url,
+    A.visit_url,
+    A.image_url,
+    A.assets_url,
+    A.state,
+    A.published,
+    A.home_page_id,
+    A.css,
+    A.config,
+    A.constants,
+    A.data_handler,
+    A.description,
+    A.latest,
+    A.git_group,
+    A.project_name,
+    A.branch,
+    A.is_demo,
+    A.is_default,
+    A.template_type,
+    A.is_template,
+    A.business_id,
+    A.set_template_time,
+    A.set_template_by,
+    A.set_default_by,
+    A.framework,
+    A.global_state,
+    A.default_lang,
+    A.extend_config,
+    A.data_hash,
+    A.can_associate,
+    A.data_source_global,
+    A.last_updated_by,
+    A.created_time,
+    A.last_updated_time,
+    A.tenant_id,
+    A.renter_id,
+    A.site_id
+    </sql>
+
+    <sql id="business_Base_Column_List">
+    B.id as business_id,
+    B.code,
+    B.name as business_name,
+    B.business_group,
+    B.created_by as block_created_by,
+    B.last_updated_by as block_last_updated_by,
+    B.created_time as block_created_time,
+    B.last_updated_time as block_last_updated_time,
+    B.tenant_id as block_tenant_id,
+    B.renter_id as block_renter_id,
+    B.site_id as block_site_id
+    </sql>
+    <!-- 公共 JOIN 逻辑 -->
+    <sql id="Common_Join">
+        FROM t_app A
+        LEFT JOIN t_business_category B ON A.business_id = B.id AND A.business_id IS NOT NULL
+    </sql>
+
+    <sql id="Common_Column_List">
+        <include refid="App_Base_Column_List"/>,
+        <include refid="business_Base_Column_List"/>
+    </sql>
 
     <!-- 查询表t_app所有数据 -->
     <select id="queryAllApp" resultMap="AppMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_app
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+         WHERE is_template != true
+    </select>
+
+    <!-- 查询应用模版所有数据 -->
+    <select id="queryAllAppTemplate" resultMap="AppMap">
+        SELECT
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+        WHERE is_template = true
     </select>
 
     <!-- 根据主键id查询表t_app信息 -->
     <select id="queryAppById" resultMap="AppMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_app
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
         <where>
             id = #{id}
+        </where>
+    </select>
+
+    <!-- 根据主键id查询应用模版信息 -->
+    <select id="queryAppTemplateById" resultMap="AppMap">
+        SELECT
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+        <where>
+            id = #{id} and is_template = true
         </where>
     </select>
 
     <!-- 根据条件查询表t_app数据 -->
     <select id="queryAppByCondition" resultMap="AppMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_app
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
         WHERE 1=1
         <include refid="AppByCondition"/>
     </select>
@@ -385,6 +495,7 @@
         , is_demo
         , is_default
         , template_type
+        , is_template
         , set_template_time
         , set_template_by
         , set_default_by
@@ -427,6 +538,7 @@
         , #{isDemo}
         , #{isDefault}
         , #{templateType}
+        , #{isTemplate}
         , #{setTemplateTime}
         , #{setTemplateBy}
         , #{setDefaultBy}

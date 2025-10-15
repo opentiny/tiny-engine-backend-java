@@ -33,6 +33,21 @@ public interface AppMapper extends BaseMapper<App> {
     List<App> queryAllApp();
 
     /**
+     * 查询应用模版所有信息
+     *
+     * @return the list
+     */
+    List<App> queryAllAppTemplate();
+
+    /**
+     * 根据主键id查询应用模版数据
+     *
+     * @param id the id
+     * @return the app
+     */
+    App queryAppTemplateById(Integer id);
+
+    /**
      * 根据主键id查询表t_app数据
      *
      * @param id the id
