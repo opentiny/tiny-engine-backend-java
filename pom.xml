@@ -67,6 +67,12 @@
             <version>${fastjson.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>bailian20231229</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
         <!--    Mybatis-plus 代码生成器依赖-->
         <dependency>
             <groupId>com.baomidou</groupId>
