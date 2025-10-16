@@ -14,16 +14,21 @@ services:
       - ./docker-deploy-data/mysql/conf/:/etc/mysql/conf.d/
       - ./docker-deploy-data/mysql/init/:/docker-entrypoint-initdb.d/
       - ./docker-deploy-data/mysql/logs/:/logs/
+
   tiny-engine-rag:
-    image: chromadb/chroma:5.0.4
+    image: chromadb/chroma:latest
+    container_name: chroma-db
     ports:
       - "8000:8000"
     environment:
       - IS_PERSISTENT=TRUE
       - PERSIST_DIRECTORY=/chroma/chroma
+      - ANONYMIZED_TELEMETRY=FALSE
     volumes:
       - ./docker-deploy-data/chroma/data:/chroma/chroma
     command: "--workers 1 --host 0.0.0.0 --port 8000"
+    restart: unless-stopped
+
   tiny-engine-back:
     image: tiny-engine-back
     container_name: tiny-engine-back
