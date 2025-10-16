@@ -20,6 +20,7 @@ ENV ACCESS_KEY_SECRET=""
 ENV INDEX_ID=""
 ENV WORK_SPACE_ID=""
 ENV FOLDER_PATH="/app/documents"
+ENV CHROMA_BASE_URL="http://tiny-engine-rag:8000"
 # 替换为自己的域名接口路径
 ENV TINY_ENGINE_URL="https://agent.opentiny.design/material-center/api/resource/download"
 ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=alpha"]
