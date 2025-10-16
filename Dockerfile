@@ -15,6 +15,7 @@ WORKDIR /app
 COPY --from=build /app/app/target/tiny-engine-app-*.jar /app/tiny-engine-app.jar
 COPY --from=build /app/base/target/tiny-engine-base-*.jar /app/tiny-engine-base.jar
 COPY --from=build /app/documents /app/documents
+COPY --from=build /app/all-MiniLM-L6-v2 /app/all-MiniLM-L6-v2
 # 设置环境变量
 ENV ACCESS_KEY_ID=""
 ENV ACCESS_KEY_SECRET=""

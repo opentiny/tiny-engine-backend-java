@@ -33,8 +33,8 @@ public class RAGConfig {
     // Chroma 配置
     private String chromaBaseUrl = System.getenv("CHROMA_BASE_URL");
     private String chromaCollectionName = "tinyengine_documents";
-    private String modelPath = "./all-MiniLM-L6-v2/model.onnx";
-    private String tokenizerPath = "./all-MiniLM-L6-v2/tokenizer.json";
+    private String modelPath = System.getenv("MODEL_PATH");
+    private String tokenizerPath = System.getenv("TOKENIZER_PATH");
 
     // 连接配置
     private int timeoutSeconds = 30;

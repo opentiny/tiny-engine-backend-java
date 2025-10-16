@@ -41,6 +41,8 @@ services:
       - tiny-engine-rag
     environment:
       - CHROMA_BASE_URL=http://tiny-engine-rag:8000
+      - MODEL_PATH=/app/all-MiniLM-L6-v2/model.onnx
+      - TOKENIZER_PATH=/app/all-MiniLM-L6-v2/tokenizer.json
 
   tiny-engine:
     image: tiny-engine
