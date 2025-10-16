@@ -23,5 +23,5 @@ public class SearchRequest {
     private String content;
     private String documentSetId;
     private int maxResults = 10;
-    private double minScore = 0.7;
+    private double minScore = 0.4;
 }
