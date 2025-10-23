@@ -106,7 +106,7 @@ public class PageHistoryServiceImpl extends ServiceImpl<PageHistoryMapper, PageH
     }
 
     /**
-     * 新增表t_page_history数据
+     * 通过名称及appId查询表t_page_history数据
      *
      * @param app the app
      * @param name the page name

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -71,6 +72,35 @@ public class AppController {
     @GetMapping("/apps/list")
     public Result<List<App>> getAllApp() {
         List<App> appList = appService.queryAllApp();
+        return Result.success(appList);
+    }
+
+    /**
+     * 分页查询表App信息
+     *
+     * @return App信息 all app
+     */
+    @Operation(summary = "分页查询表App信息", description = "分页查询表App信息",
+        parameters = {
+            @Parameter(name = "currentPage", description = "当前页"),
+            @Parameter(name = "pageSize", description = "页数")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "分页查询表App信息")
+    @GetMapping("/apps/page")
+    public Result<List<App>> getAllAppByPage(@RequestParam Integer currentPage,
+        @RequestParam Integer pageSize, @RequestParam(required = false) String name,
+        @RequestParam(required = false) Integer industryId, @RequestParam(required = false) Integer sceneId,
+        @RequestParam(required = false) String framework) {
+        App app = new App();
+        app.setName(name);
+        app.setSceneId(sceneId);
+        app.setId(industryId);
+        app.setFramework(framework);
+        List<App> appList = appService.queryAllAppByPage(currentPage, pageSize, app);
         return Result.success(appList);
     }
 

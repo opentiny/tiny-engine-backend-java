@@ -121,8 +121,11 @@ public class App extends BaseEntity {
     @Schema(name = "isTemplate", description = "是否是应用模板")
     private Boolean isTemplate;
 
-    @Schema(name = "businessId", description = "业务id")
-    private Integer businessId;
+    @Schema(name = "industry_id", description = "行业id")
+    private Integer industryId;
+
+    @Schema(name = "scene_id", description = "场景id")
+    private Integer sceneId;
 
     @Schema(name = "setTemplateTime", description = "设置模板时间")
     private LocalDateTime setTemplateTime;
@@ -160,6 +163,10 @@ public class App extends BaseEntity {
     private Map<String, Object> dataSourceGlobal;
 
     @TableField(exist = false)
-    @Schema(name = "business", description = "业务")
-    private List<BusinessCategory> business = new ArrayList<>();
+    @Schema(name = "industry", description = "行业")
+    private List<BusinessCategory> industry = new ArrayList<>();
+
+    @TableField(exist = false)
+    @Schema(name = "scene", description = "场景")
+    private List<BusinessCategory> scene = new ArrayList<>();
 }

@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, app_website, platform_id, platform_history_id, publish_url, editor_url, visit_url, image_url,
+        , name, app_website, platform_id, platform_history_id, industry_id, scene_id publish_url, editor_url, visit_url, image_url,
         assets_url, state, published, home_page_id, css, config, constants, data_handler, description, latest,
         git_group, project_name, branch, is_demo, is_default, template_type, is_template, set_template_time, set_template_by,
         set_default_by, framework, global_state, default_lang, extend_config, data_hash, can_associate,
@@ -27,6 +27,12 @@
         </if>
         <if test="platformHistoryId!=null">
             AND platform_history_id = #{platformHistoryId}
+        </if>
+        <if test="industryId!=null">
+            AND industry_id = #{industryId}
+        </if>
+        <if test="sceneId!=null">
+            AND scene_id = #{sceneId}
         </if>
         <if test="publishUrl!=null and publishUrl!=''">
             AND publish_url = #{publishUrl}
@@ -157,6 +163,12 @@
         </if>
         <if test="platformHistoryId!=null">
             platform_history_id = #{platformHistoryId},
+        </if>
+        <if test="industryId!=null">
+            industry_id = #{industryId},
+        </if>
+        <if test="sceneId!=null">
+            scene_id = #{sceneId},
         </if>
         <if test="publishUrl!=null and publishUrl!=''">
             publish_url = #{publishUrl},
@@ -303,7 +315,8 @@
         <result column="is_default" property="isDefault"/>
         <result column="template_type" property="templateType"/>
         <result column="isTemplate" property="isTemplate"/>
-        <result column="business_id" property="businessId"/>
+        <result column="industry_id" property="industryId"/>
+        <result column="scene_id" property="sceneId"/>
         <result column="set_template_time" property="setTemplateTime"/>
         <result column="set_template_by" property="setTemplateBy"/>
         <result column="set_default_by" property="setDefaultBy"/>
@@ -321,97 +334,127 @@
         <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
-        <collection property="business" ofType="com.tinyengine.it.model.entity.BusinessCategory" column="business_id">
-            <id column="business_id" property="id"/>
-            <result column="code" property="code"/>
-            <result column="business_name" property="name"/>
-            <result column="business_group" property="businessGroup"/>
-            <result column="business" property="createdBy"/>
-            <result column="business_last_updated_by" property="lastUpdatedBy"/>
-            <result column="business_created_time" property="createdTime"/>
-            <result column="business_last_updated_time" property="lastUpdatedTime"/>
-            <result column="business_tenant_id" property="tenantId"/>
-            <result column="business_renter_id" property="renterId"/>
-            <result column="business_site_id" property="siteId"/>
-        </collection>
+        <!-- 行业分类映射 -->
+        <association property="industry" javaType="com.tinyengine.it.model.entity.BusinessCategory">
+            <id column="industry_id" property="id"/>
+            <result column="industry_code" property="code"/>
+            <result column="industry_name" property="name"/>
+            <result column="industry_business_group" property="businessGroup"/>
+            <result column="industry_created_by" property="createdBy"/>
+            <result column="industry_last_updated_by" property="lastUpdatedBy"/>
+            <result column="industry_created_time" property="createdTime"/>
+            <result column="industry_last_updated_time" property="lastUpdatedTime"/>
+            <result column="industry_tenant_id" property="tenantId"/>
+            <result column="industry_renter_id" property="renterId"/>
+            <result column="industry_site_id" property="siteId"/>
+        </association>
+
+        <!-- 场景分类映射 -->
+        <association property="scene" javaType="com.tinyengine.it.model.entity.BusinessCategory">
+            <id column="scene_id" property="id"/>
+            <result column="scene_code" property="code"/>
+            <result column="scene_name" property="name"/>
+            <result column="scene_business_group" property="businessGroup"/>
+            <result column="scene_created_by" property="createdBy"/>
+            <result column="scene_last_updated_by" property="lastUpdatedBy"/>
+            <result column="scene_created_time" property="createdTime"/>
+            <result column="scene_last_updated_time" property="lastUpdatedTime"/>
+            <result column="scene_tenant_id" property="tenantId"/>
+            <result column="scene_renter_id" property="renterId"/>
+            <result column="scene_site_id" property="siteId"/>
+        </association>
     </resultMap>
     <!-- 公共列定义 -->
     <sql id="App_Base_Column_List">
         A.id,
-    A.name,
-    A.app_website,
-    A.platform_id,
-    A.platform_history_id,
-    A.publish_url,
-    A.editor_url,
-    A.visit_url,
-    A.image_url,
-    A.assets_url,
-    A.state,
-    A.published,
-    A.home_page_id,
-    A.css,
-    A.config,
-    A.constants,
-    A.data_handler,
-    A.description,
-    A.latest,
-    A.git_group,
-    A.project_name,
-    A.branch,
-    A.is_demo,
-    A.is_default,
-    A.template_type,
-    A.is_template,
-    A.business_id,
-    A.set_template_time,
-    A.set_template_by,
-    A.set_default_by,
-    A.framework,
-    A.global_state,
-    A.default_lang,
-    A.extend_config,
-    A.data_hash,
-    A.can_associate,
-    A.data_source_global,
-    A.last_updated_by,
-    A.created_time,
-    A.last_updated_time,
-    A.tenant_id,
-    A.renter_id,
-    A.site_id
+        A.name,
+        A.app_website,
+        A.platform_id,
+        A.industry_id,
+        A.scene_id,
+        A.platform_history_id,
+        A.publish_url,
+        A.editor_url,
+        A.visit_url,
+        A.image_url,
+        A.assets_url,
+        A.state,
+        A.published,
+        A.home_page_id,
+        A.css,
+        A.config,
+        A.constants,
+        A.data_handler,
+        A.description,
+        A.latest,
+        A.git_group,
+        A.project_name,
+        A.branch,
+        A.is_demo,
+        A.is_default,
+        A.template_type,
+        A.is_template,
+        A.set_template_time,
+        A.set_template_by,
+        A.set_default_by,
+        A.framework,
+        A.global_state,
+        A.default_lang,
+        A.extend_config,
+        A.data_hash,
+        A.can_associate,
+        A.data_source_global,
+        A.created_by,
+        A.last_updated_by,
+        A.created_time,
+        A.last_updated_time,
+        A.tenant_id,
+        A.renter_id,
+        A.site_id
     </sql>
 
-    <sql id="business_Base_Column_List">
-    B.id as business_id,
-    B.code,
-    B.name as business_name,
-    B.business_group,
-    B.created_by as block_created_by,
-    B.last_updated_by as block_last_updated_by,
-    B.created_time as block_created_time,
-    B.last_updated_time as block_last_updated_time,
-    B.tenant_id as block_tenant_id,
-    B.renter_id as block_renter_id,
-    B.site_id as block_site_id
-    </sql>
     <!-- 公共 JOIN 逻辑 -->
     <sql id="Common_Join">
         FROM t_app A
-        LEFT JOIN t_business_category B ON A.business_id = B.id AND A.business_id IS NOT NULL
+        LEFT JOIN t_business_category industry ON A.industry_id = industry.id AND A.industry_id  IS NOT NULL
+        LEFT JOIN t_business_category scene ON A.scene_id = scene.id AND A.scene_id  IS NOT NULL
     </sql>
-
     <sql id="Common_Column_List">
         <include refid="App_Base_Column_List"/>,
-        <include refid="business_Base_Column_List"/>
+        industry.id as industry_id, industry.code as industry_code, industry.name as industry_name,
+        industry.business_group as industry_business_group,
+        scene.id as scene_id, scene.code as scene_code, scene.name as scene_name,
+        scene.business_group as scene_business_group
     </sql>
-
-    <!-- 查询表t_app所有数据 -->
     <select id="queryAllApp" resultMap="AppMap">
         SELECT
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
-         WHERE is_template != true
+        WHERE A.is_template != true
+        ORDER BY A.created_time DESC
+    </select>
+
+    <select id="queryAllAppByPage" resultMap="AppMap">
+        SELECT
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+        <where>
+            A.is_template != true
+            <if test="name != null and name != ''">
+                AND A.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="industryId != null">
+                AND A.industry_id = #{industryId}
+            </if>
+            <if test="sceneId != null">
+                AND A.scene_id = #{sceneId}
+            </if>
+            <if test="framework != null">
+                AND A.framework = #{framework}
+            </if>
+        </where>
+        ORDER BY A.created_time DESC
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <!-- 查询应用模版所有数据 -->
@@ -419,7 +462,23 @@
         SELECT
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
-        WHERE is_template = true
+        <where>
+            A.is_template = true
+            <if test="name != null and name != ''">
+                AND A.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="industryId != null">
+                AND A.industry_id = #{industryId}
+            </if>
+            <if test="sceneId != null">
+                AND A.scene_id = #{sceneId}
+            </if>
+            <if test="framework != null">
+                AND A.framework = #{framework}
+            </if>
+        </where>
+        ORDER BY A.created_time DESC
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <!-- 根据主键id查询表t_app信息 -->
@@ -428,7 +487,7 @@
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
         <where>
-            id = #{id}
+            A.id = #{id}
         </where>
     </select>
 
@@ -438,7 +497,7 @@
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
         <where>
-            id = #{id} and is_template = true
+            A.id = #{id} and A.is_template = true
         </where>
     </select>
 
@@ -475,6 +534,8 @@
         , app_website
         , platform_id
         , platform_history_id
+        , industry_id
+        , scene_id
         , publish_url
         , editor_url
         , visit_url
@@ -518,6 +579,8 @@
         , #{appWebsite}
         , #{platformId}
         , #{platformHistoryId}
+        , #{industryId}
+        , #{sceneId}
         , #{publishUrl}
         , #{editorUrl}
         , #{visitUrl}

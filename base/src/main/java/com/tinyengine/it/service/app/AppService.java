@@ -35,6 +35,15 @@ public interface AppService extends IService<App> {
     List<App> queryAllApp();
 
     /**
+     * 分页查询应用模版所有信息
+     * @param currentPage the currentPage
+     * @param  pageSize the pageSize
+     * @param app the app
+     * @return the list
+     */
+    List<App> queryAllAppByPage(Integer currentPage, Integer pageSize, App app);
+
+    /**
      * 根据主键id查询表t_app信息
      *
      * @param id the id

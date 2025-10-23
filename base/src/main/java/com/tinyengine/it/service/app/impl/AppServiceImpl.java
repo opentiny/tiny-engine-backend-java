@@ -84,6 +84,29 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     }
 
     /**
+     * 分页查询表t_app所有信息
+     *
+     * @param pageSize
+     * @param currentPage
+     * @return the list
+     */
+    @Override
+    public List<App> queryAllAppByPage(Integer currentPage, Integer pageSize, App app) {
+        if (currentPage < 1) {
+            currentPage = 1;  // 默认第一页
+        }
+        if (pageSize < 1) {
+            pageSize = 10;    // 默认每页10条
+        }
+        if (pageSize > 1000) {
+            pageSize = 1000;  // 限制最大页大小
+        }
+        int offset = (currentPage - 1) * pageSize;
+        return this.baseMapper.queryAllAppByPage(pageSize, offset, app.getName(),
+                app.getIndustryId(), app.getSceneId(), app.getFramework());
+    }
+
+    /**
      * 根据主键id查询表t_app信息
      *
      * @param id id

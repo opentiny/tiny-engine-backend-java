@@ -75,13 +75,21 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
     Integer createPageHistory(PageHistory pageHistory);
 
     /**
-     * 新增表t_page_history数据
+     * 通过名称及appId查询表t_page_history数据
      *
      * @param app  the app
      * @param name the page name
      * @return the List<PageHistory>
      */
     List<PageHistory> queryPageHistoryByName(String name, Integer app);
+
+    /**
+     * 通过appId查询表t_page_history数据
+     *
+     * @param appId  the appId
+     * @return the List<PageHistory>
+     */
+    List<PageHistory> queryPageHistoryByAppId(Integer appId);
 
     /**
      * 查询发布的页面记录

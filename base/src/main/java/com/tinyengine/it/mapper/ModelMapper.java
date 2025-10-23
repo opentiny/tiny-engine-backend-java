@@ -15,6 +15,8 @@ package com.tinyengine.it.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.Model;
 
+import java.util.List;
+
 /**
  * The interface Model mapper.
  *
@@ -36,5 +38,13 @@ public interface ModelMapper  extends BaseMapper<Model> {
      * @return the int
      */
     int updateModelById(Model model);
+
+    /**
+     * 根据条件查询表t_model数据
+     *
+     * @param model the model
+     * @return model list
+     */
+    List<Model> queryModelByCondition(Model model);
 
 }

@@ -33,11 +33,30 @@ public interface AppMapper extends BaseMapper<App> {
     List<App> queryAllApp();
 
     /**
-     * 查询应用模版所有信息
-     *
+     * 分页查询应用所有信息
+     * @param offset the offset
+     * @param pageSize the pageSize
+     * @param name the name
+     * @param industryId the industryId
+     * @param sceneId the sceneId
+     * @param framework the framework
      * @return the list
      */
-    List<App> queryAllAppTemplate();
+    List<App> queryAllAppByPage(Integer pageSize, Integer offset, String name,
+                                Integer industryId, Integer sceneId, String framework);
+
+    /**
+     * 分页查询应用模版所有信息
+     * @param offset the offset
+     * @param pageSize the pageSize
+     * @param name the name
+     * @param industryId the industryId
+     * @param sceneId the sceneId
+     * @param framework the framework
+     * @return the list
+     */
+    List<App> queryAllAppTemplate(Integer pageSize, Integer offset, String name,
+        Integer industryId, Integer sceneId, String framework);
 
     /**
      * 根据主键id查询应用模版数据
