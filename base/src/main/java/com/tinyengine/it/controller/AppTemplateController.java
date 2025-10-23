@@ -59,11 +59,11 @@ public class AppTemplateController {
     @Operation(summary = "分页查询应用模版信息", description = "分页查询应用模版信息",
         parameters = {
             @Parameter(name = "currentPage", description = "当前页"),
-            @Parameter(name = "pageSize", description = "页数"),
+            @Parameter(name = "pageSize", description = "返回条数"),
             @Parameter(name = "name", description = "名称"),
-            @Parameter(name = "industry", description = "页数"),
-            @Parameter(name = "scene", description = "页数"),
-            @Parameter(name = "framework", description = "页数"),
+            @Parameter(name = "industry", description = "行业"),
+            @Parameter(name = "scene", description = "场景"),
+            @Parameter(name = "framework", description = "技术栈"),
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                 content = @Content(mediaType = "application/json",
