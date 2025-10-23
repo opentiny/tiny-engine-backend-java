@@ -35,6 +35,7 @@ import java.util.List;
 @TableName("t_model")
 @Schema(name = "Model", description = "模型表")
 public class Model extends BaseEntity {
+
     @Schema(name = "app_id", description = "关联appId")
     private Integer appId;
 

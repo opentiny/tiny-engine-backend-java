@@ -36,6 +36,7 @@ import java.util.Map;
 @TableName("t_app_extension")
 @Schema(name = "AppExtension", description = "应用扩展")
 public class AppExtension extends BaseEntity {
+
     @Schema(name = "platform_id", description = "关联platformId")
     private Integer platformId;
 

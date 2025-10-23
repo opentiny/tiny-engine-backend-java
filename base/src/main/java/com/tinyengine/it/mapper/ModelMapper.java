@@ -46,5 +46,4 @@ public interface ModelMapper  extends BaseMapper<Model> {
      * @return model list
      */
     List<Model> queryModelByCondition(Model model);
-
 }
