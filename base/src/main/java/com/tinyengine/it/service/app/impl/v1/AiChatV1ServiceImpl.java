@@ -285,9 +285,44 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         if (request.getMaxTokens() != null) {
             body.put("max_tokens", request.getMaxTokens());
         }
-        if (request.getTemperature() != null) {
+        body.put("temperature", request.getTemperature());
+        if(request.getTemperature() != null) {
             body.put("temperature", request.getTemperature());
         }
+        if(request.getSearchOptions() != null) {
+            body.put("stream_options", request.getSearchOptions());
+        }
+        if(request.getPresencePenalty() != null) {
+            body.put("presence_penalty", request.getPresencePenalty());
+        }
+        if(request.getResponseFormat() != null) {
+            body.put("response_format", request.getResponseFormat());
+        }
+        if(request.getMaxInputTokens() != null) {
+            body.put("max_input_tokens", request.getMaxInputTokens());
+        }
+        if(request.getMaxInputTokens() != null) {
+            body.put("vl_high_resolution_images", request.getVlHighResolutionImages());
+        }
+        if(request.getEnableThinking() != null) {
+            body.put("enable_thinking", request.getEnableThinking());
+        }
+        if(request.getToolChoice() != null) {
+            body.put("tool_choice", request.getToolChoice());
+        }
+        if(request.getStop() != null) {
+            body.put("stop", request.getStop());
+        }
+        if(request.getParallelToolCalls() != null) {
+            body.put("parallel_tool_calls", request.getParallelToolCalls());
+        }
+        if(request.getEnableSearch() != null) {
+            body.put("enable_search", request.getEnableSearch());
+        }
+        if(request.getFrequencyPenalty() != null) {
+            body.put("frequency_penalty", request.getFrequencyPenalty());
+        }
+
         return JsonUtils.encode(body);
     }
 
