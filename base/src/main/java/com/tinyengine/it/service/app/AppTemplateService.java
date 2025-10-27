@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app;
 
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.AppDto;
 import com.tinyengine.it.model.entity.App;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public interface AppTemplateService {
      * @param currentPage the currentPage
      * @param  pageSize the pageSize
      * @param app the app
-     * @return the list
+     * @return the AppDto
      */
-    List<App> queryAllAppTemplate(Integer currentPage, Integer pageSize, App app);
+    AppDto queryAllAppTemplate(Integer currentPage, Integer pageSize, App app);
 
     /**
      * 根据主键id查询应用模版信息

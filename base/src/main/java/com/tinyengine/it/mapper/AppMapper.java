@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.App;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -43,7 +44,23 @@ public interface AppMapper extends BaseMapper<App> {
      * @return the list
      */
     List<App> queryAllAppByPage(Integer pageSize, Integer offset, String name,
-                                Integer industryId, Integer sceneId, String framework);
+        Integer industryId, Integer sceneId, String framework);
+
+    /**
+     * 查询表t_app 应用总数
+     *
+     * @return the int
+     */
+    @Select("select count(id) from t_app where is_template != true")
+    int queryAppTotal();
+
+    /**
+     * 查询表t_app 模版总数
+     *
+     * @return the int
+     */
+    @Select("select count(id) from t_app where is_template = true")
+    int queryAppTemplateTotal();
 
     /**
      * 分页查询应用模版所有信息

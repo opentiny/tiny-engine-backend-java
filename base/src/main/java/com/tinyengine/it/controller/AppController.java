@@ -14,6 +14,7 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.model.dto.AppDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.service.app.AppService;
 
@@ -95,7 +96,7 @@ public class AppController {
             @ApiResponse(responseCode = "400", description = "请求失败")})
     @SystemControllerLog(description = "分页查询表App信息")
     @GetMapping("/apps/page")
-    public Result<List<App>> getAllAppByPage(@RequestParam Integer currentPage,
+    public Result<AppDto> getAllAppByPage(@RequestParam Integer currentPage,
         @RequestParam Integer pageSize, @RequestParam(required = false) String name,
         @RequestParam(required = false) Integer industryId, @RequestParam(required = false) Integer sceneId,
         @RequestParam(required = false) String framework) {
@@ -104,8 +105,8 @@ public class AppController {
         app.setSceneId(sceneId);
         app.setId(industryId);
         app.setFramework(framework);
-        List<App> appList = appService.queryAllAppByPage(currentPage, pageSize, app);
-        return Result.success(appList);
+        AppDto appDto = appService.queryAllAppByPage(currentPage, pageSize, app);
+        return Result.success(appDto);
     }
 
     /**

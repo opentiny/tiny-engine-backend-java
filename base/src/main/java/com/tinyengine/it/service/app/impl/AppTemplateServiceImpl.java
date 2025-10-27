@@ -23,6 +23,7 @@ import com.tinyengine.it.mapper.DatasourceMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.mapper.ModelMapper;
 import com.tinyengine.it.mapper.PageHistoryMapper;
+import com.tinyengine.it.model.dto.AppDto;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.AppExtension;
@@ -94,10 +95,10 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
      * @param currentPage the currentPage
      * @param  pageSize the pageSize
      * @param app the app
-     * @return the list
+     * @return the AppDto
      */
     @Override
-    public List<App> queryAllAppTemplate(Integer currentPage, Integer pageSize, App app) {
+    public AppDto queryAllAppTemplate(Integer currentPage, Integer pageSize, App app) {
         if (currentPage < 1) {
             currentPage = 1;  // 默认第一页
         }
@@ -108,8 +109,14 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
             pageSize = 1000;  // 限制最大页大小
         }
         int offset = (currentPage - 1) * pageSize;
-        return this.baseMapper.queryAllAppTemplate(pageSize, offset, app.getName(),
+
+        List<App> apps =  this.baseMapper.queryAllAppTemplate(pageSize, offset, app.getName(),
             app.getIndustryId(), app.getSceneId(), app.getFramework());
+        Integer total = this.baseMapper.queryAppTemplateTotal();
+        AppDto appDto = new AppDto();
+        appDto.setApps(apps);
+        appDto.setTotal(total);
+        return appDto;
     }
 
     /**
