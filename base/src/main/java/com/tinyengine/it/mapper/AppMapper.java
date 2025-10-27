@@ -41,10 +41,12 @@ public interface AppMapper extends BaseMapper<App> {
      * @param industryId the industryId
      * @param sceneId the sceneId
      * @param framework the framework
+     * @param orderBy the orderBy
+     * @param createdBy the createdBy
      * @return the list
      */
     List<App> queryAllAppByPage(Integer pageSize, Integer offset, String name,
-        Integer industryId, Integer sceneId, String framework);
+        Integer industryId, Integer sceneId, String framework, String orderBy, String createdBy);
 
     /**
      * 查询表t_app 应用总数
@@ -70,10 +72,12 @@ public interface AppMapper extends BaseMapper<App> {
      * @param industryId the industryId
      * @param sceneId the sceneId
      * @param framework the framework
+     * @param orderBy the orderBy
+     * @param createdBy the createdBy
      * @return the list
      */
     List<App> queryAllAppTemplate(Integer pageSize, Integer offset, String name,
-        Integer industryId, Integer sceneId, String framework);
+        Integer industryId, Integer sceneId, String framework, String orderBy, String createdBy);
 
     /**
      * 根据主键id查询应用模版数据

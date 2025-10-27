@@ -89,10 +89,11 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
      *
      * @param pageSize
      * @param currentPage
+     * @param  orderBy the orderBy
      * @return the AppDto
      */
     @Override
-    public AppDto queryAllAppByPage(Integer currentPage, Integer pageSize, App app) {
+    public AppDto queryAllAppByPage(Integer currentPage, Integer pageSize, String orderBy, App app) {
         if (currentPage < 1) {
             currentPage = 1;  // 默认第一页
         }
@@ -104,7 +105,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         }
         int offset = (currentPage - 1) * pageSize;
         List<App> apps =  this.baseMapper.queryAllAppByPage(pageSize, offset, app.getName(),
-            app.getIndustryId(), app.getSceneId(), app.getFramework());
+            app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy());
         Integer total = this.baseMapper.queryAppTotal();
         AppDto appDto = new AppDto();
         appDto.setApps(apps);

@@ -39,10 +39,11 @@ public interface AppService extends IService<App> {
      * 分页查询应用模版所有信息
      * @param currentPage the currentPage
      * @param  pageSize the pageSize
+     * @param  orderBy the orderBy
      * @param app the app
      * @return the AppDto
      */
-    AppDto queryAllAppByPage(Integer currentPage, Integer pageSize, App app);
+    AppDto queryAllAppByPage(Integer currentPage, Integer pageSize, String orderBy, App app);
 
     /**
      * 根据主键id查询表t_app信息

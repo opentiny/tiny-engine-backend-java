@@ -65,6 +65,8 @@ public class AppTemplateController {
             @Parameter(name = "industry", description = "行业"),
             @Parameter(name = "scene", description = "场景"),
             @Parameter(name = "framework", description = "技术栈"),
+            @Parameter(name = "orderBy", description = "排序方式"),
+            @Parameter(name = "createBy", description = "创建人"),
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                 content = @Content(mediaType = "application/json",
@@ -75,13 +77,15 @@ public class AppTemplateController {
     public Result<AppDto> getAllAppTemplateByPage(@RequestParam Integer currentPage,
         @RequestParam Integer pageSize, @RequestParam(required = false) String name,
         @RequestParam(required = false) Integer industryId, @RequestParam(required = false) Integer sceneId,
-        @RequestParam(required = false) String framework) {
+        @RequestParam(required = false) String framework, @RequestParam(required = false) String orderBy,
+        @RequestParam(required = false) String createBy) {
         App app = new App();
         app.setName(name);
         app.setSceneId(sceneId);
         app.setId(industryId);
         app.setFramework(framework);
-        AppDto appDto = appTemplateService.queryAllAppTemplate(currentPage, pageSize, app);
+        app.setCreatedBy(createBy);
+        AppDto appDto = appTemplateService.queryAllAppTemplate(currentPage, pageSize, orderBy, app);
         return Result.success(appDto);
     }
 

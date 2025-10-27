@@ -89,6 +89,8 @@ public class AppController {
             @Parameter(name = "industry", description = "行业"),
             @Parameter(name = "scene", description = "场景"),
             @Parameter(name = "framework", description = "技术栈"),
+            @Parameter(name = "orderBy", description = "排序方式"),
+            @Parameter(name = "createdBy", description = "创建人"),
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                  content = @Content(mediaType = "application/json",
@@ -99,13 +101,15 @@ public class AppController {
     public Result<AppDto> getAllAppByPage(@RequestParam Integer currentPage,
         @RequestParam Integer pageSize, @RequestParam(required = false) String name,
         @RequestParam(required = false) Integer industryId, @RequestParam(required = false) Integer sceneId,
-        @RequestParam(required = false) String framework) {
+        @RequestParam(required = false) String framework, @RequestParam(required = false) String orderBy,
+        @RequestParam(required = false) String createdBy) {
         App app = new App();
         app.setName(name);
         app.setSceneId(sceneId);
         app.setId(industryId);
         app.setFramework(framework);
-        AppDto appDto = appService.queryAllAppByPage(currentPage, pageSize, app);
+        app.setCreatedBy(createdBy);
+        AppDto appDto = appService.queryAllAppByPage(currentPage, pageSize, orderBy, app);
         return Result.success(appDto);
     }
 

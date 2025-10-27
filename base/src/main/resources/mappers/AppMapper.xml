@@ -430,7 +430,7 @@
         SELECT
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
-        WHERE A.is_template != true
+        WHERE IS NOT TRUE
         ORDER BY A.created_time DESC
     </select>
 
@@ -439,7 +439,7 @@
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
         <where>
-            A.is_template != true
+            A.is_template IS NOT TRUE
             <if test="name != null and name != ''">
                 AND A.name LIKE CONCAT('%', #{name}, '%')
             </if>
@@ -452,8 +452,16 @@
             <if test="framework != null">
                 AND A.framework = #{framework}
             </if>
+            <if test="createdBy != null">
+                AND A.created_by = #{createdBy}
+            </if>
         </where>
-        ORDER BY A.created_time DESC
+        ORDER BY
+        <choose>
+            <when test="orderBy == 'create_time'">A.created_time</when>
+            <when test="orderBy == 'last_updated_time'">A.last_updated_time</when>
+            <otherwise>A.id</otherwise>
+        </choose>
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
@@ -476,8 +484,17 @@
             <if test="framework != null">
                 AND A.framework = #{framework}
             </if>
+            <if test="createdBy != null">
+                AND A.created_by = #{createdBy}
+            </if>
         </where>
-        ORDER BY A.created_time DESC
+        ORDER BY
+        <choose>
+            <when test="orderBy == 'created_time'">A.created_time</when>
+            <when test="orderBy == 'last_updated_time'">A.last_updated_time</when>
+            <otherwise>A.id</otherwise>
+        </choose>
+        DESC
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 

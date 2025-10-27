@@ -94,11 +94,12 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
      * 分页查询应用模版所有信息
      * @param currentPage the currentPage
      * @param  pageSize the pageSize
+     * @param  orderBy the orderBy
      * @param app the app
      * @return the AppDto
      */
     @Override
-    public AppDto queryAllAppTemplate(Integer currentPage, Integer pageSize, App app) {
+    public AppDto queryAllAppTemplate(Integer currentPage, Integer pageSize, String orderBy, App app) {
         if (currentPage < 1) {
             currentPage = 1;  // 默认第一页
         }
@@ -111,7 +112,7 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
         int offset = (currentPage - 1) * pageSize;
 
         List<App> apps =  this.baseMapper.queryAllAppTemplate(pageSize, offset, app.getName(),
-            app.getIndustryId(), app.getSceneId(), app.getFramework());
+            app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy());
         Integer total = this.baseMapper.queryAppTemplateTotal();
         AppDto appDto = new AppDto();
         appDto.setApps(apps);
