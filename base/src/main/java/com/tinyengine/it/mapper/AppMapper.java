@@ -51,7 +51,7 @@ public interface AppMapper extends BaseMapper<App> {
      *
      * @return the int
      */
-    @Select("select count(id) from t_app where is_template != true")
+    @Select("SELECT COUNT(id) FROM t_app WHERE is_template IS NOT TRUE")
     int queryAppTotal();
 
     /**
@@ -59,7 +59,7 @@ public interface AppMapper extends BaseMapper<App> {
      *
      * @return the int
      */
-    @Select("select count(id) from t_app where is_template = true")
+    @Select("SELECT COUNT(id) FROM t_app WHERE is_template = TRUE")
     int queryAppTemplateTotal();
 
     /**
