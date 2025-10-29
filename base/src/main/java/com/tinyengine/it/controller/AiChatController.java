@@ -50,7 +50,6 @@ public class AiChatController {
      */
     @Autowired
     private AiChatV1Service aiChatV1Service;
-
     /**
      * AI api
      *
