@@ -43,9 +43,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 存储服务 - 支持动态集合管理
@@ -92,7 +94,7 @@ public class StorageService {
      * Check if file format is supported
      */
     private boolean isSupportedFormat(Path filePath) {
-        String fileName = filePath.getFileName().toString().toLowerCase();
+        String fileName = filePath.getFileName().toString().toLowerCase(Locale.ROOT);
         return SUPPORTED_FORMATS.stream().anyMatch(format -> fileName.endsWith(format));
     }
 
@@ -166,28 +168,23 @@ public class StorageService {
      * 扫描文件夹中所有支持的文件
      */
     private List<String> scanSupportedFiles(String folderPath) {
-        List<String> supportedFiles = new ArrayList<>();
+        Path folder = Paths.get(folderPath);
 
-        try {
-            Path folder = Paths.get(folderPath);
-            // 使用 Files.walk 递归扫描子文件夹
-            Files.walk(folder)
-                .filter(Files::isRegularFile)
-                .filter(this::isSupportedFormat)
-                .forEach(filePath -> {
-                    supportedFiles.add(filePath.toString());
-                    log.debug("Found supported file: {}", filePath);
-                });
-
-            supportedFiles.sort(String::compareTo);
+        try (Stream<Path> pathStream = Files.walk(folder)) {
+            return pathStream
+                    .filter(Files::isRegularFile)
+                    .filter(this::isSupportedFormat)
+                    .peek(filePath -> log.debug("Found supported file: {}", filePath))
+                    .map(Path::toString)
+                    .sorted()
+                    .collect(Collectors.toList());
 
         } catch (IOException e) {
             log.error("Failed to scan folder: {}", folderPath, e);
             throw new ServiceException(ExceptionEnum.CM333.getResultCode(), ExceptionEnum.CM333.getResultMsg());
         }
-
-        return supportedFiles;
     }
+
 
 
     /**
@@ -205,7 +202,7 @@ public class StorageService {
 
         // 根据文件路径自动判断集合
         if (filePath != null) {
-            String lowerPath = filePath.toLowerCase();
+            String lowerPath = filePath.toLowerCase(Locale.ROOT);
             // 如果路径包含特定关键词，映射到对应集合
             for (Map.Entry<String, String> entry : collectionMapping.entrySet()) {
                 if (lowerPath.contains(entry.getKey())) {
@@ -223,9 +220,11 @@ public class StorageService {
      * 检查文件格式是否支持
      */
     private boolean isSupportedFormat(String filePath) {
-        if (filePath == null) return false;
+        if (filePath == null) {
+            return false;
+        }
 
-        String lowerPath = filePath.toLowerCase();
+        String lowerPath = filePath.toLowerCase(Locale.ROOT);
         return SUPPORTED_FORMATS.stream().anyMatch(lowerPath::endsWith);
     }
 
@@ -233,9 +232,11 @@ public class StorageService {
      * 检查是否为文本格式
      */
     private boolean isTextFormat(String filePath) {
-        if (filePath == null) return false;
+        if (filePath == null) {
+            return false;
+        }
 
-        String lowerPath = filePath.toLowerCase();
+        String lowerPath = filePath.toLowerCase(Locale.ROOT);
         return TEXT_FORMATS.stream().anyMatch(lowerPath::endsWith);
     }
 
@@ -243,27 +244,65 @@ public class StorageService {
      * 获取文件格式描述
      */
     private String getFileFormatDescription(String filePath) {
-        if (filePath == null) return "unknown";
+        if (filePath == null) {
+            return "unknown";
+        }
 
-        String lowerPath = filePath.toLowerCase();
-        if (lowerPath.endsWith(".pdf")) return "PDF Document";
-        if (lowerPath.endsWith(".sql")) return "SQL Script";
-        if (lowerPath.endsWith(".java")) return "Java Source";
-        if (lowerPath.endsWith(".py")) return "Python Script";
-        if (lowerPath.endsWith(".js")) return "JavaScript";
-        if (lowerPath.endsWith(".ts")) return "TypeScript";
-        if (lowerPath.endsWith(".html")) return "HTML Document";
-        if (lowerPath.endsWith(".css")) return "CSS Stylesheet";
-        if (lowerPath.endsWith(".xml")) return "XML Document";
-        if (lowerPath.endsWith(".json")) return "JSON Data";
-        if (lowerPath.endsWith(".yaml") || lowerPath.endsWith(".yml")) return "YAML Configuration";
-        if (lowerPath.endsWith(".properties")) return "Properties File";
-        if (lowerPath.endsWith(".sh")) return "Shell Script";
-        if (lowerPath.endsWith(".bat") || lowerPath.endsWith(".cmd")) return "Batch File";
-        if (lowerPath.endsWith(".c")) return "C Source";
-        if (lowerPath.endsWith(".cpp") || lowerPath.endsWith(".h") || lowerPath.endsWith(".hpp")) return "C++ Source";
-        if (lowerPath.endsWith(".txt")) return "Text Document";
-        if (lowerPath.endsWith(".md")) return "Markdown Document";
+        String lowerPath = filePath.toLowerCase(Locale.ROOT);
+        if (lowerPath.endsWith(".pdf")) {
+            return "PDF Document";
+        }
+        if (lowerPath.endsWith(".sql")) {
+            return "SQL Script";
+        }
+        if (lowerPath.endsWith(".java")) {
+            return "Java Source";
+        }
+        if (lowerPath.endsWith(".py")) {
+            return "Python Script";
+        }
+        if (lowerPath.endsWith(".js")) {
+            return "JavaScript";
+        }
+        if (lowerPath.endsWith(".ts")) {
+            return "TypeScript";
+        }
+        if (lowerPath.endsWith(".html")) {
+            return "HTML Document";
+        }
+        if (lowerPath.endsWith(".css")) {
+            return "CSS Stylesheet";
+        }
+        if (lowerPath.endsWith(".xml")) {
+            return "XML Document";
+        }
+        if (lowerPath.endsWith(".json")) {
+            return "JSON Data";
+        }
+        if (lowerPath.endsWith(".yaml") || lowerPath.endsWith(".yml")) {
+            return "YAML Configuration";
+        }
+        if (lowerPath.endsWith(".properties")) {
+            return "Properties File";
+        }
+        if (lowerPath.endsWith(".sh")) {
+            return "Shell Script";
+        }
+        if (lowerPath.endsWith(".bat") || lowerPath.endsWith(".cmd")) {
+            return "Batch File";
+        }
+        if (lowerPath.endsWith(".c")) {
+            return "C Source";
+        }
+        if (lowerPath.endsWith(".cpp") || lowerPath.endsWith(".h") || lowerPath.endsWith(".hpp")) {
+            return "C++ Source";
+        }
+        if (lowerPath.endsWith(".txt")) {
+            return "Text Document";
+        }
+        if (lowerPath.endsWith(".md")) {
+            return "Markdown Document";
+        }
 
         return "Unknown Format";
     }
@@ -339,7 +378,7 @@ public class StorageService {
                 Path filePath = Paths.get(path);
                 Document document;
 
-                if (path.toLowerCase().endsWith(".pdf")) {
+                if (path.toLowerCase(Locale.ROOT).endsWith(".pdf")) {
                     // PDF 文件使用 PDF 解析器
                     ApachePdfBoxDocumentParser pdfParser = new ApachePdfBoxDocumentParser();
                     document = FileSystemDocumentLoader.loadDocument(filePath, pdfParser);
@@ -666,6 +705,7 @@ public class StorageService {
             throw new ServiceException(ExceptionEnum.CM332.getResultCode(), "Batch delete files failed");
         }
     }
+
     /**
      * 获取所有集合及其包含的文档路径
      */

@@ -192,10 +192,10 @@ public class ResourceController {
         // 获取文件的原始名称
         String fileName = StringUtils.cleanPath(java.util.Optional.ofNullable(file.getOriginalFilename()).orElse("image"));
 
-        if(!ImageThumbnailGenerator.validateByImageIO(file)){
+        if (!ImageThumbnailGenerator.validateByImageIO(file)) {
             return Result.failed(ExceptionEnum.CM325);
         }
-        if(fileName.contains("..")) {
+        if (fileName.contains("..")) {
             return Result.failed(ExceptionEnum.CM325);
         }
         // 将文件转为 Base64

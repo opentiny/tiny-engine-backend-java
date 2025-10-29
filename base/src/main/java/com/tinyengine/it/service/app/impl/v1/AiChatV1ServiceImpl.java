@@ -88,7 +88,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
 
         if (baseUrl.contains("v1")) {
             return ensureUrlProtocol(baseUrl) + "/chat/completions";
-        } else  {
+        } else {
             return ensureUrlProtocol(baseUrl) + "/v1/chat/completions";
         }
     }
@@ -114,40 +114,40 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
             body.put("max_tokens", request.getMaxTokens());
         }
         body.put("temperature", request.getTemperature());
-        if(request.getTemperature() != null) {
+        if (request.getTemperature() != null) {
             body.put("temperature", request.getTemperature());
         }
-        if(request.getSearchOptions() != null) {
+        if (request.getSearchOptions() != null) {
             body.put("stream_options", request.getSearchOptions());
         }
-        if(request.getPresencePenalty() != null) {
+        if (request.getPresencePenalty() != null) {
             body.put("presence_penalty", request.getPresencePenalty());
         }
-        if(request.getResponseFormat() != null) {
+        if (request.getResponseFormat() != null) {
             body.put("response_format", request.getResponseFormat());
         }
-        if(request.getMaxInputTokens() != null) {
+        if (request.getMaxInputTokens() != null) {
             body.put("max_input_tokens", request.getMaxInputTokens());
         }
-        if(request.getMaxInputTokens() != null) {
+        if (request.getMaxInputTokens() != null) {
             body.put("vl_high_resolution_images", request.getVlHighResolutionImages());
         }
-        if(request.getEnableThinking() != null) {
+        if (request.getEnableThinking() != null) {
             body.put("enable_thinking", request.getEnableThinking());
         }
-        if(request.getToolChoice() != null) {
+        if (request.getToolChoice() != null) {
             body.put("tool_choice", request.getToolChoice());
         }
-        if(request.getStop() != null) {
+        if (request.getStop() != null) {
             body.put("stop", request.getStop());
         }
-        if(request.getParallelToolCalls() != null) {
+        if (request.getParallelToolCalls() != null) {
             body.put("parallel_tool_calls", request.getParallelToolCalls());
         }
-        if(request.getEnableSearch() != null) {
+        if (request.getEnableSearch() != null) {
             body.put("enable_search", request.getEnableSearch());
         }
-        if(request.getFrequencyPenalty() != null) {
+        if (request.getFrequencyPenalty() != null) {
             body.put("frequency_penalty", request.getFrequencyPenalty());
         }
 
@@ -186,8 +186,9 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                     String errorEvent = "data: {\"error\": \"" + e.getMessage() + "\"}\n\n";
                     outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
                     outputStream.flush();
-                } catch (IOException ignored) {
-
+                } catch (IOException ioException) {
+                    throw new IOException("API请求失败，且无法发送错误信息: " + e.getMessage() +
+                            " (IO错误: " + ioException.getMessage() + ")", e);
                 }
             }
         };

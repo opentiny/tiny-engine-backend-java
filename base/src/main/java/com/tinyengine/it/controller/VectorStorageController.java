@@ -221,7 +221,7 @@ public class VectorStorageController {
     @DeleteMapping("/vector-storage/batch/{collection}")
     public Result<BatchDeleteResult> deleteMultipleFiles(@PathVariable String collection,
         @RequestBody @NotEmpty List<@NotEmpty String> filePaths) {
-        BatchDeleteResult result = vectorStorageService.deleteMultipleFiles(filePaths,collection);
+        BatchDeleteResult result = vectorStorageService.deleteMultipleFiles(filePaths, collection);
         return Result.success(result);
     }
 

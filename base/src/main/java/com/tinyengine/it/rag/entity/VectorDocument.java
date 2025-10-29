@@ -75,6 +75,7 @@ public class VectorDocument {
         this.processingTime = 0L;
         this.status = errorCount == 0 ? "SUCCESS" : "PARTIAL_SUCCESS";
     }
+
     /**
      * 获取总处理数量
      */

@@ -83,9 +83,15 @@ public class EmbeddingMatchDto {
                 dto.setSource(source);
 
                 // 将常用字段也放入 metadata map
-                if (collection != null) metadataMap.put("collection", collection);
-                if (documentSetId != null) metadataMap.put("documentSetId", documentSetId);
-                if (source != null) metadataMap.put("source", source);
+                if (collection != null) {
+                    metadataMap.put("collection", collection);
+                }
+                if (documentSetId != null) {
+                    metadataMap.put("documentSetId", documentSetId);
+                }
+                if (source != null) {
+                    metadataMap.put("source", source);
+                }
 
                 dto.setMetadata(metadataMap);
             } else {

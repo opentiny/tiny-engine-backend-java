@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -149,7 +150,7 @@ public class ImageThumbnailGenerator {
         // 检查是否为数据URI格式
         Matcher matcher = DATA_URI_PATTERN.matcher(trimmed);
         if (matcher.matches()) {
-            String mimeType = matcher.group(1).toLowerCase();
+            String mimeType = matcher.group(1).toLowerCase(Locale.ROOT);
             String cleanBase64 = matcher.group(2);
             String format = mimeTypeToFormat(mimeType);
 
@@ -173,7 +174,7 @@ public class ImageThumbnailGenerator {
 
             // 先检查是否为SVG
             String content = new String(imageBytes, 0, Math.min(1000, imageBytes.length),
-                StandardCharsets.UTF_8).trim().toLowerCase();
+                StandardCharsets.UTF_8).trim().toLowerCase(Locale.ROOT);
             if (content.contains("<svg") || (content.startsWith("<?xml") && content.contains("<svg"))) {
                 return FORMAT_SVG;
             }
@@ -253,7 +254,7 @@ public class ImageThumbnailGenerator {
                 return false;
             }
             // 获取文件扩展名
-            String extension = getFileExtension(filename).toLowerCase();
+            String extension = getFileExtension(filename).toLowerCase(Locale.ROOT);
 
             if ("svg".equals(extension)) {
                 return isSvgFile(file);
@@ -301,7 +302,7 @@ public class ImageThumbnailGenerator {
         String base64 = Base64.getEncoder().encodeToString(fileBytes);
         // 如果是SVG文件，修正MIME类型
         String filename = file.getOriginalFilename();
-        if (filename != null && filename.toLowerCase().endsWith(".svg")) {
+        if (filename != null && filename.toLowerCase(Locale.ROOT).endsWith(".svg")) {
             mimeType = "image/svg+xml";
         }
         return "data:" + mimeType + ";base64," + base64;
@@ -315,7 +316,7 @@ public class ImageThumbnailGenerator {
             return FORMAT_JPG;
         }
 
-        switch (mimeType.toLowerCase()) {
+        switch (mimeType.toLowerCase(Locale.ROOT)) {
             case "jpeg":
             case "jpg":
                 return FORMAT_JPG;
@@ -337,7 +338,7 @@ public class ImageThumbnailGenerator {
      * 格式转MIME类型
      */
     private static String formatToMimeType(String format) {
-        return MIME_TYPES.getOrDefault(format.toLowerCase(), "image/jpeg");
+        return MIME_TYPES.getOrDefault(format.toLowerCase(Locale.ROOT), "image/jpeg");
     }
 
     /**
@@ -389,7 +390,7 @@ public class ImageThumbnailGenerator {
      * 创建合适的图片转换器
      */
     private static ImageTranscoder createTranscoder(String format) {
-        switch (format.toLowerCase()) {
+        switch (format.toLowerCase(Locale.ROOT)) {
             case FORMAT_JPG:
             case FORMAT_JPEG:
                 JPEGTranscoder jpegTranscoder = new JPEGTranscoder();
@@ -504,7 +505,7 @@ public class ImageThumbnailGenerator {
     private static void validateParameters(int maxWidth, int maxHeight, String format) {
         validateParameters(maxWidth, maxHeight);
 
-        if (format == null || !MIME_TYPES.containsKey(format.toLowerCase())) {
+        if (format == null || !MIME_TYPES.containsKey(format.toLowerCase(Locale.ROOT))) {
             throw new IllegalArgumentException("Unsupported output format: " + format + "，Supported formats: " + MIME_TYPES.keySet());
         }
     }
