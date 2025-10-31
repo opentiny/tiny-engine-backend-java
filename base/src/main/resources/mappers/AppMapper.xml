@@ -17,136 +17,136 @@
     <!-- 通用条件列 -->
     <sql id="AppByCondition">
         <if test="name!=null and name!=''">
-            AND name = #{name}
+            AND A.name = #{name}
         </if>
         <if test="appWebsite!=null and appWebsite!=''">
-            AND app_website = #{appWebsite}
+            AND A.app_website = #{appWebsite}
         </if>
         <if test="platformId!=null">
-            AND platform_id = #{platformId}
+            AND A.platform_id = #{platformId}
         </if>
         <if test="platformHistoryId!=null">
-            AND platform_history_id = #{platformHistoryId}
+            AND A.platform_history_id = #{platformHistoryId}
         </if>
         <if test="industryId!=null">
-            AND industry_id = #{industryId}
+            AND A.industry_id = #{industryId}
         </if>
         <if test="sceneId!=null">
-            AND scene_id = #{sceneId}
+            AND A.scene_id = #{sceneId}
         </if>
         <if test="publishUrl!=null and publishUrl!=''">
-            AND publish_url = #{publishUrl}
+            AND A.publish_url = #{publishUrl}
         </if>
         <if test="editorUrl!=null and editorUrl!=''">
-            AND editor_url = #{editorUrl}
+            AND A.editor_url = #{editorUrl}
         </if>
         <if test="visitUrl!=null and visitUrl!=''">
-            AND visit_url = #{visitUrl}
+            AND A.visit_url = #{visitUrl}
         </if>
         <if test="imageUrl!=null and imageUrl!=''">
-            AND image_url = #{imageUrl}
+            AND A.image_url = #{imageUrl}
         </if>
         <if test="assetsUrl!=null and assetsUrl!=''">
-            AND assets_url = #{assetsUrl}
+            AND A.assets_url = #{assetsUrl}
         </if>
         <if test="state!=null and state!=''">
-            AND state = #{state}
+            AND A.state = #{state}
         </if>
         <if test="isPublish!=null">
-            AND published = #{isPublish}
+            AND A.published = #{isPublish}
         </if>
         <if test="homePage!=null">
-            AND home_page_id = #{homePage}
+            AND A.home_page_id = #{homePage}
         </if>
         <if test="css!=null and css!=''">
-            AND css = #{css}
+            AND A.css = #{css}
         </if>
         <if test="config!=null and config!=''">
-            AND config = #{config}
+            AND A.config = #{config}
         </if>
         <if test="constants!=null and constants!=''">
-            AND constants = #{constants}
+            AND A.constants = #{constants}
         </if>
         <if test="dataHandler!=null and dataHandler!=''">
-            AND data_handler = #{dataHandler}
+            AND A.data_handler = #{dataHandler}
         </if>
         <if test="description!=null and description!=''">
-            AND description = #{description}
+            AND A.description = #{description}
         </if>
         <if test="latest!=null and latest!=''">
-            AND latest = #{latest}
+            AND A.latest = #{latest}
         </if>
         <if test="gitGroup!=null and gitGroup!=''">
-            AND git_group = #{gitGroup}
+            AND A.git_group = #{gitGroup}
         </if>
         <if test="projectName!=null and projectName!=''">
-            AND project_name = #{projectName}
+            AND A.project_name = #{projectName}
         </if>
         <if test="branch!=null and branch!=''">
-            AND branch = #{branch}
+            AND A.branch = #{branch}
         </if>
         <if test="isDemo!=null">
-            AND is_demo = #{isDemo}
+            AND A.is_demo = #{isDemo}
         </if>
         <if test="isDefault!=null">
-            AND is_default = #{isDefault}
+            AND A.is_default = #{isDefault}
         </if>
         <if test="templateType!=null and templateType!=''">
-            AND template_type = #{templateType}
+            AND A.template_type = #{templateType}
         </if>
         <if test="isTemplate!=null and isTemplate!=''">
-            AND is_template = #{isTemplate}
+            AND A.is_template = #{isTemplate}
         </if>
         <if test="setTemplateTime!=null">
-            AND set_template_time = #{setTemplateTime}
+            AND A.set_template_time = #{setTemplateTime}
         </if>
         <if test="setTemplateBy!=null and setTemplateBy!=''">
-            AND set_template_by = #{setTemplateBy}
+            AND A.set_template_by = #{setTemplateBy}
         </if>
         <if test="setDefaultBy!=null and setDefaultBy!=''">
-            AND set_default_by = #{setDefaultBy}
+            AND A.set_default_by = #{setDefaultBy}
         </if>
         <if test="framework!=null and framework!=''">
-            AND framework = #{framework}
+            AND A.framework = #{framework}
         </if>
         <if test="globalState!=null and globalState!=''">
-            AND global_state = #{globalState}
+            AND A.global_state = #{globalState}
         </if>
         <if test="defaultLang!=null and defaultLang!=''">
-            AND default_lang = #{defaultLang}
+            AND A.default_lang = #{defaultLang}
         </if>
         <if test="extendConfig!=null and extendConfig!=''">
-            AND extend_config = #{extendConfig}
+            AND A.extend_config = #{extendConfig}
         </if>
         <if test="dataHash!=null and dataHash!=''">
-            AND data_hash = #{dataHash}
+            AND A.data_hash = #{dataHash}
         </if>
         <if test="canAssociate!=null">
-            AND can_associate = #{canAssociate}
+            AND A.can_associate = #{canAssociate}
         </if>
         <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">
-            AND data_source_global = #{dataSourceGlobal}
+            AND A.data_source_global = #{dataSourceGlobal}
         </if>
         <if test="createdBy!=null and createdBy!=''">
-            AND created_by = #{createdBy}
+            AND A.created_by = #{createdBy}
         </if>
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            AND last_updated_by = #{lastUpdatedBy}
+            AND A.last_updated_by = #{lastUpdatedBy}
         </if>
         <if test="createdTime!=null">
-            AND created_time = #{createdTime}
+            AND A.created_time = #{createdTime}
         </if>
         <if test="lastUpdatedTime!=null">
-            AND last_updated_time = #{lastUpdatedTime}
+            AND A.last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
-            AND tenant_id = #{tenantId}
+            AND A.tenant_id = #{tenantId}
         </if>
         <if test="renterId!=null and renterId!=''">
-            AND renter_id = #{renterId}
+            AND A.renter_id = #{renterId}
         </if>
         <if test="siteId!=null and siteId!=''">
-            AND site_id = #{siteId}
+            AND A.site_id = #{siteId}
         </if>
     </sql>
 
@@ -430,7 +430,7 @@
         SELECT
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
-        WHERE IS NOT TRUE
+        WHERE is_template IS NOT TRUE
         ORDER BY A.created_time DESC
     </select>
 
@@ -462,6 +462,7 @@
             <when test="orderBy == 'last_updated_time'">A.last_updated_time</when>
             <otherwise>A.id</otherwise>
         </choose>
+        DESC
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 

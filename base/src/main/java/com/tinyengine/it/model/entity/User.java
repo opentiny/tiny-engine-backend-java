@@ -77,6 +77,12 @@ public class User {
     @Schema(name = "username", description = "用户名")
     private String username;
 
+    @Schema(name = "password", description = "密码")
+    private String password;
+
+    @Schema(name = "salt", description = "盐")
+    private String salt;
+
     @Schema(name = "email", description = "邮箱")
     private String email;
 

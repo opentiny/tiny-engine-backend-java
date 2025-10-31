@@ -68,5 +68,5 @@ public interface UserService extends IService<User> {
      * @param user the user
      * @return the integer
      */
-    Integer createUser(User user);
+    User createUser(User user);
 }

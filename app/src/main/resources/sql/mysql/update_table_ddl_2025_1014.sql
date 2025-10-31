@@ -18,3 +18,6 @@ ALTER TABLE t_model ADD COLUMN app_id INT AFTER id;
 ALTER TABLE t_model ADD COLUMN platform_id INT AFTER app_id;
 ALTER TABLE t_model DROP INDEX u_idx_model;
 ALTER TABLE t_model ADD INDEX u_idx_model (`tenant_id`, `platform_id`, `app_id`, `name_cn`,`version`);
+
+ALTER TABLE t_user ADD COLUMN password VARCHAR(200) AFTER username;
+ALTER TABLE t_user ADD COLUMN salt VARCHAR(200) AFTER password;

@@ -92,7 +92,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return execute success data number
      */
     @Override
-    public Integer createUser(User user) {
-        return baseMapper.createUser(user);
+    public User createUser(User user) {
+        baseMapper.createUser(user);
+        return baseMapper.queryUserById(user.getId());
     }
 }

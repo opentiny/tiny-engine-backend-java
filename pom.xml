@@ -35,6 +35,7 @@
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <netty-buffer-version>4.1.118.Final</netty-buffer-version>
         <batik-version>1.18</batik-version>
+        <jjwt-version>0.12.3</jjwt-version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
     </properties>
     <dependencies>
@@ -143,11 +144,17 @@
             <version>${mockito-inline.version}</version>
         </dependency>
 
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-buffer</artifactId>
-                <version>${netty-buffer-version}</version>
-            </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-buffer</artifactId>
+            <version>${netty-buffer-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt-version}</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>

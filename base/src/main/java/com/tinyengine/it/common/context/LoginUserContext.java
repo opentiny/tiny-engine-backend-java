@@ -35,12 +35,6 @@ public interface LoginUserContext {
     String getRenterId();
 
     /**
-     * 返回当前应用信息
-     * @return 应用ID
-     */
-    int getAppId();
-
-    /**
      * 返回当前设计器信息
      * @return 设计器ID
      */

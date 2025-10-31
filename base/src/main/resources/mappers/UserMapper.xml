@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , username, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id,
+        , username, password, salt, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id,
         is_admin, is_public
     </sql>
 
@@ -15,6 +15,12 @@
     <sql id="UserByCondition">
         <if test="username!=null and username!=''">
             AND username = #{username}
+        </if>
+        <if test="password!=null and password!=''">
+            AND password = #{password}
+        </if>
+        <if test="salt!=null and salt!=''">
+            AND salt = #{salt}
         </if>
         <if test="email!=null and email!=''">
             AND email = #{email}
@@ -55,6 +61,12 @@
     <sql id="UserSetColumns">
         <if test="username!=null and username!=''">
             username = #{username},
+        </if>
+        <if test="password!=null and password!=''">
+            password = #{password},
+        </if>
+        <if test="salt!=null and salt!=''">
+            salt = #{salt},
         </if>
         <if test="email!=null and email!=''">
             email = #{email},
@@ -97,6 +109,7 @@
     <resultMap id="UserMap" type="com.tinyengine.it.model.entity.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
+        <result column="password" property="password"/>
         <result column="email" property="email"/>
         <result column="enable" property="isEnable"/>
         <result column="created_by" property="createdBy"/>
@@ -165,6 +178,8 @@
             parameterType="com.tinyengine.it.model.entity.User">
         INSERT INTO t_user ( id
         , username
+        , password
+        , salt
         , email
         , enable
         , created_by
@@ -177,6 +192,8 @@
         , is_public)
         VALUES ( #{id}
         , #{username}
+        , #{password}
+        , #{salt}
         , #{email}
         , #{isEnable}
         , #{createdBy}

@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import cn.hutool.core.util.ReflectUtil;
@@ -95,8 +96,8 @@ class UserServiceImplTest {
     void testCreateUser() {
         User param = new User();
         when(userMapper.createUser(param)).thenReturn(1);
-
-        Integer result = userServiceImpl.createUser(param);
-        Assertions.assertEquals(1, result);
+        when(userMapper.queryUserById(any())).thenReturn(param);
+        User result = userServiceImpl.createUser(param);
+        Assertions.assertEquals(param, result);
     }
 }
