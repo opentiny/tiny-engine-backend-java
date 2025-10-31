@@ -255,7 +255,42 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 326 exception enum.
      */
-    CM326("CM326", "Failed to write stream data");
+    CM326("CM326", "Failed to write stream data"),
+
+    /**
+     * Cm 327 exception enum.
+     */
+    CM327("CM327", "无法初始化 ChromaDB 存储"),
+
+    /**
+     * Cm 328 exception enum.
+     */
+    CM328("CM328", "连接 ChromaDB 存储 失败"),
+
+    /**
+     * Cm 329 exception enum.
+     */
+    CM329("CM329", "未成功加载任何文档"),
+
+    /**
+     * Cm 330 exception enum.
+     */
+    CM330("CM330", "文档处理失败"),
+
+    /**
+     * Cm 331 exception enum.
+     */
+    CM331("CM331", "检索文档失败"),
+
+    /**
+     * Cm 332 exception enum.
+     */
+    CM332("CM332", "删除文档失败"),
+
+    /**
+     * Cm 333 exception enum.
+     */
+    CM333("CM333", "文件夹扫描失败");
 
     /**
      * 错误码

@@ -12,6 +12,8 @@ target/
 *.iml
 *.ipr
 /logs
+__pycache__/
+*.log
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -38,6 +40,4 @@ build/
 ### Mac OS ###
 .DS_Store
 
-
-src/main/java/com/tinyengine/it/js/node_modules
-src/main/java/com/tinyengine/it/js/package-lock.json
+chroma_env/

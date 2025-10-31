@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -26,7 +27,34 @@ public class ChatRequest {
     private String baseUrl;
     private Object messages;
     private Object tools;
-    private Double temperature = 0.7;
+    private Float temperature;
     private boolean stream = false;
+    @JsonProperty("max_tokens")
     private Integer maxTokens;
+    @JsonProperty("stream_options")
+    private Object streamOptions;
+    @JsonProperty("presence_penalty")
+    private Float presencePenalty;
+    @JsonProperty("response_format")
+    private Object responseFormat;
+    @JsonProperty("max_input_tokens")
+    private Integer maxInputTokens;
+    @JsonProperty("vl_high_resolution_images")
+    private Boolean vlHighResolutionImages = false;
+    @JsonProperty("enable_thinking")
+    private Boolean enableThinking;
+    @JsonProperty("thinking_budget")
+    private Integer thinkingBudget;
+    private String stop;
+    @JsonProperty("tool_choice")
+    private Object toolChoice;
+    @JsonProperty("parallel_tool_calls")
+    private Boolean parallelToolCalls;
+    @JsonProperty("enable_search")
+    private Boolean enableSearch;
+    @JsonProperty("search_options")
+    private Object searchOptions;
+    @JsonProperty("frequency_penalty")
+    private Float frequencyPenalty;
+
 }

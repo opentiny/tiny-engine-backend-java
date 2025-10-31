@@ -606,13 +606,13 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
     public List<User> getUsers(List<Block> blocksList) {
         Set<String> userSet = new HashSet<>();
         List<User> users = new ArrayList<>();
-        if(blocksList.isEmpty()) {
+        if (blocksList.isEmpty()) {
             return users;
         }
         // 提取 createdBy 列表中的唯一值
         blocksList.forEach(item -> {
             if (item.getCreatedBy() != null && !userSet.contains(item.getCreatedBy())) {
-                userSet.add(String.valueOf(item.getCreatedBy()));
+                userSet.add(item.getCreatedBy());
             }
         });
 
