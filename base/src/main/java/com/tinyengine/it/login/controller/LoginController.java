@@ -119,7 +119,7 @@ public class LoginController {
         User userParam = new User();
         userParam.setUsername(user.getUsername());
         List<User> users = userService.queryUserByCondition(userParam);
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             Result.failed(ExceptionEnum.CM004);
         }
         User userResult = users.get(0);

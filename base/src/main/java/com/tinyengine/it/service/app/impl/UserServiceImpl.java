@@ -109,8 +109,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User userParam = new User();
         userParam.setUsername(user.getUsername());
         List<User> users = baseMapper.queryUserByCondition(userParam);
-        if(!users.isEmpty()){
-            throw new ServiceException(ExceptionEnum.CM003.getResultCode(), ExceptionEnum.CM003.getResultMsg());
+        if (!users.isEmpty()) {
+            throw new ServiceException(ExceptionEnum.CM003.getResultCode(),
+                ExceptionEnum.CM003.getResultMsg());
         }
         KeyPair keyPair = generateSM2KeyPair();
         PublicKey publicKey = keyPair.getPublic();
@@ -138,14 +139,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User userParam = new User();
         userParam.setUsername(user.getUsername());
         List<User> users = baseMapper.queryUserByCondition(userParam);
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             Result.failed(ExceptionEnum.CM002);
         }
         User userResult = users.get(0);
         PublicKey publicKey = getPublicKeyFromBase64(user.getPublicKey());
         PrivateKey privateKey = getPrivateKeyFromBase64(userResult.getPrivateKey());
         // 验证publickey
-        if(!validatorPublicKey(userResult.getSalt(), publicKey, privateKey)){
+        if (!validatorPublicKey(userResult.getSalt(), publicKey, privateKey)) {
             return Result.failed(ExceptionEnum.CM335);
         }
         String cipherText = encrypt(user.getSalt(), publicKey);
@@ -154,7 +155,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         baseMapper.updateUserById(user);
         User result = baseMapper.queryUserById(user.getId());
         result.setPrivateKey(null);
-        if(result.getSalt().isEmpty()){
+        if (result.getSalt().isEmpty()) {
             return Result.failed(ExceptionEnum.CM335);
         }
         return Result.success(ExceptionEnum.CM334.getResultCode(), ExceptionEnum.CM334.getResultMsg());
@@ -164,7 +165,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String plainSalt = decrypt(salt, privateKey);
         String cipherSalt = encrypt(plainSalt, publicKey);
         String decryptSalt = decrypt(cipherSalt, privateKey);
-        if(plainSalt.equals(decryptSalt)) {
+        if (plainSalt.equals(decryptSalt)) {
             return true;
         }
         return false;

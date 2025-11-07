@@ -75,7 +75,7 @@ public interface UserService extends IService<User> {
      * 忘记密码
      *
      * @param user the user
-     * @return the user
+     * @return the Result
      */
     Result forgotPassword(User user) throws Exception;
 }

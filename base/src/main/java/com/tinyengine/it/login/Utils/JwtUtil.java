@@ -21,6 +21,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Jwt til
@@ -29,8 +30,17 @@ import java.util.Map;
 public class JwtUtil {
 
     private static final long EXPIRATION_TIME = 21600000; // 6小时 = 6 * 60 * 60 * 1000 = 21600000 毫秒
-    private static final String SECRET_STRING = "tiny-engine-backend-secret-key-at-jwt-login";
-    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET_STRING.getBytes());
+    private static final String DEFAULT_SECRET = "tiny-engine-backend-secret-key-at-jwt-login";
+
+    // 避免启动时环境变量未加载的问题
+    private static String getSecretString() {
+        return Optional.ofNullable(System.getenv("SECRET_STRING"))
+                .orElse(DEFAULT_SECRET);
+    }
+
+    private static SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(getSecretString().getBytes());
+    }
 
     /**
      * 生成包含完整用户信息的 JWT Token
@@ -51,7 +61,7 @@ public class JwtUtil {
             .subject(username)
             .issuedAt(new Date())
             .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-            .signWith(SECRET_KEY)
+            .signWith(getSecretKey())
             .compact();
     }
 
@@ -61,7 +71,7 @@ public class JwtUtil {
     public String getUsernameFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
-                .verifyWith(SECRET_KEY)
+                .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -126,7 +136,7 @@ public class JwtUtil {
     private <T> T getClaimFromToken(String token, String claimName, Class<T> clazz) {
         try {
             Claims claims = Jwts.parser()
-                .verifyWith(SECRET_KEY)
+                .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -144,7 +154,7 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                .verifyWith(SECRET_KEY)
+                .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token);
             return true;
@@ -160,7 +170,7 @@ public class JwtUtil {
     public boolean isTokenExpired(String token) {
         try {
             Claims claims = Jwts.parser()
-                .verifyWith(SECRET_KEY)
+                .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

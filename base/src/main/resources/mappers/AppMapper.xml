@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, app_website, platform_id, platform_history_id, industry_id, scene_id publish_url, editor_url, visit_url, image_url,
+        , name, app_website, platform_id, platform_history_id, industry_id, scene_id, publish_url, editor_url, visit_url, image_url,
         assets_url, state, published, home_page_id, css, config, constants, data_handler, description, latest,
         git_group, project_name, branch, is_demo, is_default, template_type, is_template, set_template_time, set_template_by,
         set_default_by, framework, global_state, default_lang, extend_config, data_hash, can_associate,
@@ -314,7 +314,7 @@
         <result column="is_demo" property="isDemo"/>
         <result column="is_default" property="isDefault"/>
         <result column="template_type" property="templateType"/>
-        <result column="isTemplate" property="isTemplate"/>
+        <result column="is_template" property="isTemplate"/>
         <result column="industry_id" property="industryId"/>
         <result column="scene_id" property="sceneId"/>
         <result column="set_template_time" property="setTemplateTime"/>

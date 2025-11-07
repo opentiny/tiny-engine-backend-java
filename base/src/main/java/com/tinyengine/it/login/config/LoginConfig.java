@@ -36,10 +36,9 @@ public class LoginConfig implements WebMvcConfigurer {
             .excludePathPatterns(
                 // 注册相关
                 "/platform-center/api/user/register",
-                // 组件更新
-                "/material-center/api/component/bundle/create",
                 // 登录相关
                 "/platform-center/api/user/login",
+                // 忘记密码
                 "/platform-center/api/user/forgot-password"
             );
     }

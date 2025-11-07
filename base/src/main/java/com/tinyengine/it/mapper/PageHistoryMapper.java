@@ -92,8 +92,6 @@ public interface PageHistoryMapper extends BaseMapper<PageHistory> {
     List<PageHistory> queryPageHistoryByAppId(Integer appId);
 
     /**
-=======
->>>>>>> 91aab3e21fcaeec3a5b014afc82a555aa774dd04
      * 查询发布的页面记录
      *
      * @param iPage         the iPage

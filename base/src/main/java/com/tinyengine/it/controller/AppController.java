@@ -105,7 +105,7 @@ public class AppController {
         App app = new App();
         app.setName(name);
         app.setSceneId(sceneId);
-        app.setId(industryId);
+        app.setIndustryId(industryId);
         app.setFramework(framework);
         app.setCreatedBy(createdBy);
         AppDto appDto = appService.queryAllAppByPage(currentPage, pageSize, orderBy, app);

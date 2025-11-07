@@ -10,7 +10,7 @@ create table `t_permission_role`
     `last_updated_by`   varchar(60)  not null comment '最后修改人',
     `last_updated_time` timestamp    not null default current_timestamp comment '更新时间',
     primary key (`id`) using btree,
-    unique index `u_idx_permission_role` (`name_cn`) using btree
+    unique index `u_idx_permission_role` (`name`) using btree
 ) engine = innodb comment = '';
 
 drop table if exists `t_auth_usesr_units_roles`;
@@ -29,5 +29,5 @@ create table `t_auth_users_units_roles`
     `last_updated_by`   varchar(60)  not null comment '最后修改人',
     `last_updated_time` timestamp    not null default current_timestamp comment '更新时间',
     primary key (`id`) using btree,
-    unique index `u_idx_auth_users_units_roles` (`user_id, unit_id, unit_type`) using btree
+    unique index `u_idx_auth_users_units_roles` (`user_id`, `unit_id`, `unit_type`) using btree
 ) engine = innodb comment = '';

@@ -164,7 +164,6 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
         createPageHistory(templateId, appId);
         createAppExtension(templateId, appId);
         createDataSource(templateId, appId);
-        createAppExtension(templateId, appId);
         createI18n(templateId, appId);
         createModel(templateId, appId);
     }

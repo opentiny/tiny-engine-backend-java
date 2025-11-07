@@ -32,10 +32,11 @@ ALTER TABLE t_model
 
 ALTER TABLE t_user DROP COLUMN email, DROP COLUMN tenant_id, DROP COLUMN site_id,DROP COLUMN renter_id,DROP COLUMN created_by,DROP COLUMN last_updated_by;
 
+
+ALTER TABLE t_user
+    ADD COLUMN password VARCHAR(200) AFTER username;
 ALTER TABLE t_user
     ADD COLUMN email VARCHAR(200) AFTER password;
-ALTER TABLE t_user
-    ADD COLUMN password VARCHAR(200) AFTER email;
 ALTER TABLE t_user
     ADD COLUMN salt VARCHAR(200) AFTER password;
 ALTER TABLE t_user

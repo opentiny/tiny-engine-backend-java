@@ -41,7 +41,7 @@ public interface AppTemplateService {
      * 创建应用模版
      *
      * @param app the app
-     * @return the result
+     * @return the App
      */
     App createAppByTemplate(App app);
 
