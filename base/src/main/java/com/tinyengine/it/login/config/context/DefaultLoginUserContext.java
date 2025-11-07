@@ -33,7 +33,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
     @Override
     public int getPlatformId() {
         UserInfo userInfo = currentUser.get();
-        return userInfo != null ? userInfo.getPlatformId() : 0;
+        return userInfo != null ? userInfo.getPlatformId() : 1;
     }
 
     @Override
