@@ -94,7 +94,7 @@
         <if test="templateType!=null and templateType!=''">
             AND A.template_type = #{templateType}
         </if>
-        <if test="isTemplate!=null and isTemplate!=''">
+        <if test="isTemplate!=null">
             AND A.is_template = #{isTemplate}
         </if>
         <if test="setTemplateTime!=null">
@@ -230,7 +230,7 @@
         <if test="templateType!=null and templateType!=''">
             template_type = #{templateType},
         </if>
-        <if test="isTemplate!=null and isTemplate!=''">
+        <if test="isTemplate!=null">
             is_template = #{isTemplate},
         </if>
         <if test="setTemplateTime!=null">
