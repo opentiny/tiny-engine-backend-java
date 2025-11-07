@@ -93,6 +93,7 @@ public class SSOInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             log.error("Token validation exception: {}", e.getMessage(), e);
             response.sendRedirect(SSO_SERVER + "/login");
+            DefaultLoginUserContext.clear();
             return false;
         }
     }

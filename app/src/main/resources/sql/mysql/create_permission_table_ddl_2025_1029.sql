@@ -13,7 +13,7 @@ create table `t_permission_role`
     unique index `u_idx_permission_role` (`name`) using btree
 ) engine = innodb comment = '';
 
-drop table if exists `t_auth_usesr_units_roles`;
+drop table if exists `t_auth_users_units_roles`;
 
 create table `t_auth_users_units_roles`
 (

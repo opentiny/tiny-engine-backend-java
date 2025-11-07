@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 ;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implements AppTemplateService {
@@ -243,7 +244,7 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
         }
         for (I18nEntryDto i18nEntrieDto : i18nEntries) {
 
-            String key = i18nEntrieDto.getKey() + System.currentTimeMillis();
+            String key = i18nEntrieDto.getKey() + "_" + UUID.randomUUID();
             i18nEntrieDto.setId(null);
             i18nEntrieDto.setKey(key);
             i18nEntrieDto.setCreatedBy(null);

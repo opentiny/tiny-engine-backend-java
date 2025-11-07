@@ -12,6 +12,8 @@ public class DefaultLoginUserContext implements LoginUserContext {
 
     private static final ThreadLocal<UserInfo> currentUser = new ThreadLocal<>();
 
+    private static final int DEFAULT_PLATFORM = 1;
+
     @Override
     public String getTenantId() {
         UserInfo userInfo = currentUser.get();
@@ -33,7 +35,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
     @Override
     public int getPlatformId() {
         UserInfo userInfo = currentUser.get();
-        return userInfo != null ? userInfo.getPlatformId() : 1;
+        return userInfo != null ? userInfo.getPlatformId() : DEFAULT_PLATFORM;
     }
 
     @Override

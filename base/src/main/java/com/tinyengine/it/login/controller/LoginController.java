@@ -88,7 +88,7 @@ public class LoginController {
         PasswordValidationResult passwordValidationResult = configurablePasswordValidator
             .validateWithPolicy(user.getPassword());
         if(!passwordValidationResult.isValid()) {
-            return Result.success(passwordValidationResult);
+            return Result.failed("密码格式检验失败", passwordValidationResult.getErrorMessage());
         }
         PasswordResult password = SM3PasswordUtil.createPassword(user.getPassword());
         user.setPassword(password.getPasswordHash());
