@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 package com.tinyengine.it.login.config;
 
 import com.tinyengine.it.login.Utils.JwtUtil;
@@ -10,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * SSO Interceptor
+ */
 @Slf4j
 @Component
 public class SSOInterceptor implements HandlerInterceptor {
@@ -21,7 +36,7 @@ public class SSOInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler) throws Exception {
+        HttpServletResponse response, Object handler) throws Exception {
 
         String token = request.getHeader("Authorization");
         String requestURI = request.getRequestURI();
@@ -61,8 +76,7 @@ public class SSOInterceptor implements HandlerInterceptor {
             }
 
             // 存储用户信息到LoginUserContext
-            UserInfo userInfo = new UserInfo(
-                    userId, username, tenantId != null ? tenantId : "default-tenant"
+            UserInfo userInfo = new UserInfo(userId, username, tenantId != null ? tenantId : "default-tenant"
             );
             userInfo.setRenterId(renterId != null ? renterId : "default-renter");
             userInfo.setPlatformId(platformId != null ? platformId : 0);
@@ -73,8 +87,7 @@ public class SSOInterceptor implements HandlerInterceptor {
             DefaultLoginUserContext.setCurrentUser(userInfo);
 
             log.info("Token validated and user context set for user: {}", username);
-            log.info("User details - Tenant: {}, Platform: {}, Site: {}",
-                    tenantId, platformId, siteId);
+            log.info("User details - Tenant: {}, Platform: {}, Site: {}", tenantId, platformId, siteId);
             return true;
 
         } catch (Exception e) {
@@ -86,8 +99,7 @@ public class SSOInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response,
-                                Object handler, Exception ex) {
+        HttpServletResponse response, Object handler, Exception ex) {
         // 请求完成后清理用户上下文
         DefaultLoginUserContext.clear();
         log.debug("Cleared user context for request completion");

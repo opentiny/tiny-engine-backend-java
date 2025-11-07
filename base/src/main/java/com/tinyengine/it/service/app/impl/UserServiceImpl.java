@@ -13,6 +13,9 @@
 package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
@@ -21,7 +24,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Base64;
 import java.util.List;
+
+import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.decrypt;
+import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.encrypt;
+import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.generateSM2KeyPair;
+import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.getPrivateKeyFromBase64;
+import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.getPublicKeyFromBase64;
 
 /**
  * The type User service.
@@ -92,8 +105,68 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return execute success data number
      */
     @Override
-    public User createUser(User user) {
+    public User createUser(User user) throws Exception {
+        User userParam = new User();
+        userParam.setUsername(user.getUsername());
+        List<User> users = baseMapper.queryUserByCondition(userParam);
+        if(!users.isEmpty()){
+            throw new ServiceException(ExceptionEnum.CM003.getResultCode(), ExceptionEnum.CM003.getResultMsg());
+        }
+        KeyPair keyPair = generateSM2KeyPair();
+        PublicKey publicKey = keyPair.getPublic();
+        PrivateKey privateKey = keyPair.getPrivate();
+        String cipherText = encrypt(user.getSalt(), publicKey);
+        String publicKeyBase64 = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        String privateKeyBase64 = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+        user.setSalt(cipherText);
+        user.setPublicKey(publicKeyBase64);
+        user.setPrivateKey(privateKeyBase64);
         baseMapper.createUser(user);
-        return baseMapper.queryUserById(user.getId());
+        User result = baseMapper.queryUserById(user.getId());
+        result.setPrivateKey(null);
+        return result;
+    }
+
+    /**
+     * 忘记密码
+     *
+     * @param user the user
+     * @return the user
+     */
+    @Override
+    public Result forgotPassword(User user) throws Exception {
+        User userParam = new User();
+        userParam.setUsername(user.getUsername());
+        List<User> users = baseMapper.queryUserByCondition(userParam);
+        if(users.isEmpty()){
+            Result.failed(ExceptionEnum.CM002);
+        }
+        User userResult = users.get(0);
+        PublicKey publicKey = getPublicKeyFromBase64(user.getPublicKey());
+        PrivateKey privateKey = getPrivateKeyFromBase64(userResult.getPrivateKey());
+        // 验证publickey
+        if(!validatorPublicKey(userResult.getSalt(), publicKey, privateKey)){
+            return Result.failed(ExceptionEnum.CM335);
+        }
+        String cipherText = encrypt(user.getSalt(), publicKey);
+        user.setSalt(cipherText);
+        user.setId(userResult.getId());
+        baseMapper.updateUserById(user);
+        User result = baseMapper.queryUserById(user.getId());
+        result.setPrivateKey(null);
+        if(result.getSalt().isEmpty()){
+            return Result.failed(ExceptionEnum.CM335);
+        }
+        return Result.success(ExceptionEnum.CM334.getResultCode(), ExceptionEnum.CM334.getResultMsg());
+    }
+
+    private boolean validatorPublicKey(String salt, PublicKey publicKey, PrivateKey privateKey) throws Exception {
+        String plainSalt = decrypt(salt, privateKey);
+        String cipherSalt = encrypt(plainSalt, publicKey);
+        String decryptSalt = decrypt(cipherSalt, privateKey);
+        if(plainSalt.equals(decryptSalt)) {
+            return true;
+        }
+        return false;
     }
 }

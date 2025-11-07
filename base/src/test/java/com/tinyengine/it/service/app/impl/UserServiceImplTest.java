@@ -93,7 +93,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCreateUser() {
+    void testCreateUser() throws Exception {
         User param = new User();
         when(userMapper.createUser(param)).thenReturn(1);
         when(userMapper.queryUserById(any())).thenReturn(param);

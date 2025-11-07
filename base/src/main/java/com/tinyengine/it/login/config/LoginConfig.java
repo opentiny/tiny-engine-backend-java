@@ -1,32 +1,47 @@
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 package com.tinyengine.it.login.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * sso配置
+ */
 @Configuration
 public class LoginConfig implements WebMvcConfigurer {
 
     private final SSOInterceptor ssoInterceptor;
 
     public LoginConfig(SSOInterceptor ssoInterceptor) {
+
         this.ssoInterceptor = ssoInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(ssoInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns(
-                        // 注册相关
-                        "/register",
-                        "/platform-center/api/user/register",
-                        "/**/register",
-
-                        // 登录相关
-                        "/login",
-                        "/**/login"
-                );
+            .addPathPatterns("/**")
+            .excludePathPatterns(
+                // 注册相关
+                "/platform-center/api/user/register",
+                // 组件更新
+                "/material-center/api/component/bundle/create",
+                // 登录相关
+                "/platform-center/api/user/login",
+                "/platform-center/api/user/forgot-password"
+            );
     }
 }
 

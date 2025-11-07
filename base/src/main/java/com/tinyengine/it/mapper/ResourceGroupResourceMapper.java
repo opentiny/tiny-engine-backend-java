@@ -14,7 +14,6 @@ package com.tinyengine.it.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.ResourceGroupResource;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -48,7 +47,6 @@ public interface ResourceGroupResourceMapper extends BaseMapper<ResourceGroupRes
      * @param resourceGroupId the resource group id
      * @return the int
      */
-    @Delete("DELETE FROM r_resource_group_resource WHERE resource_group_id = #{resourceGroupId}")
     int deleteResourceGroupResourceByGroupId(Integer resourceGroupId);
 
     /**

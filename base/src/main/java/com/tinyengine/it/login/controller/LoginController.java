@@ -1,14 +1,27 @@
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 package com.tinyengine.it.login.controller;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.login.Utils.JwtUtil;
 import com.tinyengine.it.login.Utils.SM3PasswordUtil;
 import com.tinyengine.it.login.model.PasswordResult;
+import com.tinyengine.it.login.model.PasswordValidationResult;
 import com.tinyengine.it.login.model.SSOTicket;
 import com.tinyengine.it.login.model.ValidationResult;
+import com.tinyengine.it.login.service.ConfigurablePasswordValidator;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
@@ -28,8 +41,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.PrivateKey;
 import java.util.List;
 
+import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.decrypt;
+import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.getPrivateKeyFromBase64;
+
+/**
+ * Login Controller
+ */
 @Validated
 @RestController
 @CrossOrigin
@@ -43,6 +63,9 @@ public class LoginController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    ConfigurablePasswordValidator configurablePasswordValidator;
 
     /**
      * 注册
@@ -61,7 +84,12 @@ public class LoginController {
     )
     @SystemControllerLog(description = "注册")
     @PostMapping("/user/register")
-    public Result<User> createUser(@Valid @RequestBody User user) throws Exception {
+    public Result createUser(@Valid @RequestBody User user) throws Exception {
+        PasswordValidationResult passwordValidationResult = configurablePasswordValidator
+            .validateWithPolicy(user.getPassword());
+        if(!passwordValidationResult.isValid()) {
+            return Result.success(passwordValidationResult);
+        }
         PasswordResult password = SM3PasswordUtil.createPassword(user.getPassword());
         user.setPassword(password.getPasswordHash());
         user.setSalt(password.getSalt());
@@ -95,7 +123,9 @@ public class LoginController {
             Result.failed(ExceptionEnum.CM004);
         }
         User userResult = users.get(0);
-        if (authenticate(userResult.getSalt(), user.getPassword(),userResult.getPassword())) {
+        PrivateKey privateKey = getPrivateKeyFromBase64(userResult.getPrivateKey());
+        String salt = decrypt(userResult.getSalt(), privateKey);
+        if (authenticate(salt, user.getPassword(),userResult.getPassword())) {
 
             String token = jwtUtil.generateToken(user.getUsername(), "USER", userResult.getId(),
             "1", "1", 1, "1");
@@ -109,6 +139,35 @@ public class LoginController {
             return Result.success(ticket);
         }
         return Result.failed(ExceptionEnum.CM004);
+    }
+
+    /**
+     * 忘记密码
+     *
+     * @param user the user
+     * @return SSOTicket result
+     */
+    @Operation(summary = "忘记密码", description = "忘记密码",
+        parameters = {
+            @Parameter(name = "user", description = "User入参对象")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "忘记密码")
+    @PostMapping("/user/forgot-password")
+    public Result forgotPassword(@RequestBody User user) throws Exception {
+        PasswordValidationResult passwordValidationResult = configurablePasswordValidator
+            .validateWithPolicy(user.getPassword());
+        if(!passwordValidationResult.isValid()) {
+            return Result.success(passwordValidationResult);
+        }
+        PasswordResult password = SM3PasswordUtil.createPassword(user.getPassword());
+        user.setPassword(password.getPasswordHash());
+        user.setSalt(password.getSalt());
+        return userService.forgotPassword(user);
     }
 
     /**

@@ -14,11 +14,10 @@ FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY --from=build /app/app/target/tiny-engine-app-*.jar /app/tiny-engine-app.jar
 COPY --from=build /app/base/target/tiny-engine-base-*.jar /app/tiny-engine-base.jar
+COPY --from=build /app/documents /app/documents
+COPY --from=build /app/all-MiniLM-L6-v2 /app/all-MiniLM-L6-v2
 # 设置环境变量
-ENV ACCESS_KEY_ID=" "
-ENV ACCESS_KEY_SECRET = " "
-ENV INDEX_ID = " "
-ENV WORK_SPACE_ID = ""
+ENV FOLDER_PATH="/app/documents"
 # 替换为自己的域名接口路径
 ENV TINY_ENGINE_URL="https://agent.opentiny.design/material-center/api/resource/download"
 ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=alpha"]

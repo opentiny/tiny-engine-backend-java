@@ -12,6 +12,8 @@
 
 package com.tinyengine.it.common.utils;
 
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,8 +53,7 @@ public class ImageThumbnailGenerator {
     public static final String FORMAT_SVG = "svg";
 
     // 数据URI模式匹配
-    private static final Pattern DATA_URI_PATTERN =
-            Pattern.compile("^data:image/([a-zA-Z+]+);base64,(.*)$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern DATA_URI_PATTERN = Pattern.compile("^data:image/([a-zA-Z+]+);base64,(.*)$", Pattern.CASE_INSENSITIVE);
 
     private static final Map<String, String> MIME_TYPES = new HashMap<>();
     private static final Map<String, String> EXTENSION_TO_MIME = new HashMap<>();
@@ -98,7 +100,7 @@ public class ImageThumbnailGenerator {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("生成缩略图失败: " + e.getMessage(), e);
+            throw new ServiceException(ExceptionEnum.CM309.getResultCode(), "Failed to generate thumbnail: " + e.getMessage());
         }
     }
 
@@ -131,7 +133,7 @@ public class ImageThumbnailGenerator {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("生成缩略图失败: " + e.getMessage(), e);
+            throw new ServiceException(ExceptionEnum.CM309.getResultCode(), "Failed to generate thumbnail: " + e.getMessage());
         }
     }
 
@@ -148,7 +150,7 @@ public class ImageThumbnailGenerator {
         // 检查是否为数据URI格式
         Matcher matcher = DATA_URI_PATTERN.matcher(trimmed);
         if (matcher.matches()) {
-            String mimeType = matcher.group(1).toLowerCase();
+            String mimeType = matcher.group(1).toLowerCase(Locale.ROOT);
             String cleanBase64 = matcher.group(2);
             String format = mimeTypeToFormat(mimeType);
 
@@ -171,7 +173,8 @@ public class ImageThumbnailGenerator {
             byte[] imageBytes = Base64.getDecoder().decode(cleanBase64);
 
             // 先检查是否为SVG
-            String content = new String(imageBytes, 0, Math.min(1000, imageBytes.length)).trim().toLowerCase();
+            String content = new String(imageBytes, 0, Math.min(1000, imageBytes.length),
+                StandardCharsets.UTF_8).trim().toLowerCase(Locale.ROOT);
             if (content.contains("<svg") || (content.startsWith("<?xml") && content.contains("<svg"))) {
                 return FORMAT_SVG;
             }
@@ -200,7 +203,9 @@ public class ImageThumbnailGenerator {
      * 提取纯净的Base64字符串
      */
     public static String extractCleanBase64(String input) {
-        if (input == null) return "";
+        if (input == null) {
+            return "";
+        }
 
         String trimmed = input.trim();
         Matcher matcher = DATA_URI_PATTERN.matcher(trimmed);
@@ -220,6 +225,7 @@ public class ImageThumbnailGenerator {
 
     /**
      * 从 Base64 数据中提取 MIME 类型
+     *
      * @param base64Data 完整的 Base64 数据（包含 data:image/png;base64, 前缀）
      * @return 提取到的 MIME 类型，如 "image/png", "image/svg+xml"
      */
@@ -248,7 +254,7 @@ public class ImageThumbnailGenerator {
                 return false;
             }
             // 获取文件扩展名
-            String extension = getFileExtension(filename).toLowerCase();
+            String extension = getFileExtension(filename).toLowerCase(Locale.ROOT);
 
             if ("svg".equals(extension)) {
                 return isSvgFile(file);
@@ -270,14 +276,13 @@ public class ImageThumbnailGenerator {
             String content = new String(bytes, StandardCharsets.UTF_8);
 
             // 简单检查：包含<svg标签和SVG命名空间
-            return content.contains("<svg") &&
-                    (content.contains("xmlns=\"http://www.w3.org/2000/svg\"") ||
-                            content.contains("xmlns='http://www.w3.org/2000/svg'"));
+            return content.contains("<svg") && (content.contains("xmlns=\"http://www.w3.org/2000/svg\"") || content.contains("xmlns='http://www.w3.org/2000/svg'"));
 
         } catch (IOException e) {
             return false;
         }
     }
+
     /**
      * 获取文件扩展名
      */
@@ -287,6 +292,7 @@ public class ImageThumbnailGenerator {
         }
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
+
     /**
      * 简化版Base64转换
      */
@@ -296,7 +302,7 @@ public class ImageThumbnailGenerator {
         String base64 = Base64.getEncoder().encodeToString(fileBytes);
         // 如果是SVG文件，修正MIME类型
         String filename = file.getOriginalFilename();
-        if (filename != null && filename.toLowerCase().endsWith(".svg")) {
+        if (filename != null && filename.toLowerCase(Locale.ROOT).endsWith(".svg")) {
             mimeType = "image/svg+xml";
         }
         return "data:" + mimeType + ";base64," + base64;
@@ -306,9 +312,11 @@ public class ImageThumbnailGenerator {
      * MIME类型转格式
      */
     private static String mimeTypeToFormat(String mimeType) {
-        if (mimeType == null) return FORMAT_JPG;
+        if (mimeType == null) {
+            return FORMAT_JPG;
+        }
 
-        switch (mimeType.toLowerCase()) {
+        switch (mimeType.toLowerCase(Locale.ROOT)) {
             case "jpeg":
             case "jpg":
                 return FORMAT_JPG;
@@ -330,7 +338,7 @@ public class ImageThumbnailGenerator {
      * 格式转MIME类型
      */
     private static String formatToMimeType(String format) {
-        return MIME_TYPES.getOrDefault(format.toLowerCase(), "image/jpeg");
+        return MIME_TYPES.getOrDefault(format.toLowerCase(Locale.ROOT), "image/jpeg");
     }
 
     /**
@@ -374,7 +382,7 @@ public class ImageThumbnailGenerator {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("SVG缩略图生成失败: " + e.getMessage(), e);
+            throw new ServiceException(ExceptionEnum.CM309.getResultCode(), "Failed to generate thumbnail: " + e.getMessage());
         }
     }
 
@@ -382,7 +390,7 @@ public class ImageThumbnailGenerator {
      * 创建合适的图片转换器
      */
     private static ImageTranscoder createTranscoder(String format) {
-        switch (format.toLowerCase()) {
+        switch (format.toLowerCase(Locale.ROOT)) {
             case FORMAT_JPG:
             case FORMAT_JPEG:
                 JPEGTranscoder jpegTranscoder = new JPEGTranscoder();
@@ -404,21 +412,16 @@ public class ImageThumbnailGenerator {
             BufferedImage originalImage = ImageIO.read(bais);
 
             if (originalImage == null) {
-                throw new IllegalArgumentException("无法读取图片数据，可能是不支持的格式或损坏的图片");
+                throw new IllegalArgumentException("Unable to read image data, possibly due to an unsupported format or a corrupted image.");
             }
 
-            int[] newDimensions = calculateDimensions(
-                    originalImage.getWidth(),
-                    originalImage.getHeight(),
-                    maxWidth,
-                    maxHeight
-            );
+            int[] newDimensions = calculateDimensions(originalImage.getWidth(), originalImage.getHeight(), maxWidth, maxHeight);
 
             BufferedImage thumbnail = createHighQualityThumbnail(originalImage, newDimensions[0], newDimensions[1]);
             return encodeImageToBase64(thumbnail, format);
 
         } catch (Exception e) {
-            throw new RuntimeException("位图缩略图生成失败: " + e.getMessage(), e);
+            throw new ServiceException(ExceptionEnum.CM309.getResultCode(), "Failed to generate thumbnail: " + e.getMessage());
         }
     }
 
@@ -448,21 +451,16 @@ public class ImageThumbnailGenerator {
      * 创建高质量缩略图
      */
     private static BufferedImage createHighQualityThumbnail(BufferedImage originalImage, int width, int height) {
-        int imageType = originalImage.getColorModel().hasAlpha() ?
-                BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+        int imageType = originalImage.getColorModel().hasAlpha() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
 
         BufferedImage thumbnail = new BufferedImage(width, height, imageType);
         Graphics2D g = thumbnail.createGraphics();
 
         // 高质量渲染设置
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.setRenderingHint(RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_QUALITY);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
-                RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
 
         // 绘制缩略图
         g.drawImage(originalImage, 0, 0, width, height, null);
@@ -491,7 +489,7 @@ public class ImageThumbnailGenerator {
             return Base64.getEncoder().encodeToString(imageBytes);
 
         } catch (Exception e) {
-            throw new RuntimeException("编码图片失败: " + e.getMessage(), e);
+            throw new ServiceException(ExceptionEnum.CM309.getResultCode(), "Failed to encode image: " + e.getMessage());
         }
     }
 
@@ -500,16 +498,15 @@ public class ImageThumbnailGenerator {
      */
     private static void validateParameters(int maxWidth, int maxHeight) {
         if (maxWidth <= 0 || maxHeight <= 0) {
-            throw new IllegalArgumentException("宽度和高度必须大于0");
+            throw new IllegalArgumentException("Width and height must be greater than 0");
         }
     }
 
     private static void validateParameters(int maxWidth, int maxHeight, String format) {
         validateParameters(maxWidth, maxHeight);
 
-        if (format == null || !MIME_TYPES.containsKey(format.toLowerCase())) {
-            throw new IllegalArgumentException("不支持的输出格式: " + format +
-                    "，支持格式: " + MIME_TYPES.keySet());
+        if (format == null || !MIME_TYPES.containsKey(format.toLowerCase(Locale.ROOT))) {
+            throw new IllegalArgumentException("Unsupported output format: " + format + "，Supported formats: " + MIME_TYPES.keySet());
         }
     }
 }

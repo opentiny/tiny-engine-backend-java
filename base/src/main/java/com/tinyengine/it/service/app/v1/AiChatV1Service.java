@@ -12,11 +12,7 @@
 
 package com.tinyengine.it.service.app.v1;
 
-import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.ChatRequest;
-import com.tinyengine.it.model.dto.NodeDto;
-
-import java.util.List;
 
 /**
  * The interface AIChat v 1 service.
@@ -31,12 +27,4 @@ public interface AiChatV1Service {
      * @return Object the Object
      */
     public Object chatCompletion(ChatRequest request) throws Exception;
-
-    /**
-     * chatSearch.
-     *
-     * @param content the content
-     * @return String the String
-     */
-    public Result<List<NodeDto>> chatSearch(String content) throws Exception;
 }

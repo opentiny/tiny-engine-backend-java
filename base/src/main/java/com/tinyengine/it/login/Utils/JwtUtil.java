@@ -1,8 +1,19 @@
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 package com.tinyengine.it.login.Utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +22,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Jwt til
+ */
 @Component
 public class JwtUtil {
 
-    private static final long EXPIRATION_TIME = 3600000; // 1小时
-    private static final String SECRET_STRING = "your-secret-key-at-least-32-chars-long-here";
+    private static final long EXPIRATION_TIME = 21600000; // 6小时 = 6 * 60 * 60 * 1000 = 21600000 毫秒
+    private static final String SECRET_STRING = "tiny-engine-backend-secret-key-at-jwt-login";
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET_STRING.getBytes());
 
     /**
@@ -33,12 +47,12 @@ public class JwtUtil {
         claims.put("siteId", siteId);
 
         return Jwts.builder()
-                .claims(claims)
-                .subject(username)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SECRET_KEY)
-                .compact();
+            .claims(claims)
+            .subject(username)
+            .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(SECRET_KEY)
+            .compact();
     }
 
     /**
@@ -47,10 +61,10 @@ public class JwtUtil {
     public String getUsernameFromToken(String token) {
         try {
             Claims claims = Jwts.parser()
-                    .verifyWith(SECRET_KEY)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
 
             return claims.getSubject();
         } catch (Exception e) {
@@ -63,6 +77,7 @@ public class JwtUtil {
      * 从 Token 中获取角色信息
      */
     public String getRolesFromToken(String token) {
+
         return getClaimFromToken(token, "roles", String.class);
     }
 
@@ -70,6 +85,7 @@ public class JwtUtil {
      * 从 Token 中获取用户ID
      */
     public String getUserIdFromToken(String token) {
+
         return getClaimFromToken(token, "userId", String.class);
     }
 
@@ -77,6 +93,7 @@ public class JwtUtil {
      * 从 Token 中获取租户ID
      */
     public String getTenantIdFromToken(String token) {
+
         return getClaimFromToken(token, "tenantId", String.class);
     }
 
@@ -84,6 +101,7 @@ public class JwtUtil {
      * 从 Token 中获取业务租户ID
      */
     public String getRenterIdFromToken(String token) {
+
         return getClaimFromToken(token, "renterId", String.class);
     }
 
@@ -98,6 +116,7 @@ public class JwtUtil {
      * 从 Token 中获取站点ID
      */
     public String getSiteIdFromToken(String token) {
+
         return getClaimFromToken(token, "siteId", String.class);
     }
 
@@ -107,10 +126,10 @@ public class JwtUtil {
     private <T> T getClaimFromToken(String token, String claimName, Class<T> clazz) {
         try {
             Claims claims = Jwts.parser()
-                    .verifyWith(SECRET_KEY)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
 
             return claims.get(claimName, clazz);
         } catch (Exception e) {
@@ -125,9 +144,9 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .verifyWith(SECRET_KEY)
-                    .build()
-                    .parseSignedClaims(token);
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token);
             return true;
         } catch (Exception e) {
             System.err.println("Token validation failed: " + e.getMessage());
@@ -141,10 +160,10 @@ public class JwtUtil {
     public boolean isTokenExpired(String token) {
         try {
             Claims claims = Jwts.parser()
-                    .verifyWith(SECRET_KEY)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
 
             return claims.getExpiration().before(new Date());
         } catch (Exception e) {

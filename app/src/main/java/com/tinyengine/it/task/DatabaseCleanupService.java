@@ -19,32 +19,35 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
 @Service
 public class DatabaseCleanupService {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseCleanupService.class);
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private CleanupProperties cleanupProperties;
-    // 执行统计
+
     private final Map<String, ExecutionStats> executionStats = new ConcurrentHashMap<>();
+
     private final AtomicInteger totalExecutions = new AtomicInteger(0);
 
     // 默认白名单表（如果配置文件未设置）
     private static final List<String> DEFAULT_TABLES = Arrays.asList(
-        "t_resource", "t_resource_group", "r_resource_group_resource", "t_app_extension",
-        "t_block", "t_block_carriers_relation", "t_block_group", "t_block_history",
-        "r_material_block", "r_material_history_block", "r_block_group_block", "t_datasource",
-        "t_i18n_entry", "t_model", "t_page", "t_page_history", "t_page_template"
+            "t_resource", "t_resource_group", "r_resource_group_resource", "t_app_extension",
+            "t_block", "t_block_carriers_relation", "t_block_group", "t_block_history",
+            "r_material_block", "r_material_history_block", "r_block_group_block", "t_datasource",
+            "t_i18n_entry", "t_model", "t_page", "t_page_history", "t_page_template"
     );
 
     /**
@@ -53,16 +56,16 @@ public class DatabaseCleanupService {
     @Scheduled(cron = "${cleanup.cron-expression:0 0 0 * * ?}")
     public void autoCleanupAtMidnight() {
         if (!cleanupProperties.isEnabled()) {
-            logger.info("⏸️  清空任务已禁用，跳过执行");
+            logger.info("⏸️ Clearing tasks is disabled, skipping execution");
             return;
         }
 
         String executionId = UUID.randomUUID().toString().substring(0, 8);
-        String startTime = LocalDateTime.now().format(formatter);
+        String startTime = LocalDateTime.now().format(FORMATTER);
 
-        logger.info("🎯 ======= 开始执行数据库清空任务 [{}] =======", executionId);
-        logger.info("⏰ 执行时间: {}", startTime);
-        logger.info("📋 目标表: {}", getWhitelistTables());
+        logger.info("======= Start executing the database clearing task [{}] =======", executionId);
+        logger.info("⏰ Time: {}", startTime);
+        logger.info("📋 Tables: {}", getWhitelistTables());
 
         ExecutionStats stats = new ExecutionStats(executionId, startTime);
         executionStats.put(executionId, stats);
@@ -70,15 +73,15 @@ public class DatabaseCleanupService {
 
         int successCount = 0;
         int failedCount = 0;
-        long totalRowsCleaned = 0;
+        long totalRowsCleaned = 0L;
 
         for (String tableName : getWhitelistTables()) {
             try {
                 validateTableName(tableName);
 
                 if (!tableExists(tableName)) {
-                    logger.warn("⚠️  表 {} 不存在，跳过", tableName);
-                    stats.recordSkipped(tableName, "表不存在");
+                    logger.warn("⚠️  Table {} does not exist, skip", tableName);
+                    stats.recordSkipped(tableName, "Table does not exist");
                     continue;
                 }
 
@@ -87,7 +90,7 @@ public class DatabaseCleanupService {
 
                 if (cleanupProperties.isUseTruncate()) {
                     truncateTable(tableName);
-                    rowsCleaned = beforeCount; // TRUNCATE会清空所有数据
+                    rowsCleaned = beforeCount;
                 } else {
                     rowsCleaned = clearTableData(tableName);
                 }
@@ -95,27 +98,27 @@ public class DatabaseCleanupService {
                 totalRowsCleaned += rowsCleaned;
                 successCount++;
 
-                logger.info("✅ 表 {} 清空完成: 删除 {} 条记录", tableName, rowsCleaned);
+                logger.info("✅ Table {} cleared: {} records deleted", tableName, rowsCleaned);
                 stats.recordSuccess(tableName, rowsCleaned);
 
             } catch (Exception e) {
                 failedCount++;
-                logger.error("❌ 表 {} 清空失败: {}", tableName, e.getMessage(), e);
+                logger.error("❌ Failed to clear table {}: {}", tableName, e.getMessage(), e);
                 stats.recordFailure(tableName, e.getMessage());
             }
         }
 
-        String endTime = LocalDateTime.now().format(formatter);
+        String endTime = LocalDateTime.now().format(FORMATTER);
         stats.setEndTime(endTime);
         stats.setTotalRowsCleaned(totalRowsCleaned);
 
-        logger.info("📊 ======= 任务完成统计 [{}] =======", executionId);
-        logger.info("✅ 成功表数: {}", successCount);
-        logger.info("❌ 失败表数: {}", failedCount);
-        logger.info("📈 总共删除记录: {}", totalRowsCleaned);
-        logger.info("⏰ 耗时: {} 秒", stats.getDurationSeconds());
-        logger.info("🕐 开始: {}, 结束: {}", startTime, endTime);
-        logger.info("🎉 ======= 任务执行完成 =======\n");
+        logger.info("📊 ======= Task Completion Statistics [{}] =======", executionId);
+        logger.info("✅ Successful table count: {}", successCount);
+        logger.info("❌ Failure count: {}", failedCount);
+        logger.info("📈 Total deleted records: {}", totalRowsCleaned);
+        logger.info("⏰ Time-consuming: {} second", stats.getDurationSeconds());
+        logger.info("🕐 Start: {}, End: {}", startTime, endTime);
+        logger.info("🎉 ======= Task execution completed =======\n");
     }
 
     /**
@@ -127,10 +130,10 @@ public class DatabaseCleanupService {
             return;
         }
 
-        logger.warn("⚠️  ⚠️  ⚠️  重要通知：5分钟后将自动清空数据库表！");
-        logger.warn("📋 目标表: {}", getWhitelistTables());
-        logger.warn("⏰ 执行时间: 00:00:00");
-        logger.warn("💡 如需取消，请修改配置: cleanup.enabled=false");
+        logger.warn("⚠️  ⚠️  ⚠️ Important Notice: The database table will be automatically cleared in 5 minutes！");
+        logger.warn("📋 Target table: {}", getWhitelistTables());
+        logger.warn("⏰ Execution Time: 00:00:00");
+        logger.warn("💡 If you need to cancel, please change the settings: cleanup.enabled=false");
         logger.warn("==========================================");
     }
 
@@ -139,12 +142,13 @@ public class DatabaseCleanupService {
      */
     @PostConstruct
     public void init() {
-        logger.info("🚀 数据库自动清空服务初始化完成");
-        logger.info("📋 配置表: {}", getWhitelistTables());
-        logger.info("⏰ 执行时间: {}", cleanupProperties.getCronExpression());
-        logger.info("🔧 使用模式: {}", cleanupProperties.isUseTruncate() ? "TRUNCATE" : "DELETE");
-        logger.info("✅ 服务状态: {}", cleanupProperties.isEnabled() ? "已启用" : "已禁用");
+        logger.info("🚀 Database auto-clear service initialization completed");
+        logger.info("📋 Configuration table: {}", getWhitelistTables());
+        logger.info("⏰ Execution time: {}", cleanupProperties.getCronExpression());
+        logger.info("🔧 Mode in use: {}", cleanupProperties.isUseTruncate() ? "TRUNCATE" : "DELETE");
+        logger.info("✅ Service status: {}", cleanupProperties.isEnabled() ? "Enabled" : "Disabled");
         logger.info("==========================================");
+
     }
 
     /**
@@ -184,7 +188,7 @@ public class DatabaseCleanupService {
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, tableName.toUpperCase());
             return count != null && count > 0;
         } catch (Exception e) {
-            logger.warn("检查表存在失败: {}", e.getMessage());
+            logger.warn("The checklist has failed: {}", e.getMessage());
             return false;
         }
     }
@@ -209,10 +213,10 @@ public class DatabaseCleanupService {
      */
     private void validateTableName(String tableName) {
         if (tableName == null || tableName.trim().isEmpty()) {
-            throw new IllegalArgumentException("表名不能为空");
+            throw new IllegalArgumentException("Table name cannot be empty");
         }
         if (!tableName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$")) {
-            throw new IllegalArgumentException("无效的表名格式: " + tableName);
+            throw new IllegalArgumentException("Invalid table name format: " + tableName);
         }
     }
 
@@ -255,18 +259,38 @@ public class DatabaseCleanupService {
         }
 
         // Getters and setters
-        public String getExecutionId() { return executionId; }
-        public String getStartTime() { return startTime; }
-        public String getEndTime() { return endTime; }
-        public void setEndTime(String endTime) { this.endTime = endTime; }
-        public long getTotalRowsCleaned() { return totalRowsCleaned; }
-        public void setTotalRowsCleaned(long totalRowsCleaned) { this.totalRowsCleaned = totalRowsCleaned; }
-        public Map<String, TableResult> getTableResults() { return tableResults; }
+        public String getExecutionId() {
+            return executionId;
+        }
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(String endTime) {
+            this.endTime = endTime;
+        }
+
+        public long getTotalRowsCleaned() {
+            return totalRowsCleaned;
+        }
+
+        public void setTotalRowsCleaned(long totalRowsCleaned) {
+            this.totalRowsCleaned = totalRowsCleaned;
+        }
+
+        public Map<String, TableResult> getTableResults() {
+            return tableResults;
+        }
 
         public long getDurationSeconds() {
             if (startTime != null && endTime != null) {
-                LocalDateTime start = LocalDateTime.parse(startTime, formatter);
-                LocalDateTime end = LocalDateTime.parse(endTime, formatter);
+                LocalDateTime start = LocalDateTime.parse(startTime, FORMATTER);
+                LocalDateTime end = LocalDateTime.parse(endTime, FORMATTER);
                 return java.time.Duration.between(start, end).getSeconds();
             }
             return 0;
@@ -288,8 +312,16 @@ public class DatabaseCleanupService {
         }
 
         // Getters
-        public String getStatus() { return status; }
-        public long getRowsCleaned() { return rowsCleaned; }
-        public String getMessage() { return message; }
+        public String getStatus() {
+            return status;
+        }
+
+        public long getRowsCleaned() {
+            return rowsCleaned;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 }
