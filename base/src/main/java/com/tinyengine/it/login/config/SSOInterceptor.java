@@ -32,7 +32,7 @@ public class SSOInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private static final String SSO_SERVER = "http://localhost:9090";
+    private static final String SSO_SERVER = System.getenv("SSO_SERVER");
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -48,6 +48,7 @@ public class SSOInterceptor implements HandlerInterceptor {
             String redirectUrl = SSO_SERVER;
             log.info("No token, redirecting to: {}", redirectUrl);
             response.sendRedirect(redirectUrl);
+            response.sendRedirect(SSO_SERVER);
             return false;
         }
 
@@ -92,7 +93,7 @@ public class SSOInterceptor implements HandlerInterceptor {
 
         } catch (Exception e) {
             log.error("Token validation exception: {}", e.getMessage(), e);
-            response.sendRedirect(SSO_SERVER + "/login");
+            response.sendRedirect(SSO_SERVER);
             DefaultLoginUserContext.clear();
             return false;
         }
