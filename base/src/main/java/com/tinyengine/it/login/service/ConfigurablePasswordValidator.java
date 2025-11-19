@@ -69,7 +69,7 @@ public class ConfigurablePasswordValidator {
 
         if (passwordPolicy.isRequireSpecialChar()) {
             String allowedSpecialChars = passwordPolicy.getAllowedSpecialChars();
-            boolean hasAllowedSpecial = password.chars().allMatch(ch -> allowedSpecialChars.indexOf(ch) >= 0);
+            boolean hasAllowedSpecial = password.chars().anyMatch(ch -> allowedSpecialChars.indexOf(ch) >= 0);
             if (!hasAllowedSpecial) {
                 result.setValid(false);
                 result.addError("密码必须包含特殊字符: " + passwordPolicy.getAllowedSpecialChars());

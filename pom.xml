@@ -21,7 +21,7 @@
     <properties>
         <java.version>17</java.version>
         <fastjson.version>2.0.50</fastjson.version>
-        <hutool.version>5.8.27</hutool.version>
+        <hutool.version>5.8.40</hutool.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.projectlombok.version>1.18.32</org.projectlombok.version>
         <druid-spring-boot-starter.version>1.2.21</druid-spring-boot-starter.version>
