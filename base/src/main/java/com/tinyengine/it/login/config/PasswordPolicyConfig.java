@@ -46,10 +46,10 @@ public class PasswordPolicyConfig {
     private String allowedSpecialChars = "!@#$%^&*()_+-=[]{};':\"|,.<>?";
 
     // 是否检查连续字符
-    private boolean checkConsecutiveChars = true;
+    private boolean checkConsecutiveChars = false;
 
     // 是否检查顺序字符
-    private boolean checkSequentialChars = true;
+    private boolean checkSequentialChars = false;
 
     // 是否检查弱密码
     private boolean checkWeakPasswords = true;
