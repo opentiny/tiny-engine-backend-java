@@ -176,8 +176,6 @@
             <result column="username" property="username"/>
             <result column="email" property="email"/>
             <result column="enable" property="isEnable"/>
-            <result column="userCreatedBy" property="createdBy"/>
-            <result column="userLastUpdatedBy" property="lastUpdatedBy"/>
             <result column="userCreatedTime" property="createdTime"/>
             <result column="userLastUpdatedTime" property="lastUpdatedTime"/>
             <result column="userTenantId" property="tenantId"/>
@@ -232,12 +230,8 @@
         U.username,
         U.email,
         U.enable,
-        U.created_by AS userCreatedBy,
-        U.last_updated_by AS userLastUpdatedBy,
         U.created_time AS userCreatedTime,
         U.last_updated_time AS userLastUpdatedTime,
-        U.tenant_id AS userTenantId,
-        U.site_id AS userSiteId,
         U.is_admin
         FROM t_page P
         LEFT JOIN t_user U ON P.occupier_by = U.id
@@ -273,12 +267,8 @@
         U.username,
         U.email,
         U.enable,
-        U.created_by AS userCreatedBy,
-        U.last_updated_by AS userLastUpdatedBy,
         U.created_time AS userCreatedTime,
         U.last_updated_time AS userLastUpdatedTime,
-        U.tenant_id AS userTenantId,
-        U.site_id AS userSiteId,
         U.is_admin
         FROM t_page P
         LEFT JOIN t_user U ON P.occupier_by = U.id

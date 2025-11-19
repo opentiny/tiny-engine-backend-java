@@ -13,6 +13,16 @@ create table `t_permission_role`
     unique index `u_idx_permission_role` (`name`) using btree
 ) engine = innodb comment = '';
 
+drop table if exists `r_tenant_user`;
+CREATE TABLE `r_tenant_user`
+(
+    `id`                int NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `tenant_id`       int NOT NULL COMMENT '租户id',
+    `user_id` int NOT NULL COMMENT '用户id',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `u_idx_tenant_user` (`tenant_id`,`user_id`) USING BTREE
+) engine = innodb comment = '租户和用户关系表';
+
 drop table if exists `t_auth_users_units_roles`;
 
 create table `t_auth_users_units_roles`
@@ -31,3 +41,4 @@ create table `t_auth_users_units_roles`
     primary key (`id`) using btree,
     unique index `u_idx_auth_users_units_roles` (`user_id`, `unit_id`, `unit_type`) using btree
 ) engine = innodb comment = '';
+

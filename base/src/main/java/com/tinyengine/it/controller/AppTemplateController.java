@@ -82,7 +82,7 @@ public class AppTemplateController {
         App app = new App();
         app.setName(name);
         app.setSceneId(sceneId);
-        app.setId(industryId);
+        app.setIndustryId(industryId);
         app.setFramework(framework);
         app.setCreatedBy(createBy);
         AppDto appDto = appTemplateService.queryAllAppTemplate(currentPage, pageSize, orderBy, app);
