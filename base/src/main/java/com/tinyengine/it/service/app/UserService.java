@@ -13,7 +13,6 @@
 package com.tinyengine.it.service.app;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.entity.User;
 
 import java.util.List;
@@ -62,20 +61,4 @@ public interface UserService extends IService<User> {
      * @return the integer
      */
     Integer updateUserById(User user);
-
-    /**
-     * 新增表t_user数据
-     *
-     * @param user the user
-     * @return the user
-     */
-    User createUser(User user) throws Exception;
-
-    /**
-     * 忘记密码
-     *
-     * @param user the user
-     * @return the Result
-     */
-    Result forgotPassword(User user) throws Exception;
 }

@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import cn.hutool.core.util.ReflectUtil;
+import com.tinyengine.it.login.service.impl.LoginServiceImpl;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.User;
 
@@ -40,6 +41,9 @@ class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
+
+    @InjectMocks
+    private LoginServiceImpl loginServiceImpl;
 
     @BeforeEach
     void setUp() {
@@ -97,7 +101,7 @@ class UserServiceImplTest {
         User param = new User();
         when(userMapper.createUser(param)).thenReturn(1);
         when(userMapper.queryUserById(any())).thenReturn(param);
-        User result = userServiceImpl.createUser(param);
+        User result = loginServiceImpl.createUser(param);
         Assertions.assertEquals(param, result);
     }
 }

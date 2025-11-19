@@ -22,6 +22,7 @@ import com.tinyengine.it.login.model.PasswordValidationResult;
 import com.tinyengine.it.login.model.SSOTicket;
 import com.tinyengine.it.login.model.ValidationResult;
 import com.tinyengine.it.login.service.ConfigurablePasswordValidator;
+import com.tinyengine.it.login.service.LoginService;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
@@ -62,6 +63,9 @@ public class LoginController {
     private UserService userService;
 
     @Autowired
+    private LoginService loginService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
@@ -93,7 +97,7 @@ public class LoginController {
         PasswordResult password = SM3PasswordUtil.createPassword(user.getPassword());
         user.setPassword(password.getPasswordHash());
         user.setSalt(password.getSalt());
-        User userResult = userService.createUser(user);
+        User userResult = loginService.createUser(user);
         return Result.success(userResult);
     }
 
@@ -167,7 +171,7 @@ public class LoginController {
         PasswordResult password = SM3PasswordUtil.createPassword(user.getPassword());
         user.setPassword(password.getPasswordHash());
         user.setSalt(password.getSalt());
-        return userService.forgotPassword(user);
+        return loginService.forgotPassword(user);
     }
 
     /**
