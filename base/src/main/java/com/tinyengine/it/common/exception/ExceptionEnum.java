@@ -300,7 +300,18 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 335 exception enum.
      */
-    CM335("CM335", "密码重置失败");
+    CM335("CM335", "密码重置失败"),
+
+
+    /**
+     * Cm 336 exception enum.
+     */
+    CM336("CM336", "token不存在"),
+
+    /**
+     * Cm 337 exception enum.
+     */
+    CM337("CM337", "组织不存在");
 
     /**
      * 错误码

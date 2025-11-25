@@ -240,7 +240,7 @@ public class LoginController {
     public Result<SSOTicket> setTenant(@RequestParam Integer tenantId) {
         List<Tenant> tenants = loginUserContext.getTenants();
         if (tenants == null || tenants.isEmpty()) {
-            return Result.failed(ExceptionEnum.CM009);
+            return Result.failed(ExceptionEnum.CM337);
         }
         List<Tenant> currentTenant = new ArrayList<>();
         for (Tenant tenant : tenants) {
@@ -249,13 +249,16 @@ public class LoginController {
             }
         }
         if (currentTenant.isEmpty()) {
-            return Result.failed(ExceptionEnum.CM009);
+            return Result.failed(ExceptionEnum.CM337);
         }
         // 通过 RequestContextHolder 获取请求
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
             .getRequest();
         String authHeader = request.getHeader("Authorization");
         String headerToken = jwtUtil.getTokenFromRequest(authHeader);
+        if (headerToken == null || headerToken.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM336);
+        }
         String token = jwtUtil.generateTokenWithSelectedTenant(headerToken, currentTenant);
         // 将原 token 加入黑名单
         Claims claims = Jwts.parser()
