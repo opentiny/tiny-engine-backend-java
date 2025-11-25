@@ -1,3 +1,15 @@
+/**
+ * Copyright (c) 2023 - present TinyEngine Authors.
+ * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ *
+ * Use of this source code is governed by an MIT-style license.
+ *
+ * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
+ * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
+ *
+ */
+
 package com.tinyengine.it.login.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -5,9 +17,12 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.login.service.LoginService;
+import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
 import com.tinyengine.it.mapper.UserMapper;
+import com.tinyengine.it.model.entity.AuthUsersUnitsRoles;
 import com.tinyengine.it.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
@@ -24,6 +39,9 @@ import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.getPublicKeyFromBa
 
 @Service
 public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements LoginService {
+
+    @Autowired
+    AuthUsersUnitsRolesMapper authUsersUnitsRolesMapper;
     /**
      * 新增表t_user数据
      *
@@ -51,6 +69,14 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         baseMapper.createUser(user);
         User result = baseMapper.queryUserById(user.getId());
         result.setPrivateKey(null);
+
+        AuthUsersUnitsRoles authUsersUnitsRoles = new AuthUsersUnitsRoles();
+        authUsersUnitsRoles.setTenantId(1);
+        authUsersUnitsRoles.setRoleId(2);
+        authUsersUnitsRoles.setUnitType("tenant");
+        authUsersUnitsRoles.setUnitId(1);
+        authUsersUnitsRoles.setUserId(Integer.valueOf(user.getId()));
+        authUsersUnitsRolesMapper.createAuthUsersUnitsRoles(authUsersUnitsRoles);
         return result;
     }
 

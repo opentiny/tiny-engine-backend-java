@@ -13,12 +13,16 @@
 package com.tinyengine.it.service.platform.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.mapper.TenantMapper;
+import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
+import com.tinyengine.it.model.entity.AuthUsersUnitsRoles;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.service.platform.TenantService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +36,13 @@ import java.util.List;
 @Service
 @Slf4j
 public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> implements TenantService {
+
+    @Autowired
+    LoginUserContext loginUserContext;
+
+    @Autowired
+    AuthUsersUnitsRolesMapper authUsersUnitsRolesMapper;
+
     /**
      * 查询表t_tenant所有数据
      *
@@ -39,6 +50,7 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
      */
     @Override
     public List<Tenant> findAllTenant() {
+
         return baseMapper.queryAllTenant();
     }
 
@@ -50,6 +62,7 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
      */
     @Override
     public Tenant findTenantById(Integer id) {
+
         return baseMapper.queryTenantById(id);
     }
 
@@ -61,6 +74,7 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
      */
     @Override
     public List<Tenant> findTenantByCondition(Tenant tenant) {
+
         return baseMapper.queryTenantByCondition(tenant);
     }
 
@@ -72,6 +86,7 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
      */
     @Override
     public Integer deleteTenantById(Integer id) {
+
         return baseMapper.deleteTenantById(id);
     }
 
@@ -83,6 +98,7 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
      */
     @Override
     public Integer updateTenantById(Tenant tenant) {
+
         return baseMapper.updateTenantById(tenant);
     }
 
@@ -94,6 +110,16 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
      */
     @Override
     public Integer createTenant(Tenant tenant) {
-        return baseMapper.createTenant(tenant);
+        int result = baseMapper.createTenant(tenant);
+        if(result == 1) {
+            AuthUsersUnitsRoles authUsersUnitsRoles = new AuthUsersUnitsRoles();
+            authUsersUnitsRoles.setTenantId(Integer.valueOf(tenant.getId()));
+            authUsersUnitsRoles.setRoleId(2);
+            authUsersUnitsRoles.setUnitType("tenant");
+            authUsersUnitsRoles.setUnitId(Integer.valueOf(tenant.getId()));
+            authUsersUnitsRoles.setUserId(Integer.valueOf(loginUserContext.getLoginUserId()));
+            authUsersUnitsRolesMapper.createAuthUsersUnitsRoles(authUsersUnitsRoles);
+        }
+        return Integer.valueOf(tenant.getId());
     }
 }

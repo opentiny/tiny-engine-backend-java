@@ -191,6 +191,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Override
     @SystemServiceLog(description = "应用创建实现方法")
     public Result<App> createApp(App app) {
+        if (app.getTenantId() == null || app.getTenantId().isEmpty()) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         List<App> appResult = baseMapper.queryAppByCondition(app);
         if (!appResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);

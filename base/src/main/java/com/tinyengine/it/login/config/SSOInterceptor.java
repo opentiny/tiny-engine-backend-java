@@ -15,12 +15,15 @@ package com.tinyengine.it.login.config;
 import com.tinyengine.it.login.Utils.JwtUtil;
 import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
 import com.tinyengine.it.login.model.UserInfo;
+import com.tinyengine.it.model.entity.Tenant;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.util.List;
 
 /**
  * SSO Interceptor
@@ -63,11 +66,10 @@ public class SSOInterceptor implements HandlerInterceptor {
             // 从token中获取用户信息
             String username = jwtUtil.getUsernameFromToken(token);
             String userId = jwtUtil.getUserIdFromToken(token);
-            String tenantId = jwtUtil.getTenantIdFromToken(token);
+            List<Tenant> tenants = jwtUtil.getTenantIdFromToken(token);
             String roles = jwtUtil.getRolesFromToken(token);
-            String renterId = jwtUtil.getRenterIdFromToken(token);
             Integer platformId = jwtUtil.getPlatformIdFromToken(token);
-            String siteId = jwtUtil.getSiteIdFromToken(token);
+
 
             // 检查必需的用户信息
             if (username == null || username.isEmpty() || userId == null) {
@@ -77,18 +79,15 @@ public class SSOInterceptor implements HandlerInterceptor {
             }
 
             // 存储用户信息到LoginUserContext
-            UserInfo userInfo = new UserInfo(userId, username, tenantId != null ? tenantId : "default-tenant"
-            );
-            userInfo.setRenterId(renterId != null ? renterId : "default-renter");
+            UserInfo userInfo = new UserInfo(userId, username, tenants);
+
             userInfo.setPlatformId(platformId != null ? platformId : 0);
-            userInfo.setSiteId(siteId != null ? siteId : "default-site");
             userInfo.setRoles(roles != null ? roles : "USER");
             userInfo.setToken(token);
 
             DefaultLoginUserContext.setCurrentUser(userInfo);
 
             log.info("Token validated and user context set for user: {}", username);
-            log.info("User details - Tenant: {}, Platform: {}, Site: {}", tenantId, platformId, siteId);
             return true;
 
         } catch (Exception e) {

@@ -25,6 +25,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -83,4 +85,7 @@ public class User {
     @JsonProperty("updated_at")
     private LocalDateTime lastUpdatedTime;
 
+    @TableField(exist = false)
+    @Schema(name = "tenant", description = "组织")
+    private List<Tenant> tenant = new ArrayList<>();
 }

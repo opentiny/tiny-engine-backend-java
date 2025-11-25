@@ -15,6 +15,8 @@ package com.tinyengine.it.controller;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
+import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
 
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 查询用户信息
@@ -54,6 +58,9 @@ public class UserController {
     @Autowired
     private LoginUserContext loginUserContext;
 
+    @Autowired
+    AuthUsersUnitsRolesMapper authUsersUnitsRolesMapper;
+
     /**
      * Me result.
      *
@@ -69,6 +76,8 @@ public class UserController {
     public Result<User> me() {
         String loginUserId = loginUserContext.getLoginUserId();
         User user = userService.queryUserById(loginUserId);
+        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(Integer.valueOf(loginUserId));
+        user.setTenant(tenants);
         if (user == null) {
             user = new User();
             user.setId(loginUserContext.getLoginUserId());

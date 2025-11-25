@@ -25,7 +25,7 @@ public class MockUserContext implements LoginUserContext {
     }
 
     @Override
-    public String getLoginUserId() {
+    public Integer getLoginUserId() {
         return "1";
     }
 

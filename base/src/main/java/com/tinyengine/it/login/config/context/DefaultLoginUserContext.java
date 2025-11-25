@@ -2,7 +2,10 @@ package com.tinyengine.it.login.config.context;
 
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.login.model.UserInfo;
+import com.tinyengine.it.model.entity.Tenant;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 默认登录用户上下文实现
@@ -15,9 +18,9 @@ public class DefaultLoginUserContext implements LoginUserContext {
     private static final int DEFAULT_PLATFORM = 1;
 
     @Override
-    public String getTenantId() {
+    public List<Tenant> getTenants() {
         UserInfo userInfo = currentUser.get();
-        return userInfo != null ? userInfo.getTenantId() : null;
+        return userInfo != null ? userInfo.getTenants() : null;
     }
 
     @Override
@@ -27,21 +30,21 @@ public class DefaultLoginUserContext implements LoginUserContext {
     }
 
     @Override
-    public String getRenterId() {
-        UserInfo userInfo = currentUser.get();
-        return userInfo != null ? userInfo.getRenterId() : null;
-    }
-
-    @Override
     public int getPlatformId() {
         UserInfo userInfo = currentUser.get();
         return userInfo != null ? userInfo.getPlatformId() : DEFAULT_PLATFORM;
     }
 
+    /**
+     * 设置当前组织信息
+     *
+     * @param tenants
+     */
     @Override
-    public String getSiteId() {
+    public void setTenants(List<Tenant> tenants) {
         UserInfo userInfo = currentUser.get();
-        return userInfo != null ? userInfo.getSiteId() : null;
+        userInfo.setTenants(tenants);
+        currentUser.set(userInfo);
     }
 
     /**

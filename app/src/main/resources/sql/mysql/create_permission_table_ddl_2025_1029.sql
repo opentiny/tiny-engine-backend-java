@@ -13,24 +13,14 @@ create table `t_permission_role`
     unique index `u_idx_permission_role` (`name`) using btree
 ) engine = innodb comment = '';
 
-drop table if exists `r_tenant_user`;
-CREATE TABLE `r_tenant_user`
-(
-    `id`                int NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `tenant_id`       int NOT NULL COMMENT '租户id',
-    `user_id` int NOT NULL COMMENT '用户id',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `u_idx_tenant_user` (`tenant_id`,`user_id`) USING BTREE
-) engine = innodb comment = '租户和用户关系表';
+drop table if exists `r_auth_users_units_roles`;
 
-drop table if exists `t_auth_users_units_roles`;
-
-create table `t_auth_users_units_roles`
+create table `r_auth_users_units_roles`
 (
     `id`                int          not null auto_increment comment '主键id',
     `user_id`           int          not null comment '用户',
     `unit_id`           int          not null comment '业务单元',
-    `unit_type`         int          not null comment '业务单元类型',
+    `unit_type`         varchar(60)  not null comment '业务单元类型',
     `tenant_id`         int          not null comment '组织id',
     `role_id`           int          not null comment '角色id',
     `expired_time`      timestamp  comment '过期时间',
