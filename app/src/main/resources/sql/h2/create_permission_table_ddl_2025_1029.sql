@@ -20,7 +20,7 @@ create table `r_auth_users_units_roles`
     `id`                int          not null auto_increment comment '主键id',
     `user_id`           int          not null comment '用户',
     `unit_id`           int          not null comment '业务单元',
-    `unit_type`         int          not null comment '业务单元类型',
+    `unit_type`         varchar(60)  not null comment '业务单元类型',
     `tenant_id`         int          not null comment '组织id',
     `role_id`           int          not null comment '角色id',
     `expired_time`      timestamp  comment '过期时间',

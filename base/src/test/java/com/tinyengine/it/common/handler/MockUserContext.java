@@ -12,6 +12,10 @@
 package com.tinyengine.it.common.handler;
 
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.model.entity.Tenant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Mock user context
@@ -19,33 +23,39 @@ import com.tinyengine.it.common.context.LoginUserContext;
  * @since 2025-04-14
  */
 public class MockUserContext implements LoginUserContext {
+    /**
+     * 返回当前用户所诉的业务租户信息
+     *
+     * @return 租户ID
+     */
     @Override
-    public String getTenantId() {
-        return "1";
+    public List<Tenant> getTenants() {
+        Tenant tenant = new Tenant();
+        tenant.setId("1");
+        List<Tenant> tenantList = new ArrayList<>();
+        tenantList.add(tenant);
+        return tenantList;
     }
 
     @Override
-    public Integer getLoginUserId() {
+    public String getLoginUserId() {
         return "1";
     }
 
-    @Override
-    public String getRenterId() {
-        return "1";
-    }
-
-    @Override
-    public int getAppId() {
-        return 1;
-    }
 
     @Override
     public int getPlatformId() {
         return 1;
     }
 
+    /**
+     * 设置当前组织信息
+     *
+     * @param tenants
+     */
     @Override
-    public String getSiteId() {
-        return "1";
+    public void setTenants(List<Tenant> tenants) {
+
     }
+
 }

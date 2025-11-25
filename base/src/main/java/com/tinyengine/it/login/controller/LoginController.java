@@ -239,11 +239,17 @@ public class LoginController {
     @GetMapping("/user/tenant")
     public Result<SSOTicket> setTenant(@RequestParam Integer tenantId) {
         List<Tenant> tenants = loginUserContext.getTenants();
+        if (tenants == null || tenants.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM009);
+        }
         List<Tenant> currentTenant = new ArrayList<>();
         for (Tenant tenant : tenants) {
             if (tenant.getId().equals(tenantId.toString())) {
                 currentTenant.add(tenant);
             }
+        }
+        if (currentTenant.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM009);
         }
         // 通过 RequestContextHolder 获取请求
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())

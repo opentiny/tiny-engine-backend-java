@@ -14,6 +14,7 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
 import com.tinyengine.it.model.entity.Tenant;
@@ -75,14 +76,20 @@ public class UserController {
     @GetMapping("/user/me")
     public Result<User> me() {
         String loginUserId = loginUserContext.getLoginUserId();
+        if (loginUserId == null) {
+            return Result.failed(ExceptionEnum.CM009);
+        }
+        Integer userId = Integer.valueOf(loginUserId);
+        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(userId);
         User user = userService.queryUserById(loginUserId);
-        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(Integer.valueOf(loginUserId));
-        user.setTenant(tenants);
         if (user == null) {
             user = new User();
             user.setId(loginUserContext.getLoginUserId());
             user.setUsername(loginUserContext.getLoginUserId());
         }
+        user.setTenant(tenants);
+
         return Result.success(user);
     }
+
 }

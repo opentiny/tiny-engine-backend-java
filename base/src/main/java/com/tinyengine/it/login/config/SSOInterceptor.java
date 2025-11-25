@@ -48,9 +48,7 @@ public class SSOInterceptor implements HandlerInterceptor {
 
         // 如果没有token，重定向到登录页
         if (token == null || token.isEmpty()) {
-            String redirectUrl = SSO_SERVER;
-            log.info("No token, redirecting to: {}", redirectUrl);
-            response.sendRedirect(redirectUrl);
+            log.info("No token, redirecting to: {}", SSO_SERVER);
             response.sendRedirect(SSO_SERVER);
             return false;
         }

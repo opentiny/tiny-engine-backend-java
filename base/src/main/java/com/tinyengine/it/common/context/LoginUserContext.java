@@ -41,7 +41,7 @@ public interface LoginUserContext {
 
     /**
      * 设置当前组织信息
-     * @praam tenants
+     * @param tenants
      */
     void setTenants(List<Tenant> tenants);
 }

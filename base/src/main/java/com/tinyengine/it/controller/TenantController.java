@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -111,7 +112,7 @@ public class TenantController {
      */
     @Operation(summary = "删除单个组织", description = "删除单个组织",
         parameters = {
-            @Parameter(name = "id", description = "TenantId")
+            @Parameter(name = "id", description = "id")
         }, responses = {
             @ApiResponse(responseCode = "200", description = "返回信息",
                 content = @Content(mediaType = "application/json",
@@ -119,12 +120,13 @@ public class TenantController {
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
     @SystemControllerLog(description = "删除单个组织")
-    @GetMapping("/tenant/delete")
+    @DeleteMapping("/tenant/delete")
     public Result<Tenant> deleteTenant(@RequestParam Integer id) {
+        Tenant tenant = tenantService.findTenantById(id);
         int result = tenantService.deleteTenantById(id);
         if (result != 1) {
             return Result.failed(ExceptionEnum.CM009);
         }
-        return Result.success(tenantService.findTenantById(id));
+        return Result.success(tenant);
     }
 }

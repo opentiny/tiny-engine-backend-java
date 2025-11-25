@@ -55,7 +55,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         List<User> users = baseMapper.queryUserByCondition(userParam);
         if (!users.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM003.getResultCode(),
-                    ExceptionEnum.CM003.getResultMsg());
+                ExceptionEnum.CM003.getResultMsg());
         }
         KeyPair keyPair = generateSM2KeyPair();
         PublicKey publicKey = keyPair.getPublic();
@@ -92,7 +92,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         userParam.setUsername(user.getUsername());
         List<User> users = baseMapper.queryUserByCondition(userParam);
         if (users.isEmpty()) {
-            Result.failed(ExceptionEnum.CM002);
+            return Result.failed(ExceptionEnum.CM002);
         }
         User userResult = users.get(0);
         PublicKey publicKey = getPublicKeyFromBase64(user.getPublicKey());
@@ -107,7 +107,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         baseMapper.updateUserById(user);
         User result = baseMapper.queryUserById(user.getId());
         result.setPrivateKey(null);
-        if (result.getSalt().isEmpty()) {
+        if (result.getSalt() == null || result.getSalt().isEmpty()) {
             return Result.failed(ExceptionEnum.CM335);
         }
         return Result.success(ExceptionEnum.CM334.getResultCode(), ExceptionEnum.CM334.getResultMsg());

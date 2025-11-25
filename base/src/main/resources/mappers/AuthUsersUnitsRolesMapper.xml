@@ -31,16 +31,16 @@
             AND expired_time = #{expiredTime}
         </if>
         <if test="createdBy!=null and createdBy!=''">
-            AND A.created_by = #{createdBy}
+            AND created_by = #{createdBy}
         </if>
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            AND A.last_updated_by = #{lastUpdatedBy}
+            AND last_updated_by = #{lastUpdatedBy}
         </if>
         <if test="createdTime!=null">
-            AND A.created_time = #{createdTime}
+            AND created_time = #{createdTime}
         </if>
         <if test="lastUpdatedTime!=null">
-            AND A.last_updated_time = #{lastUpdatedTime}
+            AND last_updated_time = #{lastUpdatedTime}
         </if>
     </sql>
 
@@ -65,16 +65,16 @@
             expired_time = #{expiredTime},
         </if>
         <if test="createdBy!=null and createdBy!=''">
-            A.created_by = #{createdBy},
+            created_by = #{createdBy},
         </if>
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            A.last_updated_by = #{lastUpdatedBy},
+            last_updated_by = #{lastUpdatedBy},
         </if>
         <if test="createdTime!=null">
-            A.created_time = #{createdTime},
+            created_time = #{createdTime},
         </if>
         <if test="lastUpdatedTime!=null">
-            A.last_updated_time = #{lastUpdatedTime},
+            last_updated_time = #{lastUpdatedTime},
         </if>
     </sql>
 
