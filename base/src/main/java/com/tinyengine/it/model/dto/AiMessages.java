@@ -23,7 +23,43 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AiMessages {
-    private String content;
+    /**
+     * Message content - can be either:
+     * - String: for simple text messages
+     * - List: for multimodal content (text + images)
+     */
+    private Object content;
     private String role;
     private String name;
+
+    /**
+     * Get content as String (for backward compatibility)
+     * If content is not a String, returns null
+     *
+     * @return content as String or null
+     */
+    public String getContentAsString() {
+        if (content instanceof String) {
+            return (String) content;
+        }
+        return null;
+    }
+
+    /**
+     * Set content from String (for backward compatibility)
+     *
+     * @param content the content string
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    /**
+     * Set content from Object (for multimodal support)
+     *
+     * @param content the content object
+     */
+    public void setContent(Object content) {
+        this.content = content;
+    }
 }

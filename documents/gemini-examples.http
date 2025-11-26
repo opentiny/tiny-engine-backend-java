@@ -1,0 +1,344 @@
+/**
+ * Gemini API 使用示例
+ *
+ * 本文件展示了如何在项目中使用 Gemini API
+ */
+
+// ============================================
+// 示例 1: 基础对话（非流式）
+// ============================================
+POST http://localhost:8080/app-center/api/ai/chat
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY_HERE",
+  "baseUrl": "https://generativelanguage.googleapis.com",
+  "messages": [
+    {
+      "role": "user",
+      "content": "你好，请介绍一下 Google Gemini"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+
+// ============================================
+// 示例 2: 流式响应
+// ============================================
+POST http://localhost:8080/app-center/api/ai/chat
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-flash",
+  "apiKey": "YOUR_GEMINI_API_KEY_HERE",
+  "messages": [
+    {
+      "role": "user",
+      "content": "写一首关于人工智能的诗歌"
+    }
+  ],
+  "temperature": 0.9,
+  "stream": true,
+  "maxTokens": 500
+}
+
+// ============================================
+// 示例 3: 多轮对话
+// ============================================
+POST http://localhost:8080/app-center/api/ai/chat
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY_HERE",
+  "messages": [
+    {
+      "role": "user",
+      "content": "什么是机器学习？"
+    },
+    {
+      "role": "assistant",
+      "content": "机器学习是人工智能的一个子领域，它使计算机系统能够通过经验自动改进，而无需明确编程。"
+    },
+    {
+      "role": "user",
+      "content": "它和深度学习有什么区别？"
+    }
+  ],
+  "temperature": 0.7
+}
+
+// ============================================
+// 示例 4: 代码生成
+// ============================================
+POST http://localhost:8080/app-center/api/ai/chat
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY_HERE",
+  "messages": [
+    {
+      "role": "user",
+      "content": "用 Java 写一个快速排序算法的实现"
+    }
+  ],
+  "temperature": 0.3
+}
+
+// ============================================
+// 示例 5: 使用系统提示
+// ============================================
+POST http://localhost:8080/app-center/api/ai/chat
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY_HERE",
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是一个专业的 Java 开发专家，擅长解释技术概念。"
+    },
+    {
+      "role": "user",
+      "content": "什么是 Spring Boot？"
+    }
+  ],
+  "temperature": 0.7
+}
+
+// ============================================
+// 示例 6: 图片理解（Base64）
+// ============================================
+POST http://localhost:8080/app-center/api/ai/chat
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY_HERE",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "请描述这张图片的内容"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/..."
+          }
+        }
+      ]
+    }
+  ],
+  "temperature": 0.7
+}
+
+// ============================================
+// Java 代码示例
+// ============================================
+
+/*
+// 使用 RestTemplate 调用 Gemini API
+@Service
+public class GeminiChatService {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    public String chatWithGemini(String userMessage, String apiKey) {
+        String url = "http://localhost:8080/app-center/api/ai/chat";
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("model", "gemini-1.5-pro");
+        request.put("apiKey", apiKey);
+        request.put("stream", false);
+        request.put("temperature", 0.7);
+
+        List<Map<String, String>> messages = new ArrayList<>();
+        Map<String, String> message = new HashMap<>();
+        message.put("role", "user");
+        message.put("content", userMessage);
+        messages.add(message);
+        request.put("messages", messages);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+        ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
+
+        Map<String, Object> responseBody = response.getBody();
+        List<Map<String, Object>> choices = (List<Map<String, Object>>) responseBody.get("choices");
+        Map<String, Object> firstChoice = choices.get(0);
+        Map<String, String> messageContent = (Map<String, String>) firstChoice.get("message");
+
+        return messageContent.get("content");
+    }
+}
+*/
+
+// ============================================
+// JavaScript/TypeScript 示例（前端）
+// ============================================
+
+/*
+// 使用 fetch API 调用
+async function chatWithGemini(message: string, apiKey: string): Promise<string> {
+  const response = await fetch('http://localhost:8080/app-center/api/ai/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gemini-1.5-pro',
+      apiKey: apiKey,
+      messages: [
+        {
+          role: 'user',
+          content: message
+        }
+      ],
+      temperature: 0.7,
+      stream: false
+    })
+  });
+
+  const data = await response.json();
+  return data.choices[0].message.content;
+}
+
+// 流式调用示例
+async function streamChatWithGemini(message: string, apiKey: string, onChunk: (text: string) => void) {
+  const response = await fetch('http://localhost:8080/app-center/api/ai/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gemini-1.5-flash',
+      apiKey: apiKey,
+      messages: [
+        {
+          role: 'user',
+          content: message
+        }
+      ],
+      stream: true
+    })
+  });
+
+  const reader = response.body?.getReader();
+  const decoder = new TextDecoder();
+
+  while (true) {
+    const { done, value } = await reader!.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value);
+    const lines = chunk.split('\n');
+
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const data = line.slice(6);
+        if (data !== '[DONE]') {
+          try {
+            const parsed = JSON.parse(data);
+            const text = parsed.choices[0]?.delta?.content || '';
+            onChunk(text);
+          } catch (e) {
+            console.error('Parse error:', e);
+          }
+        }
+      }
+    }
+  }
+}
+*/
+
+// ============================================
+// Python 示例
+// ============================================
+
+/*
+import requests
+import json
+
+def chat_with_gemini(message: str, api_key: str) -> str:
+    """使用 Gemini API 进行对话"""
+    url = "http://localhost:8080/app-center/api/ai/chat"
+
+    payload = {
+        "model": "gemini-1.5-pro",
+        "apiKey": api_key,
+        "messages": [
+            {
+                "role": "user",
+                "content": message
+            }
+        ],
+        "temperature": 0.7,
+        "stream": False
+    }
+
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()
+
+    data = response.json()
+    return data["choices"][0]["message"]["content"]
+
+# 使用示例
+if __name__ == "__main__":
+    api_key = "YOUR_GEMINI_API_KEY"
+    user_message = "你好，请介绍一下 Google Gemini"
+
+    response = chat_with_gemini(user_message, api_key)
+    print(f"Gemini: {response}")
+*/
+
+// ============================================
+// curl 命令示例
+// ============================================
+
+/*
+# 基础对话
+curl -X POST http://localhost:8080/app-center/api/ai/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-1.5-pro",
+    "apiKey": "YOUR_GEMINI_API_KEY",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你好"
+      }
+    ],
+    "temperature": 0.7
+  }'
+
+# 流式响应
+curl -X POST http://localhost:8080/app-center/api/ai/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-1.5-flash",
+    "apiKey": "YOUR_GEMINI_API_KEY",
+    "messages": [
+      {
+        "role": "user",
+        "content": "写一首诗"
+      }
+    ],
+    "stream": true
+  }' \
+  --no-buffer
+*/
+

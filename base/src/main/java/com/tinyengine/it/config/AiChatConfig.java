@@ -26,6 +26,7 @@ public class AiChatConfig {
     private static final String OPENAI_API_URL = "https://api.openai.com";
     private static final String LOCAL_GPT_API_URL = "https://dashscope.aliyuncs.com/compatible-mode";
     private static final String DEEPSEEK_V3_URL = "https://api.deepseek.com";
+    private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com";
 
 
     /**
@@ -49,6 +50,15 @@ public class AiChatConfig {
         String deepSeekApiKey = Enums.FoundationModel.DEEPSEEK_V3.getValue().equals(model) ? token : null;
         deepSeekHeaders.put("Authorization", "Bearer " + deepSeekApiKey);
 
+        Map<String, String> geminiHeaders = new HashMap<>();
+        String geminiApiKey = null;
+        if (Enums.FoundationModel.GEMINI_PRO.getValue().equals(model) ||
+            Enums.FoundationModel.GEMINI_1_5_PRO.getValue().equals(model) ||
+            Enums.FoundationModel.GEMINI_1_5_FLASH.getValue().equals(model)) {
+            geminiApiKey = token;
+        }
+        geminiHeaders.put("x-goog-api-key", geminiApiKey);
+
         Map<String, String> ernieBotHeaders = new HashMap<>();
 
 
@@ -66,6 +76,22 @@ public class AiChatConfig {
             new AiChatConfigData(
                 DEEPSEEK_V3_URL + "/chat/completions", createCommonRequestOption(), deepSeekHeaders,
     "DeepSeek"));
+
+        // Gemini configurations
+        config.put(Enums.FoundationModel.GEMINI_PRO.getValue(),
+            new AiChatConfigData(
+                GEMINI_API_URL + "/v1beta/models/" + Enums.FoundationModel.GEMINI_PRO.getValue() + ":generateContent",
+                createCommonRequestOption(), geminiHeaders, "gemini"));
+
+        config.put(Enums.FoundationModel.GEMINI_1_5_PRO.getValue(),
+            new AiChatConfigData(
+                GEMINI_API_URL + "/v1beta/models/" + Enums.FoundationModel.GEMINI_1_5_PRO.getValue() + ":generateContent",
+                createCommonRequestOption(), geminiHeaders, "gemini"));
+
+        config.put(Enums.FoundationModel.GEMINI_1_5_FLASH.getValue(),
+            new AiChatConfigData(
+                GEMINI_API_URL + "/v1beta/models/" + Enums.FoundationModel.GEMINI_1_5_FLASH.getValue() + ":generateContent",
+                createCommonRequestOption(), geminiHeaders, "gemini"));
 
         String ernieBotAccessToken = Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(model) ? token : null;
         config.put(Enums.FoundationModel.ERNIBOT_TURBO.getValue(), new AiChatConfigData(

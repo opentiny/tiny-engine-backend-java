@@ -17,7 +17,10 @@ import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.config.OpenAIConfig;
 import com.tinyengine.it.model.dto.ChatRequest;
+import com.tinyengine.it.service.app.adapter.GeminiApiAdapter;
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -29,7 +32,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,6 +44,7 @@ import java.util.Map;
  */
 @Service
 public class AiChatV1ServiceImpl implements AiChatV1Service {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AiChatV1ServiceImpl.class);
     private final OpenAIConfig config = new OpenAIConfig();
     private HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(config.getTimeoutSeconds()))
@@ -53,35 +59,65 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
     @Override
     @SystemServiceLog(description = "chatCompletion")
     public Object chatCompletion(ChatRequest request) throws Exception {
-        String requestBody = buildRequestBody(request);
+        String model = request.getModel() != null ? request.getModel() : config.getDefaultModel();
+        boolean isGemini = GeminiApiAdapter.isGeminiModel(model);
+
+        String requestBody = buildRequestBody(request, isGemini);
         String apiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
         String baseUrl = request.getBaseUrl();
 
         // 规范化URL处理
-        String normalizedUrl = normalizeApiUrl(baseUrl);
+        String normalizedUrl = normalizeApiUrl(baseUrl, model, isGemini, apiKey);
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(normalizedUrl))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + apiKey)
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody));
+
+        // Gemini uses API key in header differently
+        if (isGemini) {
+            requestBuilder.header("x-goog-api-key", apiKey);
+        } else {
+            requestBuilder.header("Authorization", "Bearer " + apiKey);
+        }
+
         if (request.isStream()) {
             requestBuilder.header("Accept", "text/event-stream");
-            return processStreamResponse(requestBuilder);
+            return processStreamResponse(requestBuilder, isGemini, model);
         } else {
-            return processStandardResponse(requestBuilder);
+            return processStandardResponse(requestBuilder, isGemini, model);
         }
     }
 
     /**
      * 规范化API URL，兼容不同厂商
      */
-    private String normalizeApiUrl(String baseUrl) {
+    private String normalizeApiUrl(String baseUrl, String model, boolean isGemini, String apiKey) {
         if (baseUrl == null || baseUrl.trim().isEmpty()) {
-            baseUrl = config.getBaseUrl();
+            if (isGemini) {
+                // Gemini default URL structure
+                baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
+            } else {
+                baseUrl = config.getBaseUrl();
+            }
         }
         baseUrl = baseUrl.trim();
 
+        // Handle Gemini URLs
+        if (isGemini) {
+            // If already a complete Gemini URL, use it
+            if (baseUrl.contains(":generateContent") || baseUrl.contains(":streamGenerateContent")) {
+                return ensureUrlProtocol(baseUrl);
+            }
+            // Build Gemini URL
+            String geminiBase = ensureUrlProtocol(baseUrl);
+            if (!geminiBase.contains("/v1beta/models/")) {
+                geminiBase = geminiBase + "/v1beta/models/" + model + ":generateContent";
+            }
+            return geminiBase;
+        }
+
+        // Handle non-Gemini URLs
         if (baseUrl.contains("/chat/completions") || baseUrl.contains("/v1/chat/completions")) {
             return ensureUrlProtocol(baseUrl);
         }
@@ -104,10 +140,10 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         return "https://" + url;
     }
 
-    private String buildRequestBody(ChatRequest request) {
+    private String buildRequestBody(ChatRequest request, boolean isGemini) {
         Map<String, Object> body = new HashMap<>();
         body.put("model", request.getModel() != null ? request.getModel() : config.getDefaultModel());
-        body.put("messages", request.getMessages());
+        body.put("messages", normalizeMessages(request.getMessages()));
         body.put("stream", request.isStream());
         body.put("tools", request.getTools());
         if (request.getMaxTokens() != null) {
@@ -151,17 +187,80 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
             body.put("frequency_penalty", request.getFrequencyPenalty());
         }
 
-        return JsonUtils.encode(body);
+        // Convert to Gemini format if needed
+        if (isGemini) {
+            body = GeminiApiAdapter.convertRequestToGemini(body);
+        }
+
+        String requestBody = JsonUtils.encode(body);
+        
+        // 添加调试日志以便排查问题
+        LOGGER.debug("AI Chat Request Body: {}", requestBody);
+        
+        return requestBody;
     }
 
-    private JsonNode processStandardResponse(HttpRequest.Builder requestBuilder)
+    /**
+     * Normalize messages to fix format issues
+     * Fixes: role:tool messages with array content should have string content
+     */
+    private Object normalizeMessages(Object messages) {
+        if (!(messages instanceof List)) {
+            return messages;
+        }
+        
+        List<?> messageList = (List<?>) messages;
+        List<Map<String, Object>> normalizedMessages = new ArrayList<>();
+        
+        for (Object msg : messageList) {
+            if (!(msg instanceof Map)) {
+                normalizedMessages.add((Map<String, Object>) msg);
+                continue;
+            }
+            
+            Map<String, Object> messageMap = new HashMap<>((Map<String, Object>) msg);
+            
+            // Remove invalid "type" field at message level (should only be in content array)
+            messageMap.remove("type");
+            
+            // Fix role:tool messages with array content
+            Object role = messageMap.get("role");
+            Object content = messageMap.get("content");
+            
+            if ("tool".equals(role) && content instanceof List) {
+                // For tool messages, content must be a string
+                List<?> contentArray = (List<?>) content;
+                if (!contentArray.isEmpty() && contentArray.get(0) instanceof Map) {
+                    Map<?, ?> firstItem = (Map<?, ?>) contentArray.get(0);
+                    Object text = firstItem.get("text");
+                    if (text != null) {
+                        messageMap.put("content", text.toString());
+                    }
+                }
+            }
+            
+            normalizedMessages.add(messageMap);
+        }
+        
+        return normalizedMessages;
+    }
+
+    private JsonNode processStandardResponse(HttpRequest.Builder requestBuilder, boolean isGemini, String model)
             throws Exception {
         HttpResponse<String> response = httpClient.send(
                 requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
-        return JsonUtils.MAPPER.readTree(response.body());
+        JsonNode jsonResponse = JsonUtils.MAPPER.readTree(response.body());
+
+        // Convert Gemini response to OpenAI format if needed
+        if (isGemini) {
+            Map<String, Object> convertedResponse = GeminiApiAdapter.convertResponseFromGemini(jsonResponse, model);
+            return JsonUtils.MAPPER.valueToTree(convertedResponse);
+        }
+
+        return jsonResponse;
     }
 
-    private StreamingResponseBody processStreamResponse(HttpRequest.Builder requestBuilder) {
+    private StreamingResponseBody processStreamResponse(HttpRequest.Builder requestBuilder, boolean isGemini, String model) {
         return outputStream -> {
             try {
                 HttpClient client = HttpClient.newHttpClient();
