@@ -27,4 +27,12 @@ public interface AiChatV1Service {
      * @return Object the Object
      */
     public Object chatCompletion(ChatRequest request) throws Exception;
+
+    /**
+     * get token.
+     *
+     * @param apiKey the apiKey
+     * @return token the token
+     */
+    public String getToken(String apiKey) throws Exception;
 }

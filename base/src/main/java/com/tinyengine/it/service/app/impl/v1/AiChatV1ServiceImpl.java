@@ -15,9 +15,11 @@ package com.tinyengine.it.service.app.impl.v1;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.JsonUtils;
+import com.tinyengine.it.common.utils.SM4Utils;
 import com.tinyengine.it.config.OpenAIConfig;
 import com.tinyengine.it.model.dto.ChatRequest;
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -37,6 +39,7 @@ import java.util.Map;
  *
  * @since 2025-08-06
  */
+@Slf4j
 @Service
 public class AiChatV1ServiceImpl implements AiChatV1Service {
     private final OpenAIConfig config = new OpenAIConfig();
@@ -54,23 +57,37 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
     @SystemServiceLog(description = "chatCompletion")
     public Object chatCompletion(ChatRequest request) throws Exception {
         String requestBody = buildRequestBody(request);
-        String apiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
+        String encryptApiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
+        String apiKey = getApiKey(encryptApiKey);
         String baseUrl = request.getBaseUrl();
 
         // 规范化URL处理
         String normalizedUrl = normalizeApiUrl(baseUrl);
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                .uri(URI.create(normalizedUrl))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + apiKey)
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody));
+            .uri(URI.create(normalizedUrl))
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + apiKey)
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody));
         if (request.isStream()) {
             requestBuilder.header("Accept", "text/event-stream");
             return processStreamResponse(requestBuilder);
         } else {
             return processStandardResponse(requestBuilder);
         }
+    }
+
+    /**
+     * get token.
+     *
+     * @param apiKey the apiKey
+     * @return token the token
+     */
+    @Override
+    public String getToken(String apiKey) throws Exception {
+        String sm4Key = System.getenv("SM4KEY");
+        String encrypt = SM4Utils.encryptECB(apiKey, sm4Key);
+        return "EKEY_"+ encrypt;
     }
 
     /**
@@ -88,6 +105,9 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
 
         if (baseUrl.contains("v1")) {
             return ensureUrlProtocol(baseUrl) + "/chat/completions";
+        }
+        if (baseUrl.endsWith("#")) {
+            return ensureUrlProtocol(baseUrl);
         } else {
             return ensureUrlProtocol(baseUrl) + "/v1/chat/completions";
         }
@@ -155,24 +175,46 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
     }
 
     private JsonNode processStandardResponse(HttpRequest.Builder requestBuilder)
-            throws Exception {
+        throws Exception {
         HttpResponse<String> response = httpClient.send(
-                requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+            requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+
+        // 添加状态码检查
+        if (response.statusCode() != 200) {
+            String errorBody = response.body();
+            try {
+                // 尝试解析错误JSON
+                JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
+                throw new IOException("API请求失败: " + response.statusCode() + " - " +
+                    errorNode.get("error").get("message").asText());
+            } catch (Exception e) {
+                // 如果无法解析JSON，返回原始错误信息
+                throw new IOException("API请求失败: " + response.statusCode() + " - " + errorBody);
+            }
+        }
+
         return JsonUtils.MAPPER.readTree(response.body());
     }
-
     private StreamingResponseBody processStreamResponse(HttpRequest.Builder requestBuilder) {
         return outputStream -> {
             try {
-                HttpClient client = HttpClient.newHttpClient();
-                HttpResponse<InputStream> response = client.send(
-                        requestBuilder.build(),
-                        HttpResponse.BodyHandlers.ofInputStream()
+                // 使用相同的httpClient实例，确保配置一致
+                HttpResponse<InputStream> response = httpClient.send(
+                    requestBuilder.build(),
+                    HttpResponse.BodyHandlers.ofInputStream()
                 );
+
+                // 立即检查状态码
                 if (response.statusCode() != 200) {
                     String errorBody = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
-                    throw new IOException("API请求失败: " + response.statusCode() + " - " + errorBody);
+                    // 格式化为正确的SSE错误事件
+                    String errorEvent = formatSSEError(response.statusCode(), errorBody);
+                    outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
+                    outputStream.flush();
+                    return; // 重要：立即返回，不再处理流
                 }
+
+                // 正常流处理逻辑
                 try (InputStream inputStream = response.body()) {
                     byte[] buffer = new byte[8192];
                     int bytesRead;
@@ -183,14 +225,40 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                 }
             } catch (Exception e) {
                 try {
-                    String errorEvent = "data: {\"error\": \"" + e.getMessage() + "\"}\n\n";
+                    // 格式化为标准SSE错误格式
+                    String errorEvent = formatSSEError(500, e.getMessage());
                     outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
                     outputStream.flush();
                 } catch (IOException ioException) {
-                    throw new IOException("API请求失败，且无法发送错误信息: " + e.getMessage() +
-                            " (IO错误: " + ioException.getMessage() + ")", e);
+                    log.error("无法发送错误信息: " + ioException.getMessage());
                 }
             }
         };
+    }
+    /**
+     * 格式化SSE错误事件
+     */
+    private String formatSSEError(int statusCode, String errorBody) {
+        try {
+            // 尝试解析API错误信息
+            JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
+            String errorMessage = errorNode.get("error").get("message").asText();
+            return String.format("data: {\"error\": {\"code\": %d, \"message\": \"%s\"}}\n\n",
+                statusCode, errorMessage);
+        } catch (Exception e) {
+            // 如果无法解析，返回原始错误
+            return String.format("data: {\"error\": {\"code\": %d, \"message\": \"%s\"}}\n\n",
+                statusCode, errorBody.replace("\"", "\\\""));
+        }
+    }
+
+    private String getApiKey(String encryptApiKey) throws Exception {
+        String sm4Key = System.getenv("SM4KEY");
+
+        if (encryptApiKey.startsWith("EKEY_")) {
+            String  encryptBase64ApiKey = encryptApiKey.substring(5);
+            return SM4Utils.decryptECB(encryptBase64ApiKey, sm4Key);
+        }
+        return SM4Utils.decryptECB(encryptApiKey, sm4Key);
     }
 }
