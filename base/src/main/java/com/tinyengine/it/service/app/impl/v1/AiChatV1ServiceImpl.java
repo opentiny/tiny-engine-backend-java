@@ -259,6 +259,6 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
             String  encryptBase64ApiKey = encryptApiKey.substring(5);
             return SM4Utils.decryptECB(encryptBase64ApiKey, sm4Key);
         }
-        return SM4Utils.decryptECB(encryptApiKey, sm4Key);
+        return encryptApiKey;
     }
 }
