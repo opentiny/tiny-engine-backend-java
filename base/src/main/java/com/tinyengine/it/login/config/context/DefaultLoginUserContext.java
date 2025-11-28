@@ -51,6 +51,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
      * 设置当前用户信息
      */
     public static void setCurrentUser(UserInfo userInfo) {
+
         currentUser.set(userInfo);
     }
 
@@ -58,6 +59,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
      * 获取当前用户完整信息
      */
     public static UserInfo getCurrentUser() {
+
         return currentUser.get();
     }
 
@@ -65,6 +67,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
      * 清理用户信息
      */
     public static void clear() {
+
         currentUser.remove();
     }
 
