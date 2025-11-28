@@ -10,7 +10,7 @@
  *
  */
 
-package com.tinyengine.it.login.Utils;
+package com.tinyengine.it.login.utils;
 
 import com.tinyengine.it.login.service.TokenBlacklistService;
 import com.tinyengine.it.model.entity.Tenant;
@@ -42,7 +42,7 @@ public class JwtUtil {
     @Autowired
     private TokenBlacklistService tokenBlacklistService;
 
-    private static final long EXPIRATION_TIME = 21600000; // 6小时 = 6 * 60 * 60 * 1000 = 21600000 毫秒
+    private static final long EXPIRATION_TIME = 21600000L; // 6小时 = 6 * 60 * 60 * 1000 = 21600000 毫秒
     private static final String DEFAULT_SECRET = "tiny-engine-backend-secret-key-at-jwt-login";
 
     // 避免启动时环境变量未加载的问题

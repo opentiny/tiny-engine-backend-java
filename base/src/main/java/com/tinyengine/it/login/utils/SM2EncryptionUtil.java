@@ -10,7 +10,7 @@
  *
  */
 
-package com.tinyengine.it.login.Utils;
+package com.tinyengine.it.login.utils;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 

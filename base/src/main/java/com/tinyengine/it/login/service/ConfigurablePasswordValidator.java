@@ -17,6 +17,7 @@ import com.tinyengine.it.login.model.PasswordValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -27,6 +28,12 @@ public class ConfigurablePasswordValidator {
 
     @Autowired
     private PasswordPolicyConfig passwordPolicy;
+
+    // 预编译正则表达式，避免重复编译
+    private static final Pattern LOWERCASE_PATTERN = Pattern.compile("[a-z]");
+    private static final Pattern UPPERCASE_PATTERN = Pattern.compile("[A-Z]");
+    private static final Pattern DIGIT_PATTERN = Pattern.compile("[0-9]");
+    private static final Pattern CONSECUTIVE_CHARS_PATTERN = Pattern.compile("(.)\\1{2,}");
 
     public PasswordValidationResult validateWithPolicy(String password) {
         PasswordValidationResult result = new PasswordValidationResult();
@@ -40,29 +47,29 @@ public class ConfigurablePasswordValidator {
         // 长度检查
         if (password.length() < passwordPolicy.getMinLength()) {
             result.setValid(false);
-            result.addError(String.format("密码长度至少%d位", passwordPolicy.getMinLength()));
+            result.addError(String.format(Locale.ROOT, "密码长度至少%d位", passwordPolicy.getMinLength()));
         }
 
         if (password.length() > passwordPolicy.getMaxLength()) {
             result.setValid(false);
-            result.addError(String.format("密码长度不能超过%d位", passwordPolicy.getMaxLength()));
+            result.addError(String.format(Locale.ROOT, "密码长度不能超过%d位", passwordPolicy.getMaxLength()));
         }
 
-        // 字符类型检查
+        // 字符类型检查 - 使用预编译的Pattern
         if (passwordPolicy.isRequireLowerCase() &&
-                !Pattern.compile("[a-z]").matcher(password).find()) {
+                !LOWERCASE_PATTERN.matcher(password).find()) {
             result.setValid(false);
             result.addError("密码必须包含小写字母");
         }
 
         if (passwordPolicy.isRequireUpperCase() &&
-                !Pattern.compile("[A-Z]").matcher(password).find()) {
+                !UPPERCASE_PATTERN.matcher(password).find()) {
             result.setValid(false);
             result.addError("密码必须包含大写字母");
         }
 
         if (passwordPolicy.isRequireDigit() &&
-                !Pattern.compile("[0-9]").matcher(password).find()) {
+                !DIGIT_PATTERN.matcher(password).find()) {
             result.setValid(false);
             result.addError("密码必须包含数字");
         }
@@ -76,9 +83,9 @@ public class ConfigurablePasswordValidator {
             }
         }
 
-        // 其他安全检查
+        // 其他安全检查 - 使用预编译的Pattern
         if (passwordPolicy.isCheckConsecutiveChars() &&
-                Pattern.compile("(.)\\1{2,}").matcher(password).find()) {
+                CONSECUTIVE_CHARS_PATTERN.matcher(password).find()) {
             result.setValid(false);
             result.addError("密码不能包含3个及以上连续相同字符");
         }

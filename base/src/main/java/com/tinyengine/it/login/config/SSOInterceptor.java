@@ -12,7 +12,7 @@
 
 package com.tinyengine.it.login.config;
 
-import com.tinyengine.it.login.Utils.JwtUtil;
+import com.tinyengine.it.login.utils.JwtUtil;
 import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
 import com.tinyengine.it.login.model.UserInfo;
 import com.tinyengine.it.model.entity.Tenant;

@@ -36,19 +36,33 @@ public class UserInfo {
     }
 
     // getter和setter方法
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public List<Tenant> getTenants() { return tenants; }
-    public void setTenants(List<Tenant> tenants) { this.tenants = tenants; }
-    public int getPlatformId() { return platformId; }
-    public void setPlatformId(int platformId) { this.platformId = platformId; }
-    public String getRoles() { return roles; }
-    public void setRoles(String roles) { this.roles = roles; }
-    public String getToken() { return token; }
-    public void setToken(String token) { this.token = token; }
-    public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
+    public String getUserId() {
+        return userId; }
+    public void setUserId(String userId) {
+        this.userId = userId; }
+    public String getUsername() {
+        return username; }
+    public void setUsername(String username) {
+        this.username = username; }
+    public List<Tenant> getTenants() {
+        return tenants; }
+    public void setTenants(List<Tenant> tenants) {
+        this.tenants = tenants; }
+    public int getPlatformId() {
+        return platformId; }
+    public void setPlatformId(int platformId) {
+        this.platformId = platformId; }
+    public String getRoles() {
+        return roles; }
+    public void setRoles(String roles) {
+        this.roles = roles; }
+    public String getToken() {
+        return token; }
+    public void setToken(String token) {
+        this.token = token; }
+    public String getDepartment() {
+        return department; }
+    public void setDepartment(String department) {
+        this.department = department; }
 
 }

@@ -21,7 +21,6 @@ import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.AuthUsersUnitsRoles;
 import com.tinyengine.it.model.entity.User;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,17 +30,18 @@ import java.security.PublicKey;
 import java.util.Base64;
 import java.util.List;
 
-import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.decrypt;
-import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.encrypt;
-import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.generateSM2KeyPair;
-import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.getPrivateKeyFromBase64;
-import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.getPublicKeyFromBase64;
+import static com.tinyengine.it.login.utils.SM2EncryptionUtil.decrypt;
+import static com.tinyengine.it.login.utils.SM2EncryptionUtil.encrypt;
+import static com.tinyengine.it.login.utils.SM2EncryptionUtil.generateSM2KeyPair;
+import static com.tinyengine.it.login.utils.SM2EncryptionUtil.getPrivateKeyFromBase64;
+import static com.tinyengine.it.login.utils.SM2EncryptionUtil.getPublicKeyFromBase64;
 
 @Service
 public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements LoginService {
 
     @Autowired
     AuthUsersUnitsRolesMapper authUsersUnitsRolesMapper;
+
     /**
      * 新增表t_user数据
      *

@@ -1,8 +1,6 @@
 package com.tinyengine.it.mapper;
 
 import com.tinyengine.it.model.entity.AuthUsersUnitsRoles;
-import com.tinyengine.it.model.entity.Resource;
-import com.tinyengine.it.model.entity.AuthUsersUnitsRoles;
 import com.tinyengine.it.model.entity.Tenant;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

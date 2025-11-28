@@ -16,8 +16,6 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.model.dto.AppDto;
 import com.tinyengine.it.model.entity.App;
 
-import java.util.List;
-
 public interface AppTemplateService {
     /**
      * 分页查询应用模版所有信息

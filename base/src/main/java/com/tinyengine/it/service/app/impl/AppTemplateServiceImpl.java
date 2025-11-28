@@ -112,7 +112,7 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
         }
         int offset = (currentPage - 1) * pageSize;
 
-        List<App> apps =  this.baseMapper.queryAllAppTemplate(pageSize, offset, app.getName(),
+        List<App> apps = this.baseMapper.queryAllAppTemplate(pageSize, offset, app.getName(),
             app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy());
         Integer total = this.baseMapper.queryAppTemplateTotal();
         AppDto appDto = new AppDto();

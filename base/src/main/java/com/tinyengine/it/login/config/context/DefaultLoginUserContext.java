@@ -13,25 +13,25 @@ import java.util.List;
 @Component
 public class DefaultLoginUserContext implements LoginUserContext {
 
-    private static final ThreadLocal<UserInfo> currentUser = new ThreadLocal<>();
+    private static final ThreadLocal<UserInfo> CURRENT_USER = new ThreadLocal<>();
 
     private static final int DEFAULT_PLATFORM = 1;
 
     @Override
     public List<Tenant> getTenants() {
-        UserInfo userInfo = currentUser.get();
+        UserInfo userInfo = CURRENT_USER.get();
         return userInfo != null ? userInfo.getTenants() : null;
     }
 
     @Override
     public String getLoginUserId() {
-        UserInfo userInfo = currentUser.get();
+        UserInfo userInfo = CURRENT_USER.get();
         return userInfo != null ? userInfo.getUserId() : null;
     }
 
     @Override
     public int getPlatformId() {
-        UserInfo userInfo = currentUser.get();
+        UserInfo userInfo = CURRENT_USER.get();
         return userInfo != null ? userInfo.getPlatformId() : DEFAULT_PLATFORM;
     }
 
@@ -42,9 +42,9 @@ public class DefaultLoginUserContext implements LoginUserContext {
      */
     @Override
     public void setTenants(List<Tenant> tenants) {
-        UserInfo userInfo = currentUser.get();
+        UserInfo userInfo = CURRENT_USER.get();
         userInfo.setTenants(tenants);
-        currentUser.set(userInfo);
+        CURRENT_USER.set(userInfo);
     }
 
     /**
@@ -52,7 +52,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
      */
     public static void setCurrentUser(UserInfo userInfo) {
 
-        currentUser.set(userInfo);
+        CURRENT_USER.set(userInfo);
     }
 
     /**
@@ -60,7 +60,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
      */
     public static UserInfo getCurrentUser() {
 
-        return currentUser.get();
+        return CURRENT_USER.get();
     }
 
     /**
@@ -68,7 +68,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
      */
     public static void clear() {
 
-        currentUser.remove();
+        CURRENT_USER.remove();
     }
 
 

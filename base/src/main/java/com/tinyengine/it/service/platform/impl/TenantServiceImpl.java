@@ -111,7 +111,7 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
     @Override
     public Integer createTenant(Tenant tenant) {
         int result = baseMapper.createTenant(tenant);
-        if(result == 1) {
+        if (result == 1) {
             AuthUsersUnitsRoles authUsersUnitsRoles = new AuthUsersUnitsRoles();
             authUsersUnitsRoles.setTenantId(Integer.valueOf(tenant.getId()));
             authUsersUnitsRoles.setRoleId(2);

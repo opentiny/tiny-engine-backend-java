@@ -16,8 +16,8 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
-import com.tinyengine.it.login.Utils.JwtUtil;
-import com.tinyengine.it.login.Utils.SM3PasswordUtil;
+import com.tinyengine.it.login.utils.JwtUtil;
+import com.tinyengine.it.login.utils.SM3PasswordUtil;
 import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
 import com.tinyengine.it.login.model.PasswordResult;
 import com.tinyengine.it.login.model.PasswordValidationResult;
@@ -56,8 +56,8 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.decrypt;
-import static com.tinyengine.it.login.Utils.SM2EncryptionUtil.getPrivateKeyFromBase64;
+import static com.tinyengine.it.login.utils.SM2EncryptionUtil.decrypt;
+import static com.tinyengine.it.login.utils.SM2EncryptionUtil.getPrivateKeyFromBase64;
 
 /**
  * Login Controller
@@ -111,7 +111,7 @@ public class LoginController {
     public Result createUser(@Valid @RequestBody User user) throws Exception {
         PasswordValidationResult passwordValidationResult = configurablePasswordValidator
             .validateWithPolicy(user.getPassword());
-        if(!passwordValidationResult.isValid()) {
+        if (!passwordValidationResult.isValid()) {
             return Result.failed("密码格式检验失败", passwordValidationResult.getErrorMessage());
         }
         PasswordResult password = SM3PasswordUtil.createPassword(user.getPassword());
@@ -150,7 +150,7 @@ public class LoginController {
 
         PrivateKey privateKey = getPrivateKeyFromBase64(userResult.getPrivateKey());
         String salt = decrypt(userResult.getSalt(), privateKey);
-        if (authenticate(salt, user.getPassword(),userResult.getPassword())) {
+        if (authenticate(salt, user.getPassword(), userResult.getPassword())) {
             List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(Integer.valueOf(userResult.getId()));
             String token = jwtUtil.generateToken(user.getUsername(), "USER", userResult.getId(),
                     tenants, 1);
@@ -186,7 +186,7 @@ public class LoginController {
     public Result forgotPassword(@RequestBody User user) throws Exception {
         PasswordValidationResult passwordValidationResult = configurablePasswordValidator
             .validateWithPolicy(user.getPassword());
-        if(!passwordValidationResult.isValid()) {
+        if (!passwordValidationResult.isValid()) {
             return Result.success(passwordValidationResult);
         }
         PasswordResult password = SM3PasswordUtil.createPassword(user.getPassword());
