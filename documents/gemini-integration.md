@@ -10,6 +10,12 @@
 - `gemini-1.5-pro` - Gemini 1.5 Pro 模型
 - `gemini-1.5-flash` - Gemini 1.5 Flash 快速模型
 
+**注意**：模型名称支持两种格式：
+- 简单格式：`gemini-1.5-pro`（推荐）
+- 完整格式：`models/gemini-1.5-pro`（系统会自动规范化）
+
+系统会自动处理模型名称中的 `models/` 前缀，无需担心格式问题。
+
 ## API 配置
 
 ### 1. 获取 Gemini API Key
@@ -186,8 +192,27 @@ curl -X POST http://localhost:8080/app-center/api/ai/chat \
 |------|------|----------|
 | 401 Unauthorized | API Key 无效或未提供 | 检查 API Key 是否正确 |
 | 403 Forbidden | API 未启用或配额不足 | 在 Google Cloud Console 中启用 API |
+| 404 Model Not Exist | 模型名称格式错误 | 使用正确的模型名称（如 `gemini-1.5-pro`），系统已自动处理 `models/` 前缀 |
 | 429 Too Many Requests | 超出调用限制 | 降低请求频率或升级配额 |
 | 500 Internal Server Error | API 格式错误 | 检查请求格式是否符合要求 |
+
+### 常见问题排查
+
+#### 1. Model Not Exist 错误
+**原因**：早期版本可能存在模型名称格式处理问题。
+
+**解决方案**：
+- 确保使用简单格式的模型名称：`gemini-1.5-pro`、`gemini-1.5-flash`
+- 避免使用 `models/gemini-1.5-pro` 格式（虽然新版本已支持）
+- 检查模型名称拼写是否正确
+
+#### 2. Authentication Fails 错误
+**原因**：API Key 无效或格式错误。
+
+**解决方案**：
+- 在 [Google AI Studio](https://makersuite.google.com/app/apikey) 重新生成 API Key
+- 确保 API Key 完整复制，没有多余空格
+- 验证 Generative Language API 已在项目中启用
 
 ## 技术实现
 

@@ -66,7 +66,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         String apiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
         String baseUrl = request.getBaseUrl();
 
-        // 规范化URL处理
+        // 规范化URL处理（Gemini 需要在 URL 中包含 API Key）
         String normalizedUrl = normalizeApiUrl(baseUrl, model, isGemini, apiKey);
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
@@ -74,10 +74,9 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody));
 
-        // Gemini uses API key in header differently
-        if (isGemini) {
-            requestBuilder.header("x-goog-api-key", apiKey);
-        } else {
+        // Gemini uses API key in URL parameter, not in header
+        // Other providers use Bearer token in Authorization header
+        if (!isGemini) {
             requestBuilder.header("Authorization", "Bearer " + apiKey);
         }
 
@@ -95,8 +94,11 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
     private String normalizeApiUrl(String baseUrl, String model, boolean isGemini, String apiKey) {
         if (baseUrl == null || baseUrl.trim().isEmpty()) {
             if (isGemini) {
-                // Gemini default URL structure
-                baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
+                // Normalize model name: remove "models/" prefix if exists
+                String normalizedModel = normalizeGeminiModelName(model);
+                // Gemini default URL structure with API key as query parameter
+                baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/"
+                        + normalizedModel + ":generateContent?key=" + apiKey;
             } else {
                 baseUrl = config.getBaseUrl();
             }
@@ -105,16 +107,28 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
 
         // Handle Gemini URLs
         if (isGemini) {
-            // If already a complete Gemini URL, use it
-            if (baseUrl.contains(":generateContent") || baseUrl.contains(":streamGenerateContent")) {
+            // If already a complete Gemini URL with key parameter, use it
+            if ((baseUrl.contains(":generateContent") || baseUrl.contains(":streamGenerateContent"))
+                    && baseUrl.contains("key=")) {
                 return ensureUrlProtocol(baseUrl);
             }
-            // Build Gemini URL
+
+            // Build Gemini URL with API key
             String geminiBase = ensureUrlProtocol(baseUrl);
-            if (!geminiBase.contains("/v1beta/models/")) {
-                geminiBase = geminiBase + "/v1beta/models/" + model + ":generateContent";
+
+            // Remove existing key parameter if any
+            if (geminiBase.contains("?key=")) {
+                geminiBase = geminiBase.substring(0, geminiBase.indexOf("?key="));
             }
-            return geminiBase;
+
+            if (!geminiBase.contains("/v1beta/models/")) {
+                // Normalize model name: remove "models/" prefix if exists
+                String normalizedModel = normalizeGeminiModelName(model);
+                geminiBase = geminiBase + "/v1beta/models/" + normalizedModel + ":generateContent";
+            }
+
+            // Add API key as query parameter
+            return geminiBase + "?key=" + apiKey;
         }
 
         // Handle non-Gemini URLs
@@ -127,6 +141,20 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         } else {
             return ensureUrlProtocol(baseUrl) + "/v1/chat/completions";
         }
+    }
+
+    /**
+     * 规范化 Gemini 模型名称，移除 "models/" 前缀
+     */
+    private String normalizeGeminiModelName(String model) {
+        if (model == null) {
+            return "gemini-1.5-pro";
+        }
+        // Remove "models/" prefix if exists
+        if (model.startsWith("models/")) {
+            return model.substring(7); // Remove "models/"
+        }
+        return model;
     }
 
     /**
