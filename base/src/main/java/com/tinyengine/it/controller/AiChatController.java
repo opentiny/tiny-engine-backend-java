@@ -71,36 +71,25 @@ public class AiChatController {
     @SystemControllerLog(description = "AI chat")
     @PostMapping("/ai/chat")
     public ResponseEntity<?> aiChat(@RequestBody ChatRequest request,
-        @RequestHeader(value = "Authorization", required = false) String authorization) {
+        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
 
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
             request.setApiKey(token);
         }
 
-        try {
-            Object response = aiChatV1Service.chatCompletion(request);
+        Object response = aiChatV1Service.chatCompletion(request);
 
-            if (request.isStream()) {
-                return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_EVENT_STREAM)
-                    .body((StreamingResponseBody) response);
-            } else {
-                return ResponseEntity.ok(response);
-            }
-        } catch (Exception e) {
-            // 根据异常类型返回不同的状态码
-            if (e.getMessage() != null && e.getMessage().contains("401")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("认证失败: " + e.getMessage());
-            } else if (e.getMessage() != null && e.getMessage().contains("API密钥")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("API密钥错误: " + e.getMessage());
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("服务器内部错误: " + e.getMessage());
-            }
+        if (request.isStream()) {
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .header("Cache-Control", "no-cache")
+                .header("X-Accel-Buffering", "no") // 禁用Nginx缓冲
+                .body((StreamingResponseBody) response);
+        } else {
+            return ResponseEntity.ok(response);
         }
+
     }
 
 
@@ -121,34 +110,22 @@ public class AiChatController {
     @SystemControllerLog(description = "AI completions")
     @PostMapping("/chat/completions")
     public ResponseEntity<?> completions(@RequestBody ChatRequest request,
-        @RequestHeader(value = "Authorization", required = false) String authorization) {
+        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
             request.setApiKey(token);
         }
 
-        try {
-            Object response = aiChatV1Service.chatCompletion(request);
+        Object response = aiChatV1Service.chatCompletion(request);
 
-            if (request.isStream()) {
-                return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_EVENT_STREAM)
-                    .body((StreamingResponseBody) response);
-            } else {
-                return ResponseEntity.ok(response);
-            }
-        } catch (Exception e) {
-            // 根据异常类型返回不同的状态码
-            if (e.getMessage() != null && e.getMessage().contains("401")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("认证失败: " + e.getMessage());
-            } else if (e.getMessage() != null && e.getMessage().contains("API密钥")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("API密钥错误: " + e.getMessage());
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("服务器内部错误: " + e.getMessage());
-            }
+        if (request.isStream()) {
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .header("Cache-Control", "no-cache")
+                .header("X-Accel-Buffering", "no") // 禁用Nginx缓冲
+                .body((StreamingResponseBody) response);
+        } else {
+            return ResponseEntity.ok(response);
         }
     }
     /**

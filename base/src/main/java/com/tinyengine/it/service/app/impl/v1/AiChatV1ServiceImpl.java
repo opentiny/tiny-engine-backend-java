@@ -13,6 +13,7 @@
 package com.tinyengine.it.service.app.impl.v1;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.common.utils.SM4Utils;
@@ -174,82 +175,67 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         return JsonUtils.encode(body);
     }
 
-    private JsonNode processStandardResponse(HttpRequest.Builder requestBuilder)
-        throws Exception {
-        HttpResponse<String> response = httpClient.send(
-            requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+    private JsonNode processStandardResponse(HttpRequest.Builder requestBuilder) {
+        HttpResponse<String> response = null;
+        String code = null;
+        String message = null;
+        try {
+         response = httpClient.send(
+             requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+         code = String.valueOf(response.statusCode());
+            if (response.statusCode() != 200) {
+                String errorBody = response.body();
 
-        // 添加状态码检查
-        if (response.statusCode() != 200) {
-            String errorBody = response.body();
-            try {
                 // 尝试解析错误JSON
                 JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
-                throw new IOException("API请求失败: " + response.statusCode() + " - " +
-                    errorNode.get("error").get("message").asText());
-            } catch (Exception e) {
-                // 如果无法解析JSON，返回原始错误信息
-                throw new IOException("API请求失败: " + response.statusCode() + " - " + errorBody);
+                message = errorNode.get("error").get("message").asText();
+                throw new ServiceException(code, message);
             }
+            return JsonUtils.MAPPER.readTree(response.body());
+        } catch (IOException | InterruptedException e) {
+            throw new ServiceException(code, message);
         }
 
-        return JsonUtils.MAPPER.readTree(response.body());
+
     }
+
     private StreamingResponseBody processStreamResponse(HttpRequest.Builder requestBuilder) {
         return outputStream -> {
+            HttpResponse<InputStream> response = null;
             try {
-                // 使用相同的httpClient实例，确保配置一致
-                HttpResponse<InputStream> response = httpClient.send(
-                    requestBuilder.build(),
-                    HttpResponse.BodyHandlers.ofInputStream()
+                response = httpClient.send(
+                    requestBuilder.build(), HttpResponse.BodyHandlers.ofInputStream()
                 );
+            } catch (InterruptedException e) {
+                throw new ServiceException("500", e.getMessage());
+            }
 
-                // 立即检查状态码
-                if (response.statusCode() != 200) {
-                    String errorBody = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
-                    // 格式化为正确的SSE错误事件
-                    String errorEvent = formatSSEError(response.statusCode(), errorBody);
-                    outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
-                    outputStream.flush();
-                    return; // 重要：立即返回，不再处理流
-                }
+            log.info("收到AI API响应，状态码: {}", response.statusCode());
 
-                // 正常流处理逻辑
-                try (InputStream inputStream = response.body()) {
-                    byte[] buffer = new byte[8192];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                        outputStream.flush();
-                    }
-                }
-            } catch (Exception e) {
-                try {
-                    // 格式化为标准SSE错误格式
-                    String errorEvent = formatSSEError(500, e.getMessage());
-                    outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
+            if (response.statusCode() != 200) {
+                String errorBody = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
+
+                log.info("错误响应内容: {}", errorBody);
+
+                JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
+                throw new ServiceException(String.valueOf(response.statusCode()), errorNode.get("error").get("message").asText());
+            }
+
+            // 正常流处理逻辑
+            try (InputStream inputStream = response.body()) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
                     outputStream.flush();
-                } catch (IOException ioException) {
-                    log.error("无法发送错误信息: " + ioException.getMessage());
                 }
+                // 流正常结束时发送结束标记
+                String doneEvent = "data: [DONE]\n\n";
+                log.info("发送DONE事件: {}", doneEvent);
+                outputStream.write(doneEvent.getBytes(StandardCharsets.UTF_8));
+                outputStream.flush();
             }
         };
-    }
-    /**
-     * 格式化SSE错误事件
-     */
-    private String formatSSEError(int statusCode, String errorBody) {
-        try {
-            // 尝试解析API错误信息
-            JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
-            String errorMessage = errorNode.get("error").get("message").asText();
-            return String.format("data: {\"error\": {\"code\": %d, \"message\": \"%s\"}}\n\n",
-                statusCode, errorMessage);
-        } catch (Exception e) {
-            // 如果无法解析，返回原始错误
-            return String.format("data: {\"error\": {\"code\": %d, \"message\": \"%s\"}}\n\n",
-                statusCode, errorBody.replace("\"", "\\\""));
-        }
     }
 
     private String getApiKey(String encryptApiKey) throws Exception {
