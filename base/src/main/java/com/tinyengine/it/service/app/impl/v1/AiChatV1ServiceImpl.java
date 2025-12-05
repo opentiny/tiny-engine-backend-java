@@ -229,11 +229,6 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                     outputStream.write(buffer, 0, bytesRead);
                     outputStream.flush();
                 }
-                // 流正常结束时发送结束标记
-                String doneEvent = "data: [DONE]\n\n";
-                log.info("发送DONE事件: {}", doneEvent);
-                outputStream.write(doneEvent.getBytes(StandardCharsets.UTF_8));
-                outputStream.flush();
             }
         };
     }
