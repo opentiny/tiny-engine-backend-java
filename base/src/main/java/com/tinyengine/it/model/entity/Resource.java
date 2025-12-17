@@ -52,6 +52,9 @@ public class Resource extends BaseEntity {
     @Schema(name = "thumbnailUrl", description = "缩略图url")
     private String thumbnailUrl;
 
+    @Schema(name = "hash", description = "图片内容hash")
+    private String hash;
+
     @Schema(name = "category", description = "分类")
     private String category;
 

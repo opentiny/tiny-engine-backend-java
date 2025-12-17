@@ -20,6 +20,7 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
+import com.tinyengine.it.common.utils.MultipartFileHashUtils;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ResourceGroupResourceMapper;
 import com.tinyengine.it.mapper.ResourceMapper;
@@ -201,8 +202,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             resource.setThumbnailData(ImageThumbnailGenerator.createThumbnail(resource.getResourceData(), 200, 200));
         }
         QueryWrapper<Resource> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name", resource.getName());
-        queryWrapper.eq("category", resource.getCategory());
+        queryWrapper.eq("hash", resource.getHash());
         // 接入租户系统需添加租户id查询
         Resource resourceResult = this.baseMapper.selectOne(queryWrapper);
         if (resourceResult != null) {

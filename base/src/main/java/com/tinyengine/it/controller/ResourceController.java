@@ -18,6 +18,7 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
+import com.tinyengine.it.common.utils.MultipartFileHashUtils;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.model.entity.Resource;
 import com.tinyengine.it.service.material.ResourceService;
@@ -200,10 +201,12 @@ public class ResourceController {
         }
         // 将文件转为 Base64
         String base64 = ImageThumbnailGenerator.convertToBase64(file);
+        String imageHash = MultipartFileHashUtils.getMultipartFileMD5(file);
         Resource resource = new Resource();
         resource.setName(fileName);
         resource.setResourceData(base64);
         resource.setAppId(appId);
+        resource.setHash(imageHash);
         Resource result = resourceService.resourceUpload(resource);
         return Result.success(result);
     }

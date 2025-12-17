@@ -311,7 +311,11 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 337 exception enum.
      */
-    CM337("CM337", "组织不存在");
+    CM337("CM337", "组织不存在"),
+    /**
+     * Cm 338 exception enum.
+     */
+    CM338("CM338", "用户不存在，请重新注册");
 
     /**
      * 错误码
