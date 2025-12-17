@@ -41,17 +41,17 @@ public class SSOInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
         HttpServletResponse response, Object handler) throws Exception {
 
-        String token = request.getHeader("Authorization");
-        String requestURI = request.getRequestURI();
-
-        log.info("Intercepting: {}, Token: {}", requestURI, token != null ? "present" : "null");
-
+        String authorization = request.getHeader("Authorization");
         // 如果没有token，重定向到登录页
-        if (token == null || token.isEmpty()) {
+        if (authorization == null || authorization.isEmpty()) {
             log.info("No token, redirecting to: {}", SSO_SERVER);
             response.sendRedirect(SSO_SERVER);
             return false;
         }
+        String token = jwtUtil.getTokenFromRequest(authorization);
+        String requestURI = request.getRequestURI();
+
+        log.info("Intercepting: {}, Token: {}", requestURI, token != null ? "present" : "null");
 
         try {
             // 验证token
