@@ -511,10 +511,7 @@
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
         <where>
-            <if test="tenantId != null">
-                AND A.tenant_id = #{tenantId}
-            </if>
-            A.id = #{id}
+            A.id = #{id} AND A.tenant_id = #{tenantId}
         </where>
     </select>
 
@@ -524,10 +521,8 @@
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
         <where>
-            <if test="tenantId != null">
-                AND A.tenant_id = #{tenantId}
-            </if>
-            A.id = #{id} AND A.is_template = true
+        A.tenant_id = #{tenantId} AND
+        A.id = #{id} AND A.is_template = true
         </where>
     </select>
 
