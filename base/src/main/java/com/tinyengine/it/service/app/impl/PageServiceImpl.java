@@ -177,7 +177,7 @@ public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements Pa
     public Page queryPageById(Integer id) {
         Page pageInfo = baseMapper.queryPageById(id);
         // 获取schemaMeta进行获取materialHistory中的framework进行判断
-        String framework = appMapper.queryAppById(pageInfo.getApp()).getFramework();
+        String framework = appMapper.queryAppById(pageInfo.getApp(), loginUserContext.getTenantId()).getFramework();
         if (framework.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM312.getResultCode(), ExceptionEnum.CM312.getResultMsg());
         }
@@ -495,7 +495,7 @@ public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements Pa
      * @return the app home page id
      */
     public int getAppHomePageId(int appId) {
-        App appInfo = appMapper.queryAppById(appId);
+        App appInfo = appMapper.queryAppById(appId, loginUserContext.getTenantId());
         // appHomePageId 存在为null的情况，即app没有设置首页
         Integer homePage = appInfo.getHomePage();
 

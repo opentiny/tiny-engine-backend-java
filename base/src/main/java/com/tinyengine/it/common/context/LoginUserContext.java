@@ -21,8 +21,14 @@ import java.util.List;
  */
 public interface LoginUserContext {
     /**
-     * 返回当前用户所诉的业务租户信息
-     * @return 租户ID
+     * 返回当前用户所在的业务租户id
+     * @return 租户Id
+     */
+    String getTenantId();
+
+    /**
+     * 返回当前用户所在的业务租户信息
+     * @return 租户
      */
     List<Tenant> getTenants();
 

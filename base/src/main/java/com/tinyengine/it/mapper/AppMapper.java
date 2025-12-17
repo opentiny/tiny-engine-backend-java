@@ -31,7 +31,7 @@ public interface AppMapper extends BaseMapper<App> {
      *
      * @return the list
      */
-    List<App> queryAllApp();
+    List<App> queryAllApp(String tenantId);
 
     /**
      * 分页查询应用所有信息
@@ -45,24 +45,24 @@ public interface AppMapper extends BaseMapper<App> {
      * @param createdBy the createdBy
      * @return the list
      */
-    List<App> queryAllAppByPage(Integer pageSize, Integer offset, String name,
-        Integer industryId, Integer sceneId, String framework, String orderBy, String createdBy);
+    List<App> queryAllAppByPage(Integer pageSize, Integer offset, String name, Integer industryId,
+        Integer sceneId, String framework, String orderBy, String createdBy, String tenantId);
 
     /**
      * 查询表t_app 应用总数
      *
      * @return the int
      */
-    @Select("SELECT COUNT(id) FROM t_app WHERE is_template IS NOT TRUE")
-    int queryAppTotal();
+    @Select("SELECT COUNT(id) FROM t_app WHERE tenant_id = #{tenantId} AND is_template IS NOT TRUE")
+    int queryAppTotal(String tenantId);
 
     /**
      * 查询表t_app 模版总数
      *
      * @return the int
      */
-    @Select("SELECT COUNT(id) FROM t_app WHERE is_template = TRUE")
-    int queryAppTemplateTotal();
+    @Select("SELECT COUNT(id) FROM t_app WHERE tenant_id = #{tenantId} AND is_template = TRUE")
+    int queryAppTemplateTotal(String tenantId);
 
     /**
      * 分页查询应用模版所有信息
@@ -76,8 +76,8 @@ public interface AppMapper extends BaseMapper<App> {
      * @param createdBy the createdBy
      * @return the list
      */
-    List<App> queryAllAppTemplate(Integer pageSize, Integer offset, String name,
-        Integer industryId, Integer sceneId, String framework, String orderBy, String createdBy);
+    List<App> queryAllAppTemplate(Integer pageSize, Integer offset, String name, Integer industryId,
+        Integer sceneId, String framework, String orderBy, String createdBy, String tenantId);
 
     /**
      * 根据主键id查询应用模版数据
@@ -85,7 +85,7 @@ public interface AppMapper extends BaseMapper<App> {
      * @param id the id
      * @return the app
      */
-    App queryAppTemplateById(Integer id);
+    App queryAppTemplateById(Integer id, String tenantId);
 
     /**
      * 根据主键id查询表t_app数据
@@ -93,7 +93,7 @@ public interface AppMapper extends BaseMapper<App> {
      * @param id the id
      * @return the app
      */
-    App queryAppById(Integer id);
+    App queryAppById(Integer id, String tenantId);
 
     /**
      * 根据条件查询表t_app数据
@@ -109,7 +109,7 @@ public interface AppMapper extends BaseMapper<App> {
      * @param id the id
      * @return the integer
      */
-    Integer deleteAppById(@Param("id") Integer id);
+    Integer deleteAppById(@Param("id") Integer id, String tenantId);
 
     /**
      * 根据主键id更新表t_app数据
