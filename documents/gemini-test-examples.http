@@ -1,0 +1,148 @@
+### Gemini API 测试示例
+
+### 1. 测试基础对话（使用 gemini-1.5-pro）
+POST http://localhost:8080/app-center/api/chat/completions
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY",
+  "messages": [
+    {
+      "role": "user",
+      "content": "你好，介绍一下你自己"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+
+### 2. 测试带 models/ 前缀的模型名（修复后应该正常工作）
+POST http://localhost:8080/app-center/api/chat/completions
+Content-Type: application/json
+
+{
+  "model": "models/gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY",
+  "messages": [
+    {
+      "role": "user",
+      "content": "什么是人工智能？"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+
+### 3. 测试 gemini-1.5-flash 快速模型
+POST http://localhost:8080/app-center/api/chat/completions
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-flash",
+  "apiKey": "YOUR_GEMINI_API_KEY",
+  "messages": [
+    {
+      "role": "user",
+      "content": "用一句话解释量子计算"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+
+### 4. 测试多轮对话
+POST http://localhost:8080/app-center/api/chat/completions
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY",
+  "messages": [
+    {
+      "role": "user",
+      "content": "什么是机器学习？"
+    },
+    {
+      "role": "assistant",
+      "content": "机器学习是人工智能的一个分支，它让计算机系统能够从数据中学习并改进性能，而无需明确编程。"
+    },
+    {
+      "role": "user",
+      "content": "它有哪些应用？"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+
+### 5. 测试流式响应
+POST http://localhost:8080/app-center/api/chat/completions
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-flash",
+  "apiKey": "YOUR_GEMINI_API_KEY",
+  "messages": [
+    {
+      "role": "user",
+      "content": "写一首关于春天的诗"
+    }
+  ],
+  "stream": true,
+  "temperature": 0.9
+}
+
+### 6. 测试自定义 baseUrl
+POST http://localhost:8080/app-center/api/chat/completions
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY",
+  "baseUrl": "https://generativelanguage.googleapis.com",
+  "messages": [
+    {
+      "role": "user",
+      "content": "解释什么是神经网络"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+
+### 7. 测试使用 /ai/chat 端点
+POST http://localhost:8080/app-center/api/ai/chat
+Content-Type: application/json
+
+{
+  "model": "gemini-1.5-pro",
+  "apiKey": "YOUR_GEMINI_API_KEY",
+  "messages": [
+    {
+      "role": "user",
+      "content": "你好"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+
+### 8. 测试 DeepSeek 模型（对比测试）
+POST http://localhost:8080/app-center/api/chat/completions
+Content-Type: application/json
+
+{
+  "model": "deepseek-chat",
+  "apiKey": "YOUR_DEEPSEEK_API_KEY",
+  "baseUrl": "https://api.deepseek.com",
+  "messages": [
+    {
+      "role": "user",
+      "content": "你好"
+    }
+  ],
+  "temperature": 0.7,
+  "stream": false
+}
+

@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9091
 
 spring:
   config:
@@ -12,10 +12,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 111111
-    url: jdbc:mariadb://localhost:3306/tiny_engine_data_java?useUnicode=true&useSSL=false&characterEncoding=utf8
+    password: Nn2005,050618
+    url: jdbc:mysql://localhost:3306/tiny_engine_db?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5 # 连接池初始化时建立的连接数，默认值为 0。

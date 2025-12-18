@@ -119,11 +119,17 @@
             <version>${batik-version}</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>org.mariadb.jdbc</groupId>-->
+<!--            <artifactId>mariadb-java-client</artifactId>-->
+<!--            <version>${mariadb-java-client.version}</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>${mariadb-java-client.version}</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
         </dependency>
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>

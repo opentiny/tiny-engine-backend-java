@@ -273,13 +273,15 @@ public class AiChatServiceImpl implements AiChatService {
                 + "5. 不要加任何注释\n" + "6. el-table标签内不得出现el-table-column\n" + "###");
         defaultWords.setName(messages.get(0).getName());
         String role = messages.get(0).getRole();
-        String content = messages.get(0).getContent();
+        Object contentObj = messages.get(0).getContent();
+        // 确保content是字符串类型
+        String content = contentObj instanceof String ? (String) contentObj : String.valueOf(contentObj);
 
         List<AiMessages> aiMessages = new ArrayList<>();
 
         if (!PATTERN_MESSAGE.matcher(content).matches()) {
             AiMessages aiMessagesResult = messages.get(0);
-            aiMessagesResult.setContent(defaultWords.getContent() + "\n" + content);
+            aiMessagesResult.setContent(defaultWords.getContentAsString() + "\n" + content);
         }
         if (!"user".equals(role)) {
             aiMessages.add(0, defaultWords);
