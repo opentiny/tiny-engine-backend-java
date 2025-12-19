@@ -61,12 +61,4 @@ public interface UserService extends IService<User> {
      * @return the integer
      */
     Integer updateUserById(User user);
-
-    /**
-     * 新增表t_user数据
-     *
-     * @param user the user
-     * @return the integer
-     */
-    Integer createUser(User user);
 }

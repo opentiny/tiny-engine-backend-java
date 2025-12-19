@@ -188,7 +188,7 @@ public class ResourceController {
     })
     @SystemControllerLog(description = "上传图片")
     @PostMapping("/resource/upload")
-    public Result<Resource> resourceUpload(@RequestParam MultipartFile file) throws Exception {
+    public Result<Resource> resourceUpload(@RequestParam MultipartFile file, Integer appId) throws Exception {
         // 获取文件的原始名称
         String fileName = StringUtils.cleanPath(java.util.Optional.ofNullable(file.getOriginalFilename()).orElse("image"));
 
@@ -203,7 +203,7 @@ public class ResourceController {
         Resource resource = new Resource();
         resource.setName(fileName);
         resource.setResourceData(base64);
-        resource.setAppId(loginUserContext.getAppId());
+        resource.setAppId(appId);
         Resource result = resourceService.resourceUpload(resource);
         return Result.success(result);
     }

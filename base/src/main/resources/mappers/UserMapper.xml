@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , username, email, enable, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id,
+        , username, password, email, salt, public_key, private_key, enable, created_time, last_updated_time,
         is_admin, is_public
     </sql>
 
@@ -16,32 +16,29 @@
         <if test="username!=null and username!=''">
             AND username = #{username}
         </if>
+        <if test="password!=null and password!=''">
+            AND password = #{password}
+        </if>
         <if test="email!=null and email!=''">
             AND email = #{email}
         </if>
+        <if test="salt!=null and salt!=''">
+            AND salt = #{salt}
+        </if>
+        <if test="publicKey!=null and publicKey!=''">
+            AND public_key = #{publicKey}
+        </if>
+        <if test="privateKey!=null and privateKey!=''">
+            AND private_key = #{privateKey}
+        </if>
         <if test="isEnable!=null">
             AND enable = #{isEnable}
-        </if>
-        <if test="createdBy!=null and createdBy!=''">
-            AND created_by = #{createdBy}
-        </if>
-        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            AND last_updated_by = #{lastUpdatedBy}
         </if>
         <if test="createdTime!=null">
             AND created_time = #{createdTime}
         </if>
         <if test="lastUpdatedTime!=null">
             AND last_updated_time = #{lastUpdatedTime}
-        </if>
-        <if test="tenantId!=null and tenantId!=''">
-            AND tenant_id = #{tenantId}
-        </if>
-        <if test="renterId!=null and renterId!=''">
-            AND renter_id = #{renterId}
-        </if>
-        <if test="siteId!=null and siteId!=''">
-            AND site_id = #{siteId}
         </if>
         <if test="isAdmin!=null">
             AND is_admin = #{isAdmin}
@@ -56,17 +53,17 @@
         <if test="username!=null and username!=''">
             username = #{username},
         </if>
+        <if test="password!=null and password!=''">
+            password = #{password},
+        </if>
         <if test="email!=null and email!=''">
             email = #{email},
         </if>
+        <if test="salt!=null and salt!=''">
+            salt = #{salt},
+        </if>
         <if test="isEnable!=null">
             enable = #{isEnable},
-        </if>
-        <if test="createdBy!=null and createdBy!=''">
-            created_by = #{createdBy},
-        </if>
-        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            last_updated_by = #{lastUpdatedBy},
         </if>
         <if test="createdTime!=null">
             created_time = #{createdTime},
@@ -74,16 +71,6 @@
         <if test="lastUpdatedTime!=null">
             last_updated_time = #{lastUpdatedTime},
         </if>
-        <if test="tenantId!=null and tenantId!=''">
-            tenant_id = #{tenantId},
-        </if>
-        <if test="renterId!=null and renterId!=''">
-            renter_id = #{renterId},
-        </if>
-        <if test="siteId!=null and siteId!=''">
-            site_id = #{siteId},
-        </if>
-
         <if test="isAdmin!=null">
             is_admin = #{isAdmin},
         </if>
@@ -97,15 +84,13 @@
     <resultMap id="UserMap" type="com.tinyengine.it.model.entity.User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
+        <result column="password" property="password"/>
         <result column="email" property="email"/>
+        <result column="public_key" property="publicKey"/>
+        <result column="private_key" property="privateKey"/>
         <result column="enable" property="isEnable"/>
-        <result column="created_by" property="createdBy"/>
-        <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
         <result column="last_updated_time" property="lastUpdatedTime"/>
-        <result column="tenant_id" property="tenantId"/>
-        <result column="renter_id" property="renterId"/>
-        <result column="site_id" property="siteId"/>
         <result column="is_admin" property="isAdmin"/>
         <result column="is_public" property="isPublic"/>
     </resultMap>
@@ -165,27 +150,26 @@
             parameterType="com.tinyengine.it.model.entity.User">
         INSERT INTO t_user ( id
         , username
+        , password
         , email
+        , salt
+        , public_key
+        , private_key
         , enable
-        , created_by
-        , last_updated_by
         , created_time
         , last_updated_time
-        , tenant_id, renter_id
-        , site_id
         , is_admin
         , is_public)
         VALUES ( #{id}
         , #{username}
+        , #{password}
         , #{email}
+        , #{salt}
+        , #{publicKey}
+        , #{privateKey}
         , #{isEnable}
-        , #{createdBy}
-        , #{lastUpdatedBy}
         , #{createdTime}
         , #{lastUpdatedTime}
-        , #{tenantId}
-        , #{renterId}
-        , #{siteId}
         , #{isAdmin}
         , #{isPublic})
     </insert>

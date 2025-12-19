@@ -20,7 +20,7 @@ import com.tinyengine.it.service.app.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
-
+;
 import java.util.List;
 
 /**
@@ -83,16 +83,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Integer updateUserById(User user) {
         return baseMapper.updateUserById(user);
-    }
-
-    /**
-     * 新增表t_user数据
-     *
-     * @param user user
-     * @return execute success data number
-     */
-    @Override
-    public Integer createUser(User user) {
-        return baseMapper.createUser(user);
     }
 }

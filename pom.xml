@@ -21,12 +21,11 @@
     <properties>
         <java.version>17</java.version>
         <fastjson.version>2.0.50</fastjson.version>
-        <hutool.version>5.8.27</hutool.version>
+        <hutool.version>5.8.40</hutool.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.projectlombok.version>1.18.32</org.projectlombok.version>
         <druid-spring-boot-starter.version>1.2.21</druid-spring-boot-starter.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
-        <jackson.version>2.17.2</jackson.version>
         <mariadb-java-client.version>3.3.3</mariadb-java-client.version>
         <freemarker.version>2.3.32</freemarker.version>
         <spring-data-commons.version>2.5.4</spring-data-commons.version>
@@ -36,8 +35,10 @@
         <netty-buffer.version>4.1.118.Final</netty-buffer.version>
         <batik-version>1.18</batik-version>
         <bcprov-jdk18on.version>1.79</bcprov-jdk18on.version>
+        <jjwt.version>0.12.3</jjwt.version>
         <langchain4j.version>1.5.0</langchain4j.version>
         <langchain4j-rag.version>1.5.0-beta11</langchain4j-rag.version>
+        <bcprov-jdk18on.version>1.79</bcprov-jdk18on.version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
     </properties>
     <dependencies>
@@ -183,9 +184,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>${bcprov-jdk18on.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-buffer</artifactId>
             <version>${netty-buffer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
 
         <dependency>

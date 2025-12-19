@@ -25,6 +25,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -43,13 +45,33 @@ public class User {
     @TableId(value = "id", type = IdType.AUTO)
     private String id;
 
-    @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "createdBy", description = "创建人")
-    private String createdBy;
+    @Schema(name = "username", description = "用户名")
+    private String username;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @Schema(name = "lastUpdatedBy", description = "最后修改人")
-    private String lastUpdatedBy;
+    @Schema(name = "email", description = "邮箱")
+    private String email;
+
+    @Schema(name = "password", description = "密码")
+    private String password;
+
+    @Schema(name = "salt", description = "盐")
+    private String salt;
+
+    @Schema(name = "public_key", description = "公钥")
+    private String publicKey;
+
+    @Schema(name = "private_key", description = "私钥")
+    private String privateKey;
+
+    @TableField("enable")
+    @Schema(name = "enable", description = "账号是否可用")
+    private Boolean isEnable;
+
+    @Schema(name = "isAdmin", description = "是否管理员")
+    private Boolean isAdmin;
+
+    @Schema(name = "isPublic", description = "是否公共账号")
+    private Boolean isPublic;
 
     @TableField(fill = FieldFill.INSERT)
     @Schema(name = "createdTime", description = "创建时间")
@@ -63,30 +85,7 @@ public class User {
     @JsonProperty("updated_at")
     private LocalDateTime lastUpdatedTime;
 
-    @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "tenantId", description = "租户ID")
-    private String tenantId;
-
-    @TableField(fill = FieldFill.INSERT)
-    @Schema(name = "renterId", description = "业务租户ID")
-    private String renterId;
-
-    @Schema(name = "siteId", description = "站点ID")
-    private String siteId;
-
-    @Schema(name = "username", description = "用户名")
-    private String username;
-
-    @Schema(name = "email", description = "邮箱")
-    private String email;
-
-    @TableField("enable")
-    @Schema(name = "enable", description = "账号是否可用")
-    private Boolean isEnable;
-
-    @Schema(name = "isAdmin", description = "是否管理员")
-    private Boolean isAdmin;
-
-    @Schema(name = "isPublic", description = "是否公共账号")
-    private Boolean isPublic;
+    @TableField(exist = false)
+    @Schema(name = "tenant", description = "组织")
+    private List<Tenant> tenant = new ArrayList<>();
 }

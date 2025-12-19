@@ -11,6 +11,10 @@
 
 package com.tinyengine.it.common.context;
 
+import com.tinyengine.it.model.entity.Tenant;
+
+import java.util.List;
+
 /**
  * 保存用户信息的上下文
  * 由集成方自行实现接口
@@ -20,25 +24,14 @@ public interface LoginUserContext {
      * 返回当前用户所诉的业务租户信息
      * @return 租户ID
      */
-    String getTenantId();
+    List<Tenant> getTenants();
 
     /**
      * 返回当前用户信息
+     *
      * @return 用户ID
      */
     String getLoginUserId();
-
-    /**
-     * 返回当前用户所属业务租户信息
-     * @return 业务租户ID
-     */
-    String getRenterId();
-
-    /**
-     * 返回当前应用信息
-     * @return 应用ID
-     */
-    int getAppId();
 
     /**
      * 返回当前设计器信息
@@ -47,8 +40,8 @@ public interface LoginUserContext {
     int getPlatformId();
 
     /**
-     * getSiteId
-     * @return Strinig
+     * 设置当前组织信息
+     * @param tenants
      */
-    String getSiteId();
+    void setTenants(List<Tenant> tenants);
 }

@@ -100,8 +100,6 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             queryWrapper.eq("thumbnail_name", name);
         }
 
-        queryWrapper.eq("app_id", loginUserContext.getAppId());
-
         return this.baseMapper.selectOne(queryWrapper);
     }
 

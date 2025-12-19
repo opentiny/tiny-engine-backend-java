@@ -37,4 +37,7 @@ public class BusinessCategory extends BaseEntity {
 
     @Schema(name = "name", description = "名称")
     private String name;
+
+    @Schema(name = "businessGroup", description = "分组")
+    private String businessGroup;
 }

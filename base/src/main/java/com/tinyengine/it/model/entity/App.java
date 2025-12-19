@@ -24,6 +24,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +119,15 @@ public class App extends BaseEntity {
     @Schema(name = "templateType", description = "应用模板类型")
     private String templateType;
 
+    @Schema(name = "isTemplate", description = "是否是应用模板")
+    private Boolean isTemplate;
+
+    @Schema(name = "industry_id", description = "行业id")
+    private Integer industryId;
+
+    @Schema(name = "scene_id", description = "场景id")
+    private Integer sceneId;
+
     @Schema(name = "setTemplateTime", description = "设置模板时间")
     private LocalDateTime setTemplateTime;
 
@@ -151,4 +162,12 @@ public class App extends BaseEntity {
     @JsonProperty("data_source_global")
     @TableField(typeHandler = MapTypeHandler.class)
     private Map<String, Object> dataSourceGlobal;
+
+    @TableField(exist = false)
+    @Schema(name = "industry", description = "行业")
+    private List<BusinessCategory> industry = new ArrayList<>();
+
+    @TableField(exist = false)
+    @Schema(name = "scene", description = "场景")
+    private List<BusinessCategory> scene = new ArrayList<>();
 }

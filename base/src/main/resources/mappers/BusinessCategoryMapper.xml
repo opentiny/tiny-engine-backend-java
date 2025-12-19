@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , code, name, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
+        , code, name, business_group,created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
@@ -17,6 +17,9 @@
         </if>
         <if test="name!=null and name!=''">
             AND name = #{name}
+        </if>
+        <if test="businessGroup!=null and businessGroup!=''">
+            AND business_group = #{businessGroup}
         </if>
         <if test="createdBy!=null and createdBy!=''">
             AND created_by = #{createdBy}
@@ -49,6 +52,9 @@
         <if test="name!=null and name!=''">
             name = #{name},
         </if>
+        <if test="businessGroup!=null and businessGroup!=''">
+            business_group = #{businessGroup},
+        </if>
         <if test="createdBy!=null and createdBy!=''">
             created_by = #{createdBy},
         </if>
@@ -78,6 +84,7 @@
         <id column="id" property="id"/>
         <result column="code" property="code"/>
         <result column="name" property="name"/>
+        <result column="business_group" property="businessGroup"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
         <result column="created_time" property="createdTime"/>
@@ -134,6 +141,7 @@
         INSERT INTO t_business_category ( id
         , code
         , name
+        , business_group
         , created_by
         , last_updated_by
         , created_time
@@ -144,6 +152,7 @@
         VALUES ( #{id}
         , #{code}
         , #{name}
+        , #{businessGroup}
         , #{createdBy}
         , #{lastUpdatedBy}
         , #{createdTime}

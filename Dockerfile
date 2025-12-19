@@ -18,8 +18,7 @@ COPY --from=build /app/documents /app/documents
 COPY --from=build /app/all-MiniLM-L6-v2 /app/all-MiniLM-L6-v2
 # 设置环境变量
 ENV FOLDER_PATH="/app/documents"
-# 替换为自己的域名接口路径
-ENV TINY_ENGINE_URL="https://agent.opentiny.design/material-center/api/resource/download"
+
 ENTRYPOINT ["java", "-jar", "tiny-engine-app.jar", "--spring.profiles.active=alpha"]
 EXPOSE 9090
 

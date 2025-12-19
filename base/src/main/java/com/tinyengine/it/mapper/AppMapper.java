@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.App;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -31,6 +32,60 @@ public interface AppMapper extends BaseMapper<App> {
      * @return the list
      */
     List<App> queryAllApp();
+
+    /**
+     * 分页查询应用所有信息
+     * @param offset the offset
+     * @param pageSize the pageSize
+     * @param name the name
+     * @param industryId the industryId
+     * @param sceneId the sceneId
+     * @param framework the framework
+     * @param orderBy the orderBy
+     * @param createdBy the createdBy
+     * @return the list
+     */
+    List<App> queryAllAppByPage(Integer pageSize, Integer offset, String name,
+        Integer industryId, Integer sceneId, String framework, String orderBy, String createdBy);
+
+    /**
+     * 查询表t_app 应用总数
+     *
+     * @return the int
+     */
+    @Select("SELECT COUNT(id) FROM t_app WHERE is_template IS NOT TRUE")
+    int queryAppTotal();
+
+    /**
+     * 查询表t_app 模版总数
+     *
+     * @return the int
+     */
+    @Select("SELECT COUNT(id) FROM t_app WHERE is_template = TRUE")
+    int queryAppTemplateTotal();
+
+    /**
+     * 分页查询应用模版所有信息
+     * @param offset the offset
+     * @param pageSize the pageSize
+     * @param name the name
+     * @param industryId the industryId
+     * @param sceneId the sceneId
+     * @param framework the framework
+     * @param orderBy the orderBy
+     * @param createdBy the createdBy
+     * @return the list
+     */
+    List<App> queryAllAppTemplate(Integer pageSize, Integer offset, String name,
+        Integer industryId, Integer sceneId, String framework, String orderBy, String createdBy);
+
+    /**
+     * 根据主键id查询应用模版数据
+     *
+     * @param id the id
+     * @return the app
+     */
+    App queryAppTemplateById(Integer id);
 
     /**
      * 根据主键id查询表t_app数据

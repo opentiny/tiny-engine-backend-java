@@ -14,6 +14,7 @@ package com.tinyengine.it.service.app;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.model.dto.AppDto;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.PreviewDto;
 import com.tinyengine.it.model.dto.SchemaI18n;
@@ -33,6 +34,16 @@ public interface AppService extends IService<App> {
      * @return the list
      */
     List<App> queryAllApp();
+
+    /**
+     * 分页查询应用模版所有信息
+     * @param currentPage the currentPage
+     * @param  pageSize the pageSize
+     * @param  orderBy the orderBy
+     * @param app the app
+     * @return the AppDto
+     */
+    AppDto queryAllAppByPage(Integer currentPage, Integer pageSize, String orderBy, App app);
 
     /**
      * 根据主键id查询表t_app信息

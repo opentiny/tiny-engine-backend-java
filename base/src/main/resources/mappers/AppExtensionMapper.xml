@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, type, content, app_id, category, created_by, last_updated_by, created_time, last_updated_time,
+        , name, type, content, app_id, platform_id, category, created_by, last_updated_by, created_time, last_updated_time,
         tenant_id, renter_id, site_id
     </sql>
 
@@ -24,6 +24,9 @@
         </if>
         <if test="app!=null">
             AND app_id = #{app}
+        </if>
+        <if test="platformId!=null">
+            AND platform_id = #{platformId}
         </if>
         <if test="category!=null and category!=''">
             AND category = #{category}
@@ -65,6 +68,9 @@
         <if test="app!=null">
             app_id = #{app},
         </if>
+        <if test="platformId!=null">
+            platform_id = #{platformId},
+        </if>
         <if test="category!=null and category!=''">
             category = #{category},
         </if>
@@ -99,6 +105,7 @@
         <result column="type" property="type"/>
         <result column="content" property="content"/>
         <result column="app_id" property="app"/>
+        <result column="platform_id" property="platformId"/>
         <result column="category" property="category"/>
         <result column="created_by" property="createdBy"/>
         <result column="last_updated_by" property="lastUpdatedBy"/>
@@ -165,6 +172,7 @@
         , type
         , content
         , app_id
+        , platform_id
         , category
         , created_by
         , last_updated_by
@@ -178,6 +186,7 @@
         , #{type}
         , #{content}
         , #{app}
+        , #{platformId}
         , #{category}
         , #{createdBy}
         , #{lastUpdatedBy}

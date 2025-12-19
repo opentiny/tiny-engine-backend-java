@@ -7,11 +7,17 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name_cn, name_en, version, model_url, parameters, `method`, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
+        , app_id, platform_id, name_cn, name_en, version, model_url, parameters, `method`, description, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
     <!-- 通用条件列 -->
     <sql id="ModelByCondition">
+        <if test="appId!=null">
+            AND app_id = #{appId}
+        </if>
+        <if test="platformId!=null">
+            AND platform_id = #{platformId}
+        </if>
         <if test="nameCn!=null and nameCn!=''">
             AND name_cn = #{nameCn}
         </if>
@@ -59,6 +65,12 @@
 
     <!-- 通用设置列 -->
     <sql id="ModelSetColumns">
+        <if test="appId!=null">
+            app_id = #{appId},
+        </if>
+        <if test="platformId!=null">
+            platform_id = #{platformId},
+        </if>
         <if test="nameCn!=null and nameCn!=''">
             name_cn = #{nameCn},
         </if>
@@ -107,6 +119,8 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="ModelMap" type="com.tinyengine.it.model.entity.Model">
         <id column="id" property="id"/>
+        <result column="app_id" property="appId"/>
+        <result column="platform_id" property="platformId"/>
         <result column="name_cn" property="nameCn"/>
         <result column="name_en" property="nameEn"/>
         <result column="version" property="version"/>
@@ -168,6 +182,8 @@
     <insert id="createModel" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.tinyengine.it.model.entity.Model">
         INSERT INTO t_model ( id
+                            , app_id
+                            , platform_id
                             , name_cn
                             , name_en
                             , version
@@ -183,6 +199,8 @@
                             , renter_id
                             , site_id)
         VALUES ( #{id}
+               , #{appId}
+               , #{platformId}
                , #{nameCn}
                , #{nameEn}
                , #{version}

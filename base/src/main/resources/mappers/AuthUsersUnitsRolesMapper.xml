@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper">
+
+    <!-- 通用设置 -->
+
+    <!-- 通用查询列 -->
+    <sql id="Base_Column_List">
+        id
+        , tenant_id, user_id, unit_id, unit_type, role_id, expired_time, created_by, last_updated_by, created_time, last_updated_time
+    </sql>
+
+    <!-- 通用条件列 -->
+    <sql id="AuthUsersUnitsRolesByCondition">
+        <if test="tenantId!=null">
+            AND tenant_id = #{tenantId}
+        </if>
+        <if test="UserId!=null">
+            AND user_id = #{UserId}
+        </if>
+        <if test="unitId!=null">
+            AND unit_id = #{unitId}
+        </if>
+        <if test="unitType!=null and unitType!=''">
+            AND unit_type = #{unitType}
+        </if>
+        <if test="roleId!=null">
+            AND role_id = #{roleId}
+        </if>
+        <if test="expiredTime!=null">
+            AND expired_time = #{expiredTime}
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            AND created_by = #{createdBy}
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            AND last_updated_by = #{lastUpdatedBy}
+        </if>
+        <if test="createdTime!=null">
+            AND created_time = #{createdTime}
+        </if>
+        <if test="lastUpdatedTime!=null">
+            AND last_updated_time = #{lastUpdatedTime}
+        </if>
+    </sql>
+
+    <!-- 通用设置列 -->
+    <sql id="AuthUsersUnitsRolesSetColumns">
+        <if test="tenantId!=null">
+            tenant_id = #{tenantId},
+        </if>
+        <if test="UserId!=null">
+            user_id = #{UserId},
+        </if>
+        <if test="unitId!=null">
+            unit_id = #{unitId},
+        </if>
+        <if test="unitType!=null and unitType!=''">
+            unit_type = #{unitType},
+        </if>
+        <if test="roleId!=null">
+            role_id = #{roleId},
+        </if>
+        <if test="expiredTime!=null">
+            expired_time = #{expiredTime},
+        </if>
+        <if test="createdBy!=null and createdBy!=''">
+            created_by = #{createdBy},
+        </if>
+        <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
+            last_updated_by = #{lastUpdatedBy},
+        </if>
+        <if test="createdTime!=null">
+            created_time = #{createdTime},
+        </if>
+        <if test="lastUpdatedTime!=null">
+            last_updated_time = #{lastUpdatedTime},
+        </if>
+    </sql>
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="AuthUsersUnitsRolesMap" type="com.tinyengine.it.model.entity.AuthUsersUnitsRoles">
+        <id column="id" property="id"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="user_id" property="UserId"/>
+        <result column="unit_id" property="unitId"/>
+        <result column="unit_type" property="unitType"/>
+        <result column="role_id" property="roleId"/>
+        <result column="expired_time" property="expiredTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="last_updated_time" property="lastUpdatedTime"/>
+    </resultMap>
+
+    <!-- 查询表r_auth_users_units_roles所有数据 -->
+    <select id="queryAllAuthUsersUnitsRoles" resultMap="AuthUsersUnitsRolesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_auth_users_units_roles
+    </select>
+
+    <!-- 根据主键id查询表r_auth_users_units_roles信息 -->
+    <select id="queryAuthUsersUnitsRolesById" resultMap="AuthUsersUnitsRolesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_auth_users_units_roles
+        WHERE id=#{id}
+    </select>
+
+    <!-- 根据条件查询表r_auth_users_units_roles数据 -->
+    <select id="queryAuthUsersUnitsRolesByCondition" resultMap="AuthUsersUnitsRolesMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM r_auth_users_units_roles
+        WHERE 1=1
+        <include refid="AuthUsersUnitsRolesByCondition"/>
+    </select>
+
+    <!-- 根据主键id删除表r_auth_users_units_roles数据 -->
+    <delete id="deleteAuthUsersUnitsRolesById">
+        DELETE
+        FROM r_auth_users_units_roles
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 根据主键id更新表r_auth_users_units_roles数据 -->
+    <update id="updateAuthUsersUnitsRolesById" parameterType="com.tinyengine.it.model.entity.AuthUsersUnitsRoles">
+        UPDATE r_auth_users_units_roles
+        <set>
+            <include refid="AuthUsersUnitsRolesSetColumns"/>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- 新增表r_auth_users_units_roles数据 -->
+    <insert id="createAuthUsersUnitsRoles" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.tinyengine.it.model.entity.AuthUsersUnitsRoles">
+        INSERT INTO r_auth_users_units_roles (id,
+                                              tenant_id,
+                                              user_id,
+                                              unit_id,
+                                              unit_type,
+                                              role_id,
+                                              expired_time,
+                                              created_by,
+                                              created_time,
+                                              last_updated_by,
+                                              last_updated_time)
+        VALUES (#{id},
+                #{tenantId},
+                #{userId},
+                #{unitId},
+                #{unitType},
+                #{roleId},
+                #{expiredTime},
+                #{createdBy},
+                #{createdTime},
+                #{lastUpdatedBy},
+                #{lastUpdatedTime}) ON DUPLICATE KEY
+        UPDATE
+            tenant_id =
+        VALUES (tenant_id), user_id =
+        VALUES (user_id), unit_id =
+        VALUES (unit_id), unit_type =
+        VALUES (unit_type), role_id =
+        VALUES (role_id), expired_time =
+        VALUES (expired_time), last_updated_by =
+        VALUES (last_updated_by), last_updated_time =
+        VALUES (last_updated_time)
+    </insert>
+</mapper>

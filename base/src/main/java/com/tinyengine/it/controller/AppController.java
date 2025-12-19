@@ -14,6 +14,7 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.model.dto.AppDto;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.service.app.AppService;
 
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -71,6 +73,43 @@ public class AppController {
     public Result<List<App>> getAllApp() {
         List<App> appList = appService.queryAllApp();
         return Result.success(appList);
+    }
+
+    /**
+     * 分页查询表App信息
+     *
+     * @return App信息 all app
+     */
+    @Operation(summary = "分页查询表App信息", description = "分页查询表App信息",
+        parameters = {
+            @Parameter(name = "currentPage", description = "当前页"),
+            @Parameter(name = "pageSize", description = "返回条数"),
+            @Parameter(name = "name", description = "名称"),
+            @Parameter(name = "industry", description = "行业"),
+            @Parameter(name = "scene", description = "场景"),
+            @Parameter(name = "framework", description = "技术栈"),
+            @Parameter(name = "orderBy", description = "排序方式"),
+            @Parameter(name = "createdBy", description = "创建人"),
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")})
+    @SystemControllerLog(description = "分页查询表App信息")
+    @GetMapping("/apps/page")
+    public Result<AppDto> getAllAppByPage(@RequestParam Integer currentPage,
+        @RequestParam Integer pageSize, @RequestParam(required = false) String name,
+        @RequestParam(required = false) Integer industryId, @RequestParam(required = false) Integer sceneId,
+        @RequestParam(required = false) String framework, @RequestParam(required = false) String orderBy,
+        @RequestParam(required = false) String createdBy) {
+        App app = new App();
+        app.setName(name);
+        app.setSceneId(sceneId);
+        app.setIndustryId(industryId);
+        app.setFramework(framework);
+        app.setCreatedBy(createdBy);
+        AppDto appDto = appService.queryAllAppByPage(currentPage, pageSize, orderBy, app);
+        return Result.success(appDto);
     }
 
     /**

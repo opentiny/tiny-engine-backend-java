@@ -14,7 +14,10 @@ package com.tinyengine.it.controller;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
+import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
 
@@ -30,6 +33,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 查询用户信息
@@ -54,6 +59,9 @@ public class UserController {
     @Autowired
     private LoginUserContext loginUserContext;
 
+    @Autowired
+    AuthUsersUnitsRolesMapper authUsersUnitsRolesMapper;
+
     /**
      * Me result.
      *
@@ -68,12 +76,20 @@ public class UserController {
     @GetMapping("/user/me")
     public Result<User> me() {
         String loginUserId = loginUserContext.getLoginUserId();
+        if (loginUserId == null) {
+            return Result.failed(ExceptionEnum.CM009);
+        }
+        Integer userId = Integer.valueOf(loginUserId);
+        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(userId);
         User user = userService.queryUserById(loginUserId);
         if (user == null) {
             user = new User();
             user.setId(loginUserContext.getLoginUserId());
             user.setUsername(loginUserContext.getLoginUserId());
         }
+        user.setTenant(tenants);
+
         return Result.success(user);
     }
+
 }

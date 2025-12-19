@@ -242,6 +242,15 @@
         ORDER BY last_updated_time ASC
     </select>
 
+    <select id="queryPageHistoryByAppId" resultMap="PageHistoryMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_page_history
+        WHERE
+        app_id = #{appId}
+        and is_published = 1
+    </select>
+
     <!-- 根据主键id删除表t_page_history数据 -->
     <delete id="deletePageHistoryById">
         DELETE

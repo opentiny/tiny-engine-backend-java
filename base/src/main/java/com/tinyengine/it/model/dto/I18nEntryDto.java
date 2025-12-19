@@ -85,6 +85,6 @@ public class I18nEntryDto {
     @JsonProperty("site_id")
     private String siteId;
 
-    @Schema(name = "lang", description = "更新人")
+    @Schema(name = "lang", description = "t_i18n_lang")
     private I18nLang lang;
 }

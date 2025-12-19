@@ -7,9 +7,9 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , name, app_website, platform_id, platform_history_id, publish_url, editor_url, visit_url, image_url,
+        , name, app_website, platform_id, platform_history_id, industry_id, scene_id, publish_url, editor_url, visit_url, image_url,
         assets_url, state, published, home_page_id, css, config, constants, data_handler, description, latest,
-        git_group, project_name, branch, is_demo, is_default, template_type, set_template_time, set_template_by,
+        git_group, project_name, branch, is_demo, is_default, template_type, is_template, set_template_time, set_template_by,
         set_default_by, framework, global_state, default_lang, extend_config, data_hash, can_associate,
         data_source_global, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
@@ -17,127 +17,136 @@
     <!-- 通用条件列 -->
     <sql id="AppByCondition">
         <if test="name!=null and name!=''">
-            AND name = #{name}
+            AND A.name = #{name}
         </if>
         <if test="appWebsite!=null and appWebsite!=''">
-            AND app_website = #{appWebsite}
+            AND A.app_website = #{appWebsite}
         </if>
         <if test="platformId!=null">
-            AND platform_id = #{platformId}
+            AND A.platform_id = #{platformId}
         </if>
         <if test="platformHistoryId!=null">
-            AND platform_history_id = #{platformHistoryId}
+            AND A.platform_history_id = #{platformHistoryId}
+        </if>
+        <if test="industryId!=null">
+            AND A.industry_id = #{industryId}
+        </if>
+        <if test="sceneId!=null">
+            AND A.scene_id = #{sceneId}
         </if>
         <if test="publishUrl!=null and publishUrl!=''">
-            AND publish_url = #{publishUrl}
+            AND A.publish_url = #{publishUrl}
         </if>
         <if test="editorUrl!=null and editorUrl!=''">
-            AND editor_url = #{editorUrl}
+            AND A.editor_url = #{editorUrl}
         </if>
         <if test="visitUrl!=null and visitUrl!=''">
-            AND visit_url = #{visitUrl}
+            AND A.visit_url = #{visitUrl}
         </if>
         <if test="imageUrl!=null and imageUrl!=''">
-            AND image_url = #{imageUrl}
+            AND A.image_url = #{imageUrl}
         </if>
         <if test="assetsUrl!=null and assetsUrl!=''">
-            AND assets_url = #{assetsUrl}
+            AND A.assets_url = #{assetsUrl}
         </if>
         <if test="state!=null and state!=''">
-            AND state = #{state}
+            AND A.state = #{state}
         </if>
         <if test="isPublish!=null">
-            AND published = #{isPublish}
+            AND A.published = #{isPublish}
         </if>
         <if test="homePage!=null">
-            AND home_page_id = #{homePage}
+            AND A.home_page_id = #{homePage}
         </if>
         <if test="css!=null and css!=''">
-            AND css = #{css}
+            AND A.css = #{css}
         </if>
         <if test="config!=null and config!=''">
-            AND config = #{config}
+            AND A.config = #{config}
         </if>
         <if test="constants!=null and constants!=''">
-            AND constants = #{constants}
+            AND A.constants = #{constants}
         </if>
         <if test="dataHandler!=null and dataHandler!=''">
-            AND data_handler = #{dataHandler}
+            AND A.data_handler = #{dataHandler}
         </if>
         <if test="description!=null and description!=''">
-            AND description = #{description}
+            AND A.description = #{description}
         </if>
         <if test="latest!=null and latest!=''">
-            AND latest = #{latest}
+            AND A.latest = #{latest}
         </if>
         <if test="gitGroup!=null and gitGroup!=''">
-            AND git_group = #{gitGroup}
+            AND A.git_group = #{gitGroup}
         </if>
         <if test="projectName!=null and projectName!=''">
-            AND project_name = #{projectName}
+            AND A.project_name = #{projectName}
         </if>
         <if test="branch!=null and branch!=''">
-            AND branch = #{branch}
+            AND A.branch = #{branch}
         </if>
         <if test="isDemo!=null">
-            AND is_demo = #{isDemo}
+            AND A.is_demo = #{isDemo}
         </if>
         <if test="isDefault!=null">
-            AND is_default = #{isDefault}
+            AND A.is_default = #{isDefault}
         </if>
         <if test="templateType!=null and templateType!=''">
-            AND template_type = #{templateType}
+            AND A.template_type = #{templateType}
+        </if>
+        <if test="isTemplate!=null">
+            AND A.is_template = #{isTemplate}
         </if>
         <if test="setTemplateTime!=null">
-            AND set_template_time = #{setTemplateTime}
+            AND A.set_template_time = #{setTemplateTime}
         </if>
         <if test="setTemplateBy!=null and setTemplateBy!=''">
-            AND set_template_by = #{setTemplateBy}
+            AND A.set_template_by = #{setTemplateBy}
         </if>
         <if test="setDefaultBy!=null and setDefaultBy!=''">
-            AND set_default_by = #{setDefaultBy}
+            AND A.set_default_by = #{setDefaultBy}
         </if>
         <if test="framework!=null and framework!=''">
-            AND framework = #{framework}
+            AND A.framework = #{framework}
         </if>
         <if test="globalState!=null and globalState!=''">
-            AND global_state = #{globalState}
+            AND A.global_state = #{globalState}
         </if>
         <if test="defaultLang!=null and defaultLang!=''">
-            AND default_lang = #{defaultLang}
+            AND A.default_lang = #{defaultLang}
         </if>
         <if test="extendConfig!=null and extendConfig!=''">
-            AND extend_config = #{extendConfig}
+            AND A.extend_config = #{extendConfig}
         </if>
         <if test="dataHash!=null and dataHash!=''">
-            AND data_hash = #{dataHash}
+            AND A.data_hash = #{dataHash}
         </if>
         <if test="canAssociate!=null">
-            AND can_associate = #{canAssociate}
+            AND A.can_associate = #{canAssociate}
         </if>
         <if test="dataSourceGlobal!=null and dataSourceGlobal!=''">
-            AND data_source_global = #{dataSourceGlobal}
+            AND A.data_source_global = #{dataSourceGlobal}
         </if>
         <if test="createdBy!=null and createdBy!=''">
-            AND created_by = #{createdBy}
+            AND A.created_by = #{createdBy}
         </if>
         <if test="lastUpdatedBy!=null and lastUpdatedBy!=''">
-            AND last_updated_by = #{lastUpdatedBy}
+            AND A.last_updated_by = #{lastUpdatedBy}
         </if>
         <if test="createdTime!=null">
-            AND created_time = #{createdTime}
+            AND A.created_time = #{createdTime}
         </if>
         <if test="lastUpdatedTime!=null">
-            AND last_updated_time = #{lastUpdatedTime}
+            AND A.last_updated_time = #{lastUpdatedTime}
         </if>
         <if test="tenantId!=null and tenantId!=''">
-            AND tenant_id = #{tenantId}
+            AND A.tenant_id = #{tenantId}
         </if>
         <if test="renterId!=null and renterId!=''">
-            AND renter_id = #{renterId}
+            AND A.renter_id = #{renterId}
         </if>
         <if test="siteId!=null and siteId!=''">
-            AND site_id = #{siteId}
+            AND A.site_id = #{siteId}
         </if>
     </sql>
 
@@ -154,6 +163,12 @@
         </if>
         <if test="platformHistoryId!=null">
             platform_history_id = #{platformHistoryId},
+        </if>
+        <if test="industryId!=null">
+            industry_id = #{industryId},
+        </if>
+        <if test="sceneId!=null">
+            scene_id = #{sceneId},
         </if>
         <if test="publishUrl!=null and publishUrl!=''">
             publish_url = #{publishUrl},
@@ -214,6 +229,9 @@
         </if>
         <if test="templateType!=null and templateType!=''">
             template_type = #{templateType},
+        </if>
+        <if test="isTemplate!=null">
+            is_template = #{isTemplate},
         </if>
         <if test="setTemplateTime!=null">
             set_template_time = #{setTemplateTime},
@@ -296,6 +314,9 @@
         <result column="is_demo" property="isDemo"/>
         <result column="is_default" property="isDefault"/>
         <result column="template_type" property="templateType"/>
+        <result column="is_template" property="isTemplate"/>
+        <result column="industry_id" property="industryId"/>
+        <result column="scene_id" property="sceneId"/>
         <result column="set_template_time" property="setTemplateTime"/>
         <result column="set_template_by" property="setTemplateBy"/>
         <result column="set_default_by" property="setDefaultBy"/>
@@ -313,30 +334,196 @@
         <result column="tenant_id" property="tenantId"/>
         <result column="renter_id" property="renterId"/>
         <result column="site_id" property="siteId"/>
-    </resultMap>
+        <!-- 行业分类映射 -->
+        <association property="industry" javaType="com.tinyengine.it.model.entity.BusinessCategory">
+            <id column="industry_id" property="id"/>
+            <result column="industry_code" property="code"/>
+            <result column="industry_name" property="name"/>
+            <result column="industry_business_group" property="businessGroup"/>
+            <result column="industry_created_by" property="createdBy"/>
+            <result column="industry_last_updated_by" property="lastUpdatedBy"/>
+            <result column="industry_created_time" property="createdTime"/>
+            <result column="industry_last_updated_time" property="lastUpdatedTime"/>
+            <result column="industry_tenant_id" property="tenantId"/>
+            <result column="industry_renter_id" property="renterId"/>
+            <result column="industry_site_id" property="siteId"/>
+        </association>
 
-    <!-- 查询表t_app所有数据 -->
+        <!-- 场景分类映射 -->
+        <association property="scene" javaType="com.tinyengine.it.model.entity.BusinessCategory">
+            <id column="scene_id" property="id"/>
+            <result column="scene_code" property="code"/>
+            <result column="scene_name" property="name"/>
+            <result column="scene_business_group" property="businessGroup"/>
+            <result column="scene_created_by" property="createdBy"/>
+            <result column="scene_last_updated_by" property="lastUpdatedBy"/>
+            <result column="scene_created_time" property="createdTime"/>
+            <result column="scene_last_updated_time" property="lastUpdatedTime"/>
+            <result column="scene_tenant_id" property="tenantId"/>
+            <result column="scene_renter_id" property="renterId"/>
+            <result column="scene_site_id" property="siteId"/>
+        </association>
+    </resultMap>
+    <!-- 公共列定义 -->
+    <sql id="App_Base_Column_List">
+        A.id,
+        A.name,
+        A.app_website,
+        A.platform_id,
+        A.industry_id,
+        A.scene_id,
+        A.platform_history_id,
+        A.publish_url,
+        A.editor_url,
+        A.visit_url,
+        A.image_url,
+        A.assets_url,
+        A.state,
+        A.published,
+        A.home_page_id,
+        A.css,
+        A.config,
+        A.constants,
+        A.data_handler,
+        A.description,
+        A.latest,
+        A.git_group,
+        A.project_name,
+        A.branch,
+        A.is_demo,
+        A.is_default,
+        A.template_type,
+        A.is_template,
+        A.set_template_time,
+        A.set_template_by,
+        A.set_default_by,
+        A.framework,
+        A.global_state,
+        A.default_lang,
+        A.extend_config,
+        A.data_hash,
+        A.can_associate,
+        A.data_source_global,
+        A.created_by,
+        A.last_updated_by,
+        A.created_time,
+        A.last_updated_time,
+        A.tenant_id,
+        A.renter_id,
+        A.site_id
+    </sql>
+
+    <!-- 公共 JOIN 逻辑 -->
+    <sql id="Common_Join">
+        FROM t_app A
+        LEFT JOIN t_business_category industry ON A.industry_id = industry.id AND A.industry_id  IS NOT NULL
+        LEFT JOIN t_business_category scene ON A.scene_id = scene.id AND A.scene_id  IS NOT NULL
+    </sql>
+    <sql id="Common_Column_List">
+        <include refid="App_Base_Column_List"/>,
+        industry.id as industry_id, industry.code as industry_code, industry.name as industry_name,
+        industry.business_group as industry_business_group,
+        scene.id as scene_id, scene.code as scene_code, scene.name as scene_name,
+        scene.business_group as scene_business_group
+    </sql>
     <select id="queryAllApp" resultMap="AppMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_app
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+        WHERE A.is_template IS NOT TRUE
+        ORDER BY A.created_time DESC
+    </select>
+
+    <select id="queryAllAppByPage" resultMap="AppMap">
+        SELECT
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+        <where>
+            A.is_template IS NOT TRUE
+            <if test="name != null and name != ''">
+                AND A.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="industryId != null">
+                AND A.industry_id = #{industryId}
+            </if>
+            <if test="sceneId != null">
+                AND A.scene_id = #{sceneId}
+            </if>
+            <if test="framework != null">
+                AND A.framework = #{framework}
+            </if>
+            <if test="createdBy != null">
+                AND A.created_by = #{createdBy}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderBy == 'create_time'">A.created_time</when>
+            <when test="orderBy == 'last_updated_time'">A.last_updated_time</when>
+            <otherwise>A.id</otherwise>
+        </choose>
+        DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- 查询应用模版所有数据 -->
+    <select id="queryAllAppTemplate" resultMap="AppMap">
+        SELECT
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+        <where>
+            A.is_template = true
+            <if test="name != null and name != ''">
+                AND A.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="industryId != null">
+                AND A.industry_id = #{industryId}
+            </if>
+            <if test="sceneId != null">
+                AND A.scene_id = #{sceneId}
+            </if>
+            <if test="framework != null">
+                AND A.framework = #{framework}
+            </if>
+            <if test="createdBy != null">
+                AND A.created_by = #{createdBy}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderBy == 'created_time'">A.created_time</when>
+            <when test="orderBy == 'last_updated_time'">A.last_updated_time</when>
+            <otherwise>A.id</otherwise>
+        </choose>
+        DESC
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <!-- 根据主键id查询表t_app信息 -->
     <select id="queryAppById" resultMap="AppMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_app
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
         <where>
-            id = #{id}
+            A.id = #{id}
+        </where>
+    </select>
+
+    <!-- 根据主键id查询应用模版信息 -->
+    <select id="queryAppTemplateById" resultMap="AppMap">
+        SELECT
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
+        <where>
+            A.id = #{id} AND A.is_template = true
         </where>
     </select>
 
     <!-- 根据条件查询表t_app数据 -->
     <select id="queryAppByCondition" resultMap="AppMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_app
+        <include refid="Common_Column_List"/>
+        <include refid="Common_Join"/>
         WHERE 1=1
         <include refid="AppByCondition"/>
     </select>
@@ -365,6 +552,8 @@
         , app_website
         , platform_id
         , platform_history_id
+        , industry_id
+        , scene_id
         , publish_url
         , editor_url
         , visit_url
@@ -385,6 +574,7 @@
         , is_demo
         , is_default
         , template_type
+        , is_template
         , set_template_time
         , set_template_by
         , set_default_by
@@ -407,6 +597,8 @@
         , #{appWebsite}
         , #{platformId}
         , #{platformHistoryId}
+        , #{industryId}
+        , #{sceneId}
         , #{publishUrl}
         , #{editorUrl}
         , #{visitUrl}
@@ -427,6 +619,7 @@
         , #{isDemo}
         , #{isDefault}
         , #{templateType}
+        , #{isTemplate}
         , #{setTemplateTime}
         , #{setTemplateBy}
         , #{setDefaultBy}

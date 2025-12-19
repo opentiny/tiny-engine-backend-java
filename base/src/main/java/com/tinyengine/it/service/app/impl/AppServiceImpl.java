@@ -19,6 +19,7 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
+import com.tinyengine.it.model.dto.AppDto;
 import com.tinyengine.it.model.dto.I18nEntryDto;
 import com.tinyengine.it.model.dto.MetaDto;
 import com.tinyengine.it.model.dto.PreviewDto;
@@ -81,6 +82,35 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Override
     public List<App> queryAllApp() {
         return baseMapper.queryAllApp();
+    }
+
+    /**
+     * 分页查询表t_app所有信息
+     *
+     * @param pageSize
+     * @param currentPage
+     * @param  orderBy the orderBy
+     * @return the AppDto
+     */
+    @Override
+    public AppDto queryAllAppByPage(Integer currentPage, Integer pageSize, String orderBy, App app) {
+        if (currentPage < 1) {
+            currentPage = 1;  // 默认第一页
+        }
+        if (pageSize < 1) {
+            pageSize = 10;    // 默认每页10条
+        }
+        if (pageSize > 1000) {
+            pageSize = 1000;  // 限制最大页大小
+        }
+        int offset = (currentPage - 1) * pageSize;
+        List<App> apps = this.baseMapper.queryAllAppByPage(pageSize, offset, app.getName(),
+            app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy());
+        Integer total = this.baseMapper.queryAppTotal();
+        AppDto appDto = new AppDto();
+        appDto.setApps(apps);
+        appDto.setTotal(total);
+        return appDto;
     }
 
     /**
@@ -161,6 +191,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Override
     @SystemServiceLog(description = "应用创建实现方法")
     public Result<App> createApp(App app) {
+        if (app.getTenantId() == null || app.getTenantId().isEmpty()) {
+            return Result.failed(ExceptionEnum.CM002);
+        }
         List<App> appResult = baseMapper.queryAppByCondition(app);
         if (!appResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);

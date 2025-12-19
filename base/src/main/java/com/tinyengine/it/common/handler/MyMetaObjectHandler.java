@@ -41,7 +41,13 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("createdBy", loginUserContext.getLoginUserId(), metaObject);
         this.setFieldValByName("lastUpdatedBy", loginUserContext.getLoginUserId(), metaObject);
         this.setFieldValByName("platformId", loginUserContext.getPlatformId(), metaObject);
-        fillStrategy(metaObject, "tenantId", loginUserContext.getTenantId());
+
+        if (loginUserContext.getTenants() != null && loginUserContext.getTenants().isEmpty()) {
+            Integer tenant = Integer.valueOf(loginUserContext.getTenants().get(0).getId());
+            if (tenant != null) {
+                this.setFieldValByName("tenantId", tenant, metaObject);
+            }
+        }
     }
 
     @Override
