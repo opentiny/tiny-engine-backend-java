@@ -34,6 +34,7 @@
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <netty-buffer.version>4.1.118.Final</netty-buffer.version>
         <batik-version>1.18</batik-version>
+        <bcprov-jdk18on.version>1.79</bcprov-jdk18on.version>
         <jjwt.version>0.12.3</jjwt.version>
         <langchain4j.version>1.5.0</langchain4j.version>
         <langchain4j-rag.version>1.5.0-beta11</langchain4j-rag.version>
@@ -54,6 +55,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>${bcprov-jdk18on.version}</version>
         </dependency>
 
         <dependency>
@@ -174,12 +181,6 @@
             <artifactId>mockito-inline</artifactId>
             <scope>test</scope>
             <version>${mockito-inline.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk18on</artifactId>
-            <version>${bcprov-jdk18on.version}</version>
         </dependency>
 
         <dependency>

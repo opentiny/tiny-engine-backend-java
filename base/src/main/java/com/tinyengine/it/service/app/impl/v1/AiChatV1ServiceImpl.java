@@ -13,11 +13,14 @@
 package com.tinyengine.it.service.app.impl.v1;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.JsonUtils;
+import com.tinyengine.it.common.utils.SM4Utils;
 import com.tinyengine.it.config.OpenAIConfig;
 import com.tinyengine.it.model.dto.ChatRequest;
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -37,6 +40,7 @@ import java.util.Map;
  *
  * @since 2025-08-06
  */
+@Slf4j
 @Service
 public class AiChatV1ServiceImpl implements AiChatV1Service {
     private final OpenAIConfig config = new OpenAIConfig();
@@ -54,23 +58,37 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
     @SystemServiceLog(description = "chatCompletion")
     public Object chatCompletion(ChatRequest request) throws Exception {
         String requestBody = buildRequestBody(request);
-        String apiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
+        String encryptApiKey = request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
+        String apiKey = getApiKey(encryptApiKey);
         String baseUrl = request.getBaseUrl();
 
         // 规范化URL处理
         String normalizedUrl = normalizeApiUrl(baseUrl);
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-                .uri(URI.create(normalizedUrl))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + apiKey)
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody));
+            .uri(URI.create(normalizedUrl))
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + apiKey)
+            .POST(HttpRequest.BodyPublishers.ofString(requestBody));
         if (request.isStream()) {
             requestBuilder.header("Accept", "text/event-stream");
             return processStreamResponse(requestBuilder);
         } else {
             return processStandardResponse(requestBuilder);
         }
+    }
+
+    /**
+     * get token.
+     *
+     * @param apiKey the apiKey
+     * @return token the token
+     */
+    @Override
+    public String getToken(String apiKey) throws Exception {
+        String sm4Key = System.getenv("SM4KEY");
+        String encrypt = SM4Utils.encryptECB(apiKey, sm4Key);
+        return "EKEY_"+ encrypt;
     }
 
     /**
@@ -88,6 +106,9 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
 
         if (baseUrl.contains("v1")) {
             return ensureUrlProtocol(baseUrl) + "/chat/completions";
+        }
+        if (baseUrl.endsWith("#")) {
+            return ensureUrlProtocol(baseUrl);
         } else {
             return ensureUrlProtocol(baseUrl) + "/v1/chat/completions";
         }
@@ -154,43 +175,71 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         return JsonUtils.encode(body);
     }
 
-    private JsonNode processStandardResponse(HttpRequest.Builder requestBuilder)
-            throws Exception {
-        HttpResponse<String> response = httpClient.send(
-                requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
-        return JsonUtils.MAPPER.readTree(response.body());
+    private JsonNode processStandardResponse(HttpRequest.Builder requestBuilder) {
+        HttpResponse<String> response = null;
+        String code = null;
+        String message = null;
+        try {
+         response = httpClient.send(
+             requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+         code = String.valueOf(response.statusCode());
+            if (response.statusCode() != 200) {
+                String errorBody = response.body();
+
+                // 尝试解析错误JSON
+                JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
+                message = errorNode.get("error").get("message").asText();
+                throw new ServiceException(code, message);
+            }
+            return JsonUtils.MAPPER.readTree(response.body());
+        } catch (IOException | InterruptedException e) {
+            throw new ServiceException(code, message);
+        }
+
+
     }
 
     private StreamingResponseBody processStreamResponse(HttpRequest.Builder requestBuilder) {
         return outputStream -> {
+            HttpResponse<InputStream> response = null;
             try {
-                HttpClient client = HttpClient.newHttpClient();
-                HttpResponse<InputStream> response = client.send(
-                        requestBuilder.build(),
-                        HttpResponse.BodyHandlers.ofInputStream()
+                response = httpClient.send(
+                    requestBuilder.build(), HttpResponse.BodyHandlers.ofInputStream()
                 );
-                if (response.statusCode() != 200) {
-                    String errorBody = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
-                    throw new IOException("API请求失败: " + response.statusCode() + " - " + errorBody);
-                }
-                try (InputStream inputStream = response.body()) {
-                    byte[] buffer = new byte[8192];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                        outputStream.flush();
-                    }
-                }
-            } catch (Exception e) {
-                try {
-                    String errorEvent = "data: {\"error\": \"" + e.getMessage() + "\"}\n\n";
-                    outputStream.write(errorEvent.getBytes(StandardCharsets.UTF_8));
+            } catch (InterruptedException e) {
+                throw new ServiceException("500", e.getMessage());
+            }
+
+            log.info("收到AI API响应，状态码: {}", response.statusCode());
+
+            if (response.statusCode() != 200) {
+                String errorBody = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
+
+                log.info("错误响应内容: {}", errorBody);
+
+                JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
+                throw new ServiceException(String.valueOf(response.statusCode()), errorNode.get("error").get("message").asText());
+            }
+
+            // 正常流处理逻辑
+            try (InputStream inputStream = response.body()) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
                     outputStream.flush();
-                } catch (IOException ioException) {
-                    throw new IOException("API请求失败，且无法发送错误信息: " + e.getMessage() +
-                            " (IO错误: " + ioException.getMessage() + ")", e);
                 }
             }
         };
+    }
+
+    private String getApiKey(String encryptApiKey) throws Exception {
+        String sm4Key = System.getenv("SM4KEY");
+
+        if (encryptApiKey.startsWith("EKEY_")) {
+            String  encryptBase64ApiKey = encryptApiKey.substring(5);
+            return SM4Utils.decryptECB(encryptBase64ApiKey, sm4Key);
+        }
+        return encryptApiKey;
     }
 }

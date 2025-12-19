@@ -12,7 +12,10 @@
 
 package com.tinyengine.it.controller;
 
+import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.model.dto.AiToken;
 import com.tinyengine.it.model.dto.ChatRequest;
 
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
@@ -24,7 +27,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -50,6 +52,7 @@ public class AiChatController {
      */
     @Autowired
     private AiChatV1Service aiChatV1Service;
+
     /**
      * AI api
      *
@@ -66,22 +69,28 @@ public class AiChatController {
     })
     @SystemControllerLog(description = "AI chat")
     @PostMapping("/ai/chat")
-    public ResponseEntity<?> aiChat(@RequestBody ChatRequest request) {
-        try {
-            Object response = aiChatV1Service.chatCompletion(request);
+    public ResponseEntity<?> aiChat(@RequestBody ChatRequest request,
+        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
 
-            if (request.isStream()) {
-                return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_EVENT_STREAM)
-                    .body((StreamingResponseBody) response);
-            } else {
-                return ResponseEntity.ok(response);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            String token = authorization.replace("Bearer ", "");
+            request.setApiKey(token);
         }
+
+        Object response = aiChatV1Service.chatCompletion(request);
+
+        if (request.isStream()) {
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .header("Cache-Control", "no-cache")
+                .header("X-Accel-Buffering", "no") // 禁用Nginx缓冲
+                .body((StreamingResponseBody) response);
+        } else {
+            return ResponseEntity.ok(response);
+        }
+
     }
+
 
     /**
      * AI api v1
@@ -100,24 +109,46 @@ public class AiChatController {
     @SystemControllerLog(description = "AI completions")
     @PostMapping("/chat/completions")
     public ResponseEntity<?> completions(@RequestBody ChatRequest request,
-        @RequestHeader("Authorization") String authorization) {
+        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
             request.setApiKey(token);
         }
-        try {
-            Object response = aiChatV1Service.chatCompletion(request);
 
-            if (request.isStream()) {
-                return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_EVENT_STREAM)
-                    .body((StreamingResponseBody) response);
-            } else {
-                return ResponseEntity.ok(response);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
+        Object response = aiChatV1Service.chatCompletion(request);
+
+        if (request.isStream()) {
+            return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .header("Cache-Control", "no-cache")
+                .header("X-Accel-Buffering", "no") // 禁用Nginx缓冲
+                .body((StreamingResponseBody) response);
+        } else {
+            return ResponseEntity.ok(response);
         }
+    }
+    /**
+     * get token
+     *
+     * @param request the request
+     * @return ai回答信息 result
+     */
+    @Operation(summary = "获取加密key信息", description = "获取加密key信息",
+        parameters = {
+            @Parameter(name = "request", description = "入参对象")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "get token")
+    @PostMapping("/encrypt-key")
+    public Result<AiToken> getToken(@RequestBody ChatRequest request) throws Exception {
+        String apiKey = request.getApiKey();
+        if(apiKey == null || apiKey.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM320);
+        }
+        String token = aiChatV1Service.getToken(apiKey);
+        return Result.success(new AiToken(token));
     }
 }
