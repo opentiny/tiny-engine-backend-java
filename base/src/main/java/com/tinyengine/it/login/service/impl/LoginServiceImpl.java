@@ -76,6 +76,8 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         authUsersUnitsRoles.setUnitType("tenant");
         authUsersUnitsRoles.setUnitId(1);
         authUsersUnitsRoles.setUserId(Integer.valueOf(user.getId()));
+        authUsersUnitsRoles.setCreatedBy(user.getId());
+        authUsersUnitsRoles.setLastUpdatedBy(user.getId());
         authUsersUnitsRolesMapper.createAuthUsersUnitsRoles(authUsersUnitsRoles);
         return result;
     }

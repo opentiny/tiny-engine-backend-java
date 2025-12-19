@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , app_id, platform_id, `name`, thumbnail_name, resource_url, thumbnail_url, category, description, thumbnail_data, resource_data,
+        , app_id, platform_id, `name`, thumbnail_name, resource_url, thumbnail_url, hash, category, description, thumbnail_data, resource_data,
         public_status, is_default, created_by, last_updated_by, created_time, last_updated_time, tenant_id, renter_id, site_id
     </sql>
 
@@ -27,6 +27,9 @@
         </if>
         <if test="resourceUrl!=null and resourceUrl!=''">
             AND resource_url = #{resourceUrl}
+        </if>
+        <if test="hash!=null and hash!=''">
+            AND hash = #{hash}
         </if>
         <if test="thumbnailUrl!=null and thumbnailUrl!=''">
             AND thumbnail_url = #{thumbnailUrl}
@@ -92,6 +95,9 @@
         <if test="thumbnailUrl!=null and thumbnailUrl!=''">
             thumbnail_url = #{thumbnailUrl},
         </if>
+        <if test="hash!=null and hash!=''">
+            hash = #{hash},
+        </if>
         <if test="category!=null and category!=''">
             category = #{category},
         </if>
@@ -143,6 +149,7 @@
         <result column="thumbnail_name" property="thumbnailName"/>
         <result column="resource_url" property="resourceUrl"/>
         <result column="thumbnail_url" property="thumbnailUrl"/>
+        <result column="hash" property="hash"/>
         <result column="category" property="category"/>
         <result column="description" property="description"/>
         <result column="thumbnail_data" property="thumbnailData"/>
@@ -255,6 +262,7 @@
                                , thumbnail_name
                                , resource_url
                                , thumbnail_url
+                               , hash
                                , category
                                , description
                                , thumbnail_data
@@ -275,6 +283,7 @@
                , #{thumbnailName}
                , #{resourceUrl}
                , #{thumbnailUrl}
+               , #{hash}
                , #{category}
                , #{description}
                , #{thumbnailData}
