@@ -42,7 +42,7 @@ public class Tenant {
     @TableId(value = "id", type = IdType.AUTO)
     private String id;
 
-    @Schema(name = "nameCn", description = "组织唯一代码")
+    @Schema(name = "orgCode", description = "组织唯一代码")
     private String orgCode;
 
     @Schema(name = "nameCn", description = "组织中文名")
