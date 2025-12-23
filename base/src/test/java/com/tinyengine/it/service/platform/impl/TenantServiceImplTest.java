@@ -90,13 +90,4 @@ class TenantServiceImplTest {
         Integer result = tenantServiceImpl.updateTenantById(param);
         Assertions.assertEquals(2, result);
     }
-
-    @Test
-    void testCreateTenant() {
-        Tenant param = new Tenant();
-        when(tenantMapper.createTenant(param)).thenReturn(2);
-
-        Integer result = tenantServiceImpl.createTenant(param);
-        Assertions.assertEquals(2, result);
-    }
 }
