@@ -24,6 +24,16 @@ import java.util.List;
  */
 public class MockUserContext implements LoginUserContext {
     /**
+     * 返回当前用户所在的业务租户id
+     *
+     * @return 租户Id
+     */
+    @Override
+    public String getTenantId() {
+        return "1";
+    }
+
+    /**
      * 返回当前用户所诉的业务租户信息
      *
      * @return 租户ID
