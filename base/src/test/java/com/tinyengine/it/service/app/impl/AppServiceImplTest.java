@@ -20,6 +20,8 @@ import static org.mockito.Mockito.when;
 import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.handler.MockUserContext;
+import com.tinyengine.it.common.utils.TestUtil;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.model.dto.I18nEntryDto;
@@ -69,6 +71,7 @@ class AppServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ReflectUtil.setFieldValue(appServiceImpl, "baseMapper", appMapper);
+        ReflectUtil.setFieldValue(appServiceImpl, "loginUserContext", new MockUserContext());
     }
 
     @Test
@@ -135,6 +138,7 @@ class AppServiceImplTest {
     void testCreateApp() {
         List<App> appResult = new ArrayList<>();
         App param = new App();
+        param.setTenantId("1");
         when(appMapper.queryAppByCondition(param)).thenReturn(appResult);
         when(appMapper.createApp(param)).thenReturn(1);
 

@@ -80,6 +80,7 @@ class BlockServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
+        when(loginUserContext.getTenantId()).thenReturn("1");
         ReflectUtil.setFieldValue(blockServiceImpl, "baseMapper", blockMapper);
     }
 

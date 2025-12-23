@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.controller;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -19,6 +20,8 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.handler.MockUserContext;
 import com.tinyengine.it.common.utils.TestUtil;
+import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
+import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
 
@@ -28,6 +31,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * test case
@@ -42,7 +48,7 @@ class UserControllerTest {
     private UserController userController;
 
     @Mock
-    private LoginUserContext loginUserContext = new MockUserContext();
+    private AuthUsersUnitsRolesMapper authUsersUnitsRolesMapper;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -53,7 +59,11 @@ class UserControllerTest {
     void testMe() throws NoSuchFieldException, IllegalAccessException {
         TestUtil.setPrivateValue(userController, "loginUserContext", new MockUserContext());
         User mockData = new User();
+        Tenant tenant = new Tenant();
+        List<Tenant> tenants = new ArrayList<>();
+        tenants.add(tenant);
         when(userService.queryUserById(anyString())).thenReturn(mockData);
+        when(authUsersUnitsRolesMapper.queryAllTenantByUserId(anyInt())).thenReturn(tenants);
         Result<User> result = userController.me();
         Assertions.assertEquals(mockData, result.getData());
     }

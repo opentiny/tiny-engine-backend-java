@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
+import com.tinyengine.it.common.handler.MockUserContext;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.BlockMapper;
@@ -95,6 +96,7 @@ class PageServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ReflectUtil.setFieldValue(pageServiceImpl, "baseMapper", pageMapper);
+        ReflectUtil.setFieldValue(pageServiceImpl, "loginUserContext", new MockUserContext());
     }
 
     @Test
