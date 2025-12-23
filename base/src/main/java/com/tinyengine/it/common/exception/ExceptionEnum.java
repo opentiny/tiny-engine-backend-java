@@ -312,10 +312,16 @@ public enum ExceptionEnum implements IBaseError {
      * Cm 337 exception enum.
      */
     CM337("CM337", "组织不存在"),
+
     /**
      * Cm 338 exception enum.
      */
-    CM338("CM338", "用户不存在，请重新注册");
+    CM338("CM338", "用户不存在，请重新注册"),
+
+    /**
+     * Cm 339 exception enum.
+     */
+    CM339("CM338", "token检验失败，请重新登录");
 
     /**
      * 错误码

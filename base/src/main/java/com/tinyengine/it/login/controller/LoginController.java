@@ -239,18 +239,27 @@ public class LoginController {
     @GetMapping("/user/tenant")
     public Result<SSOTicket> setTenant(@RequestParam Integer tenantId) {
         List<Tenant> tenants = loginUserContext.getTenants();
+        if (tenantId == null) {
+            return Result.failed(ExceptionEnum.CM320);
+        }
         if (tenants == null || tenants.isEmpty()) {
             return Result.failed(ExceptionEnum.CM337);
         }
-        List<Tenant> currentTenant = new ArrayList<>();
+        List<Tenant> tenantList = new ArrayList<>();
+        boolean found = false;
         for (Tenant tenant : tenants) {
             if (tenant.getId().equals(tenantId.toString())) {
-                currentTenant.add(tenant);
+                tenant.setIsInUse(true);
+                found = true;
             }
+            tenant.setIsInUse(false);
+            tenantList.add(tenant);
         }
-        if (currentTenant.isEmpty()) {
+
+        if (!found) {
             return Result.failed(ExceptionEnum.CM337);
         }
+
         // 通过 RequestContextHolder 获取请求
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
             .getRequest();
@@ -259,7 +268,7 @@ public class LoginController {
         if (headerToken == null || headerToken.isEmpty()) {
             return Result.failed(ExceptionEnum.CM336);
         }
-        String token = jwtUtil.generateTokenWithSelectedTenant(headerToken, currentTenant);
+        String token = jwtUtil.generateTokenWithSelectedTenant(headerToken, tenantList);
         // 将原 token 加入黑名单
         Claims claims = Jwts.parser()
             .verifyWith(JwtUtil.getSecretKey())

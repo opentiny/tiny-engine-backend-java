@@ -12,8 +12,11 @@
 
 package com.tinyengine.it.service.platform.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.TenantMapper;
 import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
 import com.tinyengine.it.model.entity.AuthUsersUnitsRoles;
@@ -110,6 +113,12 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
      */
     @Override
     public Integer createTenant(Tenant tenant) {
+        QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name_cn", tenant.getNameCn());
+        Tenant tenantResult = this.baseMapper.selectOne(queryWrapper);
+        if (tenantResult != null) {
+            throw new ServiceException(ExceptionEnum.CM003.getResultCode(), ExceptionEnum.CM003.getResultMsg());
+        }
         int result = baseMapper.createTenant(tenant);
         if (result == 1) {
             AuthUsersUnitsRoles authUsersUnitsRoles = new AuthUsersUnitsRoles();

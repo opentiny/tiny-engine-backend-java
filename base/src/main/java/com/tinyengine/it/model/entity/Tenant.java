@@ -54,6 +54,10 @@ public class Tenant {
     @Schema(name = "description", description = "组织描述")
     private String description;
 
+    @TableField(exist = false)
+    @Schema(name = "isInUse", description = "是否当前所在组织")
+    private Boolean isInUse;
+
     @TableField(fill = FieldFill.INSERT)
     @Schema(name = "createdTime", description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

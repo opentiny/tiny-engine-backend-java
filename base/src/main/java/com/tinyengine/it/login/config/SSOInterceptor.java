@@ -12,6 +12,8 @@
 
 package com.tinyengine.it.login.config;
 
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.login.utils.JwtUtil;
 import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
 import com.tinyengine.it.login.model.UserInfo;
@@ -35,8 +37,6 @@ public class SSOInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private static final String SSO_SERVER = System.getenv("SSO_SERVER");
-
     @Override
     public boolean preHandle(HttpServletRequest request,
         HttpServletResponse response, Object handler) throws Exception {
@@ -44,9 +44,8 @@ public class SSOInterceptor implements HandlerInterceptor {
         String authorization = request.getHeader("Authorization");
         // 如果没有token，重定向到登录页
         if (authorization == null || authorization.isEmpty()) {
-            log.info("No token, redirecting to: {}", SSO_SERVER);
-            response.sendRedirect(SSO_SERVER);
-            return false;
+            log.info("No token");
+            throw new ServiceException(ExceptionEnum.CM336.getResultCode(), ExceptionEnum.CM336.getResultMsg());
         }
         String token = jwtUtil.getTokenFromRequest(authorization);
         String requestURI = request.getRequestURI();
@@ -57,8 +56,7 @@ public class SSOInterceptor implements HandlerInterceptor {
             // 验证token
             if (!jwtUtil.validateToken(token)) {
                 log.warn("Token validation failed");
-                response.sendRedirect(SSO_SERVER);
-                return false;
+                throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
             }
 
             // 从token中获取用户信息
@@ -72,8 +70,7 @@ public class SSOInterceptor implements HandlerInterceptor {
             // 检查必需的用户信息
             if (username == null || username.isEmpty() || userId == null) {
                 log.warn("User information is incomplete - username: {}, userId: {}", username, userId);
-                response.sendRedirect(SSO_SERVER);
-                return false;
+                throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
             }
 
             // 存储用户信息到LoginUserContext
@@ -90,9 +87,8 @@ public class SSOInterceptor implements HandlerInterceptor {
 
         } catch (Exception e) {
             log.error("Token validation exception: {}", e.getMessage(), e);
-            response.sendRedirect(SSO_SERVER);
             DefaultLoginUserContext.clear();
-            return false;
+            throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
         }
     }
 

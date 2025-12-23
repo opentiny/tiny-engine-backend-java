@@ -30,8 +30,13 @@ public class DefaultLoginUserContext implements LoginUserContext {
         if (tenantList == null || tenantList.isEmpty()) {
             return DEFAULT_TENANT;
         }
+        for (Tenant tenant : tenantList) {
+            if (tenant.getIsInUse()) {
+                return tenant.getId();
+            }
+        }
 
-        return tenantList.get(0).getId();
+        return DEFAULT_TENANT;
     }
 
     @Override
