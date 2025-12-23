@@ -119,7 +119,7 @@ class AppV1ServiceImplTest {
         Map<String, Object> dataSourceGlobal = JsonUtils.MAPPER.readValue(json, Map.class);
         app.setDataSourceGlobal(dataSourceGlobal);
 
-        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+        when(appMapper.queryAppById(anyInt(), anyString())).thenReturn(app);
         Page page = new Page();
         page.setIsPage(true);
         page.setPageContent(new HashMap<>());
@@ -155,7 +155,7 @@ class AppV1ServiceImplTest {
     void testGetMetaDto() {
         App app = new App();
         app.setPlatformId(1);
-        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+        when(appMapper.queryAppById(anyInt(), anyString())).thenReturn(app);
         when(i18nEntryMapper.findI18nEntriesByHostandHostType(anyInt(), anyString())).thenReturn(
             Arrays.asList(new I18nEntryDto()));
         when(appExtensionMapper.queryAppExtensionByCondition(any(AppExtension.class))).thenReturn(

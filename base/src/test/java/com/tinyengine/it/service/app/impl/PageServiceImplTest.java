@@ -111,7 +111,7 @@ class PageServiceImplTest {
         app.setFramework("Vue");
         app.setHomePage(1);
         // not home page
-        when(appMapper.queryAppById(333)).thenReturn(app);
+        when(appMapper.queryAppById(333, "1")).thenReturn(app);
 
         Page result = pageServiceImpl.queryPageById(1);
         assertEquals(returnPage, result);
@@ -151,7 +151,7 @@ class PageServiceImplTest {
         app.setFramework("Vue");
         app.setHomePage(1);
         // not home page
-        when(appMapper.queryAppById(333)).thenReturn(app);
+        when(appMapper.queryAppById(333, "1")).thenReturn(app);
         when(pageHistoryService.createPageHistory(any(PageHistory.class))).thenReturn(1);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
 
@@ -186,7 +186,7 @@ class PageServiceImplTest {
         app.setFramework("Vue");
         app.setHomePage(1);
         // not home page
-        when(appMapper.queryAppById(333)).thenReturn(app);
+        when(appMapper.queryAppById(333, "1")).thenReturn(app);
         HashMap<String, List<String>> blockAsset = new HashMap<String, List<String>>() {
             {
                 put("blockAsset", Arrays.asList("getBlockAssetsResponse"));
@@ -222,7 +222,7 @@ class PageServiceImplTest {
         app.setFramework("Vue");
         app.setHomePage(1);
         // not home page
-        when(appMapper.queryAppById(222)).thenReturn(app);
+        when(appMapper.queryAppById(222, "1")).thenReturn(app);
         User occupier = new User();
         occupier.setId("111");
         when(userService.queryUserById("555")).thenReturn(occupier);
@@ -245,7 +245,7 @@ class PageServiceImplTest {
         App app = new App();
         app.setFramework("Vue");
         app.setHomePage(1);
-        when(appMapper.queryAppById(222)).thenReturn(app);
+        when(appMapper.queryAppById(222, "1")).thenReturn(app);
         Page parentInfo = new Page();
         parentInfo.setDepth(4);
         parentInfo.setIsPage(false);
