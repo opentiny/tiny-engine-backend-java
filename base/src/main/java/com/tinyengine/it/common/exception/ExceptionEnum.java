@@ -321,7 +321,7 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 339 exception enum.
      */
-    CM339("CM338", "token检验失败，请重新登录");
+    CM339("CM339", "token检验失败，请重新登录");
 
     /**
      * 错误码

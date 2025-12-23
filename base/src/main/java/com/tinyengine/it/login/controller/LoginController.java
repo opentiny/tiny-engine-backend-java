@@ -251,8 +251,10 @@ public class LoginController {
             if (tenant.getId().equals(tenantId.toString())) {
                 tenant.setIsInUse(true);
                 found = true;
+            } else {
+                tenant.setIsInUse(false);
             }
-            tenant.setIsInUse(false);
+
             tenantList.add(tenant);
         }
 
