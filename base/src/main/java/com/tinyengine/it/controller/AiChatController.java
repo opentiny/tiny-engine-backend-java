@@ -18,6 +18,9 @@ import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.model.dto.AiToken;
 import com.tinyengine.it.model.dto.ChatRequest;
 
+import com.tinyengine.it.rag.entity.EmbeddingMatchDto;
+import com.tinyengine.it.rag.entity.SearchRequest;
+import com.tinyengine.it.rag.service.StorageService;
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.util.List;
+
 /**
  * The type Ai chat controller.
  *
@@ -52,6 +57,9 @@ public class AiChatController {
      */
     @Autowired
     private AiChatV1Service aiChatV1Service;
+
+    @Autowired
+    private StorageService vectorStorageService;
 
     /**
      * AI api
@@ -150,5 +158,26 @@ public class AiChatController {
         }
         String token = aiChatV1Service.getToken(apiKey);
         return Result.success(new AiToken(token));
+    }
+
+    /**
+     * search in collection
+     *
+     * @param searchDto the searchDto
+     * @return result
+     */
+    @Operation(summary = "在指定集合中搜索", description = "在指定集合中搜索",
+        parameters = {
+            @Parameter(name = "searchDto", description = "搜索请求参数体"),
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json", schema = @Schema())),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
+    @SystemControllerLog(description = "AI search in collection")
+    @PostMapping("/ai/search")
+    public Result<List<EmbeddingMatchDto>> searchInCollection(@RequestBody SearchRequest searchDto) {
+        List<EmbeddingMatchDto> results = vectorStorageService.search(searchDto);
+        return Result.success(results);
     }
 }
