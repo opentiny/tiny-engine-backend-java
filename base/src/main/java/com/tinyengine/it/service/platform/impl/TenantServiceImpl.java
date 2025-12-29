@@ -114,7 +114,7 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
     @Override
     public Integer createTenant(Tenant tenant) {
         QueryWrapper<Tenant> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name_cn", tenant.getNameCn());
+        queryWrapper.eq("name_en", tenant.getNameEn());
         Tenant tenantResult = this.baseMapper.selectOne(queryWrapper);
         if (tenantResult != null) {
             throw new ServiceException(ExceptionEnum.CM003.getResultCode(), ExceptionEnum.CM003.getResultMsg());
