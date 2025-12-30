@@ -29,7 +29,6 @@ import com.tinyengine.it.model.dto.SchemaUtils;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.I18nEntry;
 import com.tinyengine.it.model.entity.Platform;
-import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.service.app.AppService;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.app.impl.v1.AppV1ServiceImpl;

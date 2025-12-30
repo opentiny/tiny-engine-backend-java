@@ -17,7 +17,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.tinyengine.it.common.base.Result;
-import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.handler.MockUserContext;
 import com.tinyengine.it.common.utils.TestUtil;
 import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
