@@ -15,7 +15,6 @@ package com.tinyengine.it.service.app.impl;
 import static org.mockito.Mockito.when;
 
 import cn.hutool.core.util.ReflectUtil;
-import com.tinyengine.it.common.handler.MockUserContext;
 import com.tinyengine.it.login.service.impl.LoginServiceImpl;
 import com.tinyengine.it.mapper.UserMapper;
 import com.tinyengine.it.model.entity.User;
@@ -27,7 +26,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
