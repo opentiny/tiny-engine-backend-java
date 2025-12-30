@@ -40,7 +40,7 @@ public class GlobalExceptionAdvice {
      * @param e the e
      * @return the result
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(Exception.class)
     public Result<Map<String, String>> handleException(Exception e) {
         // 修改为 log.error，传递异常对象以打印堆栈信息
@@ -69,7 +69,7 @@ public class GlobalExceptionAdvice {
      * @param e the e
      * @return the result
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ServiceException.class)
     public Result<Map<String, String>> handleServiceException(ServiceException e) {
         // 修改为 log.error，传递异常对象以打印堆栈信息

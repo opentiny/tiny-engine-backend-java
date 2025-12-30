@@ -12,7 +12,6 @@
 
 package com.tinyengine.it.service.app.impl;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import cn.hutool.core.util.ReflectUtil;

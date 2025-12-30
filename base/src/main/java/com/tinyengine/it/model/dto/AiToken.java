@@ -27,7 +27,7 @@ public class AiToken {
     public  AiToken(String token) {
         this.token = token;
     }
-    public AiToken(){
+    public AiToken() {
 
     }
 }
