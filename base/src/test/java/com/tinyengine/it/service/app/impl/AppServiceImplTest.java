@@ -19,13 +19,7 @@ import static org.mockito.Mockito.when;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
-<<<<<<< HEAD
-import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.handler.MockUserContext;
-import com.tinyengine.it.common.utils.TestUtil;
-=======
-import com.tinyengine.it.common.handler.MockUserContext;
->>>>>>> 0f2ef7ba169f4c502dea62846f23b11ce5f82c55
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.model.dto.I18nEntryDto;
