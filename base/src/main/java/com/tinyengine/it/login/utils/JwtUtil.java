@@ -116,6 +116,7 @@ public class JwtUtil {
             simple.put("description", tenant.getDescription());
             simple.put("createdBy", tenant.getCreatedBy());
             simple.put("lastUpdatedBy", tenant.getLastUpdatedBy());
+            simple.put("isInUse", tenant.getIsInUse());
             // 不传递日期字段，避免序列化问题
             return simple;
         }).collect(Collectors.toList());
@@ -182,6 +183,7 @@ public class JwtUtil {
             tenant.setDescription((String) map.get("description"));
             tenant.setCreatedBy((String) map.get("createdBy"));
             tenant.setLastUpdatedBy((String) map.get("lastUpdatedBy"));
+            tenant.setIsInUse((Boolean) map.get("isInUse"));
             return tenant;
         }).collect(Collectors.toList());
     }
