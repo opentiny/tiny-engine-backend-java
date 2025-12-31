@@ -153,7 +153,7 @@ public class AiChatController {
     @PostMapping("/encrypt-key")
     public Result<AiToken> getToken(@RequestBody ChatRequest request) throws Exception {
         String apiKey = request.getApiKey();
-        if(apiKey == null || apiKey.isEmpty()) {
+        if (apiKey == null || apiKey.isEmpty()) {
             return Result.failed(ExceptionEnum.CM320);
         }
         String token = aiChatV1Service.getToken(apiKey);

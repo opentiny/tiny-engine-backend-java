@@ -20,7 +20,6 @@ import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.ImageThumbnailGenerator;
-import com.tinyengine.it.common.utils.MultipartFileHashUtils;
 import com.tinyengine.it.common.utils.Utils;
 import com.tinyengine.it.mapper.ResourceGroupResourceMapper;
 import com.tinyengine.it.mapper.ResourceMapper;
