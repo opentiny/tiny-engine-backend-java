@@ -78,7 +78,7 @@ public class AiChatController {
     @SystemControllerLog(description = "AI chat")
     @PostMapping("/ai/chat")
     public ResponseEntity<?> aiChat(@RequestBody ChatRequest request,
-        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
+        @RequestHeader(value = "Authorization", required = true) String authorization) throws Exception {
 
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
@@ -117,7 +117,7 @@ public class AiChatController {
     @SystemControllerLog(description = "AI completions")
     @PostMapping("/chat/completions")
     public ResponseEntity<?> completions(@RequestBody ChatRequest request,
-        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
+        @RequestHeader(value = "Authorization", required = true) String authorization) throws Exception {
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
             request.setApiKey(token);
