@@ -495,18 +495,16 @@ public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements Pa
      * @return the app home page id
      */
     public int getAppHomePageId(int appId) {
+        log.info("Getting home page ID for appId: {}, TenantId: {}", appId, loginUserContext.getTenantId());
         App appInfo = appMapper.queryAppById(appId, loginUserContext.getTenantId());
         // appHomePageId 存在为null的情况，即app没有设置首页
-        Integer homePage = appInfo.getHomePage();
-
-        // 将 homePage 转换为整数，如果为空则默认为 0
-        int id;
-        if (homePage == null) {
-            id = 0;
-            return id;
+        if (appInfo == null) {
+            throw new ServiceException(ExceptionEnum.CM340.getResultCode(), "App not found for ID: " + appId+",TenantId:"+loginUserContext.getTenantId());
         }
-        id = homePage;
-        return id;
+        // 将 homePage 转换为整数，如果为空则默认为 0
+        Integer homePage = appInfo.getHomePage();
+        log.info("Retrieved home page ID: {} for appId: {}", homePage, appId);
+        return homePage != null ? homePage : 0;
     }
 
     /**

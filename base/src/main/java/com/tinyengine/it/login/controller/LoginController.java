@@ -31,6 +31,7 @@ import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
+import com.tinyengine.it.service.platform.TenantService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,6 +91,8 @@ public class LoginController {
 
     @Autowired
     LoginUserContext loginUserContext;
+    @Autowired
+    private  TenantService tenantService;
 
     /**
      * 注册
@@ -238,10 +241,12 @@ public class LoginController {
     @SystemControllerLog(description = "设置当前组织")
     @GetMapping("/user/tenant")
     public Result<SSOTicket> setTenant(@RequestParam Integer tenantId) {
-        List<Tenant> tenants = loginUserContext.getTenants();
         if (tenantId == null) {
             return Result.failed(ExceptionEnum.CM320);
         }
+
+        List<Tenant> tenants = tenantService.findTenantByTenantId(tenantId);
+
         if (tenants == null || tenants.isEmpty()) {
             return Result.failed(ExceptionEnum.CM337);
         }

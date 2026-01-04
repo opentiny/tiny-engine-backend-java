@@ -39,7 +39,10 @@ public class LoginConfig implements WebMvcConfigurer {
                 // 登录相关
                 "/platform-center/api/user/login",
                 // 忘记密码
-                "/platform-center/api/user/forgot-password"
+                "/platform-center/api/user/forgot-password",
+                // AI
+                "/app-center/api/ai/chat",
+                "/app-center/api/chat/completions"
             );
     }
 }

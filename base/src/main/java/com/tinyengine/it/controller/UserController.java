@@ -88,7 +88,10 @@ public class UserController {
             user.setUsername(loginUserContext.getLoginUserId());
         }
         user.setTenant(tenants);
-
+        user.setPassword(null);
+        user.setPrivateKey(null);
+        user.setPublicKey(null);
+        user.setSalt(null);
         return Result.success(user);
     }
 

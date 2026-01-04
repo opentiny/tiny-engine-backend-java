@@ -47,6 +47,14 @@ public interface TenantService extends IService<Tenant> {
     List<Tenant> findTenantByCondition(Tenant tenant);
 
     /**
+     * 根据条件查询表t_tenant信息
+     *
+     * @param tenantId the tenantId
+     * @return the list
+     */
+    List<Tenant> findTenantByTenantId(Integer tenantId);
+
+    /**
      * 根据主键id删除t_tenant数据
      *
      * @param id the id
