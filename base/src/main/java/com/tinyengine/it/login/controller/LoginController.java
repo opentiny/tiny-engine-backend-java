@@ -91,8 +91,6 @@ public class LoginController {
 
     @Autowired
     LoginUserContext loginUserContext;
-    @Autowired
-    private  TenantService tenantService;
 
     /**
      * 注册
@@ -241,11 +239,11 @@ public class LoginController {
     @SystemControllerLog(description = "设置当前组织")
     @GetMapping("/user/tenant")
     public Result<SSOTicket> setTenant(@RequestParam Integer tenantId) {
+        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(Integer.valueOf(loginUserContext.getLoginUserId()));
+
         if (tenantId == null) {
             return Result.failed(ExceptionEnum.CM320);
         }
-
-        List<Tenant> tenants = tenantService.findTenantByTenantId(tenantId);
 
         if (tenants == null || tenants.isEmpty()) {
             return Result.failed(ExceptionEnum.CM337);
@@ -264,7 +262,7 @@ public class LoginController {
         }
 
         if (!found) {
-            return Result.failed(ExceptionEnum.CM337);
+            return Result.failed(ExceptionEnum.CM341);
         }
 
         // 通过 RequestContextHolder 获取请求

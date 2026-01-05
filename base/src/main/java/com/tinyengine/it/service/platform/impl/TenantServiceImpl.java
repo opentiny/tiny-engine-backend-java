@@ -82,17 +82,6 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
     }
 
     /**
-     * 根据条件查询表t_tenant信息
-     *
-     * @param tenantId the tenantId
-     * @return the list
-     */
-    @Override
-    public List<Tenant> findTenantByTenantId(Integer tenantId) {
-        return baseMapper.selectList(new QueryWrapper<Tenant>().eq("id", tenantId));
-    }
-
-    /**
      * 根据主键id删除表t_tenant数据
      *
      * @param id id

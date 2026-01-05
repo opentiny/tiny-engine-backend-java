@@ -322,11 +322,16 @@ public enum ExceptionEnum implements IBaseError {
      * Cm 339 exception enum.
      */
     CM339("CM339", "token检验失败，请重新登录"),
+
     /**
      * Cm 340 exception enum.
      */
-    CM340("CM340", "请求资源不存在");
+    CM340("CM340", "请求资源不存在"),
 
+    /**
+     * Cm 341 exception enum.
+     */
+    CM341("CM341", "组织在当前用户组织列表中匹配不到");
     /**
      * 错误码
      */
