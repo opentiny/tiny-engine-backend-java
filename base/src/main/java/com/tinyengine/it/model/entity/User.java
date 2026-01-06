@@ -63,6 +63,9 @@ public class User {
     @Schema(name = "private_key", description = "私钥")
     private String privateKey;
 
+    @Schema(name = "use_tenant_id", description = "当前使用的租户ID")
+    private Integer useTenantId;
+
     @TableField("enable")
     @Schema(name = "enable", description = "账号是否可用")
     private Boolean isEnable;

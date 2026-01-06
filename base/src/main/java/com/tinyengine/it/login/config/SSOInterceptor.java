@@ -18,6 +18,8 @@ import com.tinyengine.it.login.utils.JwtUtil;
 import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
 import com.tinyengine.it.login.model.UserInfo;
 import com.tinyengine.it.model.entity.Tenant;
+import com.tinyengine.it.model.entity.User;
+import com.tinyengine.it.service.app.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,8 @@ public class SSOInterceptor implements HandlerInterceptor {
 
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -72,8 +76,16 @@ public class SSOInterceptor implements HandlerInterceptor {
                 log.warn("User information is incomplete - username: {}, userId: {}", username, userId);
                 throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
             }
-
-            // 存储用户信息到LoginUserContext
+            User user = userService.queryUserById(userId);// 确认用户存在
+            if (user == null) {
+                log.warn("User not found for userId: {}", userId);
+                throw new ServiceException(ExceptionEnum.CM338.getResultCode(), ExceptionEnum.CM339.getResultMsg());
+            }
+            Integer useTenantId = user.getUseTenantId();
+            for (Tenant tenant : tenants) {
+	            tenant.setIsInUse(tenant.getId().equals(useTenantId.toString()));
+            }
+// 存储用户信息到LoginUserContext
             UserInfo userInfo = new UserInfo(userId, username, tenants);
 
             userInfo.setPlatformId(platformId != null ? platformId : 0);

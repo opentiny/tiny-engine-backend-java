@@ -108,10 +108,11 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
             pageSize = 1000;  // 限制最大页大小
         }
         int offset = (currentPage - 1) * pageSize;
+        String tenantId = loginUserContext.getTenantId();
         List<App> apps = this.baseMapper.queryAllAppByPage(pageSize, offset, app.getName(),
             app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy(),
-            loginUserContext.getTenantId());
-        Integer total = this.baseMapper.queryAppTotal(loginUserContext.getTenantId());
+            tenantId);
+        Integer total = this.baseMapper.queryAppTotal(tenantId);
         AppDto appDto = new AppDto();
         appDto.setApps(apps);
         appDto.setTotal(total);

@@ -18,6 +18,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
     private static final int DEFAULT_PLATFORM = 1;
     private static final String DEFAULT_TENANT = "1";
 
+
     /**
      * 返回当前用户所在的业务租户id
      *
@@ -31,11 +32,10 @@ public class DefaultLoginUserContext implements LoginUserContext {
             return DEFAULT_TENANT;
         }
         for (Tenant tenant : tenantList) {
-            if (tenant.getIsInUse()) {
+            if (tenant.getIsInUse()!=null&&tenant.getIsInUse()) {
                 return tenant.getId();
             }
         }
-
         return DEFAULT_TENANT;
     }
 

@@ -264,6 +264,13 @@ public class LoginController {
         if (!found) {
             return Result.failed(ExceptionEnum.CM341);
         }
+        //存储当前组织到LoginUserContext
+        loginUserContext.setTenants(tenantList);
+        // 更新用户当前使用组织
+        User user = new User();
+        user.setId(loginUserContext.getLoginUserId());
+        user.setUseTenantId(tenantId);
+        userService.updateUserById(user);
 
         // 通过 RequestContextHolder 获取请求
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
