@@ -7,7 +7,7 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , username, password, email, salt, public_key, private_key, use_tenant_id,enable, created_time, last_updated_time,
+        , username, password, email, salt, public_key, private_key,enable, created_time, last_updated_time,
         is_admin, is_public
     </sql>
 
@@ -49,9 +49,6 @@
         <if test="isPublic!=null">
             AND is_public = #{isPublic}
         </if>
-        <if test="useTenantId!=null">
-            AND use_tenant_id = #{useTenantId}
-        </if>
     </sql>
 
     <!-- 通用设置列 -->
@@ -83,9 +80,7 @@
         <if test="isPublic!=null">
             is_public = #{isPublic},
         </if>
-        <if test="useTenantId!=null">
-            use_tenant_id = #{useTenantId},
-        </if>
+
     </sql>
 
 
@@ -102,7 +97,6 @@
         <result column="last_updated_time" property="lastUpdatedTime"/>
         <result column="is_admin" property="isAdmin"/>
         <result column="is_public" property="isPublic"/>
-        <result column="use_tenant_id" property="useTenantId"/>
 
     </resultMap>
 
@@ -166,7 +160,6 @@
         , salt
         , public_key
         , private_key
-        , use_tenant_id
         , enable
         , created_time
         , last_updated_time
@@ -179,7 +172,6 @@
         , #{salt}
         , #{publicKey}
         , #{privateKey}
-        , #{useTenantId}
         , #{isEnable}
         , #{createdTime}
         , #{lastUpdatedTime}
