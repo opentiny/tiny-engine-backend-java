@@ -70,7 +70,6 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         user.setSalt(cipherText);
         user.setPublicKey(publicKeyBase64);
         user.setPrivateKey(privateKeyBase64);
-        user.setUseTenantId(Integer.valueOf(loginUserContext.getTenantId()));
         baseMapper.createUser(user);
         User result = baseMapper.queryUserById(user.getId());
         result.setPrivateKey(null);

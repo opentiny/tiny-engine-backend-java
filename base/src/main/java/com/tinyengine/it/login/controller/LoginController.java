@@ -16,13 +16,10 @@ import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemControllerLog;
+import com.tinyengine.it.login.model.*;
 import com.tinyengine.it.login.utils.JwtUtil;
 import com.tinyengine.it.login.utils.SM3PasswordUtil;
 import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
-import com.tinyengine.it.login.model.PasswordResult;
-import com.tinyengine.it.login.model.PasswordValidationResult;
-import com.tinyengine.it.login.model.SSOTicket;
-import com.tinyengine.it.login.model.ValidationResult;
 import com.tinyengine.it.login.service.ConfigurablePasswordValidator;
 import com.tinyengine.it.login.service.LoginService;
 import com.tinyengine.it.login.service.TokenBlacklistService;
@@ -31,9 +28,6 @@ import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Tenant;
 import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.UserService;
-import com.tinyengine.it.service.platform.TenantService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -265,34 +259,22 @@ public class LoginController {
             return Result.failed(ExceptionEnum.CM341);
         }
         //存储当前组织到LoginUserContext
-        loginUserContext.setTenants(tenantList);
-        // 更新用户当前使用组织
-        User user = new User();
-        user.setId(loginUserContext.getLoginUserId());
-        user.setUseTenantId(tenantId);
-        userService.updateUserById(user);
+        UserInfo currentUser = DefaultLoginUserContext.getCurrentUser();
+        currentUser.setTenants(tenantList);
+        DefaultLoginUserContext.setCurrentUser(currentUser);
 
         // 通过 RequestContextHolder 获取请求
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
             .getRequest();
         String authHeader = request.getHeader("Authorization");
-        String headerToken = jwtUtil.getTokenFromRequest(authHeader);
+       String headerToken = jwtUtil.getTokenFromRequest(authHeader);
         if (headerToken == null || headerToken.isEmpty()) {
             return Result.failed(ExceptionEnum.CM336);
         }
-        String token = jwtUtil.generateTokenWithSelectedTenant(headerToken, tenantList);
-        // 将原 token 加入黑名单
-        Claims claims = Jwts.parser()
-            .verifyWith(JwtUtil.getSecretKey())
-            .build()
-            .parseSignedClaims(headerToken)
-            .getPayload();
 
-        long expiryTime = claims.getExpiration().getTime();
-        tokenBlacklistService.blacklistToken(headerToken, expiryTime);
         // 创建SSO票据
         SSOTicket ticket = new SSOTicket();
-        ticket.setToken(token);
+        ticket.setToken(headerToken);
         ticket.setUsername(DefaultLoginUserContext.getCurrentUser().getUsername());
         ticket.setExpireTime(System.currentTimeMillis() + 3600000);
 

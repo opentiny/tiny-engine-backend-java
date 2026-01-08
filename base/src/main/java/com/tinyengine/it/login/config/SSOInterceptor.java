@@ -17,9 +17,8 @@ import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.login.utils.JwtUtil;
 import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
 import com.tinyengine.it.login.model.UserInfo;
+import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
 import com.tinyengine.it.model.entity.Tenant;
-import com.tinyengine.it.model.entity.User;
-import com.tinyengine.it.service.app.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +38,13 @@ public class SSOInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserService userService;
-
+    AuthUsersUnitsRolesMapper authUsersUnitsRolesMapper;
     @Override
     public boolean preHandle(HttpServletRequest request,
         HttpServletResponse response, Object handler) throws Exception {
 
         String authorization = request.getHeader("Authorization");
+        String org = request.getHeader("X-Lowcode-Org");
         // 如果没有token，重定向到登录页
         if (authorization == null || authorization.isEmpty()) {
             log.info("No token");
@@ -66,7 +65,6 @@ public class SSOInterceptor implements HandlerInterceptor {
             // 从token中获取用户信息
             String username = jwtUtil.getUsernameFromToken(token);
             String userId = jwtUtil.getUserIdFromToken(token);
-            List<Tenant> tenants = jwtUtil.getTenantIdFromToken(token);
             String roles = jwtUtil.getRolesFromToken(token);
             Integer platformId = jwtUtil.getPlatformIdFromToken(token);
 
@@ -76,16 +74,30 @@ public class SSOInterceptor implements HandlerInterceptor {
                 log.warn("User information is incomplete - username: {}, userId: {}", username, userId);
                 throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
             }
-            User user = userService.queryUserById(userId);// 确认用户存在
-            if (user == null) {
-                log.warn("User not found for userId: {}", userId);
-                throw new ServiceException(ExceptionEnum.CM338.getResultCode(), ExceptionEnum.CM339.getResultMsg());
+            List<Tenant> tenants= authUsersUnitsRolesMapper.queryAllTenantByUserId(Integer.valueOf(userId));
+            if(!requestURI.equals("/platform-center/api/user/me")){
+
+                if(requestURI.contains("user/tenant")){
+                    String queryString = request.getQueryString();
+                      org=queryString.split("=")[1];
+                }
+                if(tenants != null&&!org.equals("null")){
+                    boolean findOrg = false;
+                    for (Tenant tenant : tenants) {
+                        tenant.setIsInUse(tenant.getId().equals(org));
+                        if(tenant.getIsInUse()){
+                            findOrg = true;
+                        }
+                    }
+                    if(!findOrg){
+                        log.warn("X-Lowcode-Org not found in user's tenants - X-Lowcode-Org: {}", org);
+                        throw new ServiceException(ExceptionEnum.CM341.getResultCode(), ExceptionEnum.CM341.getResultMsg());
+                    }
+                }
+
             }
-            Integer useTenantId = user.getUseTenantId();
-            for (Tenant tenant : tenants) {
-	            tenant.setIsInUse(tenant.getId().equals(useTenantId.toString()));
-            }
-// 存储用户信息到LoginUserContext
+
+            // 存储用户信息到LoginUserContext
             UserInfo userInfo = new UserInfo(userId, username, tenants);
 
             userInfo.setPlatformId(platformId != null ? platformId : 0);
@@ -100,7 +112,7 @@ public class SSOInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             log.error("Token validation exception: {}", e.getMessage(), e);
             DefaultLoginUserContext.clear();
-            throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
+            throw new ServiceException(ExceptionEnum.CM339.getResultCode(), e.getMessage());
         }
     }
 
@@ -109,6 +121,7 @@ public class SSOInterceptor implements HandlerInterceptor {
         HttpServletResponse response, Object handler, Exception ex) {
         // 请求完成后清理用户上下文
         DefaultLoginUserContext.clear();
+
         log.debug("Cleared user context for request completion");
     }
 }

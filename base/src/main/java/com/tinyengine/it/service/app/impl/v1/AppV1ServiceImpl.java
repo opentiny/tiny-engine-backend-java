@@ -280,7 +280,9 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @return the meta
      */
     public MetaDto getMetaDto(Integer id) {
-        App app = appMapper.queryAppById(id, loginUserContext.getTenantId());
+        String tenantId = loginUserContext.getTenantId();
+        log.info("Getting login user  tenant id: {}", tenantId);
+        App app = appMapper.queryAppById(id, tenantId);
         if (app == null) {
             throw new ServiceException(ExceptionEnum.CM009.getResultCode(), ExceptionEnum.CM009.getResultMsg());
         }
