@@ -336,7 +336,7 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 342 exception enum.
      */
-    CM342("CM342", "数字格式异常"),;
+    CM342("CM342", "数字格式异常");
     /**
      * 错误码
      */
