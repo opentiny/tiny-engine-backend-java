@@ -331,7 +331,12 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 341 exception enum.
      */
-    CM341("CM341", "组织在当前用户组织列表中匹配不到");
+    CM341("CM341", "组织在当前用户组织列表中匹配不到"),
+
+    /**
+     * Cm 342 exception enum.
+     */
+    CM342("CM342", "数字格式异常"),;
     /**
      * 错误码
      */

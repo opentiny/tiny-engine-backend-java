@@ -15,6 +15,7 @@ package com.tinyengine.it.login.controller;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.login.model.*;
 import com.tinyengine.it.login.utils.JwtUtil;
@@ -35,6 +36,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -230,10 +232,18 @@ public class LoginController {
                 schema = @Schema(implementation = App.class))),
             @ApiResponse(responseCode = "400", description = "请求失败")
     })
+
     @SystemControllerLog(description = "设置当前组织")
     @GetMapping("/user/tenant")
     public Result<SSOTicket> setTenant(@RequestParam Integer tenantId) {
-        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(Integer.valueOf(loginUserContext.getLoginUserId()));
+        int userIdInt;
+        String userId = loginUserContext.getLoginUserId();
+        try {
+            userIdInt = Integer.parseInt(userId);
+        } catch (NumberFormatException e) {
+            return Result.failed(ExceptionEnum.CM342);
+        }
+        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(userIdInt);
 
         if (tenantId == null) {
             return Result.failed(ExceptionEnum.CM320);
