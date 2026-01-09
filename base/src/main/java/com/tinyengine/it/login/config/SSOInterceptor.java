@@ -75,28 +75,20 @@ public class SSOInterceptor implements HandlerInterceptor {
                 throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
             }
             List<Tenant> tenants= authUsersUnitsRolesMapper.queryAllTenantByUserId(Integer.valueOf(userId));
-            if(!requestURI.equals("/platform-center/api/user/me")){
 
-                if(requestURI.contains("user/tenant")){
-                    String queryString = request.getQueryString();
-                      org=queryString.split("=")[1];
-                }
-                if(tenants != null&&!org.equals("null")){
-                    boolean findOrg = false;
-                    for (Tenant tenant : tenants) {
-                        tenant.setIsInUse(tenant.getId().equals(org));
-                        if(tenant.getIsInUse()){
-                            findOrg = true;
-                        }
-                    }
-                    if(!findOrg){
-                        log.warn("X-Lowcode-Org not found in user's tenants - X-Lowcode-Org: {}", org);
-                        throw new ServiceException(ExceptionEnum.CM341.getResultCode(), ExceptionEnum.CM341.getResultMsg());
+            if(!"null".equals(org) && org != null){
+                boolean findOrg = false;
+                for (Tenant tenant : tenants) {
+                    tenant.setIsInUse(tenant.getId().equals(org));
+                    if(tenant.getIsInUse()){
+                        findOrg = true;
                     }
                 }
-
+                if(!findOrg){
+                    log.warn("X-Lowcode-Org not found in user's tenants - X-Lowcode-Org: {}", org);
+                    throw new ServiceException(ExceptionEnum.CM341.getResultCode(), ExceptionEnum.CM341.getResultMsg());
+                }
             }
-
             // 存储用户信息到LoginUserContext
             UserInfo userInfo = new UserInfo(userId, username, tenants);
 
