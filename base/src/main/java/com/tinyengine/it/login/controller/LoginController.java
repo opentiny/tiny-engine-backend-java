@@ -217,7 +217,79 @@ public class LoginController {
         return Result.success(new ValidationResult(false, null));
     }
 
+    /**
+     * 设置当前组织
+     *
+     * @param tenantId the tenantId
+     * @return result
+     */
+    @Operation(summary = "设置当前组织", description = "设置当前组织",
+        parameters = {
+            @Parameter(name = "tenantId", description = "组织id")
+        }, responses = {
+            @ApiResponse(responseCode = "200", description = "返回信息",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = App.class))),
+            @ApiResponse(responseCode = "400", description = "请求失败")
+    })
 
+    @SystemControllerLog(description = "设置当前组织")
+    @GetMapping("/user/tenant")
+    public Result<SSOTicket> setTenant(@RequestParam Integer tenantId) {
+        int userIdInt;
+        String userId = loginUserContext.getLoginUserId();
+        try {
+            userIdInt = Integer.parseInt(userId);
+        } catch (NumberFormatException e) {
+            return Result.failed(ExceptionEnum.CM342);
+        }
+        List<Tenant> tenants = authUsersUnitsRolesMapper.queryAllTenantByUserId(userIdInt);
+
+        if (tenantId == null) {
+            return Result.failed(ExceptionEnum.CM320);
+        }
+
+        if (tenants == null || tenants.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM337);
+        }
+        List<Tenant> tenantList = new ArrayList<>();
+        boolean found = false;
+        for (Tenant tenant : tenants) {
+            if (tenant.getId().equals(tenantId.toString())) {
+                tenant.setIsInUse(true);
+                found = true;
+            } else {
+                tenant.setIsInUse(false);
+            }
+
+            tenantList.add(tenant);
+        }
+
+        if (!found) {
+            return Result.failed(ExceptionEnum.CM341);
+        }
+        //存储当前组织到LoginUserContext
+        UserInfo currentUser = DefaultLoginUserContext.getCurrentUser();
+        currentUser.setTenants(tenantList);
+        DefaultLoginUserContext.setCurrentUser(currentUser);
+
+        // 通过 RequestContextHolder 获取请求
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+            .getRequest();
+        String authHeader = request.getHeader("Authorization");
+       String headerToken = jwtUtil.getTokenFromRequest(authHeader);
+        if (headerToken == null || headerToken.isEmpty()) {
+            return Result.failed(ExceptionEnum.CM336);
+        }
+
+        // 创建SSO票据
+        SSOTicket ticket = new SSOTicket();
+        ticket.setToken(headerToken);
+        ticket.setUsername(DefaultLoginUserContext.getCurrentUser().getUsername());
+        ticket.setExpireTime(System.currentTimeMillis() + 3600000);
+
+        return Result.success(ticket);
+    }
     private boolean authenticate(String salt, String password, String userPassword) throws Exception {
         return SM3PasswordUtil.verifyPassword(password, userPassword, salt);
     }
