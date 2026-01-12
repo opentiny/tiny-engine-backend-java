@@ -115,6 +115,9 @@ public class SSOInterceptor implements HandlerInterceptor {
 		} catch (Exception e) {
 			log.error("Token validation exception: {}", e.getMessage(), e);
 			DefaultLoginUserContext.clear();
+			if(e instanceof ServiceException) {
+				throw e;
+			}
 			throw new ServiceException(ExceptionEnum.CM339.getResultCode(), ExceptionEnum.CM339.getResultMsg());
 		}
 	}
