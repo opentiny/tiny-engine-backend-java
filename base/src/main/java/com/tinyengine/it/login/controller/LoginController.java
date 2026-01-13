@@ -15,15 +15,12 @@ package com.tinyengine.it.login.controller;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
-import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemControllerLog;
 import com.tinyengine.it.login.model.*;
 import com.tinyengine.it.login.utils.JwtUtil;
 import com.tinyengine.it.login.utils.SM3PasswordUtil;
-import com.tinyengine.it.login.config.context.DefaultLoginUserContext;
 import com.tinyengine.it.login.service.ConfigurablePasswordValidator;
 import com.tinyengine.it.login.service.LoginService;
-import com.tinyengine.it.login.service.TokenBlacklistService;
 import com.tinyengine.it.mapper.AuthUsersUnitsRolesMapper;
 import com.tinyengine.it.model.entity.App;
 import com.tinyengine.it.model.entity.Tenant;
@@ -34,9 +31,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,11 +41,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+
 
 import java.security.PrivateKey;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.tinyengine.it.login.utils.SM2EncryptionUtil.decrypt;
@@ -76,8 +69,6 @@ public class LoginController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private TokenBlacklistService tokenBlacklistService;
 
     @Autowired
     ConfigurablePasswordValidator configurablePasswordValidator;
@@ -217,7 +208,14 @@ public class LoginController {
         return Result.success(new ValidationResult(false, null));
     }
 
-
+    /**
+     * 认证
+     * @param salt
+     * @param password
+     * @param userPassword
+     * @return boolean
+     * @throws Exception
+     */
     private boolean authenticate(String salt, String password, String userPassword) throws Exception {
         return SM3PasswordUtil.verifyPassword(password, userPassword, salt);
     }
