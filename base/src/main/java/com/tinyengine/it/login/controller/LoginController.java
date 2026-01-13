@@ -209,12 +209,12 @@ public class LoginController {
     }
 
     /**
-     * 认证
-     * @param salt
-     * @param password
-     * @param userPassword
+     * verify password
+     * @param salt salt
+     * @param password password
+     * @param userPassword userPassword
      * @return boolean
-     * @throws Exception
+     * @throws Exception exception
      */
     private boolean authenticate(String salt, String password, String userPassword) throws Exception {
         return SM3PasswordUtil.verifyPassword(password, userPassword, salt);
