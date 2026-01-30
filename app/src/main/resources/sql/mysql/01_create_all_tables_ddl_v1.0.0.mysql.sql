@@ -581,7 +581,7 @@ create table `t_tenant`
     `id`                int          not null auto_increment comment '主键id',
     `org_code`          varchar(255) comment '组织唯一代码',
     `name_cn`           varchar(255) not null comment '组织中文名',
-    `name_en`           varchar(255) comment '组织英文名',
+    `name_en`           varchar(255)  comment '组织英文名',
     `description`       varchar(2000) comment '组织描述',
     `created_by`        varchar(60)  not null comment '创建人',
     `created_time`      timestamp    not null default current_timestamp comment '创建时间',

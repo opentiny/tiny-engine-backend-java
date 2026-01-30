@@ -15,6 +15,7 @@ package com.tinyengine.it.mapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.model.entity.App;
 
 import org.junit.jupiter.api.Disabled;
@@ -35,9 +36,12 @@ class AppMapperTest {
     @Autowired
     private AppMapper appMapper;
 
+    @Autowired
+    LoginUserContext loginUserContext;
     @Test
     void queryAllApp() {
-        List<App> result = appMapper.queryAllApp();
+        String tenantId = loginUserContext.getTenantId();
+        List<App> result = appMapper.queryAllApp(tenantId);
         assertNotNull(result);
         assertEquals(1, result.size());
         App app = result.get(0);

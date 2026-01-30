@@ -42,7 +42,7 @@ public class Tenant {
     @TableId(value = "id", type = IdType.AUTO)
     private String id;
 
-    @Schema(name = "nameCn", description = "组织唯一代码")
+    @Schema(name = "orgCode", description = "组织唯一代码")
     private String orgCode;
 
     @Schema(name = "nameCn", description = "组织中文名")
@@ -53,6 +53,10 @@ public class Tenant {
 
     @Schema(name = "description", description = "组织描述")
     private String description;
+
+    @TableField(exist = false)
+    @Schema(name = "isInUse", description = "是否当前所在组织")
+    private Boolean isInUse;
 
     @TableField(fill = FieldFill.INSERT)
     @Schema(name = "createdTime", description = "创建时间")

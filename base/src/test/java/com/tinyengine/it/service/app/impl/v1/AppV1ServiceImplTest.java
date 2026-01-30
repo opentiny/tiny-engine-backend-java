@@ -17,7 +17,9 @@ import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tinyengine.it.common.handler.MockUserContext;
 import com.tinyengine.it.common.utils.JsonUtils;
 import com.tinyengine.it.mapper.AppExtensionMapper;
 import com.tinyengine.it.mapper.AppMapper;
@@ -74,9 +76,6 @@ class AppV1ServiceImplTest {
     private I18nEntryMapper i18nEntryMapper;
 
     @Mock
-    private I18nEntryService i18nEntryService;
-
-    @Mock
     private AppExtensionMapper appExtensionMapper;
 
     @Mock
@@ -98,12 +97,17 @@ class AppV1ServiceImplTest {
     private PlatformService platformService;
     @Mock
     private ComponentLibraryMapper componentLibraryMapper;
+
+    @Mock
+    private I18nEntryService i18nEntryService;
     @InjectMocks
     private AppV1ServiceImpl appV1ServiceImpl;
 
     @BeforeEach
     void setUp() {
+
         MockitoAnnotations.openMocks(this);
+        ReflectUtil.setFieldValue(appV1ServiceImpl, "loginUserContext", new MockUserContext());
     }
 
     @Test
@@ -119,7 +123,7 @@ class AppV1ServiceImplTest {
         Map<String, Object> dataSourceGlobal = JsonUtils.MAPPER.readValue(json, Map.class);
         app.setDataSourceGlobal(dataSourceGlobal);
 
-        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+        when(appMapper.queryAppById(anyInt(), anyString())).thenReturn(app);
         Page page = new Page();
         page.setIsPage(true);
         page.setPageContent(new HashMap<>());
@@ -140,7 +144,9 @@ class AppV1ServiceImplTest {
 
         when(platformService.queryPlatformById(any())).thenReturn(platform);
         List<ComponentLibrary> componentLibraryList = new ArrayList<>();
+        SchemaI18n schemaI18n = new SchemaI18n();
         when(componentLibraryMapper.queryAllComponentLibrary()).thenReturn(componentLibraryList);
+        when(i18nEntryService.formatEntriesList(any())).thenReturn(schemaI18n);
         SchemaDto result = appV1ServiceImpl.appSchema(appId);
         Assertions.assertEquals("2", result.getMeta().getAppId());
     }
@@ -155,7 +161,7 @@ class AppV1ServiceImplTest {
     void testGetMetaDto() {
         App app = new App();
         app.setPlatformId(1);
-        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+        when(appMapper.queryAppById(anyInt(), anyString())).thenReturn(app);
         when(i18nEntryMapper.findI18nEntriesByHostandHostType(anyInt(), anyString())).thenReturn(
             Arrays.asList(new I18nEntryDto()));
         when(appExtensionMapper.queryAppExtensionByCondition(any(AppExtension.class))).thenReturn(

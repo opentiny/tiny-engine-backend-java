@@ -312,11 +312,31 @@ public enum ExceptionEnum implements IBaseError {
      * Cm 337 exception enum.
      */
     CM337("CM337", "组织不存在"),
+
     /**
      * Cm 338 exception enum.
      */
-    CM338("CM338", "用户不存在，请重新注册");
+    CM338("CM338", "用户不存在，请重新注册"),
 
+    /**
+     * Cm 339 exception enum.
+     */
+    CM339("CM339", "token检验失败，请重新登录"),
+
+    /**
+     * Cm 340 exception enum.
+     */
+    CM340("CM340", "请求资源不存在"),
+
+    /**
+     * Cm 341 exception enum.
+     */
+    CM341("CM341", "组织在当前用户组织列表中匹配不到"),
+
+    /**
+     * Cm 342 exception enum.
+     */
+    CM342("CM342", "数字格式异常");
     /**
      * 错误码
      */

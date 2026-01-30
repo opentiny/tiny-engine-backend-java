@@ -210,12 +210,12 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                 throw new ServiceException("500", e.getMessage());
             }
 
-            log.info("收到AI API响应，状态码: {}", response.statusCode());
+            log.info("Received AI API response, status code {}", response.statusCode());
 
             if (response.statusCode() != 200) {
                 String errorBody = new String(response.body().readAllBytes(), StandardCharsets.UTF_8);
 
-                log.info("错误响应内容: {}", errorBody);
+                log.info("errorBody: {}", errorBody);
 
                 JsonNode errorNode = JsonUtils.MAPPER.readTree(errorBody);
                 throw new ServiceException(String.valueOf(response.statusCode()), errorNode.get("error").get("message").asText());

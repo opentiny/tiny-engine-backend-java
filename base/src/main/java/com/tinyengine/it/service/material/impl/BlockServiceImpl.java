@@ -639,7 +639,7 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         if (appId != null && !appId.isEmpty()) {
             appIdTemp = Integer.parseInt(appId);
         }
-        App apps = appMapper.queryAppById(appIdTemp);
+        App apps = appMapper.queryAppById(appIdTemp, loginUserContext.getTenantId());
         if (groupIdTemp != 0) {
             if (!apps.getId().equals(appIdTemp)) {
                 return Result.failed(ExceptionEnum.CM206);

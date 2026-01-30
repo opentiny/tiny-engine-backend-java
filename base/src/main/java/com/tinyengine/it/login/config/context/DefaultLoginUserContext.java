@@ -16,6 +16,34 @@ public class DefaultLoginUserContext implements LoginUserContext {
     private static final ThreadLocal<UserInfo> CURRENT_USER = new ThreadLocal<>();
 
     private static final int DEFAULT_PLATFORM = 1;
+    private static final String DEFAULT_TENANT = "1";
+
+
+
+    /**
+     * 返回当前用户所在的业务租户id
+     *
+     * @return 租户Id
+     */
+    @Override
+    public String getTenantId() {
+        UserInfo userInfo = CURRENT_USER.get();
+        List<Tenant> tenantList = userInfo != null ? userInfo.getTenants() : null;
+        if (tenantList == null || tenantList.isEmpty()) {
+            return DEFAULT_TENANT;
+        }
+        for (Tenant tenant : tenantList) {
+            if(tenant.getIsInUse()!=null){
+                if (tenant.getIsInUse()) {
+                    return tenant.getId();
+                }
+            }else{
+                return tenantList.get(0).getId();
+            }
+
+        }
+        return DEFAULT_TENANT;
+    }
 
     @Override
     public List<Tenant> getTenants() {
@@ -46,6 +74,7 @@ public class DefaultLoginUserContext implements LoginUserContext {
         userInfo.setTenants(tenants);
         CURRENT_USER.set(userInfo);
     }
+
 
     /**
      * 设置当前用户信息

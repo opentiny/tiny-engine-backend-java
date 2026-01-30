@@ -14,6 +14,7 @@ package com.tinyengine.it.service.app.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.log.SystemServiceLog;
@@ -74,6 +75,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Autowired
     private AppV1ServiceImpl appV1ServiceImpl;
 
+    @Autowired
+    private LoginUserContext loginUserContext;
+
     /**
      * 查询表t_app所有数据
      *
@@ -81,7 +85,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
      */
     @Override
     public List<App> queryAllApp() {
-        return baseMapper.queryAllApp();
+        return baseMapper.queryAllApp(loginUserContext.getTenantId());
     }
 
     /**
@@ -104,9 +108,11 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
             pageSize = 1000;  // 限制最大页大小
         }
         int offset = (currentPage - 1) * pageSize;
+        String tenantId = loginUserContext.getTenantId();
         List<App> apps = this.baseMapper.queryAllAppByPage(pageSize, offset, app.getName(),
-            app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy());
-        Integer total = this.baseMapper.queryAppTotal();
+            app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy(),
+            tenantId);
+        Integer total = this.baseMapper.queryAppTotal(tenantId);
         AppDto appDto = new AppDto();
         appDto.setApps(apps);
         appDto.setTotal(total);
@@ -122,7 +128,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Override
     @SystemServiceLog(description = "通过id查询应用实现方法")
     public Result<App> queryAppById(Integer id) {
-        App app = baseMapper.queryAppById(id);
+        App app = baseMapper.queryAppById(id, loginUserContext.getTenantId());
         if (app == null) {
             return Result.failed(ExceptionEnum.CM009);
         }
@@ -149,8 +155,8 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Override
     @SystemServiceLog(description = "应用删除实现方法")
     public Result<App> deleteAppById(Integer id) {
-        App app = baseMapper.queryAppById(id);
-        int result = baseMapper.deleteAppById(id);
+        App app = baseMapper.queryAppById(id, loginUserContext.getTenantId());
+        int result = baseMapper.deleteAppById(id, loginUserContext.getTenantId());
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM009);
         }
@@ -168,7 +174,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     public Result<App> updateAppById(App app) {
         // 如果更新extend_config字段，从platform获取数据，继承非route部分
         if (app.getExtendConfig() != null && !app.getExtendConfig().isEmpty()) {
-            App appResult = baseMapper.queryAppById(app.getId());
+            App appResult = baseMapper.queryAppById(app.getId(), loginUserContext.getTenantId());
             Platform platform = platformService.queryPlatformById(appResult.getPlatformId());
             Map<String, Object> appExtendConfig = platform.getAppExtendConfig();
             appExtendConfig.remove("route");
@@ -178,7 +184,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);
         }
-        App selectedApp = baseMapper.queryAppById(app.getId());
+        App selectedApp = baseMapper.queryAppById(app.getId(), loginUserContext.getTenantId());
         return Result.success(selectedApp);
     }
 
@@ -191,14 +197,16 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Override
     @SystemServiceLog(description = "应用创建实现方法")
     public Result<App> createApp(App app) {
-        if (app.getTenantId() == null || app.getTenantId().isEmpty()) {
-            return Result.failed(ExceptionEnum.CM002);
+        if (loginUserContext.getTenantId() == null ) {
+            return Result.failed(ExceptionEnum.CM337);
         }
+        app.setTenantId(loginUserContext.getTenantId());
         List<App> appResult = baseMapper.queryAppByCondition(app);
         if (!appResult.isEmpty()) {
             return Result.failed(ExceptionEnum.CM003);
         }
         app.setIsPublish(false);
+        app.setPlatformHistoryId("1");
         int result = baseMapper.createApp(app);
         if (result < 1) {
             return Result.failed(ExceptionEnum.CM001);

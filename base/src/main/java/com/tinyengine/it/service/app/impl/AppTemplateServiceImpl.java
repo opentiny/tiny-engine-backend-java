@@ -15,6 +15,7 @@ package com.tinyengine.it.service.app.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.mapper.AppExtensionMapper;
@@ -91,6 +92,9 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private LoginUserContext loginUserContext;
+
     /**
      * 分页查询应用模版所有信息
      * @param currentPage the currentPage
@@ -113,8 +117,9 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
         int offset = (currentPage - 1) * pageSize;
 
         List<App> apps = this.baseMapper.queryAllAppTemplate(pageSize, offset, app.getName(),
-            app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy());
-        Integer total = this.baseMapper.queryAppTemplateTotal();
+            app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy(),
+            loginUserContext.getTenantId());
+        Integer total = this.baseMapper.queryAppTemplateTotal(loginUserContext.getTenantId());
         AppDto appDto = new AppDto();
         appDto.setApps(apps);
         appDto.setTotal(total);
@@ -129,7 +134,7 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
      */
     @Override
     public Result<App> queryAppTemplateById(Integer id) {
-        App app = baseMapper.queryAppTemplateById(id);
+        App app = baseMapper.queryAppTemplateById(id, loginUserContext.getTenantId());
         if (app == null) {
             return Result.failed(ExceptionEnum.CM009);
         }
@@ -157,7 +162,7 @@ public class AppTemplateServiceImpl extends ServiceImpl<AppMapper, App> implemen
             throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultMsg());
         }
         copyData(templateId, app.getId());
-        return appMapper.queryAppById(app.getId());
+        return appMapper.queryAppById(app.getId(), loginUserContext.getTenantId());
     }
 
     private void copyData(int templateId, int appId) {

@@ -177,7 +177,7 @@ public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements Pa
     public Page queryPageById(Integer id) {
         Page pageInfo = baseMapper.queryPageById(id);
         // 获取schemaMeta进行获取materialHistory中的framework进行判断
-        String framework = appMapper.queryAppById(pageInfo.getApp()).getFramework();
+        String framework = appMapper.queryAppById(pageInfo.getApp(), loginUserContext.getTenantId()).getFramework();
         if (framework.isEmpty()) {
             throw new ServiceException(ExceptionEnum.CM312.getResultCode(), ExceptionEnum.CM312.getResultMsg());
         }
@@ -495,18 +495,16 @@ public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements Pa
      * @return the app home page id
      */
     public int getAppHomePageId(int appId) {
-        App appInfo = appMapper.queryAppById(appId);
+        log.info("Getting home page ID for appId: {}, TenantId: {}", appId, loginUserContext.getTenantId());
+        App appInfo = appMapper.queryAppById(appId, loginUserContext.getTenantId());
         // appHomePageId 存在为null的情况，即app没有设置首页
-        Integer homePage = appInfo.getHomePage();
-
-        // 将 homePage 转换为整数，如果为空则默认为 0
-        int id;
-        if (homePage == null) {
-            id = 0;
-            return id;
+        if (appInfo == null) {
+            throw new ServiceException(ExceptionEnum.CM340.getResultCode(), "App not found for ID: " + appId+",TenantId:"+loginUserContext.getTenantId());
         }
-        id = homePage;
-        return id;
+        // 将 homePage 转换为整数，如果为空则默认为 0
+        Integer homePage = appInfo.getHomePage();
+        log.info("Retrieved home page ID: {} for appId: {}", homePage, appId);
+        return homePage != null ? homePage : 0;
     }
 
     /**

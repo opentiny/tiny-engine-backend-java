@@ -80,6 +80,7 @@ class BlockServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         when(loginUserContext.getLoginUserId()).thenReturn("1");
+        when(loginUserContext.getTenantId()).thenReturn("1");
         ReflectUtil.setFieldValue(blockServiceImpl, "baseMapper", blockMapper);
     }
 
@@ -290,7 +291,7 @@ class BlockServiceImplTest {
 
         App app = new App();
         app.setId(1);
-        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+        when(appMapper.queryAppById(anyInt(), anyString())).thenReturn(app);
 
         Result<List<Block>> result = blockServiceImpl.listNew("1", "1");
         Assertions.assertEquals(blocksList, result.getData());
@@ -307,7 +308,7 @@ class BlockServiceImplTest {
 
         App app = new App();
         app.setId(1);
-        when(appMapper.queryAppById(anyInt())).thenReturn(app);
+        when(appMapper.queryAppById(anyInt(), anyString())).thenReturn(app);
 
         HashMap<String, String> param = new HashMap<>();
 

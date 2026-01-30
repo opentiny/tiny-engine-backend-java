@@ -430,7 +430,7 @@
         SELECT
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
-        WHERE A.is_template IS NOT TRUE
+        WHERE A.is_template IS NOT TRUE AND A.tenant_id = #{tenantId}
         ORDER BY A.created_time DESC
     </select>
 
@@ -454,6 +454,9 @@
             </if>
             <if test="createdBy != null">
                 AND A.created_by = #{createdBy}
+            </if>
+            <if test="tenantId != null">
+                AND A.tenant_id = #{tenantId}
             </if>
         </where>
         ORDER BY
@@ -488,6 +491,9 @@
             <if test="createdBy != null">
                 AND A.created_by = #{createdBy}
             </if>
+            <if test="tenantId != null">
+                AND A.tenant_id = #{tenantId}
+            </if>
         </where>
         ORDER BY
         <choose>
@@ -505,7 +511,7 @@
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
         <where>
-            A.id = #{id}
+            A.id = #{id} AND A.tenant_id = #{tenantId}
         </where>
     </select>
 
@@ -515,7 +521,8 @@
         <include refid="Common_Column_List"/>
         <include refid="Common_Join"/>
         <where>
-            A.id = #{id} AND A.is_template = true
+        A.tenant_id = #{tenantId} AND
+        A.id = #{id} AND A.is_template = true
         </where>
     </select>
 
@@ -532,7 +539,7 @@
     <delete id="deleteAppById">
         DELETE
         FROM t_app
-        WHERE id = #{id}
+        WHERE id = #{id} AND tenant_id = #{tenantId}
     </delete>
 
     <!-- 根据主键id更新表t_app数据 -->
@@ -542,7 +549,7 @@
             <include refid="AppSetColumns"/>
         </set>
         WHERE
-        id=#{id}
+        id = #{id} AND tenant_id = #{tenantId}
     </update>
 
     <!-- 新增表t_app数据 -->

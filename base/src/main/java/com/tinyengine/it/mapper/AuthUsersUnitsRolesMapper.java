@@ -1,5 +1,6 @@
 package com.tinyengine.it.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tinyengine.it.model.entity.AuthUsersUnitsRoles;
 import com.tinyengine.it.model.entity.Tenant;
 import org.apache.ibatis.annotations.Param;
@@ -7,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-public interface AuthUsersUnitsRolesMapper {
+public interface AuthUsersUnitsRolesMapper extends BaseMapper<AuthUsersUnitsRoles> {
     /**
      * 查询表r_auth_users_units_roles所有信息
      *

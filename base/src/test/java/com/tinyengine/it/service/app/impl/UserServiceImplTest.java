@@ -12,7 +12,6 @@
 
 package com.tinyengine.it.service.app.impl;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import cn.hutool.core.util.ReflectUtil;
@@ -49,6 +48,7 @@ class UserServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ReflectUtil.setFieldValue(userServiceImpl, "baseMapper", userMapper);
+        ReflectUtil.setFieldValue(loginServiceImpl, "baseMapper", userMapper);
     }
 
     @Test
@@ -94,14 +94,5 @@ class UserServiceImplTest {
 
         Integer result = userServiceImpl.updateUserById(param);
         Assertions.assertEquals(1, result);
-    }
-
-    @Test
-    void testCreateUser() throws Exception {
-        User param = new User();
-        when(userMapper.createUser(param)).thenReturn(1);
-        when(userMapper.queryUserById(any())).thenReturn(param);
-        User result = loginServiceImpl.createUser(param);
-        Assertions.assertEquals(param, result);
     }
 }

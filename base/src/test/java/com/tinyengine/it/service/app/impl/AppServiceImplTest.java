@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.tinyengine.it.common.base.Result;
+import com.tinyengine.it.common.handler.MockUserContext;
 import com.tinyengine.it.mapper.AppMapper;
 import com.tinyengine.it.mapper.I18nEntryMapper;
 import com.tinyengine.it.model.dto.I18nEntryDto;
@@ -68,12 +69,13 @@ class AppServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ReflectUtil.setFieldValue(appServiceImpl, "baseMapper", appMapper);
+        ReflectUtil.setFieldValue(appServiceImpl, "loginUserContext", new MockUserContext());
     }
 
     @Test
     void testQueryAllApp() {
         List<App> mockData = Arrays.<App>asList(new App());
-        when(appMapper.queryAllApp()).thenReturn(mockData);
+        when(appMapper.queryAllApp("1")).thenReturn(mockData);
 
         List<App> result = appServiceImpl.queryAllApp();
         Assertions.assertEquals(mockData, result);
@@ -82,7 +84,7 @@ class AppServiceImplTest {
     @Test
     void testQueryAppById() {
         App app = new App();
-        when(appMapper.queryAppById(1)).thenReturn(app);
+        when(appMapper.queryAppById(1, "1")).thenReturn(app);
 
         Result<App> result = appServiceImpl.queryAppById(1);
         Assertions.assertEquals(app, result.getData());
@@ -100,8 +102,8 @@ class AppServiceImplTest {
     @Test
     void testDeleteAppById() {
         App app = new App();
-        when(appMapper.queryAppById(1)).thenReturn(app);
-        when(appMapper.deleteAppById(1)).thenReturn(2);
+        when(appMapper.queryAppById(1, "1")).thenReturn(app);
+        when(appMapper.deleteAppById(1, "1")).thenReturn(2);
 
         Result<App> result = appServiceImpl.deleteAppById(1);
         Assertions.assertEquals(app, result.getData());
@@ -115,7 +117,7 @@ class AppServiceImplTest {
 
         resultApp.setExtendConfig(mockConfig);
         int appId = 1;
-        when(appMapper.queryAppById(appId)).thenReturn(resultApp);
+        when(appMapper.queryAppById(appId, "1")).thenReturn(resultApp);
         App param = new App();
         param.setId(appId);
 
@@ -134,6 +136,7 @@ class AppServiceImplTest {
     void testCreateApp() {
         List<App> appResult = new ArrayList<>();
         App param = new App();
+        param.setTenantId("1");
         when(appMapper.queryAppByCondition(param)).thenReturn(appResult);
         when(appMapper.createApp(param)).thenReturn(1);
 

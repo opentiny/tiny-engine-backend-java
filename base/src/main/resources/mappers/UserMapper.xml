@@ -7,12 +7,15 @@
     <!-- 通用查询列 -->
     <sql id="Base_Column_List">
         id
-        , username, password, email, salt, public_key, private_key, enable, created_time, last_updated_time,
+        , username, password, email, salt, public_key, private_key,enable, created_time, last_updated_time,
         is_admin, is_public
     </sql>
 
     <!-- 通用条件列 -->
     <sql id="UserByCondition">
+        <if test="id!=null and id!=''">
+            AND id = #{id}
+        </if>
         <if test="username!=null and username!=''">
             AND username = #{username}
         </if>
@@ -77,6 +80,7 @@
         <if test="isPublic!=null">
             is_public = #{isPublic},
         </if>
+
     </sql>
 
 
@@ -93,6 +97,7 @@
         <result column="last_updated_time" property="lastUpdatedTime"/>
         <result column="is_admin" property="isAdmin"/>
         <result column="is_public" property="isPublic"/>
+
     </resultMap>
 
     <!-- 查询表t_user所有数据 -->

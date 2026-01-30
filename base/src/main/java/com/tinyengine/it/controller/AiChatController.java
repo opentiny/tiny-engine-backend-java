@@ -78,7 +78,7 @@ public class AiChatController {
     @SystemControllerLog(description = "AI chat")
     @PostMapping("/ai/chat")
     public ResponseEntity<?> aiChat(@RequestBody ChatRequest request,
-        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
+        @RequestHeader(value = "Authorization", required = true) String authorization) throws Exception {
 
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
@@ -117,7 +117,7 @@ public class AiChatController {
     @SystemControllerLog(description = "AI completions")
     @PostMapping("/chat/completions")
     public ResponseEntity<?> completions(@RequestBody ChatRequest request,
-        @RequestHeader(value = "Authorization", required = false) String authorization) throws Exception {
+        @RequestHeader(value = "Authorization", required = true) String authorization) throws Exception {
         if (authorization != null && authorization.startsWith("Bearer ")) {
             String token = authorization.replace("Bearer ", "");
             request.setApiKey(token);
@@ -153,7 +153,7 @@ public class AiChatController {
     @PostMapping("/encrypt-key")
     public Result<AiToken> getToken(@RequestBody ChatRequest request) throws Exception {
         String apiKey = request.getApiKey();
-        if(apiKey == null || apiKey.isEmpty()) {
+        if (apiKey == null || apiKey.isEmpty()) {
             return Result.failed(ExceptionEnum.CM320);
         }
         String token = aiChatV1Service.getToken(apiKey);

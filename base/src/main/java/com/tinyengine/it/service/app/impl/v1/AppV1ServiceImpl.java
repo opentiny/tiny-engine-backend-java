@@ -16,6 +16,8 @@ import static com.tinyengine.it.common.utils.JsonUtils.convertValue;
 import static com.tinyengine.it.common.utils.Utils.findMaxVersion;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.common.utils.Schema;
@@ -141,6 +143,9 @@ public class AppV1ServiceImpl implements AppV1Service {
 
     @Autowired
     private ComponentLibraryMapper componentLibraryMapper;
+
+    @Autowired
+    private LoginUserContext loginUserContext;
 
     /**
      * 获取应用schema
@@ -275,8 +280,12 @@ public class AppV1ServiceImpl implements AppV1Service {
      * @return the meta
      */
     public MetaDto getMetaDto(Integer id) {
-        App app = appMapper.queryAppById(id);
-
+        String tenantId = loginUserContext.getTenantId();
+        log.info("Getting login user tenant id: {}", tenantId);
+        App app = appMapper.queryAppById(id, tenantId);
+        if (app == null) {
+            throw new ServiceException(ExceptionEnum.CM009.getResultCode(), ExceptionEnum.CM009.getResultMsg());
+        }
         Platform platform = platformService.queryPlatformById(app.getPlatformId());
 
         // 当前版本暂无设计器数据
