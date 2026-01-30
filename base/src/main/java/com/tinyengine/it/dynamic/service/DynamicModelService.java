@@ -3,6 +3,8 @@ package com.tinyengine.it.dynamic.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.tinyengine.it.common.context.LoginUserContext;
+import com.tinyengine.it.common.exception.ExceptionEnum;
+import com.tinyengine.it.common.exception.ServiceException;
 import com.tinyengine.it.dynamic.dto.DynamicDelete;
 import com.tinyengine.it.dynamic.dto.DynamicInsert;
 import com.tinyengine.it.dynamic.dto.DynamicQuery;
@@ -53,6 +55,8 @@ public class DynamicModelService {
 
 		} catch (Exception e) {
 			log.error("createDynamicTable failed: {}", tableName, e);
+			throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
+
 		}
 	}
     private String generateDropTableSQL(String tableName) {
@@ -81,6 +85,8 @@ public class DynamicModelService {
 			log.info("Successfully dropped table: {}", tableName);
 		} catch (Exception e) {
 			log.error("Failed to drop table: {}", tableName, e);
+			throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
+
 		}
 	}
 	/**
