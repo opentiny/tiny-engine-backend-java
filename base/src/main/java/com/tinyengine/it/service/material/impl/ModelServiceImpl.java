@@ -152,8 +152,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         try {
             dynamicModelService.dropDynamicTable(model);
         } catch (Exception e) {
-            log.error("刪除动态表失败", e);
-            throw new RuntimeException("刪除动态表失败: " + e.getMessage());
+            log.error("deleteModelById", e);
+            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
+
         }
         return model;
     }
@@ -188,8 +189,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         try {
             dynamicModelService.modifyTableStructure(model);
         } catch (Exception e) {
-            log.error("修改动态表失败", e);
-            throw new RuntimeException("修改动态表失败: " + e.getMessage());
+            log.error("updateModelById", e);
+            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
         }
         Model modelResult = this.baseMapper.selectById(model.getId());
         return modelResult;

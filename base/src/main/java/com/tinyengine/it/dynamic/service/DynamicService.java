@@ -224,7 +224,7 @@ public class DynamicService {
 		}
 	}
 	private String getTableName(String modelId) {
-		return "dynamic_" + modelId.toLowerCase();
+		return "dynamic_" + modelId.toLowerCase(Locale.ROOT);
 	}
 
 
