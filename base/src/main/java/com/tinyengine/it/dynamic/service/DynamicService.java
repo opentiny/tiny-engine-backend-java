@@ -117,7 +117,7 @@ public class DynamicService {
 
 		String userId = loginUserContext.getLoginUserId();
 		if( userId == null || userId.trim().isEmpty()) {
-			List<Model> modelList = modelService.getModelByName(dto.getNameEn());
+			List<Model> modelList = modelService.getModelByEnName(dto.getNameEn());
 			if( modelList.isEmpty()) {
 				throw new IllegalArgumentException("模型不存在: " + dto.getNameEn());
 			}else {
