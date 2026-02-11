@@ -80,7 +80,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     @SystemServiceLog(description = "根据名称查询model实现方法")
     public List<Model> getModelByEnName(String nameEn) {
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("name_en", nameEn);
+        queryWrapper.eq("name_en", nameEn);
         return this.baseMapper.selectList(queryWrapper);    }
 
     /**
