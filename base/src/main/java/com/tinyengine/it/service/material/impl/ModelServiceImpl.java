@@ -142,7 +142,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), Enums.methodName.QUERYAPI.getValue(), model));
         methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), Enums.methodName.DELETEAPI.getValue(), model));
         model.setMethod(methodDtos);
-
+        model.setTenantId(loginUserContext.getTenantId());
         int result = this.baseMapper.createModel(model);
         if (result != 1) {
             throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
