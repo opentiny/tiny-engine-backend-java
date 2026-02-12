@@ -15,6 +15,7 @@ package com.tinyengine.it.service.material.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
@@ -44,6 +45,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
 
     @Autowired
     private DynamicModelService dynamicModelService;
+
+    @Autowired
+    private LoginUserContext loginUserContext;
     /**
      * 查询表t_model信息
      *
@@ -107,7 +111,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
                 queryWrapper.like("name_en", nameEn);
             }
         }
-
+        queryWrapper.eq("created_by", loginUserContext.getLoginUserId());
+        queryWrapper.eq("tenant_id", loginUserContext.getTenantId());
         page(page, queryWrapper);
         return page;
     }
@@ -137,6 +142,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), Enums.methodName.QUERYAPI.getValue(), model));
         methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), Enums.methodName.DELETEAPI.getValue(), model));
         model.setMethod(methodDtos);
+
         int result = this.baseMapper.createModel(model);
         if (result != 1) {
             throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
