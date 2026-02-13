@@ -399,7 +399,7 @@ public class DynamicModelService {
 			return "VARCHAR(255)"; // 默认处理
 		}
 		switch (javaType) {
-			case "String":
+			case "String", "ModelRef":
 				return "VARCHAR";
 			case "Number":
 				return "INT";
@@ -447,6 +447,9 @@ public class DynamicModelService {
 				break;
 			case "Enum":
 				sb.append("ENUM").append("(").append(getEnumOptions(field.getOptions())).append(")");
+				break;
+			case "ModelRef":
+				sb.append("VARCHAR(255)"); // 存储JSON字符串，长度可根据实际需求调整
 				break;
 			default:
 				sb.append("TEXT");
