@@ -44,6 +44,10 @@ public class DynamicModelService {
 	 */
 	@Transactional
 	public void createDynamicTable(Model modelMetadata)  {
+		if(modelMetadata.getParameters()==null || modelMetadata.getParameters().isEmpty()){
+			throw new ServiceException(ExceptionEnum.CM001.getResultCode(), "Model parameters cannot be null or empty");
+
+		}
 		String tableName = getTableName(modelMetadata.getNameEn());
 		String sql = generateCreateTableSQL(tableName, modelMetadata);
 
@@ -314,7 +318,9 @@ public class DynamicModelService {
 	public void modifyTableStructure(Model model) {
 		String tableName = getTableName(model.getNameEn());
 		List<ParametersDto> parameters = model.getParameters();
-
+		if(parameters == null || parameters.isEmpty()){
+			throw new IllegalArgumentException("Model parameters cannot be null or empty");
+		}
 
 		// Fetch existing table structure
 		String fetchColumnsSql = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ?";
@@ -393,7 +399,7 @@ public class DynamicModelService {
 			return "VARCHAR(255)"; // 默认处理
 		}
 		switch (javaType) {
-			case "String":
+			case "String", "ModelRef":
 				return "VARCHAR";
 			case "Number":
 				return "INT";
@@ -442,6 +448,9 @@ public class DynamicModelService {
 			case "Enum":
 				sb.append("ENUM").append("(").append(getEnumOptions(field.getOptions())).append(")");
 				break;
+			case "ModelRef":
+				sb.append("VARCHAR(255)"); // 存储JSON字符串，长度可根据实际需求调整
+				break;
 			default:
 				sb.append("TEXT");
 		}
@@ -462,9 +471,17 @@ public class DynamicModelService {
 
 	private String getEnumOptions(String optionStr) {
 		List<String> options= new ArrayList<>();
-		JSONArray jsonlist = JSON.parseArray(optionStr);
-		for (int i = 0; i < jsonlist.size(); i++) {
-			String value = jsonlist.getJSONObject(i).getString("value");
+		if(optionStr == null || optionStr.trim().isEmpty()){
+			throw new IllegalArgumentException("Enum options cannot be null or empty");
+		}
+		JSONArray jsonList;
+		try {
+			 jsonList = JSON.parseArray(optionStr);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Invalid enum options format, expected JSON array string", e);
+		}
+		for (int i = 0; i < jsonList.size(); i++) {
+			String value = jsonList.getJSONObject(i).getString("value");
 			options.add(value);
 		}
 

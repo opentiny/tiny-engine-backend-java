@@ -58,8 +58,8 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         userParam.setUsername(user.getUsername());
         List<User> users = baseMapper.queryUserByCondition(userParam);
         if (!users.isEmpty()) {
-            throw new ServiceException(ExceptionEnum.CM003.getResultCode(),
-                ExceptionEnum.CM003.getResultMsg());
+            throw new ServiceException(ExceptionEnum.CM343.getResultCode(),
+                ExceptionEnum.CM343.getResultMsg());
         }
         KeyPair keyPair = generateSM2KeyPair();
         PublicKey publicKey = keyPair.getPublic();
@@ -98,14 +98,19 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         userParam.setUsername(user.getUsername());
         List<User> users = baseMapper.queryUserByCondition(userParam);
         if (users.isEmpty()) {
-            return Result.failed(ExceptionEnum.CM002);
+            return Result.failed(ExceptionEnum.CM345);
         }
         User userResult = users.get(0);
-        PublicKey publicKey = getPublicKeyFromBase64(user.getPublicKey());
+        PublicKey publicKey;
+        try {
+            publicKey = getPublicKeyFromBase64(user.getPublicKey());
+        } catch (Exception e) {
+            return Result.failed(ExceptionEnum.CM344);
+        }
         PrivateKey privateKey = getPrivateKeyFromBase64(userResult.getPrivateKey());
         // 验证publickey
         if (!validatorPublicKey(userResult.getSalt(), publicKey, privateKey)) {
-            return Result.failed(ExceptionEnum.CM335);
+            return Result.failed(ExceptionEnum.CM344);
         }
         String cipherText = encrypt(user.getSalt(), publicKey);
         user.setSalt(cipherText);

@@ -336,7 +336,23 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 342 exception enum.
      */
-    CM342("CM342", "数字格式异常");
+    CM342("CM342", "数字格式异常"),
+
+
+    /**
+     * Cm 343 exception enum.
+     */
+    CM343("CM343", "该用户名已被注册，请尝试其他名称"),
+
+    /**
+     * Cm 344 exception enum.
+     */
+    CM344("CM344", "账户恢复代码无效"),
+
+    /**
+     * Cm 345 exception enum.
+     */
+    CM345("CM345", "用户名不存在,请重新输入"),;
     /**
      * 错误码
      */

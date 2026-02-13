@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.dynamic.dao.ModelDataDao;
 import com.tinyengine.it.dynamic.dto.*;
+import com.tinyengine.it.model.entity.Model;
 import com.tinyengine.it.service.material.ModelService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +113,18 @@ public class DynamicService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("tableName", tableName);
 		params.put("data", dto.getParams());
+
+
 		String userId = loginUserContext.getLoginUserId();
+		if( userId == null || userId.trim().isEmpty()) {
+			List<Model> modelList = modelService.getModelByEnName(dto.getNameEn());
+			if( modelList.isEmpty()) {
+				throw new IllegalArgumentException("模型不存在: " + dto.getNameEn());
+			}else {
+				userId=modelList.get(0).getCreatedBy();
+			}
+		}
+
 		// 添加系统字段
 		dto.getParams().put("created_by", userId);
 		dto.getParams().put("updated_by", userId);

@@ -15,6 +15,7 @@ package com.tinyengine.it.service.material.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.enums.Enums;
 import com.tinyengine.it.common.exception.ExceptionEnum;
 import com.tinyengine.it.common.exception.ServiceException;
@@ -44,6 +45,9 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
 
     @Autowired
     private DynamicModelService dynamicModelService;
+
+    @Autowired
+    private LoginUserContext loginUserContext;
     /**
      * 查询表t_model信息
      *
@@ -71,6 +75,19 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     }
 
     /**
+     * 根据name查询表t_model信息
+     *
+     * @param nameEn
+     * @return the model list
+     */
+    @Override
+    @SystemServiceLog(description = "根据名称查询model实现方法")
+    public List<Model> getModelByEnName(String nameEn) {
+        QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name_en", nameEn);
+        return this.baseMapper.selectList(queryWrapper);    }
+
+    /**
      * 分页查询表t_model信息
      *
      * @return the list
@@ -94,7 +111,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
                 queryWrapper.like("name_en", nameEn);
             }
         }
-
+        queryWrapper.eq("created_by", loginUserContext.getLoginUserId());
+        queryWrapper.eq("tenant_id", loginUserContext.getTenantId());
         page(page, queryWrapper);
         return page;
     }
@@ -112,9 +130,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     public Model createModel(Model model) {
         // 验证模型唯一性
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name_cn", model.getNameCn())
-            .or()
-            .eq("name_en", model.getNameEn());
+        queryWrapper.eq("name_en", model.getNameEn());
         if (this.baseMapper.selectCount(queryWrapper) > 0) {
             throw new ServiceException(ExceptionEnum.CM003.getResultCode(), "Model with the same name already exists");
         }
@@ -124,6 +140,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), Enums.methodName.QUERYAPI.getValue(), model));
         methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), Enums.methodName.DELETEAPI.getValue(), model));
         model.setMethod(methodDtos);
+        model.setTenantId(loginUserContext.getTenantId());
         int result = this.baseMapper.createModel(model);
         if (result != 1) {
             throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
