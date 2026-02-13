@@ -318,7 +318,9 @@ public class DynamicModelService {
 	public void modifyTableStructure(Model model) {
 		String tableName = getTableName(model.getNameEn());
 		List<ParametersDto> parameters = model.getParameters();
-
+		if(parameters == null || parameters.isEmpty()){
+			throw new IllegalArgumentException("Model parameters cannot be null or empty");
+		}
 
 		// Fetch existing table structure
 		String fetchColumnsSql = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ?";
