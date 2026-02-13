@@ -44,6 +44,10 @@ public class DynamicModelService {
 	 */
 	@Transactional
 	public void createDynamicTable(Model modelMetadata)  {
+		if(modelMetadata.getParameters()==null || modelMetadata.getParameters().isEmpty()){
+			throw new ServiceException(ExceptionEnum.CM001.getResultCode(), "Model parameters cannot be null or empty");
+
+		}
 		String tableName = getTableName(modelMetadata.getNameEn());
 		String sql = generateCreateTableSQL(tableName, modelMetadata);
 
