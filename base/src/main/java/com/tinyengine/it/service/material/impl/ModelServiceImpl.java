@@ -130,9 +130,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     public Model createModel(Model model) {
         // 验证模型唯一性
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name_cn", model.getNameCn())
-            .or()
-            .eq("name_en", model.getNameEn());
+        queryWrapper.eq("name_en", model.getNameEn());
         if (this.baseMapper.selectCount(queryWrapper) > 0) {
             throw new ServiceException(ExceptionEnum.CM003.getResultCode(), "Model with the same name already exists");
         }
