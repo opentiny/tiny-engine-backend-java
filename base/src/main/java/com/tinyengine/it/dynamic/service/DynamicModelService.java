@@ -462,9 +462,17 @@ public class DynamicModelService {
 
 	private String getEnumOptions(String optionStr) {
 		List<String> options= new ArrayList<>();
-		JSONArray jsonlist = JSON.parseArray(optionStr);
-		for (int i = 0; i < jsonlist.size(); i++) {
-			String value = jsonlist.getJSONObject(i).getString("value");
+		if(optionStr == null || optionStr.trim().isEmpty()){
+			throw new IllegalArgumentException("Enum options cannot be null or empty");
+		}
+		JSONArray jsonList;
+		try {
+			 jsonList = JSON.parseArray(optionStr);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Invalid enum options format, expected JSON array string", e);
+		}
+		for (int i = 0; i < jsonList.size(); i++) {
+			String value = jsonList.getJSONObject(i).getString("value");
 			options.add(value);
 		}
 
