@@ -12,6 +12,7 @@
 
 package com.tinyengine.it.service.app.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.context.LoginUserContext;
@@ -112,10 +113,14 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         List<App> apps = this.baseMapper.queryAllAppByPage(pageSize, offset, app.getName(),
             app.getIndustryId(), app.getSceneId(), app.getFramework(), orderBy, app.getCreatedBy(),
             tenantId);
-        Integer total = this.baseMapper.queryAppTotal(tenantId);
+        // Query total count directly
+        Long totalCount = this.baseMapper.queryAppCount(app.getName(), app.getIndustryId(),
+            app.getSceneId(), app.getFramework(), app.getCreatedBy(), tenantId);
+
+       // Integer total = this.baseMapper.queryAppTotal(tenantId);
         AppDto appDto = new AppDto();
         appDto.setApps(apps);
-        appDto.setTotal(total);
+        appDto.setTotal(Math.toIntExact(totalCount));
         return appDto;
     }
 

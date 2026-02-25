@@ -49,6 +49,18 @@ public interface AppMapper extends BaseMapper<App> {
         Integer sceneId, String framework, String orderBy, String createdBy, String tenantId);
 
     /**
+     * 根据条件查询表t_app数据总数
+     * @param name
+     * @param industryId
+     * @param sceneId
+     * @param framework
+     * @param createdBy
+     * @param tenantId
+     * @return
+     */
+    Long queryAppCount(String name, Integer industryId, Integer sceneId, String framework, String createdBy, String tenantId);
+
+    /**
      * 查询表t_app 应用总数
      *
      * @return the int

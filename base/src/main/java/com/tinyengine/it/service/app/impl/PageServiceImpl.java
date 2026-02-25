@@ -438,7 +438,7 @@ public class PageServiceImpl extends ServiceImpl<PageMapper, Page> implements Pa
         App app = new App();
         app.setId(appId);
         app.setHomePage(pageId);
-
+        app.setTenantId(loginUserContext.getTenantId());
         int result = appMapper.updateAppById(app);
         return result >= 1;
     }

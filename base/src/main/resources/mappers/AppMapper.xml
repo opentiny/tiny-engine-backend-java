@@ -469,6 +469,29 @@
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <select id="queryAppCount" resultType="long">
+        SELECT COUNT(*)
+        <include refid="Common_Join"/>
+        WHERE A.is_template IS NOT TRUE
+        <if test="name != null and name != ''">
+            AND A.name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="industryId != null">
+            AND A.industry_id = #{industryId}
+        </if>
+        <if test="sceneId != null">
+            AND A.scene_id = #{sceneId}
+        </if>
+        <if test="framework != null">
+            AND A.framework = #{framework}
+        </if>
+        <if test="createdBy != null">
+            AND A.created_by = #{createdBy}
+        </if>
+        <if test="tenantId != null">
+            AND A.tenant_id = #{tenantId}
+        </if>
+    </select>
     <!-- 查询应用模版所有数据 -->
     <select id="queryAllAppTemplate" resultMap="AppMap">
         SELECT
