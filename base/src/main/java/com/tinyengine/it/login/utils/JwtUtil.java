@@ -19,17 +19,18 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -43,17 +44,33 @@ public class JwtUtil {
     private TokenBlacklistService tokenBlacklistService;
 
     private static final long EXPIRATION_TIME = 21600000L; // 6小时 = 6 * 60 * 60 * 1000 = 21600000 毫秒
-    private static final String DEFAULT_SECRET = "tiny-engine-backend-secret-key-at-jwt-login";
+    private static final String SECRET_ENV_NAME = "SECRET_STRING";
 
-    // 避免启动时环境变量未加载的问题
+    @PostConstruct
+    public void validateSecretConfiguration() {
+        try {
+            getSecretKey();
+        } catch (Exception e) {
+            throw new IllegalStateException(
+                "JWT secret is not configured correctly. Set environment variable "
+                    + SECRET_ENV_NAME + " to a strong value before starting the service.",
+                e
+            );
+        }
+    }
+
     private static String getSecretString() {
-        return Optional.ofNullable(System.getenv("SECRET_STRING"))
-            .orElse(DEFAULT_SECRET);
+        String secret = System.getenv(SECRET_ENV_NAME);
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException(
+                "Missing required environment variable " + SECRET_ENV_NAME + " for JWT signing."
+            );
+        }
+        return secret;
     }
 
     public static SecretKey getSecretKey() {
-
-        return Keys.hmacShaKeyFor(getSecretString().getBytes());
+        return Keys.hmacShaKeyFor(getSecretString().getBytes(StandardCharsets.UTF_8));
     }
 
     /**
