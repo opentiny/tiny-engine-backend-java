@@ -206,7 +206,7 @@ public class DynamicModelService {
 			}
 		}
 		if (orderBy != null && !orderBy.isEmpty()) {
-			SqlIdentifierValidator.validate(orderBy.replaceAll("\\s+(ASC|DESC)$", ""));
+			SqlIdentifierValidator.validate(orderBy.replaceAll("(?i)\\s+(ASC|DESC)$", ""));
 		}
 
 		// 1. 构建SQL

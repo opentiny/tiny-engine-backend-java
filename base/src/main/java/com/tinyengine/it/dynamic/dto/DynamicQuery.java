@@ -22,6 +22,6 @@ public class DynamicQuery {
     @Pattern(regexp = "^[a-zA-Z_][a-zA-Z0-9_]*$", message = "排序字段格式不正确")
     private String orderBy;
 
-    @Pattern(regexp = "^(ASC|DESC)$", message = "排序方式只能是 ASC 或 DESC")
+    @Pattern(regexp = "^(?i)(ASC|DESC)$", message = "排序方式只能是 ASC 或 DESC")
     private String orderType = "ASC";
 }
