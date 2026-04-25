@@ -11,11 +11,11 @@ import com.tinyengine.it.dynamic.dto.DynamicQuery;
 import com.tinyengine.it.dynamic.dto.DynamicUpdate;
 import com.tinyengine.it.model.dto.ParametersDto;
 import com.tinyengine.it.model.entity.Model;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.tinyengine.it.common.utils.SqlIdentifierValidator;
 import com.tinyengine.it.service.material.ModelService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class DynamicModelService {
 
 	private static final Set<String> SYSTEM_FIELDS = Set.of(
@@ -44,6 +43,16 @@ public class DynamicModelService {
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private final LoginUserContext loginUserContext;
 	private final ModelService modelService;
+
+	public DynamicModelService(JdbcTemplate jdbcTemplate,
+	                           NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+	                           LoginUserContext loginUserContext,
+	                           @Lazy ModelService modelService) {
+		this.jdbcTemplate = jdbcTemplate;
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+		this.loginUserContext = loginUserContext;
+		this.modelService = modelService;
+	}
 
 
 	/**
