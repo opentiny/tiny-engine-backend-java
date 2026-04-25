@@ -8,6 +8,7 @@ import com.tinyengine.it.dynamic.dto.DynamicQuery;
 import com.tinyengine.it.dynamic.dto.DynamicUpdate;
 import com.tinyengine.it.model.dto.ParametersDto;
 import com.tinyengine.it.model.entity.Model;
+import com.tinyengine.it.service.material.ModelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -37,17 +38,32 @@ class DynamicModelServiceTest {
 	@Mock
 	private LoginUserContext loginUserContext;
 
+	@Mock
+	private ModelService modelService;
+
 	@InjectMocks
 	private DynamicModelService dynamicModelService;
+
+	private Model testModel;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		MockitoAnnotations.openMocks(this);
 		ReflectUtil.setFieldValue(dynamicModelService, "jdbcTemplate", jdbcTemplate);
 		ReflectUtil.setFieldValue(dynamicModelService, "loginUserContext", loginUserContext);
 		ReflectUtil.setFieldValue(dynamicModelService, "namedParameterJdbcTemplate", namedParameterJdbcTemplate);
+		ReflectUtil.setFieldValue(dynamicModelService, "modelService", modelService);
 
+		testModel = new Model();
+		testModel.setNameEn("test_table");
+		testModel.setCreatedBy("1");
+		ParametersDto p1 = new ParametersDto();
+		p1.setProp("id");
+		ParametersDto p2 = new ParametersDto();
+		p2.setProp("name");
+		testModel.setParameters(Arrays.asList(p1, p2));
+
+		when(modelService.getModelByEnName("test_table")).thenReturn(Arrays.asList(testModel));
 	}
 
 
@@ -180,7 +196,8 @@ class DynamicModelServiceTest {
 		dto.setNameEn("test_table");
 		dto.setFields(Arrays.asList("id", "name"));
 		dto.setParams(Map.of("id", 1));
-		dto.setOrderBy("id DESC");
+		dto.setOrderBy("id");
+		dto.setOrderType("DESC");
 		dto.setCurrentPage(1);
 		dto.setPageSize(10);
 

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.tinyengine.it.common.utils.SqlIdentifierValidator;
+import com.tinyengine.it.service.material.ModelService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -35,9 +36,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DynamicModelService {
 
+	private static final Set<String> SYSTEM_FIELDS = Set.of(
+		"id", "created_at", "updated_at", "deleted_at", "created_by", "updated_by"
+	);
+
 	private final JdbcTemplate jdbcTemplate;
 	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	private final LoginUserContext loginUserContext;
+	private final ModelService modelService;
 
 
 	/**
@@ -279,18 +285,19 @@ public class DynamicModelService {
 	 * 分页查询
 	 */
 	public Map<String, Object> queryWithPage(DynamicQuery dto) {
-		String tableName = getTableName( dto.getNameEn());
+		String tableName = getTableName(dto.getNameEn());
 		List<String> fields = dto.getFields();
 		Map<String, Object> conditions = dto.getParams();
 		String orderBy = dto.getOrderBy();
 		Integer pageNum = dto.getCurrentPage();
 		Integer pageSize = dto.getPageSize();
 
+		validateQueryFields(dto);
+
 		// 计算分页
 		Integer limit = null;
 		if (pageNum != null && pageSize != null) {
 			limit = pageSize;
-			// 如果需要偏移量，可以在这里处理
 		}
 
 		// 执行查询
@@ -303,6 +310,60 @@ public class DynamicModelService {
 		result.put("total", count);
 
 		return result;
+	}
+
+	private Set<String> getAllowedFields(String nameEn) {
+		List<Model> modelList = modelService.getModelByEnName(nameEn);
+		if (modelList == null || modelList.isEmpty()) {
+			return Collections.emptySet();
+		}
+		Model model = modelList.get(0);
+		Set<String> allowed = new HashSet<>(SYSTEM_FIELDS);
+		if (model.getParameters() != null) {
+			for (Object param : model.getParameters()) {
+				String prop = extractProp(param);
+				if (prop != null) {
+					allowed.add(prop);
+				}
+			}
+		}
+		return allowed;
+	}
+
+	@SuppressWarnings("unchecked")
+	private String extractProp(Object param) {
+		if (param instanceof ParametersDto) {
+			return ((ParametersDto) param).getProp();
+		}
+		if (param instanceof Map) {
+			Object value = ((Map<String, Object>) param).get("prop");
+			return value != null ? value.toString() : null;
+		}
+		return null;
+	}
+
+	private void validateQueryFields(DynamicQuery dto) {
+		Set<String> allowedFields = getAllowedFields(dto.getNameEn());
+
+		if (dto.getFields() != null && !dto.getFields().isEmpty()) {
+			for (String field : dto.getFields()) {
+				SqlIdentifierValidator.validate(field);
+				if (!allowedFields.contains(field)) {
+					throw new IllegalArgumentException("不允许的字段: " + field);
+				}
+			}
+		}
+
+		if (dto.getOrderBy() != null && !dto.getOrderBy().isEmpty()) {
+			SqlIdentifierValidator.validate(dto.getOrderBy());
+			if (!allowedFields.contains(dto.getOrderBy())) {
+				throw new IllegalArgumentException("不允许的排序字段: " + dto.getOrderBy());
+			}
+		}
+
+		if (dto.getOrderType() != null) {
+			SqlIdentifierValidator.validateOrderType(dto.getOrderType());
+		}
 	}
 	private Object convertValueByType(Object value, String fieldType, String columnName) {
 		try {
