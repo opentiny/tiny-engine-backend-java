@@ -63,7 +63,7 @@ public class DynamicService {
             dto.setPageSize(10);
         }
         validateTableExists(dto.getNameEn());
-        validateTableAndData(dto.getNameEn(), dto.getParams());
+        validateConditionKeys(dto.getParams());
         validateQueryFields(dto);
         List<JSONObject> list = query(dto);
         String tableName = getTableName(dto.getNameEn());
@@ -236,6 +236,15 @@ public class DynamicService {
 
         for (String field : data.keySet()) {
             SqlIdentifierValidator.validate(field);
+        }
+    }
+
+    private void validateConditionKeys(Map<String, Object> conditions) {
+        if (conditions == null || conditions.isEmpty()) {
+            return;
+        }
+        for (String key : conditions.keySet()) {
+            SqlIdentifierValidator.validate(key);
         }
     }
 

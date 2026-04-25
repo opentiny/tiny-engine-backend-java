@@ -248,4 +248,32 @@ class DynamicServiceSqlInjectionTest {
 
         assertThrows(IllegalArgumentException.class, () -> dynamicService.queryWithPage(dto));
     }
+
+    // --- queryWithPage accepts null/empty params ---
+
+    @Test
+    void queryAcceptsNullParams() {
+        DynamicQuery dto = new DynamicQuery();
+        dto.setNameEn("test_model");
+        dto.setParams(null);
+        dto.setCurrentPage(1);
+        dto.setPageSize(10);
+
+        mockCountResult();
+
+        assertDoesNotThrow(() -> dynamicService.queryWithPage(dto));
+    }
+
+    @Test
+    void queryAcceptsEmptyParams() {
+        DynamicQuery dto = new DynamicQuery();
+        dto.setNameEn("test_model");
+        dto.setParams(Collections.emptyMap());
+        dto.setCurrentPage(1);
+        dto.setPageSize(10);
+
+        mockCountResult();
+
+        assertDoesNotThrow(() -> dynamicService.queryWithPage(dto));
+    }
 }
