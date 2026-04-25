@@ -14,6 +14,7 @@ import com.tinyengine.it.model.entity.Model;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.tinyengine.it.common.utils.SqlIdentifierValidator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -181,6 +182,17 @@ public class DynamicModelService {
 	                                              Map<String, Object> conditions,
 	                                              String orderBy,
 	                                              Integer limit) {
+
+		SqlIdentifierValidator.validate(tableName);
+		SqlIdentifierValidator.validateAll(fields);
+		if (conditions != null && !conditions.isEmpty()) {
+			for (String key : conditions.keySet()) {
+				SqlIdentifierValidator.validate(key);
+			}
+		}
+		if (orderBy != null && !orderBy.isEmpty()) {
+			SqlIdentifierValidator.validate(orderBy.replaceAll("\\s+(ASC|DESC)$", ""));
+		}
 
 		// 1. 构建SQL
 		StringBuilder sql = new StringBuilder("SELECT ");
@@ -525,6 +537,9 @@ public class DynamicModelService {
 
 		String tableName = getTableName(dataDto.getNameEn());
 		Map<String, Object> record = new HashMap<>(dataDto.getParams());
+		for (String col : record.keySet()) {
+			SqlIdentifierValidator.validate(col);
+		}
 		String userId = loginUserContext.getLoginUserId();
 		// 添加系统字段
 		record.put("created_by",userId);
@@ -606,6 +621,9 @@ public class DynamicModelService {
 		}
 		Long id = Long.parseLong(params1.get("id").toString());
 		Map<String, Object> updateFields = dto.getData();
+		for (String col : updateFields.keySet()) {
+			SqlIdentifierValidator.validate(col);
+		}
 		String tableName = getTableName(modelId);
 		StringBuilder sql = new StringBuilder("UPDATE " + tableName + " SET ");
 		List<Object> params = new ArrayList<>();
