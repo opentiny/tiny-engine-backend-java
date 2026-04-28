@@ -33,4 +33,5 @@ public class OpenAIConfig {
     private String defaultModel = "deepseek-chat";
     private int timeoutSeconds = 300;
     private List<String> allowedHosts = new ArrayList<>();
+    private boolean allowAnyHost = false;
 }

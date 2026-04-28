@@ -28,10 +28,18 @@ class AiChatV1ServiceImplTest {
         service.stubHost("example.com", "93.184.216.34");
     }
 
-    // === 无白名单模式（严格校验）===
+    // === 无白名单模式（默认 fail-closed）===
 
     @Test
-    void shouldAllowPublicHttpsUrl() {
+    void shouldRejectWhenNoAllowedHostsConfigured() {
+        ServiceException exception = assertThrows(ServiceException.class, () ->
+            service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
+        assertEquals("No AI allowed hosts configured", exception.getMessage());
+    }
+
+    @Test
+    void shouldAllowPublicHttpsUrlWhenAllowAnyHostEnabled() {
+        config.setAllowAnyHost(true);
         assertDoesNotThrow(() ->
             service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
     }
@@ -45,18 +53,21 @@ class AiChatV1ServiceImplTest {
         "https://169.254.169.254/latest/meta-data/"
     })
     void shouldRejectInternalAddresses(String url) {
+        config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
             service.validateFinalUrl(url));
     }
 
     @Test
     void shouldRejectHttpForPublicHost() {
+        config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
             service.validateFinalUrl("http://api.openai.com/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectInvalidUrl() {
+        config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
             service.validateFinalUrl("not-a-valid-url"));
     }
@@ -93,18 +104,21 @@ class AiChatV1ServiceImplTest {
 
     @Test
     void shouldRejectCarrierGradeNatAddress() {
+        config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
             service.validateFinalUrl("https://100.64.0.1/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectBenchmarkingAddress() {
+        config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
             service.validateFinalUrl("https://198.18.0.1/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectIpv6UniqueLocalAddress() {
+        config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
             service.validateFinalUrl("https://[fc00::1]/v1/chat/completions"));
     }

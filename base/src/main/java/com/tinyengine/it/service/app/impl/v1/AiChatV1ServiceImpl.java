@@ -269,22 +269,27 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
 
         List<String> allowedHosts = config.getAllowedHosts();
 
-        if (allowedHosts != null && !allowedHosts.isEmpty()) {
-            boolean matched = allowedHosts.stream()
-                .anyMatch(allowed -> allowed.equalsIgnoreCase(host));
-            if (!matched) {
-                throw new ServiceException("400",
-                    "Host not allowed: " + host + ". Allowed hosts: " + allowedHosts);
-            }
-
-            if (isLoopback) {
-                return;
+        if (allowedHosts == null || allowedHosts.isEmpty()) {
+            if (!config.isAllowAnyHost()) {
+                throw new ServiceException("500", "No AI allowed hosts configured");
             }
 
             enforceHttpsAndIpCheck(uri, host);
-        } else {
-            enforceHttpsAndIpCheck(uri, host);
+            return;
         }
+
+        boolean matched = allowedHosts.stream()
+            .anyMatch(allowed -> allowed.equalsIgnoreCase(host));
+        if (!matched) {
+            throw new ServiceException("400",
+                "Host not allowed: " + host + ". Allowed hosts: " + allowedHosts);
+        }
+
+        if (isLoopback) {
+            return;
+        }
+
+        enforceHttpsAndIpCheck(uri, host);
     }
 
     void enforceHttpsAndIpCheck(URI uri, String host) {

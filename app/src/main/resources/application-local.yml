@@ -49,6 +49,7 @@ cors:
   allow-credentials: true
 
 ai:
+  allow-any-host: false
   allowed-hosts:
     - api.openai.com
     - api.deepseek.com

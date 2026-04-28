@@ -90,6 +90,7 @@ cors:
   allowed-origins: "*"
 
 ai:
+  allow-any-host: false
   allowed-hosts:
     - api.openai.com
     - api.deepseek.com
