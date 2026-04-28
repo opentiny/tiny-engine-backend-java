@@ -22,11 +22,15 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,11 +47,21 @@ public class JwtUtil {
     @Autowired
     private TokenBlacklistService tokenBlacklistService;
 
+    @Autowired
+    private Environment environment;
+
     private static final long EXPIRATION_TIME = 21600000L; // 6小时 = 6 * 60 * 60 * 1000 = 21600000 毫秒
     private static final String SECRET_ENV_NAME = "SECRET_STRING";
+    private static String cachedSecret;
 
     @PostConstruct
     public void validateSecretConfiguration() {
+        boolean isDev = Arrays.asList(environment.getActiveProfiles()).contains("dev");
+        String secret = resolveSecret(isDev);
+        cachedSecret = secret;
+        if (isDev && System.getenv(SECRET_ENV_NAME) == null) {
+            log.info("JWT secret auto-generated for dev profile (tokens invalidate on restart)");
+        }
         try {
             getSecretKey();
         } catch (Exception e) {
@@ -59,18 +73,23 @@ public class JwtUtil {
         }
     }
 
-    private static String getSecretString() {
+    private static String resolveSecret(boolean isDev) {
         String secret = System.getenv(SECRET_ENV_NAME);
-        if (secret == null || secret.isBlank()) {
-            throw new IllegalStateException(
-                "Missing required environment variable " + SECRET_ENV_NAME + " for JWT signing."
-            );
+        if (secret != null && !secret.isBlank()) {
+            return secret;
         }
-        return secret;
+        if (isDev) {
+            byte[] bytes = new byte[32];
+            new SecureRandom().nextBytes(bytes);
+            return Base64.getEncoder().encodeToString(bytes);
+        }
+        throw new IllegalStateException(
+            "Missing required environment variable " + SECRET_ENV_NAME + " for JWT signing."
+        );
     }
 
     public static SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(getSecretString().getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(cachedSecret.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
