@@ -26,7 +26,9 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.Inet6Address;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -35,6 +37,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,7 +250,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         };
     }
 
-    private static final Set<String> LOOPBACK_HOSTS = Set.of("localhost", "127.0.0.1", "[::1]");
+    private static final Set<String> LOOPBACK_HOSTS = Set.of("localhost", "127.0.0.1", "::1", "[::1]");
 
     void validateFinalUrl(String finalUrl) {
         URI uri;
@@ -291,16 +294,84 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         }
 
         try {
-            InetAddress address = InetAddress.getByName(host);
-            if (address.isLoopbackAddress()
-                || address.isSiteLocalAddress()
-                || address.isLinkLocalAddress()
-                || address.isAnyLocalAddress()) {
+            InetAddress[] addresses = resolveHostAddresses(host);
+            boolean hasBlockedAddress = Arrays.stream(addresses).anyMatch(this::isBlockedAddress);
+            if (hasBlockedAddress) {
                 throw new ServiceException("400", "Internal network addresses are not allowed");
             }
         } catch (UnknownHostException e) {
             throw new ServiceException("400", "Unable to resolve host: " + host);
         }
+    }
+
+    InetAddress[] resolveHostAddresses(String host) throws UnknownHostException {
+        return InetAddress.getAllByName(host);
+    }
+
+    boolean isBlockedAddress(InetAddress address) {
+        if (address.isLoopbackAddress()
+            || address.isSiteLocalAddress()
+            || address.isLinkLocalAddress()
+            || address.isAnyLocalAddress()
+            || address.isMulticastAddress()) {
+            return true;
+        }
+
+        if (address instanceof Inet4Address) {
+            return isBlockedIpv4((Inet4Address) address);
+        }
+        if (address instanceof Inet6Address) {
+            return isBlockedIpv6((Inet6Address) address);
+        }
+        return false;
+    }
+
+    private boolean isBlockedIpv4(Inet4Address address) {
+        byte[] octets = address.getAddress();
+        int first = octets[0] & 0xFF;
+        int second = octets[1] & 0xFF;
+        int third = octets[2] & 0xFF;
+
+        if (first == 0) {
+            return true;
+        }
+        if (first == 100 && second >= 64 && second <= 127) {
+            return true;
+        }
+        if (first == 192 && second == 0 && third == 0) {
+            return true;
+        }
+        if (first == 192 && second == 0 && third == 2) {
+            return true;
+        }
+        if (first == 198 && (second == 18 || second == 19)) {
+            return true;
+        }
+        if (first == 198 && second == 51 && third == 100) {
+            return true;
+        }
+        if (first == 203 && second == 0 && third == 113) {
+            return true;
+        }
+        return first >= 240;
+    }
+
+    private boolean isBlockedIpv6(Inet6Address address) {
+        byte[] octets = address.getAddress();
+        int first = octets[0] & 0xFF;
+        int second = octets[1] & 0xFF;
+
+        if ((first & 0xFE) == 0xFC) {
+            return true;
+        }
+        if (first == 0x20 && second == 0x01) {
+            int third = octets[2] & 0xFF;
+            int fourth = octets[3] & 0xFF;
+            if (third == 0x0D && fourth == 0xB8) {
+                return true;
+            }
+        }
+        return first == 0xFF;
     }
 
     private String getApiKey(String encryptApiKey) throws Exception {

@@ -53,7 +53,16 @@ ai:
     - api.openai.com
     - api.deepseek.com
     - dashscope.aliyuncs.com
-    - aip.baidubce.com
+    - qianfan.baidubce.com
+    - api.hunyuan.cloud.tencent.com
+    - ark.cn-beijing.volces.com
+    - open.bigmodel.cn
     - api.moonshot.cn
+    - api.01.ai
+    - api.minimax.chat
+    - spark-api.cn-huabei-1.xf-yun.com
+    - api.sensenova.cn
+    - api.baichuan-ai.com
+    - api.tiangong.cn
     - localhost
     - 127.0.0.1

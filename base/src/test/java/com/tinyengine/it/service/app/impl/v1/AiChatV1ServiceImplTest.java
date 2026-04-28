@@ -7,18 +7,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AiChatV1ServiceImplTest {
-    private AiChatV1ServiceImpl service;
+    private TestAiChatV1ServiceImpl service;
     private OpenAIConfig config;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         config = new OpenAIConfig();
-        service = new AiChatV1ServiceImpl(config);
+        service = new TestAiChatV1ServiceImpl(config);
+        service.stubHost("api.openai.com", "8.8.8.8");
+        service.stubHost("api.deepseek.com", "1.1.1.1");
+        service.stubHost("example.com", "93.184.216.34");
     }
 
     // === 无白名单模式（严格校验）===
@@ -82,5 +89,48 @@ class AiChatV1ServiceImplTest {
         config.setAllowedHosts(List.of("api.deepseek.com"));
         assertThrows(ServiceException.class, () ->
             service.validateFinalUrl("http://api.deepseek.com/v1/chat/completions"));
+    }
+
+    @Test
+    void shouldRejectCarrierGradeNatAddress() {
+        assertThrows(ServiceException.class, () ->
+            service.validateFinalUrl("https://100.64.0.1/v1/chat/completions"));
+    }
+
+    @Test
+    void shouldRejectBenchmarkingAddress() {
+        assertThrows(ServiceException.class, () ->
+            service.validateFinalUrl("https://198.18.0.1/v1/chat/completions"));
+    }
+
+    @Test
+    void shouldRejectIpv6UniqueLocalAddress() {
+        assertThrows(ServiceException.class, () ->
+            service.validateFinalUrl("https://[fc00::1]/v1/chat/completions"));
+    }
+
+    private static final class TestAiChatV1ServiceImpl extends AiChatV1ServiceImpl {
+        private final Map<String, InetAddress[]> resolvedHosts = new HashMap<>();
+
+        private TestAiChatV1ServiceImpl(OpenAIConfig config) {
+            super(config);
+        }
+
+        private void stubHost(String host, String... addresses) throws UnknownHostException {
+            InetAddress[] resolved = new InetAddress[addresses.length];
+            for (int i = 0; i < addresses.length; i++) {
+                resolved[i] = InetAddress.getByName(addresses[i]);
+            }
+            resolvedHosts.put(host, resolved);
+        }
+
+        @Override
+        InetAddress[] resolveHostAddresses(String host) throws UnknownHostException {
+            InetAddress[] resolved = resolvedHosts.get(host);
+            if (resolved != null) {
+                return resolved;
+            }
+            return super.resolveHostAddresses(host);
+        }
     }
 }
