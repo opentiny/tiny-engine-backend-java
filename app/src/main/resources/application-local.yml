@@ -47,3 +47,13 @@ cors:
   allowed-headers: "Accept,Referer,User-Agent,x-lowcode-mode,x-lowcode-org,Content-Type,Authorization"
   exposed-headers: "Authorization"
   allow-credentials: true
+
+ai:
+  allowed-hosts:
+    - api.openai.com
+    - api.deepseek.com
+    - dashscope.aliyuncs.com
+    - aip.baidubce.com
+    - api.moonshot.cn
+    - localhost
+    - 127.0.0.1

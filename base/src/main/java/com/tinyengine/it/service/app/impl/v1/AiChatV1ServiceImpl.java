@@ -26,14 +26,19 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The type AiChat v1 service.
@@ -43,10 +48,16 @@ import java.util.Map;
 @Slf4j
 @Service
 public class AiChatV1ServiceImpl implements AiChatV1Service {
-    private final OpenAIConfig config = new OpenAIConfig();
-    private HttpClient httpClient = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(config.getTimeoutSeconds()))
-            .build();
+    private final OpenAIConfig config;
+    private final HttpClient httpClient;
+
+    public AiChatV1ServiceImpl(OpenAIConfig config) {
+        this.config = config;
+        this.httpClient = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(config.getTimeoutSeconds()))
+                .followRedirects(HttpClient.Redirect.NEVER)
+                .build();
+    }
 
     /**
      * chatCompletion.
@@ -64,6 +75,9 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
 
         // 规范化URL处理
         String normalizedUrl = normalizeApiUrl(baseUrl);
+
+        // 对最终请求 URL 做安全校验（在 normalize 之后，确保校验的是真正发出的地址）
+        validateFinalUrl(normalizedUrl);
 
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
             .uri(URI.create(normalizedUrl))
@@ -231,6 +245,62 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
                 }
             }
         };
+    }
+
+    private static final Set<String> LOOPBACK_HOSTS = Set.of("localhost", "127.0.0.1", "[::1]");
+
+    void validateFinalUrl(String finalUrl) {
+        URI uri;
+        try {
+            uri = new URI(finalUrl);
+        } catch (URISyntaxException e) {
+            throw new ServiceException("400", "Invalid baseUrl format");
+        }
+
+        String host = uri.getHost();
+        if (host == null || host.isEmpty()) {
+            throw new ServiceException("400", "Invalid baseUrl: missing host");
+        }
+
+        boolean isLoopback = LOOPBACK_HOSTS.contains(host.toLowerCase());
+
+        List<String> allowedHosts = config.getAllowedHosts();
+
+        if (allowedHosts != null && !allowedHosts.isEmpty()) {
+            boolean matched = allowedHosts.stream()
+                .anyMatch(allowed -> allowed.equalsIgnoreCase(host));
+            if (!matched) {
+                throw new ServiceException("400",
+                    "Host not allowed: " + host + ". Allowed hosts: " + allowedHosts);
+            }
+
+            if (isLoopback) {
+                return;
+            }
+
+            enforceHttpsAndIpCheck(uri, host);
+        } else {
+            enforceHttpsAndIpCheck(uri, host);
+        }
+    }
+
+    void enforceHttpsAndIpCheck(URI uri, String host) {
+        String scheme = uri.getScheme();
+        if (scheme == null || !"https".equalsIgnoreCase(scheme)) {
+            throw new ServiceException("400", "Only HTTPS protocol is allowed for custom baseUrl");
+        }
+
+        try {
+            InetAddress address = InetAddress.getByName(host);
+            if (address.isLoopbackAddress()
+                || address.isSiteLocalAddress()
+                || address.isLinkLocalAddress()
+                || address.isAnyLocalAddress()) {
+                throw new ServiceException("400", "Internal network addresses are not allowed");
+            }
+        } catch (UnknownHostException e) {
+            throw new ServiceException("400", "Unable to resolve host: " + host);
+        }
     }
 
     private String getApiKey(String encryptApiKey) throws Exception {

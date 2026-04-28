@@ -13,7 +13,11 @@
 package com.tinyengine.it.config;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The type Open AI config.
@@ -22,9 +26,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
+@ConfigurationProperties(prefix = "ai")
 public class OpenAIConfig {
     private String apiKey = "your-api-key";
     private String baseUrl = "https://api.deepseek.com/chat/completions";
     private String defaultModel = "deepseek-chat";
     private int timeoutSeconds = 300;
+    private List<String> allowedHosts = new ArrayList<>();
 }

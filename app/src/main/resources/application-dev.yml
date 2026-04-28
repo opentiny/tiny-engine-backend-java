@@ -91,3 +91,13 @@ logging:
 cors:
   allowed-origins: "*"
 
+ai:
+  allowed-hosts:
+    - api.openai.com
+    - api.deepseek.com
+    - dashscope.aliyuncs.com
+    - aip.baidubce.com
+    - api.moonshot.cn
+    - localhost
+    - 127.0.0.1
+

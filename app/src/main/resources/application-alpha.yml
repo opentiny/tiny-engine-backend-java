@@ -89,3 +89,5 @@ logging:
 cors:
   allowed-origins: "*"
 
+ai:
+  allowed-hosts:
