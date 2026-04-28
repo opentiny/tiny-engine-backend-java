@@ -28,6 +28,24 @@ spring:
       min-evictable-idle-time-millis: 300000 # 连接在池中保持空闲的最小时间（单位：毫秒）。如果空闲时间超过这个值，连接将被回收，默认值为 1800000。
       pool-prepared-statements: true # 是否缓存 PreparedStatement 对象，默认值为 true。
       max-open-prepared-statements: 20 # 最大缓存的 PreparedStatement 数量，默认值为 -1，表示无限制。如果 `pool-prepared-statements` 设置为 true，设置此值以限制缓存数量。
+  ai:
+    mcp:
+      server:
+        enabled: true
+        protocol: STREAMABLE
+        version: 1.0.0
+        tool-change-notification: true
+        type: SYNC
+        annotation-scanner:
+          enabled: false
+        capabilities:
+          tool: true
+        streamable-http:
+          mcp-endpoint: /mcp
+        name: tiny-engine-mcp
+
+
+
   # 清空任务配置
 cleanup:
   enabled: false
@@ -88,4 +106,20 @@ logging:
 
 cors:
   allowed-origins: "*"
+
+
+openai:
+  api-key: your-api-key
+  base-url: https://api.deepseek.com/v1/chat/completions
+  default-model: deepseek-chat
+  timeout-seconds: 300
+  streamable-tools:
+    doc_tools: http://localhost:9090/mcp  # 工具名 -> SSE服务URL
+
+
+  streamable-http:
+    max-connections: 10
+    connection-timeout-seconds: 30
+    request-timeout-seconds: 60
+    protocol-version: 2025-06-18
 

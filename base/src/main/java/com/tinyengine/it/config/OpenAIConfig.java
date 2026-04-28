@@ -13,7 +13,11 @@
 package com.tinyengine.it.config;
 
 import lombok.Data;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Open AI config.
@@ -21,10 +25,26 @@ import org.springframework.context.annotation.Configuration;
  * @since 2025-08-06
  */
 @Data
-@Configuration
+@Component
+@ConfigurationProperties(prefix = "openai")
 public class OpenAIConfig {
     private String apiKey = "your-api-key";
     private String baseUrl = "https://api.deepseek.com/chat/completions";
     private String defaultModel = "deepseek-chat";
     private int timeoutSeconds = 300;
+
+    // Streamable HTTP 工具映射（工具名 -> 服务URL）
+    private Map<String, String> streamableTools = new HashMap<>();
+
+    // Streamable HTTP 连接池配置
+    private StreamableHttpConfig streamableHttp = new StreamableHttpConfig();
+
+    @Data
+    public static class StreamableHttpConfig  {
+        private int maxConnections = 20;
+        private int connectionTimeoutSeconds = 30;
+        private int requestTimeoutSeconds = 60;
+        private String protocolVersion = "2025-06-18"; // 协议版本
+        private boolean keepAlive = true;
+    }
 }

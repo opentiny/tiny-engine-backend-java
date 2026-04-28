@@ -40,6 +40,10 @@
         <langchain4j-rag.version>1.5.0-beta11</langchain4j-rag.version>
         <bcprov-jdk18on.version>1.79</bcprov-jdk18on.version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
+        <netty.version>4.1.118.Final</netty.version>
+        <spring-ai.version>1.1.4</spring-ai.version>
+
+
     </properties>
     <dependencies>
         <dependency>
@@ -50,6 +54,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Spring Boot WebFlux (用于响应式流处理) -->
+        <!-- 添加 WebFlux 支持（与 MVC 共存） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
         <dependency>
@@ -67,6 +77,23 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid-spring-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-client</artifactId>
+            <version>${spring-ai.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+            <version>${spring-ai.version}</version>
+
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>7.3.0.202506031305-r</version>
         </dependency>
 
         <dependency>
@@ -188,7 +215,17 @@
             <artifactId>netty-buffer</artifactId>
             <version>${netty-buffer.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-bom</artifactId>
+            <version>${netty.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>

@@ -13,9 +13,15 @@
 package com.tinyengine.it;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+import java.util.Map;
 
 /**
  * The type Tiny engine application.
@@ -24,7 +30,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  */
 @SpringBootApplication
 @EnableAspectJAutoProxy
-@MapperScan({"com.tinyengine.it.mapper","com.tinyengine.it.dynamic.dao"})
+@MapperScan({"com.tinyengine.it.mapper","com.tinyengine.it.dynamic.dao","com.tinyengine.it.mcp.tools"})
 public class TinyEngineApplication {
     /**
      * The entry point of application.
@@ -34,4 +40,7 @@ public class TinyEngineApplication {
     public static void main(String[] args) {
         SpringApplication.run(TinyEngineApplication.class, args);
     }
+
+
+
 }
