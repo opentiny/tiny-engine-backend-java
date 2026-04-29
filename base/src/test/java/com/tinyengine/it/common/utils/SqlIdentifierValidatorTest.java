@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SqlIdentifierValidatorTest {
 
@@ -101,7 +102,7 @@ class SqlIdentifierValidatorTest {
                 "name AND 1=1",
                 "id; SELECT SLEEP(5)",
                 "COUNT(*)",
-                "GROUP_CONCAT(username)",
+                "GROUP_CONCAT(username)"
         };
         for (String payload : sqliPayloads) {
             assertThrows(IllegalArgumentException.class,

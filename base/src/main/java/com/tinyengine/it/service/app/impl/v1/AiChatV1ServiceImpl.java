@@ -40,6 +40,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -265,7 +266,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
             throw new ServiceException("400", "Invalid baseUrl: missing host");
         }
 
-        boolean isLoopback = LOOPBACK_HOSTS.contains(host.toLowerCase());
+        boolean isLoopback = LOOPBACK_HOSTS.contains(host.toLowerCase(Locale.ROOT));
 
         List<String> allowedHosts = config.getAllowedHosts();
 
