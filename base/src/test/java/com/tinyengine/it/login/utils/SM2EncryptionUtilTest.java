@@ -162,12 +162,10 @@ class SM2EncryptionUtilTest {
 	@Test
 	void encryptAndDecryptWithUnicodeCharacters() throws Exception {
 		String plainText = "你好，世界！🌍";
-		System.out.println("Original plain text: " + plainText);
 		PublicKey publicKey = keyPair.getPublic();
 		PrivateKey privateKey = keyPair.getPrivate();
 
 		String encryptedText = SM2EncryptionUtil.encrypt(plainText, publicKey);
-		System.out.println("Encrypted text: " + encryptedText);
 		assertNotNull(encryptedText, "Encrypted text should not be null");
 
 		String decryptedText = SM2EncryptionUtil.decrypt(encryptedText, privateKey);

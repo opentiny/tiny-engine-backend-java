@@ -4,7 +4,8 @@ import com.tinyengine.it.login.model.PasswordResult;
 import org.junit.jupiter.api.*;
 import org.mockito.MockitoAnnotations;
 
-import java.security.KeyPair;
+
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -240,7 +241,7 @@ class SM3PasswordUtilTest {
 		String hash = SM3PasswordUtil.sm3Hash("test", "salt");
 		assertTrue(hash.matches("^[0-9a-f]{64}$"));
 		// 确保没有大写字母
-		assertEquals(hash, hash.toLowerCase());
+		assertEquals(hash, hash.toLowerCase(Locale.ROOT));
 	}
 
 	@Test
@@ -454,9 +455,7 @@ class SM3PasswordUtilTest {
 		String hash2 = SM3PasswordUtil.sm3Hash(input, salt);
 		assertEquals(hash1, hash2, "相同输入应得到相同哈希");
 
-		// 可选：如果有预置的权威向量，可取消注释验证
-		// String expected = "66c7f0f462eeedd9d1f2d46bdc10e4e24167c4875cf2f7a2297da02b8f4ba8e0";
-		// assertEquals(expected, hash1);
+
 	}
 
 	// 4. 密码为空字符串时的特殊处理（盐值生成和验证）
