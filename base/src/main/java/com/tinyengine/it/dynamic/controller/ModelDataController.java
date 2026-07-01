@@ -68,7 +68,7 @@ public class ModelDataController {
 			return Result.success(dynamicService.insert(dto));
 		} catch (Exception e) {
 			log.error("insert failed for table: {}", dto.getNameEn(), e);
-			return Result.failed("insert operation failed");
+			return Result.failed("insert operation failed:"+e.getMessage());
 		}
 
 	}
@@ -90,7 +90,7 @@ public class ModelDataController {
 			return Result.success(dynamicService.update(dto));
 		} catch (Exception e) {
 			log.error("updateApi failed for table: {}", dto.getNameEn(), e);
-			return Result.failed("update operation failed");
+			return Result.failed("update operation failed:"+e.getMessage());
 		}
 
 	}
@@ -111,7 +111,7 @@ public class ModelDataController {
 			return Result.success(dynamicService.delete(dto));
 		} catch (Exception e) {
 			log.error("deleteApi failed for table: {}", dto.getNameEn(), e);
-			return Result.failed("delete operation failed");
+			return Result.failed("delete operation failed:"+e.getMessage());
 		}
 	}
 }

@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.9</version>
+        <version>3.2.4</version>
     </parent>
 
     <modules>
@@ -28,7 +28,6 @@
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <mariadb-java-client.version>3.3.3</mariadb-java-client.version>
         <freemarker.version>2.3.32</freemarker.version>
-        <spring-data-commons.version>2.5.4</spring-data-commons.version>
         <springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
         <mockito-inline.version>4.11.0</mockito-inline.version>
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
@@ -38,7 +37,6 @@
         <jjwt.version>0.12.3</jjwt.version>
         <langchain4j.version>1.5.0</langchain4j.version>
         <langchain4j-rag.version>1.5.0-beta11</langchain4j-rag.version>
-        <bcprov-jdk18on.version>1.79</bcprov-jdk18on.version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
     </properties>
     <dependencies>
@@ -56,6 +54,31 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.23</version> <!-- 使用适合你的数据库的版本 -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.lettuce</groupId>
+                    <artifactId>lettuce-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <!-- 连接池依赖（必须显式引入，否则连接池不生效） -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -65,7 +88,7 @@
 
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid-spring-boot-3-starter</artifactId>
             <version>${druid-spring-boot-starter.version}</version>
         </dependency>
 
@@ -78,7 +101,7 @@
         <!--    Mybatis-plus 代码生成器依赖-->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
 
@@ -175,6 +198,15 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Hibernate Core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.3.2.Final</version> <!-- 使用适合你的Spring Boot版本的Hibernate版本 -->
+        </dependency>
+
+
+
 
         <dependency>
             <groupId>org.mockito</groupId>
@@ -188,6 +220,7 @@
             <artifactId>netty-buffer</artifactId>
             <version>${netty-buffer.version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -221,6 +254,7 @@
                 <version>${tiny-engine.version}</version>
             </dependency>
         </dependencies>
+
     </dependencyManagement>
 
     <build>

@@ -28,6 +28,25 @@ services:
       - PERSIST_DIRECTORY=/data
       - ANONYMIZED_TELEMETRY=FALSE
 
+  tiny-engine-redis:
+    image: redis:7-alpine
+    container_name: tiny-engine-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./docker-deploy-data/redis/data/:/data
+      - ./docker-deploy-data/redis/conf/:/usr/local/etc/redis/
+      - ./docker-deploy-data/redis/logs/:/logs/
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --logfile /logs/redis.log
+
   tiny-engine-back:
     image: tiny-engine-back
     container_name: tiny-engine-back
@@ -39,10 +58,12 @@ services:
     depends_on:
       - tiny-engine-data
       - tiny-engine-rag
+      - tiny-engine-redis
     environment:
       - CHROMA_BASE_URL=http://tiny-engine-rag:8000
       - MODEL_PATH=/app/all-MiniLM-L6-v2/model.onnx
       - TOKENIZER_PATH=/app/all-MiniLM-L6-v2/tokenizer.json
+
 
   tiny-engine:
     image: tiny-engine

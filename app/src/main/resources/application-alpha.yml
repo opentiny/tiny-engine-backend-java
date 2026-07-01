@@ -28,6 +28,28 @@ spring:
       min-evictable-idle-time-millis: 300000 # 连接在池中保持空闲的最小时间（单位：毫秒）。如果空闲时间超过这个值，连接将被回收，默认值为 1800000。
       pool-prepared-statements: true # 是否缓存 PreparedStatement 对象，默认值为 true。
       max-open-prepared-statements: 20 # 最大缓存的 PreparedStatement 数量，默认值为 -1，表示无限制。如果 `pool-prepared-statements` 设置为 true，设置此值以限制缓存数量。
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  data:
+    redis:
+      host: tiny-engine-redis
+      port: 6379
+      database: 0              # 默认库，Nonce 建议单独使用一个库（如 1），避免业务数据干扰
+      # 连接超时配置（非常重要）
+      connect-timeout: 5000ms   # 建立连接超时，5秒
+      timeout: 5000ms          # 读取数据超时，5秒
+      jedis: # Jedis 连接池配置
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+          max-wait: 2000ms
+
+
   # 清空任务配置
 cleanup:
   enabled: false

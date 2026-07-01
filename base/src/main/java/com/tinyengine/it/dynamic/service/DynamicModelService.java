@@ -606,18 +606,18 @@ public class DynamicModelService {
 
 
 		String tableName = getTableName(dataDto.getNameEn());
-		Map<String, Object> record = new HashMap<>(dataDto.getParams());
-		for (String col : record.keySet()) {
+		Map<String, Object> map = new HashMap<>(dataDto.getParams());
+		for (String col : map.keySet()) {
 			SqlIdentifierValidator.validate(col);
 		}
 		String userId = loginUserContext.getLoginUserId();
 		// 添加系统字段
-		record.put("created_by",userId);
-		record.put("updated_by", userId);
+		map.put("created_by",userId);
+		map.put("updated_by", userId);
 
 		// 构建SQL
-		String columns = String.join(", ", record.keySet());
-		String placeholders = record.keySet().stream()
+		String columns = String.join(", ", map.keySet());
+		String placeholders = map.keySet().stream()
 			.map(k -> "?")
 			.collect(Collectors.joining(", "));
 
@@ -634,7 +634,7 @@ public class DynamicModelService {
 				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
 				int index = 1;
-				for (Object value : record.values()) {
+				for (Object value : map.values()) {
 					ps.setObject(index++, value);
 				}
 
@@ -645,10 +645,10 @@ public class DynamicModelService {
 		Long generatedId = keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
 
 		if (generatedId != null) {
-			record.put("id", generatedId);
+			map.put("id", generatedId);
 		}
 
-		return record;
+		return map;
 	}
 
 

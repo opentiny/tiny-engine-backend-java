@@ -352,7 +352,11 @@ public enum ExceptionEnum implements IBaseError {
     /**
      * Cm 345 exception enum.
      */
-    CM345("CM345", "用户名不存在,请重新输入"),;
+    CM345("CM345", "用户名不存在,请重新输入"),
+    /**
+     * Cm 345 exception enum.
+     */
+    CM346("CM346", "缺少请求头");
     /**
      * 错误码
      */

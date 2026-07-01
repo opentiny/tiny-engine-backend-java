@@ -15,6 +15,9 @@ public class DefaultLoginUserContext implements LoginUserContext {
 
     private static final ThreadLocal<UserInfo> CURRENT_USER = new ThreadLocal<>();
 
+    private static final ThreadLocal<String> CURRENT_TENANT = new ThreadLocal<>();
+
+
     private static final int DEFAULT_PLATFORM = 1;
     private static final String DEFAULT_TENANT = "1";
 
@@ -98,6 +101,19 @@ public class DefaultLoginUserContext implements LoginUserContext {
     public static void clear() {
 
         CURRENT_USER.remove();
+
+    }
+
+    public static void setCurrentTenant(String tenantId) {
+        CURRENT_TENANT.set(tenantId);
+    }
+
+    public static String getCurrentTenant() {
+        return CURRENT_TENANT.get();
+    }
+
+    public static void clearCurrentTenant() {
+        CURRENT_TENANT.remove();
     }
 
 
