@@ -1,0 +1,5 @@
+# .github/codeql/codeql-config.yml
+paths-ignore:
+  - '**/target/'          # Maven 编译输出
+  - '**/src/test/'        # 单元测试代码（测试断言常被误报）
+  - '**/generated-sources/' # 自动生成的代码（如 MapStruct、QueryDSL）
