@@ -24,7 +24,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  */
 @SpringBootApplication
 @EnableAspectJAutoProxy
-@MapperScan({"com.tinyengine.it.mapper","com.tinyengine.it.dynamic.dao"})
+@MapperScan({"com.tinyengine.it.mapper","com.tinyengine.it.dynamic.dao","com.tinyengine.it.mcp"})
 public class TinyEngineApplication {
     /**
      * The entry point of application.

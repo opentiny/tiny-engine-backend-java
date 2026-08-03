@@ -40,6 +40,8 @@
         <langchain4j-rag.version>1.5.0-beta11</langchain4j-rag.version>
         <bcprov-jdk18on.version>1.79</bcprov-jdk18on.version>
         <tiny-engine.version>1.0-SNAPSHOT</tiny-engine.version>
+        <spring-ai.version>1.1.4</spring-ai.version>
+
     </properties>
     <dependencies>
         <dependency>
@@ -68,7 +70,18 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid-spring-boot-starter.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+            <version>${spring-ai.version}</version>
 
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>7.3.0.202506031305-r</version>
+        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
