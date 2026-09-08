@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -85,6 +86,8 @@ public class DynamicModelService {
     private static final int DEFAULT_VARCHAR = 255;
     private static final int ASC_SUFFIX_LEN = 4;
     private static final int DESC_SUFFIX_LEN = 5;
+    private static final Pattern ALTER_PATTERN =
+            Pattern.compile("^(ADD COLUMN|MODIFY COLUMN|DROP COLUMN) [A-Za-z_][A-Za-z0-9_]*.*$");
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -523,9 +526,24 @@ public class DynamicModelService {
 
         // Execute ALTER TABLE statements
         for (String alterStatement : alterStatements) {
-            String sql = String.format("ALTER TABLE %s %s", tableName, alterStatement);
-            jdbcTemplate.execute(sql);
+            executeAlterTableStatement(tableName, alterStatement);
         }
+    }
+
+    private void executeAlterTableStatement(final String tableName, final String alterStatement) {
+        if (!tableName.matches("^dynamic_[a-z0-9_]+$")) {
+            throw new IllegalArgumentException("Invalid dynamic table name");
+        }
+        if (!ALTER_PATTERN.matcher(alterStatement).matches()
+                || alterStatement.contains(";")
+                || alterStatement.contains("--")
+                || alterStatement.contains("/*")
+                || alterStatement.contains("*/")
+                || alterStatement.contains("#")) {
+            throw new IllegalArgumentException("Invalid ALTER TABLE statement");
+        }
+        final String sql = String.format("ALTER TABLE %s %s", tableName, alterStatement);
+        jdbcTemplate.execute(sql);
     }
 
     private void addCommonFields(List<ParametersDto> parameters) {

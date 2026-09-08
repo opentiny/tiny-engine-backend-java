@@ -1,13 +1,13 @@
 package com.tinyengine.it.dynamic.dao;
 
-import com.tinyengine.it.common.utils.SqlIdentifierValidator;
-
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 @SuppressWarnings({
     "PMD.CognitiveComplexity",
     "PMD.CyclomaticComplexity",
@@ -24,6 +24,7 @@ public class DynamicSqlProvider {
     private static final String TABLE_NAME_PARAM = "tableName";
     private static final String CONDITIONS_PARAM = "conditions";
     private static final String DATA_PARAM = "data";
+    private static final Pattern SQL_ID_PATTERN = Pattern.compile("^[A-Za-z_][A-Za-z0-9_]*$");
 
     @SuppressWarnings("PMD.UnnecessaryConstructor")
     public DynamicSqlProvider() {
@@ -177,11 +178,15 @@ public class DynamicSqlProvider {
         if (identifier.isEmpty()) {
             return null;
         }
-        return SqlIdentifierValidator.requireValidIdentifier(identifier);
+        return requireIdentifier(identifier, name);
     }
 
     private String requireIdentifier(final Object value, final String name) {
-        return SqlIdentifierValidator.requireValidIdentifier(requireString(value, name));
+        final String identifier = requireString(value, name);
+        if (!SQL_ID_PATTERN.matcher(identifier).matches()) {
+            throw new IllegalArgumentException(name + " must be a valid SQL identifier");
+        }
+        return identifier;
     }
 
     private String requireString(final Object value, final String name) {
@@ -195,7 +200,11 @@ public class DynamicSqlProvider {
         if (value == null || value instanceof String stringValue && stringValue.isEmpty()) {
             return "ASC";
         }
-        return SqlIdentifierValidator.requireValidOrderType(requireString(value, "orderType"));
+        final String orderType = requireString(value, "orderType");
+        if (!"ASC".equalsIgnoreCase(orderType) && !"DESC".equalsIgnoreCase(orderType)) {
+            throw new IllegalArgumentException("orderType must be ASC or DESC");
+        }
+        return orderType.toUpperCase(Locale.ROOT);
     }
 
     private int requirePositiveInt(final Integer value, final String name) {
