@@ -2,7 +2,6 @@ package com.tinyengine.it.common.utils;
 
 import java.util.List;
 
-@SuppressWarnings("PMD.LawOfDemeter")
 public final class SqlIdentifierValidator {
 
     private SqlIdentifierValidator() {
@@ -56,11 +55,20 @@ public final class SqlIdentifierValidator {
         return "ASC".equalsIgnoreCase(orderType) || "DESC".equalsIgnoreCase(orderType);
     }
 
-    public static String escapeSqlLiteral(final Object value) {
-        final String stringValue = value == null ? null : value.toString();
-        return stringValue == null
-                ? null
-                : stringValue.replace("\\", "\\\\").replace("'", "''");
+    public static String escapeSqlLiteral(final String value) {
+        String escapedValue = null;
+        if (value != null) {
+            final StringBuilder escaped = new StringBuilder(value.length());
+            for (int index = 0; index < value.length(); index++) {
+                final char character = value.charAt(index);
+                escaped.append(character);
+                if (character == '\\' || character == '\'') {
+                    escaped.append(character);
+                }
+            }
+            escapedValue = escaped.toString();
+        }
+        return escapedValue;
     }
 
     private static boolean isIdentifierStart(final char character) {

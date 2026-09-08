@@ -21,19 +21,15 @@ import dev.langchain4j.model.output.Response;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.chroma.ChromaEmbeddingStore;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import okhttp3.OkHttpClient;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -42,19 +38,16 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-@SuppressWarnings({
-    "PMD.ConfusingTernary", "PMD.DataflowAnomalyAnalysis", "PMD.LawOfDemeter"
-})
 @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
         justification = "The configuration is a Spring-managed collaborator and is not exposed.")
 public class VectorStoreConfig {
     private static final int CHROMA_TIMEOUT = 30;
-    private static final int HEALTH_TIMEOUT = 5;
     private static final String FALLBACK_WARNING =
             "RAG features are disabled - using fallback embedding store";
 
     private final RAGConfig ragConfig;
+    private final ChromaConnectionProbe connectionProbe;
 
     /**
      * 嵌入模型 Bean - 尝试创建，失败时返回降级实现.
@@ -62,7 +55,6 @@ public class VectorStoreConfig {
      * @return embedding model bean
      */
     @Bean
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public EmbeddingModel embeddingModel() {
         EmbeddingModel embeddingModel;
         try {
@@ -79,7 +71,7 @@ public class VectorStoreConfig {
                                 PoolingMode.MEAN);
                 logInfo("ONNX embedding model initialization successful");
             }
-        } catch (RuntimeException exception) {
+        } catch (IllegalArgumentException exception) {
             logWarn(
                     "ONNX embedding model initialization failed, using fallback implementation",
                     exception);
@@ -94,36 +86,26 @@ public class VectorStoreConfig {
      * @return embedding store bean
      */
     @Bean
-    @SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.LawOfDemeter"})
     public EmbeddingStore<TextSegment> embeddingStore() {
-        EmbeddingStore<TextSegment> embeddingStore;
-        try {
-            // 检查必要的配置参数
-            if (ragConfig.getChromaBaseUrl() == null) {
-                logWarn("ChromaDB configuration is incomplete, using fallback embedding store");
-                embeddingStore = createFallbackEmbeddingStore();
-            } else if (!testChromaConnection(ragConfig.getChromaBaseUrl())) {
-                logWarn("ChromaDB connection test failed, using fallback embedding store");
-                embeddingStore = createFallbackEmbeddingStore();
-            } else {
-                logInfo(
-                        "Attempting to initialize ChromaDB connection: {}",
-                        ragConfig.getChromaBaseUrl());
-                String collectionName = ragConfig.getChromaCollectionName();
-                if (collectionName == null) {
-                    collectionName = "documents";
-                }
+        EmbeddingStore<TextSegment> embeddingStore = createFallbackEmbeddingStore();
+        final String chromaBaseUrl = ragConfig.getChromaBaseUrl();
+        if (chromaBaseUrl == null) {
+            logWarn("ChromaDB configuration is incomplete, using fallback embedding store");
+        } else if (connectionProbe.isAvailable(chromaBaseUrl)) {
+            try {
+                logInfo("Attempting to initialize ChromaDB connection: {}", chromaBaseUrl);
+                final String collectionName = getCollectionName();
                 embeddingStore =
-                        ChromaEmbeddingStore.builder()
-                                .baseUrl(ragConfig.getChromaBaseUrl())
-                                .collectionName(collectionName)
-                                .timeout(Duration.ofSeconds(CHROMA_TIMEOUT))
-                                .build();
+                        ChromaStoreFactory.create(
+                                chromaBaseUrl,
+                                collectionName,
+                                Duration.ofSeconds(CHROMA_TIMEOUT));
                 logInfo("ChromaDB embeddingStore initialization successful");
+            } catch (IllegalArgumentException exception) {
+                logWarn("ChromaDB initialization failed, using fallback embedding store", exception);
             }
-        } catch (RuntimeException exception) {
-            logWarn("ChromaDB initialization failed, using fallback embedding store", exception);
-            embeddingStore = createFallbackEmbeddingStore();
+        } else {
+                logWarn("ChromaDB connection test failed, using fallback embedding store");
         }
         return embeddingStore;
     }
@@ -134,7 +116,6 @@ public class VectorStoreConfig {
      * @return storage service bean
      */
     @Bean
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public StorageService vectorStorageService(
             final EmbeddingModel embeddingModel,
             final EmbeddingStore<TextSegment> embeddingStore) {
@@ -156,44 +137,13 @@ public class VectorStoreConfig {
                         storeAvailable);
             }
 
-        } catch (RuntimeException exception) {
+        } catch (IllegalArgumentException exception) {
             logError("StorageService initialization failed, creating fallback instance", exception);
             // 创建完全降级的实例
             storageService = new StorageService(
                     createFallbackEmbeddingModel(), createFallbackEmbeddingStore(), ragConfig);
         }
         return storageService;
-    }
-
-    /**
-     * 测试 ChromaDB 连接 - 返回布尔值而不是抛出异常.
-     *
-     * @return whether ChromaDB can be reached
-     */
-    private boolean testChromaConnection(final String baseUrl) {
-        boolean connected = false;
-        try {
-            final okhttp3.Request request =
-                    new okhttp3.Request.Builder().url(baseUrl + "/api/v1/heartbeat").get().build();
-
-            final OkHttpClient client =
-                    new OkHttpClient.Builder()
-                            .connectTimeout(Duration.ofSeconds(HEALTH_TIMEOUT))
-                            .readTimeout(Duration.ofSeconds(HEALTH_TIMEOUT))
-                            .build();
-
-            try (okhttp3.Response response = client.newCall(request).execute()) {
-                if (response.isSuccessful()) {
-                    logInfo("ChromaDB connection test successful");
-                    connected = true;
-                } else {
-                    logWarn("ChromaDB connection test failed with status: {}", response.code());
-                }
-            }
-        } catch (IOException exception) {
-            logWarn("ChromaDB connection test failed: {}", exception.getMessage());
-        }
-        return connected;
     }
 
     /**
@@ -212,6 +162,11 @@ public class VectorStoreConfig {
      */
     private EmbeddingStore<TextSegment> createFallbackEmbeddingStore() {
         return new FallbackEmbeddingStore();
+    }
+
+    private String getCollectionName() {
+        final String collectionName = ragConfig.getChromaCollectionName();
+        return collectionName == null ? "documents" : collectionName;
     }
 
     private static void logInfo(final String message, final Object... arguments) {
@@ -284,4 +239,5 @@ public class VectorStoreConfig {
             return new EmbeddingSearchResult<>(Collections.emptyList());
         }
     }
+
 }
