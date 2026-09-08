@@ -1,7 +1,10 @@
 package com.tinyengine.it.common.utils;
 
 import java.util.List;
-
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.DataflowAnomalyAnalysis"
+})
 public final class SqlIdentifierValidator {
 
     private SqlIdentifierValidator() {

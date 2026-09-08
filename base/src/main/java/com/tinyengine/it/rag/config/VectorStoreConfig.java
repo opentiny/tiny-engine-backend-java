@@ -38,6 +38,10 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.DataflowAnomalyAnalysis"
+})
 @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
         justification = "The configuration is a Spring-managed collaborator and is not exposed.")

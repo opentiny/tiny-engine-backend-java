@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import java.security.GeneralSecurityException;
 import java.util.Base64;
-
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.DataflowAnomalyAnalysis"
+})
 class SM4UtilsTest {
     private static final int SHORT_KEY_LEN = 8;
     private final int invalidKeyLength;

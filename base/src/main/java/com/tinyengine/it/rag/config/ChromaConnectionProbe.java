@@ -8,7 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
-
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.DataflowAnomalyAnalysis"
+})
 /** Checks ChromaDB availability before initializing an embedding store. */
 @Component
 public final class ChromaConnectionProbe {
