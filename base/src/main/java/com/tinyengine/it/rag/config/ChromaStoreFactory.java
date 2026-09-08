@@ -8,7 +8,8 @@ import java.time.Duration;
 
 /** Creates Chroma embedding stores from validated connection settings. */
 public final class ChromaStoreFactory {
-    private ChromaStoreFactory() {}
+    private ChromaStoreFactory() {
+    }
 
     public static EmbeddingStore<TextSegment> create(
             final String baseUrl, final String collectionName, final Duration timeout) {

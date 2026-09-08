@@ -105,7 +105,7 @@ public class VectorStoreConfig {
                 logWarn("ChromaDB initialization failed, using fallback embedding store", exception);
             }
         } else {
-                logWarn("ChromaDB connection test failed, using fallback embedding store");
+            logWarn("ChromaDB connection test failed, using fallback embedding store");
         }
         return embeddingStore;
     }

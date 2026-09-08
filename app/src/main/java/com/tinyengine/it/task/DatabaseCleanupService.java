@@ -12,7 +12,6 @@ package com.tinyengine.it.task;
 
 import jakarta.annotation.PostConstruct;
 
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,9 @@ public class DatabaseCleanupService {
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final int EXEC_ID_LENGTH = 8;
+    private static final int HEX_NIBBLE_SHIFT = 4;
+    private static final int HEX_NIBBLE_MASK = 0x0F;
+    private static final int HEX_RADIX = 16;
 
     private final boolean cleanupEnabled;
     private final boolean useTruncate;
@@ -170,8 +172,10 @@ public class DatabaseCleanupService {
         random.nextBytes(randomBytes);
         final StringBuilder identifier = new StringBuilder(randomBytes.length * 2);
         for (final byte randomByte : randomBytes) {
-            identifier.append(Character.forDigit((randomByte >>> 4) & 0x0F, 16));
-            identifier.append(Character.forDigit(randomByte & 0x0F, 16));
+            identifier.append(
+                    Character.forDigit(
+                            (randomByte >>> HEX_NIBBLE_SHIFT) & HEX_NIBBLE_MASK, HEX_RADIX));
+            identifier.append(Character.forDigit(randomByte & HEX_NIBBLE_MASK, HEX_RADIX));
         }
         return identifier.substring(0, EXEC_ID_LENGTH);
     }

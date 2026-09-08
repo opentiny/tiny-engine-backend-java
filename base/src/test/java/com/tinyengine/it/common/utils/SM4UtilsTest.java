@@ -13,8 +13,7 @@ class SM4UtilsTest {
     private static final int SHORT_KEY_LEN = 8;
     private final int invalidKeyLength;
 
-    /** Initializes the invalid key length used by validation tests. */
-    public SM4UtilsTest() {
+    /* default */ SM4UtilsTest() {
         invalidKeyLength = SHORT_KEY_LEN;
     }
 
