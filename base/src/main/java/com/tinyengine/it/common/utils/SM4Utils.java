@@ -24,6 +24,7 @@ public final class SM4Utils {
     private static final int IV_LENGTH_BYTES = 12;
     private static final int GCM_TAG_BITS = 128;
     private static final Base64Codec BASE64_CODEC = new Base64Codec();
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
@@ -49,8 +50,7 @@ public final class SM4Utils {
             throws GeneralSecurityException {
         final byte[] key = decodeKey(base64Key);
         final byte[] nonce = new byte[IV_LENGTH_BYTES];
-        final SecureRandom random = new SecureRandom();
-        random.nextBytes(nonce);
+        SECURE_RANDOM.nextBytes(nonce);
 
         final byte[] encrypted =
                 doCipher(
@@ -123,7 +123,7 @@ public final class SM4Utils {
 
         private KeyGeneratorService() throws GeneralSecurityException {
             generator = KeyGenerator.getInstance(ALGORITHM, "BC");
-            generator.init(KEY_SIZE, new SecureRandom());
+            generator.init(KEY_SIZE, SECURE_RANDOM);
         }
 
         private byte[] generate() {

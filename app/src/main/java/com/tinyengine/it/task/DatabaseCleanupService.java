@@ -44,6 +44,7 @@ public class DatabaseCleanupService {
     private static final int HEX_NIBBLE_SHIFT = 4;
     private static final int HEX_NIBBLE_MASK = 0x0F;
     private static final int HEX_RADIX = 16;
+    private static final SecureRandom EXECUTION_ID_RANDOM = new SecureRandom();
 
     private final boolean cleanupEnabled;
     private final boolean useTruncate;
@@ -164,12 +165,11 @@ public class DatabaseCleanupService {
      * @return whitelist table names
      */
     public List<String> getWhitelistTables() {
-        return whitelistTables;
+        return List.copyOf(whitelistTables);
     }
     private static String createExecutionId() {
-        final SecureRandom random = new SecureRandom();
         final byte[] randomBytes = new byte[(EXEC_ID_LENGTH + 1) / 2];
-        random.nextBytes(randomBytes);
+        EXECUTION_ID_RANDOM.nextBytes(randomBytes);
         final StringBuilder identifier = new StringBuilder(randomBytes.length * 2);
         for (final byte randomByte : randomBytes) {
             identifier.append(
