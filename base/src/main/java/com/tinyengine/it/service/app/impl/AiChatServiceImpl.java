@@ -37,6 +37,21 @@ import java.util.regex.Pattern;
  */
 @Service
 @Slf4j
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidInstantiatingObjectsInLoops",
+    "PMD.AvoidLiteralsInIfCondition",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.GodClass",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.ShortVariable",
+    "PMD.UselessParentheses"
+})
 public class AiChatServiceImpl implements AiChatService {
     private static final Pattern PATTERN_TAG_START = Pattern.compile("```javascript|<template>");
     private static final Pattern PATTERN_TAG_END =

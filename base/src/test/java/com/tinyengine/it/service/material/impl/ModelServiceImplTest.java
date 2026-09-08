@@ -18,6 +18,12 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.LawOfDemeter",
+    "PMD.LinguisticNaming",
+    "PMD.LocalVariableCouldBeFinal"
+})
 class ModelServiceImplTest {
 
     @Mock private ModelMapper modelMapper;

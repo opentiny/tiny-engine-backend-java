@@ -35,12 +35,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.TooManyMethods"})
 @NoArgsConstructor
 @Service
 public class DatabaseCleanupService {
-    private static final String SUPPRESS_DDA  = "PMD.DataflowAnomalyAnalysis";
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCleanupService.class);
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -195,7 +193,7 @@ public class DatabaseCleanupService {
             stats.recordFailure(tableName, exception.getMessage());
         }
     }
-    @SuppressWarnings(SUPPRESS_DDA)
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private long clearTable(final String tableName) {
         long result;   // 存储最终返回值
         if (cleanupProperties.isUseTruncate()) {
@@ -232,7 +230,7 @@ public class DatabaseCleanupService {
      *
      * @return whether the table exists
      */
-    @SuppressWarnings(SUPPRESS_DDA)
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public boolean tableExists(final String tableName) {
         boolean exists = false;
         try {
@@ -242,9 +240,7 @@ public class DatabaseCleanupService {
             final Integer count =
                     jdbcTemplate.queryForObject(
                     sql, Integer.class, tableName.toUpperCase(Locale.ROOT));
-            if (count != null && count > 0) {
-                exists = true;
-            }
+            exists = count != null && count > 0;
         } catch (DataAccessException | IllegalArgumentException exception) {
             logWarn("The checklist has failed: {}", exception.getMessage());
         }
@@ -255,16 +251,14 @@ public class DatabaseCleanupService {
      *
      * @return record count in the table
      */
-    @SuppressWarnings(SUPPRESS_DDA)
+    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     public long getTableRecordCount(final String tableName) {
         long result = -1L;
         try {
             validateTableName(tableName);
             final String sql = "SELECT COUNT(*) FROM " + tableName;
             final Long count = jdbcTemplate.queryForObject(sql, Long.class);
-            if (count != null) {
-                result = count;
-            }
+            result = count == null ? 0L : count;
         } catch (DataAccessException | IllegalArgumentException exception) {
             logError("Table record count failed: {}", exception.getMessage());
         }

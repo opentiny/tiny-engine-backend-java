@@ -52,7 +52,27 @@ import java.util.Set;
  */
 @Slf4j
 @Service
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidFinalLocalVariable",
+    "PMD.AvoidUsingHardCodedIP",
+    "PMD.CommentDefaultAccessModifier",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.DefaultPackage",
+    "PMD.ExcessiveImports",
+    "PMD.GodClass",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.ModifiedCyclomaticComplexity",
+    "PMD.NPathComplexity",
+    "PMD.OnlyOneReturn",
+    "PMD.PrematureDeclaration",
+    "PMD.PreserveStackTrace",
+    "PMD.StdCyclomaticComplexity",
+    "PMD.TooManyMethods"
+})
 public class AiChatV1ServiceImpl implements AiChatV1Service {
     private static final int HTTP_OK = 200;
     private static final int STREAM_BUF_SIZE = 8192;

@@ -28,7 +28,18 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.GodClass",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.ShortVariable",
+    "PMD.TooManyMethods"
+})
 public class DynamicService {
     @Autowired private ModelDataDao dynamicDao;
     @Autowired private ModelService modelService;

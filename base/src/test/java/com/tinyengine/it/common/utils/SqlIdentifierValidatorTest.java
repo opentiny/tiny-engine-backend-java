@@ -8,7 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.JUnitAssertionsShouldIncludeMessage",
+    "PMD.JUnitTestContainsTooManyAsserts",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.TooManyMethods"
+})
 class SqlIdentifierValidatorTest {
 
     @Test

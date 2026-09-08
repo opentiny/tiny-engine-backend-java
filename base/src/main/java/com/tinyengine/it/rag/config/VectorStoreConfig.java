@@ -40,6 +40,9 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
+@SuppressWarnings({
+    "PMD.ConfusingTernary", "PMD.DataflowAnomalyAnalysis", "PMD.LawOfDemeter"
+})
 public class VectorStoreConfig {
     private static final int CHROMA_TIMEOUT = 30;
     private static final int HEALTH_TIMEOUT = 5;

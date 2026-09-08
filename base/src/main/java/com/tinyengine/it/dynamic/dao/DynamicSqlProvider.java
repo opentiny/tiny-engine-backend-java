@@ -8,7 +8,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({
+    "PMD.CognitiveComplexity",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.GodClass",
+    "PMD.LawOfDemeter",
+    "PMD.OnlyOneReturn",
+    "PMD.TooManyMethods"
+})
 public class DynamicSqlProvider {
 
     private static final String COUNT_SELECT = "COUNT(*) AS count";

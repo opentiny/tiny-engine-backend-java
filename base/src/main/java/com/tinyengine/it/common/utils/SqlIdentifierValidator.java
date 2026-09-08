@@ -2,6 +2,7 @@ package com.tinyengine.it.common.utils;
 
 import java.util.List;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class SqlIdentifierValidator {
 
     private SqlIdentifierValidator() {

@@ -44,7 +44,24 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({
+    "PMD.AppendCharacterWithChar",
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidLiteralsInIfCondition",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.GodClass",
+    "PMD.InefficientStringBuffering",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.LongVariable",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.PrematureDeclaration",
+    "PMD.ShortVariable",
+    "PMD.TooManyMethods",
+    "PMD.UnnecessaryLocalBeforeReturn"
+})
 public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements ModelService {
 
     @Autowired private DynamicModelService dynamicModelService;

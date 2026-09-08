@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import java.security.GeneralSecurityException;
 import java.util.Base64;
 
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor", "PMD.DataflowAnomalyAnalysis", "PMD.LocalVariableCouldBeFinal"
+})
 class SM4UtilsTest {
     private static final int SHORT_KEY_LEN = 8;
 

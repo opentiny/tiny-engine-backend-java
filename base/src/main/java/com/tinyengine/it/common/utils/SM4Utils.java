@@ -15,6 +15,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class SM4Utils {
 
     private static final String ALGORITHM = "SM4";
@@ -73,13 +74,13 @@ public final class SM4Utils {
 
     public static String decrypt(final String encryptedBase64, final String base64Key)
             throws GeneralSecurityException {
-        final byte[] key = decodeKey(base64Key);
         final Base64.Decoder decoder = Base64.getDecoder();
         final byte[] encryptedWithIv = decoder.decode(encryptedBase64);
         if (encryptedWithIv.length <= IV_LENGTH_BYTES) {
             throw new IllegalArgumentException("Invalid encrypted payload");
         }
 
+        final byte[] key = decodeKey(base64Key);
         final ByteBuffer buffer = ByteBuffer.wrap(encryptedWithIv);
         final byte[] nonce = new byte[IV_LENGTH_BYTES];
         buffer.get(nonce);

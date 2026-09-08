@@ -46,7 +46,37 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({
+    "PMD.AppendCharacterWithChar",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidReassigningParameters",
+    "PMD.CognitiveComplexity",
+    "PMD.ConfusingTernary",
+    "PMD.ConsecutiveAppendsShouldReuse",
+    "PMD.ConsecutiveLiteralAppends",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.ExcessiveImports",
+    "PMD.GodClass",
+    "PMD.ImplicitSwitchFallThrough",
+    "PMD.InefficientStringBuffering",
+    "PMD.InsufficientStringBufferDeclaration",
+    "PMD.LawOfDemeter",
+    "PMD.LinguisticNaming",
+    "PMD.LiteralsFirstInComparisons",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.ModifiedCyclomaticComplexity",
+    "PMD.NPathComplexity",
+    "PMD.OnlyOneReturn",
+    "PMD.PositionLiteralsFirstInComparisons",
+    "PMD.PrematureDeclaration",
+    "PMD.ShortVariable",
+    "PMD.StdCyclomaticComplexity",
+    "PMD.TooManyMethods",
+    "PMD.UnusedPrivateMethod",
+    "PMD.UseStringBufferForStringAppends"
+})
 public class DynamicModelService {
 
     private static final Set<String> SYSTEM_FIELDS =

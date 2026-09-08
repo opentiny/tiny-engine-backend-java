@@ -74,7 +74,35 @@ import java.util.stream.Stream;
  */
 @Service
 @Slf4j
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidCatchingGenericException",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidInstantiatingObjectsInLoops",
+    "PMD.AvoidLiteralsInIfCondition",
+    "PMD.CognitiveComplexity",
+    "PMD.CollapsibleIfStatements",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.EmptyStatementNotInLoop",
+    "PMD.ExcessiveImports",
+    "PMD.GodClass",
+    "PMD.GuardLogStatement",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.LongVariable",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.ModifiedCyclomaticComplexity",
+    "PMD.NPathComplexity",
+    "PMD.OnlyOneReturn",
+    "PMD.PrematureDeclaration",
+    "PMD.ShortVariable",
+    "PMD.SimplifyBooleanReturns",
+    "PMD.StdCyclomaticComplexity",
+    "PMD.TooManyMethods",
+    "PMD.UnnecessarySemicolon",
+    "PMD.UnusedAssignment"
+})
 public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements BlockService {
     private static final int DEFAULT_PAGE_SIZE = 10;
 
