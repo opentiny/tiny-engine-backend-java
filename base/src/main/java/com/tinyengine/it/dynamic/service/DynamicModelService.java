@@ -15,12 +15,14 @@ import com.tinyengine.it.model.dto.ParametersDto;
 import com.tinyengine.it.model.entity.Model;
 import com.tinyengine.it.service.material.ModelService;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -28,11 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -77,6 +75,9 @@ import java.util.stream.Collectors;
     "PMD.UnusedPrivateMethod",
     "PMD.UseStringBufferForStringAppends"
 })
+@SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The constructor stores Spring-managed collaborators without exposing them.")
 public class DynamicModelService {
 
     private static final Set<String> SYSTEM_FIELDS =
@@ -648,19 +649,6 @@ public class DynamicModelService {
     }
 
     /** 验证表和数据 */
-    private void validateTableAndData(String tableName, Map<String, Object> data) {
-        SqlIdentifierValidator.validate(tableName);
-
-        if (data == null || data.isEmpty()) {
-            throw new IllegalArgumentException("数据不能为空");
-        }
-
-        // 验证字段名格式
-        for (String field : data.keySet()) {
-            SqlIdentifierValidator.validate(field);
-        }
-    }
-
     /**
      * 创建数据.
      *
@@ -687,23 +675,12 @@ public class DynamicModelService {
                 String.format("INSERT INTO %s (%s) VALUES (%s)", tableName, columns, placeholders);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        PreparedStatementCreatorFactory creatorFactory =
+                new PreparedStatementCreatorFactory(sql);
+        creatorFactory.setReturnGeneratedKeys(true);
 
         jdbcTemplate.update(
-                new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(Connection con)
-                            throws SQLException {
-                        PreparedStatement ps =
-                                con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-                        int index = 1;
-                        for (Object value : record.values()) {
-                            ps.setObject(index++, value);
-                        }
-
-                        return ps;
-                    }
-                },
+                creatorFactory.newPreparedStatementCreator(record.values().toArray()),
                 keyHolder);
 
         Long generatedId = keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;

@@ -619,7 +619,7 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
                 result = updateBlockById(blockParam);
             }
             return result;
-        } catch (Exception e) {
+        } catch (RuntimeException exception) {
             return Result.failed(ExceptionEnum.CM001);
         }
     }
@@ -705,21 +705,19 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
                 return Result.failed(ExceptionEnum.CM206);
             }
         }
-        List<Block> blocksList = new ArrayList<>();
         // 如果有 groupId, 只查group下的block,以及自己创建的区块
         if (groupIdTemp != 0) {
-            blocksList =
+            List<Block> groupBlocks =
                     baseMapper.findBlockByBlockGroupId(
                             groupIdTemp, loginUserContext.getLoginUserId());
-            return Result.success(blocksList);
+            return Result.success(groupBlocks);
         }
         // 如果没有 groupId
         // 1. 查询和 app 相关的所有 group
         // 2. 组合 groups 下的所有 block
         // 3. 查询个人创建的 blocks
         // 4. 将个人的和 groups 下的 blocks 合并去重
-        blocksList = baseMapper.findBlocksByBlockGroupIdAppId(appIdTemp);
-        List<Block> appBlocks = blocksList;
+        List<Block> appBlocks = baseMapper.findBlocksByBlockGroupIdAppId(appIdTemp);
         // 通过createBy查询区块表数据
         Block blocks = new Block();
         blocks.setCreatedBy(loginUserContext.getLoginUserId());

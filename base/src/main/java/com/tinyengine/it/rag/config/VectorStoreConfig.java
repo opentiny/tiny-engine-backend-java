@@ -23,6 +23,8 @@ import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.chroma.ChromaEmbeddingStore;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,6 +45,9 @@ import java.util.List;
 @SuppressWarnings({
     "PMD.ConfusingTernary", "PMD.DataflowAnomalyAnalysis", "PMD.LawOfDemeter"
 })
+@SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The configuration is a Spring-managed collaborator and is not exposed.")
 public class VectorStoreConfig {
     private static final int CHROMA_TIMEOUT = 30;
     private static final int HEALTH_TIMEOUT = 5;
