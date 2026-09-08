@@ -206,7 +206,12 @@ public class StorageService {
      * @return whether the file format is supported
      */
     private boolean isSupportedFormat(Path filePath) {
-        String fileName = filePath.getFileName().toString().toLowerCase(Locale.ROOT);
+        Path fileNamePath = filePath == null ? null : filePath.getFileName();
+        if (fileNamePath == null) {
+            return false;
+        }
+
+        String fileName = fileNamePath.toString().toLowerCase(Locale.ROOT);
         return SUPPORTED_FORMATS.stream().anyMatch(format -> fileName.endsWith(format));
     }
 
@@ -398,20 +403,6 @@ public class StorageService {
 
         // 默认集合
         return DEFAULT_COLL;
-    }
-
-    /**
-     * 检查文件格式是否支持.
-     *
-     * @return whether the file format is supported
-     */
-    private boolean isSupportedFormat(String filePath) {
-        if (filePath == null) {
-            return false;
-        }
-
-        String lowerPath = filePath.toLowerCase(Locale.ROOT);
-        return SUPPORTED_FORMATS.stream().anyMatch(lowerPath::endsWith);
     }
 
     /**
@@ -670,14 +661,15 @@ public class StorageService {
                             totalSize,
                             collectionName);
                 }
-            } catch (Exception e) {
+            } catch (RuntimeException exception) {
                 errorCount++;
                 logError(
                         "Vectorization failed [{}] in collection {}: {}",
                         (startIndex + i + 1),
                         collectionName,
                         segment.text()
-                                .substring(0, Math.min(PREVIEW_LEN, segment.text().length())));
+                                .substring(0, Math.min(PREVIEW_LEN, segment.text().length())),
+                        exception);
             }
         }
 
@@ -688,11 +680,11 @@ public class StorageService {
                         "Successfully stored {} text segments to vector database in collection: {}",
                         embeddings.size(),
                         collectionName);
-            } catch (Exception e) {
+            } catch (RuntimeException exception) {
                 logError(
                         "Batch storage to vector database failed in collection: {}",
                         collectionName,
-                        e);
+                        exception);
                 errorCount += embeddings.size();
                 successCount -= embeddings.size();
             }

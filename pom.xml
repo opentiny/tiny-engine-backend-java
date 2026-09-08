@@ -65,6 +65,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.7.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid-spring-boot-starter.version}</version>

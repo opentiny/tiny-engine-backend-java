@@ -269,6 +269,8 @@ public class AiChatServiceImpl implements AiChatService {
     }
 
     private List<AiMessages> formatMessage(List<AiMessages> messages) {
+        List<AiMessages> formattedMessages = new ArrayList<>(messages);
+        AiMessages firstMessage = formattedMessages.get(0);
         AiMessages defaultWords = new AiMessages();
         defaultWords.setRole("user");
         defaultWords.setContent(
@@ -284,21 +286,18 @@ public class AiChatServiceImpl implements AiChatService {
                         + "5. 不要加任何注释\n"
                         + "6. el-table标签内不得出现el-table-column\n"
                         + "###");
-        defaultWords.setName(messages.get(0).getName());
-        String role = messages.get(0).getRole();
-        String content = messages.get(0).getContent();
-
-        List<AiMessages> aiMessages = new ArrayList<>();
+        defaultWords.setName(firstMessage.getName());
+        String role = firstMessage.getRole();
+        String content = firstMessage.getContent();
 
         if (content == null || !content.contains(REQ_MARKER)) {
-            AiMessages aiMessagesResult = messages.get(0);
-            aiMessagesResult.setContent(defaultWords.getContent() + "\n" + content);
+            firstMessage.setContent(defaultWords.getContent() + "\n" + content);
         }
         if (!"user".equals(role)) {
-            aiMessages.add(0, defaultWords);
+            formattedMessages.add(0, defaultWords);
         }
 
-        return messages;
+        return formattedMessages;
     }
 
     private boolean isSafeToken(String token) {

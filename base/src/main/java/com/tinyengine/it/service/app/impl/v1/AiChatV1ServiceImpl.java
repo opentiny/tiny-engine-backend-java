@@ -19,6 +19,8 @@ import com.tinyengine.it.config.OpenAIConfig;
 import com.tinyengine.it.model.dto.ChatRequest;
 import com.tinyengine.it.service.app.v1.AiChatV1Service;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
@@ -73,6 +75,9 @@ import java.util.Set;
     "PMD.StdCyclomaticComplexity",
     "PMD.TooManyMethods"
 })
+@SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "The configuration is a Spring-managed collaborator and is not exposed.")
 public class AiChatV1ServiceImpl implements AiChatV1Service {
     private static final int HTTP_OK = 200;
     private static final int STREAM_BUF_SIZE = 8192;

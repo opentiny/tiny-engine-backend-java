@@ -26,27 +26,29 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings({"PMD.DataflowAnomalyAnalysis", "PMD.TooManyMethods"})
-@NoArgsConstructor
 @Service
+@SuppressWarnings("PMD.TooManyMethods")
 public class DatabaseCleanupService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCleanupService.class);
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final int EXEC_ID_LENGTH = 8;
 
-    @Autowired private JdbcTemplate jdbcTemplate;
-
-    @Autowired private CleanupProperties cleanupProperties;
+    private final boolean cleanupEnabled;
+    private final boolean useTruncate;
+    private final boolean sendWarning;
+    private final String cronExpression;
+    private final List<String> whitelistTables;
+    private final JdbcTemplate jdbcTemplate;
 
     private final Map<String, ExecutionStats> executionStats = new ConcurrentHashMap<>();
 
@@ -73,10 +75,25 @@ public class DatabaseCleanupService {
                     "t_page_history",
                     "t_page_template");
 
+    @Autowired
+    public DatabaseCleanupService(
+            final JdbcTemplate jdbcTemplate, final CleanupProperties cleanupProperties) {
+        this.jdbcTemplate = jdbcTemplate;
+        cleanupEnabled = cleanupProperties.isEnabled();
+        useTruncate = cleanupProperties.isUseTruncate();
+        sendWarning = cleanupProperties.isSendWarning();
+        cronExpression = cleanupProperties.getCronExpression();
+        final List<String> configuredTables = cleanupProperties.getWhitelistTables();
+        whitelistTables =
+                configuredTables == null || configuredTables.isEmpty()
+                        ? DEFAULT_TABLES
+                        : List.copyOf(configuredTables);
+    }
+
     /** 每天24:00自动执行清空操作 */
     @Scheduled(cron = "${cleanup.cron-expression:0 0 0 * * ?}")
     public void autoCleanupAtMidnight() {
-        if (!cleanupProperties.isEnabled()) {
+        if (!cleanupEnabled) {
             logInfo("⏸️ Clearing tasks is disabled, skipping execution");
             return;
         }
@@ -114,7 +131,7 @@ public class DatabaseCleanupService {
     /** 每天23:55发送预警通知 */
     @Scheduled(cron = "0 55 23 * * ?")
     public void sendCleanupWarning() {
-        if (!cleanupProperties.isEnabled() || !cleanupProperties.isSendWarning()) {
+        if (!cleanupEnabled || !sendWarning) {
             return;
         }
 
@@ -132,10 +149,9 @@ public class DatabaseCleanupService {
     public void init() {
         logInfo("🚀 Database auto-clear service initialization completed");
         logInfo("📋 Configuration table: {}", getWhitelistTables());
-        logInfo("⏰ Execution time: {}", cleanupProperties.getCronExpression());
-        logInfo(
-                "🔧 Mode in use: {}", cleanupProperties.isUseTruncate() ? "TRUNCATE" : "DELETE");
-        logInfo("✅ Service status: {}", cleanupProperties.isEnabled() ? "Enabled" : "Disabled");
+        logInfo("⏰ Execution time: {}", cronExpression);
+        logInfo("🔧 Mode in use: {}", useTruncate ? "TRUNCATE" : "DELETE");
+        logInfo("✅ Service status: {}", cleanupEnabled ? "Enabled" : "Disabled");
         logInfo("==========================================");
     }
 
@@ -145,20 +161,19 @@ public class DatabaseCleanupService {
      *
      * @return whitelist table names
      */
-    @SuppressWarnings("PMD.LawOfDemeter")
     public List<String> getWhitelistTables() {
-        final List<String> tables = cleanupProperties.getWhitelistTables();
-        return tables != null && !tables.isEmpty() ? tables : DEFAULT_TABLES;
+        return whitelistTables;
     }
-    @SuppressWarnings("PMD.LawOfDemeter")
     private static String createExecutionId() {
-        final UUID uuid = UUID.randomUUID();
-        final String fullUuid = uuid.toString();
-        return truncateUuid(fullUuid);
-    }
-
-    private static String truncateUuid(final String uuid) {
-        return uuid.substring(0, EXEC_ID_LENGTH);
+        final SecureRandom random = new SecureRandom();
+        final byte[] randomBytes = new byte[(EXEC_ID_LENGTH + 1) / 2];
+        random.nextBytes(randomBytes);
+        final StringBuilder identifier = new StringBuilder(randomBytes.length * 2);
+        for (final byte randomByte : randomBytes) {
+            identifier.append(Character.forDigit((randomByte >>> 4) & 0x0F, 16));
+            identifier.append(Character.forDigit(randomByte & 0x0F, 16));
+        }
+        return identifier.substring(0, EXEC_ID_LENGTH);
     }
 
     private static String currentTime() {
@@ -172,7 +187,6 @@ public class DatabaseCleanupService {
             final ExecutionStats stats,
             final CleanupSummary cleanupSummary) {
         try {
-            validateTableName(tableName);
             if (!tableExists(tableName)) {
                 logWarn("⚠️  Table {} does not exist, skip", tableName);
                 stats.recordSkipped(tableName, "Table does not exist");
@@ -193,88 +207,6 @@ public class DatabaseCleanupService {
             stats.recordFailure(tableName, exception.getMessage());
         }
     }
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    private long clearTable(final String tableName) {
-        long result;   // 存储最终返回值
-        if (cleanupProperties.isUseTruncate()) {
-            final long recordCount = getTableRecordCount(tableName);
-            truncateTable(tableName);
-            result = recordCount;
-        } else {
-            result = clearTableData(tableName);
-
-        }
-        return result;   // 唯一的返回语句
-    }
-
-    /**
-     * 清空表数据（DELETE方式）.
-     *
-     * @return number of deleted rows
-     */
-    private long clearTableData(final String tableName) {
-        validateTableName(tableName);
-        final String sql = "DELETE FROM " + tableName;
-        return jdbcTemplate.update(sql);
-    }
-
-    /** 清空表数据（TRUNCATE方式） */
-    private void truncateTable(final String tableName) {
-        validateTableName(tableName);
-        final String sql = "TRUNCATE TABLE " + tableName;
-        jdbcTemplate.execute(sql);
-    }
-
-    /**
-     * 检查表是否存在.
-     *
-     * @return whether the table exists
-     */
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public boolean tableExists(final String tableName) {
-        boolean exists = false;
-        try {
-            final String sql =
-                    "SELECT COUNT(*) FROM information_schema.tables "
-                    + "WHERE table_schema = DATABASE() AND table_name = ?";
-            final Integer count =
-                    jdbcTemplate.queryForObject(
-                    sql, Integer.class, tableName.toUpperCase(Locale.ROOT));
-            exists = count != null && count > 0;
-        } catch (DataAccessException | IllegalArgumentException exception) {
-            logWarn("The checklist has failed: {}", exception.getMessage());
-        }
-        return exists;
-    }
-    /**
-     * 获取表记录数量.
-     *
-     * @return record count in the table
-     */
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    public long getTableRecordCount(final String tableName) {
-        long result = -1L;
-        try {
-            validateTableName(tableName);
-            final String sql = "SELECT COUNT(*) FROM " + tableName;
-            final Long count = jdbcTemplate.queryForObject(sql, Long.class);
-            result = count == null ? 0L : count;
-        } catch (DataAccessException | IllegalArgumentException exception) {
-            logError("Table record count failed: {}", exception.getMessage());
-        }
-        return result;
-    }
-
-    /** 验证表名安全性 */
-    private void validateTableName(final String tableName) {
-        if (tableName == null || tableName.isBlank()) {
-            throw new IllegalArgumentException("Table name cannot be empty");
-        }
-        if (!tableName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$")) {
-            throw new IllegalArgumentException("Invalid table name format: " + tableName);
-        }
-    }
-
     /**
      * 获取执行统计.
      *
@@ -386,16 +318,70 @@ public class DatabaseCleanupService {
         public Map<String, TableResult> getTableResults() {
             return tableResults;
         }
-        @ SuppressWarnings({"PMD.DataflowAnomalyAnalysis", "PMD.LawOfDemeter"})
         public long getDurationSeconds() {
             long result = 0;  // 默认值对应 startTime 或 endTime 为空的情况
             if (startTime != null && endTime != null) {
                 final LocalDateTime start = LocalDateTime.parse(startTime, FORMATTER);
                 final LocalDateTime end = LocalDateTime.parse(endTime, FORMATTER);
                 final Duration duration = between(start, end);   // 使用静态导入的方法
-                result = duration.getSeconds();                  // 单独调用，无链式
+                result = durationInSeconds(duration);
             }
             return result;  // 唯一的退出点
+        }
+
+        private static long durationInSeconds(final Duration duration) {
+            return duration.getSeconds();
+        }
+    }
+
+    private long clearTable(final String tableName) {
+        validateTableName(tableName);
+        long rowsCleaned;
+        if (useTruncate) {
+            final long recordCount = getTableRecordCount(tableName);
+            jdbcTemplate.execute("TRUNCATE TABLE " + tableName);
+            rowsCleaned = recordCount;
+        } else {
+            rowsCleaned = jdbcTemplate.update("DELETE FROM " + tableName);
+        }
+        return rowsCleaned;
+    }
+
+    public boolean tableExists(final String tableName) {
+        boolean exists = false;
+        try {
+            final String sql =
+                    "SELECT COUNT(*) FROM information_schema.tables "
+                            + "WHERE table_schema = DATABASE() AND table_name = ?";
+            final Integer count =
+                    jdbcTemplate.queryForObject(
+                            sql, Integer.class, tableName.toUpperCase(Locale.ROOT));
+            exists = count != null && count > 0;
+        } catch (DataAccessException | IllegalArgumentException exception) {
+            logWarn("The checklist has failed: {}", exception.getMessage());
+        }
+        return exists;
+    }
+
+    public long getTableRecordCount(final String tableName) {
+        long count = -1L;
+        try {
+            validateTableName(tableName);
+            final Long queriedCount =
+                    jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + tableName, Long.class);
+            count = queriedCount == null ? 0L : queriedCount;
+        } catch (DataAccessException | IllegalArgumentException exception) {
+            logError("Table record count failed: {}", exception.getMessage());
+        }
+        return count;
+    }
+
+    private void validateTableName(final String tableName) {
+        if (tableName == null || tableName.isBlank()) {
+            throw new IllegalArgumentException("Table name cannot be empty");
+        }
+        if (!tableName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$")) {
+            throw new IllegalArgumentException("Invalid table name format: " + tableName);
         }
     }
 
