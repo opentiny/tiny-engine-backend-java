@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD.TooManyMethods,DataflowAnomalyAnalysis")
 public class DatabaseCleanupService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCleanupService.class);
     private static final DateTimeFormatter FORMATTER =
