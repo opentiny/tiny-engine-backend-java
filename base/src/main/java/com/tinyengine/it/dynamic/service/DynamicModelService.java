@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -86,8 +85,6 @@ public class DynamicModelService {
     private static final int DEFAULT_VARCHAR = 255;
     private static final int ASC_SUFFIX_LEN = 4;
     private static final int DESC_SUFFIX_LEN = 5;
-    private static final Pattern ALTER_PATTERN =
-            Pattern.compile("^(ADD COLUMN|MODIFY COLUMN|DROP COLUMN) [A-Za-z_][A-Za-z0-9_]*.*$");
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -534,7 +531,8 @@ public class DynamicModelService {
         if (!tableName.matches("^dynamic_[a-z0-9_]+$")) {
             throw new IllegalArgumentException("Invalid dynamic table name");
         }
-        if (!ALTER_PATTERN.matcher(alterStatement).matches()
+        if (!alterStatement.matches(
+                        "^(ADD COLUMN|MODIFY COLUMN|DROP COLUMN) [A-Za-z_][A-Za-z0-9_]*( [^;#]*)?$")
                 || alterStatement.contains(";")
                 || alterStatement.contains("--")
                 || alterStatement.contains("/*")

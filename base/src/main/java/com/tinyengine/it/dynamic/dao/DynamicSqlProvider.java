@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 @SuppressWarnings({
     "PMD.CognitiveComplexity",
     "PMD.CyclomaticComplexity",
@@ -24,7 +23,6 @@ public class DynamicSqlProvider {
     private static final String TABLE_NAME_PARAM = "tableName";
     private static final String CONDITIONS_PARAM = "conditions";
     private static final String DATA_PARAM = "data";
-    private static final Pattern SQL_ID_PATTERN = Pattern.compile("^[A-Za-z_][A-Za-z0-9_]*$");
 
     @SuppressWarnings("PMD.UnnecessaryConstructor")
     public DynamicSqlProvider() {
@@ -183,7 +181,7 @@ public class DynamicSqlProvider {
 
     private String requireIdentifier(final Object value, final String name) {
         final String identifier = requireString(value, name);
-        if (!SQL_ID_PATTERN.matcher(identifier).matches()) {
+        if (!identifier.matches("^[A-Za-z_][A-Za-z0-9_]*$")) {
             throw new IllegalArgumentException(name + " must be a valid SQL identifier");
         }
         return identifier;
