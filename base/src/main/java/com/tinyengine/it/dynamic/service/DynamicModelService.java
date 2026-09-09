@@ -616,38 +616,42 @@ public class DynamicModelService {
         sb.append(columnName).append(" ");
 
         // 映射数据类型
-        switch (field.getType() == null ? "" : field.getType()) {
-            case "String":
-                int maxLength =
-                        field.getMaxLength() != null ? field.getMaxLength() : DEFAULT_VARCHAR;
-                if (maxLength <= 0 || maxLength > MAX_VARCHAR) {
-                    throw new IllegalArgumentException("Invalid VARCHAR length");
-                }
-                sb.append("VARCHAR(").append(maxLength).append(")");
-                break;
-            case "Integer", "Number":
-                sb.append("INT");
-                break;
-            case "Boolean":
-                sb.append("TINYINT(1)");
-                break;
-            case "Date":
-                sb.append("DATE");
-                break;
-            case "DateTime":
-                sb.append("DATETIME");
-                break;
-            case "Enum":
-                sb.append("ENUM")
-                        .append("(")
-                        .append(getEnumOptions(field.getOptions()))
-                        .append(")");
-                break;
-            case "ModelRef":
-                sb.append("VARCHAR(255)"); // 存储JSON字符串，长度可根据实际需求调整
-                break;
-            default:
-                sb.append("TEXT");
+        if (field.getType() == null) {
+            sb.append("VARCHAR(").append(DEFAULT_VARCHAR).append(")");
+        } else {
+            switch (field.getType()) {
+                case "String":
+                    int maxLength =
+                            field.getMaxLength() != null ? field.getMaxLength() : DEFAULT_VARCHAR;
+                    if (maxLength <= 0 || maxLength > MAX_VARCHAR) {
+                        throw new IllegalArgumentException("Invalid VARCHAR length");
+                    }
+                    sb.append("VARCHAR(").append(maxLength).append(")");
+                    break;
+                case "Integer", "Number":
+                    sb.append("INT");
+                    break;
+                case "Boolean":
+                    sb.append("TINYINT(1)");
+                    break;
+                case "Date":
+                    sb.append("DATE");
+                    break;
+                case "DateTime":
+                    sb.append("DATETIME");
+                    break;
+                case "Enum":
+                    sb.append("ENUM")
+                            .append("(")
+                            .append(getEnumOptions(field.getOptions()))
+                            .append(")");
+                    break;
+                case "ModelRef":
+                    sb.append("VARCHAR(255)"); // 存储JSON字符串，长度可根据实际需求调整
+                    break;
+                default:
+                    sb.append("TEXT");
+            }
         }
 
         if (Boolean.TRUE.equals(field.getRequired())) {

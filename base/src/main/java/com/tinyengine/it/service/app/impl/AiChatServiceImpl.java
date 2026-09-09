@@ -290,7 +290,9 @@ public class AiChatServiceImpl implements AiChatService {
         String role = firstMessage.getRole();
         String content = firstMessage.getContent();
 
-        if (content == null || !content.contains(REQ_MARKER)) {
+        if (content == null) {
+            firstMessage.setContent(defaultWords.getContent());
+        } else if (!content.contains(REQ_MARKER)) {
             firstMessage.setContent(defaultWords.getContent() + "\n" + content);
         }
         if (!"user".equals(role)) {
