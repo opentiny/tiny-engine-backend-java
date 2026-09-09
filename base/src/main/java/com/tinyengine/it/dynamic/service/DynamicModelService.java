@@ -83,8 +83,33 @@ public class DynamicModelService {
     private static final Set<String> SYSTEM_FIELDS =
             Set.of("id", "created_at", "updated_at", "deleted_at", "created_by", "updated_by");
     private static final int DEFAULT_VARCHAR = 255;
+    private static final int MAX_VARCHAR = 65_535;
     private static final int ASC_SUFFIX_LEN = 4;
     private static final int DESC_SUFFIX_LEN = 5;
+    private static final String IDENTIFIER_REGEX = "[A-Za-z_][A-Za-z0-9_]*";
+    private static final String LITERAL_REGEX = "'(?:''|[^'\\r\\n])*'";
+    private static final String COLUMN_TYPE_REGEX =
+            "(?:VARCHAR\\([1-9][0-9]{0,4}\\)|INT|TINYINT\\(1\\)|DATE|DATETIME|TEXT|ENUM\\("
+                    + LITERAL_REGEX
+                    + "(?:, "
+                    + LITERAL_REGEX
+                    + ")*\\))";
+    private static final String ALTER_REGEX =
+            "^(?:ADD COLUMN|MODIFY COLUMN) "
+                    + IDENTIFIER_REGEX
+                    + " "
+                    + COLUMN_TYPE_REGEX
+                    + "(?: NOT NULL)?"
+                    + "(?: DEFAULT "
+                    + LITERAL_REGEX
+                    + ")?"
+                    + "(?: COMMENT "
+                    + LITERAL_REGEX
+                    + ")?"
+                    + "(?: AFTER "
+                    + IDENTIFIER_REGEX
+                    + ")?$";
+    private static final String DROP_REGEX = "^DROP COLUMN " + IDENTIFIER_REGEX + "$";
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -531,13 +556,9 @@ public class DynamicModelService {
         if (!tableName.matches("^dynamic_[a-z0-9_]+$")) {
             throw new IllegalArgumentException("Invalid dynamic table name");
         }
-        if (!alterStatement.matches(
-                        "^(ADD COLUMN|MODIFY COLUMN|DROP COLUMN) [A-Za-z_][A-Za-z0-9_]*( [^;#]*)?$")
-                || alterStatement.contains(";")
-                || alterStatement.contains("--")
-                || alterStatement.contains("/*")
-                || alterStatement.contains("*/")
-                || alterStatement.contains("#")) {
+        if (alterStatement == null
+                || !alterStatement.matches(ALTER_REGEX)
+                        && !alterStatement.matches(DROP_REGEX)) {
             throw new IllegalArgumentException("Invalid ALTER TABLE statement");
         }
         final String sql = String.format("ALTER TABLE %s %s", tableName, alterStatement);
@@ -599,6 +620,9 @@ public class DynamicModelService {
             case "String":
                 int maxLength =
                         field.getMaxLength() != null ? field.getMaxLength() : DEFAULT_VARCHAR;
+                if (maxLength <= 0 || maxLength > MAX_VARCHAR) {
+                    throw new IllegalArgumentException("Invalid VARCHAR length");
+                }
                 sb.append("VARCHAR(").append(maxLength).append(")");
                 break;
             case "Integer", "Number":
@@ -658,6 +682,9 @@ public class DynamicModelService {
         }
         for (int i = 0; i < jsonList.size(); i++) {
             String value = jsonList.getJSONObject(i).getString("value");
+            if (value == null || value.contains("\r") || value.contains("\n")) {
+                throw new IllegalArgumentException("Invalid enum option");
+            }
             options.add(SqlIdentifierValidator.escapeSqlLiteral(value));
         }
 
