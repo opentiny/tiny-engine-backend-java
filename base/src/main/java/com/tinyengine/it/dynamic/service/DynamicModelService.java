@@ -300,13 +300,6 @@ public class DynamicModelService {
     public List<Map<String, Object>> dynamicCount(
             String tableName, Map<String, Object> conditions) {
 
-        SqlIdentifierValidator.validate(tableName);
-        if (conditions != null && !conditions.isEmpty()) {
-            for (String key : conditions.keySet()) {
-                SqlIdentifierValidator.validate(key);
-            }
-        }
-
         // 1. 构建SQL
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) as count");
 
