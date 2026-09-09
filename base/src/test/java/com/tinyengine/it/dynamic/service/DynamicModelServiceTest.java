@@ -39,6 +39,22 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.ExcessiveImports",
+    "PMD.JUnitAssertionsShouldIncludeMessage",
+    "PMD.JUnitTestContainsTooManyAsserts",
+    "PMD.LawOfDemeter",
+    "PMD.LinguisticNaming",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.LongVariable",
+    "PMD.ShortVariable",
+    "PMD.SingularField",
+    "PMD.TooManyMethods",
+    "PMD.TooManyStaticImports"
+})
 class DynamicModelServiceTest {
 
     private static final int PAGE_SIZE = 10;
