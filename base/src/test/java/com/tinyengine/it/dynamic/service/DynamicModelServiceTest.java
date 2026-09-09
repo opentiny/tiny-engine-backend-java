@@ -170,6 +170,16 @@ class DynamicModelServiceTest {
 	}
 
 	@Test
+	void dynamicCountRejectsUnsafeIdentifiers() {
+		Map<String, Object> conditions = Map.of("id; DROP TABLE users", 1);
+
+		assertThrows(
+				IllegalArgumentException.class,
+				() -> dynamicModelService.dynamicCount("test_table", conditions));
+		verifyNoInteractions(namedParameterJdbcTemplate, jdbcTemplate);
+	}
+
+	@Test
 	void count() {
 		// Arrange
 		String tableName = "test_table";
