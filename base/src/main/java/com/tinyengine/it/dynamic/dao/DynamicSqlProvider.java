@@ -71,9 +71,10 @@ public class DynamicSqlProvider {
         if (pageNum != null && pageSize != null) {
             final int safePageNum = requirePositiveInt(pageNum, "pageNum");
             final int safePageSize = requirePositiveInt(pageSize, "pageSize");
-            params.put("offset", (safePageNum - 1) * safePageSize);
+            final int offset = Math.multiplyExact(safePageNum - 1, safePageSize);
+            params.put("offset", offset);
             params.put("limit", safePageSize);
-            return sql + " LIMIT #{offset}, #{limit}";
+            return sql + " LIMIT " + offset + ", " + safePageSize;
         }
 
         return sql.toString();
