@@ -789,7 +789,12 @@ public class StorageService {
      */
     public DeleteResult deleteByFilePath(String filePath, String collectionName) {
         try {
-            String safeFilePath = resolveDocumentPath(filePath).toString();
+            final Path documentRoot = getDocumentRoot();
+            final Path resolvedPath = resolveDocumentPath(filePath, documentRoot);
+            final String safeFilePath =
+                    Files.exists(resolvedPath)
+                            ? resolveRealDocumentPath(resolvedPath, documentRoot).toString()
+                            : resolvedPath.toString();
             logInfo(
                     "Deleting documents by file path: {} from collection: {}",
                     safeFilePath,
