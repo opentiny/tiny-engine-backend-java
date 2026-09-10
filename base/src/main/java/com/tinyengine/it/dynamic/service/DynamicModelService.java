@@ -86,30 +86,20 @@ public class DynamicModelService {
     private static final int MAX_VARCHAR = 65_535;
     private static final int ASC_SUFFIX_LEN = 4;
     private static final int DESC_SUFFIX_LEN = 5;
-    private static final String IDENTIFIER_REGEX = "[A-Za-z_][A-Za-z0-9_]*";
-    private static final String LITERAL_REGEX = "'(?:''|[^'\\r\\n])*'";
-    private static final String COLUMN_TYPE_REGEX =
-            "(?:VARCHAR\\([1-9][0-9]{0,4}\\)|INT|TINYINT\\(1\\)|DATE|DATETIME|TEXT|ENUM\\("
-                    + LITERAL_REGEX
-                    + "(?:, "
-                    + LITERAL_REGEX
-                    + ")*\\))";
-    private static final String ALTER_REGEX =
-            "^(?:ADD COLUMN|MODIFY COLUMN) "
-                    + IDENTIFIER_REGEX
-                    + " "
-                    + COLUMN_TYPE_REGEX
-                    + "(?: NOT NULL)?"
-                    + "(?: DEFAULT "
-                    + LITERAL_REGEX
-                    + ")?"
-                    + "(?: COMMENT "
-                    + LITERAL_REGEX
-                    + ")?"
-                    + "(?: AFTER "
-                    + IDENTIFIER_REGEX
-                    + ")?$";
-    private static final String DROP_REGEX = "^DROP COLUMN " + IDENTIFIER_REGEX + "$";
+
+    private enum AlterOperationType {
+        ADD,
+        MODIFY,
+        DROP
+    }
+
+    private record AlterOperation(
+            AlterOperationType type,
+            String columnName,
+            ParametersDto parameter,
+            String columnType,
+            String afterColumn) {
+    }
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -510,7 +500,7 @@ public class DynamicModelService {
                                         col -> col.get("DATA_TYPE")));
 
         // Generate ALTER TABLE statements
-        List<String> alterStatements = new ArrayList<>();
+        List<AlterOperation> alterOperations = new ArrayList<>();
         // Add or modify columns based on parameters
         for (int i = 0; i < parameters.size(); i++) {
             String afterColumn = null;
@@ -525,14 +515,22 @@ public class DynamicModelService {
 
             if (!existingColumnMap.containsKey(columnName)) {
                 // Add new column
-                String addSql = generateColumnDefinition(param, "add");
-                if (afterColumn != null) {
-                    addSql += " AFTER " + afterColumn;
-                }
-                alterStatements.add(addSql);
+                alterOperations.add(
+                        new AlterOperation(
+                                AlterOperationType.ADD,
+                                columnName,
+                                param,
+                                null,
+                                afterColumn));
             } else if (!existingColumnMap.get(columnName).equalsIgnoreCase(columnType)) {
                 // Modify existing column
-                alterStatements.add(String.format("MODIFY COLUMN %s %s", columnName, columnType));
+                alterOperations.add(
+                        new AlterOperation(
+                                AlterOperationType.MODIFY,
+                                columnName,
+                                null,
+                                columnType,
+                                null));
             }
         }
 
@@ -542,27 +540,91 @@ public class DynamicModelService {
         for (String existingColumn : existingColumnMap.keySet()) {
             SqlIdentifierValidator.validate(existingColumn);
             if (parameters.stream().noneMatch(param -> param.getProp().equals(existingColumn))) {
-                alterStatements.add(String.format("DROP COLUMN %s", existingColumn));
+                alterOperations.add(
+                        new AlterOperation(
+                                AlterOperationType.DROP,
+                                existingColumn,
+                                null,
+                                null,
+                                null));
             }
         }
 
         // Execute ALTER TABLE statements
-        for (String alterStatement : alterStatements) {
-            executeAlterTableStatement(tableName, alterStatement);
+        for (AlterOperation operation : alterOperations) {
+            executeAlterTableStatement(tableName, operation);
         }
     }
 
-    private void executeAlterTableStatement(final String tableName, final String alterStatement) {
-        if (!tableName.matches("^dynamic_[a-z0-9_]+$")) {
-            throw new IllegalArgumentException("Invalid dynamic table name");
+    private void executeAlterTableStatement(
+            final String tableName, final AlterOperation operation) {
+        String safeTable = requireAlterIdentifier(tableName, "tableName");
+        String sql;
+        switch (operation.type()) {
+            case ADD:
+                sql = buildAddColumnSql(operation, safeTable);
+                break;
+            case MODIFY:
+                sql = buildModifyColumnSql(operation, safeTable);
+                break;
+            case DROP:
+                sql =
+                        "ALTER TABLE "
+                                + safeTable
+                                + " DROP COLUMN "
+                                + requireAlterIdentifier(operation.columnName(), "columnName");
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported ALTER TABLE operation");
         }
-        if (alterStatement == null
-                || !alterStatement.matches(ALTER_REGEX)
-                        && !alterStatement.matches(DROP_REGEX)) {
-            throw new IllegalArgumentException("Invalid ALTER TABLE statement");
-        }
-        final String sql = String.format("ALTER TABLE %s %s", tableName, alterStatement);
         jdbcTemplate.execute(sql);
+    }
+
+    private String buildAddColumnSql(
+            final AlterOperation operation, final String tableName) {
+        requireAlterIdentifier(operation.columnName(), "columnName");
+        final String columnDefinition = generateColumnDefinition(operation.parameter(), "add");
+        final String afterColumn = operation.afterColumn();
+        return afterColumn == null
+                ? "ALTER TABLE " + tableName + " " + columnDefinition
+                : "ALTER TABLE "
+                        + tableName
+                        + " "
+                        + columnDefinition
+                        + " AFTER "
+                        + requireAlterIdentifier(afterColumn, "afterColumn");
+    }
+
+    private String buildModifyColumnSql(
+            final AlterOperation operation, final String tableName) {
+        return "ALTER TABLE "
+                + tableName
+                + " MODIFY COLUMN "
+                + requireAlterIdentifier(operation.columnName(), "columnName")
+                + " "
+                + requireColumnType(operation.columnType());
+    }
+
+    private String requireAlterIdentifier(final String value, final String name) {
+        if (value == null || !value.matches("^[A-Za-z_][A-Za-z0-9_]*$")) {
+            throw new IllegalArgumentException(name + " must be a valid SQL identifier");
+        }
+        return value;
+    }
+
+    private String requireColumnType(final String value) {
+        if (value == null
+                || !(value.equals("INT")
+                        || value.equals("TINYINT")
+                        || value.equals("DATE")
+                        || value.equals("TIMESTAMP")
+                        || value.equals("VARCHAR")
+                        || value.equals("Enum")
+                        || value.equals("TEXT")
+                        || value.matches("^VARCHAR\\([1-9][0-9]{0,4}\\)$"))) {
+            throw new IllegalArgumentException("Invalid SQL column type");
+        }
+        return value;
     }
 
     private void addCommonFields(List<ParametersDto> parameters) {
