@@ -131,8 +131,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
         String encryptApiKey =
                 request.getApiKey() != null ? request.getApiKey() : config.getApiKey();
         String apiKey = getApiKey(encryptApiKey);
-        // The network target is controlled by server-side configuration, never request input.
-        String normalizedUrl = normalizeApiUrl();
+        String normalizedUrl = normalizeApiUrl(request.getBaseUrl());
 
         // 对最终请求 URL 做安全校验（在 normalize 之后，确保校验的是真正发出的地址）
         URI requestUri = validateFinalUrl(normalizedUrl);
@@ -169,8 +168,12 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
      *
      * @return normalized API URL
      */
-    private String normalizeApiUrl() {
-        final String normalizedUrl = config.getBaseUrl().trim();
+    private String normalizeApiUrl(final String requestedUrl) {
+        final String configuredUrl =
+                requestedUrl == null || requestedUrl.isBlank()
+                        ? config.getBaseUrl()
+                        : requestedUrl;
+        final String normalizedUrl = configuredUrl.trim();
 
         if (normalizedUrl.contains("/chat/completions")
                 || normalizedUrl.contains("/v1/chat/completions")) {
