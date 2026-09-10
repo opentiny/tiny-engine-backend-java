@@ -20,7 +20,7 @@ public final class SM4Utils {
     private static final String ALGORITHM = "SM4";
     private static final String TRANSFORMATION = "SM4/GCM/NoPadding";
     private static final String LEGACY_TRANSFORM = "SM4/ECB/PKCS5Padding";
-    private static final String GCM_PAYLOAD_PREFIX = "GCM1:";
+    private static final String GCM_PREFIX = "GCM1:";
     private static final int KEY_SIZE = 128;
     private static final int KEY_LENGTH_BYTES = KEY_SIZE / Byte.SIZE;
     private static final int IV_LENGTH_BYTES = 12;
@@ -63,22 +63,24 @@ public final class SM4Utils {
         final PayloadBuffer outputBuffer = new PayloadBuffer(nonce.length + encrypted.length);
         outputBuffer.append(nonce);
         outputBuffer.append(encrypted);
-        return GCM_PAYLOAD_PREFIX + BASE64_CODEC.encode(outputBuffer.toByteArray());
+        return GCM_PREFIX + BASE64_CODEC.encode(outputBuffer.toByteArray());
     }
 
     public static String decrypt(final String encryptedBase64, final String base64Key)
             throws GeneralSecurityException {
         final byte[] key = decodeKey(base64Key);
-        if (encryptedBase64.startsWith(GCM_PAYLOAD_PREFIX)) {
-            return decryptGcm(encryptedBase64.substring(GCM_PAYLOAD_PREFIX.length()), key);
+        String decrypted;
+        if (encryptedBase64.startsWith(GCM_PREFIX)) {
+            decrypted = decryptGcm(encryptedBase64.substring(GCM_PREFIX.length()), key);
+        } else {
+            try {
+                // Keep compatibility with GCM payloads created before the version prefix was added.
+                decrypted = decryptGcm(encryptedBase64, key);
+            } catch (GeneralSecurityException | IllegalArgumentException exception) {
+                decrypted = decryptLegacyEcb(encryptedBase64, key);
+            }
         }
-
-        try {
-            // Keep compatibility with GCM payloads created before the version prefix was added.
-            return decryptGcm(encryptedBase64, key);
-        } catch (GeneralSecurityException | IllegalArgumentException exception) {
-            return decryptLegacyEcb(encryptedBase64, key);
-        }
+        return decrypted;
     }
 
     private static String decryptGcm(final String encryptedBase64, final byte[] key)
@@ -99,10 +101,12 @@ public final class SM4Utils {
         return new String(decrypted, StandardCharsets.UTF_8);
     }
 
+    @SuppressWarnings("PMD.LawOfDemeter")
     private static String decryptLegacyEcb(final String encryptedBase64, final byte[] key)
             throws GeneralSecurityException {
         final Cipher cipher = Cipher.getInstance(LEGACY_TRANSFORM, "BC");
-        cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, ALGORITHM));
+        final SecretKeySpec secretKey = new SecretKeySpec(key, ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
         final byte[] decrypted = cipher.doFinal(BASE64_CODEC.decode(encryptedBase64));
         return new String(decrypted, StandardCharsets.UTF_8);
     }
