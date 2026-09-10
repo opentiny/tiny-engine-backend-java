@@ -14,7 +14,11 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.LawOfDemeter"
+})
 public final class SM4Utils {
 
     private static final String ALGORITHM = "SM4";
