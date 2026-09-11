@@ -83,7 +83,7 @@ class DynamicModelServiceTest {
         MockitoAnnotations.openMocks(this);
         ReflectUtil.setFieldValue(dynamicModelService, "jdbcTemplate", jdbcTemplate);
         ReflectUtil.setFieldValue(dynamicModelService, "loginUserContext", loginUserContext);
-        ReflectUtil.setFieldValue(dynamicModelService, "namedParameterJdbcTemplate", namedJdbcTemplate);
+        ReflectUtil.setFieldValue(dynamicModelService, "namedJdbcTemplate", namedJdbcTemplate);
         ReflectUtil.setFieldValue(dynamicModelService, "modelService", modelService);
 
         testModel = new Model();
@@ -383,11 +383,13 @@ class DynamicModelServiceTest {
         dataDto.setParams(Map.of("name", "test"));
 
         when(loginUserContext.getLoginUserId()).thenReturn("1");
-        when(jdbcTemplate.update(any(), any(PreparedStatementCreator.class), any())).thenReturn(1);
+        when(jdbcTemplate.update(any(PreparedStatementCreator.class), any(KeyHolder.class)))
+                .thenReturn(1);
 
         Map<String, Object> result = dynamicModelService.createData(dataDto);
         assertNotNull(result);
-        verify(jdbcTemplate, times(1)).update(any(PreparedStatementCreator.class), any());
+        verify(jdbcTemplate, times(1))
+                .update(any(PreparedStatementCreator.class), any(KeyHolder.class));
     }
 
     @Test

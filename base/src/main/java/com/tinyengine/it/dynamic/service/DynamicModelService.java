@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.core.SqlTypeValue;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -32,6 +33,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -785,8 +787,10 @@ public class DynamicModelService {
                 String.format("INSERT INTO %s (%s) VALUES (%s)", tableName, columns, placeholders);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        int[] parameterTypes = new int[record.size()];
+        Arrays.fill(parameterTypes, SqlTypeValue.TYPE_UNKNOWN);
         PreparedStatementCreatorFactory creatorFactory =
-                new PreparedStatementCreatorFactory(sql);
+                new PreparedStatementCreatorFactory(sql, parameterTypes);
         creatorFactory.setReturnGeneratedKeys(true);
 
         jdbcTemplate.update(
