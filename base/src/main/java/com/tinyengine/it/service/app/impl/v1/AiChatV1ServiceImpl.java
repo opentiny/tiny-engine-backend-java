@@ -335,7 +335,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
             throw new ServiceException("400", "Invalid baseUrl: missing host");
         }
         final String fragment = uri.getRawFragment();
-        if (uri.getUserInfo() != null || fragment != null && !fragment.isEmpty()) {
+        if (uri.getUserInfo() != null || (fragment != null && !fragment.isEmpty())) {
             throw new ServiceException(
                     "400", "Invalid baseUrl: user info and fragments are not allowed");
         }
