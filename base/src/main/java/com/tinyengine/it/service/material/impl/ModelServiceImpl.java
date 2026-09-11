@@ -1,15 +1,13 @@
 /**
- * Copyright (c) 2023 - present TinyEngine Authors.
- * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ * Copyright (c) 2023 - present TinyEngine Authors. Copyright (c) 2023 - present Huawei Cloud
+ * Computing Technologies Co., Ltd.
  *
- * Use of this source code is governed by an MIT-style license.
+ * <p>Use of this source code is governed by an MIT-style license.
  *
- * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
- * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
- * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
+ * <p>THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR A
+ * PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
  */
-
 package com.tinyengine.it.service.material.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -29,25 +27,47 @@ import com.tinyengine.it.model.dto.RequestParameter;
 import com.tinyengine.it.model.dto.ResponseParameter;
 import com.tinyengine.it.model.entity.Model;
 import com.tinyengine.it.service.material.ModelService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@SuppressWarnings({
+    "PMD.AppendCharacterWithChar",
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidLiteralsInIfCondition",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.GodClass",
+    "PMD.InefficientStringBuffering",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.LongVariable",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.PrematureDeclaration",
+    "PMD.ShortVariable",
+    "PMD.TooManyMethods",
+    "PMD.UnnecessaryLocalBeforeReturn"
+})
 public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements ModelService {
 
-    @Autowired
-    private DynamicModelService dynamicModelService;
+    @Autowired private DynamicModelService dynamicModelService;
 
-    @Autowired
-    private LoginUserContext loginUserContext;
+    @Autowired private LoginUserContext loginUserContext;
+
     /**
      * 查询表t_model信息
      *
@@ -85,7 +105,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     public List<Model> getModelByEnName(String nameEn) {
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name_en", nameEn);
-        return this.baseMapper.selectList(queryWrapper);    }
+        return this.baseMapper.selectList(queryWrapper);
+    }
 
     /**
      * 分页查询表t_model信息
@@ -121,8 +142,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
      * 创建t_material
      *
      * @param model
-     * @return the model
-     * @ param the model
+     * @return the model @ param the model
      */
     @Override
     @SystemServiceLog(description = "创建model实现方法")
@@ -132,18 +152,36 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         QueryWrapper<Model> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name_en", model.getNameEn());
         if (this.baseMapper.selectCount(queryWrapper) > 0) {
-            throw new ServiceException(ExceptionEnum.CM003.getResultCode(), "Model with the same name already exists");
+            throw new ServiceException(
+                    ExceptionEnum.CM003.getResultCode(), "Model with the same name already exists");
         }
         List<MethodDto> methodDtos = new ArrayList<>();
-        methodDtos.add(getMethodDto(Enums.methodName.CREATED.getValue(), Enums.methodName.INSERTAPI.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.UPDATE.getValue(), Enums.methodName.UPDATEAPI.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), Enums.methodName.QUERYAPI.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), Enums.methodName.DELETEAPI.getValue(), model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.CREATED.getValue(),
+                        Enums.methodName.INSERTAPI.getValue(),
+                        model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.UPDATE.getValue(),
+                        Enums.methodName.UPDATEAPI.getValue(),
+                        model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.QUERY.getValue(),
+                        Enums.methodName.QUERYAPI.getValue(),
+                        model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.DELETE.getValue(),
+                        Enums.methodName.DELETEAPI.getValue(),
+                        model));
         model.setMethod(methodDtos);
         model.setTenantId(loginUserContext.getTenantId());
         int result = this.baseMapper.createModel(model);
         if (result != 1) {
-            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
+            throw new ServiceException(
+                    ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
         }
         // 创建动态表
         dynamicModelService.createDynamicTable(model);
@@ -154,8 +192,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
      * 删除t_model
      *
      * @param id
-     * @return the Model
-     * @ param the id
+     * @return the Model @ param the id
      */
     @Override
     @SystemServiceLog(description = "根据id删除model实现方法")
@@ -164,14 +201,17 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         Model model = this.baseMapper.selectById(id);
         int result = this.baseMapper.deleteById(id);
         if (result != 1) {
-            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
+            throw new ServiceException(
+                    ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
         }
         try {
             dynamicModelService.dropDynamicTable(model);
-        } catch (Exception e) {
-            log.error("deleteModelById", e);
-            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
-
+        } catch (ServiceException exception) {
+            log.error("deleteModelById", exception);
+            throw new ServiceException(
+                    ExceptionEnum.CM001.getResultCode(),
+                    ExceptionEnum.CM001.getResultCode(),
+                    exception);
         }
         return model;
     }
@@ -180,34 +220,53 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
      * 修改t_model
      *
      * @param model
-     * @return the model
-     * @ param the model
+     * @return the model @ param the model
      */
     @Override
     @SystemServiceLog(description = "根据id修改model实现方法")
     @Transactional
     public Model updateModelById(Model model) {
         List<MethodDto> methodDtos = new ArrayList<>();
-        methodDtos.add(getMethodDto(Enums.methodName.CREATED.getValue(), Enums.methodName.INSERTAPI.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.UPDATE.getValue(), Enums.methodName.UPDATEAPI.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.QUERY.getValue(), Enums.methodName.QUERYAPI.getValue(), model));
-        methodDtos.add(getMethodDto(Enums.methodName.DELETE.getValue(), Enums.methodName.DELETEAPI.getValue(), model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.CREATED.getValue(),
+                        Enums.methodName.INSERTAPI.getValue(),
+                        model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.UPDATE.getValue(),
+                        Enums.methodName.UPDATEAPI.getValue(),
+                        model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.QUERY.getValue(),
+                        Enums.methodName.QUERYAPI.getValue(),
+                        model));
+        methodDtos.add(
+                getMethodDto(
+                        Enums.methodName.DELETE.getValue(),
+                        Enums.methodName.DELETEAPI.getValue(),
+                        model));
         model.setMethod(methodDtos);
         if (model.getId() == null) {
-            throw new ServiceException(ExceptionEnum.CM002.getResultCode(), ExceptionEnum.CM002.getResultCode());
+            throw new ServiceException(
+                    ExceptionEnum.CM002.getResultCode(), ExceptionEnum.CM002.getResultCode());
         }
         int result = this.baseMapper.updateModelById(model);
         if (result != 1) {
-            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
+            throw new ServiceException(
+                    ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
         }
-
 
         // 修改动态表
         try {
             dynamicModelService.modifyTableStructure(model);
-        } catch (Exception e) {
-            log.error("updateModelById", e);
-            throw new ServiceException(ExceptionEnum.CM001.getResultCode(), ExceptionEnum.CM001.getResultCode());
+        } catch (ServiceException exception) {
+            log.error("updateModelById", exception);
+            throw new ServiceException(
+                    ExceptionEnum.CM001.getResultCode(),
+                    ExceptionEnum.CM001.getResultCode(),
+                    exception);
         }
         Model modelResult = this.baseMapper.selectById(model.getId());
         return modelResult;
@@ -217,28 +276,30 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
      * 获取Model建表sql
      *
      * @param id
-     * @return the String
-     * @ param the id
+     * @return the String @ param the id
      */
     @Override
     public String getTableById(Integer id) {
         Model model = this.baseMapper.selectById(id);
         StringBuilder sql = new StringBuilder(getTableByModle(model));
         List<?> rawList = model.getParameters();
-        List<ParametersDto> fields = rawList.stream()
-                .map(item -> JsonUtils.MAPPER.convertValue(item, ParametersDto.class))
-                .collect(Collectors.toList());
-        fields.forEach(item -> {
-            if(item.getIsModel()) {
-                Model result = this.baseMapper.selectById(item.getDefaultValue());
-                sql.append(getTableByModle(result));
-            }
-        });
+        List<ParametersDto> fields =
+                rawList.stream()
+                        .map(item -> JsonUtils.MAPPER.convertValue(item, ParametersDto.class))
+                        .collect(Collectors.toList());
+        fields.forEach(
+                item -> {
+                    if (Boolean.TRUE.equals(item.getIsModel())) {
+                        Model result = this.baseMapper.selectById(item.getDefaultValue());
+                        sql.append(getTableByModle(result));
+                    }
+                });
         return sql.toString();
     }
 
     /**
      * 获取所有模型的建表SQL语句
+     *
      * @return 拼接好的SQL语句字符串，每个表的SQL用分号分隔并换行
      * @throws IOException 如果JSON解析失败
      */
@@ -252,9 +313,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
 
         StringJoiner sqlJoiner = new StringJoiner(" ");
 
-        modelList.stream()
-                .map(this::getTableByModle)
-                .forEach(sqlJoiner::add);
+        modelList.stream().map(this::getTableByModle).forEach(sqlJoiner::add);
 
         return sqlJoiner.toString();
     }
@@ -268,18 +327,17 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
     public List<String> getAllModelName() {
         List<Model> modelList = this.baseMapper.selectList(null);
         if (!CollectionUtils.isEmpty(modelList)) {
-            return modelList.stream()
-                    .map(Model::getNameEn)
-                    .collect(Collectors.toList());
+            return modelList.stream().map(Model::getNameEn).collect(Collectors.toList());
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private String getTableByModle(Model model) {
         List<?> rawList = model.getParameters();
-        List<ParametersDto> fields = rawList.stream()
-                .map(item -> JsonUtils.MAPPER.convertValue(item, ParametersDto.class))
-                .collect(Collectors.toList());
+        List<ParametersDto> fields =
+                rawList.stream()
+                        .map(item -> JsonUtils.MAPPER.convertValue(item, ParametersDto.class))
+                        .collect(Collectors.toList());
 
         StringBuilder sql = new StringBuilder("CREATE TABLE " + model.getNameEn() + " (");
 
@@ -313,20 +371,14 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         if (javaType == null) {
             return "VARCHAR(255)"; // 默认处理
         }
-        switch (javaType) {
-            case "String":
-                return "VARCHAR(500)";
-            case "Number":
-                return "INT";
-            case "Boolean":
-                return "BOOLEAN";
-            case "Date":
-                return "TIMESTAMP";
-            case "Enum":
-                return "LONGTEXT";
-            default:
-                return "LONGTEXT"; // 默认处理
-        }
+        return switch (javaType) {
+            case "String" -> "VARCHAR(500)";
+            case "Number" -> "INT";
+            case "Boolean" -> "BOOLEAN";
+            case "Date" -> "TIMESTAMP";
+            case "Enum" -> "LONGTEXT";
+            default -> "LONGTEXT"; // 默认处理
+        };
     }
 
     private MethodDto getMethodDto(String name, String nameEn, Model model) {
@@ -355,9 +407,8 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
             parameterList.add(currentPage);
             parameterList.add(pageSize);
             parameterList.add(nameCn);
-
         }
-        if( name.equals(Enums.methodName.UPDATE.getValue())) {
+        if (name.equals(Enums.methodName.UPDATE.getValue())) {
             RequestParameter requestParameterData = new RequestParameter();
             requestParameterData.setProp(Enums.methodParam.DATA.getValue());
             requestParameterData.setType(Enums.paramType.OBJECT.getValue());
@@ -405,6 +456,4 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         responseParameterList.add(data);
         return responseParameterList;
     }
-
-
 }

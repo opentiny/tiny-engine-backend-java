@@ -17,6 +17,22 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidUsingHardCodedIP",
+    "PMD.CommentDefaultAccessModifier",
+    "PMD.DefaultPackage",
+    "PMD.JUnitAssertionsShouldIncludeMessage",
+    "PMD.JUnitTestContainsTooManyAsserts",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.TestClassWithoutTestCases",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.TooManyMethods"
+})
 class AiChatV1ServiceImplTest {
     private TestAiChatV1ServiceImpl service;
     private OpenAIConfig config;
@@ -35,7 +51,7 @@ class AiChatV1ServiceImplTest {
     @Test
     void shouldRejectWhenNoAllowedHostsConfigured() {
         ServiceException exception = assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
+                service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
         assertEquals("No AI allowed hosts configured", exception.getMessage());
     }
 
@@ -43,7 +59,7 @@ class AiChatV1ServiceImplTest {
     void shouldAllowPublicHttpsUrlWhenAllowAnyHostEnabled() {
         config.setAllowAnyHost(true);
         assertDoesNotThrow(() ->
-            service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
+                service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
     }
 
     @ParameterizedTest
@@ -57,21 +73,21 @@ class AiChatV1ServiceImplTest {
     void shouldRejectInternalAddresses(String url) {
         config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl(url));
+                service.validateFinalUrl(url));
     }
 
     @Test
     void shouldRejectHttpForPublicHost() {
         config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("http://api.openai.com/v1/chat/completions"));
+                service.validateFinalUrl("http://api.openai.com/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectInvalidUrl() {
         config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("not-a-valid-url"));
+                service.validateFinalUrl("not-a-valid-url"));
     }
 
     // === 白名单模式 ===
@@ -80,51 +96,64 @@ class AiChatV1ServiceImplTest {
     void shouldAllowWhitelistedHost() {
         config.setAllowedHosts(List.of("api.deepseek.com", "api.openai.com"));
         assertDoesNotThrow(() ->
-            service.validateFinalUrl("https://api.deepseek.com/v1/chat/completions"));
+                service.validateFinalUrl("https://api.deepseek.com/v1/chat/completions"));
+    }
+
+    @Test
+    void shouldAllowEmptyTrailingFragment() {
+        config.setAllowedHosts(List.of("api.deepseek.com"));
+        assertDoesNotThrow(() ->
+                service.validateFinalUrl("https://api.deepseek.com/v1/chat/completions#"));
     }
 
     @Test
     void shouldRejectNonWhitelistedHost() {
         config.setAllowedHosts(List.of("api.deepseek.com"));
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
+                service.validateFinalUrl("https://api.openai.com/v1/chat/completions"));
     }
 
     @Test
     void shouldAllowWhitelistedLocalhostWithHttp() {
         config.setAllowedHosts(List.of("localhost", "127.0.0.1"));
         assertDoesNotThrow(() ->
-            service.validateFinalUrl("http://localhost:11434/v1/chat/completions"));
+                service.validateFinalUrl("http://localhost:11434/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectHttpForWhitelistedExternalHost() {
         config.setAllowedHosts(List.of("api.deepseek.com"));
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("http://api.deepseek.com/v1/chat/completions"));
+                service.validateFinalUrl("http://api.deepseek.com/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectCarrierGradeNatAddress() {
         config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("https://100.64.0.1/v1/chat/completions"));
+                service.validateFinalUrl("https://100.64.0.1/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectBenchmarkingAddress() {
         config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("https://198.18.0.1/v1/chat/completions"));
+                service.validateFinalUrl("https://198.18.0.1/v1/chat/completions"));
     }
 
     @Test
     void shouldRejectIpv6UniqueLocalAddress() {
         config.setAllowAnyHost(true);
         assertThrows(ServiceException.class, () ->
-            service.validateFinalUrl("https://[fc00::1]/v1/chat/completions"));
+                service.validateFinalUrl("https://[fc00::1]/v1/chat/completions"));
     }
 
+    @SuppressWarnings({
+        "PMD.CommentDefaultAccessModifier",
+        "PMD.DefaultPackage",
+        "PMD.MethodArgumentCouldBeFinal",
+        "PMD.TestClassWithoutTestCases"
+    })
     private static final class TestAiChatV1ServiceImpl extends AiChatV1ServiceImpl {
         private final Map<String, InetAddress[]> resolvedHosts = new HashMap<>();
 

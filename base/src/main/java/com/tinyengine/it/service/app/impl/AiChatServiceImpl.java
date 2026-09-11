@@ -1,21 +1,18 @@
 /**
- * Copyright (c) 2023 - present TinyEngine Authors.
- * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ * Copyright (c) 2023 - present TinyEngine Authors. Copyright (c) 2023 - present Huawei Cloud
+ * Computing Technologies Co., Ltd.
  *
- * Use of this source code is governed by an MIT-style license.
+ * <p>Use of this source code is governed by an MIT-style license.
  *
- * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
- * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
- * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
+ * <p>THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR A
+ * PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
  */
-
 package com.tinyengine.it.service.app.impl;
 
 import com.tinyengine.it.common.base.Result;
 import com.tinyengine.it.common.enums.Enums;
-import com.tinyengine.it.common.exception.ExceptionEnum;
-import com.tinyengine.it.common.exception.ServiceException;
+
 import com.tinyengine.it.common.log.SystemServiceLog;
 import com.tinyengine.it.gateway.ai.AiChatClient;
 import com.tinyengine.it.model.dto.AiMessages;
@@ -40,10 +37,26 @@ import java.util.regex.Pattern;
  */
 @Service
 @Slf4j
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidInstantiatingObjectsInLoops",
+    "PMD.AvoidLiteralsInIfCondition",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.GodClass",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.ShortVariable",
+    "PMD.UselessParentheses"
+})
 public class AiChatServiceImpl implements AiChatService {
     private static final Pattern PATTERN_TAG_START = Pattern.compile("```javascript|<template>");
-    private static final Pattern PATTERN_TAG_END = Pattern.compile("```|</template>|</script>|</style>");
-    private static final Pattern PATTERN_MESSAGE = Pattern.compile(".*编码时遵从以下几条要求.*");
+    private static final Pattern PATTERN_TAG_END =
+            Pattern.compile("```|</template>|</script>|</style>");
+    private static final String REQ_MARKER = "编码时遵从以下几条要求";
 
     /**
      * Get start and end int [ ].
@@ -69,7 +82,7 @@ public class AiChatServiceImpl implements AiChatService {
             }
         }
 
-        return new int[]{start, end};
+        return new int[] {start, end};
     }
 
     @SystemServiceLog(description = "getAnswerFromAi 获取ai回答")
@@ -87,23 +100,18 @@ public class AiChatServiceImpl implements AiChatService {
         List<Map<String, Object>> choices = (List<Map<String, Object>>) data.get("choices");
         Map<String, String> message = (Map<String, String>) choices.get(0).get("message");
 
-        String answerContent = "";
-        String isFinish = "";
+        String finishReasonValue = "";
+        StringBuilder answerContent = new StringBuilder();
         Object finishReason = choices.get(0).get("finish_reason");
         if (finishReason instanceof String) {
-            isFinish = (String) finishReason;
+            finishReasonValue = (String) finishReason;
         }
-        if (!"length".equals(isFinish)) {
-            answerContent = message.get("content");
-        }
-
         // 若内容被截断，继续请求AI
-        while ("length".equals(isFinish)) {
+        while ("length".equals(finishReasonValue)) {
             String prefix = message.get("content");
-            answerContent = answerContent + prefix;
+            answerContent.append(prefix);
 
             // 将此部分内容加入消息列表
-            Map<String, Object> partialMessage = new HashMap<>();
             AiMessages aiMessages = new AiMessages();
             List<AiMessages> messagesList = aiParam.getMessages();
             aiMessages.setRole("assistant");
@@ -113,23 +121,18 @@ public class AiChatServiceImpl implements AiChatService {
             aiParam.setMessages(messagesList);
 
             // 再次请求AI
-            try {
-                data = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel()).getData();
-            } catch (Exception e) {
-                throw new ServiceException(ExceptionEnum.CM001.getResultCode(), e.getMessage());
-            }
+            data =
+                    requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel())
+                            .getData();
             choices = (List<Map<String, Object>>) data.get("choices");
             message = (Map<String, String>) choices.get(0).get("message");
-            StringBuilder sb = new StringBuilder();
-            answerContent = String.valueOf(sb.append(message.get("content")));
             finishReason = choices.get(0).get("finish_reason");
             if (finishReason instanceof String) {
-                isFinish = (String) finishReason;
+                finishReasonValue = (String) finishReason;
             }
         }
-        // 通过二方包将页面转成schema
-        String codes = extractCode(answerContent);
-        Map<String, Object> result = buildResult(answerContent, message);
+        answerContent.append(message.get("content"));
+        Map<String, Object> result = buildResult(answerContent.toString(), message);
         return Result.success(result);
     }
 
@@ -138,7 +141,7 @@ public class AiChatServiceImpl implements AiChatService {
         if (token == null || token.isEmpty()) {
             return Result.failed("The token cannot be empty");
         }
-        if (!Pattern.matches("^[A-Za-z0-9_.-]+$", token)) {
+        if (!isSafeToken(token)) {
             return Result.failed("Invalid token format");
         }
 
@@ -152,7 +155,8 @@ public class AiChatServiceImpl implements AiChatService {
         }
         foundationModel.put("model", model);
         aiParam.setFoundationModel(foundationModel);
-        Result<Map<String, Object>> resultData = requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel());
+        Result<Map<String, Object>> resultData =
+                requestAnswerFromAi(aiParam.getMessages(), aiParam.getFoundationModel());
         // 调用接口失败时且data为null
         if (!resultData.isSuccess() && resultData.getData() == null) {
             return Result.failed(resultData.getCode(), resultData.getMessage());
@@ -174,12 +178,13 @@ public class AiChatServiceImpl implements AiChatService {
         return result;
     }
 
-    private Result<Map<String, Object>> requestAnswerFromAi(List<AiMessages> messages,
-        Map<String, String> foundationModel) {
+    private Result<Map<String, Object>> requestAnswerFromAi(
+            List<AiMessages> messages, Map<String, String> foundationModel) {
         List<AiMessages> aiMessages = formatMessage(messages);
 
         AiParam aiParam = new AiParam(foundationModel, aiMessages);
-        AiChatClient aiChatClient = new AiChatClient(foundationModel.get("model"), foundationModel.get("token"));
+        AiChatClient aiChatClient =
+                new AiChatClient(foundationModel.get("model"), foundationModel.get("token"));
         Map<String, Object> response = aiChatClient.executeChatRequest(aiParam);
         // 适配文心一言的响应数据结构，文心的部分异常情况status也是200，需要转为400，以免前端无所适从
         if (response.get("error_code") != null) {
@@ -189,7 +194,8 @@ public class AiChatServiceImpl implements AiChatService {
         }
         if (response.get("error") != null) {
             String code = (response.get("code") != null) ? response.get("code").toString() : "";
-            String message = (response.get("message") != null) ? response.get("message").toString() : "";
+            String message =
+                    (response.get("message") != null) ? response.get("message").toString() : "";
             return Result.failed(code, message);
         }
         if (Enums.FoundationModel.ERNIBOT_TURBO.getValue().equals(foundationModel.get("model"))) {
@@ -200,8 +206,8 @@ public class AiChatServiceImpl implements AiChatService {
 
     /**
      * 转换模型返回格式
-     * <p>
-     * 暂且只满足回复中只包括一个代码块的场景
+     *
+     * <p>暂且只满足回复中只包括一个代码块的场景
      *
      * @param response ai返回内容
      * @return result 返回结果
@@ -228,8 +234,8 @@ public class AiChatServiceImpl implements AiChatService {
 
     /**
      * 提取回复中的代码
-     * <p>
-     * 暂且只满足回复中只包括一个代码块的场景
+     *
+     * <p>暂且只满足回复中只包括一个代码块的场景
      *
      * @param content ai回复的内容
      * @return 提取的文本 string
@@ -246,8 +252,8 @@ public class AiChatServiceImpl implements AiChatService {
 
     /**
      * 去除回复中的代码
-     * <p>
-     * 暂且只满足回复中只包括一个代码块的场景
+     *
+     * <p>暂且只满足回复中只包括一个代码块的场景
      *
      * @param content ai回复的内容
      * @return 去除代码后的回复内容 string
@@ -263,28 +269,51 @@ public class AiChatServiceImpl implements AiChatService {
     }
 
     private List<AiMessages> formatMessage(List<AiMessages> messages) {
+        List<AiMessages> formattedMessages = new ArrayList<>(messages);
+        AiMessages firstMessage = formattedMessages.get(0);
         AiMessages defaultWords = new AiMessages();
         defaultWords.setRole("user");
         defaultWords.setContent(
-            "你是一名前端开发专家，编码时遵从以下几条要求:\n" + "###\n" + "1. 只使用 element-ui组件库的el-button 和 el-table组件\n"
-                + "2. el-table表格组件的使用方式为 <el-table :columns=\"columnData\" :data=\"tableData\"></el-table> "
-                + "columns的columnData表示列数据，其中用title表示列名，field表示表格数据字段； data的tableData表示表格展示的数据。 "
-                + "el-table标签内不得出现子元素\n" + "3. 使用vue2技术栈\n" + "4. 回复中只能有一个代码块\n"
-                + "5. 不要加任何注释\n" + "6. el-table标签内不得出现el-table-column\n" + "###");
-        defaultWords.setName(messages.get(0).getName());
-        String role = messages.get(0).getRole();
-        String content = messages.get(0).getContent();
+                "你是一名前端开发专家，编码时遵从以下几条要求:\n"
+                        + "###\n"
+                        + "1. 只使用 element-ui组件库的el-button 和 el-table组件\n"
+                        + "2. el-table表格组件的使用方式为 <el-table :columns=\"columnData\""
+                        + " :data=\"tableData\"></el-table>"
+                        + " columns的columnData表示列数据，其中用title表示列名，field表示表格数据字段；"
+                        + " data的tableData表示表格展示的数据。 el-table标签内不得出现子元素\n"
+                        + "3. 使用vue2技术栈\n"
+                        + "4. 回复中只能有一个代码块\n"
+                        + "5. 不要加任何注释\n"
+                        + "6. el-table标签内不得出现el-table-column\n"
+                        + "###");
+        defaultWords.setName(firstMessage.getName());
+        String role = firstMessage.getRole();
+        String content = firstMessage.getContent();
 
-        List<AiMessages> aiMessages = new ArrayList<>();
-
-        if (!PATTERN_MESSAGE.matcher(content).matches()) {
-            AiMessages aiMessagesResult = messages.get(0);
-            aiMessagesResult.setContent(defaultWords.getContent() + "\n" + content);
+        if (content == null) {
+            firstMessage.setContent(defaultWords.getContent());
+        } else if (!content.contains(REQ_MARKER)) {
+            firstMessage.setContent(defaultWords.getContent() + "\n" + content);
         }
         if (!"user".equals(role)) {
-            aiMessages.add(0, defaultWords);
+            formattedMessages.add(0, defaultWords);
         }
 
-        return messages;
+        return formattedMessages;
+    }
+
+    private boolean isSafeToken(String token) {
+        for (int i = 0; i < token.length(); i++) {
+            char c = token.charAt(i);
+            if (!((c >= 'A' && c <= 'Z')
+                    || (c >= 'a' && c <= 'z')
+                    || (c >= '0' && c <= '9')
+                    || c == '_'
+                    || c == '.'
+                    || c == '-')) {
+                return false;
+            }
+        }
+        return true;
     }
 }

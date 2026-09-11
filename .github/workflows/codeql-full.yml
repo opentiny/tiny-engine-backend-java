@@ -1,0 +1,221 @@
+name: CodeQL Full Scan
+
+on:
+  schedule:
+    - cron: '34 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  packages: read
+  actions: read
+
+jobs:
+  detect:
+    name: Detect CodeQL languages
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Build matrix
+        id: matrix
+        shell: bash
+        run: |
+          matrix=$(bash .github/scripts/codeql-matrix.sh manual)
+          printf 'matrix=%s\n' "$matrix" >> "$GITHUB_OUTPUT"
+
+  analyze:
+    needs: detect
+    name: Full scan (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.detect.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        if: matrix.language == 'java-kotlin'
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
+      - name: Build project
+        if: matrix.language == 'java-kotlin'
+        run: mvn -B clean test-compile -DskipTests -Dcheckstyle.skip=true -Dpmd.skip=true -Dspotbugs.skip=true -Dcpd.skip=true
+
+      - name: Prepare CodeQL SARIF directory
+        shell: bash
+        run: |
+          rm -rf codeql-sarif
+          mkdir -p codeql-sarif
+
+      - name: Perform CodeQL Analysis
+        id: codeql-analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          output: ${{ github.workspace }}/codeql-sarif
+          upload: always
+          category: "/codeql-full:${{ matrix.language }}"
+
+      - name: Summarize CodeQL SARIF report
+        id: sarif-summary
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p codeql-sarif
+          report_index="codeql-sarif/scan-files.txt"
+          sarif_count=0
+          invalid_sarif=0
+          violations=0
+
+          {
+            printf 'language=%s\n' '${{ matrix.language }}'
+            printf 'codeql_output=%s\n' '${{ github.workspace }}/codeql-sarif'
+            printf '\nGenerated SARIF files:\n'
+          } > "$report_index"
+
+          while IFS= read -r -d '' file; do
+            sarif_count=$((sarif_count + 1))
+            result_count=$(jq '[.runs[]?.results[]?] | length' "$file" 2>/dev/null || true)
+
+            if [[ "$result_count" =~ ^[0-9]+$ ]]; then
+              violations=$((violations + result_count))
+              printf '%s results=%s\n' "$file" "$result_count" >> "$report_index"
+            else
+              invalid_sarif=$((invalid_sarif + 1))
+              printf '%s results=invalid-sarif\n' "$file" >> "$report_index"
+            fi
+          done < <(find codeql-sarif -type f -name '*.sarif' -print0)
+
+          {
+            printf '\nSummary:\n'
+            printf 'sarif_count=%s\n' "$sarif_count"
+            printf 'invalid_sarif=%s\n' "$invalid_sarif"
+            printf 'violations=%s\n' "$violations"
+          } >> "$report_index"
+
+          printf 'sarif_count=%s\n' "$sarif_count" >> "$GITHUB_OUTPUT"
+          printf 'invalid_sarif=%s\n' "$invalid_sarif" >> "$GITHUB_OUTPUT"
+          printf 'violations=%s\n' "$violations" >> "$GITHUB_OUTPUT"
+
+      - name: Install SARIF tools
+        if: ${{ always() && hashFiles('codeql-sarif/**/*.sarif') != '' }}
+        run: python -m pip install sarif-tools
+
+      - name: Generate CodeQL HTML report
+        id: html-report
+        if: ${{ always() && hashFiles('codeql-sarif/**/*.sarif') != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          html_dir="codeql-html-report"
+          rm -rf "$html_dir"
+          mkdir -p "$html_dir"
+
+          html_count=0
+          while IFS= read -r -d '' sarif_file; do
+            sarif html "$sarif_file" --output "$html_dir"
+            html_count=$((html_count + 1))
+            printf '%s -> %s/\n' "$sarif_file" "$html_dir"
+          done < <(find codeql-sarif -type f -name '*.sarif' -print0)
+
+          index_file="$html_dir/reports.html"
+          {
+            printf '<!doctype html>\n'
+            printf '<html lang="en">\n'
+            printf '<head><meta charset="utf-8"><title>CodeQL HTML Reports</title></head>\n'
+            printf '<body>\n'
+            printf '<h1>CodeQL HTML Reports - %s</h1>\n' '${{ matrix.language }}'
+            printf '<ul>\n'
+            while IFS= read -r -d '' html_file; do
+              link="${html_file#$html_dir/}"
+              printf '<li><a href="%s">%s</a></li>\n' "$link" "$link"
+            done < <(find "$html_dir" -maxdepth 1 -type f -name '*.html' ! -name 'reports.html' -print0 | sort -z)
+            printf '</ul>\n'
+            printf '</body>\n'
+            printf '</html>\n'
+          } > "$index_file"
+
+          if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+            {
+              printf '## CodeQL HTML report\n\n'
+              printf '| Metric | Result |\n'
+              printf '|------|------|\n'
+              printf '| Language | %s |\n' '${{ matrix.language }}'
+              printf '| HTML files | %s |\n' "$html_count"
+              printf '| Artifact | codeql-full-html-%s |\n' '${{ matrix.language }}'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          printf 'html_count=%s\n' "$html_count" >> "$GITHUB_OUTPUT"
+
+      - name: Upload CodeQL SARIF report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: codeql-full-sarif-${{ matrix.language }}
+          path: codeql-sarif
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload CodeQL HTML report
+        if: ${{ always() && hashFiles('codeql-html-report/**/*.html') != '' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: codeql-full-html-${{ matrix.language }}
+          path: codeql-html-report
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Check CodeQL findings
+        if: always()
+        shell: bash
+        env:
+          SARIF_COUNT: ${{ steps.sarif-summary.outputs.sarif_count }}
+          INVALID_SARIF: ${{ steps.sarif-summary.outputs.invalid_sarif }}
+          VIOLATIONS: ${{ steps.sarif-summary.outputs.violations }}
+        run: |
+          sarif_count="${SARIF_COUNT:-0}"
+          invalid_sarif="${INVALID_SARIF:-0}"
+          violations="${VIOLATIONS:-0}"
+
+          if [[ "$sarif_count" -eq 0 ]]; then
+            echo "::error::CodeQL did not produce a SARIF report."
+            exit 1
+          fi
+
+          if [[ "$invalid_sarif" -ne 0 ]]; then
+            echo "::error::CodeQL produced $invalid_sarif invalid SARIF report(s)."
+            exit 1
+          fi
+
+          if [[ "$violations" -ne 0 ]]; then
+            echo "::error::CodeQL found $violations result(s)."
+            exit 1
+          fi
+
+          echo "CodeQL found no results."
