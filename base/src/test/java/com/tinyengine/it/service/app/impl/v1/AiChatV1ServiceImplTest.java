@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     "PMD.MethodArgumentCouldBeFinal",
     "PMD.OnlyOneReturn",
     "PMD.TestClassWithoutTestCases",
+    "PMD.DataflowAnomalyAnalysis",
     "PMD.TooManyMethods"
 })
 class AiChatV1ServiceImplTest {

@@ -75,7 +75,7 @@ public class VectorStoreConfig {
                                 PoolingMode.MEAN);
                 logInfo("ONNX embedding model initialization successful");
             }
-        } catch (Exception exception) {
+        } catch (IllegalArgumentException  exception) {
             logWarn(
                     "ONNX embedding model initialization failed, using fallback implementation",
                     exception);
