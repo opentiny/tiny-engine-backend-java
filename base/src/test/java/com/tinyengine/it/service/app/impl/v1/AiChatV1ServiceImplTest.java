@@ -17,6 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidUsingHardCodedIP",
+    "PMD.CommentDefaultAccessModifier",
+    "PMD.DefaultPackage",
+    "PMD.JUnitAssertionsShouldIncludeMessage",
+    "PMD.JUnitTestContainsTooManyAsserts",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.TestClassWithoutTestCases",
+    "PMD.TooManyMethods"
+})
 class AiChatV1ServiceImplTest {
     private TestAiChatV1ServiceImpl service;
     private OpenAIConfig config;
@@ -132,6 +147,12 @@ class AiChatV1ServiceImplTest {
                 service.validateFinalUrl("https://[fc00::1]/v1/chat/completions"));
     }
 
+    @SuppressWarnings({
+        "PMD.CommentDefaultAccessModifier",
+        "PMD.DefaultPackage",
+        "PMD.MethodArgumentCouldBeFinal",
+        "PMD.TestClassWithoutTestCases"
+    })
     private static final class TestAiChatV1ServiceImpl extends AiChatV1ServiceImpl {
         private final Map<String, InetAddress[]> resolvedHosts = new HashMap<>();
 
