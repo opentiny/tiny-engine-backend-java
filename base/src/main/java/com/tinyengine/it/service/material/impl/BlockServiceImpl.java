@@ -365,14 +365,16 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         // 创建 QueryWrapper 实例
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (block != null && !block.isEmpty()) {
-            // 处理 blockLabelName 为数组的情况
-            String labelsCondition =
-                    block.stream()
-                            .map(name -> "label = '" + name + "'")
-                            .collect(Collectors.joining(" OR "));
-
             // 添加标签条件
-            queryWrapper.and(wrapper -> wrapper.apply(labelsCondition));
+            queryWrapper.and(
+                    wrapper -> {
+                        for (int index = 0; index < block.size(); index++) {
+                            if (index > 0) {
+                                wrapper.or();
+                            }
+                            wrapper.eq("label", block.get(index));
+                        }
+                    });
 
             // 添加框架条件
             queryWrapper.eq("framework", framework);
