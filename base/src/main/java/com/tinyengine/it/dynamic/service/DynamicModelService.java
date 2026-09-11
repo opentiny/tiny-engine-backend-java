@@ -619,9 +619,9 @@ public class DynamicModelService {
                 || !(value.equals("INT")
                         || value.equals("TINYINT")
                         || value.equals("DATE")
-                        || value.equals("TIMESTAMP")
+                        || value.equals("DATETIME")
                         || value.equals("VARCHAR")
-                        || value.equals("Enum")
+                        || value.equals("ENUM")
                         || value.equals("TEXT")
                         || value.matches("^VARCHAR\\([1-9][0-9]{0,4}\\)$"))) {
             throw new IllegalArgumentException("Invalid SQL column type");
