@@ -650,14 +650,15 @@ public class DynamicModelService {
 
     private static String mapJavaTypeToSQL(String javaType) {
         if (javaType == null) {
-            return "VARCHAR(" + DEFAULT_VARCHAR + ")"; // 默认处理
+            return "VARCHAR"; // 默认处理
         }
         return switch (javaType) {
             case "String", "ModelRef" -> "VARCHAR";
-            case "Number" -> "INT";
+            case "Integer", "Number" -> "INT";
             case "Boolean" -> "TINYINT";
-            case "Date" -> "TIMESTAMP";
-            case "Enum" -> "Enum";
+            case "Date" -> "DATE";
+            case "DateTime" -> "DATETIME";
+            case "Enum" -> "ENUM";
             default -> "TEXT"; // 默认处理
         };
     }
