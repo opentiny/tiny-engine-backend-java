@@ -73,7 +73,8 @@ import java.util.Set;
     "PMD.PrematureDeclaration",
     "PMD.PreserveStackTrace",
     "PMD.StdCyclomaticComplexity",
-    "PMD.TooManyMethods"
+    "PMD.TooManyMethods",
+    "PMD.UselessParentheses",
 })
 @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
