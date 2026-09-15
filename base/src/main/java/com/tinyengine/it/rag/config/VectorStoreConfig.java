@@ -40,7 +40,8 @@ import java.util.List;
 @Slf4j
 @SuppressWarnings({
     "PMD.AtLeastOneConstructor",
-    "PMD.DataflowAnomalyAnalysis"
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.AvoidCatchingGenericException"
 })
 @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
@@ -75,7 +76,7 @@ public class VectorStoreConfig {
                                 PoolingMode.MEAN);
                 logInfo("ONNX embedding model initialization successful");
             }
-        } catch (IllegalArgumentException  exception) {
+        } catch (Exception  exception) {
             logWarn(
                     "ONNX embedding model initialization failed, using fallback implementation",
                     exception);
