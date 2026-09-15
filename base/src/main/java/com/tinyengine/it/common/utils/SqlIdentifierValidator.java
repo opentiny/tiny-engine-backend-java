@@ -35,10 +35,7 @@ public final class SqlIdentifierValidator {
         }
     }
 
-    public static String requireValidOrderType(final String orderType) {
-        validateOrderType(orderType);
-        return orderType.toUpperCase(java.util.Locale.ROOT);
-    }
+
 
     public static boolean isValidIdentifier(final String identifier) {
         boolean valid = identifier != null && !identifier.isEmpty();

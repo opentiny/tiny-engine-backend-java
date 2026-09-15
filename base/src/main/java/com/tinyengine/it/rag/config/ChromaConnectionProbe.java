@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
+/** Checks ChromaDB availability before initializing an embedding store. */
 @SuppressWarnings({
     "PMD.AtLeastOneConstructor",
     "PMD.DataflowAnomalyAnalysis"
 })
-/** Checks ChromaDB availability before initializing an embedding store. */
 @Component
 public final class ChromaConnectionProbe {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChromaConnectionProbe.class);
