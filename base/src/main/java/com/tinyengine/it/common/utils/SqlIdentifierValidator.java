@@ -35,8 +35,6 @@ public final class SqlIdentifierValidator {
         }
     }
 
-
-
     public static boolean isValidIdentifier(final String identifier) {
         boolean valid = identifier != null && !identifier.isEmpty();
         if (valid) {
