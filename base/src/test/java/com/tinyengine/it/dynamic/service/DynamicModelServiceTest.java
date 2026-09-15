@@ -29,6 +29,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
@@ -36,6 +37,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 
@@ -200,6 +202,16 @@ class DynamicModelServiceTest {
         assertEquals(1, result.size());
         assertEquals(COUNT_RESULT, result.get(0).get("count"));
         verify(namedJdbcTemplate, times(1)).queryForList(anyString(), anyMap());
+    }
+
+    @Test
+    void dynamicCountRejectsUnsafeIdentifiers() {
+        final Map<String, Object> conditions = Map.of("id; DROP TABLE users", 1);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> dynamicModelService.dynamicCount("test_table", conditions));
+        verifyNoInteractions(namedJdbcTemplate, jdbcTemplate);
     }
 
     @Test

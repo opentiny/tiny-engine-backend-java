@@ -31,6 +31,7 @@ import com.tinyengine.it.service.material.ModelService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -206,7 +207,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         }
         try {
             dynamicModelService.dropDynamicTable(model);
-        } catch (ServiceException exception) {
+        } catch (ServiceException | IllegalArgumentException | DataAccessException exception) {
             log.error("deleteModelById", exception);
             throw new ServiceException(
                     ExceptionEnum.CM001.getResultCode(),
@@ -261,7 +262,7 @@ public class ModelServiceImpl extends ServiceImpl<ModelMapper, Model> implements
         // 修改动态表
         try {
             dynamicModelService.modifyTableStructure(model);
-        } catch (ServiceException exception) {
+        } catch (ServiceException | IllegalArgumentException | DataAccessException exception) {
             log.error("updateModelById", exception);
             throw new ServiceException(
                     ExceptionEnum.CM001.getResultCode(),
