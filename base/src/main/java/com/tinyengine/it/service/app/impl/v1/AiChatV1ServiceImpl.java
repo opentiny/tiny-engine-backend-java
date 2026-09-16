@@ -158,7 +158,7 @@ public class AiChatV1ServiceImpl implements AiChatV1Service {
      */
     @Override
     public String getToken(String apiKey) throws GeneralSecurityException {
-        String sm4Key = "rOGV7EsU7thOawaUrOI+LA=="; // 这里使用固定的SM4密钥，实际应用中应从安全配置中获取
+        String sm4Key = System.getenv("SM4KEY");
         String encrypt = SM4Utils.encrypt(apiKey, sm4Key);
         return EKEY_PREFIX + encrypt;
     }
