@@ -114,7 +114,7 @@ for module in "${!module_files[@]}"; do
     echo "   - 运行 Checkstyle 检查（增量扫描）..."
     echo "$file_list"
     set +e
-    PROJECT_ROOT=$(pwd)
+    PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
     rm -f "$report_file"
     output=$(cd "$module" && \
         echo "   Current directory: $(pwd)" && \
@@ -129,7 +129,7 @@ for module in "${!module_files[@]}"; do
                 echo "   ⚠️  not found: $include"; \
             fi; \
         done && \
-        mvn checkstyle:check \
+        mvn -f "$PROJECT_ROOT/pom.xml" -pl "$module" checkstyle:check \
             -Dcheckstyle.config.location="$PROJECT_ROOT/checkstyle/code-check-checkstyle.xml" \
             -Dcheckstyle.violationSeverity=warning \
             -Dcheckstyle.outputFormat=xml \
@@ -158,7 +158,7 @@ for module in "${!module_files[@]}"; do
     # （可选）生成 HTML 报告供人工查看
     echo "   - 生成 HTML 报告（可选）..."
     set +e
-    (cd "$module" && mvn checkstyle:checkstyle \
+    (cd "$module" && mvn -f "$PROJECT_ROOT/pom.xml" -pl "$module" checkstyle:checkstyle \
         -Dcheckstyle.config.location="$PROJECT_ROOT/checkstyle/code-check-checkstyle.xml" \
         -Dcheckstyle.includes="$file_list" \
         -Dcheckstyle.violationSeverity=warning) > /dev/null 2>&1

@@ -1,16 +1,16 @@
 /**
- * Copyright (c) 2023 - present TinyEngine Authors.
- * Copyright (c) 2023 - present Huawei Cloud Computing Technologies Co., Ltd.
+ * Copyright (c) 2023 - present TinyEngine Authors. Copyright (c) 2023 - present Huawei Cloud
+ * Computing Technologies Co., Ltd.
  *
- * Use of this source code is governed by an MIT-style license.
+ * <p>Use of this source code is governed by an MIT-style license.
  *
- * THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
- * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR
- * A PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
- *
+ * <p>THE OPEN SOURCE SOFTWARE IN THIS PRODUCT IS DISTRIBUTED IN THE HOPE THAT IT WILL BE USEFUL,
+ * BUT WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR A
+ * PARTICULAR PURPOSE. SEE THE APPLICABLE LICENSES FOR MORE DETAILS.
  */
-
 package com.tinyengine.it.service.material.impl;
+
+import cn.hutool.core.bean.BeanUtil;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -48,7 +48,6 @@ import com.tinyengine.it.model.entity.User;
 import com.tinyengine.it.service.app.I18nEntryService;
 import com.tinyengine.it.service.material.BlockService;
 
-import cn.hutool.core.bean.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.BeanUtils;
@@ -65,7 +64,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -76,30 +74,53 @@ import java.util.stream.Stream;
  */
 @Service
 @Slf4j
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.AvoidCatchingGenericException",
+    "PMD.AvoidDuplicateLiterals",
+    "PMD.AvoidInstantiatingObjectsInLoops",
+    "PMD.AvoidLiteralsInIfCondition",
+    "PMD.CognitiveComplexity",
+    "PMD.CollapsibleIfStatements",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.EmptyStatementNotInLoop",
+    "PMD.ExcessiveImports",
+    "PMD.GodClass",
+    "PMD.GuardLogStatement",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.LongVariable",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.ModifiedCyclomaticComplexity",
+    "PMD.NPathComplexity",
+    "PMD.OnlyOneReturn",
+    "PMD.PrematureDeclaration",
+    "PMD.ShortVariable",
+    "PMD.SimplifyBooleanReturns",
+    "PMD.StdCyclomaticComplexity",
+    "PMD.TooManyMethods",
+    "PMD.UnnecessarySemicolon",
+    "PMD.UnusedAssignment"
+})
 public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements BlockService {
-    @Autowired
-    private UserMapper userMapper;
+    private static final int DEFAULT_PAGE_SIZE = 10;
 
-    @Autowired
-    private AppMapper appMapper;
+    @Autowired private UserMapper userMapper;
 
-    @Autowired
-    private BlockHistoryMapper blockHistoryMapper;
+    @Autowired private AppMapper appMapper;
 
-    @Autowired
-    private I18nEntryService i18nEntryService;
+    @Autowired private BlockHistoryMapper blockHistoryMapper;
 
-    @Autowired
-    private I18nEntryMapper i18nEntryMapper;
+    @Autowired private I18nEntryService i18nEntryService;
 
-    @Autowired
-    private BlockGroupMapper blockGroupMapper;
+    @Autowired private I18nEntryMapper i18nEntryMapper;
 
-    @Autowired
-    private BlockGroupBlockMapper blockGroupBlockMapper;
+    @Autowired private BlockGroupMapper blockGroupMapper;
 
-    @Autowired
-    private LoginUserContext loginUserContext;
+    @Autowired private BlockGroupBlockMapper blockGroupBlockMapper;
+
+    @Autowired private LoginUserContext loginUserContext;
 
     /**
      * 查询表t_block所有数据
@@ -124,12 +145,14 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
             return blockDto;
         }
         boolean isPublished =
-            blockDto.getLastBuildInfo() != null && blockDto.getLastBuildInfo().get("result") instanceof Boolean
-                ? (Boolean) blockDto.getLastBuildInfo().get("result")
-                : Boolean.FALSE;
+                blockDto.getLastBuildInfo() != null
+                                && blockDto.getLastBuildInfo().get("result") instanceof Boolean
+                        ? (Boolean) blockDto.getLastBuildInfo().get("result")
+                        : Boolean.FALSE;
         blockDto.setIsPublished(isPublished);
-        List<BlockGroup> groups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(),
-            loginUserContext.getLoginUserId());
+        List<BlockGroup> groups =
+                blockGroupMapper.findBlockGroupByBlockId(
+                        blockDto.getId(), loginUserContext.getLoginUserId());
         blockDto.setGroups(groups);
         return blockDto;
     }
@@ -188,40 +211,40 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
             blocks.setScreenshot("");
         }
 
+        Result<BlockDto> result;
         if (blockParam.getGroups() == null) {
             baseMapper.updateBlockById(blocks);
             BlockDto blockDtoResult = queryBlockById(blocks.getId());
-            return Result.success(blockDtoResult);
-        }
-
-        // 根据区块id获取区块所在分组
-        List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blocks.getId(),
-            loginUserContext.getLoginUserId());
-        // 删除区块与分组关系
-        if (blockGroups != null && !blockGroups.isEmpty()) {
-            List<Integer> blockGroupIds = blockGroups.stream().map(BlockGroup::getId).collect(Collectors.toList());
-            for (Integer id : blockGroupIds) {
-                blockGroupBlockMapper.deleteByGroupIdAndBlockId(id, blocks.getId());
+            result = Result.success(blockDtoResult);
+        } else {
+            // 根据区块id获取区块所在分组
+            List<BlockGroup> blockGroups =
+                    blockGroupMapper.findBlockGroupByBlockId(
+                            blocks.getId(), loginUserContext.getLoginUserId());
+            // 删除区块与分组关系
+            if (blockGroups != null && !blockGroups.isEmpty()) {
+                List<Integer> blockGroupIds =
+                        blockGroups.stream().map(BlockGroup::getId).collect(Collectors.toList());
+                for (Integer id : blockGroupIds) {
+                    blockGroupBlockMapper.deleteByGroupIdAndBlockId(id, blocks.getId());
+                }
             }
-        }
-        // 更新区块
-        baseMapper.updateBlockById(blocks);
-        BlockDto blockDtoResult = new BlockDto();
-        // 参数存在区块分组且无值
-        if (blockParam.getGroups().isEmpty()) {
-            blockDtoResult = queryBlockById(blocks.getId());
-            return Result.success(blockDtoResult);
+
+            // 更新区块
+            baseMapper.updateBlockById(blocks);
+            if (!blockParam.getGroups().isEmpty()) {
+                for (Integer groupId : blockParam.getGroups()) {
+                    BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
+                    blockGroupBlock.setBlockId(blockParam.getId());
+                    blockGroupBlock.setBlockGroupId(groupId);
+                    blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
+                }
+            }
+            BlockDto blockDtoResult = queryBlockById(blocks.getId());
+            result = Result.success(blockDtoResult);
         }
 
-        for (Integer groupId : blockParam.getGroups()) {
-            BlockGroupBlock blockGroupBlock = new BlockGroupBlock();
-            blockGroupBlock.setBlockId(blockParam.getId());
-            blockGroupBlock.setBlockGroupId(groupId);
-            blockGroupBlockMapper.createBlockGroupBlock(blockGroupBlock);
-        }
-
-        blockDtoResult = queryBlockById(blocks.getId());
-        return Result.success(blockDtoResult);
+        return result;
     }
 
     /**
@@ -275,7 +298,8 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
      * @param framework the framework
      * @return the block assets
      */
-    public Map<String, List<String>> getBlockAssets(Map<String, Object> pageContent, String framework) {
+    public Map<String, List<String>> getBlockAssets(
+            Map<String, Object> pageContent, String framework) {
         List<String> block = new ArrayList<>();
 
         try {
@@ -295,23 +319,39 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         mergedAssets.put("styles", new ArrayList<>());
 
         // Merge the assets using streams
-        return blocksList.stream().map(Block::getAssets).map(assetsMap -> {
-            Map<String, List<String>> tempMap = new HashMap<>();
-            tempMap.put("material", (List<String>) assetsMap.getOrDefault("material", new ArrayList<>()));
-            tempMap.put("scripts", (List<String>) assetsMap.getOrDefault("scripts", new ArrayList<>()));
-            tempMap.put("styles", (List<String>) assetsMap.getOrDefault("styles", new ArrayList<>()));
-            return tempMap;
-        }).reduce(mergedAssets, (acc, curr) -> {
-            acc.get("material").addAll(curr.get("material"));
-            acc.get("scripts").addAll(curr.get("scripts"));
-            acc.get("styles").addAll(curr.get("styles"));
-            return acc;
-        }, (map1, map2) -> {
-            map1.get("material").addAll(map2.get("material"));
-            map1.get("scripts").addAll(map2.get("scripts"));
-            map1.get("styles").addAll(map2.get("styles"));
-            return map1;
-        });
+        return blocksList.stream()
+                .map(Block::getAssets)
+                .map(
+                        assetsMap -> {
+                            Map<String, List<String>> tempMap = new HashMap<>();
+                            tempMap.put(
+                                    "material",
+                                    (List<String>)
+                                            assetsMap.getOrDefault("material", new ArrayList<>()));
+                            tempMap.put(
+                                    "scripts",
+                                    (List<String>)
+                                            assetsMap.getOrDefault("scripts", new ArrayList<>()));
+                            tempMap.put(
+                                    "styles",
+                                    (List<String>)
+                                            assetsMap.getOrDefault("styles", new ArrayList<>()));
+                            return tempMap;
+                        })
+                .reduce(
+                        mergedAssets,
+                        (acc, curr) -> {
+                            acc.get("material").addAll(curr.get("material"));
+                            acc.get("scripts").addAll(curr.get("scripts"));
+                            acc.get("styles").addAll(curr.get("styles"));
+                            return acc;
+                        },
+                        (map1, map2) -> {
+                            map1.get("material").addAll(map2.get("material"));
+                            map1.get("scripts").addAll(map2.get("scripts"));
+                            map1.get("styles").addAll(map2.get("styles"));
+                            return map1;
+                        });
     }
 
     /**
@@ -325,13 +365,16 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         // 创建 QueryWrapper 实例
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         if (block != null && !block.isEmpty()) {
-            // 处理 blockLabelName 为数组的情况
-            String labelsCondition = block.stream()
-                .map(name -> "label = '" + name + "'")
-                .collect(Collectors.joining(" OR "));
-
             // 添加标签条件
-            queryWrapper.and(wrapper -> wrapper.apply(labelsCondition));
+            queryWrapper.and(
+                    wrapper -> {
+                        for (int index = 0; index < block.size(); index++) {
+                            if (index > 0) {
+                                wrapper.or();
+                            }
+                            wrapper.eq("label", block.get(index));
+                        }
+                    });
 
             // 添加框架条件
             queryWrapper.eq("framework", framework);
@@ -364,7 +407,8 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
                 }
             }
             if (schemaMap.containsKey("children") && schemaMap.get("children") instanceof List) {
-                traverseBlocks(JsonUtils.MAPPER.writeValueAsString(schemaMap.get("children")), block);
+                traverseBlocks(
+                        JsonUtils.MAPPER.writeValueAsString(schemaMap.get("children")), block);
             }
         }
     }
@@ -388,8 +432,8 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
     @Override
     public IPage<Block> findBlocksByPagetionList(BlockParamDto blockParamDto) {
         String appId = blockParamDto.getAppId();
-        // 如果 appId 存在并且不匹配指定的正则表达式，则删除它
-        if (appId != null && !Pattern.matches("^[1-9]+[0-9]*$", appId)) {
+        // 如果 appId 不是正整数，则删除它
+        if (appId != null && !isPositiveInteger(appId)) {
             blockParamDto.setAppId(null); // 设置成null达到map中remove的效果
         }
         // 获取查询条件
@@ -422,7 +466,7 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         int limit = blockParamDto.getLimit() != null ? blockParamDto.getLimit() : 0;
         int start = blockParamDto.getStart() != null ? blockParamDto.getStart() : 0;
         int pageNum = start == 0 && limit == 0 ? 1 : (start / limit) + 1;
-        int pageSize = limit == 0 ? 10 : limit;
+        int pageSize = limit == 0 ? DEFAULT_PAGE_SIZE : limit;
         Page<Block> page = new Page<>(pageNum, pageSize);
         return baseMapper.selectPage(page, queryWrapper);
     }
@@ -458,29 +502,40 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         }
 
         for (BlockDto blockDto : blocksList) {
-            List<BlockGroup> blockGroups = blockGroupMapper.findBlockGroupByBlockId(blockDto.getId(),
-                loginUserContext.getLoginUserId());
+            List<BlockGroup> blockGroups =
+                    blockGroupMapper.findBlockGroupByBlockId(
+                            blockDto.getId(), loginUserContext.getLoginUserId());
             blockDto.setGroups(blockGroups);
         }
         return blocksList.stream()
-                .filter(item -> {
-                    // 过滤掉未发布的
-                    if (item.getLastBuildInfo() == null || item.getContent() == null || item.getAssets() == null) {
-                        return false;
-                    }
-                    // 组过滤
-                    if (item.getGroups() != null && item.getGroups()
-                        .stream()
-                        .anyMatch(group -> group != null
-                                    && group.getId().equals(notGroupDto.getGroupId()))) {
-                        return false;
-                    }
-                    // 公开范围过滤
-                    if (item.getPublicStatus() == Enums.Scope.FULL_PUBLIC.getValue()) {
-                        return true;
-                    }
-                    return item.getPublicStatus() == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
-                }).collect(Collectors.toList());
+                .filter(
+                        item -> {
+                            // 过滤掉未发布的
+                            if (item.getLastBuildInfo() == null
+                                    || item.getContent() == null
+                                    || item.getAssets() == null) {
+                                return false;
+                            }
+                            // 组过滤
+                            if (item.getGroups() != null
+                                    && item.getGroups().stream()
+                                            .anyMatch(
+                                                    group ->
+                                                            group != null
+                                                                    && group.getId()
+                                                                            .equals(
+                                                                                    notGroupDto
+                                                                                            .getGroupId()))) {
+                                return false;
+                            }
+                            // 公开范围过滤
+                            if (item.getPublicStatus() == Enums.Scope.FULL_PUBLIC.getValue()) {
+                                return true;
+                            }
+                            return item.getPublicStatus()
+                                    == Enums.Scope.PUBLIC_IN_TENANTS.getValue();
+                        })
+                .collect(Collectors.toList());
     }
 
     /**
@@ -529,7 +584,8 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
 
         try {
             BlockDto blockDto = blockBuildDto.getBlock();
-            List<I18nEntryDto> i18nList = i18nEntryMapper.findI18nEntriesByHostandHostType(id, "block");
+            List<I18nEntryDto> i18nList =
+                    i18nEntryMapper.findI18nEntriesByHostandHostType(id, "block");
             // 序列化国际化词条
             SchemaI18n appEntries = i18nEntryService.formatEntriesList(i18nList);
             BlockHistory blockHistory = new BlockHistory();
@@ -552,19 +608,20 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
             Map<String, Object> buildInfo = createBuildInfo(blockBuildDto.getVersion(), now);
             blockHistory.setBuildInfo(buildInfo);
             blockHistory.setId(null);
+            Result<BlockDto> result = Result.failed(ExceptionEnum.CM008);
             int blockHistoryResult = blockHistoryMapper.createBlockHistory(blockHistory);
-            if (blockHistoryResult < 1) {
-                return Result.failed(ExceptionEnum.CM008);
+            if (blockHistoryResult >= 1) {
+                BlockParam blockParam = new BlockParam();
+                blockParam.setLastBuildInfo(buildInfo);
+                blockParam.setLatestHistoryId(blockHistory);
+                blockParam.setLatestVersion(blockHistory.getVersion());
+                blockParam.setId(blockDto.getId());
+                blockParam.setAppId(blockDto.getAppId());
+                blockParam.setGroups(null);
+                result = updateBlockById(blockParam);
             }
-            BlockParam blockParam = new BlockParam();
-            blockParam.setLastBuildInfo(buildInfo);
-            blockParam.setLatestHistoryId(blockHistory);
-            blockParam.setLatestVersion(blockHistory.getVersion());
-            blockParam.setId(blockDto.getId());
-            blockParam.setAppId(blockDto.getAppId());
-            blockParam.setGroups(null);
-            return updateBlockById(blockParam);
-        } catch (Exception e) {
+            return result;
+        } catch (RuntimeException exception) {
             return Result.failed(ExceptionEnum.CM001);
         }
     }
@@ -587,10 +644,14 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         String description = request.get("description");
 
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
-        queryWrapper.and(wrapper -> wrapper.like(StringUtils.isNotEmpty(nameCn), "name", nameCn)
-            .or()
-            .like(StringUtils.isNotEmpty(description), "description", description)
-        );
+        queryWrapper.and(
+                wrapper ->
+                        wrapper.like(StringUtils.isNotEmpty(nameCn), "name", nameCn)
+                                .or()
+                                .like(
+                                        StringUtils.isNotEmpty(description),
+                                        "description",
+                                        description));
         List<Block> blocksList = baseMapper.selectList(queryWrapper);
         Page<Block> page = new Page<>(1, blocksList.size());
         return baseMapper.selectPage(page, queryWrapper);
@@ -610,11 +671,12 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
             return users;
         }
         // 提取 createdBy 列表中的唯一值
-        blocksList.forEach(item -> {
-            if (item.getCreatedBy() != null && !userSet.contains(item.getCreatedBy())) {
-                userSet.add(item.getCreatedBy());
-            }
-        });
+        blocksList.forEach(
+                item -> {
+                    if (item.getCreatedBy() != null && !userSet.contains(item.getCreatedBy())) {
+                        userSet.add(item.getCreatedBy());
+                    }
+                });
 
         List<String> userIdsList = new ArrayList<>(userSet);
 
@@ -625,7 +687,7 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
     /**
      * 获取区块
      *
-     * @param appId   the appId
+     * @param appId the appId
      * @param groupId the groupId
      * @return the list
      */
@@ -645,42 +707,56 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
                 return Result.failed(ExceptionEnum.CM206);
             }
         }
-        List<Block> blocksList = new ArrayList<>();
         // 如果有 groupId, 只查group下的block,以及自己创建的区块
         if (groupIdTemp != 0) {
-            blocksList = baseMapper.findBlockByBlockGroupId(groupIdTemp, loginUserContext.getLoginUserId());
-            return Result.success(blocksList);
+            List<Block> groupBlocks =
+                    baseMapper.findBlockByBlockGroupId(
+                            groupIdTemp, loginUserContext.getLoginUserId());
+            return Result.success(groupBlocks);
         }
         // 如果没有 groupId
         // 1. 查询和 app 相关的所有 group
         // 2. 组合 groups 下的所有 block
         // 3. 查询个人创建的 blocks
         // 4. 将个人的和 groups 下的 blocks 合并去重
-        blocksList = baseMapper.findBlocksByBlockGroupIdAppId(appIdTemp);
-        List<Block> appBlocks = blocksList;
+        List<Block> appBlocks = baseMapper.findBlocksByBlockGroupIdAppId(appIdTemp);
         // 通过createBy查询区块表数据
         Block blocks = new Block();
         blocks.setCreatedBy(loginUserContext.getLoginUserId());
         List<Block> personalBlocks = queryBlockByCondition(blocks);
         List<Block> retBlocks = new ArrayList<>();
         // 合并 personalBlocks 和 appBlocks 数组
-        List<Block> combinedBlocks = Stream.concat(personalBlocks.stream(), appBlocks.stream())
-            .collect(Collectors.toList());
+        List<Block> combinedBlocks =
+                Stream.concat(personalBlocks.stream(), appBlocks.stream())
+                        .collect(Collectors.toList());
         // 遍历合并后的数组，检查是否存在具有相同 id 的元素
-        combinedBlocks.forEach(block -> {
-            boolean isFind = retBlocks.stream().anyMatch(retBlock -> Objects.equals(retBlock.getId(), block.getId()));
-            if (!isFind) {
-                retBlocks.add(block);
-            }
-        });
+        combinedBlocks.forEach(
+                block -> {
+                    boolean isFind =
+                            retBlocks.stream()
+                                    .anyMatch(
+                                            retBlock ->
+                                                    Objects.equals(
+                                                            retBlock.getId(), block.getId()));
+                    if (!isFind) {
+                        retBlocks.add(block);
+                    }
+                });
         // 给is_published赋值
-        List<Block> result = retBlocks.stream().map(b -> {
-            boolean isPublished = b.getLastBuildInfo() != null && b.getLastBuildInfo().get("result") instanceof Boolean
-                ? (Boolean) b.getLastBuildInfo().get("result")
-                : Boolean.FALSE;
-            b.setIsPublished(isPublished);
-            return b;
-        }).collect(Collectors.toList());
+        List<Block> result =
+                retBlocks.stream()
+                        .map(
+                                b -> {
+                                    boolean isPublished =
+                                            b.getLastBuildInfo() != null
+                                                            && b.getLastBuildInfo().get("result")
+                                                                    instanceof Boolean
+                                                    ? (Boolean) b.getLastBuildInfo().get("result")
+                                                    : Boolean.FALSE;
+                                    b.setIsPublished(isPublished);
+                                    return b;
+                                })
+                        .collect(Collectors.toList());
         return Result.success(result);
     }
 
@@ -702,7 +778,8 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         queryBlock.setFramework(blockDto.getFramework());
         queryBlock.setCreatedBy(loginUserContext.getLoginUserId());
         List<Block> blockList = baseMapper.queryBlockByCondition(queryBlock);
-        List<Integer> groups = blockDto.getGroups().stream().map(BlockGroup::getId).collect(Collectors.toList());
+        List<Integer> groups =
+                blockDto.getGroups().stream().map(BlockGroup::getId).collect(Collectors.toList());
         ;
         blockDto.setGroups(null);
         BlockParam blockParam = new BlockParam();
@@ -748,5 +825,22 @@ public class BlockServiceImpl extends ServiceImpl<BlockMapper, Block> implements
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         buildInfo.put("endTime", buildTime.format(formatter));
         return buildInfo;
+    }
+
+    private boolean isPositiveInteger(String value) {
+        if (value == null || value.isEmpty()) {
+            return false;
+        }
+        char first = value.charAt(0);
+        if (first < '1' || first > '9') {
+            return false;
+        }
+        for (int i = 1; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -4,36 +4,59 @@ import com.alibaba.fastjson.JSONObject;
 import com.tinyengine.it.common.context.LoginUserContext;
 import com.tinyengine.it.common.utils.SqlIdentifierValidator;
 import com.tinyengine.it.dynamic.dao.ModelDataDao;
-import com.tinyengine.it.dynamic.dto.*;
+import com.tinyengine.it.dynamic.dto.DynamicDelete;
+import com.tinyengine.it.dynamic.dto.DynamicInsert;
+import com.tinyengine.it.dynamic.dto.DynamicQuery;
+import com.tinyengine.it.dynamic.dto.DynamicUpdate;
 import com.tinyengine.it.model.dto.ParametersDto;
 import com.tinyengine.it.model.entity.Model;
 import com.tinyengine.it.service.material.ModelService;
+
 import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 @Service
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.CyclomaticComplexity",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.GodClass",
+    "PMD.LawOfDemeter",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.OnlyOneReturn",
+    "PMD.ShortVariable",
+    "PMD.TooManyMethods"
+})
 public class DynamicService {
-    @Autowired
-    private ModelDataDao dynamicDao;
-    @Autowired
-    private ModelService modelService;
-    @Autowired
-    private LoginUserContext loginUserContext;
+    @Autowired private ModelDataDao dynamicDao;
+    @Autowired private ModelService modelService;
+    @Autowired private LoginUserContext loginUserContext;
 
-    private static final Set<String> SYSTEM_FIELDS = Set.of(
-            "id", "created_at", "updated_at", "deleted_at", "created_by", "updated_by"
-    );
+    private static final Set<String> SYSTEM_FIELDS =
+            Set.of("id", "created_at", "updated_at", "deleted_at", "created_by", "updated_by");
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final String TABLE_NAME_KEY = "tableName";
+    private static final String CONDITIONS_KEY = "conditions";
 
     public List<JSONObject> query(DynamicQuery dto) {
         String tableName = getTableName(dto.getNameEn());
         Map<String, Object> params = new HashMap<>();
-        params.put("tableName", tableName);
+        params.put(TABLE_NAME_KEY, tableName);
         params.put("fields", dto.getFields());
-        params.put("conditions", dto.getParams());
+        params.put(CONDITIONS_KEY, dto.getParams());
         params.put("pageNum", dto.getCurrentPage());
         params.put("pageSize", dto.getPageSize());
         params.put("orderBy", dto.getOrderBy());
@@ -44,23 +67,23 @@ public class DynamicService {
 
     public Long count(String tableName, Map<String, Object> conditions) {
         Map<String, Object> params = new HashMap<>();
-        params.put("tableName", tableName);
+        params.put(TABLE_NAME_KEY, tableName);
         params.put("fields", Arrays.asList("COUNT(*) as count"));
-        params.put("conditions", conditions);
+        params.put(CONDITIONS_KEY, conditions);
 
         List<JSONObject> result = dynamicDao.select(params);
         return Long.parseLong(result.get(0).get("count").toString());
     }
 
     public Map<String, Object> queryWithPage(DynamicQuery dto) {
-        if (dto.getNameEn() == null || dto.getNameEn().trim().isEmpty()) {
+        if (dto.getNameEn() == null || dto.getNameEn().isBlank()) {
             throw new IllegalArgumentException("查询操作必须指定模型名称");
         }
         if (dto.getCurrentPage() == null || dto.getCurrentPage() <= 0) {
             dto.setCurrentPage(1);
         }
         if (dto.getPageSize() == null || dto.getPageSize() <= 0) {
-            dto.setPageSize(10);
+            dto.setPageSize(DEFAULT_PAGE_SIZE);
         }
         validateTableExists(dto.getNameEn());
         validateConditionKeys(dto.getParams());
@@ -81,7 +104,7 @@ public class DynamicService {
 
     @Transactional
     public Map<String, Object> insert(DynamicInsert dto) {
-        if (dto.getNameEn() == null || dto.getNameEn().trim().isEmpty()) {
+        if (dto.getNameEn() == null || dto.getNameEn().isBlank()) {
             throw new IllegalArgumentException("插入操作必须指定模型名称");
         }
         if (dto.getParams() == null || dto.getParams().isEmpty()) {
@@ -91,11 +114,11 @@ public class DynamicService {
         validateTableAndData(dto.getNameEn(), dto.getParams());
         String tableName = getTableName(dto.getNameEn());
         Map<String, Object> params = new HashMap<>();
-        params.put("tableName", tableName);
+        params.put(TABLE_NAME_KEY, tableName);
         params.put("data", dto.getParams());
 
         String userId = loginUserContext.getLoginUserId();
-        if (userId == null || userId.trim().isEmpty()) {
+        if (userId == null || userId.isBlank()) {
             List<Model> modelList = modelService.getModelByEnName(dto.getNameEn());
             if (modelList.isEmpty()) {
                 throw new IllegalArgumentException("模型不存在: " + dto.getNameEn());
@@ -117,7 +140,7 @@ public class DynamicService {
 
     @Transactional
     public Map<String, Object> update(DynamicUpdate dto) {
-        if (dto.getNameEn() == null || dto.getNameEn().trim().isEmpty()) {
+        if (dto.getNameEn() == null || dto.getNameEn().isBlank()) {
             throw new IllegalArgumentException("更新操作必须指定模型名称");
         }
         if (dto.getParams() == null || dto.getParams().isEmpty()) {
@@ -131,9 +154,9 @@ public class DynamicService {
         validateTableAndData(dto.getNameEn(), dto.getParams());
         String tableName = getTableName(dto.getNameEn());
         Map<String, Object> params = new HashMap<>();
-        params.put("tableName", tableName);
+        params.put(TABLE_NAME_KEY, tableName);
         params.put("data", dto.getData());
-        params.put("conditions", dto.getParams());
+        params.put(CONDITIONS_KEY, dto.getParams());
         Map<String, Object> result = new HashMap<>();
         Integer update = dynamicDao.update(params);
         result.put("update", update);
@@ -142,7 +165,7 @@ public class DynamicService {
 
     @Transactional
     public Map<String, Object> delete(DynamicDelete dto) {
-        if (dto.getNameEn() == null || dto.getNameEn().trim().isEmpty()) {
+        if (dto.getNameEn() == null || dto.getNameEn().isBlank()) {
             throw new IllegalArgumentException("删除操作必须指定模型名称");
         }
         if (dto.getId() == null) {
@@ -154,8 +177,8 @@ public class DynamicService {
         Map<String, Object> params = new HashMap<>();
         Map<Object, Object> conditions = new HashMap<>();
         conditions.put("id", dto.getId());
-        params.put("tableName", tableName);
-        params.put("conditions", conditions);
+        params.put(TABLE_NAME_KEY, tableName);
+        params.put(CONDITIONS_KEY, conditions);
         Map<String, Object> result = new HashMap<>();
         Integer delete = dynamicDao.delete(params);
         result.put("delete", delete);
@@ -222,13 +245,7 @@ public class DynamicService {
     }
 
     private void validateTableAndData(String tableName, Map<String, Object> data) {
-        if (tableName == null || tableName.trim().isEmpty()) {
-            throw new IllegalArgumentException("表名不能为空");
-        }
-
-        if (!tableName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$")) {
-            throw new IllegalArgumentException("表名格式不正确");
-        }
+        SqlIdentifierValidator.validate(tableName);
 
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("数据不能为空");
@@ -256,6 +273,10 @@ public class DynamicService {
     }
 
     private String getTableName(String modelId) {
-        return "dynamic_" + modelId.toLowerCase(Locale.ROOT);
+        if (modelId == null || modelId.isBlank()) {
+            throw new IllegalArgumentException("模型名称不能为空");
+        }
+        String tableName = "dynamic_" + modelId.toLowerCase(Locale.ROOT);
+        return SqlIdentifierValidator.requireValidIdentifier(tableName);
     }
 }

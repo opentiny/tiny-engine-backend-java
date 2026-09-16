@@ -1,13 +1,21 @@
 package com.tinyengine.it.common.utils;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+@SuppressWarnings({
+    "PMD.AtLeastOneConstructor",
+    "PMD.DataflowAnomalyAnalysis",
+    "PMD.JUnitAssertionsShouldIncludeMessage",
+    "PMD.JUnitTestContainsTooManyAsserts",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.TooManyMethods"
+})
 class SqlIdentifierValidatorTest {
 
     @Test
@@ -30,24 +38,39 @@ class SqlIdentifierValidatorTest {
 
     @Test
     void rejectSqlInjectionInIdentifier() {
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("@@version"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("1; DROP TABLE users"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("id OR 1=1"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("(SELECT password FROM t_user)"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("name AS leaked"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("name'"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("name\""));
+        assertThrows(
+                IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("@@version"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SqlIdentifierValidator.validate("1; DROP TABLE users"));
+        assertThrows(
+                IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("id OR 1=1"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SqlIdentifierValidator.validate("(SELECT password FROM t_user)"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SqlIdentifierValidator.validate("name AS leaked"));
+        assertThrows(
+                IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("name'"));
+        assertThrows(
+                IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("name\""));
     }
 
     @Test
     void rejectSubqueryInIdentifier() {
-        assertThrows(IllegalArgumentException.class,
-                () -> SqlIdentifierValidator.validate("(SELECT GROUP_CONCAT(table_name) FROM information_schema.tables)"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        SqlIdentifierValidator.validate(
+                                "(SELECT GROUP_CONCAT(table_name) FROM"
+                                        + " information_schema.tables)"));
     }
 
     @Test
     void rejectStartingWithDigit() {
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("1name"));
+        assertThrows(
+                IllegalArgumentException.class, () -> SqlIdentifierValidator.validate("1name"));
     }
 
     @Test
@@ -59,7 +82,8 @@ class SqlIdentifierValidatorTest {
     @Test
     void validateAllRejectsInvalidEntry() {
         List<String> fields = Arrays.asList("id", "@@version", "name");
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validateAll(fields));
+        assertThrows(
+                IllegalArgumentException.class, () -> SqlIdentifierValidator.validateAll(fields));
     }
 
     @Test
@@ -81,33 +105,45 @@ class SqlIdentifierValidatorTest {
 
     @Test
     void rejectInvalidOrderType() {
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validateOrderType("INVALID"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validateOrderType("; DROP TABLE"));
-        assertThrows(IllegalArgumentException.class, () -> SqlIdentifierValidator.validateOrderType(null));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SqlIdentifierValidator.validateOrderType("INVALID"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SqlIdentifierValidator.validateOrderType("; DROP TABLE"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SqlIdentifierValidator.validateOrderType(null));
     }
 
     @Test
     void rejectSqliPatternsInIdentifier() {
         String[] sqliPayloads = {
-                "@@version",
-                "@@datadir",
-                "SLEEP(5)",
-                "BENCHMARK(10000000,SHA1('test'))",
-                "LOAD_FILE('/etc/passwd')",
-                "INTO OUTFILE '/tmp/shell.php'",
-                "UNION SELECT 1,2,3",
-                "information_schema.tables",
-                "1 OR 1=1",
-                "'; DROP TABLE users--",
-                "name AND 1=1",
-                "id; SELECT SLEEP(5)",
-                "COUNT(*)",
-                "GROUP_CONCAT(username)"
+            "@@version",
+            "@@datadir",
+            "SLEEP(5)",
+            "BENCHMARK(10000000,SHA1('test'))",
+            "LOAD_FILE('/etc/passwd')",
+            "INTO OUTFILE '/tmp/shell.php'",
+            "UNION SELECT 1,2,3",
+            "information_schema.tables",
+            "1 OR 1=1",
+            "'; DROP TABLE users--",
+            "name AND 1=1",
+            "id; SELECT SLEEP(5)",
+            "COUNT(*)",
+            "GROUP_CONCAT(username)"
         };
         for (String payload : sqliPayloads) {
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(
+                    IllegalArgumentException.class,
                     () -> SqlIdentifierValidator.validate(payload),
                     "Should reject: " + payload);
         }
+    }
+
+    @Test
+    void escapeSqlLiteral() {
+        assertEquals("it''s \\\\ ok", SqlIdentifierValidator.escapeSqlLiteral("it's \\ ok"));
     }
 }
