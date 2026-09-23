@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +55,6 @@ import java.util.stream.Collectors;
     "PMD.ConfusingTernary",
     "PMD.ConsecutiveAppendsShouldReuse",
     "PMD.ConsecutiveLiteralAppends",
-    "PMD.CyclomaticComplexity",
     "PMD.DataflowAnomalyAnalysis",
     "PMD.ExcessiveImports",
     "PMD.GodClass",
@@ -84,6 +84,11 @@ public class DynamicModelService {
 
     private static final Set<String> SYSTEM_FIELDS =
             Set.of("id", "created_at", "updated_at", "deleted_at", "created_by", "updated_by");
+    private static final Set<String> VALID_COLUMN_TYPES =
+        Set.of("INT", "TINYINT", "DATE", "DATETIME", "VARCHAR", "ENUM", "TEXT");
+
+    private static final Pattern VARCHAR_COLUMN_TYPE =
+        Pattern.compile("VARCHAR\\([1-9][0-9]{0,4}\\)");
     private static final int DEFAULT_VARCHAR = 255;
     private static final int MAX_VARCHAR = 65_535;
     private static final int ASC_SUFFIX_LEN = 4;
@@ -622,18 +627,21 @@ public class DynamicModelService {
     }
 
     private String requireColumnType(final String value) {
-        if (value == null
-                || !(value.equals("INT")
-                        || value.equals("TINYINT")
-                        || value.equals("DATE")
-                        || value.equals("DATETIME")
-                        || value.equals("VARCHAR")
-                        || value.equals("ENUM")
-                        || value.equals("TEXT")
-                        || value.matches("^VARCHAR\\([1-9][0-9]{0,4}\\)$"))) {
+        if (!isValidColumnType(value)) {
             throw new IllegalArgumentException("Invalid SQL column type");
         }
         return value;
+    }
+    private boolean isValidColumnType(final String value) {
+        if (value == null) {
+            return false;
+        }
+
+        if (VALID_COLUMN_TYPES.contains(value)) {
+            return true;
+        }
+
+        return VARCHAR_COLUMN_TYPE.matcher(value).matches();
     }
 
     private void addCommonFields(List<ParametersDto> parameters) {
