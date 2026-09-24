@@ -56,7 +56,6 @@ import java.util.stream.Collectors;
     "PMD.ConsecutiveAppendsShouldReuse",
     "PMD.ConsecutiveLiteralAppends",
     "PMD.CyclomaticComplexity",
-    "PMD.LongVariable",
     "PMD.DataflowAnomalyAnalysis",
     "PMD.ExcessiveImports",
     "PMD.GodClass",
@@ -86,10 +85,10 @@ public class DynamicModelService {
 
     private static final Set<String> SYSTEM_FIELDS =
             Set.of("id", "created_at", "updated_at", "deleted_at", "created_by", "updated_by");
-    private static final Set<String> VALID_COLUMN_TYPES =
+    private static final Set<String> COLUMN_TYPES =
             Set.of("INT", "TINYINT", "DATE", "DATETIME", "VARCHAR", "ENUM", "TEXT");
 
-    private static final Pattern VARCHAR_COLUMN_TYPE =
+    private static final Pattern SIZED_VARCHAR =
             Pattern.compile("VARCHAR\\([1-9][0-9]{0,4}\\)");
     private static final int DEFAULT_VARCHAR = 255;
     private static final int MAX_VARCHAR = 65_535;
@@ -634,16 +633,15 @@ public class DynamicModelService {
         }
         return value;
     }
+
+    /**
+     * 验证列类型是否合法.
+     * @param value
+     * @return
+     */
     private boolean isValidColumnType(final String value) {
-        if (value == null) {
-            return false;
-        }
-
-        if (VALID_COLUMN_TYPES.contains(value)) {
-            return true;
-        }
-
-        return VARCHAR_COLUMN_TYPE.matcher(value).matches();
+        return value != null
+            && (COLUMN_TYPES.contains(value) || SIZED_VARCHAR.matcher(value).matches());
     }
 
     private void addCommonFields(List<ParametersDto> parameters) {
