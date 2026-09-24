@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
     "PMD.AvoidDuplicateLiterals",
     "PMD.AvoidInstantiatingObjectsInLoops",
     "PMD.AvoidLiteralsInIfCondition",
-    "PMD.CyclomaticComplexity",
     "PMD.DataflowAnomalyAnalysis",
     "PMD.GodClass",
     "PMD.LawOfDemeter",
@@ -305,15 +304,19 @@ public class AiChatServiceImpl implements AiChatService {
     private boolean isSafeToken(String token) {
         for (int i = 0; i < token.length(); i++) {
             char c = token.charAt(i);
-            if (!((c >= 'A' && c <= 'Z')
-                    || (c >= 'a' && c <= 'z')
-                    || (c >= '0' && c <= '9')
-                    || c == '_'
-                    || c == '.'
-                    || c == '-')) {
+            if (!isSafeTokenCharacter(c)) {
                 return false;
             }
         }
         return true;
+    }
+
+    private boolean isSafeTokenCharacter(final char c) {
+        return (c >= 'A' && c <= 'Z')
+                || (c >= 'a' && c <= 'z')
+                || (c >= '0' && c <= '9')
+                || c == '_'
+                || c == '.'
+                || c == '-';
     }
 }
