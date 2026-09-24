@@ -634,11 +634,6 @@ public class DynamicModelService {
         return value;
     }
 
-    /**
-     * 验证列类型是否合法.
-     * @param value
-     * @return
-     */
     private boolean isValidColumnType(final String value) {
         return value != null
             && (COLUMN_TYPES.contains(value) || SIZED_VARCHAR.matcher(value).matches());
