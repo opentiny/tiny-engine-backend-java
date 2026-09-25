@@ -45,6 +45,12 @@ public class CanvasServiceImpl implements CanvasService {
 
     @Override
     public Result<CanvasDto> lockCanvas(Integer id, String state, String type) {
+        if(id== null){
+            return Result.failed("id can not be null");
+        }
+        if(!isNotBlank(state) || !isNotBlank(type)){
+            return Result.failed("invalid parameter");
+        }
         String occupier = null;
         // needTODO 先试用mock数据，后续添加登录及权限后从session获取,
         User user = userMapper.queryUserById(loginUserContext.getLoginUserId());
@@ -57,6 +63,9 @@ public class CanvasServiceImpl implements CanvasService {
         User occupierValue = state.equals(Enums.CanvasEditorState.OCCUPY.getValue()) ? user : null;
         if ("page".equals(type)) {
             Page page = pageMapper.queryPageById(id);
+            if(page == null){
+                return Result.failed("page not exist");
+            }
             if (page.getOccupier() != null) {
                 occupier = page.getOccupier().getId();
             }
@@ -72,6 +81,9 @@ public class CanvasServiceImpl implements CanvasService {
             }
         } else {
             Block block = blockMapper.queryBlockById(id);
+            if(block == null){
+                return Result.failed("block not exist");
+            }
             occupier = block.getOccupierBy();
             Boolean isCaDoIt = isCanDoIt(occupier, user);
             if (isCaDoIt) {
@@ -88,7 +100,9 @@ public class CanvasServiceImpl implements CanvasService {
         canvasDto.setOccupier(occupierValue);
         return Result.success(canvasDto);
     }
-
+    public static boolean isNotBlank(String str) {
+        return str != null && !str.trim().isEmpty();
+    }
     private Boolean isCanDoIt(String occupier, User user) {
         return occupier == null || occupier.equals(user.getId());
     }
